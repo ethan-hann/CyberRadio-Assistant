@@ -21,6 +21,7 @@ namespace RadioExt_Helper.forms
         private void MainForm_Load(object sender, EventArgs e)
         {
             //ApplyFonts();
+            GlobalData.Initialize();
 
         }
 

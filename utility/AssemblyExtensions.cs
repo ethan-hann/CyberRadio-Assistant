@@ -1,0 +1,21 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace RadioExt_Helper.utility
+{
+    internal static class AssemblyExtensions
+    {
+        public static string ReadResource(this Assembly assembly, string resourceName)
+        {
+            using Stream? stream = assembly.GetManifestResourceStream(resourceName);
+            if (stream == null) { return string.Empty; }
+
+            using StreamReader reader = new(stream);
+            return reader.ReadToEnd();
+        }
+    }
+}

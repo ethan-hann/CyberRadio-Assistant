@@ -12,6 +12,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="resources\final_ui_icon_strings.txt" />
     <None Remove="resources\fonts\CFNotcheDemo-Bold.ttf" />
     <None Remove="resources\fonts\CFNotcheDemo-Regular.ttf" />
     <None Remove="resources\images\cyber-radio-assistant.png" />
@@ -22,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="resources\final_ui_icon_strings.txt" />
     <EmbeddedResource Include="resources\fonts\CFNotcheDemo-Bold.ttf" />
     <EmbeddedResource Include="resources\fonts\CFNotcheDemo-Regular.ttf" />
     <EmbeddedResource Include="resources\images\cyber-radio-assistant.ico" />
