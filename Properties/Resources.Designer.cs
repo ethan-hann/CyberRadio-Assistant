@@ -59,5 +59,15 @@ namespace RadioExt_Helper.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap cyber_radio_assistant {
+            get {
+                object obj = ResourceManager.GetObject("cyber-radio-assistant", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
     }
 }

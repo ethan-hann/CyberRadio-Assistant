@@ -22,6 +22,12 @@ namespace RadioExt_Helper.user_controls
             InitializeComponent();
 
             _metaData = metaData;
+            Dock = DockStyle.Fill;
+        }
+
+        private void StationEditor_Load(object sender, EventArgs e)
+        {
+            txtDisplayName.Text = _metaData.DisplayName;
         }
     }
 }
