@@ -26,12 +26,12 @@ namespace RadioExt_Helper.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string CustomRadioPaths {
+        public string BackupPath {
             get {
-                return ((string)(this["CustomRadioPaths"]));
+                return ((string)(this["BackupPath"]));
             }
             set {
-                this["CustomRadioPaths"] = value;
+                this["BackupPath"] = value;
             }
         }
         
