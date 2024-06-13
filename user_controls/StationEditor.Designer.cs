@@ -30,9 +30,9 @@
         {
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(StationEditor));
-            label2 = new Label();
+            lblIcon = new Label();
             txtDisplayName = new TextBox();
-            label1 = new Label();
+            lblName = new Label();
             label3 = new Label();
             groupBox1 = new GroupBox();
             tableLayoutPanel3 = new TableLayoutPanel();
@@ -43,26 +43,26 @@
             panel3 = new Panel();
             groupBox3 = new GroupBox();
             tableLayoutPanel1 = new TableLayoutPanel();
-            tableLayoutPanel4 = new TableLayoutPanel();
-            panel2 = new Panel();
-            label8 = new Label();
-            txtVolumeEdit = new TextBox();
-            label7 = new Label();
-            lblSelectedVolume = new Label();
-            volumeSlider = new FloatTrackBar();
-            label5 = new Label();
+            lblVolume = new Label();
             numericUpDown1 = new NumericUpDown();
-            label4 = new Label();
+            lblFM = new Label();
+            flowLayoutPanel4 = new FlowLayoutPanel();
+            volumeSlider = new TrackBar();
+            lblVolumeVal = new Label();
+            panel2 = new Panel();
+            txtVolumeEdit = new TextBox();
+            lblSelectedVolume = new Label();
+            lblVolumeMinMax = new Label();
             groupBox2 = new GroupBox();
             tableLayoutPanel2 = new TableLayoutPanel();
             txtInkAtlasPart = new TextBox();
             txtInkAtlasPath = new TextBox();
-            label6 = new Label();
+            lblUsingCustomIcon = new Label();
             flowLayoutPanel1 = new FlowLayoutPanel();
             radUseCustomYes = new RadioButton();
             radUseCustomNo = new RadioButton();
-            lblInkAtlasPart = new Label();
-            lblInkAtlasPath = new Label();
+            lblInkPart = new Label();
+            lblInkPath = new Label();
             tabMusic = new TabPage();
             groupBox4 = new GroupBox();
             tableLayoutPanel5 = new TableLayoutPanel();
@@ -77,6 +77,8 @@
             txtPastedURL = new TextBox();
             txtStreamURL = new TextBox();
             tabImages = new ImageList(components);
+            statusStrip1 = new StatusStrip();
+            lblStatus = new ToolStripStatusLabel();
             groupBox1.SuspendLayout();
             tableLayoutPanel3.SuspendLayout();
             tabControl.SuspendLayout();
@@ -84,10 +86,10 @@
             panel1.SuspendLayout();
             groupBox3.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
-            tableLayoutPanel4.SuspendLayout();
-            panel2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)volumeSlider).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDown1).BeginInit();
+            flowLayoutPanel4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)volumeSlider).BeginInit();
+            panel2.SuspendLayout();
             groupBox2.SuspendLayout();
             tableLayoutPanel2.SuspendLayout();
             flowLayoutPanel1.SuspendLayout();
@@ -97,57 +99,63 @@
             flowLayoutPanel2.SuspendLayout();
             tableLayoutPanel6.SuspendLayout();
             flowLayoutPanel3.SuspendLayout();
+            statusStrip1.SuspendLayout();
             SuspendLayout();
             // 
-            // label2
+            // lblIcon
             // 
-            label2.Anchor = AnchorStyles.Right;
-            label2.AutoSize = true;
-            label2.Font = new Font("CF Notche Demo", 9F);
-            label2.Location = new Point(43, 45);
-            label2.Name = "label2";
-            label2.Size = new Size(36, 12);
-            label2.TabIndex = 2;
-            label2.Text = "Icon: ";
+            lblIcon.Anchor = AnchorStyles.Right;
+            lblIcon.AutoSize = true;
+            lblIcon.Font = new Font("CF Notche Demo", 9F);
+            lblIcon.Location = new Point(43, 40);
+            lblIcon.Name = "lblIcon";
+            lblIcon.Size = new Size(36, 12);
+            lblIcon.TabIndex = 2;
+            lblIcon.Text = "Icon: ";
+            lblIcon.MouseEnter += lblIcon_MouseEnter;
+            lblIcon.MouseLeave += lblIcon_MouseLeave;
             // 
             // txtDisplayName
             // 
             txtDisplayName.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             txtDisplayName.Font = new Font("CF Notche Demo", 9F, FontStyle.Bold);
-            txtDisplayName.Location = new Point(85, 6);
+            txtDisplayName.Location = new Point(85, 5);
             txtDisplayName.Name = "txtDisplayName";
             txtDisplayName.Size = new Size(648, 21);
             txtDisplayName.TabIndex = 1;
             // 
-            // label1
+            // lblName
             // 
-            label1.Anchor = AnchorStyles.Right;
-            label1.AutoSize = true;
-            label1.Font = new Font("CF Notche Demo", 9F);
-            label1.Location = new Point(35, 11);
-            label1.Name = "label1";
-            label1.Size = new Size(44, 12);
-            label1.TabIndex = 0;
-            label1.Text = "Name: ";
+            lblName.Anchor = AnchorStyles.Right;
+            lblName.AutoSize = true;
+            lblName.Font = new Font("CF Notche Demo", 9F);
+            lblName.Location = new Point(35, 9);
+            lblName.Name = "lblName";
+            lblName.Size = new Size(44, 12);
+            lblName.TabIndex = 0;
+            lblName.Text = "Name: ";
+            lblName.MouseEnter += lblName_MouseEnter;
+            lblName.MouseLeave += lblName_MouseLeave;
             // 
             // label3
             // 
             label3.Anchor = AnchorStyles.Right;
             label3.AutoSize = true;
-            label3.Location = new Point(33, -135);
+            label3.Location = new Point(33, -127);
             label3.Name = "label3";
-            label3.Size = new Size(111, 16);
+            label3.Size = new Size(113, 15);
             label3.TabIndex = 4;
             label3.Text = "Using Custom Icon?";
             // 
             // groupBox1
             // 
+            groupBox1.BackColor = Color.White;
             groupBox1.Controls.Add(tableLayoutPanel3);
             groupBox1.Dock = DockStyle.Top;
             groupBox1.Font = new Font("CF Notche Demo", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             groupBox1.Location = new Point(0, 0);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(742, 88);
+            groupBox1.Size = new Size(742, 82);
             groupBox1.TabIndex = 2;
             groupBox1.TabStop = false;
             groupBox1.Text = "Display";
@@ -157,8 +165,8 @@
             tableLayoutPanel3.ColumnCount = 2;
             tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 11.141304F));
             tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 88.858696F));
-            tableLayoutPanel3.Controls.Add(label1, 0, 0);
-            tableLayoutPanel3.Controls.Add(label2, 0, 1);
+            tableLayoutPanel3.Controls.Add(lblName, 0, 0);
+            tableLayoutPanel3.Controls.Add(lblIcon, 0, 1);
             tableLayoutPanel3.Controls.Add(txtDisplayName, 1, 0);
             tableLayoutPanel3.Controls.Add(cmbUIIcons, 1, 1);
             tableLayoutPanel3.Dock = DockStyle.Fill;
@@ -167,7 +175,7 @@
             tableLayoutPanel3.RowCount = 2;
             tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
             tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel3.Size = new Size(736, 68);
+            tableLayoutPanel3.Size = new Size(736, 62);
             tableLayoutPanel3.TabIndex = 0;
             // 
             // cmbUIIcons
@@ -177,7 +185,7 @@
             cmbUIIcons.AutoCompleteSource = AutoCompleteSource.ListItems;
             cmbUIIcons.Font = new Font("CF Notche Demo", 9F, FontStyle.Bold);
             cmbUIIcons.FormattingEnabled = true;
-            cmbUIIcons.Location = new Point(85, 41);
+            cmbUIIcons.Location = new Point(85, 36);
             cmbUIIcons.Name = "cmbUIIcons";
             cmbUIIcons.Size = new Size(648, 20);
             cmbUIIcons.Sorted = true;
@@ -193,7 +201,7 @@
             tabControl.Location = new Point(0, 0);
             tabControl.Name = "tabControl";
             tabControl.SelectedIndex = 0;
-            tabControl.Size = new Size(758, 488);
+            tabControl.Size = new Size(758, 433);
             tabControl.TabIndex = 6;
             // 
             // tabDisplayAndIcon
@@ -205,7 +213,7 @@
             tabDisplayAndIcon.Location = new Point(4, 25);
             tabDisplayAndIcon.Name = "tabDisplayAndIcon";
             tabDisplayAndIcon.Padding = new Padding(3);
-            tabDisplayAndIcon.Size = new Size(750, 459);
+            tabDisplayAndIcon.Size = new Size(750, 404);
             tabDisplayAndIcon.TabIndex = 0;
             tabDisplayAndIcon.Text = "Display and Icon";
             tabDisplayAndIcon.ToolTipText = "Change the display name and icon for this radio station.";
@@ -213,6 +221,7 @@
             // 
             // panel1
             // 
+            panel1.BackColor = Color.White;
             panel1.Controls.Add(panel3);
             panel1.Controls.Add(groupBox3);
             panel1.Controls.Add(groupBox2);
@@ -220,25 +229,27 @@
             panel1.Dock = DockStyle.Fill;
             panel1.Location = new Point(3, 3);
             panel1.Name = "panel1";
-            panel1.Size = new Size(742, 451);
+            panel1.Size = new Size(742, 396);
             panel1.TabIndex = 3;
             // 
             // panel3
             // 
-            panel3.Dock = DockStyle.Top;
-            panel3.Location = new Point(0, 351);
+            panel3.BackColor = Color.White;
+            panel3.Dock = DockStyle.Fill;
+            panel3.Location = new Point(0, 299);
             panel3.Name = "panel3";
-            panel3.Size = new Size(742, 100);
+            panel3.Size = new Size(742, 97);
             panel3.TabIndex = 5;
             // 
             // groupBox3
             // 
+            groupBox3.BackColor = Color.White;
             groupBox3.Controls.Add(tableLayoutPanel1);
             groupBox3.Dock = DockStyle.Top;
             groupBox3.Font = new Font("CF Notche Demo", 9F, FontStyle.Bold);
-            groupBox3.Location = new Point(0, 209);
+            groupBox3.Location = new Point(0, 195);
             groupBox3.Name = "groupBox3";
-            groupBox3.Size = new Size(742, 142);
+            groupBox3.Size = new Size(742, 104);
             groupBox3.TabIndex = 4;
             groupBox3.TabStop = false;
             groupBox3.Text = "Settings";
@@ -248,63 +259,107 @@
             tableLayoutPanel1.ColumnCount = 2;
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 16.440218F));
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 83.5597839F));
-            tableLayoutPanel1.Controls.Add(tableLayoutPanel4, 1, 1);
-            tableLayoutPanel1.Controls.Add(label5, 0, 1);
+            tableLayoutPanel1.Controls.Add(lblVolume, 0, 1);
             tableLayoutPanel1.Controls.Add(numericUpDown1, 1, 0);
-            tableLayoutPanel1.Controls.Add(label4, 0, 0);
+            tableLayoutPanel1.Controls.Add(lblFM, 0, 0);
+            tableLayoutPanel1.Controls.Add(flowLayoutPanel4, 1, 1);
             tableLayoutPanel1.Dock = DockStyle.Fill;
             tableLayoutPanel1.Location = new Point(3, 17);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 2;
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 21.3114758F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 78.68852F));
-            tableLayoutPanel1.Size = new Size(736, 122);
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 41.09589F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 58.90411F));
+            tableLayoutPanel1.Size = new Size(736, 84);
             tableLayoutPanel1.TabIndex = 0;
             // 
-            // tableLayoutPanel4
+            // lblVolume
             // 
-            tableLayoutPanel4.ColumnCount = 1;
-            tableLayoutPanel4.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tableLayoutPanel4.Controls.Add(panel2, 0, 1);
-            tableLayoutPanel4.Controls.Add(volumeSlider, 0, 0);
-            tableLayoutPanel4.Dock = DockStyle.Fill;
-            tableLayoutPanel4.Location = new Point(124, 29);
-            tableLayoutPanel4.Name = "tableLayoutPanel4";
-            tableLayoutPanel4.RowCount = 2;
-            tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Percent, 41.11111F));
-            tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Percent, 58.88889F));
-            tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel4.Size = new Size(609, 90);
-            tableLayoutPanel4.TabIndex = 6;
+            lblVolume.Anchor = AnchorStyles.Right;
+            lblVolume.AutoSize = true;
+            lblVolume.Font = new Font("CF Notche Demo", 9F);
+            lblVolume.Location = new Point(66, 53);
+            lblVolume.Name = "lblVolume";
+            lblVolume.Size = new Size(52, 12);
+            lblVolume.TabIndex = 3;
+            lblVolume.Text = "Volume: ";
+            // 
+            // numericUpDown1
+            // 
+            numericUpDown1.Anchor = AnchorStyles.Left;
+            numericUpDown1.DecimalPlaces = 1;
+            numericUpDown1.Font = new Font("CF Notche Demo", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            numericUpDown1.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
+            numericUpDown1.Location = new Point(124, 5);
+            numericUpDown1.Maximum = new decimal(new int[] { 9999999, 0, 0, 0 });
+            numericUpDown1.Name = "numericUpDown1";
+            numericUpDown1.Size = new Size(91, 24);
+            numericUpDown1.TabIndex = 7;
+            // 
+            // lblFM
+            // 
+            lblFM.Anchor = AnchorStyles.Right;
+            lblFM.AutoSize = true;
+            lblFM.Font = new Font("CF Notche Demo", 9F);
+            lblFM.Location = new Point(91, 11);
+            lblFM.Name = "lblFM";
+            lblFM.Size = new Size(27, 12);
+            lblFM.TabIndex = 2;
+            lblFM.Text = "FM: ";
+            // 
+            // flowLayoutPanel4
+            // 
+            flowLayoutPanel4.BackColor = Color.White;
+            flowLayoutPanel4.Controls.Add(volumeSlider);
+            flowLayoutPanel4.Controls.Add(lblVolumeVal);
+            flowLayoutPanel4.Controls.Add(panel2);
+            flowLayoutPanel4.Controls.Add(lblVolumeMinMax);
+            flowLayoutPanel4.Dock = DockStyle.Fill;
+            flowLayoutPanel4.Location = new Point(124, 37);
+            flowLayoutPanel4.Name = "flowLayoutPanel4";
+            flowLayoutPanel4.Size = new Size(609, 44);
+            flowLayoutPanel4.TabIndex = 8;
+            // 
+            // volumeSlider
+            // 
+            volumeSlider.BackColor = Color.White;
+            volumeSlider.LargeChange = 50;
+            volumeSlider.Location = new Point(3, 3);
+            volumeSlider.Maximum = 250;
+            volumeSlider.Name = "volumeSlider";
+            volumeSlider.Size = new Size(263, 45);
+            volumeSlider.SmallChange = 10;
+            volumeSlider.TabIndex = 6;
+            volumeSlider.TickStyle = TickStyle.None;
+            volumeSlider.Scroll += volumeSlider_Scroll;
+            // 
+            // lblVolumeVal
+            // 
+            lblVolumeVal.Anchor = AnchorStyles.Left;
+            lblVolumeVal.AutoSize = true;
+            lblVolumeVal.Font = new Font("CF Notche Demo", 9.749999F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblVolumeVal.Location = new Point(269, 19);
+            lblVolumeVal.Margin = new Padding(0);
+            lblVolumeVal.Name = "lblVolumeVal";
+            lblVolumeVal.Size = new Size(43, 13);
+            lblVolumeVal.TabIndex = 6;
+            lblVolumeVal.Text = "Value:";
+            lblVolumeVal.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // panel2
             // 
-            panel2.Controls.Add(label8);
+            panel2.Anchor = AnchorStyles.Left;
             panel2.Controls.Add(txtVolumeEdit);
-            panel2.Controls.Add(label7);
             panel2.Controls.Add(lblSelectedVolume);
-            panel2.Dock = DockStyle.Fill;
-            panel2.Location = new Point(3, 40);
+            panel2.Location = new Point(312, 10);
+            panel2.Margin = new Padding(0);
             panel2.Name = "panel2";
-            panel2.Size = new Size(603, 47);
-            panel2.TabIndex = 5;
-            // 
-            // label8
-            // 
-            label8.Anchor = AnchorStyles.Left;
-            label8.AutoSize = true;
-            label8.Font = new Font("CF Notche Demo", 9.749999F, FontStyle.Italic, GraphicsUnit.Point, 0);
-            label8.Location = new Point(5, 28);
-            label8.Name = "label8";
-            label8.Size = new Size(104, 13);
-            label8.TabIndex = 7;
-            label8.Text = "Min: 0.0 - Max: 25.0";
-            label8.TextAlign = ContentAlignment.MiddleCenter;
+            panel2.Size = new Size(71, 30);
+            panel2.TabIndex = 8;
             // 
             // txtVolumeEdit
             // 
             txtVolumeEdit.Font = new Font("CF Notche Demo", 9.749999F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            txtVolumeEdit.Location = new Point(76, 3);
+            txtVolumeEdit.Location = new Point(3, 5);
             txtVolumeEdit.Name = "txtVolumeEdit";
             txtVolumeEdit.Size = new Size(67, 22);
             txtVolumeEdit.TabIndex = 5;
@@ -313,24 +368,12 @@
             txtVolumeEdit.KeyDown += txtVolumeEdit_KeyDown;
             txtVolumeEdit.KeyPress += txtVolumeEdit_KeyPress;
             // 
-            // label7
-            // 
-            label7.Anchor = AnchorStyles.Left;
-            label7.AutoSize = true;
-            label7.Font = new Font("CF Notche Demo", 11.25F, FontStyle.Bold);
-            label7.Location = new Point(3, 7);
-            label7.Name = "label7";
-            label7.Size = new Size(49, 15);
-            label7.TabIndex = 6;
-            label7.Text = "Value:";
-            label7.TextAlign = ContentAlignment.MiddleCenter;
-            // 
             // lblSelectedVolume
             // 
             lblSelectedVolume.Anchor = AnchorStyles.Left;
             lblSelectedVolume.AutoSize = true;
             lblSelectedVolume.Font = new Font("CF Notche Demo", 11.25F, FontStyle.Bold);
-            lblSelectedVolume.Location = new Point(76, 7);
+            lblSelectedVolume.Location = new Point(3, 10);
             lblSelectedVolume.Name = "lblSelectedVolume";
             lblSelectedVolume.Size = new Size(25, 15);
             lblSelectedVolume.TabIndex = 5;
@@ -338,65 +381,27 @@
             lblSelectedVolume.TextAlign = ContentAlignment.MiddleCenter;
             lblSelectedVolume.DoubleClick += lblSelectedVolume_DoubleClick;
             // 
-            // volumeSlider
+            // lblVolumeMinMax
             // 
-            volumeSlider.BackColor = Color.White;
-            volumeSlider.Dock = DockStyle.Fill;
-            volumeSlider.LargeChange = 5F;
-            volumeSlider.Location = new Point(3, 3);
-            volumeSlider.Maximum = 25F;
-            volumeSlider.Minimum = 0F;
-            volumeSlider.Name = "volumeSlider";
-            volumeSlider.Precision = 0.1F;
-            volumeSlider.Size = new Size(603, 31);
-            volumeSlider.SmallChange = 0.1F;
-            volumeSlider.TabIndex = 4;
-            volumeSlider.TickFrequency = 5;
-            volumeSlider.Value = 1F;
-            volumeSlider.Scroll += volumeSlider_Scroll;
-            // 
-            // label5
-            // 
-            label5.Anchor = AnchorStyles.Right;
-            label5.AutoSize = true;
-            label5.Font = new Font("CF Notche Demo", 9F);
-            label5.Location = new Point(66, 68);
-            label5.Name = "label5";
-            label5.Size = new Size(52, 12);
-            label5.TabIndex = 3;
-            label5.Text = "Volume: ";
-            // 
-            // numericUpDown1
-            // 
-            numericUpDown1.Anchor = AnchorStyles.Left;
-            numericUpDown1.DecimalPlaces = 1;
-            numericUpDown1.Font = new Font("CF Notche Demo", 9.749999F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            numericUpDown1.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
-            numericUpDown1.Location = new Point(124, 3);
-            numericUpDown1.Maximum = new decimal(new int[] { 9999999, 0, 0, 0 });
-            numericUpDown1.Name = "numericUpDown1";
-            numericUpDown1.Size = new Size(91, 22);
-            numericUpDown1.TabIndex = 7;
-            // 
-            // label4
-            // 
-            label4.Anchor = AnchorStyles.Right;
-            label4.AutoSize = true;
-            label4.Font = new Font("CF Notche Demo", 9F);
-            label4.Location = new Point(91, 7);
-            label4.Name = "label4";
-            label4.Size = new Size(27, 12);
-            label4.TabIndex = 2;
-            label4.Text = "FM: ";
+            lblVolumeMinMax.Anchor = AnchorStyles.Left;
+            lblVolumeMinMax.AutoSize = true;
+            lblVolumeMinMax.Font = new Font("CF Notche Demo", 9.749999F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblVolumeMinMax.Location = new Point(386, 19);
+            lblVolumeMinMax.Name = "lblVolumeMinMax";
+            lblVolumeMinMax.Size = new Size(104, 13);
+            lblVolumeMinMax.TabIndex = 7;
+            lblVolumeMinMax.Text = "Min: 0.0 - Max: 25.0";
+            lblVolumeMinMax.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // groupBox2
             // 
+            groupBox2.BackColor = Color.White;
             groupBox2.Controls.Add(tableLayoutPanel2);
             groupBox2.Dock = DockStyle.Top;
             groupBox2.Font = new Font("CF Notche Demo", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            groupBox2.Location = new Point(0, 88);
+            groupBox2.Location = new Point(0, 82);
             groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(742, 121);
+            groupBox2.Size = new Size(742, 113);
             groupBox2.TabIndex = 3;
             groupBox2.TabStop = false;
             groupBox2.Text = "Custom Icon";
@@ -408,10 +413,10 @@
             tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 83.5597839F));
             tableLayoutPanel2.Controls.Add(txtInkAtlasPart, 1, 2);
             tableLayoutPanel2.Controls.Add(txtInkAtlasPath, 1, 1);
-            tableLayoutPanel2.Controls.Add(label6, 0, 0);
+            tableLayoutPanel2.Controls.Add(lblUsingCustomIcon, 0, 0);
             tableLayoutPanel2.Controls.Add(flowLayoutPanel1, 1, 0);
-            tableLayoutPanel2.Controls.Add(lblInkAtlasPart, 0, 2);
-            tableLayoutPanel2.Controls.Add(lblInkAtlasPath, 0, 1);
+            tableLayoutPanel2.Controls.Add(lblInkPart, 0, 2);
+            tableLayoutPanel2.Controls.Add(lblInkPath, 0, 1);
             tableLayoutPanel2.Dock = DockStyle.Fill;
             tableLayoutPanel2.Location = new Point(3, 17);
             tableLayoutPanel2.Name = "tableLayoutPanel2";
@@ -419,14 +424,14 @@
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 32.9545441F));
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 30.681818F));
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 36.363636F));
-            tableLayoutPanel2.Size = new Size(736, 101);
+            tableLayoutPanel2.Size = new Size(736, 93);
             tableLayoutPanel2.TabIndex = 0;
             // 
             // txtInkAtlasPart
             // 
             txtInkAtlasPart.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             txtInkAtlasPart.Font = new Font("CF Notche Demo", 9F, FontStyle.Bold);
-            txtInkAtlasPart.Location = new Point(124, 71);
+            txtInkAtlasPart.Location = new Point(124, 65);
             txtInkAtlasPart.Name = "txtInkAtlasPart";
             txtInkAtlasPart.Size = new Size(609, 21);
             txtInkAtlasPart.TabIndex = 2;
@@ -435,21 +440,21 @@
             // 
             txtInkAtlasPath.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             txtInkAtlasPath.Font = new Font("CF Notche Demo", 9F, FontStyle.Bold);
-            txtInkAtlasPath.Location = new Point(124, 37);
+            txtInkAtlasPath.Location = new Point(124, 33);
             txtInkAtlasPath.Name = "txtInkAtlasPath";
             txtInkAtlasPath.Size = new Size(609, 21);
             txtInkAtlasPath.TabIndex = 3;
             // 
-            // label6
+            // lblUsingCustomIcon
             // 
-            label6.Anchor = AnchorStyles.Right;
-            label6.AutoSize = true;
-            label6.Font = new Font("CF Notche Demo", 9F);
-            label6.Location = new Point(74, 10);
-            label6.Name = "label6";
-            label6.Size = new Size(44, 12);
-            label6.TabIndex = 3;
-            label6.Text = "Using?";
+            lblUsingCustomIcon.Anchor = AnchorStyles.Right;
+            lblUsingCustomIcon.AutoSize = true;
+            lblUsingCustomIcon.Font = new Font("CF Notche Demo", 9F);
+            lblUsingCustomIcon.Location = new Point(74, 9);
+            lblUsingCustomIcon.Name = "lblUsingCustomIcon";
+            lblUsingCustomIcon.Size = new Size(44, 12);
+            lblUsingCustomIcon.TabIndex = 3;
+            lblUsingCustomIcon.Text = "Using?";
             // 
             // flowLayoutPanel1
             // 
@@ -458,7 +463,7 @@
             flowLayoutPanel1.Dock = DockStyle.Fill;
             flowLayoutPanel1.Location = new Point(124, 3);
             flowLayoutPanel1.Name = "flowLayoutPanel1";
-            flowLayoutPanel1.Size = new Size(609, 27);
+            flowLayoutPanel1.Size = new Size(609, 24);
             flowLayoutPanel1.TabIndex = 0;
             // 
             // radUseCustomYes
@@ -490,27 +495,27 @@
             radUseCustomNo.UseVisualStyleBackColor = true;
             radUseCustomNo.CheckedChanged += radUseCustomNo_CheckedChanged;
             // 
-            // lblInkAtlasPart
+            // lblInkPart
             // 
-            lblInkAtlasPart.Anchor = AnchorStyles.Right;
-            lblInkAtlasPart.AutoSize = true;
-            lblInkAtlasPart.Font = new Font("CF Notche Demo", 9F);
-            lblInkAtlasPart.Location = new Point(30, 76);
-            lblInkAtlasPart.Name = "lblInkAtlasPart";
-            lblInkAtlasPart.Size = new Size(88, 12);
-            lblInkAtlasPart.TabIndex = 1;
-            lblInkAtlasPart.Text = "Ink Atlas Part: ";
+            lblInkPart.Anchor = AnchorStyles.Right;
+            lblInkPart.AutoSize = true;
+            lblInkPart.Font = new Font("CF Notche Demo", 9F);
+            lblInkPart.Location = new Point(30, 69);
+            lblInkPart.Name = "lblInkPart";
+            lblInkPart.Size = new Size(88, 12);
+            lblInkPart.TabIndex = 1;
+            lblInkPart.Text = "Ink Atlas Part: ";
             // 
-            // lblInkAtlasPath
+            // lblInkPath
             // 
-            lblInkAtlasPath.Anchor = AnchorStyles.Right;
-            lblInkAtlasPath.AutoSize = true;
-            lblInkAtlasPath.Font = new Font("CF Notche Demo", 9F);
-            lblInkAtlasPath.Location = new Point(27, 42);
-            lblInkAtlasPath.Name = "lblInkAtlasPath";
-            lblInkAtlasPath.Size = new Size(91, 12);
-            lblInkAtlasPath.TabIndex = 0;
-            lblInkAtlasPath.Text = "Ink Atlas Path: ";
+            lblInkPath.Anchor = AnchorStyles.Right;
+            lblInkPath.AutoSize = true;
+            lblInkPath.Font = new Font("CF Notche Demo", 9F);
+            lblInkPath.Location = new Point(27, 38);
+            lblInkPath.Name = "lblInkPath";
+            lblInkPath.Size = new Size(91, 12);
+            lblInkPath.TabIndex = 0;
+            lblInkPath.Text = "Ink Atlas Path: ";
             // 
             // tabMusic
             // 
@@ -520,7 +525,7 @@
             tabMusic.Location = new Point(4, 25);
             tabMusic.Name = "tabMusic";
             tabMusic.Padding = new Padding(3);
-            tabMusic.Size = new Size(750, 459);
+            tabMusic.Size = new Size(750, 404);
             tabMusic.TabIndex = 1;
             tabMusic.Text = "Music";
             tabMusic.ToolTipText = "Change the music this radio station will play.";
@@ -533,7 +538,7 @@
             groupBox4.Font = new Font("CF Notche Demo", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             groupBox4.Location = new Point(3, 3);
             groupBox4.Name = "groupBox4";
-            groupBox4.Size = new Size(742, 123);
+            groupBox4.Size = new Size(742, 115);
             groupBox4.TabIndex = 0;
             groupBox4.TabStop = false;
             groupBox4.Text = "Stream Settings";
@@ -553,7 +558,7 @@
             tableLayoutPanel5.RowCount = 2;
             tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Percent, 29.1262131F));
             tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Percent, 70.87379F));
-            tableLayoutPanel5.Size = new Size(736, 103);
+            tableLayoutPanel5.Size = new Size(736, 95);
             tableLayoutPanel5.TabIndex = 0;
             // 
             // lblStreamURL
@@ -561,7 +566,7 @@
             lblStreamURL.Anchor = AnchorStyles.Right;
             lblStreamURL.AutoSize = true;
             lblStreamURL.Font = new Font("CF Notche Demo", 9F);
-            lblStreamURL.Location = new Point(33, 60);
+            lblStreamURL.Location = new Point(33, 55);
             lblStreamURL.Name = "lblStreamURL";
             lblStreamURL.Size = new Size(75, 12);
             lblStreamURL.TabIndex = 3;
@@ -572,7 +577,7 @@
             label9.Anchor = AnchorStyles.Right;
             label9.AutoSize = true;
             label9.Font = new Font("CF Notche Demo", 9F);
-            label9.Location = new Point(30, 9);
+            label9.Location = new Point(30, 7);
             label9.Name = "label9";
             label9.Size = new Size(78, 12);
             label9.TabIndex = 1;
@@ -585,7 +590,7 @@
             flowLayoutPanel2.Dock = DockStyle.Fill;
             flowLayoutPanel2.Location = new Point(114, 3);
             flowLayoutPanel2.Name = "flowLayoutPanel2";
-            flowLayoutPanel2.Size = new Size(619, 24);
+            flowLayoutPanel2.Size = new Size(619, 21);
             flowLayoutPanel2.TabIndex = 2;
             // 
             // radUseStreamYes
@@ -625,12 +630,12 @@
             tableLayoutPanel6.Controls.Add(flowLayoutPanel3, 0, 1);
             tableLayoutPanel6.Controls.Add(txtStreamURL, 0, 0);
             tableLayoutPanel6.Dock = DockStyle.Fill;
-            tableLayoutPanel6.Location = new Point(114, 33);
+            tableLayoutPanel6.Location = new Point(114, 30);
             tableLayoutPanel6.Name = "tableLayoutPanel6";
             tableLayoutPanel6.RowCount = 2;
             tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
             tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel6.Size = new Size(619, 67);
+            tableLayoutPanel6.Size = new Size(619, 62);
             tableLayoutPanel6.TabIndex = 4;
             // 
             // flowLayoutPanel3
@@ -639,16 +644,16 @@
             flowLayoutPanel3.Controls.Add(btnGetRadioGardenURL);
             flowLayoutPanel3.Controls.Add(txtPastedURL);
             flowLayoutPanel3.Dock = DockStyle.Fill;
-            flowLayoutPanel3.Location = new Point(3, 36);
+            flowLayoutPanel3.Location = new Point(3, 34);
             flowLayoutPanel3.Name = "flowLayoutPanel3";
-            flowLayoutPanel3.Size = new Size(613, 28);
+            flowLayoutPanel3.Size = new Size(613, 25);
             flowLayoutPanel3.TabIndex = 1;
             // 
             // btnGetRadioGardenURL
             // 
             btnGetRadioGardenURL.Location = new Point(3, 3);
             btnGetRadioGardenURL.Name = "btnGetRadioGardenURL";
-            btnGetRadioGardenURL.Size = new Size(177, 23);
+            btnGetRadioGardenURL.Size = new Size(177, 22);
             btnGetRadioGardenURL.TabIndex = 1;
             btnGetRadioGardenURL.Text = "Get URL from Radio Garden";
             btnGetRadioGardenURL.UseVisualStyleBackColor = true;
@@ -670,7 +675,7 @@
             // 
             txtStreamURL.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             tableLayoutPanel6.SetColumnSpan(txtStreamURL, 2);
-            txtStreamURL.Location = new Point(3, 6);
+            txtStreamURL.Location = new Point(3, 5);
             txtStreamURL.Name = "txtStreamURL";
             txtStreamURL.Size = new Size(613, 21);
             txtStreamURL.TabIndex = 0;
@@ -683,15 +688,36 @@
             tabImages.Images.SetKeyName(0, "display-frame.png");
             tabImages.Images.SetKeyName(1, "sound-waves.png");
             // 
+            // statusStrip1
+            // 
+            statusStrip1.BackColor = Color.Transparent;
+            statusStrip1.Items.AddRange(new ToolStripItem[] { lblStatus });
+            statusStrip1.Location = new Point(0, 433);
+            statusStrip1.Name = "statusStrip1";
+            statusStrip1.Size = new Size(758, 25);
+            statusStrip1.SizingGrip = false;
+            statusStrip1.TabIndex = 7;
+            statusStrip1.Text = "statusStrip1";
+            // 
+            // lblStatus
+            // 
+            lblStatus.Image = Properties.Resources.info;
+            lblStatus.Margin = new Padding(5, 3, 0, 2);
+            lblStatus.Name = "lblStatus";
+            lblStatus.Padding = new Padding(2);
+            lblStatus.Size = new Size(59, 20);
+            lblStatus.Text = "Ready";
+            // 
             // StationEditor
             // 
-            AutoScaleDimensions = new SizeF(7F, 16F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;
             Controls.Add(tabControl);
+            Controls.Add(statusStrip1);
             Controls.Add(label3);
             Name = "StationEditor";
-            Size = new Size(758, 488);
+            Size = new Size(758, 458);
             Load += StationEditor_Load;
             groupBox1.ResumeLayout(false);
             tableLayoutPanel3.ResumeLayout(false);
@@ -702,12 +728,12 @@
             groupBox3.ResumeLayout(false);
             tableLayoutPanel1.ResumeLayout(false);
             tableLayoutPanel1.PerformLayout();
-            tableLayoutPanel4.ResumeLayout(false);
-            tableLayoutPanel4.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)numericUpDown1).EndInit();
+            flowLayoutPanel4.ResumeLayout(false);
+            flowLayoutPanel4.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)volumeSlider).EndInit();
             panel2.ResumeLayout(false);
             panel2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)volumeSlider).EndInit();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown1).EndInit();
             groupBox2.ResumeLayout(false);
             tableLayoutPanel2.ResumeLayout(false);
             tableLayoutPanel2.PerformLayout();
@@ -723,14 +749,16 @@
             tableLayoutPanel6.PerformLayout();
             flowLayoutPanel3.ResumeLayout(false);
             flowLayoutPanel3.PerformLayout();
+            statusStrip1.ResumeLayout(false);
+            statusStrip1.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
-        private Label label1;
+        private Label lblName;
         private TextBox txtDisplayName;
-        private Label label2;
+        private Label lblIcon;
         private Label label3;
         private GroupBox groupBox1;
         private TableLayoutPanel tableLayoutPanel3;
@@ -742,26 +770,23 @@
         private TableLayoutPanel tableLayoutPanel2;
         private TextBox txtInkAtlasPart;
         private TextBox txtInkAtlasPath;
-        private Label label6;
+        private Label lblUsingCustomIcon;
         private FlowLayoutPanel flowLayoutPanel1;
         private RadioButton radUseCustomYes;
         private RadioButton radUseCustomNo;
-        private Label lblInkAtlasPart;
-        private Label lblInkAtlasPath;
+        private Label lblInkPart;
+        private Label lblInkPath;
         private ComboBox cmbUIIcons;
         private Panel panel1;
         private GroupBox groupBox3;
         private TableLayoutPanel tableLayoutPanel1;
-        private Label label5;
-        private Label label4;
-        private FloatTrackBar volumeSlider;
-        private TableLayoutPanel tableLayoutPanel4;
+        private Label lblVolume;
+        private Label lblFM;
         private Label lblSelectedVolume;
         private NumericUpDown numericUpDown1;
-        private Panel panel2;
-        private Label label7;
+        private Label lblVolumeVal;
         private TextBox txtVolumeEdit;
-        private Label label8;
+        private Label lblVolumeMinMax;
         private Panel panel3;
         private GroupBox groupBox4;
         private TableLayoutPanel tableLayoutPanel5;
@@ -775,5 +800,10 @@
         private Button btnGetRadioGardenURL;
         private FlowLayoutPanel flowLayoutPanel3;
         private TextBox txtPastedURL;
+        private TrackBar volumeSlider;
+        private FlowLayoutPanel flowLayoutPanel4;
+        private Panel panel2;
+        private StatusStrip statusStrip1;
+        private ToolStripStatusLabel lblStatus;
     }
 }

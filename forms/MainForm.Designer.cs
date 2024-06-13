@@ -34,6 +34,8 @@
             fileToolStripMenuItem = new ToolStripMenuItem();
             pathsToolStripMenuItem = new ToolStripMenuItem();
             refreshStationsToolStripMenuItem = new ToolStripMenuItem();
+            languageToolStripMenuItem = new ToolStripMenuItem();
+            cmbLanguageSelect = new ToolStripComboBox();
             helpToolStripMenuItem = new ToolStripMenuItem();
             howToUseToolStripMenuItem = new ToolStripMenuItem();
             aboutToolStripMenuItem = new ToolStripMenuItem();
@@ -56,10 +58,10 @@
             // 
             menuStrip1.BackColor = Color.Transparent;
             menuStrip1.Font = new Font("CF Notche Demo", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, helpToolStripMenuItem });
+            menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, languageToolStripMenuItem, helpToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new Size(845, 24);
+            menuStrip1.Size = new Size(1053, 24);
             menuStrip1.TabIndex = 0;
             menuStrip1.Text = "menuStrip1";
             // 
@@ -74,7 +76,7 @@
             // 
             pathsToolStripMenuItem.Image = Properties.Resources.folder;
             pathsToolStripMenuItem.Name = "pathsToolStripMenuItem";
-            pathsToolStripMenuItem.Size = new Size(180, 22);
+            pathsToolStripMenuItem.Size = new Size(164, 22);
             pathsToolStripMenuItem.Text = "Game Paths";
             pathsToolStripMenuItem.Click += pathsToolStripMenuItem_Click;
             // 
@@ -82,9 +84,25 @@
             // 
             refreshStationsToolStripMenuItem.Image = Properties.Resources.refresh;
             refreshStationsToolStripMenuItem.Name = "refreshStationsToolStripMenuItem";
-            refreshStationsToolStripMenuItem.Size = new Size(180, 22);
+            refreshStationsToolStripMenuItem.Size = new Size(164, 22);
             refreshStationsToolStripMenuItem.Text = "Refresh Stations";
             refreshStationsToolStripMenuItem.Click += refreshStationsToolStripMenuItem_Click;
+            // 
+            // languageToolStripMenuItem
+            // 
+            languageToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { cmbLanguageSelect });
+            languageToolStripMenuItem.Name = "languageToolStripMenuItem";
+            languageToolStripMenuItem.Size = new Size(73, 20);
+            languageToolStripMenuItem.Text = "Language";
+            // 
+            // cmbLanguageSelect
+            // 
+            cmbLanguageSelect.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbLanguageSelect.Items.AddRange(new object[] { "English (en)", "French (fr)", "Spanish (es)" });
+            cmbLanguageSelect.Name = "cmbLanguageSelect";
+            cmbLanguageSelect.Size = new Size(121, 23);
+            cmbLanguageSelect.Sorted = true;
+            cmbLanguageSelect.SelectedIndexChanged += cmbLanguageSelect_SelectedIndexChanged;
             // 
             // helpToolStripMenuItem
             // 
@@ -97,14 +115,14 @@
             // 
             howToUseToolStripMenuItem.Image = Properties.Resources.guide;
             howToUseToolStripMenuItem.Name = "howToUseToolStripMenuItem";
-            howToUseToolStripMenuItem.Size = new Size(180, 22);
+            howToUseToolStripMenuItem.Size = new Size(135, 22);
             howToUseToolStripMenuItem.Text = "How To Use";
             // 
             // aboutToolStripMenuItem
             // 
             aboutToolStripMenuItem.Image = Properties.Resources.info;
             aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            aboutToolStripMenuItem.Size = new Size(180, 22);
+            aboutToolStripMenuItem.Size = new Size(135, 22);
             aboutToolStripMenuItem.Text = "About";
             // 
             // fdlgOpenGameExe
@@ -113,6 +131,7 @@
             // 
             // splitContainer1
             // 
+            splitContainer1.BackColor = Color.Transparent;
             splitContainer1.Dock = DockStyle.Fill;
             splitContainer1.Location = new Point(0, 24);
             splitContainer1.Margin = new Padding(3, 2, 3, 2);
@@ -122,8 +141,12 @@
             // 
             splitContainer1.Panel1.Controls.Add(lbStations);
             splitContainer1.Panel1.Controls.Add(tableLayoutPanel1);
-            splitContainer1.Size = new Size(845, 417);
-            splitContainer1.SplitterDistance = 203;
+            // 
+            // splitContainer1.Panel2
+            // 
+            splitContainer1.Panel2.BackColor = Color.Transparent;
+            splitContainer1.Size = new Size(1053, 592);
+            splitContainer1.SplitterDistance = 251;
             splitContainer1.TabIndex = 1;
             // 
             // lbStations
@@ -136,7 +159,7 @@
             lbStations.Location = new Point(0, 0);
             lbStations.Margin = new Padding(3, 2, 3, 2);
             lbStations.Name = "lbStations";
-            lbStations.Size = new Size(203, 380);
+            lbStations.Size = new Size(251, 555);
             lbStations.TabIndex = 0;
             lbStations.SelectedIndexChanged += lbStations_SelectedIndexChanged;
             // 
@@ -152,21 +175,21 @@
             tableLayoutPanel1.Controls.Add(btnDeleteStation, 1, 0);
             tableLayoutPanel1.Controls.Add(btnAddStation, 0, 0);
             tableLayoutPanel1.Dock = DockStyle.Bottom;
-            tableLayoutPanel1.Location = new Point(0, 380);
+            tableLayoutPanel1.Location = new Point(0, 555);
             tableLayoutPanel1.Margin = new Padding(3, 2, 3, 2);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 1;
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel1.Size = new Size(203, 37);
+            tableLayoutPanel1.Size = new Size(251, 37);
             tableLayoutPanel1.TabIndex = 1;
             // 
             // btnDeleteStation
             // 
             btnDeleteStation.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            btnDeleteStation.Location = new Point(104, 2);
+            btnDeleteStation.Location = new Point(128, 2);
             btnDeleteStation.Margin = new Padding(3, 2, 3, 2);
             btnDeleteStation.Name = "btnDeleteStation";
-            btnDeleteStation.Size = new Size(96, 33);
+            btnDeleteStation.Size = new Size(120, 33);
             btnDeleteStation.TabIndex = 1;
             btnDeleteStation.Text = "Delete Station";
             btnDeleteStation.UseVisualStyleBackColor = true;
@@ -177,7 +200,7 @@
             btnAddStation.Location = new Point(3, 2);
             btnAddStation.Margin = new Padding(3, 2, 3, 2);
             btnAddStation.Name = "btnAddStation";
-            btnAddStation.Size = new Size(95, 33);
+            btnAddStation.Size = new Size(119, 33);
             btnAddStation.TabIndex = 0;
             btnAddStation.Text = "New Station";
             btnAddStation.UseVisualStyleBackColor = true;
@@ -187,17 +210,15 @@
             AutoScaleDimensions = new SizeF(7F, 12F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;
-            ClientSize = new Size(845, 441);
+            ClientSize = new Size(1053, 616);
             Controls.Add(splitContainer1);
             Controls.Add(menuStrip1);
             Font = new Font("CF Notche Demo", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            FormBorderStyle = FormBorderStyle.FixedSingle;
             Icon = (Icon)resources.GetObject("$this.Icon");
             MainMenuStrip = menuStrip1;
             Margin = new Padding(3, 2, 3, 2);
             MaximizeBox = false;
             Name = "MainForm";
-            SizeGripStyle = SizeGripStyle.Hide;
             StartPosition = FormStartPosition.CenterParent;
             Text = "Cyber Radio Assistant";
             Load += MainForm_Load;
@@ -229,5 +250,7 @@
         private Button btnAddStation;
         private ToolStripMenuItem refreshStationsToolStripMenuItem;
         private BindingSource metaDataBindingSource;
+        private ToolStripMenuItem languageToolStripMenuItem;
+        private ToolStripComboBox cmbLanguageSelect;
     }
 }

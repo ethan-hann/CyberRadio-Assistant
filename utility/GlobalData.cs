@@ -1,9 +1,12 @@
-﻿using System;
+﻿using RadioExt_Helper.forms;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
+using System.Resources;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,9 +15,14 @@ namespace RadioExt_Helper.utility
     public static class GlobalData
     {
         /// <summary>
-        /// Get a list of strings containing all UIIcon records in the game. This list is populated from an embedded text file.
+        /// A list of strings containing all UIIcon records in the game. This list is populated from an embedded text file.
         /// </summary>
         public static BindingList<string> UIIcons { get; private set; } = [];
+
+        /// <summary>
+        /// The resource manager responsible for keeping translations of strings.
+        /// </summary>
+        public static readonly ResourceManager Strings = new("RadioExt_Helper.Strings", typeof(MainForm).Assembly);
 
         internal static Assembly ExecAssembly { get; private set; } = Assembly.GetExecutingAssembly();
 
@@ -24,6 +32,18 @@ namespace RadioExt_Helper.utility
         public static void Initialize()
         {
             GetUIIcons();
+            SetCulture("English (en)");
+        }
+
+        /// <summary>
+        /// Sets the UI culture to the value passed in. This method expects the culture to be formatted like so:
+        /// <c>English (en)</c>, where the culture code is in parentheses at the end of the string.
+        /// </summary>
+        /// <param name="culture">The culture to change the UI to.</param>
+        public static void SetCulture(string culture)
+        {
+            string parsedCulture = culture.Substring(culture.IndexOf('(') + 1, culture.Length - culture.LastIndexOf(')') + 1);
+            CultureInfo.CurrentUICulture = new CultureInfo(parsedCulture);
         }
 
         private static void GetUIIcons()

@@ -1,4 +1,5 @@
 ﻿using RadioExt_Helper.models;
+using RadioExt_Helper.Properties;
 using RadioExt_Helper.utility;
 using System;
 using System.Collections.Generic;
@@ -40,7 +41,7 @@ namespace RadioExt_Helper.user_controls
         private void StationEditor_Load(object sender, EventArgs e)
         {
             SetDisplayTabValues();
-
+            SetMusicTabValues();
         }
 
         #region Display and Icon Tab
@@ -60,8 +61,8 @@ namespace RadioExt_Helper.user_controls
                 radUseCustomYes.Checked = false;
                 txtInkAtlasPart.Visible = !radUseCustomNo.Checked;
                 txtInkAtlasPath.Visible = !radUseCustomNo.Checked;
-                lblInkAtlasPart.Visible = !radUseCustomNo.Checked;
-                lblInkAtlasPath.Visible = !radUseCustomNo.Checked;
+                lblInkPart.Visible = !radUseCustomNo.Checked;
+                lblInkPath.Visible = !radUseCustomNo.Checked;
             }
 
             txtInkAtlasPath.Text = _icon.InkAtlasPath;
@@ -78,14 +79,14 @@ namespace RadioExt_Helper.user_controls
             _icon.UseCustom = !radUseCustomNo.Checked;
             txtInkAtlasPart.Visible = !radUseCustomNo.Checked;
             txtInkAtlasPath.Visible = !radUseCustomNo.Checked;
-            lblInkAtlasPart.Visible = !radUseCustomNo.Checked;
-            lblInkAtlasPath.Visible = !radUseCustomNo.Checked;
+            lblInkPart.Visible = !radUseCustomNo.Checked;
+            lblInkPath.Visible = !radUseCustomNo.Checked;
         }
 
         private void volumeSlider_Scroll(object sender, EventArgs e)
         {
-            lblSelectedVolume.Text = $"{volumeSlider.Value:F1}";
-            _metaData.Volume = volumeSlider.Value;
+            _metaData.Volume = volumeSlider.Value * 0.1f;
+            lblSelectedVolume.Text = $"{_metaData.Volume:F1}";
         }
 
         private void lblSelectedVolume_DoubleClick(object sender, EventArgs e)
@@ -101,15 +102,18 @@ namespace RadioExt_Helper.user_controls
         {
             if (e.KeyCode == Keys.Enter)
             {
+                var maxVol = volumeSlider.Maximum * 0.1f;
+                var minVol = volumeSlider.Minimum * 0.1f;
+
                 if (float.TryParse(txtVolumeEdit.Text, NumberStyles.Float, CultureInfo.InvariantCulture, out float newVolume))
                 {
-                    if (newVolume > volumeSlider.Maximum || newVolume < volumeSlider.Minimum)
+                    if (newVolume > maxVol || newVolume < minVol)
                         e.Handled = true;
                     else
                     {
                         lblSelectedVolume.Text = txtVolumeEdit.Text;
                         txtVolumeEdit.Visible = false;
-                        volumeSlider.Value = newVolume;
+                        volumeSlider.Value = (int)(newVolume / 0.1f);
                         e.Handled = true;
                     }
                 }
@@ -133,6 +137,19 @@ namespace RadioExt_Helper.user_controls
         #endregion
 
         #region Music Tab
+        private void SetMusicTabValues()
+        {
+            radUseStreamYes.Checked = _streamInfo.IsStream;
+            radUseStreamNo.Checked = !radUseStreamYes.Checked;
+
+            if (_streamInfo.IsStream)
+                ToggleStreamControls(true);
+            else
+                ToggleStreamControls(false);
+
+            txtStreamURL.Text = _streamInfo.StreamURL;
+        }
+
         private void radUseStreamYes_CheckedChanged(object sender, EventArgs e)
         {
             ToggleStreamControls(true);
@@ -218,7 +235,28 @@ namespace RadioExt_Helper.user_controls
 
         #endregion
 
+        #region Hover Help
 
-        
+        private void lblName_MouseEnter(object sender, EventArgs e)
+        {
+            lblStatus.Text = GlobalData.Strings.GetString("StationNameHelp");
+        }
+
+        private void lblName_MouseLeave(object sender, EventArgs e)
+        {
+            lblStatus.Text = GlobalData.Strings.GetString("Ready");
+        }
+
+        private void lblIcon_MouseEnter(object sender, EventArgs e)
+        {
+            lblStatus.Text = GlobalData.Strings.GetString("IconHelp");
+        }
+
+        #endregion
+
+        private void lblIcon_MouseLeave(object sender, EventArgs e)
+        {
+            lblStatus.Text = GlobalData.Strings.GetString("Ready");
+        }
     }
 }

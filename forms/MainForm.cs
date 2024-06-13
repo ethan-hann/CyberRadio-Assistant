@@ -22,7 +22,7 @@ namespace RadioExt_Helper.forms
         {
             //ApplyFonts();
             GlobalData.Initialize();
-
+            cmbLanguageSelect.SelectedIndex = 0;
         }
 
         private void MainForm_Shown(object sender, EventArgs e)
@@ -108,7 +108,7 @@ namespace RadioExt_Helper.forms
                 splitContainer1.Panel2.Controls.Add(editorControl);
                 editorControl.StationUpdated += UpdateStation;
             }
-            
+
         }
 
         private void UpdateStation(object? sender, EventArgs e)
@@ -116,6 +116,17 @@ namespace RadioExt_Helper.forms
             if (e is StationUpdatedEventArgs args)
             {
                 //TODO: Update station metadata with changed version
+            }
+        }
+
+        private void cmbLanguageSelect_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var selectedCulture = cmbLanguageSelect.SelectedItem;
+            if (selectedCulture != null)
+            {
+                string? culture = selectedCulture.ToString();
+                if (culture != null)
+                    GlobalData.SetCulture(culture);
             }
         }
     }
