@@ -175,6 +175,7 @@
             // fdlgBackupPath
             // 
             fdlgBackupPath.Description = "Select the path to backup custom radio stations to.";
+            fdlgBackupPath.UseDescriptionForTitle = true;
             // 
             // fdlgOpenGameExe
             // 

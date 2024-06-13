@@ -1,28 +1,18 @@
 ﻿using RadioExt_Helper.models;
-using RadioExt_Helper.Properties;
 using RadioExt_Helper.utility;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace RadioExt_Helper.user_controls
 {
-    public partial class StationEditor : UserControl
+    public sealed partial class StationEditor : UserControl
     {
         public EventHandler? StationUpdated;
 
-        private MetaData _metaData;
-        private CustomIcon _icon;
-        private StreamInfo _streamInfo;
+        private readonly MetaData _metaData;
+        private readonly CustomIcon _icon;
+        private readonly StreamInfo _streamInfo;
 
-        private bool isPasteOperation = false;
+        private bool _isPasteOperation;
 
         public StationEditor(MetaData metaData)
         {
@@ -33,7 +23,7 @@ namespace RadioExt_Helper.user_controls
             _streamInfo = _metaData.StreamInfo;
 
             //Populate combobox of UIIcons
-            GlobalData.UIIcons.ToList().ForEach(icon => cmbUIIcons.Items.Add(icon));
+            GlobalData.UiIcons.ToList().ForEach(icon => cmbUIIcons.Items.Add(icon));
 
             Dock = DockStyle.Fill;
         }
@@ -42,6 +32,36 @@ namespace RadioExt_Helper.user_controls
         {
             SetDisplayTabValues();
             SetMusicTabValues();
+            Translate();
+        }
+
+        private void Translate()
+        {
+            tabDisplayAndIcon.Text = GlobalData.Strings.GetString("DisplayAndIcon");
+            lblName.Text = GlobalData.Strings.GetString("DisplayName");
+            lblIcon.Text = GlobalData.Strings.GetString("Icon");
+            lblUsingCustomIcon.Text = GlobalData.Strings.GetString("Using?");
+            lblInkPath.Text = GlobalData.Strings.GetString("InkAtlasPath");
+            lblInkPart.Text = GlobalData.Strings.GetString("InkAtlasPart");
+            lblFM.Text = GlobalData.Strings.GetString("FM");
+            lblVolume.Text = GlobalData.Strings.GetString("Volume");
+            lblVolumeVal.Text = GlobalData.Strings.GetString("Value");
+            radUseCustomYes.Text = GlobalData.Strings.GetString("Yes");
+            radUseCustomNo.Text = GlobalData.Strings.GetString("No");
+            grpDisplay.Text = GlobalData.Strings.GetString("Display");
+            grpCustomIcon.Text = GlobalData.Strings.GetString("CustomIcon");
+            grpSettings.Text = GlobalData.Strings.GetString("Settings");
+            
+            tabMusic.Text = GlobalData.Strings.GetString("Music");
+            lblUseStream.Text = GlobalData.Strings.GetString("UseStream");
+            lblStreamURL.Text = GlobalData.Strings.GetString("StreamURL");
+            grpStreamSettings.Text = GlobalData.Strings.GetString("StreamSettings");
+            btnGetRadioGardenURL.Text = GlobalData.Strings.GetString("GetURLFromRadioGarden");
+            txtPastedURL.PlaceholderText = GlobalData.Strings.GetString("URLHint");
+            radUseStreamYes.Text = GlobalData.Strings.GetString("Yes");
+            radUseStreamNo.Text = GlobalData.Strings.GetString("No");
+            
+            lblStatus.Text = GlobalData.Strings.GetString("Ready");
         }
 
         #region Display and Icon Tab
@@ -86,7 +106,7 @@ namespace RadioExt_Helper.user_controls
         private void volumeSlider_Scroll(object sender, EventArgs e)
         {
             _metaData.Volume = volumeSlider.Value * 0.1f;
-            lblSelectedVolume.Text = $"{_metaData.Volume:F1}";
+            lblSelectedVolume.Text = $@"{_metaData.Volume:F1}";
         }
 
         private void lblSelectedVolume_DoubleClick(object sender, EventArgs e)
@@ -100,23 +120,22 @@ namespace RadioExt_Helper.user_controls
 
         private void txtVolumeEdit_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Enter)
-            {
-                var maxVol = volumeSlider.Maximum * 0.1f;
-                var minVol = volumeSlider.Minimum * 0.1f;
+            if (e.KeyCode != Keys.Enter) return;
+            
+            var maxVol = volumeSlider.Maximum * 0.1f;
+            var minVol = volumeSlider.Minimum * 0.1f;
 
-                if (float.TryParse(txtVolumeEdit.Text, NumberStyles.Float, CultureInfo.InvariantCulture, out float newVolume))
-                {
-                    if (newVolume > maxVol || newVolume < minVol)
-                        e.Handled = true;
-                    else
-                    {
-                        lblSelectedVolume.Text = txtVolumeEdit.Text;
-                        txtVolumeEdit.Visible = false;
-                        volumeSlider.Value = (int)(newVolume / 0.1f);
-                        e.Handled = true;
-                    }
-                }
+            if (!float.TryParse(txtVolumeEdit.Text, NumberStyles.Float, CultureInfo.InvariantCulture,
+                    out var newVolume)) return;
+            
+            if (newVolume > maxVol || newVolume < minVol)
+                e.Handled = true;
+            else
+            {
+                lblSelectedVolume.Text = txtVolumeEdit.Text;
+                txtVolumeEdit.Visible = false;
+                volumeSlider.Value = (int)(newVolume / 0.1f);
+                e.Handled = true;
             }
         }
 
@@ -124,15 +143,11 @@ namespace RadioExt_Helper.user_controls
         {
             // Allow control characters, digits, decimal point, and minus sign
             if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && e.KeyChar != '.')
-            {
                 e.Handled = true;
-            }
 
             // Allow only one decimal point
             if (e.KeyChar == '.' && ((TextBox)sender).Text.IndexOf('.') > -1)
-            {
                 e.Handled = true;
-            }
         }
         #endregion
 
@@ -142,12 +157,9 @@ namespace RadioExt_Helper.user_controls
             radUseStreamYes.Checked = _streamInfo.IsStream;
             radUseStreamNo.Checked = !radUseStreamYes.Checked;
 
-            if (_streamInfo.IsStream)
-                ToggleStreamControls(true);
-            else
-                ToggleStreamControls(false);
+            ToggleStreamControls(_streamInfo.IsStream);
 
-            txtStreamURL.Text = _streamInfo.StreamURL;
+            txtStreamURL.Text = _streamInfo.StreamUrl;
         }
 
         private void radUseStreamYes_CheckedChanged(object sender, EventArgs e)
@@ -179,7 +191,7 @@ namespace RadioExt_Helper.user_controls
         {
             txtPastedURL.Visible = false;
             txtStreamURL.Enabled = true;
-            btnGetRadioGardenURL.Text = "Get URL from Radio Garden";
+            btnGetRadioGardenURL.Text = GlobalData.Strings.GetString("GetURLFromRadioGarden");
             txtPastedURL.Text = string.Empty;
         }
 
@@ -187,7 +199,7 @@ namespace RadioExt_Helper.user_controls
         {
             txtPastedURL.Visible = true;
             txtStreamURL.Enabled = false;
-            btnGetRadioGardenURL.Text = "Cancel";
+            btnGetRadioGardenURL.Text = GlobalData.Strings.GetString("Cancel");
         }
 
         private void btnGetRadioGardenURL_Click(object sender, EventArgs e)
@@ -200,10 +212,10 @@ namespace RadioExt_Helper.user_controls
 
         private void txtPastedURL_TextChanged(object sender, EventArgs e)
         {
-            if (isPasteOperation)
+            if (_isPasteOperation)
             {
                 HandlePasteOperation();
-                isPasteOperation = false;
+                _isPasteOperation = false;
             }
             else
             {
@@ -213,18 +225,18 @@ namespace RadioExt_Helper.user_controls
 
         private void txtPastedURL_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Control && e.KeyCode == Keys.V)
-                isPasteOperation = true;
+            if (e is { Control: true, KeyCode: Keys.V })
+                _isPasteOperation = true;
         }
 
         private void HandlePasteOperation()
         {
-            string pastedText = txtPastedURL.Text;
+            var pastedText = txtPastedURL.Text;
             if (pastedText.StartsWith("https://") && pastedText.Contains("radio.garden"))
             {
                 txtStreamURL.Text = pastedText;
                 //TODO: Get actual stream url from pasted text
-                _streamInfo.StreamURL = txtStreamURL.Text;
+                _streamInfo.StreamUrl = txtStreamURL.Text;
                 HideRadioGardenTextInput();
             }
             else
@@ -251,12 +263,12 @@ namespace RadioExt_Helper.user_controls
         {
             lblStatus.Text = GlobalData.Strings.GetString("IconHelp");
         }
-
-        #endregion
-
+        
         private void lblIcon_MouseLeave(object sender, EventArgs e)
         {
             lblStatus.Text = GlobalData.Strings.GetString("Ready");
         }
+
+        #endregion
     }
 }

@@ -13,7 +13,7 @@ namespace RadioExt_Helper.models
         public string DisplayName { get; set; } = "69.9 Your Station Name";
 
         [JsonProperty("fm")]
-        public float FM { get; set; } = 69.9f;
+        public float Fm { get; set; } = 69.9f;
 
         [JsonProperty("volume")]
         public float Volume { get; set; } = 1.0f;

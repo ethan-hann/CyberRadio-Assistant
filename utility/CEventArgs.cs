@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace RadioExt_Helper.utility
 {
-    public class CEventArgs
+    public abstract class CEventArgs
     {
         public class StationUpdatedEventArgs(MetaData metaData) : EventArgs
         {

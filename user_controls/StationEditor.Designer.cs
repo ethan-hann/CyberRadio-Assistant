@@ -1,6 +1,6 @@
 ﻿namespace RadioExt_Helper.user_controls
 {
-    partial class StationEditor
+    sealed partial class StationEditor
     {
         /// <summary> 
         /// Required designer variable.
@@ -34,14 +34,14 @@
             txtDisplayName = new TextBox();
             lblName = new Label();
             label3 = new Label();
-            groupBox1 = new GroupBox();
+            grpDisplay = new GroupBox();
             tableLayoutPanel3 = new TableLayoutPanel();
             cmbUIIcons = new ComboBox();
             tabControl = new TabControl();
             tabDisplayAndIcon = new TabPage();
             panel1 = new Panel();
             panel3 = new Panel();
-            groupBox3 = new GroupBox();
+            grpSettings = new GroupBox();
             tableLayoutPanel1 = new TableLayoutPanel();
             lblVolume = new Label();
             numericUpDown1 = new NumericUpDown();
@@ -53,7 +53,7 @@
             txtVolumeEdit = new TextBox();
             lblSelectedVolume = new Label();
             lblVolumeMinMax = new Label();
-            groupBox2 = new GroupBox();
+            grpCustomIcon = new GroupBox();
             tableLayoutPanel2 = new TableLayoutPanel();
             txtInkAtlasPart = new TextBox();
             txtInkAtlasPath = new TextBox();
@@ -64,10 +64,10 @@
             lblInkPart = new Label();
             lblInkPath = new Label();
             tabMusic = new TabPage();
-            groupBox4 = new GroupBox();
+            grpStreamSettings = new GroupBox();
             tableLayoutPanel5 = new TableLayoutPanel();
             lblStreamURL = new Label();
-            label9 = new Label();
+            lblUseStream = new Label();
             flowLayoutPanel2 = new FlowLayoutPanel();
             radUseStreamYes = new RadioButton();
             radUseStreamNo = new RadioButton();
@@ -79,22 +79,22 @@
             tabImages = new ImageList(components);
             statusStrip1 = new StatusStrip();
             lblStatus = new ToolStripStatusLabel();
-            groupBox1.SuspendLayout();
+            grpDisplay.SuspendLayout();
             tableLayoutPanel3.SuspendLayout();
             tabControl.SuspendLayout();
             tabDisplayAndIcon.SuspendLayout();
             panel1.SuspendLayout();
-            groupBox3.SuspendLayout();
+            grpSettings.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numericUpDown1).BeginInit();
             flowLayoutPanel4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)volumeSlider).BeginInit();
             panel2.SuspendLayout();
-            groupBox2.SuspendLayout();
+            grpCustomIcon.SuspendLayout();
             tableLayoutPanel2.SuspendLayout();
             flowLayoutPanel1.SuspendLayout();
             tabMusic.SuspendLayout();
-            groupBox4.SuspendLayout();
+            grpStreamSettings.SuspendLayout();
             tableLayoutPanel5.SuspendLayout();
             flowLayoutPanel2.SuspendLayout();
             tableLayoutPanel6.SuspendLayout();
@@ -147,18 +147,18 @@
             label3.TabIndex = 4;
             label3.Text = "Using Custom Icon?";
             // 
-            // groupBox1
+            // grpDisplay
             // 
-            groupBox1.BackColor = Color.White;
-            groupBox1.Controls.Add(tableLayoutPanel3);
-            groupBox1.Dock = DockStyle.Top;
-            groupBox1.Font = new Font("CF Notche Demo", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            groupBox1.Location = new Point(0, 0);
-            groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(742, 82);
-            groupBox1.TabIndex = 2;
-            groupBox1.TabStop = false;
-            groupBox1.Text = "Display";
+            grpDisplay.BackColor = Color.White;
+            grpDisplay.Controls.Add(tableLayoutPanel3);
+            grpDisplay.Dock = DockStyle.Top;
+            grpDisplay.Font = new Font("CF Notche Demo", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            grpDisplay.Location = new Point(0, 0);
+            grpDisplay.Name = "grpDisplay";
+            grpDisplay.Size = new Size(742, 82);
+            grpDisplay.TabIndex = 2;
+            grpDisplay.TabStop = false;
+            grpDisplay.Text = "Display";
             // 
             // tableLayoutPanel3
             // 
@@ -223,9 +223,9 @@
             // 
             panel1.BackColor = Color.White;
             panel1.Controls.Add(panel3);
-            panel1.Controls.Add(groupBox3);
-            panel1.Controls.Add(groupBox2);
-            panel1.Controls.Add(groupBox1);
+            panel1.Controls.Add(grpSettings);
+            panel1.Controls.Add(grpCustomIcon);
+            panel1.Controls.Add(grpDisplay);
             panel1.Dock = DockStyle.Fill;
             panel1.Location = new Point(3, 3);
             panel1.Name = "panel1";
@@ -241,18 +241,18 @@
             panel3.Size = new Size(742, 97);
             panel3.TabIndex = 5;
             // 
-            // groupBox3
+            // grpSettings
             // 
-            groupBox3.BackColor = Color.White;
-            groupBox3.Controls.Add(tableLayoutPanel1);
-            groupBox3.Dock = DockStyle.Top;
-            groupBox3.Font = new Font("CF Notche Demo", 9F, FontStyle.Bold);
-            groupBox3.Location = new Point(0, 195);
-            groupBox3.Name = "groupBox3";
-            groupBox3.Size = new Size(742, 104);
-            groupBox3.TabIndex = 4;
-            groupBox3.TabStop = false;
-            groupBox3.Text = "Settings";
+            grpSettings.BackColor = Color.White;
+            grpSettings.Controls.Add(tableLayoutPanel1);
+            grpSettings.Dock = DockStyle.Top;
+            grpSettings.Font = new Font("CF Notche Demo", 9F, FontStyle.Bold);
+            grpSettings.Location = new Point(0, 195);
+            grpSettings.Name = "grpSettings";
+            grpSettings.Size = new Size(742, 104);
+            grpSettings.TabIndex = 4;
+            grpSettings.TabStop = false;
+            grpSettings.Text = "Settings";
             // 
             // tableLayoutPanel1
             // 
@@ -393,18 +393,18 @@
             lblVolumeMinMax.Text = "Min: 0.0 - Max: 25.0";
             lblVolumeMinMax.TextAlign = ContentAlignment.MiddleCenter;
             // 
-            // groupBox2
+            // grpCustomIcon
             // 
-            groupBox2.BackColor = Color.White;
-            groupBox2.Controls.Add(tableLayoutPanel2);
-            groupBox2.Dock = DockStyle.Top;
-            groupBox2.Font = new Font("CF Notche Demo", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            groupBox2.Location = new Point(0, 82);
-            groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(742, 113);
-            groupBox2.TabIndex = 3;
-            groupBox2.TabStop = false;
-            groupBox2.Text = "Custom Icon";
+            grpCustomIcon.BackColor = Color.White;
+            grpCustomIcon.Controls.Add(tableLayoutPanel2);
+            grpCustomIcon.Dock = DockStyle.Top;
+            grpCustomIcon.Font = new Font("CF Notche Demo", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            grpCustomIcon.Location = new Point(0, 82);
+            grpCustomIcon.Name = "grpCustomIcon";
+            grpCustomIcon.Size = new Size(742, 113);
+            grpCustomIcon.TabIndex = 3;
+            grpCustomIcon.TabStop = false;
+            grpCustomIcon.Text = "Custom Icon";
             // 
             // tableLayoutPanel2
             // 
@@ -520,7 +520,7 @@
             // tabMusic
             // 
             tabMusic.BorderStyle = BorderStyle.FixedSingle;
-            tabMusic.Controls.Add(groupBox4);
+            tabMusic.Controls.Add(grpStreamSettings);
             tabMusic.ImageIndex = 1;
             tabMusic.Location = new Point(4, 25);
             tabMusic.Name = "tabMusic";
@@ -531,17 +531,17 @@
             tabMusic.ToolTipText = "Change the music this radio station will play.";
             tabMusic.UseVisualStyleBackColor = true;
             // 
-            // groupBox4
+            // grpStreamSettings
             // 
-            groupBox4.Controls.Add(tableLayoutPanel5);
-            groupBox4.Dock = DockStyle.Top;
-            groupBox4.Font = new Font("CF Notche Demo", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            groupBox4.Location = new Point(3, 3);
-            groupBox4.Name = "groupBox4";
-            groupBox4.Size = new Size(742, 115);
-            groupBox4.TabIndex = 0;
-            groupBox4.TabStop = false;
-            groupBox4.Text = "Stream Settings";
+            grpStreamSettings.Controls.Add(tableLayoutPanel5);
+            grpStreamSettings.Dock = DockStyle.Top;
+            grpStreamSettings.Font = new Font("CF Notche Demo", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            grpStreamSettings.Location = new Point(3, 3);
+            grpStreamSettings.Name = "grpStreamSettings";
+            grpStreamSettings.Size = new Size(742, 115);
+            grpStreamSettings.TabIndex = 0;
+            grpStreamSettings.TabStop = false;
+            grpStreamSettings.Text = "Stream Settings";
             // 
             // tableLayoutPanel5
             // 
@@ -549,7 +549,7 @@
             tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 15.081522F));
             tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 84.91848F));
             tableLayoutPanel5.Controls.Add(lblStreamURL, 0, 1);
-            tableLayoutPanel5.Controls.Add(label9, 0, 0);
+            tableLayoutPanel5.Controls.Add(lblUseStream, 0, 0);
             tableLayoutPanel5.Controls.Add(flowLayoutPanel2, 1, 0);
             tableLayoutPanel5.Controls.Add(tableLayoutPanel6, 1, 1);
             tableLayoutPanel5.Dock = DockStyle.Fill;
@@ -572,16 +572,16 @@
             lblStreamURL.TabIndex = 3;
             lblStreamURL.Text = "Stream URL:";
             // 
-            // label9
+            // lblUseStream
             // 
-            label9.Anchor = AnchorStyles.Right;
-            label9.AutoSize = true;
-            label9.Font = new Font("CF Notche Demo", 9F);
-            label9.Location = new Point(30, 7);
-            label9.Name = "label9";
-            label9.Size = new Size(78, 12);
-            label9.TabIndex = 1;
-            label9.Text = "Use Stream?";
+            lblUseStream.Anchor = AnchorStyles.Right;
+            lblUseStream.AutoSize = true;
+            lblUseStream.Font = new Font("CF Notche Demo", 9F);
+            lblUseStream.Location = new Point(30, 7);
+            lblUseStream.Name = "lblUseStream";
+            lblUseStream.Size = new Size(78, 12);
+            lblUseStream.TabIndex = 1;
+            lblUseStream.Text = "Use Stream?";
             // 
             // flowLayoutPanel2
             // 
@@ -719,13 +719,13 @@
             Name = "StationEditor";
             Size = new Size(758, 458);
             Load += StationEditor_Load;
-            groupBox1.ResumeLayout(false);
+            grpDisplay.ResumeLayout(false);
             tableLayoutPanel3.ResumeLayout(false);
             tableLayoutPanel3.PerformLayout();
             tabControl.ResumeLayout(false);
             tabDisplayAndIcon.ResumeLayout(false);
             panel1.ResumeLayout(false);
-            groupBox3.ResumeLayout(false);
+            grpSettings.ResumeLayout(false);
             tableLayoutPanel1.ResumeLayout(false);
             tableLayoutPanel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)numericUpDown1).EndInit();
@@ -734,13 +734,13 @@
             ((System.ComponentModel.ISupportInitialize)volumeSlider).EndInit();
             panel2.ResumeLayout(false);
             panel2.PerformLayout();
-            groupBox2.ResumeLayout(false);
+            grpCustomIcon.ResumeLayout(false);
             tableLayoutPanel2.ResumeLayout(false);
             tableLayoutPanel2.PerformLayout();
             flowLayoutPanel1.ResumeLayout(false);
             flowLayoutPanel1.PerformLayout();
             tabMusic.ResumeLayout(false);
-            groupBox4.ResumeLayout(false);
+            grpStreamSettings.ResumeLayout(false);
             tableLayoutPanel5.ResumeLayout(false);
             tableLayoutPanel5.PerformLayout();
             flowLayoutPanel2.ResumeLayout(false);
@@ -760,13 +760,13 @@
         private TextBox txtDisplayName;
         private Label lblIcon;
         private Label label3;
-        private GroupBox groupBox1;
+        private GroupBox grpDisplay;
         private TableLayoutPanel tableLayoutPanel3;
         private TabControl tabControl;
         private TabPage tabDisplayAndIcon;
         private TabPage tabMusic;
         private ImageList tabImages;
-        private GroupBox groupBox2;
+        private GroupBox grpCustomIcon;
         private TableLayoutPanel tableLayoutPanel2;
         private TextBox txtInkAtlasPart;
         private TextBox txtInkAtlasPath;
@@ -778,7 +778,7 @@
         private Label lblInkPath;
         private ComboBox cmbUIIcons;
         private Panel panel1;
-        private GroupBox groupBox3;
+        private GroupBox grpSettings;
         private TableLayoutPanel tableLayoutPanel1;
         private Label lblVolume;
         private Label lblFM;
@@ -788,9 +788,9 @@
         private TextBox txtVolumeEdit;
         private Label lblVolumeMinMax;
         private Panel panel3;
-        private GroupBox groupBox4;
+        private GroupBox grpStreamSettings;
         private TableLayoutPanel tableLayoutPanel5;
-        private Label label9;
+        private Label lblUseStream;
         private FlowLayoutPanel flowLayoutPanel2;
         private RadioButton radUseStreamYes;
         private RadioButton radUseStreamNo;

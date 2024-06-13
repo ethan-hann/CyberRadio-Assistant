@@ -10,7 +10,7 @@ namespace RadioExt_Helper.utility;
 public static class FontLoader
 {
     private static bool _isInitialized = false;
-    private static PrivateFontCollection _privateFonts = new();
+    private static readonly PrivateFontCollection PrivateFonts = new();
     
     private static readonly Dictionary<string, string> Fonts = new()
     {
@@ -33,29 +33,29 @@ public static class FontLoader
             
             // Read the font data from the stream into a new array of bytes.
             var fontData = new byte[fontStream.Length];
-            var bytesReadCount = fontStream.Read(fontData, 0, (int)fontStream.Length);
+            _ = fontStream.Read(fontData, 0, (int)fontStream.Length);
             fontStream.Close();
                 
             // Allocate memory for the font data and copy it
-            IntPtr fontPtr = System.Runtime.InteropServices.Marshal.AllocCoTaskMem(fontData.Length);
+            var fontPtr = System.Runtime.InteropServices.Marshal.AllocCoTaskMem(fontData.Length);
             System.Runtime.InteropServices.Marshal.Copy(fontData, 0, fontPtr, fontData.Length);
                 
             // Add the font to the PrivateFontCollection
-            _privateFonts.AddMemoryFont(fontPtr, fontData.Length);
+            PrivateFonts.AddMemoryFont(fontPtr, fontData.Length);
                 
             // Free the allocated memory
             System.Runtime.InteropServices.Marshal.FreeCoTaskMem(fontPtr);
         }
 
-        if (_privateFonts.Families.Length > 0)
+        if (PrivateFonts.Families.Length > 0)
             _isInitialized = true;
     }
 
     public static void ApplyCustomFont(Control c, float emSize, bool isBold = false)
     {
-        if (_privateFonts.Families.Length <= 0) return;
+        if (PrivateFonts.Families.Length <= 0) return;
 
-        var customFont = new Font(_privateFonts.Families.First(), emSize,
+        var customFont = new Font(PrivateFonts.Families.First(), emSize,
             isBold ? FontStyle.Bold : FontStyle.Regular);
 
         if (c.InvokeRequired)

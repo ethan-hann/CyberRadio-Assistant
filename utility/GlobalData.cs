@@ -17,7 +17,7 @@ namespace RadioExt_Helper.utility
         /// <summary>
         /// A list of strings containing all UIIcon records in the game. This list is populated from an embedded text file.
         /// </summary>
-        public static BindingList<string> UIIcons { get; private set; } = [];
+        public static BindingList<string> UiIcons { get; private set; } = [];
 
         /// <summary>
         /// The resource manager responsible for keeping translations of strings.
@@ -31,7 +31,7 @@ namespace RadioExt_Helper.utility
         //Initialize all global data.
         public static void Initialize()
         {
-            GetUIIcons();
+            GetUiIcons();
             SetCulture("English (en)");
         }
 
@@ -42,11 +42,12 @@ namespace RadioExt_Helper.utility
         /// <param name="culture">The culture to change the UI to.</param>
         public static void SetCulture(string culture)
         {
-            string parsedCulture = culture.Substring(culture.IndexOf('(') + 1, culture.Length - culture.LastIndexOf(')') + 1);
+            var parsedCulture = culture.Substring(culture.IndexOf('(') + 1, 
+                culture.Length - culture.LastIndexOf(')') + 1);
             CultureInfo.CurrentUICulture = new CultureInfo(parsedCulture);
         }
 
-        private static void GetUIIcons()
+        private static void GetUiIcons()
         {
             if (_uiIconsInitialized) { return; }
             try
@@ -56,7 +57,7 @@ namespace RadioExt_Helper.utility
                 var txtData = ExecAssembly.ReadResource("RadioExt_Helper.resources.final_ui_icon_strings.txt");
                 foreach (string line in txtData.Split('\n'))
                     strings.Add(line.TrimEnd().TrimStart());
-                UIIcons = new BindingList<string>(strings.Distinct().ToList());
+                UiIcons = new BindingList<string>(strings.Distinct().ToList());
 
                 _uiIconsInitialized = true;
             } catch (Exception ex) { Debug.WriteLine(ex); }

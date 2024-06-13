@@ -11,7 +11,7 @@ namespace RadioExt_Helper.utility
     {
         public static string ReadResource(this Assembly assembly, string resourceName)
         {
-            using Stream? stream = assembly.GetManifestResourceStream(resourceName);
+            using var stream = assembly.GetManifestResourceStream(resourceName);
             if (stream == null) { return string.Empty; }
 
             using StreamReader reader = new(stream);

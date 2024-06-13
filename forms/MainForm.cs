@@ -11,7 +11,7 @@ namespace RadioExt_Helper.forms
 {
     public partial class MainForm : Form
     {
-        private BindingList<MetaData> _stations = [];
+        private readonly BindingList<MetaData> _stations = [];
 
         public MainForm()
         {
@@ -23,12 +23,31 @@ namespace RadioExt_Helper.forms
             //ApplyFonts();
             GlobalData.Initialize();
             cmbLanguageSelect.SelectedIndex = 0;
+            
         }
 
         private void MainForm_Shown(object sender, EventArgs e)
         {
+            Translate();
             CheckGamePath();
             PopulateStations();
+        }
+
+        private void Translate()
+        {
+            Text = GlobalData.Strings.GetString("MainTitle");
+            fileToolStripMenuItem.Text = GlobalData.Strings.GetString("File");
+            languageToolStripMenuItem.Text = GlobalData.Strings.GetString("Language");
+            helpToolStripMenuItem.Text = GlobalData.Strings.GetString("Help");
+            pathsToolStripMenuItem.Text = GlobalData.Strings.GetString("GamePaths");
+            refreshStationsToolStripMenuItem.Text = GlobalData.Strings.GetString("RefreshStations");
+            howToUseToolStripMenuItem.Text = GlobalData.Strings.GetString("HowToUse");
+            aboutToolStripMenuItem.Text = GlobalData.Strings.GetString("About");
+            
+            //Buttons
+            btnAddStation.Text = GlobalData.Strings.GetString("NewStation");
+            btnDeleteStation.Text = GlobalData.Strings.GetString("DeleteStation");
+
         }
 
         private void ApplyFonts()
@@ -49,20 +68,19 @@ namespace RadioExt_Helper.forms
 
         private void CheckGamePath()
         {
-            if (Settings.Default.GameBasePath.Equals(string.Empty))
-            {
-                DialogResult result = MessageBox.Show("The path to the Cyberpunk 2077 executable has not been set." +
-                                                      "\nPlease set it now.", "No Game Path", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                if (result is DialogResult.OK or DialogResult.Cancel)
-                {
-                    string basePath = PathHelper.GetGamePath(fdlgOpenGameExe, true);
-                    if (!basePath.Equals(string.Empty))
-                    {
-                        Settings.Default.GameBasePath = basePath;
-                        Settings.Default.Save();
-                    }
-                }
-            }
+            if (!Settings.Default.GameBasePath.Equals(string.Empty)) return;
+            
+            var caption = GlobalData.Strings.GetString("NoGamePath");
+            var text = GlobalData.Strings.GetString("NoExeFound");
+            var result = MessageBox.Show(text ,caption, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+
+            if (result is not (DialogResult.OK or DialogResult.Cancel)) return;
+            
+            var basePath = PathHelper.GetGamePath(fdlgOpenGameExe, true);
+            if (basePath.Equals(string.Empty)) return;
+            
+            Settings.Default.GameBasePath = basePath;
+            Settings.Default.Save();
         }
 
         private void PopulateStations()
@@ -72,14 +90,14 @@ namespace RadioExt_Helper.forms
             if (!Settings.Default.BackupPath.Equals(string.Empty))
             {
                 _stations.Clear();
-                foreach (string directory in Directory.EnumerateDirectories(Settings.Default.BackupPath))
+                foreach (var directory in Directory.EnumerateDirectories(Settings.Default.BackupPath))
                 {
-                    foreach (string file in Directory.EnumerateFiles(directory))
+                    foreach (var file in Directory.EnumerateFiles(directory))
                     {
                         if (!Path.GetExtension(file).Equals(".json")) { continue; }
 
-                        string json = File.ReadAllText(file);
-                        MetaData? md = JsonConvert.DeserializeObject<MetaData>(json);
+                        var json = File.ReadAllText(file);
+                        var md = JsonConvert.DeserializeObject<MetaData>(json);
                         if (md != null)
                             _stations.Add(md);
                     }
@@ -102,12 +120,11 @@ namespace RadioExt_Helper.forms
         private void lbStations_SelectedIndexChanged(object sender, EventArgs e)
         {
             splitContainer1.Panel2.Controls.Clear();
-            if (lbStations.SelectedItem is MetaData station)
-            {
-                StationEditor editorControl = new(station);
-                splitContainer1.Panel2.Controls.Add(editorControl);
-                editorControl.StationUpdated += UpdateStation;
-            }
+            if (lbStations.SelectedItem is not MetaData station) return;
+            
+            StationEditor editorControl = new(station);
+            splitContainer1.Panel2.Controls.Add(editorControl);
+            editorControl.StationUpdated += UpdateStation;
 
         }
 
@@ -122,12 +139,12 @@ namespace RadioExt_Helper.forms
         private void cmbLanguageSelect_SelectedIndexChanged(object sender, EventArgs e)
         {
             var selectedCulture = cmbLanguageSelect.SelectedItem;
-            if (selectedCulture != null)
-            {
-                string? culture = selectedCulture.ToString();
-                if (culture != null)
-                    GlobalData.SetCulture(culture);
-            }
+
+            var culture = selectedCulture?.ToString();
+            if (culture != null)
+                GlobalData.SetCulture(culture);
+            cmbLanguageSelect.DroppedDown = false;
+            Translate();
         }
     }
 }

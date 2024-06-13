@@ -126,4 +126,151 @@
   <data name="StationNameHelp" xml:space="preserve">
     <value>Controls the name of your station that will be displayed in the game. Special characters are escaped properly.</value>
   </data>
+  <data name="NoExeFound" xml:space="preserve">
+    <value>The path to the Cyberpunk 2077 executable has not been set.\nPlease set it now.</value>
+  </data>
+  <data name="NoGamePath" xml:space="preserve">
+    <value>No Game Path</value>
+  </data>
+  <data name="RadioExtPathPlaceholder" xml:space="preserve">
+    <value>&lt;no path set; radioExt is not installed&gt;</value>
+  </data>
+  <data name="BackupPathPlaceholder" xml:space="preserve">
+    <value>&lt;no path set; radio stations will NOT be backed up&gt;</value>
+  </data>
+  <data name="AreYouSure" xml:space="preserve">
+    <value>Are you sure?</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Confirm</value>
+  </data>
+  <data name="NonCyberpunkExe" xml:space="preserve">
+    <value>The selected file did not look like Cyberpunk 2077. Please try again.</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="GameBasePath" xml:space="preserve">
+    <value>Game Base Path</value>
+  </data>
+  <data name="RadioStationPath" xml:space="preserve">
+    <value>Radio Stations Path</value>
+  </data>
+  <data name="BackUpPath" xml:space="preserve">
+    <value>Back Up Path</value>
+  </data>
+  <data name="Change" xml:space="preserve">
+    <value>Change</value>
+  </data>
+  <data name="Clear" xml:space="preserve">
+    <value>Clear</value>
+  </data>
+  <data name="GameBasePathPlaceholder" xml:space="preserve">
+    <value>&lt;no path set; game executable missing&gt;</value>
+  </data>
+  <data name="DotDotDot" xml:space="preserve">
+    <value>...</value>
+  </data>
+  <data name="GamePaths" xml:space="preserve">
+    <value>Game Paths</value>
+  </data>
+  <data name="MainTitle" xml:space="preserve">
+    <value>Cyber Radio Assistant</value>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>File</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="Help" xml:space="preserve">
+    <value>Help</value>
+  </data>
+  <data name="RefreshStations" xml:space="preserve">
+    <value>Refresh Stations</value>
+  </data>
+  <data name="HowToUse" xml:space="preserve">
+    <value>How To Use</value>
+  </data>
+  <data name="About" xml:space="preserve">
+    <value>About</value>
+  </data>
+  <data name="NewStation" xml:space="preserve">
+    <value>New Station</value>
+  </data>
+  <data name="DeleteStation" xml:space="preserve">
+    <value>Delete Station</value>
+  </data>
+  <data name="DisplayAndIcon" xml:space="preserve">
+    <value>Display and Icon</value>
+  </data>
+  <data name="Music" xml:space="preserve">
+    <value>Music</value>
+  </data>
+  <data name="BackupPathHelp" xml:space="preserve">
+    <value>Select the path to backup custom radio stations to.</value>
+  </data>
+  <data name="Open" xml:space="preserve">
+    <value>Open</value>
+  </data>
+  <data name="DisplayName" xml:space="preserve">
+    <value>Name:</value>
+  </data>
+  <data name="Display" xml:space="preserve">
+    <value>Display</value>
+  </data>
+  <data name="CustomIcon" xml:space="preserve">
+    <value>Custom Icon</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="Icon" xml:space="preserve">
+    <value>Icon:</value>
+  </data>
+  <data name="Using?" xml:space="preserve">
+    <value>Using?</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="InkAtlasPath" xml:space="preserve">
+    <value>Ink Atlas Path:</value>
+  </data>
+  <data name="InkAtlasPart" xml:space="preserve">
+    <value>Ink Atlas Part:</value>
+  </data>
+  <data name="FM" xml:space="preserve">
+    <value>FM</value>
+  </data>
+  <data name="Volume" xml:space="preserve">
+    <value>Volume</value>
+  </data>
+  <data name="Value" xml:space="preserve">
+    <value>Value</value>
+  </data>
+  <data name="Min" xml:space="preserve">
+    <value>Min:</value>
+  </data>
+  <data name="Max" xml:space="preserve">
+    <value>Max:</value>
+  </data>
+  <data name="UseStream" xml:space="preserve">
+    <value>Use Stream?</value>
+  </data>
+  <data name="StreamURL" xml:space="preserve">
+    <value>Strean URL:</value>
+  </data>
+  <data name="GetURLFromRadioGarden" xml:space="preserve">
+    <value>Get URL from Radio Garden</value>
+  </data>
+  <data name="URLHint" xml:space="preserve">
+    <value>(Ctrl + V) - Paste Radio Garden URL here</value>
+  </data>
+  <data name="StreamSettings" xml:space="preserve">
+    <value>Stream Settings</value>
+  </data>
 </root>

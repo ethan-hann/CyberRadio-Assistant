@@ -126,4 +126,151 @@
   <data name="StationNameHelp" xml:space="preserve">
     <value>Contrôle le nom de votre station qui sera affiché dans le jeu. Les caractères spéciaux sont échappés correctement.</value>
   </data>
+  <data name="NoExeFound" xml:space="preserve">
+    <value>Le chemin vers l’exécutable Cyberpunk 2077 n’a pas été défini.\nVeuillez le définir maintenant.</value>
+  </data>
+  <data name="NoGamePath" xml:space="preserve">
+    <value>Aucun chemin de jeu</value>
+  </data>
+  <data name="RadioExtPathPlaceholder" xml:space="preserve">
+    <value>&lt;aucun chemin défini ; radioExt n'est pas installé&gt;</value>
+  </data>
+  <data name="BackupPathPlaceholder" xml:space="preserve">
+    <value>&lt;aucun chemin défini ; les stations de radio ne seront PAS sauvegardées&gt;</value>
+  </data>
+  <data name="AreYouSure" xml:space="preserve">
+    <value>Es-tu sûr?</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Confirmer</value>
+  </data>
+  <data name="NonCyberpunkExe" xml:space="preserve">
+    <value>Le fichier sélectionné ne ressemble pas à Cyberpunk 2077. Veuillez réessayer.</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Annuler</value>
+  </data>
+  <data name="GameBasePath" xml:space="preserve">
+    <value>Chemin de base du jeu</value>
+  </data>
+  <data name="RadioStationPath" xml:space="preserve">
+    <value>Chemin des stations de radio</value>
+  </data>
+  <data name="BackUpPath" xml:space="preserve">
+    <value>Chemin de sauvegarde</value>
+  </data>
+  <data name="Change" xml:space="preserve">
+    <value>Changement</value>
+  </data>
+  <data name="Clear" xml:space="preserve">
+    <value>Clair</value>
+  </data>
+  <data name="GameBasePathPlaceholder" xml:space="preserve">
+    <value>&lt;aucun chemin défini ; exécutable du jeu manquant&gt;</value>
+  </data>
+  <data name="DotDotDot" xml:space="preserve">
+    <value>...</value>
+  </data>
+  <data name="GamePaths" xml:space="preserve">
+    <value>Chemins de jeu</value>
+  </data>
+  <data name="MainTitle" xml:space="preserve">
+    <value>Assistant cyberradio</value>
+  </data>
+  <data name="About" xml:space="preserve">
+    <value>À propos</value>
+  </data>
+  <data name="DeleteStation" xml:space="preserve">
+    <value>Supprimer une station</value>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>Déposer</value>
+  </data>
+  <data name="Help" xml:space="preserve">
+    <value>Aide</value>
+  </data>
+  <data name="HowToUse" xml:space="preserve">
+    <value>Comment utiliser</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Langue</value>
+  </data>
+  <data name="NewStation" xml:space="preserve">
+    <value>Nouvelle gare</value>
+  </data>
+  <data name="RefreshStations" xml:space="preserve">
+    <value>Actualiser les stations</value>
+  </data>
+  <data name="Music" xml:space="preserve">
+    <value>Musique</value>
+  </data>
+  <data name="BackupPathHelp" xml:space="preserve">
+    <value>Sélectionnez le chemin vers lequel sauvegarder les stations de radio personnalisées.</value>
+  </data>
+  <data name="DisplayAndIcon" xml:space="preserve">
+    <value>Affichage et icône</value>
+  </data>
+  <data name="Open" xml:space="preserve">
+    <value>Ouvrir</value>
+  </data>
+  <data name="URLHint" xml:space="preserve">
+    <value>(Ctrl + V) - Collez l'URL de Radio Garden ici</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Oui</value>
+  </data>
+  <data name="Icon" xml:space="preserve">
+    <value>Icône:</value>
+  </data>
+  <data name="DisplayName" xml:space="preserve">
+    <value>Nom:</value>
+  </data>
+  <data name="CustomIcon" xml:space="preserve">
+    <value>Icône personnalisée</value>
+  </data>
+  <data name="Display" xml:space="preserve">
+    <value>Afficher</value>
+  </data>
+  <data name="FM" xml:space="preserve">
+    <value>FM</value>
+  </data>
+  <data name="GetURLFromRadioGarden" xml:space="preserve">
+    <value>Obtenir l'URL de Radio Garden</value>
+  </data>
+  <data name="InkAtlasPart" xml:space="preserve">
+    <value>Pièce Atlas d'encre:</value>
+  </data>
+  <data name="InkAtlasPath" xml:space="preserve">
+    <value>Chemin de l'Atlas de l'encre:</value>
+  </data>
+  <data name="Max" xml:space="preserve">
+    <value>Max:</value>
+  </data>
+  <data name="Min" xml:space="preserve">
+    <value>Min:</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>Non</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Paramètres</value>
+  </data>
+  <data name="StreamURL" xml:space="preserve">
+    <value>URL du flux:</value>
+  </data>
+  <data name="UseStream" xml:space="preserve">
+    <value>Utiliser Stream?</value>
+  </data>
+  <data name="Using?" xml:space="preserve">
+    <value>En utilisant?</value>
+  </data>
+  <data name="Value" xml:space="preserve">
+    <value>Valeur</value>
+  </data>
+  <data name="Volume" xml:space="preserve">
+    <value>Volume</value>
+  </data>
+  <data name="StreamSettings" xml:space="preserve">
+    <value>Paramètres de flux</value>
+  </data>
 </root>

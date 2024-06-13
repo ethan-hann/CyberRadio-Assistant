@@ -98,7 +98,7 @@
             // cmbLanguageSelect
             // 
             cmbLanguageSelect.DropDownStyle = ComboBoxStyle.DropDownList;
-            cmbLanguageSelect.Items.AddRange(new object[] { "English (en)", "French (fr)", "Spanish (es)" });
+            cmbLanguageSelect.Items.AddRange(new object[] { "English (en)", "Español (es)", "Français (fr)" });
             cmbLanguageSelect.Name = "cmbLanguageSelect";
             cmbLanguageSelect.Size = new Size(121, 23);
             cmbLanguageSelect.Sorted = true;
@@ -213,6 +213,7 @@
             ClientSize = new Size(1053, 616);
             Controls.Add(splitContainer1);
             Controls.Add(menuStrip1);
+            DoubleBuffered = true;
             Font = new Font("CF Notche Demo", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             Icon = (Icon)resources.GetObject("$this.Icon");
             MainMenuStrip = menuStrip1;
