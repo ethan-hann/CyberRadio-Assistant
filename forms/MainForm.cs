@@ -23,7 +23,7 @@ namespace RadioExt_Helper.forms
             //ApplyFonts();
             GlobalData.Initialize();
             cmbLanguageSelect.SelectedIndex = 0;
-            
+
         }
 
         private void MainForm_Shown(object sender, EventArgs e)
@@ -42,8 +42,10 @@ namespace RadioExt_Helper.forms
             pathsToolStripMenuItem.Text = GlobalData.Strings.GetString("GamePaths");
             refreshStationsToolStripMenuItem.Text = GlobalData.Strings.GetString("RefreshStations");
             howToUseToolStripMenuItem.Text = GlobalData.Strings.GetString("HowToUse");
+            radioExtGitHubToolStripMenuItem.Text = GlobalData.Strings.GetString("RadioExtGithub");
+            radioExtOnNexusModsToolStripMenuItem.Text = GlobalData.Strings.GetString("RadioExtNexusMods");
             aboutToolStripMenuItem.Text = GlobalData.Strings.GetString("About");
-            
+
             //Buttons
             btnAddStation.Text = GlobalData.Strings.GetString("NewStation");
             btnDeleteStation.Text = GlobalData.Strings.GetString("DeleteStation");
@@ -69,16 +71,16 @@ namespace RadioExt_Helper.forms
         private void CheckGamePath()
         {
             if (!Settings.Default.GameBasePath.Equals(string.Empty)) return;
-            
+
             var caption = GlobalData.Strings.GetString("NoGamePath");
             var text = GlobalData.Strings.GetString("NoExeFound");
-            var result = MessageBox.Show(text ,caption, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            var result = MessageBox.Show(text, caption, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 
             if (result is not (DialogResult.OK or DialogResult.Cancel)) return;
-            
+
             var basePath = PathHelper.GetGamePath(fdlgOpenGameExe, true);
             if (basePath.Equals(string.Empty)) return;
-            
+
             Settings.Default.GameBasePath = basePath;
             Settings.Default.Save();
         }
@@ -107,6 +109,7 @@ namespace RadioExt_Helper.forms
             lbStations.EndUpdate();
         }
 
+        #region File Menu
         private void pathsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             new PathSettings().ShowDialog();
@@ -116,12 +119,26 @@ namespace RadioExt_Helper.forms
         {
             PopulateStations();
         }
+        #endregion
+
+        #region Help Menu
+        private void radioExtHelpToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            GlobalData.OpenUrl("https://github.com/justarandomguyintheinternet/CP77_radioExt");
+        }
+
+        private void radioExtOnNexusModsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            GlobalData.OpenUrl("https://www.nexusmods.com/cyberpunk2077/mods/4591");
+        }
+
+        #endregion
 
         private void lbStations_SelectedIndexChanged(object sender, EventArgs e)
         {
             splitContainer1.Panel2.Controls.Clear();
             if (lbStations.SelectedItem is not MetaData station) return;
-            
+
             StationEditor editorControl = new(station);
             splitContainer1.Panel2.Controls.Add(editorControl);
             editorControl.StationUpdated += UpdateStation;

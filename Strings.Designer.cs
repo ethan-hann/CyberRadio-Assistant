@@ -150,6 +150,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Specifies whether or not you want to use a custom icon for the radio station..
+        /// </summary>
+        internal static string CustomIconHelp {
+            get {
+                return ResourceManager.GetString("CustomIconHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Delete Station.
         /// </summary>
         internal static string DeleteStation {
@@ -209,6 +218,15 @@ namespace RadioExt_Helper {
         internal static string FM {
             get {
                 return ResourceManager.GetString("FM", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Used to place the station at the right place in the stations list. If the station name has an FM number, it should be the same..
+        /// </summary>
+        internal static string FMHelp {
+            get {
+                return ResourceManager.GetString("FMHelp", resourceCulture);
             }
         }
         
@@ -299,6 +317,24 @@ namespace RadioExt_Helper {
         internal static string InkAtlasPath {
             get {
                 return ResourceManager.GetString("InkAtlasPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Specifies which part of the .inkatlas should be used for the icon, e.g., gryphon_5.
+        /// </summary>
+        internal static string InkPartHelp {
+            get {
+                return ResourceManager.GetString("InkPartHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Points to the .inkatlas that holds the icon texture..
+        /// </summary>
+        internal static string InkPathHelp {
+            get {
+                return ResourceManager.GetString("InkPathHelp", resourceCulture);
             }
         }
         
@@ -402,11 +438,47 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to An error occurred while trying to open the URL: .
+        /// </summary>
+        internal static string OpenURLErrorOccured {
+            get {
+                return ResourceManager.GetString("OpenURLErrorOccured", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to radioExt GitHub.
+        /// </summary>
+        internal static string RadioExtGithub {
+            get {
+                return ResourceManager.GetString("RadioExtGithub", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to radioExt on NexusMods.
+        /// </summary>
+        internal static string RadioExtNexusMods {
+            get {
+                return ResourceManager.GetString("RadioExtNexusMods", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;no path set; radioExt is not installed&gt;.
         /// </summary>
         internal static string RadioExtPathPlaceholder {
             get {
                 return ResourceManager.GetString("RadioExtPathPlaceholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Press to get a box where you can paste a URL from radio.garden and parse the final web stream..
+        /// </summary>
+        internal static string RadioGardenBtnHelp {
+            get {
+                return ResourceManager.GetString("RadioGardenBtnHelp", resourceCulture);
             }
         }
         
@@ -465,11 +537,20 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Strean URL:.
+        ///   Looks up a localized string similar to Stream URL:.
         /// </summary>
         internal static string StreamURL {
             get {
                 return ResourceManager.GetString("StreamURL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The URL of the web stream to use..
+        /// </summary>
+        internal static string StreamURLHelp {
+            get {
+                return ResourceManager.GetString("StreamURLHelp", resourceCulture);
             }
         }
         
@@ -488,6 +569,15 @@ namespace RadioExt_Helper {
         internal static string UseStream {
             get {
                 return ResourceManager.GetString("UseStream", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Indicates if this station should use a web stream for its audio source..
+        /// </summary>
+        internal static string UseStreamHelp {
+            get {
+                return ResourceManager.GetString("UseStreamHelp", resourceCulture);
             }
         }
         
@@ -515,6 +605,24 @@ namespace RadioExt_Helper {
         internal static string Volume {
             get {
                 return ResourceManager.GetString("Volume", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Overall volume multiplier for the station. Make sure all songs have the same volume, then adjust the overall volume of the station with this value to match up with vanilla stations..
+        /// </summary>
+        internal static string VolumeHelp {
+            get {
+                return ResourceManager.GetString("VolumeHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The currently selected volume. Use the slider or double click value to change..
+        /// </summary>
+        internal static string VolumeValHelp {
+            get {
+                return ResourceManager.GetString("VolumeValHelp", resourceCulture);
             }
         }
         

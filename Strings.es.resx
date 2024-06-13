@@ -273,4 +273,40 @@
   <data name="StreamSettings" xml:space="preserve">
     <value>Configuración de transmisión</value>
   </data>
+  <data name="CustomIconHelp" xml:space="preserve">
+    <value>Especifica si desea utilizar o no un icono personalizado para la estación de radio.</value>
+  </data>
+  <data name="InkPathHelp" xml:space="preserve">
+    <value>Señala el .inkatlas que contiene la textura del icono.</value>
+  </data>
+  <data name="InkPartHelp" xml:space="preserve">
+    <value>Especifica qué parte del .inkatlas debe usarse para el ícono, por ejemplo, gryphon_5</value>
+  </data>
+  <data name="FMHelp" xml:space="preserve">
+    <value>Se utiliza para colocar la estación en el lugar correcto en la lista de estaciones. Si el nombre de la estación tiene un número de FM, debería ser el mismo.</value>
+  </data>
+  <data name="VolumeHelp" xml:space="preserve">
+    <value>Multiplicador de volumen global de la estación. Asegúrese de que todas las canciones tengan el mismo volumen, luego ajuste el volumen general de la estación con este valor para que coincida con las estaciones básicas.</value>
+  </data>
+  <data name="VolumeValHelp" xml:space="preserve">
+    <value>El volumen seleccionado actualmente. Utilice el control deslizante o haga doble clic en el valor para cambiar.</value>
+  </data>
+  <data name="UseStreamHelp" xml:space="preserve">
+    <value>Indica si esta estación debe usar una transmisión web como fuente de audio.</value>
+  </data>
+  <data name="StreamURLHelp" xml:space="preserve">
+    <value>La URL de la transmisión web que se utilizará.</value>
+  </data>
+  <data name="RadioGardenBtnHelp" xml:space="preserve">
+    <value>Appuyez pour obtenir une boîte dans laquelle vous pouvez coller une URL de radio.garden et analyser le flux Web final.</value>
+  </data>
+  <data name="OpenURLErrorOccured" xml:space="preserve">
+    <value>Se produjo un error al intentar abrir la URL: </value>
+  </data>
+  <data name="RadioExtGithub" xml:space="preserve">
+    <value>radioExt GitHub</value>
+  </data>
+  <data name="RadioExtNexusMods" xml:space="preserve">
+    <value>radioExt en NexusMods</value>
+  </data>
 </root>

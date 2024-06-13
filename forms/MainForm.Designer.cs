@@ -38,6 +38,9 @@
             cmbLanguageSelect = new ToolStripComboBox();
             helpToolStripMenuItem = new ToolStripMenuItem();
             howToUseToolStripMenuItem = new ToolStripMenuItem();
+            radioExtOnNexusModsToolStripMenuItem = new ToolStripMenuItem();
+            radioExtGitHubToolStripMenuItem = new ToolStripMenuItem();
+            toolStripSeparator1 = new ToolStripSeparator();
             aboutToolStripMenuItem = new ToolStripMenuItem();
             fdlgOpenGameExe = new OpenFileDialog();
             splitContainer1 = new SplitContainer();
@@ -76,7 +79,7 @@
             // 
             pathsToolStripMenuItem.Image = Properties.Resources.folder;
             pathsToolStripMenuItem.Name = "pathsToolStripMenuItem";
-            pathsToolStripMenuItem.Size = new Size(164, 22);
+            pathsToolStripMenuItem.Size = new Size(180, 22);
             pathsToolStripMenuItem.Text = "Game Paths";
             pathsToolStripMenuItem.Click += pathsToolStripMenuItem_Click;
             // 
@@ -84,7 +87,7 @@
             // 
             refreshStationsToolStripMenuItem.Image = Properties.Resources.refresh;
             refreshStationsToolStripMenuItem.Name = "refreshStationsToolStripMenuItem";
-            refreshStationsToolStripMenuItem.Size = new Size(164, 22);
+            refreshStationsToolStripMenuItem.Size = new Size(180, 22);
             refreshStationsToolStripMenuItem.Text = "Refresh Stations";
             refreshStationsToolStripMenuItem.Click += refreshStationsToolStripMenuItem_Click;
             // 
@@ -97,16 +100,16 @@
             // 
             // cmbLanguageSelect
             // 
-            cmbLanguageSelect.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbLanguageSelect.DropDownStyle = ComboBoxStyle.Simple;
             cmbLanguageSelect.Items.AddRange(new object[] { "English (en)", "Español (es)", "Français (fr)" });
             cmbLanguageSelect.Name = "cmbLanguageSelect";
-            cmbLanguageSelect.Size = new Size(121, 23);
+            cmbLanguageSelect.Size = new Size(121, 150);
             cmbLanguageSelect.Sorted = true;
             cmbLanguageSelect.SelectedIndexChanged += cmbLanguageSelect_SelectedIndexChanged;
             // 
             // helpToolStripMenuItem
             // 
-            helpToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { howToUseToolStripMenuItem, aboutToolStripMenuItem });
+            helpToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { howToUseToolStripMenuItem, radioExtOnNexusModsToolStripMenuItem, radioExtGitHubToolStripMenuItem, toolStripSeparator1, aboutToolStripMenuItem });
             helpToolStripMenuItem.Name = "helpToolStripMenuItem";
             helpToolStripMenuItem.Size = new Size(42, 20);
             helpToolStripMenuItem.Text = "Help";
@@ -115,14 +118,33 @@
             // 
             howToUseToolStripMenuItem.Image = Properties.Resources.guide;
             howToUseToolStripMenuItem.Name = "howToUseToolStripMenuItem";
-            howToUseToolStripMenuItem.Size = new Size(135, 22);
+            howToUseToolStripMenuItem.Size = new Size(202, 22);
             howToUseToolStripMenuItem.Text = "How To Use";
+            // 
+            // radioExtOnNexusModsToolStripMenuItem
+            // 
+            radioExtOnNexusModsToolStripMenuItem.Name = "radioExtOnNexusModsToolStripMenuItem";
+            radioExtOnNexusModsToolStripMenuItem.Size = new Size(202, 22);
+            radioExtOnNexusModsToolStripMenuItem.Text = "radioExt on NexusMods";
+            radioExtOnNexusModsToolStripMenuItem.Click += radioExtOnNexusModsToolStripMenuItem_Click;
+            // 
+            // radioExtGitHubToolStripMenuItem
+            // 
+            radioExtGitHubToolStripMenuItem.Name = "radioExtGitHubToolStripMenuItem";
+            radioExtGitHubToolStripMenuItem.Size = new Size(202, 22);
+            radioExtGitHubToolStripMenuItem.Text = "radioExt GitHub";
+            radioExtGitHubToolStripMenuItem.Click += radioExtHelpToolStripMenuItem_Click;
+            // 
+            // toolStripSeparator1
+            // 
+            toolStripSeparator1.Name = "toolStripSeparator1";
+            toolStripSeparator1.Size = new Size(199, 6);
             // 
             // aboutToolStripMenuItem
             // 
             aboutToolStripMenuItem.Image = Properties.Resources.info;
             aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            aboutToolStripMenuItem.Size = new Size(135, 22);
+            aboutToolStripMenuItem.Size = new Size(202, 22);
             aboutToolStripMenuItem.Text = "About";
             // 
             // fdlgOpenGameExe
@@ -253,5 +275,8 @@
         private BindingSource metaDataBindingSource;
         private ToolStripMenuItem languageToolStripMenuItem;
         private ToolStripComboBox cmbLanguageSelect;
+        private ToolStripSeparator toolStripSeparator1;
+        private ToolStripMenuItem radioExtOnNexusModsToolStripMenuItem;
+        private ToolStripMenuItem radioExtGitHubToolStripMenuItem;
     }
 }

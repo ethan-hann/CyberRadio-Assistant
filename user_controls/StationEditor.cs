@@ -51,7 +51,7 @@ namespace RadioExt_Helper.user_controls
             grpDisplay.Text = GlobalData.Strings.GetString("Display");
             grpCustomIcon.Text = GlobalData.Strings.GetString("CustomIcon");
             grpSettings.Text = GlobalData.Strings.GetString("Settings");
-            
+
             tabMusic.Text = GlobalData.Strings.GetString("Music");
             lblUseStream.Text = GlobalData.Strings.GetString("UseStream");
             lblStreamURL.Text = GlobalData.Strings.GetString("StreamURL");
@@ -60,7 +60,7 @@ namespace RadioExt_Helper.user_controls
             txtPastedURL.PlaceholderText = GlobalData.Strings.GetString("URLHint");
             radUseStreamYes.Text = GlobalData.Strings.GetString("Yes");
             radUseStreamNo.Text = GlobalData.Strings.GetString("No");
-            
+
             lblStatus.Text = GlobalData.Strings.GetString("Ready");
         }
 
@@ -87,6 +87,20 @@ namespace RadioExt_Helper.user_controls
 
             txtInkAtlasPath.Text = _icon.InkAtlasPath;
             txtInkAtlasPart.Text = _icon.InkAtlasPart;
+            nudFM.Value = (decimal)_metaData.Fm;
+            volumeSlider.Value = (int)(_metaData.Volume / 0.1f);
+            lblSelectedVolume.Text = $@"{_metaData.Volume:F1}";
+        }
+
+        private void txtDisplayName_TextChanged(object sender, EventArgs e)
+        {
+            _metaData.DisplayName = txtDisplayName.Text;
+        }
+
+        private void cmbUIIcons_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cmbUIIcons.SelectedItem is string iconStr)
+                _metaData.Icon = iconStr;
         }
 
         private void radUseCustomYes_CheckedChanged(object sender, EventArgs e)
@@ -101,6 +115,21 @@ namespace RadioExt_Helper.user_controls
             txtInkAtlasPath.Visible = !radUseCustomNo.Checked;
             lblInkPart.Visible = !radUseCustomNo.Checked;
             lblInkPath.Visible = !radUseCustomNo.Checked;
+        }
+
+        private void txtInkAtlasPath_TextChanged(object sender, EventArgs e)
+        {
+            _icon.InkAtlasPath = txtInkAtlasPath.Text;
+        }
+
+        private void txtInkAtlasPart_TextChanged(object sender, EventArgs e)
+        {
+            _icon.InkAtlasPart = txtInkAtlasPart.Text;
+        }
+
+        private void nudFM_ValueChanged(object sender, EventArgs e)
+        {
+            _metaData.Fm = (float)nudFM.Value;
         }
 
         private void volumeSlider_Scroll(object sender, EventArgs e)
@@ -121,13 +150,13 @@ namespace RadioExt_Helper.user_controls
         private void txtVolumeEdit_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode != Keys.Enter) return;
-            
+
             var maxVol = volumeSlider.Maximum * 0.1f;
             var minVol = volumeSlider.Minimum * 0.1f;
 
             if (!float.TryParse(txtVolumeEdit.Text, NumberStyles.Float, CultureInfo.InvariantCulture,
                     out var newVolume)) return;
-            
+
             if (newVolume > maxVol || newVolume < minVol)
                 e.Handled = true;
             else
@@ -172,6 +201,11 @@ namespace RadioExt_Helper.user_controls
         {
             ToggleStreamControls(false);
             _streamInfo.IsStream = !radUseStreamNo.Checked;
+        }
+
+        private void txtStreamURL_TextChanged(object sender, EventArgs e)
+        {
+            _streamInfo.StreamUrl = txtStreamURL.Text;
         }
 
         private void ToggleStreamControls(bool onOff)
@@ -234,8 +268,7 @@ namespace RadioExt_Helper.user_controls
             var pastedText = txtPastedURL.Text;
             if (pastedText.StartsWith("https://") && pastedText.Contains("radio.garden"))
             {
-                txtStreamURL.Text = pastedText;
-                //TODO: Get actual stream url from pasted text
+                txtStreamURL.Text = ParseRadioGardenURL(pastedText);
                 _streamInfo.StreamUrl = txtStreamURL.Text;
                 HideRadioGardenTextInput();
             }
@@ -245,30 +278,75 @@ namespace RadioExt_Helper.user_controls
             }
         }
 
+        private string ParseRadioGardenURL(string rawURL)
+        {
+            //TODO: Get actual stream url from pasted text
+            return string.Empty;
+        }
+
         #endregion
 
         #region Hover Help
-
         private void lblName_MouseEnter(object sender, EventArgs e)
         {
             lblStatus.Text = GlobalData.Strings.GetString("StationNameHelp");
-        }
-
-        private void lblName_MouseLeave(object sender, EventArgs e)
-        {
-            lblStatus.Text = GlobalData.Strings.GetString("Ready");
         }
 
         private void lblIcon_MouseEnter(object sender, EventArgs e)
         {
             lblStatus.Text = GlobalData.Strings.GetString("IconHelp");
         }
-        
-        private void lblIcon_MouseLeave(object sender, EventArgs e)
+
+        private void lblUsingCustomIcon_MouseEnter(object sender, EventArgs e)
+        {
+            lblStatus.Text = GlobalData.Strings.GetString("CustomIconHelp");
+        }
+
+        private void lblInkPath_MouseEnter(object sender, EventArgs e)
+        {
+            lblStatus.Text = GlobalData.Strings.GetString("InkPathHelp");
+        }
+
+        private void lblInkPart_MouseEnter(object sender, EventArgs e)
+        {
+            lblStatus.Text = GlobalData.Strings.GetString("InkPartHelp");
+        }
+
+        private void lblFM_MouseEnter(object sender, EventArgs e)
+        {
+            lblStatus.Text = GlobalData.Strings.GetString("FMHelp");
+        }
+
+        private void lblVolume_MouseEnter(object sender, EventArgs e)
+        {
+            lblStatus.Text = GlobalData.Strings.GetString("VolumeHelp");
+        }
+
+        private void lblVolumeVal_MouseEnter(object sender, EventArgs e)
+        {
+            lblStatus.Text = GlobalData.Strings.GetString("VolumeValHelp");
+        }
+
+        private void lblUseStream_MouseEnter(object sender, EventArgs e)
+        {
+            lblStatus.Text = GlobalData.Strings.GetString("UseStreamHelp");
+        }
+
+        private void lblStreamURL_MouseEnter(object sender, EventArgs e)
+        {
+            lblStatus.Text = GlobalData.Strings.GetString("StreamURLHelp");
+        }
+
+        private void btnGetRadioGardenURL_MouseEnter(object sender, EventArgs e)
+        {
+            if (!btnGetRadioGardenURL.Text.Equals(GlobalData.Strings.GetString("Cancel")))
+                lblStatus.Text = GlobalData.Strings.GetString("RadioGardenBtnHelp");
+        }
+
+        private void lbl_MouseLeave(object sender, EventArgs e)
         {
             lblStatus.Text = GlobalData.Strings.GetString("Ready");
         }
-
         #endregion
     }
 }

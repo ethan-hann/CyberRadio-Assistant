@@ -47,6 +47,26 @@ namespace RadioExt_Helper.utility
             CultureInfo.CurrentUICulture = new CultureInfo(parsedCulture);
         }
 
+        /// <summary>
+        /// Opens the specified URL in the default web browser.
+        /// </summary>
+        /// <param name="url">The URL to open.</param>
+        public static void OpenUrl(string url)
+        {
+            try
+            {
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = url,
+                    UseShellExecute = true
+                });
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(Strings.GetString("OpenURLErrorOccured") + ex.Message);
+            }
+        }
+
         private static void GetUiIcons()
         {
             if (_uiIconsInitialized) { return; }
@@ -62,5 +82,7 @@ namespace RadioExt_Helper.utility
                 _uiIconsInitialized = true;
             } catch (Exception ex) { Debug.WriteLine(ex); }
         }
+
+        
     }
 }

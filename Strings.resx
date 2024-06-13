@@ -262,7 +262,7 @@
     <value>Use Stream?</value>
   </data>
   <data name="StreamURL" xml:space="preserve">
-    <value>Strean URL:</value>
+    <value>Stream URL:</value>
   </data>
   <data name="GetURLFromRadioGarden" xml:space="preserve">
     <value>Get URL from Radio Garden</value>
@@ -272,5 +272,41 @@
   </data>
   <data name="StreamSettings" xml:space="preserve">
     <value>Stream Settings</value>
+  </data>
+  <data name="CustomIconHelp" xml:space="preserve">
+    <value>Specifies whether or not you want to use a custom icon for the radio station.</value>
+  </data>
+  <data name="InkPathHelp" xml:space="preserve">
+    <value>Points to the .inkatlas that holds the icon texture.</value>
+  </data>
+  <data name="InkPartHelp" xml:space="preserve">
+    <value>Specifies which part of the .inkatlas should be used for the icon, e.g., gryphon_5</value>
+  </data>
+  <data name="FMHelp" xml:space="preserve">
+    <value>Used to place the station at the right place in the stations list. If the station name has an FM number, it should be the same.</value>
+  </data>
+  <data name="VolumeHelp" xml:space="preserve">
+    <value>Overall volume multiplier for the station. Make sure all songs have the same volume, then adjust the overall volume of the station with this value to match up with vanilla stations.</value>
+  </data>
+  <data name="VolumeValHelp" xml:space="preserve">
+    <value>The currently selected volume. Use the slider or double click value to change.</value>
+  </data>
+  <data name="UseStreamHelp" xml:space="preserve">
+    <value>Indicates if this station should use a web stream for its audio source.</value>
+  </data>
+  <data name="StreamURLHelp" xml:space="preserve">
+    <value>The URL of the web stream to use.</value>
+  </data>
+  <data name="RadioGardenBtnHelp" xml:space="preserve">
+    <value>Press to get a box where you can paste a URL from radio.garden and parse the final web stream.</value>
+  </data>
+  <data name="OpenURLErrorOccured" xml:space="preserve">
+    <value>An error occurred while trying to open the URL: </value>
+  </data>
+  <data name="RadioExtGithub" xml:space="preserve">
+    <value>radioExt GitHub</value>
+  </data>
+  <data name="RadioExtNexusMods" xml:space="preserve">
+    <value>radioExt on NexusMods</value>
   </data>
 </root>
