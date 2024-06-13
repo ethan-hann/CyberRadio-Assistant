@@ -244,13 +244,13 @@
     <value>Ink Atlas Part:</value>
   </data>
   <data name="FM" xml:space="preserve">
-    <value>FM</value>
+    <value>FM:</value>
   </data>
   <data name="Volume" xml:space="preserve">
-    <value>Volume</value>
+    <value>Volume:</value>
   </data>
   <data name="Value" xml:space="preserve">
-    <value>Value</value>
+    <value>Value:</value>
   </data>
   <data name="Min" xml:space="preserve">
     <value>Min:</value>
@@ -308,5 +308,11 @@
   </data>
   <data name="RadioExtNexusMods" xml:space="preserve">
     <value>radioExt on NexusMods</value>
+  </data>
+  <data name="NoStationsYet" xml:space="preserve">
+    <value>No Stations Yet!</value>
+  </data>
+  <data name="NewStationListBoxEntry" xml:space="preserve">
+    <value>[New Station]</value>
   </data>
 </root>

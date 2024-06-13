@@ -12,6 +12,8 @@ namespace RadioExt_Helper.forms
     public partial class MainForm : Form
     {
         private readonly BindingList<MetaData> _stations = [];
+        private readonly StationEditor _stationEditorCtrl = new();
+        private readonly NoStationsCtl _noStationsCtrl = new();
 
         public MainForm()
         {
@@ -22,8 +24,8 @@ namespace RadioExt_Helper.forms
         {
             //ApplyFonts();
             GlobalData.Initialize();
-            cmbLanguageSelect.SelectedIndex = 0;
 
+            _stationEditorCtrl.StationUpdated += UpdateStation;
         }
 
         private void MainForm_Shown(object sender, EventArgs e)
@@ -31,6 +33,12 @@ namespace RadioExt_Helper.forms
             Translate();
             CheckGamePath();
             PopulateStations();
+
+            splitContainer1.Panel2.Controls.Add(_noStationsCtrl);
+            splitContainer1.Panel2.Controls.Add(_stationEditorCtrl);
+
+            _noStationsCtrl.Visible = _stations.Count <= 0;
+            _stationEditorCtrl.Visible = !_noStationsCtrl.Visible;
         }
 
         private void Translate()
@@ -136,13 +144,50 @@ namespace RadioExt_Helper.forms
 
         private void lbStations_SelectedIndexChanged(object sender, EventArgs e)
         {
-            splitContainer1.Panel2.Controls.Clear();
             if (lbStations.SelectedItem is not MetaData station) return;
+            _stationEditorCtrl.SetMetaData(station);
+        }
 
-            StationEditor editorControl = new(station);
-            splitContainer1.Panel2.Controls.Add(editorControl);
-            editorControl.StationUpdated += UpdateStation;
+        private int _newStationCount = 1;
+        private void btnAddStation_Click(object sender, EventArgs e)
+        {
+            MetaData blankStation = new();
+            blankStation.DisplayName = $"{GlobalData.Strings.GetString("NewStationListBoxEntry")} {_newStationCount}";
 
+            _stations.Add(blankStation);
+            lbStations.SelectedItem = blankStation;
+            _newStationCount++;
+
+            //Reshow our station editor if the station count has increased again.
+            if (_stations.Count > 0)
+            {
+                _noStationsCtrl.Visible = false;
+                _stationEditorCtrl.Visible = true;
+            }
+        }
+
+        private void btnDeleteStation_Click(object sender, EventArgs e)
+        {
+            if (lbStations.SelectedItem is MetaData station)
+            {
+                _stations.Remove(station);
+
+                //If the station to be removed contains "[New Station]" in the name, decrement our new station count.
+                if (station.DisplayName.Contains(GlobalData.Strings.GetString("NewStationListBoxEntry")))
+                    _newStationCount--;
+
+                //Reset new station count if there are no more "New stations" in the list box.
+                if (!_stations.Where(s => s.DisplayName.Contains(GlobalData.Strings.GetString("NewStationListBoxEntry"))).Any())
+                    _newStationCount = 1;
+
+                //Hide the station editor (and reset it) if there are no stations to edit.
+                if (_stations.Count <= 0)
+                {
+                    _stationEditorCtrl.Visible = false;
+                    _stationEditorCtrl.SetMetaData(new MetaData());
+                    _noStationsCtrl.Visible = true;
+                }
+            }
         }
 
         private void UpdateStation(object? sender, EventArgs e)
@@ -155,13 +200,24 @@ namespace RadioExt_Helper.forms
 
         private void cmbLanguageSelect_SelectedIndexChanged(object sender, EventArgs e)
         {
-            var selectedCulture = cmbLanguageSelect.SelectedItem;
-
-            var culture = selectedCulture?.ToString();
-            if (culture != null)
+            if (cmbLanguageSelect.SelectedItem is string culture)
+            {
                 GlobalData.SetCulture(culture);
+                Translate();
+                foreach (Control c in splitContainer1.Panel2.Controls)
+                {
+                    if (c is StationEditor se)
+                        se.Translate();
+                    else if (c is NoStationsCtl nsc)
+                        nsc.Translate();
+                    else
+                        continue;
+                }
+            }
+
             cmbLanguageSelect.DroppedDown = false;
-            Translate();
         }
+
+        
     }
 }

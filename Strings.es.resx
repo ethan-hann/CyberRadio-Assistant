@@ -232,7 +232,7 @@
     <value>Mostrar</value>
   </data>
   <data name="FM" xml:space="preserve">
-    <value>FM</value>
+    <value>FM:</value>
   </data>
   <data name="GetURLFromRadioGarden" xml:space="preserve">
     <value>Obtener URL de Radio Garden</value>
@@ -265,10 +265,10 @@
     <value>¿Usando?</value>
   </data>
   <data name="Value" xml:space="preserve">
-    <value>Valor</value>
+    <value>Valor:</value>
   </data>
   <data name="Volume" xml:space="preserve">
-    <value>Volumen</value>
+    <value>Volumen:</value>
   </data>
   <data name="StreamSettings" xml:space="preserve">
     <value>Configuración de transmisión</value>
@@ -308,5 +308,11 @@
   </data>
   <data name="RadioExtNexusMods" xml:space="preserve">
     <value>radioExt en NexusMods</value>
+  </data>
+  <data name="NoStationsYet" xml:space="preserve">
+    <value>¡Aún no hay estaciones de radio!</value>
+  </data>
+  <data name="NewStationListBoxEntry" xml:space="preserve">
+    <value>[Nueva Estación]</value>
   </data>
 </root>

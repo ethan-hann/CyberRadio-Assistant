@@ -8,34 +8,40 @@ namespace RadioExt_Helper.user_controls
     {
         public EventHandler? StationUpdated;
 
-        private readonly MetaData _metaData;
-        private readonly CustomIcon _icon;
-        private readonly StreamInfo _streamInfo;
+        private MetaData _metaData = new();
+        private CustomIcon _icon = new();
+        private StreamInfo _streamInfo = new();
 
         private bool _isPasteOperation;
 
-        public StationEditor(MetaData metaData)
+        public StationEditor()
         {
             InitializeComponent();
+            Dock = DockStyle.Fill;
+        }
 
+        public void SetMetaData(MetaData metaData)
+        {
             _metaData = metaData;
             _icon = _metaData.CustomIcon;
             _streamInfo = _metaData.StreamInfo;
 
-            //Populate combobox of UIIcons
-            GlobalData.UiIcons.ToList().ForEach(icon => cmbUIIcons.Items.Add(icon));
-
-            Dock = DockStyle.Fill;
-        }
-
-        private void StationEditor_Load(object sender, EventArgs e)
-        {
             SetDisplayTabValues();
             SetMusicTabValues();
             Translate();
         }
 
-        private void Translate()
+        private void StationEditor_Load(object sender, EventArgs e)
+        {
+            //Populate combobox of UIIcons
+            GlobalData.UiIcons.ToList().ForEach(icon => cmbUIIcons.Items.Add(icon));
+
+            SetDisplayTabValues();
+            SetMusicTabValues();
+            Translate();
+        }
+
+        public void Translate()
         {
             tabDisplayAndIcon.Text = GlobalData.Strings.GetString("DisplayAndIcon");
             lblName.Text = GlobalData.Strings.GetString("DisplayName");

@@ -46,6 +46,7 @@
             // 
             // tableLayoutPanel1
             // 
+            tableLayoutPanel1.BackColor = Color.Transparent;
             tableLayoutPanel1.ColumnCount = 4;
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 16.9863014F));
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 83.0137F));
@@ -68,14 +69,14 @@
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333321F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333359F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333359F));
-            tableLayoutPanel1.Size = new Size(926, 126);
+            tableLayoutPanel1.Size = new Size(947, 131);
             tableLayoutPanel1.TabIndex = 0;
             // 
             // label4
             // 
             label4.Anchor = AnchorStyles.Right;
             label4.AutoSize = true;
-            label4.Location = new Point(30, 96);
+            label4.Location = new Point(33, 100);
             label4.Name = "label4";
             label4.Size = new Size(91, 17);
             label4.TabIndex = 6;
@@ -88,9 +89,9 @@
             tableLayoutPanel1.SetColumnSpan(lblRadioPath, 3);
             lblRadioPath.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold | FontStyle.Italic);
             lblRadioPath.ForeColor = Color.Green;
-            lblRadioPath.Location = new Point(127, 53);
+            lblRadioPath.Location = new Point(130, 56);
             lblRadioPath.Name = "lblRadioPath";
-            lblRadioPath.Size = new Size(796, 17);
+            lblRadioPath.Size = new Size(814, 17);
             lblRadioPath.TabIndex = 4;
             lblRadioPath.Text = "<no path set; radioExt is not installed>";
             // 
@@ -98,7 +99,7 @@
             // 
             label2.Anchor = AnchorStyles.Right;
             label2.AutoSize = true;
-            label2.Location = new Point(3, 53);
+            label2.Location = new Point(6, 56);
             label2.Name = "label2";
             label2.Size = new Size(118, 17);
             label2.TabIndex = 3;
@@ -110,9 +111,9 @@
             lblGameBasePath.AutoSize = true;
             lblGameBasePath.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold | FontStyle.Italic);
             lblGameBasePath.ForeColor = Color.Green;
-            lblGameBasePath.Location = new Point(127, 12);
+            lblGameBasePath.Location = new Point(130, 13);
             lblGameBasePath.Name = "lblGameBasePath";
-            lblGameBasePath.Size = new Size(600, 17);
+            lblGameBasePath.Size = new Size(618, 17);
             lblGameBasePath.TabIndex = 2;
             lblGameBasePath.Text = "<no path set; game executable missing>";
             // 
@@ -120,7 +121,7 @@
             // 
             label1.Anchor = AnchorStyles.Right;
             label1.AutoSize = true;
-            label1.Location = new Point(12, 12);
+            label1.Location = new Point(15, 13);
             label1.Name = "label1";
             label1.Size = new Size(109, 17);
             label1.TabIndex = 0;
@@ -130,7 +131,7 @@
             // 
             btnChangeGameBasePath.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             tableLayoutPanel1.SetColumnSpan(btnChangeGameBasePath, 2);
-            btnChangeGameBasePath.Location = new Point(733, 8);
+            btnChangeGameBasePath.Location = new Point(754, 9);
             btnChangeGameBasePath.Name = "btnChangeGameBasePath";
             btnChangeGameBasePath.Size = new Size(190, 25);
             btnChangeGameBasePath.TabIndex = 1;
@@ -141,7 +142,7 @@
             // btnChangeBackUpPath
             // 
             btnChangeBackUpPath.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            btnChangeBackUpPath.Location = new Point(733, 91);
+            btnChangeBackUpPath.Location = new Point(754, 95);
             btnChangeBackUpPath.Name = "btnChangeBackUpPath";
             btnChangeBackUpPath.Size = new Size(114, 26);
             btnChangeBackUpPath.TabIndex = 9;
@@ -152,7 +153,7 @@
             // btnClearBackupPath
             // 
             btnClearBackupPath.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            btnClearBackupPath.Location = new Point(853, 91);
+            btnClearBackupPath.Location = new Point(874, 95);
             btnClearBackupPath.Name = "btnClearBackupPath";
             btnClearBackupPath.Size = new Size(70, 26);
             btnClearBackupPath.TabIndex = 7;
@@ -166,9 +167,9 @@
             lblBackupPath.AutoSize = true;
             lblBackupPath.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold | FontStyle.Italic);
             lblBackupPath.ForeColor = Color.Green;
-            lblBackupPath.Location = new Point(127, 96);
+            lblBackupPath.Location = new Point(130, 100);
             lblBackupPath.Name = "lblBackupPath";
-            lblBackupPath.Size = new Size(600, 17);
+            lblBackupPath.Size = new Size(618, 17);
             lblBackupPath.TabIndex = 8;
             lblBackupPath.Text = "<no path set; radio stations will NOT be backed up>";
             // 
@@ -186,7 +187,7 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;
-            ClientSize = new Size(926, 126);
+            ClientSize = new Size(947, 126);
             Controls.Add(tableLayoutPanel1);
             Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             FormBorderStyle = FormBorderStyle.FixedSingle;

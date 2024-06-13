@@ -213,7 +213,7 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to FM.
+        ///   Looks up a localized string similar to FM:.
         /// </summary>
         internal static string FM {
             get {
@@ -393,6 +393,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to [New Station].
+        /// </summary>
+        internal static string NewStationListBoxEntry {
+            get {
+                return ResourceManager.GetString("NewStationListBoxEntry", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No.
         /// </summary>
         internal static string No {
@@ -425,6 +434,15 @@ namespace RadioExt_Helper {
         internal static string NonCyberpunkExe {
             get {
                 return ResourceManager.GetString("NonCyberpunkExe", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No Stations Yet!.
+        /// </summary>
+        internal static string NoStationsYet {
+            get {
+                return ResourceManager.GetString("NoStationsYet", resourceCulture);
             }
         }
         
@@ -591,7 +609,7 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Value.
+        ///   Looks up a localized string similar to Value:.
         /// </summary>
         internal static string Value {
             get {
@@ -600,7 +618,7 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Volume.
+        ///   Looks up a localized string similar to Volume:.
         /// </summary>
         internal static string Volume {
             get {

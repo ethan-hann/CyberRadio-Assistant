@@ -79,7 +79,7 @@
             // 
             pathsToolStripMenuItem.Image = Properties.Resources.folder;
             pathsToolStripMenuItem.Name = "pathsToolStripMenuItem";
-            pathsToolStripMenuItem.Size = new Size(180, 22);
+            pathsToolStripMenuItem.Size = new Size(164, 22);
             pathsToolStripMenuItem.Text = "Game Paths";
             pathsToolStripMenuItem.Click += pathsToolStripMenuItem_Click;
             // 
@@ -87,7 +87,7 @@
             // 
             refreshStationsToolStripMenuItem.Image = Properties.Resources.refresh;
             refreshStationsToolStripMenuItem.Name = "refreshStationsToolStripMenuItem";
-            refreshStationsToolStripMenuItem.Size = new Size(180, 22);
+            refreshStationsToolStripMenuItem.Size = new Size(164, 22);
             refreshStationsToolStripMenuItem.Text = "Refresh Stations";
             refreshStationsToolStripMenuItem.Click += refreshStationsToolStripMenuItem_Click;
             // 
@@ -100,10 +100,11 @@
             // 
             // cmbLanguageSelect
             // 
-            cmbLanguageSelect.DropDownStyle = ComboBoxStyle.Simple;
+            cmbLanguageSelect.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbLanguageSelect.FlatStyle = FlatStyle.System;
             cmbLanguageSelect.Items.AddRange(new object[] { "English (en)", "Español (es)", "Français (fr)" });
             cmbLanguageSelect.Name = "cmbLanguageSelect";
-            cmbLanguageSelect.Size = new Size(121, 150);
+            cmbLanguageSelect.Size = new Size(121, 23);
             cmbLanguageSelect.Sorted = true;
             cmbLanguageSelect.SelectedIndexChanged += cmbLanguageSelect_SelectedIndexChanged;
             // 
@@ -176,8 +177,9 @@
             lbStations.DataSource = metaDataBindingSource;
             lbStations.DisplayMember = "DisplayName";
             lbStations.Dock = DockStyle.Fill;
+            lbStations.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lbStations.FormattingEnabled = true;
-            lbStations.ItemHeight = 12;
+            lbStations.ItemHeight = 17;
             lbStations.Location = new Point(0, 0);
             lbStations.Margin = new Padding(3, 2, 3, 2);
             lbStations.Name = "lbStations";
@@ -215,6 +217,7 @@
             btnDeleteStation.TabIndex = 1;
             btnDeleteStation.Text = "Delete Station";
             btnDeleteStation.UseVisualStyleBackColor = true;
+            btnDeleteStation.Click += btnDeleteStation_Click;
             // 
             // btnAddStation
             // 
@@ -226,6 +229,7 @@
             btnAddStation.TabIndex = 0;
             btnAddStation.Text = "New Station";
             btnAddStation.UseVisualStyleBackColor = true;
+            btnAddStation.Click += btnAddStation_Click;
             // 
             // MainForm
             // 
