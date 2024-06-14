@@ -18,11 +18,14 @@ namespace RadioExt_Helper.models
         [JsonProperty("name")]
         public string Name { get; set; } = string.Empty;
 
+        [JsonProperty("artist")]
+        public string Artist { get; set; } = string.Empty;
+
         /// <summary>
-        /// The length (in seconds) of the song.
+        /// The duration (in seconds) of the song.
         /// </summary>
-        [JsonProperty("length")]
-        public float Length { get; set; }
+        [JsonProperty("duration")]
+        public TimeSpan Duration { get; set; }
 
         /// <summary>
         /// The file size (in bytes) of the song.

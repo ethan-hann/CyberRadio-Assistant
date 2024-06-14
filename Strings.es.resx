@@ -330,4 +330,10 @@
   <data name="SongNameHeader" xml:space="preserve">
     <value>Nombre</value>
   </data>
+  <data name="EditSongOrder" xml:space="preserve">
+    <value>Editar orden de canciones</value>
+  </data>
+  <data name="SongArtistHeader" xml:space="preserve">
+    <value>Artista</value>
+  </data>
 </root>

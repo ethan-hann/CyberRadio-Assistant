@@ -33,6 +33,7 @@
             removeSongsToolStripMenuItem = new ToolStripMenuItem();
             lvSongs = new ListView();
             colSongNames = new ColumnHeader();
+            colArtist = new ColumnHeader();
             colSongLength = new ColumnHeader();
             colSongFileSize = new ColumnHeader();
             fdlgOpenSongs = new OpenFileDialog();
@@ -69,19 +70,29 @@
             // 
             // lvSongs
             // 
-            lvSongs.Columns.AddRange(new ColumnHeader[] { colSongNames, colSongLength, colSongFileSize });
+            lvSongs.Columns.AddRange(new ColumnHeader[] { colSongNames, colArtist, colSongLength, colSongFileSize });
             lvSongs.Dock = DockStyle.Fill;
+            lvSongs.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lvSongs.FullRowSelect = true;
+            lvSongs.GridLines = true;
             lvSongs.Location = new Point(0, 24);
             lvSongs.Name = "lvSongs";
             lvSongs.Size = new Size(919, 625);
             lvSongs.TabIndex = 1;
             lvSongs.UseCompatibleStateImageBehavior = false;
             lvSongs.View = View.Details;
+            lvSongs.ColumnClick += lvSongs_ColumnClick;
+            lvSongs.MouseDoubleClick += lvSongs_MouseDoubleClick;
             // 
             // colSongNames
             // 
             colSongNames.Text = "Name";
             colSongNames.Width = 150;
+            // 
+            // colArtist
+            // 
+            colArtist.Text = "Artist";
+            colArtist.Width = 150;
             // 
             // colSongLength
             // 
@@ -153,5 +164,6 @@
         private OpenFileDialog fdlgOpenSongs;
         private TableLayoutPanel tableLayoutPanel1;
         private Button btnSongOrder;
+        private ColumnHeader colArtist;
     }
 }

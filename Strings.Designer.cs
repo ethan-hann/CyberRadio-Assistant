@@ -213,6 +213,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Edit Song Order.
+        /// </summary>
+        internal static string EditSongOrder {
+            get {
+                return ResourceManager.GetString("EditSongOrder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to File.
         /// </summary>
         internal static string File {
@@ -551,6 +560,15 @@ namespace RadioExt_Helper {
         internal static string Settings {
             get {
                 return ResourceManager.GetString("Settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Artist.
+        /// </summary>
+        internal static string SongArtistHeader {
+            get {
+                return ResourceManager.GetString("SongArtistHeader", resourceCulture);
             }
         }
         

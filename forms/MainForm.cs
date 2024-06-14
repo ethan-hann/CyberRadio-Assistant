@@ -5,14 +5,18 @@ using RadioExt_Helper.Properties;
 using System.ComponentModel;
 using RadioExt_Helper.user_controls;
 using static RadioExt_Helper.utility.CEventArgs;
+using AetherUtils.Core.Files;
 
 namespace RadioExt_Helper.forms
 {
     public partial class MainForm : Form
     {
-        private readonly BindingList<MetaData> _stations = [];
+        private readonly BindingList<Station> _stations = [];
         private readonly StationEditor _stationEditorCtrl = new();
         private readonly NoStationsCtl _noStationsCtrl = new();
+
+        private readonly Json<MetaData> metaDataJson = new Json<MetaData>();
+        private readonly Json<SongList> songListJson = new Json<SongList>();
 
         public MainForm()
         {
@@ -99,19 +103,40 @@ namespace RadioExt_Helper.forms
             if (!Settings.Default.BackupPath.Equals(string.Empty))
             {
                 _stations.Clear();
+
                 foreach (var directory in Directory.EnumerateDirectories(Settings.Default.BackupPath))
                 {
+                    MetaData? metaData = null;
+                    SongList? songList = null;
+
                     foreach (var file in Directory.EnumerateFiles(directory))
                     {
-                        if (!Path.GetExtension(file).Equals(".json")) { continue; }
-
-                        var json = File.ReadAllText(file);
-                        var md = JsonConvert.DeserializeObject<MetaData>(json);
-                        if (md != null)
-                            _stations.Add(md);
+                        var extension = FileHelper.GetExtension(file);
+                        
+                        switch (extension)
+                        {
+                            case ".json":
+                                metaData = metaDataJson.LoadJson(file);
+                                break;
+                            case ".sgls":
+                                songList = songListJson.LoadJson(file);
+                                break;
+                            default:
+                                continue;
+                        }
                     }
+
+                    Station s = new();
+                    if (metaData != null)
+                        s.MetaData = metaData;
+
+                    if (songList != null)
+                        s.SongList = songList;
+
+                    _stations.Add(s);
                 }
             }
+
             lbStations.DataSource = _stations;
             lbStations.EndUpdate();
         }
@@ -143,16 +168,17 @@ namespace RadioExt_Helper.forms
 
         private void lbStations_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (lbStations.SelectedItem is not MetaData station) return;
-            _stationEditorCtrl.SetMetaData(station, new SongList()); //TODO: change to use song list read from disk
+            if (lbStations.SelectedItem is not Station station) return;
+            _stationEditorCtrl.SetMetaData(station.MetaData, station.SongList); //TODO: change to use song list read from disk
         }
 
         private int _newStationCount = 1;
         private void btnAddStation_Click(object sender, EventArgs e)
         {
-            MetaData blankStation = new()
+            Station blankStation = new()
             {
-                DisplayName = $"{GlobalData.Strings.GetString("NewStationListBoxEntry")} {_newStationCount}"
+                MetaData = new MetaData() { DisplayName = $"{GlobalData.Strings.GetString("NewStationListBoxEntry")} {_newStationCount}" },
+                SongList = []
             };
 
             _stations.Add(blankStation);
@@ -168,18 +194,18 @@ namespace RadioExt_Helper.forms
 
         private void btnDeleteStation_Click(object sender, EventArgs e)
         {
-            if (lbStations.SelectedItem is not MetaData station) return;
+            if (lbStations.SelectedItem is not Station station) return;
             
             _stations.Remove(station);
 
             //If the station to be removed contains "[New Station]" in the name, decrement our new station count.
-            if (station.DisplayName.Contains(
+            if (station.MetaData.DisplayName.Contains(
                     GlobalData.Strings.GetString("NewStationListBoxEntry") ??
                     throw new InvalidOperationException()))
                 _newStationCount--;
 
             //Reset new station count if there are no more "New stations" in the list box.
-            if (!_stations.Any(s => s.DisplayName.Contains(
+            if (!_stations.Any(s => s.MetaData.DisplayName.Contains(
                     GlobalData.Strings.GetString("NewStationListBoxEntry") ?? 
                     throw new InvalidOperationException())))
                 _newStationCount = 1;

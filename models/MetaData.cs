@@ -29,5 +29,7 @@ namespace RadioExt_Helper.models
 
         [JsonProperty("order")]
         public string[] Order { get; set; } = [];
+
+        public override string ToString() => DisplayName;
     }
 }

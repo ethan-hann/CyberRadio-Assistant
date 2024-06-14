@@ -45,7 +45,7 @@
             fdlgOpenGameExe = new OpenFileDialog();
             splitContainer1 = new SplitContainer();
             lbStations = new ListBox();
-            metaDataBindingSource = new BindingSource(components);
+            stationBindingSource = new BindingSource(components);
             tableLayoutPanel1 = new TableLayoutPanel();
             btnDeleteStation = new Button();
             btnAddStation = new Button();
@@ -53,14 +53,14 @@
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)metaDataBindingSource).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)stationBindingSource).BeginInit();
             tableLayoutPanel1.SuspendLayout();
             SuspendLayout();
             // 
             // menuStrip1
             // 
             menuStrip1.BackColor = Color.Transparent;
-            menuStrip1.Font = new Font("CF Notche Demo", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            menuStrip1.Font = new Font("CF Notche Demo", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, languageToolStripMenuItem, helpToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
@@ -79,7 +79,7 @@
             // 
             pathsToolStripMenuItem.Image = Properties.Resources.folder;
             pathsToolStripMenuItem.Name = "pathsToolStripMenuItem";
-            pathsToolStripMenuItem.Size = new Size(164, 22);
+            pathsToolStripMenuItem.Size = new Size(166, 22);
             pathsToolStripMenuItem.Text = "Game Paths";
             pathsToolStripMenuItem.Click += pathsToolStripMenuItem_Click;
             // 
@@ -87,7 +87,7 @@
             // 
             refreshStationsToolStripMenuItem.Image = Properties.Resources.refresh;
             refreshStationsToolStripMenuItem.Name = "refreshStationsToolStripMenuItem";
-            refreshStationsToolStripMenuItem.Size = new Size(164, 22);
+            refreshStationsToolStripMenuItem.Size = new Size(166, 22);
             refreshStationsToolStripMenuItem.Text = "Refresh Stations";
             refreshStationsToolStripMenuItem.Click += refreshStationsToolStripMenuItem_Click;
             // 
@@ -119,33 +119,33 @@
             // 
             howToUseToolStripMenuItem.Image = Properties.Resources.guide;
             howToUseToolStripMenuItem.Name = "howToUseToolStripMenuItem";
-            howToUseToolStripMenuItem.Size = new Size(202, 22);
+            howToUseToolStripMenuItem.Size = new Size(204, 22);
             howToUseToolStripMenuItem.Text = "How To Use";
             // 
             // radioExtOnNexusModsToolStripMenuItem
             // 
             radioExtOnNexusModsToolStripMenuItem.Name = "radioExtOnNexusModsToolStripMenuItem";
-            radioExtOnNexusModsToolStripMenuItem.Size = new Size(202, 22);
+            radioExtOnNexusModsToolStripMenuItem.Size = new Size(204, 22);
             radioExtOnNexusModsToolStripMenuItem.Text = "radioExt on NexusMods";
             radioExtOnNexusModsToolStripMenuItem.Click += radioExtOnNexusModsToolStripMenuItem_Click;
             // 
             // radioExtGitHubToolStripMenuItem
             // 
             radioExtGitHubToolStripMenuItem.Name = "radioExtGitHubToolStripMenuItem";
-            radioExtGitHubToolStripMenuItem.Size = new Size(202, 22);
+            radioExtGitHubToolStripMenuItem.Size = new Size(204, 22);
             radioExtGitHubToolStripMenuItem.Text = "radioExt GitHub";
             radioExtGitHubToolStripMenuItem.Click += radioExtHelpToolStripMenuItem_Click;
             // 
             // toolStripSeparator1
             // 
             toolStripSeparator1.Name = "toolStripSeparator1";
-            toolStripSeparator1.Size = new Size(199, 6);
+            toolStripSeparator1.Size = new Size(201, 6);
             // 
             // aboutToolStripMenuItem
             // 
             aboutToolStripMenuItem.Image = Properties.Resources.info;
             aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            aboutToolStripMenuItem.Size = new Size(202, 22);
+            aboutToolStripMenuItem.Size = new Size(204, 22);
             aboutToolStripMenuItem.Text = "About";
             // 
             // fdlgOpenGameExe
@@ -174,8 +174,8 @@
             // 
             // lbStations
             // 
-            lbStations.DataSource = metaDataBindingSource;
-            lbStations.DisplayMember = "DisplayName";
+            lbStations.DataSource = stationBindingSource;
+            lbStations.DisplayMember = "MetaData";
             lbStations.Dock = DockStyle.Fill;
             lbStations.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lbStations.FormattingEnabled = true;
@@ -187,9 +187,9 @@
             lbStations.TabIndex = 0;
             lbStations.SelectedIndexChanged += lbStations_SelectedIndexChanged;
             // 
-            // metaDataBindingSource
+            // stationBindingSource
             // 
-            metaDataBindingSource.DataSource = typeof(models.MetaData);
+            stationBindingSource.DataSource = typeof(models.Station);
             // 
             // tableLayoutPanel1
             // 
@@ -210,6 +210,7 @@
             // btnDeleteStation
             // 
             btnDeleteStation.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            btnDeleteStation.Font = new Font("CF Notche Demo", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnDeleteStation.Location = new Point(128, 2);
             btnDeleteStation.Margin = new Padding(3, 2, 3, 2);
             btnDeleteStation.Name = "btnDeleteStation";
@@ -222,6 +223,7 @@
             // btnAddStation
             // 
             btnAddStation.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            btnAddStation.Font = new Font("CF Notche Demo", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnAddStation.Location = new Point(3, 2);
             btnAddStation.Margin = new Padding(3, 2, 3, 2);
             btnAddStation.Name = "btnAddStation";
@@ -255,7 +257,7 @@
             splitContainer1.Panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
             splitContainer1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)metaDataBindingSource).EndInit();
+            ((System.ComponentModel.ISupportInitialize)stationBindingSource).EndInit();
             tableLayoutPanel1.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
@@ -276,11 +278,11 @@
         private Button btnDeleteStation;
         private Button btnAddStation;
         private ToolStripMenuItem refreshStationsToolStripMenuItem;
-        private BindingSource metaDataBindingSource;
         private ToolStripMenuItem languageToolStripMenuItem;
         private ToolStripComboBox cmbLanguageSelect;
         private ToolStripSeparator toolStripSeparator1;
         private ToolStripMenuItem radioExtOnNexusModsToolStripMenuItem;
         private ToolStripMenuItem radioExtGitHubToolStripMenuItem;
+        private BindingSource stationBindingSource;
     }
 }

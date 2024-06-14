@@ -35,6 +35,7 @@
 
   <ItemGroup>
     <PackageReference Include="AetherUtils.Core" Version="1.0.4" />
+    <PackageReference Include="TagLibSharp" Version="2.3.0" />
   </ItemGroup>
 
   <ItemGroup>
