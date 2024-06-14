@@ -6,16 +6,20 @@ using System.Threading.Tasks;
 
 namespace RadioExt_Helper.models
 {
-    public class LanguageItem
+    /// <summary>
+    /// Wrapper class for a language string and the associated country flag. Used for the custom Image Combo Box.
+    /// </summary>
+    public class LanguageItem(string language, Image flag)
     {
-        public string Language { get; set; }
-        public Image Flag { get; set; }
+        /// <summary>
+        /// The language string.
+        /// </summary>
+        public string Language { get; set; } = language;
 
-        public LanguageItem(string language, Image flag)
-        {
-            Language = language;
-            Flag = flag;
-        }
+        /// <summary>
+        /// An image of the country flag associated with this language.
+        /// </summary>
+        public Image Flag { get; set; } = flag;
 
         public override string ToString()
         {

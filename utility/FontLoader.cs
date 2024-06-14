@@ -42,7 +42,7 @@ public static class FontLoader
                 
             // Add the font to the PrivateFontCollection
             PrivateFonts.AddMemoryFont(fontPtr, fontData.Length);
-                
+
             // Free the allocated memory
             System.Runtime.InteropServices.Marshal.FreeCoTaskMem(fontPtr);
         }

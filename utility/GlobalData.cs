@@ -82,7 +82,5 @@ namespace RadioExt_Helper.utility
                 _uiIconsInitialized = true;
             } catch (Exception ex) { Debug.WriteLine(ex); }
         }
-
-        
     }
 }
