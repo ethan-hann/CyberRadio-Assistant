@@ -157,7 +157,7 @@
     <value>Ruta de estaciones de radio</value>
   </data>
   <data name="BackUpPath" xml:space="preserve">
-    <value>Ruta de respaldo</value>
+    <value>Camino de preparación</value>
   </data>
   <data name="Change" xml:space="preserve">
     <value>Cambiar</value>
@@ -208,7 +208,7 @@
     <value>Música</value>
   </data>
   <data name="BackupPathHelp" xml:space="preserve">
-    <value>Seleccione la ruta para realizar una copia de seguridad de las estaciones de radio personalizadas.</value>
+    <value>Seleccione la ruta para organizar estaciones de radio personalizadas.</value>
   </data>
   <data name="Open" xml:space="preserve">
     <value>Abierto</value>

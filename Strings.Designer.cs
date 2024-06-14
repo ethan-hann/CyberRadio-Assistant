@@ -87,7 +87,7 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Back Up Path.
+        ///   Looks up a localized string similar to Staging Path.
         /// </summary>
         internal static string BackUpPath {
             get {
@@ -96,7 +96,7 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select the path to backup custom radio stations to..
+        ///   Looks up a localized string similar to Select the path to stage custom radio stations to..
         /// </summary>
         internal static string BackupPathHelp {
             get {

@@ -157,7 +157,7 @@
     <value>Chemin des stations de radio</value>
   </data>
   <data name="BackUpPath" xml:space="preserve">
-    <value>Chemin de sauvegarde</value>
+    <value>Chemin de préparation</value>
   </data>
   <data name="Change" xml:space="preserve">
     <value>Changement</value>
@@ -205,7 +205,7 @@
     <value>Musique</value>
   </data>
   <data name="BackupPathHelp" xml:space="preserve">
-    <value>Sélectionnez le chemin vers lequel sauvegarder les stations de radio personnalisées.</value>
+    <value>Sélectionnez le chemin vers lequel diffuser les stations de radio personnalisées.</value>
   </data>
   <data name="DisplayAndIcon" xml:space="preserve">
     <value>Affichage et icône</value>

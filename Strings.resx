@@ -157,7 +157,7 @@
     <value>Radio Stations Path</value>
   </data>
   <data name="BackUpPath" xml:space="preserve">
-    <value>Back Up Path</value>
+    <value>Staging Path</value>
   </data>
   <data name="Change" xml:space="preserve">
     <value>Change</value>
@@ -208,7 +208,7 @@
     <value>Music</value>
   </data>
   <data name="BackupPathHelp" xml:space="preserve">
-    <value>Select the path to backup custom radio stations to.</value>
+    <value>Select the path to stage custom radio stations to.</value>
   </data>
   <data name="Open" xml:space="preserve">
     <value>Open</value>
