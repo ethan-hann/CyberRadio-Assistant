@@ -315,4 +315,19 @@
   <data name="NewStationListBoxEntry" xml:space="preserve">
     <value>[New Station]</value>
   </data>
+  <data name="AddSongsToolStrip" xml:space="preserve">
+    <value>Add Song(s)</value>
+  </data>
+  <data name="RemoveSongsToolStrip" xml:space="preserve">
+    <value>Remove Selected Song(s)</value>
+  </data>
+  <data name="SongNameHeader" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="SongLengthHeader" xml:space="preserve">
+    <value>Length</value>
+  </data>
+  <data name="SongFileSizeHeader" xml:space="preserve">
+    <value>File Size</value>
+  </data>
 </root>

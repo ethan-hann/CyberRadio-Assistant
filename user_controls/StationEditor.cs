@@ -1,6 +1,7 @@
 ﻿using RadioExt_Helper.models;
 using RadioExt_Helper.utility;
 using System.Globalization;
+using static RadioExt_Helper.utility.CEventArgs;
 
 namespace RadioExt_Helper.user_controls
 {
@@ -11,8 +12,12 @@ namespace RadioExt_Helper.user_controls
         private MetaData _metaData = new();
         private CustomIcon _icon = new();
         private StreamInfo _streamInfo = new();
+        private SongList _songList = new();
+
+        private CustomMusicCtl _musicCtl = new();
 
         private bool _isPasteOperation;
+        private string _initialStationName = string.Empty;
 
         public StationEditor()
         {
@@ -20,11 +25,17 @@ namespace RadioExt_Helper.user_controls
             Dock = DockStyle.Fill;
         }
 
-        public void SetMetaData(MetaData metaData)
+        public void SetMetaData(MetaData metaData, SongList songList)
         {
             _metaData = metaData;
             _icon = _metaData.CustomIcon;
             _streamInfo = _metaData.StreamInfo;
+            _songList = songList;
+
+            _initialStationName = _metaData.DisplayName;
+
+            if (grpSongs.Controls["CustomMusicCtl"] is CustomMusicCtl musicCtl)
+                musicCtl.SetSongList(_songList);
 
             SetDisplayTabValues();
             SetMusicTabValues();
@@ -36,9 +47,21 @@ namespace RadioExt_Helper.user_controls
             //Populate combobox of UIIcons
             GlobalData.UiIcons.ToList().ForEach(icon => cmbUIIcons.Items.Add(icon));
 
+            grpSongs.Controls.Add(_musicCtl);
+            _musicCtl.SongListUpdated += UpdateSongList;
+
             SetDisplayTabValues();
             SetMusicTabValues();
             Translate();
+        }
+
+        private void UpdateSongList(object? sender, EventArgs e)
+        {
+            if (e is SongListUpdatedEventArgs args)
+            {
+                _songList = args.Songs;
+                UpdateEvent();
+            }
         }
 
         public void Translate()
@@ -68,6 +91,8 @@ namespace RadioExt_Helper.user_controls
             radUseStreamNo.Text = GlobalData.Strings.GetString("No");
 
             lblStatus.Text = GlobalData.Strings.GetString("Ready");
+
+            _musicCtl.Translate();
         }
 
         #region Display and Icon Tab
@@ -101,17 +126,22 @@ namespace RadioExt_Helper.user_controls
         private void txtDisplayName_TextChanged(object sender, EventArgs e)
         {
             _metaData.DisplayName = txtDisplayName.Text;
+            UpdateEvent();
         }
 
         private void cmbUIIcons_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cmbUIIcons.SelectedItem is string iconStr)
+            {
                 _metaData.Icon = iconStr;
+                UpdateEvent();
+            }
         }
 
         private void radUseCustomYes_CheckedChanged(object sender, EventArgs e)
         {
             _icon.UseCustom = radUseCustomYes.Checked;
+            UpdateEvent();
         }
 
         private void radUseCustomNo_CheckedChanged(object sender, EventArgs e)
@@ -121,27 +151,33 @@ namespace RadioExt_Helper.user_controls
             txtInkAtlasPath.Visible = !radUseCustomNo.Checked;
             lblInkPart.Visible = !radUseCustomNo.Checked;
             lblInkPath.Visible = !radUseCustomNo.Checked;
+
+            UpdateEvent();
         }
 
         private void txtInkAtlasPath_TextChanged(object sender, EventArgs e)
         {
             _icon.InkAtlasPath = txtInkAtlasPath.Text;
+            UpdateEvent();
         }
 
         private void txtInkAtlasPart_TextChanged(object sender, EventArgs e)
         {
             _icon.InkAtlasPart = txtInkAtlasPart.Text;
+            UpdateEvent();
         }
 
         private void nudFM_ValueChanged(object sender, EventArgs e)
         {
             _metaData.Fm = (float)nudFM.Value;
+            UpdateEvent();
         }
 
         private void volumeSlider_Scroll(object sender, EventArgs e)
         {
             _metaData.Volume = volumeSlider.Value * 0.1f;
             lblSelectedVolume.Text = $@"{_metaData.Volume:F1}";
+            UpdateEvent();
         }
 
         private void lblSelectedVolume_DoubleClick(object sender, EventArgs e)
@@ -149,6 +185,7 @@ namespace RadioExt_Helper.user_controls
             txtVolumeEdit.Text = lblSelectedVolume.Text;
             txtVolumeEdit.Size = lblSelectedVolume.Size;
             txtVolumeEdit.Visible = true;
+            volumeSlider.Enabled = false;
             txtVolumeEdit.Focus();
             txtVolumeEdit.SelectAll();
         }
@@ -169,8 +206,10 @@ namespace RadioExt_Helper.user_controls
             {
                 lblSelectedVolume.Text = txtVolumeEdit.Text;
                 txtVolumeEdit.Visible = false;
+                volumeSlider.Enabled = true;
                 volumeSlider.Value = (int)(newVolume / 0.1f);
                 e.Handled = true;
+                UpdateEvent();
             }
         }
 
@@ -201,17 +240,20 @@ namespace RadioExt_Helper.user_controls
         {
             ToggleStreamControls(true);
             _streamInfo.IsStream = radUseStreamYes.Checked;
+            UpdateEvent();
         }
 
         private void radUseStreamNo_CheckedChanged(object sender, EventArgs e)
         {
             ToggleStreamControls(false);
             _streamInfo.IsStream = !radUseStreamNo.Checked;
+            UpdateEvent();
         }
 
         private void txtStreamURL_TextChanged(object sender, EventArgs e)
         {
             _streamInfo.StreamUrl = txtStreamURL.Text;
+            UpdateEvent();
         }
 
         private void ToggleStreamControls(bool onOff)
@@ -225,6 +267,8 @@ namespace RadioExt_Helper.user_controls
 
             if (txtPastedURL.Visible && radUseStreamNo.Checked)
                 HideRadioGardenTextInput();
+
+            grpSongs.Visible = !onOff;
         }
 
         private void HideRadioGardenTextInput()
@@ -291,6 +335,11 @@ namespace RadioExt_Helper.user_controls
         }
 
         #endregion
+
+        /// <summary>
+        /// Calls the event handler <see cref="StationUpdated"/> with the updated station information.
+        /// </summary>
+        private void UpdateEvent() => StationUpdated?.Invoke(this, new StationUpdatedEventArgs(_metaData, _songList, _initialStationName));
 
         #region Hover Help
         private void lblName_MouseEnter(object sender, EventArgs e)

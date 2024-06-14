@@ -1,7 +1,6 @@
 using Newtonsoft.Json;
 using RadioExt_Helper.models;
 using RadioExt_Helper.utility;
-using System.Diagnostics;
 using RadioExt_Helper.Properties;
 using System.ComponentModel;
 using RadioExt_Helper.user_controls;
@@ -87,7 +86,7 @@ namespace RadioExt_Helper.forms
             if (result is not (DialogResult.OK or DialogResult.Cancel)) return;
 
             var basePath = PathHelper.GetGamePath(fdlgOpenGameExe, true);
-            if (basePath.Equals(string.Empty)) return;
+            if (basePath != null && basePath.Equals(string.Empty)) return;
 
             Settings.Default.GameBasePath = basePath;
             Settings.Default.Save();
@@ -145,55 +144,59 @@ namespace RadioExt_Helper.forms
         private void lbStations_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (lbStations.SelectedItem is not MetaData station) return;
-            _stationEditorCtrl.SetMetaData(station);
+            _stationEditorCtrl.SetMetaData(station, new SongList()); //TODO: change to use song list read from disk
         }
 
         private int _newStationCount = 1;
         private void btnAddStation_Click(object sender, EventArgs e)
         {
-            MetaData blankStation = new();
-            blankStation.DisplayName = $"{GlobalData.Strings.GetString("NewStationListBoxEntry")} {_newStationCount}";
+            MetaData blankStation = new()
+            {
+                DisplayName = $"{GlobalData.Strings.GetString("NewStationListBoxEntry")} {_newStationCount}"
+            };
 
             _stations.Add(blankStation);
             lbStations.SelectedItem = blankStation;
             _newStationCount++;
 
-            //Reshow our station editor if the station count has increased again.
-            if (_stations.Count > 0)
-            {
-                _noStationsCtrl.Visible = false;
-                _stationEditorCtrl.Visible = true;
-            }
+            //Re-show our station editor if the station count has increased again.
+            if (_stations.Count <= 0) return;
+            
+            _noStationsCtrl.Visible = false;
+            _stationEditorCtrl.Visible = true;
         }
 
         private void btnDeleteStation_Click(object sender, EventArgs e)
         {
-            if (lbStations.SelectedItem is MetaData station)
-            {
-                _stations.Remove(station);
+            if (lbStations.SelectedItem is not MetaData station) return;
+            
+            _stations.Remove(station);
 
-                //If the station to be removed contains "[New Station]" in the name, decrement our new station count.
-                if (station.DisplayName.Contains(GlobalData.Strings.GetString("NewStationListBoxEntry")))
-                    _newStationCount--;
+            //If the station to be removed contains "[New Station]" in the name, decrement our new station count.
+            if (station.DisplayName.Contains(
+                    GlobalData.Strings.GetString("NewStationListBoxEntry") ??
+                    throw new InvalidOperationException()))
+                _newStationCount--;
 
-                //Reset new station count if there are no more "New stations" in the list box.
-                if (!_stations.Where(s => s.DisplayName.Contains(GlobalData.Strings.GetString("NewStationListBoxEntry"))).Any())
-                    _newStationCount = 1;
+            //Reset new station count if there are no more "New stations" in the list box.
+            if (!_stations.Any(s => s.DisplayName.Contains(
+                    GlobalData.Strings.GetString("NewStationListBoxEntry") ?? 
+                    throw new InvalidOperationException())))
+                _newStationCount = 1;
 
-                //Hide the station editor (and reset it) if there are no stations to edit.
-                if (_stations.Count <= 0)
-                {
-                    _stationEditorCtrl.Visible = false;
-                    _stationEditorCtrl.SetMetaData(new MetaData());
-                    _noStationsCtrl.Visible = true;
-                }
-            }
+            //Hide the station editor (and reset it) if there are no stations to edit.
+            if (_stations.Count > 0) return;
+            
+            _stationEditorCtrl.Visible = false;
+            _stationEditorCtrl.SetMetaData(new MetaData(), new SongList());
+            _noStationsCtrl.Visible = true;
         }
 
         private void UpdateStation(object? sender, EventArgs e)
         {
             if (e is StationUpdatedEventArgs args)
             {
+                
                 //TODO: Update station metadata with changed version
             }
         }
@@ -206,12 +209,17 @@ namespace RadioExt_Helper.forms
                 Translate();
                 foreach (Control c in splitContainer1.Panel2.Controls)
                 {
-                    if (c is StationEditor se)
-                        se.Translate();
-                    else if (c is NoStationsCtl nsc)
-                        nsc.Translate();
-                    else
-                        continue;
+                    switch (c)
+                    {
+                        case StationEditor se:
+                            se.Translate();
+                            break;
+                        case NoStationsCtl nsc:
+                            nsc.Translate();
+                            break;
+                        default:
+                            continue;
+                    }
                 }
             }
 

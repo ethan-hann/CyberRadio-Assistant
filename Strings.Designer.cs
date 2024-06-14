@@ -69,6 +69,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add Song(s).
+        /// </summary>
+        internal static string AddSongsToolStrip {
+            get {
+                return ResourceManager.GetString("AddSongsToolStrip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure?.
         /// </summary>
         internal static string AreYouSure {
@@ -528,11 +537,47 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove Selected Song(s).
+        /// </summary>
+        internal static string RemoveSongsToolStrip {
+            get {
+                return ResourceManager.GetString("RemoveSongsToolStrip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Settings.
         /// </summary>
         internal static string Settings {
             get {
                 return ResourceManager.GetString("Settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File Size.
+        /// </summary>
+        internal static string SongFileSizeHeader {
+            get {
+                return ResourceManager.GetString("SongFileSizeHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Length.
+        /// </summary>
+        internal static string SongLengthHeader {
+            get {
+                return ResourceManager.GetString("SongLengthHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name.
+        /// </summary>
+        internal static string SongNameHeader {
+            get {
+                return ResourceManager.GetString("SongNameHeader", resourceCulture);
             }
         }
         

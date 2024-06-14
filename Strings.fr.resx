@@ -315,4 +315,19 @@
   <data name="NewStationListBoxEntry" xml:space="preserve">
     <value>[Nouvelle gare]</value>
   </data>
+  <data name="RemoveSongsToolStrip" xml:space="preserve">
+    <value>Supprimer les chansons sélectionnées</value>
+  </data>
+  <data name="AddSongsToolStrip" xml:space="preserve">
+    <value>Ajouter des chansons</value>
+  </data>
+  <data name="SongFileSizeHeader" xml:space="preserve">
+    <value>Taille du fichier</value>
+  </data>
+  <data name="SongLengthHeader" xml:space="preserve">
+    <value>Longueur</value>
+  </data>
+  <data name="SongNameHeader" xml:space="preserve">
+    <value>Nom</value>
+  </data>
 </root>
