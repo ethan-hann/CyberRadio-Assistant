@@ -7,19 +7,13 @@ using System.Threading.Tasks;
 
 namespace RadioExt_Helper.utility
 {
-    public class ListViewItemComparer : IComparer
+    public class ListViewItemComparer(int column, SortOrder order) : IComparer
     {
-        private int _column;
+        private int _column = column;
 
         public int Column { get { return _column; } }
 
-        public SortOrder Order { get; set; }
-
-        public ListViewItemComparer(int column, SortOrder order)
-        {
-            _column = column;
-            Order = order;
-        }
+        public SortOrder Order { get; set; } = order;
 
         public int Compare(object? x, object? y)
         {
