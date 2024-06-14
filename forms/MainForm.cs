@@ -85,6 +85,8 @@ namespace RadioExt_Helper.forms
             radioExtOnNexusModsToolStripMenuItem.Text = GlobalData.Strings.GetString("RadioExtNexusMods");
             aboutToolStripMenuItem.Text = GlobalData.Strings.GetString("About");
 
+            grpStations.Text = GlobalData.Strings.GetString("Stations");
+
             //Buttons
             btnAddStation.Text = GlobalData.Strings.GetString("NewStation");
             btnDeleteStation.Text = GlobalData.Strings.GetString("DeleteStation");
@@ -146,7 +148,7 @@ namespace RadioExt_Helper.forms
                     foreach (var file in Directory.EnumerateFiles(directory))
                     {
                         var extension = FileHelper.GetExtension(file);
-                        
+
                         switch (extension)
                         {
                             case ".json":
@@ -184,6 +186,89 @@ namespace RadioExt_Helper.forms
         }
 
         #region File Menu
+        private void exportStationsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (lbStations.Items.Count <= 0) return;
+
+            //TODO: Export radio stations
+            foreach (var item in lbStations.Items)
+            {
+                if (item is not Station station) continue;
+
+                //Create the directory(ies) for the station in the staging path
+                var stationPath = CreateStationDirectory(station);
+
+                if (stationPath.Equals(string.Empty)) continue;
+
+                //Create the metadata json
+                var metadataSaved = CreateMetaDataJSON(stationPath, station);
+                if (!metadataSaved) continue;
+
+                //Create the song list json (if needed)
+                if (station.SongList.Count() <= 0) continue;
+                var songListSaved = CreateSongListJSON(stationPath, station);
+
+                //Copy songs to staging folder
+                CopySongsToStaging(stationPath, station);
+            }
+
+            //Refresh stations list box
+            PopulateStations();
+        }
+
+        private string CreateStationDirectory(Station station)
+        {
+            if (Settings.Default.BackupPath.Equals(string.Empty)) return string.Empty;
+
+            //string cleanName = FileHelper.RemoveInvalidFileNameChars(station.MetaData.DisplayName);
+            var stationPath = Path.Combine(Settings.Default.BackupPath, station.MetaData.DisplayName);
+            FileHelper.CreateDirectories(stationPath);
+            return stationPath;
+        }
+
+        private bool CreateMetaDataJSON(string stationPath, Station station)
+        {
+            if (Settings.Default.BackupPath.Equals(string.Empty)) return false;
+
+            var mdPath = Path.Combine(stationPath, "metadata.json");
+            return metaDataJson.SaveJson(mdPath, station.MetaData);
+        }
+
+        private bool CreateSongListJSON(string stationPath, Station station)
+        {
+            if (Settings.Default.BackupPath.Equals(string.Empty)) return false;
+
+            var songPath = Path.Combine(stationPath, "songs.sgls");
+            return songListJson.SaveJson(songPath, station.SongList);
+        }
+
+        private void CopySongsToStaging(string stationPath, Station station)
+        {
+            if (Settings.Default.BackupPath.Equals(string.Empty)) return;
+
+            var files = Directory.GetFiles(stationPath);
+
+            //Remove original song files from staging folder
+            foreach (var file in files)
+            {
+                if (FileHelper.GetExtension(file, false).Equals(".json") || FileHelper.GetExtension(file, false).Equals(".sgls"))
+                    continue;
+                File.Delete(file);
+            }
+
+            foreach (var song in station.SongList)
+            {
+                var songPath = Path.Combine(stationPath, Path.GetFileName(song.OriginalFilePath));
+                if (FileHelper.DoesFileExist(song.OriginalFilePath))
+                    File.Copy(song.OriginalFilePath, songPath, true);
+            }
+        }
+
+        private void ExportFromStagingToLive()
+        {
+            //TODO: export stations from staging to live radioExt directory
+        }
+
         private void pathsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             new PathSettings().ShowDialog();
@@ -211,7 +296,7 @@ namespace RadioExt_Helper.forms
         private void lbStations_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (lbStations.SelectedItem is not Station station) return;
-            _stationEditorCtrl.SetMetaData(station.MetaData, station.SongList); //TODO: change to use song list read from disk
+            _stationEditorCtrl.SetMetaData(station.MetaData, station.SongList);
         }
 
         private int _newStationCount = 1;
@@ -229,7 +314,7 @@ namespace RadioExt_Helper.forms
 
             //Re-show our station editor if the station count has increased again.
             if (_stations.Count <= 0) return;
-            
+
             _noStationsCtrl.Visible = false;
             _stationEditorCtrl.Visible = true;
         }
@@ -237,7 +322,7 @@ namespace RadioExt_Helper.forms
         private void btnDeleteStation_Click(object sender, EventArgs e)
         {
             if (lbStations.SelectedItem is not Station station) return;
-            
+
             _stations.Remove(station);
 
             //If the station to be removed contains "[New Station]" in the name, decrement our new station count.
@@ -248,13 +333,13 @@ namespace RadioExt_Helper.forms
 
             //Reset new station count if there are no more "New stations" in the list box.
             if (!_stations.Any(s => s.MetaData.DisplayName.Contains(
-                    GlobalData.Strings.GetString("NewStationListBoxEntry") ?? 
+                    GlobalData.Strings.GetString("NewStationListBoxEntry") ??
                     throw new InvalidOperationException())))
                 _newStationCount = 1;
 
             //Hide the station editor (and reset it) if there are no stations to edit.
             if (_stations.Count > 0) return;
-            
+
             _stationEditorCtrl.Visible = false;
             _stationEditorCtrl.SetMetaData(new MetaData(), new SongList());
             _noStationsCtrl.Visible = true;
@@ -264,8 +349,11 @@ namespace RadioExt_Helper.forms
         {
             if (e is StationUpdatedEventArgs args)
             {
-                
-                //TODO: Update station metadata with changed version
+                if (lbStations.SelectedItem is Station station)
+                {
+                    station.MetaData = args.MetaData;
+                    station.SongList = args.Songs;
+                }
             }
         }
 

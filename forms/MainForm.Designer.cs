@@ -32,6 +32,8 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             menuStrip1 = new MenuStrip();
             fileToolStripMenuItem = new ToolStripMenuItem();
+            exportStationsToolStripMenuItem = new ToolStripMenuItem();
+            toolStripSeparator2 = new ToolStripSeparator();
             pathsToolStripMenuItem = new ToolStripMenuItem();
             refreshStationsToolStripMenuItem = new ToolStripMenuItem();
             languageToolStripMenuItem = new ToolStripMenuItem();
@@ -43,6 +45,7 @@
             aboutToolStripMenuItem = new ToolStripMenuItem();
             fdlgOpenGameExe = new OpenFileDialog();
             splitContainer1 = new SplitContainer();
+            grpStations = new GroupBox();
             lbStations = new ListBox();
             stationBindingSource = new BindingSource(components);
             tableLayoutPanel1 = new TableLayoutPanel();
@@ -52,6 +55,7 @@
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.SuspendLayout();
+            grpStations.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)stationBindingSource).BeginInit();
             tableLayoutPanel1.SuspendLayout();
             SuspendLayout();
@@ -69,10 +73,23 @@
             // 
             // fileToolStripMenuItem
             // 
-            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { pathsToolStripMenuItem, refreshStationsToolStripMenuItem });
+            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { exportStationsToolStripMenuItem, toolStripSeparator2, pathsToolStripMenuItem, refreshStationsToolStripMenuItem });
             fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             fileToolStripMenuItem.Size = new Size(37, 20);
             fileToolStripMenuItem.Text = "File";
+            // 
+            // exportStationsToolStripMenuItem
+            // 
+            exportStationsToolStripMenuItem.Image = Properties.Resources.export_file;
+            exportStationsToolStripMenuItem.Name = "exportStationsToolStripMenuItem";
+            exportStationsToolStripMenuItem.Size = new Size(166, 22);
+            exportStationsToolStripMenuItem.Text = "Export Stations";
+            exportStationsToolStripMenuItem.Click += exportStationsToolStripMenuItem_Click;
+            // 
+            // toolStripSeparator2
+            // 
+            toolStripSeparator2.Name = "toolStripSeparator2";
+            toolStripSeparator2.Size = new Size(163, 6);
             // 
             // pathsToolStripMenuItem
             // 
@@ -150,7 +167,7 @@
             // 
             // splitContainer1.Panel1
             // 
-            splitContainer1.Panel1.Controls.Add(lbStations);
+            splitContainer1.Panel1.Controls.Add(grpStations);
             splitContainer1.Panel1.Controls.Add(tableLayoutPanel1);
             // 
             // splitContainer1.Panel2
@@ -160,6 +177,18 @@
             splitContainer1.SplitterDistance = 251;
             splitContainer1.TabIndex = 1;
             // 
+            // grpStations
+            // 
+            grpStations.Controls.Add(lbStations);
+            grpStations.Dock = DockStyle.Fill;
+            grpStations.Font = new Font("CF Notche Demo", 9F, FontStyle.Bold);
+            grpStations.Location = new Point(0, 0);
+            grpStations.Name = "grpStations";
+            grpStations.Size = new Size(251, 555);
+            grpStations.TabIndex = 2;
+            grpStations.TabStop = false;
+            grpStations.Text = "Stations";
+            // 
             // lbStations
             // 
             lbStations.DataSource = stationBindingSource;
@@ -168,10 +197,10 @@
             lbStations.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lbStations.FormattingEnabled = true;
             lbStations.ItemHeight = 17;
-            lbStations.Location = new Point(0, 0);
+            lbStations.Location = new Point(3, 17);
             lbStations.Margin = new Padding(3, 2, 3, 2);
             lbStations.Name = "lbStations";
-            lbStations.Size = new Size(251, 555);
+            lbStations.Size = new Size(245, 535);
             lbStations.TabIndex = 0;
             lbStations.SelectedIndexChanged += lbStations_SelectedIndexChanged;
             // 
@@ -245,6 +274,7 @@
             splitContainer1.Panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
             splitContainer1.ResumeLayout(false);
+            grpStations.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)stationBindingSource).EndInit();
             tableLayoutPanel1.ResumeLayout(false);
             ResumeLayout(false);
@@ -271,5 +301,8 @@
         private ToolStripMenuItem radioExtOnNexusModsToolStripMenuItem;
         private ToolStripMenuItem radioExtGitHubToolStripMenuItem;
         private BindingSource stationBindingSource;
+        private ToolStripMenuItem exportStationsToolStripMenuItem;
+        private ToolStripSeparator toolStripSeparator2;
+        private GroupBox grpStations;
     }
 }

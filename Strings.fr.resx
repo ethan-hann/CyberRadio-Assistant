@@ -342,4 +342,7 @@
   <data name="Songs" xml:space="preserve">
     <value>Chansons</value>
   </data>
+  <data name="Stations" xml:space="preserve">
+    <value>Gares</value>
+  </data>
 </root>

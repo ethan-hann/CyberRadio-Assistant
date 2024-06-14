@@ -627,6 +627,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Stations.
+        /// </summary>
+        internal static string Stations {
+            get {
+                return ResourceManager.GetString("Stations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Stream Settings.
         /// </summary>
         internal static string StreamSettings {
