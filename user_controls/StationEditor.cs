@@ -85,6 +85,7 @@ namespace RadioExt_Helper.user_controls
             lblUseStream.Text = GlobalData.Strings.GetString("UseStream");
             lblStreamURL.Text = GlobalData.Strings.GetString("StreamURL");
             grpStreamSettings.Text = GlobalData.Strings.GetString("StreamSettings");
+            grpSongs.Text = GlobalData.Strings.GetString("Songs");
             btnGetRadioGardenURL.Text = GlobalData.Strings.GetString("GetURLFromRadioGarden");
             txtPastedURL.PlaceholderText = GlobalData.Strings.GetString("URLHint");
             radUseStreamYes.Text = GlobalData.Strings.GetString("Yes");

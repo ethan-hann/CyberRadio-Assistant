@@ -35,7 +35,6 @@
             pathsToolStripMenuItem = new ToolStripMenuItem();
             refreshStationsToolStripMenuItem = new ToolStripMenuItem();
             languageToolStripMenuItem = new ToolStripMenuItem();
-            cmbLanguageSelect = new ToolStripComboBox();
             helpToolStripMenuItem = new ToolStripMenuItem();
             howToUseToolStripMenuItem = new ToolStripMenuItem();
             radioExtOnNexusModsToolStripMenuItem = new ToolStripMenuItem();
@@ -93,20 +92,9 @@
             // 
             // languageToolStripMenuItem
             // 
-            languageToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { cmbLanguageSelect });
             languageToolStripMenuItem.Name = "languageToolStripMenuItem";
             languageToolStripMenuItem.Size = new Size(73, 20);
             languageToolStripMenuItem.Text = "Language";
-            // 
-            // cmbLanguageSelect
-            // 
-            cmbLanguageSelect.DropDownStyle = ComboBoxStyle.DropDownList;
-            cmbLanguageSelect.FlatStyle = FlatStyle.System;
-            cmbLanguageSelect.Items.AddRange(new object[] { "English (en)", "Español (es)", "Français (fr)" });
-            cmbLanguageSelect.Name = "cmbLanguageSelect";
-            cmbLanguageSelect.Size = new Size(121, 23);
-            cmbLanguageSelect.Sorted = true;
-            cmbLanguageSelect.SelectedIndexChanged += cmbLanguageSelect_SelectedIndexChanged;
             // 
             // helpToolStripMenuItem
             // 
@@ -279,7 +267,6 @@
         private Button btnAddStation;
         private ToolStripMenuItem refreshStationsToolStripMenuItem;
         private ToolStripMenuItem languageToolStripMenuItem;
-        private ToolStripComboBox cmbLanguageSelect;
         private ToolStripSeparator toolStripSeparator1;
         private ToolStripMenuItem radioExtOnNexusModsToolStripMenuItem;
         private ToolStripMenuItem radioExtGitHubToolStripMenuItem;

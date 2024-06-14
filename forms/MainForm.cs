@@ -6,6 +6,8 @@ using System.ComponentModel;
 using RadioExt_Helper.user_controls;
 using static RadioExt_Helper.utility.CEventArgs;
 using AetherUtils.Core.Files;
+using System.Globalization;
+using System.Windows.Forms;
 
 namespace RadioExt_Helper.forms
 {
@@ -18,9 +20,12 @@ namespace RadioExt_Helper.forms
         private readonly Json<MetaData> metaDataJson = new Json<MetaData>();
         private readonly Json<SongList> songListJson = new Json<SongList>();
 
+        private readonly ImageComboBox _languageComboBox = new ImageComboBox();
+
         public MainForm()
         {
             InitializeComponent();
+            InitializeLanguageDropDown();
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -33,6 +38,7 @@ namespace RadioExt_Helper.forms
 
         private void MainForm_Shown(object sender, EventArgs e)
         {
+            SelectLanguage();
             Translate();
             CheckGamePath();
             PopulateStations();
@@ -40,8 +46,30 @@ namespace RadioExt_Helper.forms
             splitContainer1.Panel2.Controls.Add(_noStationsCtrl);
             splitContainer1.Panel2.Controls.Add(_stationEditorCtrl);
 
-            _noStationsCtrl.Visible = _stations.Count <= 0;
-            _stationEditorCtrl.Visible = !_noStationsCtrl.Visible;
+            HandleUserControlVisibility();
+        }
+
+        private void InitializeLanguageDropDown()
+        {
+            //Populate the language combo box
+            _languageComboBox.Items.Add(new LanguageItem("English (en)", Resources.united_kingdom));
+            _languageComboBox.Items.Add(new LanguageItem("Español (es)", Resources.spain));
+            _languageComboBox.Items.Add(new LanguageItem("Français (fr)", Resources.france));
+
+            _languageComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+            _languageComboBox.SelectedIndexChanged += cmbLanguageSelect_SelectedIndexChanged;
+
+            // Create a ToolStripControlHost to host the ImageComboBox
+            ToolStripControlHost toolStripControlHost = new ToolStripControlHost(_languageComboBox);
+
+            // Add the ToolStripControlHost to the "Language" tool strip menu
+            languageToolStripMenuItem.DropDownItems.Add(toolStripControlHost);
+        }
+
+        private void SelectLanguage()
+        {
+            _languageComboBox.SelectedIndex = 0;
+            cmbLanguageSelect_SelectedIndexChanged(_languageComboBox, EventArgs.Empty);
         }
 
         private void Translate()
@@ -61,6 +89,12 @@ namespace RadioExt_Helper.forms
             btnAddStation.Text = GlobalData.Strings.GetString("NewStation");
             btnDeleteStation.Text = GlobalData.Strings.GetString("DeleteStation");
 
+        }
+
+        private void HandleUserControlVisibility()
+        {
+            _noStationsCtrl.Visible = _stations.Count <= 0;
+            _stationEditorCtrl.Visible = !_noStationsCtrl.Visible;
         }
 
         private void ApplyFonts()
@@ -138,6 +172,14 @@ namespace RadioExt_Helper.forms
             }
 
             lbStations.DataSource = _stations;
+            if (lbStations.Items.Count > 0)
+            {
+                lbStations.SelectedIndex = 0;
+                lbStations_SelectedIndexChanged(lbStations, EventArgs.Empty);
+            }
+
+            HandleUserControlVisibility();
+
             lbStations.EndUpdate();
         }
 
@@ -227,11 +269,11 @@ namespace RadioExt_Helper.forms
             }
         }
 
-        private void cmbLanguageSelect_SelectedIndexChanged(object sender, EventArgs e)
+        private void cmbLanguageSelect_SelectedIndexChanged(object? sender, EventArgs e)
         {
-            if (cmbLanguageSelect.SelectedItem is string culture)
+            if (_languageComboBox.SelectedItem is LanguageItem culture)
             {
-                GlobalData.SetCulture(culture);
+                GlobalData.SetCulture(culture.Language);
                 Translate();
                 foreach (Control c in splitContainer1.Panel2.Controls)
                 {
@@ -247,11 +289,11 @@ namespace RadioExt_Helper.forms
                             continue;
                     }
                 }
+
+                Focus(); //re-focus the main form
+
+                languageToolStripMenuItem.HideDropDown();
             }
-
-            cmbLanguageSelect.DroppedDown = false;
         }
-
-        
     }
 }

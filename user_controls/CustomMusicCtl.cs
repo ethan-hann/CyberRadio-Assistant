@@ -104,7 +104,20 @@ namespace RadioExt_Helper.user_controls
 
         private void removeSongsToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (lvSongs.SelectedItems.Count <= 0) return;
 
+            if (lvSongs.SelectedItems.Count == lvSongs.Items.Count)
+            {
+                if (MessageBox.Show(this, GlobalData.Strings.GetString("DeleteAllSongsConfirm"), 
+                    GlobalData.Strings.GetString("Confirm"), MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No) return;
+            }
+
+            for (int i = 0; i < lvSongs.SelectedItems.Count; i++)
+            {
+                if (lvSongs.SelectedItems[i].Tag is Song song)
+                    _songList.Remove(song);
+            }
+            PopulateListView();
         }
 
         private void lvSongs_ColumnClick(object sender, ColumnClickEventArgs e)

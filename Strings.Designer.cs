@@ -168,6 +168,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to remove all songs?.
+        /// </summary>
+        internal static string DeleteAllSongsConfirm {
+            get {
+                return ResourceManager.GetString("DeleteAllSongsConfirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Delete Station.
         /// </summary>
         internal static string DeleteStation {
@@ -596,6 +605,15 @@ namespace RadioExt_Helper {
         internal static string SongNameHeader {
             get {
                 return ResourceManager.GetString("SongNameHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Songs.
+        /// </summary>
+        internal static string Songs {
+            get {
+                return ResourceManager.GetString("Songs", resourceCulture);
             }
         }
         

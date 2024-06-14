@@ -83,6 +83,16 @@ namespace RadioExt_Helper.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap france {
+            get {
+                object obj = ResourceManager.GetObject("france", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap guide {
             get {
                 object obj = ResourceManager.GetObject("guide", resourceCulture);
@@ -106,6 +116,26 @@ namespace RadioExt_Helper.Properties {
         internal static System.Drawing.Bitmap refresh {
             get {
                 object obj = ResourceManager.GetObject("refresh", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap spain {
+            get {
+                object obj = ResourceManager.GetObject("spain", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap united_kingdom {
+            get {
+                object obj = ResourceManager.GetObject("united_kingdom", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

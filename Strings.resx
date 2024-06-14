@@ -336,4 +336,10 @@
   <data name="SongArtistHeader" xml:space="preserve">
     <value>Artist</value>
   </data>
+  <data name="DeleteAllSongsConfirm" xml:space="preserve">
+    <value>Are you sure you want to remove all songs?</value>
+  </data>
+  <data name="Songs" xml:space="preserve">
+    <value>Songs</value>
+  </data>
 </root>
