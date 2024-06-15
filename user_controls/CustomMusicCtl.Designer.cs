@@ -102,7 +102,7 @@
             lvSongs.GridLines = true;
             lvSongs.Location = new Point(3, 30);
             lvSongs.Name = "lvSongs";
-            lvSongs.Size = new Size(905, 635);
+            lvSongs.Size = new Size(905, 631);
             lvSongs.TabIndex = 1;
             lvSongs.UseCompatibleStateImageBehavior = false;
             lvSongs.View = View.Details;
@@ -139,7 +139,7 @@
             tabControl1.Controls.Add(pgSongs);
             tabControl1.Controls.Add(pgSongOrder);
             tabControl1.Dock = DockStyle.Fill;
-            tabControl1.Font = new Font("CF Notche Demo", 11.9999981F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            tabControl1.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             tabControl1.ImageList = tabImages;
             tabControl1.Location = new Point(0, 0);
             tabControl1.Name = "tabControl1";
@@ -153,10 +153,10 @@
             pgSongs.Controls.Add(lvSongs);
             pgSongs.Controls.Add(menuStrip1);
             pgSongs.ImageIndex = 0;
-            pgSongs.Location = new Point(4, 26);
+            pgSongs.Location = new Point(4, 30);
             pgSongs.Name = "pgSongs";
             pgSongs.Padding = new Padding(3);
-            pgSongs.Size = new Size(911, 668);
+            pgSongs.Size = new Size(911, 664);
             pgSongs.TabIndex = 0;
             pgSongs.Text = "Song Listing";
             // 

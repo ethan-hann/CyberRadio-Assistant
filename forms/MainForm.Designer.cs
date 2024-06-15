@@ -183,7 +183,7 @@
             // 
             grpStations.Controls.Add(lbStations);
             grpStations.Dock = DockStyle.Fill;
-            grpStations.Font = new Font("CF Notche Demo", 9F, FontStyle.Bold);
+            grpStations.Font = new Font("Comic Sans MS", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             grpStations.Location = new Point(0, 0);
             grpStations.Name = "grpStations";
             grpStations.Size = new Size(328, 819);
@@ -199,10 +199,10 @@
             lbStations.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lbStations.FormattingEnabled = true;
             lbStations.ItemHeight = 17;
-            lbStations.Location = new Point(3, 17);
+            lbStations.Location = new Point(3, 20);
             lbStations.Margin = new Padding(3, 2, 3, 2);
             lbStations.Name = "lbStations";
-            lbStations.Size = new Size(322, 799);
+            lbStations.Size = new Size(322, 796);
             lbStations.TabIndex = 0;
             lbStations.SelectedIndexChanged += lbStations_SelectedIndexChanged;
             // 

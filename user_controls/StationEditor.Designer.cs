@@ -199,7 +199,7 @@
             tabControl.Controls.Add(tabDisplayAndIcon);
             tabControl.Controls.Add(tabMusic);
             tabControl.Dock = DockStyle.Fill;
-            tabControl.Font = new Font("CF Notche Demo", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            tabControl.Font = new Font("Segoe UI", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             tabControl.ImageList = tabImages;
             tabControl.Location = new Point(0, 0);
             tabControl.Name = "tabControl";
@@ -213,10 +213,10 @@
             tabDisplayAndIcon.Controls.Add(panel1);
             tabDisplayAndIcon.Font = new Font("CF Notche Demo", 9.749999F, FontStyle.Regular, GraphicsUnit.Point, 0);
             tabDisplayAndIcon.ImageIndex = 0;
-            tabDisplayAndIcon.Location = new Point(4, 25);
+            tabDisplayAndIcon.Location = new Point(4, 29);
             tabDisplayAndIcon.Name = "tabDisplayAndIcon";
             tabDisplayAndIcon.Padding = new Padding(3);
-            tabDisplayAndIcon.Size = new Size(976, 662);
+            tabDisplayAndIcon.Size = new Size(976, 658);
             tabDisplayAndIcon.TabIndex = 0;
             tabDisplayAndIcon.Text = "Display and Icon";
             tabDisplayAndIcon.ToolTipText = "Change the display name and icon for this radio station.";
@@ -232,7 +232,7 @@
             panel1.Dock = DockStyle.Fill;
             panel1.Location = new Point(3, 3);
             panel1.Name = "panel1";
-            panel1.Size = new Size(968, 654);
+            panel1.Size = new Size(968, 650);
             panel1.TabIndex = 3;
             // 
             // panel3
@@ -241,7 +241,7 @@
             panel3.Dock = DockStyle.Fill;
             panel3.Location = new Point(0, 299);
             panel3.Name = "panel3";
-            panel3.Size = new Size(968, 355);
+            panel3.Size = new Size(968, 351);
             panel3.TabIndex = 5;
             // 
             // grpSettings
@@ -542,10 +542,10 @@
             tabMusic.Controls.Add(grpSongs);
             tabMusic.Controls.Add(grpStreamSettings);
             tabMusic.ImageIndex = 1;
-            tabMusic.Location = new Point(4, 25);
+            tabMusic.Location = new Point(4, 29);
             tabMusic.Name = "tabMusic";
             tabMusic.Padding = new Padding(3);
-            tabMusic.Size = new Size(976, 662);
+            tabMusic.Size = new Size(976, 658);
             tabMusic.TabIndex = 1;
             tabMusic.Text = "Music";
             tabMusic.ToolTipText = "Change the music this radio station will play.";
@@ -556,7 +556,7 @@
             grpSongs.Font = new Font("CF Notche Demo", 9F, FontStyle.Bold);
             grpSongs.Location = new Point(3, 122);
             grpSongs.Name = "grpSongs";
-            grpSongs.Size = new Size(968, 535);
+            grpSongs.Size = new Size(968, 531);
             grpSongs.TabIndex = 1;
             grpSongs.TabStop = false;
             grpSongs.Text = "Songs";

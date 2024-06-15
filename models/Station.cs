@@ -19,6 +19,6 @@ namespace RadioExt_Helper.models
         /// <summary>
         /// The song list for this station; empty if <see cref="MetaData.StreamInfo.IsStream"/> is <c>true</c>.
         /// </summary>
-        public SongList SongList { get; set; } = [];
+        public List<Song> SongList { get; set; } = [];
     }
 }

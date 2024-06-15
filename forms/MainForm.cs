@@ -8,6 +8,11 @@ using static RadioExt_Helper.utility.CEventArgs;
 using AetherUtils.Core.Files;
 using System.Globalization;
 using System.Windows.Forms;
+using AetherUtils.Core.Extensions;
+using AetherUtils.Core.WinForms.Controls;
+using AetherUtils.Core.WinForms.Models;
+using AetherUtils.Core.Reflection;
+using Org.BouncyCastle.Asn1.Ocsp;
 
 namespace RadioExt_Helper.forms
 {
@@ -20,7 +25,7 @@ namespace RadioExt_Helper.forms
         private readonly Json<MetaData> metaDataJson = new Json<MetaData>();
         private readonly Json<SongList> songListJson = new Json<SongList>();
 
-        private readonly ImageComboBox _languageComboBox = new ImageComboBox();
+        private readonly ImageComboBox<ImageComboBoxItem> _languageComboBox = new();
 
         public MainForm()
         {
@@ -30,8 +35,8 @@ namespace RadioExt_Helper.forms
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            //ApplyFonts();
             GlobalData.Initialize();
+            ApplyFontsToControls(this);
 
             _stationEditorCtrl.StationUpdated += UpdateStation;
         }
@@ -52,9 +57,9 @@ namespace RadioExt_Helper.forms
         private void InitializeLanguageDropDown()
         {
             //Populate the language combo box
-            _languageComboBox.Items.Add(new LanguageItem("English (en)", Resources.united_kingdom));
-            _languageComboBox.Items.Add(new LanguageItem("Español (es)", Resources.spain));
-            _languageComboBox.Items.Add(new LanguageItem("Français (fr)", Resources.france));
+            _languageComboBox.Items.Add(new ImageComboBoxItem("English (en)", Resources.united_kingdom));
+            _languageComboBox.Items.Add(new ImageComboBoxItem("Español (es)", Resources.spain));
+            _languageComboBox.Items.Add(new ImageComboBoxItem("Français (fr)", Resources.france));
 
             _languageComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             _languageComboBox.SelectedIndexChanged += cmbLanguageSelect_SelectedIndexChanged;
@@ -99,20 +104,22 @@ namespace RadioExt_Helper.forms
             _stationEditorCtrl.Visible = !_noStationsCtrl.Visible;
         }
 
-        private void ApplyFonts()
+        private void ApplyFontsToControls(Control control)
         {
-            FontLoader.Initialize();
-            foreach (Control control in Controls)
+            switch (control)
             {
-                if (control.GetType() == typeof(MenuStrip))
-                {
-                    FontLoader.ApplyCustomFont(control, 10, true);
-                }
-                else
-                {
-                    FontLoader.ApplyCustomFont(control, 12);
-                }
+                case MenuStrip:
+                case GroupBox:
+                case Button:
+                    FontHandler.Instance.ApplyFont(control, "CyberPunk_Regular", 9, FontStyle.Bold);
+                    break;
+                case TabControl:
+                    FontHandler.Instance.ApplyFont(control, "CyberPunk_Regular", 12, FontStyle.Bold);
+                    break;
             }
+
+            foreach (Control child in control.Controls)
+                ApplyFontsToControls(child);
         }
 
         private void CheckGamePath()
@@ -284,12 +291,12 @@ namespace RadioExt_Helper.forms
         #region Help Menu
         private void radioExtHelpToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            GlobalData.OpenUrl("https://github.com/justarandomguyintheinternet/CP77_radioExt");
+            "https://github.com/justarandomguyintheinternet/CP77_radioExt".OpenUrl();
         }
 
         private void radioExtOnNexusModsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            GlobalData.OpenUrl("https://www.nexusmods.com/cyberpunk2077/mods/4591");
+            "https://www.nexusmods.com/cyberpunk2077/mods/4591".OpenUrl();
         }
 
         #endregion
@@ -360,9 +367,9 @@ namespace RadioExt_Helper.forms
 
         private void cmbLanguageSelect_SelectedIndexChanged(object? sender, EventArgs e)
         {
-            if (_languageComboBox.SelectedItem is LanguageItem culture)
+            if (_languageComboBox.SelectedItem is ImageComboBoxItem culture)
             {
-                GlobalData.SetCulture(culture.Language);
+                GlobalData.SetCulture(culture.Text);
                 Translate();
                 foreach (Control c in splitContainer1.Panel2.Controls)
                 {

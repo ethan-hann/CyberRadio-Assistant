@@ -5,7 +5,7 @@ using static RadioExt_Helper.utility.CEventArgs;
 
 namespace RadioExt_Helper.user_controls
 {
-    public sealed partial class StationEditor : UserControl
+    public sealed partial class StationEditor : UserControl, IUserControl
     {
         public EventHandler? StationUpdated;
 
@@ -18,6 +18,9 @@ namespace RadioExt_Helper.user_controls
 
         private bool _isPasteOperation;
         private string _initialStationName = string.Empty;
+
+        public string UniqueName { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public Station Station { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         public StationEditor()
         {
@@ -402,6 +405,11 @@ namespace RadioExt_Helper.user_controls
         private void lbl_MouseLeave(object sender, EventArgs e)
         {
             lblStatus.Text = GlobalData.Strings.GetString("Ready");
+        }
+
+        public void ApplyFonts()
+        {
+            throw new NotImplementedException();
         }
         #endregion
     }

@@ -63,11 +63,11 @@ namespace RadioExt_Helper.forms
 
         private void ApplyFonts()
         {
-            FontLoader.Initialize();
-            foreach (Control control in Controls)
-            {
-                FontLoader.ApplyCustomFont(control, 11);
-            }
+            //FontLoader.Initialize();
+            //foreach (Control control in Controls)
+            //{
+            //    FontLoader.ApplyCustomFont(control, 11);
+            //}
         }
 
         private void btnChangeBackUpPath_Click(object sender, EventArgs e)

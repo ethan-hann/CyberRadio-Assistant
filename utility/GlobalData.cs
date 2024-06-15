@@ -1,4 +1,6 @@
-﻿using RadioExt_Helper.forms;
+﻿using AetherUtils.Core.Extensions;
+using AetherUtils.Core.Reflection;
+using RadioExt_Helper.forms;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -27,12 +29,22 @@ namespace RadioExt_Helper.utility
         internal static Assembly ExecAssembly { get; private set; } = Assembly.GetExecutingAssembly();
 
         private static bool _uiIconsInitialized = false;
+        private static bool _globalDataInitialized = false;
 
         //Initialize all global data.
         public static void Initialize()
         {
+            if (_globalDataInitialized) return;
+
             GetUiIcons();
             SetCulture("English (en)");
+            AddFontsToAssembly();
+        }
+
+        private static void AddFontsToAssembly()
+        {
+            FontHandler.Instance.AddFont(ExecAssembly, "CyberPunk_Regular", "RadioExt_Helper.resources.fonts.CFNotcheDemo-Regular.ttf");
+            FontHandler.Instance.AddFont(ExecAssembly, "CyberPunk_Bold", "RadioExt_Helper.resources.fonts.CFNotcheDemo-Bold.ttf");
         }
 
         /// <summary>
@@ -45,66 +57,6 @@ namespace RadioExt_Helper.utility
             var parsedCulture = culture.Substring(culture.IndexOf('(') + 1, 
                 culture.Length - culture.LastIndexOf(')') + 1);
             CultureInfo.CurrentUICulture = new CultureInfo(parsedCulture);
-        }
-
-        /// <summary>
-        /// Opens the specified URL in the default web browser.
-        /// </summary>
-        /// <param name="url">The URL to open.</param>
-        public static void OpenUrl(string url)
-        {
-            try
-            {
-                Process.Start(new ProcessStartInfo
-                {
-                    FileName = url,
-                    UseShellExecute = true
-                });
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(Strings.GetString("OpenURLErrorOccured") + ex.Message);
-            }
-        }
-
-        /// <summary>
-        /// Creates a new <see cref="Bitmap"/> image from the specified text. This image can then be used for a drag-drop operation to
-        /// show a preview of the data being dragged.
-        /// </summary>
-        /// <param name="text">The text to capture as a Bitmap.</param>
-        /// <returns>A new Bitmap "screenshot" of the text.</returns>
-        public static Bitmap CreateDragImage(string text)
-        {
-            Font font = new Font("Arial", 12);
-            SizeF textSize;
-
-            using Graphics g = Graphics.FromImage(new Bitmap(1, 1));
-            textSize = g.MeasureString(text, font);
-
-            Bitmap bitmap = new Bitmap((int)textSize.Width, (int)textSize.Height);
-
-            using Graphics gr = Graphics.FromImage(bitmap);
-            gr.Clear(Color.Transparent);
-            gr.DrawString(text, font, Brushes.Black, 0, 0);
-
-            return bitmap;
-        }
-
-        /// <summary>
-        /// Checks if the two lists contain the same items.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="list1"></param>
-        /// <param name="list2"></param>
-        /// <returns></returns>
-        public static bool AreListsEqual<T>(IList<T> list1, IList<T> list2) where T : notnull
-        {
-            if (list1.Count != list2.Count) return false;
-
-            var dict1 = list1.GroupBy(x => x).ToDictionary(g => g.Key, g =>g.Count());
-            var dict2 = list2.GroupBy(x => x).ToDictionary(g => g.Key, g =>g.Count());
-
-            return dict1.Count == dict2.Count && !dict1.Except(dict2).Any();
         }
 
         private static void GetUiIcons()
