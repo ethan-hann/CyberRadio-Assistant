@@ -1,5 +1,6 @@
 ﻿using RadioExt_Helper.models;
 using RadioExt_Helper.utility;
+using System.ComponentModel;
 using System.Globalization;
 using static RadioExt_Helper.utility.CEventArgs;
 
@@ -9,50 +10,70 @@ namespace RadioExt_Helper.user_controls
     {
         public EventHandler? StationUpdated;
 
-        private MetaData _metaData = new();
-        private CustomIcon _icon = new();
-        private StreamInfo _streamInfo = new();
-        private SongList _songList = new();
-
-        private CustomMusicCtl _musicCtl = new();
+        private readonly Station _station;
+        private readonly CustomMusicCtl _musicCtl;
 
         private bool _isPasteOperation;
         private string _initialStationName = string.Empty;
 
-        public string UniqueName { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public Station Station { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public Station Station { get => _station; }
 
-        public StationEditor()
+        public StationEditor(Station station)
         {
             InitializeComponent();
             Dock = DockStyle.Fill;
+
+            _station = station;
+
+            _initialStationName = _station.MetaData.DisplayName;
+            _musicCtl = new(_station);
+            _musicCtl.SongListUpdated += UpdateSongList;
+
+            grpSongs.Controls.Add(_musicCtl);
+
+            //Populate combobox of UIIcons
+            GlobalData.UiIcons.ToList().ForEach(icon => cmbUIIcons.Items.Add(icon));
         }
 
-        public void SetMetaData(MetaData metaData, SongList songList)
+        public void ApplyFonts()
         {
-            _metaData = metaData;
-            _icon = _metaData.CustomIcon;
-            _streamInfo = _metaData.StreamInfo;
-            _songList = songList;
-
-            _initialStationName = _metaData.DisplayName;
-
-            if (grpSongs.Controls["CustomMusicCtl"] is CustomMusicCtl musicCtl)
-                musicCtl.SetSongList(_songList);
-
-            SetDisplayTabValues();
-            SetMusicTabValues();
-            Translate();
+            throw new NotImplementedException();
         }
+
+        //public void UpdateStation(Station station)
+        //{
+        //    _station.MetaData = station.MetaData;
+        //    _station.CustomIcon = station.CustomIcon;
+        //    _station.StreamInfo = station.StreamInfo;
+        //    _station.SongsAsList = station.SongsAsList;
+        //    _initialStationName = _station.MetaData.DisplayName;
+
+        //    _musicCtl.SetSongList(_station.SongsAsList);
+
+        //    SetDisplayTabValues();
+        //    SetMusicTabValues();
+        //    Translate();
+        //}
+
+        //public void SetMetaData(MetaData metaData, SongList songList)
+        //{
+        //    _metaData = metaData;
+        //    _icon = _metaData.CustomIcon;
+        //    _streamInfo = _metaData.StreamInfo;
+        //    _songList = songList;
+
+        //    _initialStationName = _metaData.DisplayName;
+
+        //    if (grpSongs.Controls["CustomMusicCtl"] is CustomMusicCtl musicCtl)
+        //        musicCtl.SetSongList(_songList);
+
+        //    SetDisplayTabValues();
+        //    SetMusicTabValues();
+        //    Translate();
+        //}
 
         private void StationEditor_Load(object sender, EventArgs e)
         {
-            //Populate combobox of UIIcons
-            GlobalData.UiIcons.ToList().ForEach(icon => cmbUIIcons.Items.Add(icon));
-
-            grpSongs.Controls.Add(_musicCtl);
-            _musicCtl.SongListUpdated += UpdateSongList;
-
             SetDisplayTabValues();
             SetMusicTabValues();
             Translate();
@@ -62,7 +83,7 @@ namespace RadioExt_Helper.user_controls
         {
             if (e is SongListUpdatedEventArgs args)
             {
-                _songList = args.Songs;
+                _station.SongsAsList = args.Songs;
                 UpdateEvent();
             }
         }
@@ -102,10 +123,10 @@ namespace RadioExt_Helper.user_controls
         #region Display and Icon Tab
         private void SetDisplayTabValues()
         {
-            txtDisplayName.Text = _metaData.DisplayName;
-            cmbUIIcons.Text = _metaData.Icon;
+            txtDisplayName.Text = _station.MetaData.DisplayName;
+            cmbUIIcons.Text = _station.MetaData.Icon;
 
-            if (_icon.UseCustom)
+            if (_station.CustomIcon.UseCustom)
             {
                 radUseCustomYes.Checked = true;
                 radUseCustomNo.Checked = false;
@@ -120,37 +141,38 @@ namespace RadioExt_Helper.user_controls
                 lblInkPath.Visible = !radUseCustomNo.Checked;
             }
 
-            txtInkAtlasPath.Text = _icon.InkAtlasPath;
-            txtInkAtlasPart.Text = _icon.InkAtlasPart;
-            nudFM.Value = (decimal)_metaData.Fm;
-            volumeSlider.Value = (int)(_metaData.Volume / 0.1f);
-            lblSelectedVolume.Text = $@"{_metaData.Volume:F1}";
+            txtInkAtlasPath.Text = _station.CustomIcon.InkAtlasPath;
+            txtInkAtlasPart.Text = _station.CustomIcon.InkAtlasPart;
+            nudFM.Value = (decimal)_station.MetaData.Fm;
+            volumeSlider.Value = (int)(_station.MetaData.Volume / 0.1f);
+            lblSelectedVolume.Text = $@"{_station.MetaData.Volume:F1}";
         }
 
         private void txtDisplayName_TextChanged(object sender, EventArgs e)
         {
-            _metaData.DisplayName = txtDisplayName.Text;
+            _station.MetaData.DisplayName = txtDisplayName.Text;
             UpdateEvent();
+            _initialStationName = txtDisplayName.Text;
         }
 
         private void cmbUIIcons_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cmbUIIcons.SelectedItem is string iconStr)
             {
-                _metaData.Icon = iconStr;
+                _station.MetaData.Icon = iconStr;
                 UpdateEvent();
             }
         }
 
         private void radUseCustomYes_CheckedChanged(object sender, EventArgs e)
         {
-            _icon.UseCustom = radUseCustomYes.Checked;
+            _station.CustomIcon.UseCustom = radUseCustomYes.Checked;
             UpdateEvent();
         }
 
         private void radUseCustomNo_CheckedChanged(object sender, EventArgs e)
         {
-            _icon.UseCustom = !radUseCustomNo.Checked;
+            _station.CustomIcon.UseCustom = !radUseCustomNo.Checked;
             txtInkAtlasPart.Visible = !radUseCustomNo.Checked;
             txtInkAtlasPath.Visible = !radUseCustomNo.Checked;
             lblInkPart.Visible = !radUseCustomNo.Checked;
@@ -161,26 +183,26 @@ namespace RadioExt_Helper.user_controls
 
         private void txtInkAtlasPath_TextChanged(object sender, EventArgs e)
         {
-            _icon.InkAtlasPath = txtInkAtlasPath.Text;
+            _station.CustomIcon.InkAtlasPath = txtInkAtlasPath.Text;
             UpdateEvent();
         }
 
         private void txtInkAtlasPart_TextChanged(object sender, EventArgs e)
         {
-            _icon.InkAtlasPart = txtInkAtlasPart.Text;
+            _station.CustomIcon.InkAtlasPart = txtInkAtlasPart.Text;
             UpdateEvent();
         }
 
         private void nudFM_ValueChanged(object sender, EventArgs e)
         {
-            _metaData.Fm = (float)nudFM.Value;
+            _station.MetaData.Fm = (float)nudFM.Value;
             UpdateEvent();
         }
 
         private void volumeSlider_Scroll(object sender, EventArgs e)
         {
-            _metaData.Volume = volumeSlider.Value * 0.1f;
-            lblSelectedVolume.Text = $@"{_metaData.Volume:F1}";
+            _station.MetaData.Volume = volumeSlider.Value * 0.1f;
+            lblSelectedVolume.Text = $@"{_station.MetaData.Volume:F1}";
             UpdateEvent();
         }
 
@@ -232,31 +254,31 @@ namespace RadioExt_Helper.user_controls
         #region Music Tab
         private void SetMusicTabValues()
         {
-            radUseStreamYes.Checked = _streamInfo.IsStream;
+            radUseStreamYes.Checked = _station.StreamInfo.IsStream;
             radUseStreamNo.Checked = !radUseStreamYes.Checked;
 
-            ToggleStreamControls(_streamInfo.IsStream);
+            ToggleStreamControls(_station.StreamInfo.IsStream);
 
-            txtStreamURL.Text = _streamInfo.StreamUrl;
+            txtStreamURL.Text = _station.StreamInfo.StreamUrl;
         }
 
         private void radUseStreamYes_CheckedChanged(object sender, EventArgs e)
         {
             ToggleStreamControls(true);
-            _streamInfo.IsStream = radUseStreamYes.Checked;
+            _station.StreamInfo.IsStream = radUseStreamYes.Checked;
             UpdateEvent();
         }
 
         private void radUseStreamNo_CheckedChanged(object sender, EventArgs e)
         {
             ToggleStreamControls(false);
-            _streamInfo.IsStream = !radUseStreamNo.Checked;
+            _station.StreamInfo.IsStream = !radUseStreamNo.Checked;
             UpdateEvent();
         }
 
         private void txtStreamURL_TextChanged(object sender, EventArgs e)
         {
-            _streamInfo.StreamUrl = txtStreamURL.Text;
+            _station.StreamInfo.StreamUrl = txtStreamURL.Text;
             UpdateEvent();
         }
 
@@ -323,7 +345,7 @@ namespace RadioExt_Helper.user_controls
             if (pastedText.StartsWith("https://") && pastedText.Contains("radio.garden"))
             {
                 txtStreamURL.Text = ParseRadioGardenURL(pastedText);
-                _streamInfo.StreamUrl = txtStreamURL.Text;
+                _station.StreamInfo.StreamUrl = txtStreamURL.Text;
                 HideRadioGardenTextInput();
             }
             else
@@ -343,7 +365,7 @@ namespace RadioExt_Helper.user_controls
         /// <summary>
         /// Calls the event handler <see cref="StationUpdated"/> with the updated station information.
         /// </summary>
-        private void UpdateEvent() => StationUpdated?.Invoke(this, new StationUpdatedEventArgs(_metaData, _songList, _initialStationName));
+        private void UpdateEvent() => StationUpdated?.Invoke(this, new StationUpdatedEventArgs(_station, _initialStationName));
 
         #region Hover Help
         private void lblName_MouseEnter(object sender, EventArgs e)
@@ -405,11 +427,6 @@ namespace RadioExt_Helper.user_controls
         private void lbl_MouseLeave(object sender, EventArgs e)
         {
             lblStatus.Text = GlobalData.Strings.GetString("Ready");
-        }
-
-        public void ApplyFonts()
-        {
-            throw new NotImplementedException();
         }
         #endregion
     }

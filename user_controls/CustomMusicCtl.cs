@@ -18,25 +18,29 @@ using ListView = System.Windows.Forms.ListView;
 
 namespace RadioExt_Helper.user_controls
 {
-    public partial class CustomMusicCtl : UserControl
+    public partial class CustomMusicCtl : UserControl, IUserControl
     {
         public EventHandler? SongListUpdated;
 
-        private SongList _songList = [];
-        private List<Song> _songListDataSource = [];
+        private BindingList<Song> _bindingSongList = [];
 
-        public CustomMusicCtl()
+        private readonly Station _station;
+
+        public Station Station => _station;
+
+        public CustomMusicCtl(Station station)
         {
             InitializeComponent();
 
             Dock = DockStyle.Fill;
+            _station = station;
+            SetSongList(_station.SongsAsList);
         }
 
         private void CustomMusicCtl_Load(object sender, EventArgs e)
         {
             Translate();
-            PopulateListView();
-            PopulateSongListBox();
+            UpdateListsAndViews();
         }
 
         public void Translate()
@@ -57,10 +61,11 @@ namespace RadioExt_Helper.user_controls
             lvSongOrder.Columns[1].Text = GlobalData.Strings.GetString("SongNameHeader");
         }
 
-        public void SetSongList(SongList songList)
+        public void SetSongList(List<Song> songList)
         {
-            _songList = songList;
-            _songListDataSource.AddRange(_songList);
+            _station.SongsAsList = songList;
+            _bindingSongList = [.. songList];
+
             PopulateListView();
         }
 
@@ -69,12 +74,8 @@ namespace RadioExt_Helper.user_controls
             lvSongs.SuspendLayout();
             lvSongs.Items.Clear();
 
-            foreach (Song song in _songList)
+            foreach (Song song in _station.SongsAsList)
             {
-                //TimeSpan length = TimeSpan.FromSeconds(song.Duration);
-                //string timeString = string.Format("{0}:{1:02}:{2:02}",
-                //    (int)length.TotalHours, length.Minutes, length.Seconds);
-
                 ListViewItem lvItem = new(new string[]
                 {
                     song.Name,
@@ -91,6 +92,12 @@ namespace RadioExt_Helper.user_controls
             lvSongs.ResumeLayout();
         }
 
+        private bool CanBeAdded(Song song)
+        {
+            return !_station.SongsAsList.Where(s => s.Name.Equals(song.Name) && s.Artist.Equals(song.Artist)
+                                            && s.OriginalFilePath.Equals(song.OriginalFilePath)).Any();
+        }
+
         private void addSongsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (fdlgOpenSongs.ShowDialog() != DialogResult.OK) return;
@@ -105,12 +112,15 @@ namespace RadioExt_Helper.user_controls
                 song.Size = (ulong)new FileInfo(path).Length;
                 song.Duration = file.Properties.Duration;
 
-                _songList.Add(song);
-                _songListDataSource.Add(song);
+                
+                if (CanBeAdded(song))
+                {
+                    _station.SongsAsList.Add(song);
+                    _bindingSongList.Add(song);
+                }
             }
 
-            PopulateListView();
-            PopulateSongListBox();
+            UpdateListsAndViews();
         }
 
         private void removeSongsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -127,12 +137,32 @@ namespace RadioExt_Helper.user_controls
             {
                 if (lvSongs.SelectedItems[i].Tag is Song song)
                 {
-                    _songList.Remove(song);
-                    _songListDataSource.Remove(song);
+                    _station.SongsAsList.Remove(song);
+                    _bindingSongList.Remove(song);
                 }
             }
+            UpdateListsAndViews();
+        }
+
+        private void UpdateListsAndViews()
+        {
             PopulateListView();
             PopulateSongListBox();
+            SynchronizeSongOrder();
+        }
+
+        private void SynchronizeSongOrder()
+        {
+            lvSongOrder.BeginUpdate();
+            for (int i = lvSongOrder.Items.Count - 1; i >= 0; i--)
+            {
+                var item = lvSongOrder.Items[i];
+                if (item.Tag is Song song)
+                    if (!_station.SongsAsList.Contains(song))
+                        lvSongOrder.Items.Remove(item);
+            }
+            UpdateOrderColumn();
+            lvSongOrder.EndUpdate();
         }
 
         private void lvSongs_ColumnClick(object sender, ColumnClickEventArgs e)
@@ -168,7 +198,7 @@ namespace RadioExt_Helper.user_controls
             lbSongs.BeginUpdate();
             lbSongs.DataSource = null;
 
-            lbSongs.DataSource = _songListDataSource;
+            lbSongs.DataSource = _bindingSongList;
             lbSongs.EndUpdate();
         }
 
@@ -182,10 +212,9 @@ namespace RadioExt_Helper.user_controls
                 if (item is not Song song) continue;
 
                 AddSongToOrderListView(song);
-                _songListDataSource.Remove(song);
+                _bindingSongList.Remove(song);
 
-                PopulateSongListBox();
-                UpdateOrderColumn();
+                UpdateListsAndViews();
             }
         }
 
@@ -199,11 +228,16 @@ namespace RadioExt_Helper.user_controls
                 if (lvItem.Tag is not Song song) continue;
 
                 lvSongOrder.Items.Remove(lvItem);
-                _songListDataSource.Add(song);
+                _bindingSongList.Add(song);
             }
 
-            PopulateSongListBox();
-            UpdateOrderColumn();
+            UpdateListsAndViews();
+
+            if (lvSongOrder.Items.Count > 0)
+            {
+                lvSongOrder.Items[0].Selected = true;
+                lvSongOrder.EnsureVisible(0);
+            }
         }
 
         private void lvSongOrder_DragEnter(object sender, DragEventArgs e)
@@ -268,6 +302,11 @@ namespace RadioExt_Helper.user_controls
         {
             for (int i = 0; i < lvSongOrder.Items.Count; i++)
                 lvSongOrder.Items[i].SubItems[0].Text = (i + 1).ToString();
+        }
+
+        public void ApplyFonts()
+        {
+            throw new NotImplementedException();
         }
         #endregion
 

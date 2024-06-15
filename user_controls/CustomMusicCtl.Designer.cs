@@ -165,10 +165,10 @@
             pgSongOrder.BackColor = Color.White;
             pgSongOrder.Controls.Add(splitContainer1);
             pgSongOrder.ImageIndex = 1;
-            pgSongOrder.Location = new Point(4, 26);
+            pgSongOrder.Location = new Point(4, 30);
             pgSongOrder.Name = "pgSongOrder";
             pgSongOrder.Padding = new Padding(3);
-            pgSongOrder.Size = new Size(911, 668);
+            pgSongOrder.Size = new Size(911, 664);
             pgSongOrder.TabIndex = 1;
             pgSongOrder.Text = "Song Order";
             // 
@@ -189,8 +189,8 @@
             // splitContainer1.Panel2
             // 
             splitContainer1.Panel2.Controls.Add(lvSongOrder);
-            splitContainer1.Size = new Size(905, 662);
-            splitContainer1.SplitterDistance = 344;
+            splitContainer1.Size = new Size(905, 658);
+            splitContainer1.SplitterDistance = 341;
             splitContainer1.SplitterWidth = 8;
             splitContainer1.TabIndex = 0;
             // 
@@ -205,7 +205,7 @@
             lbSongs.Location = new Point(0, 0);
             lbSongs.Name = "lbSongs";
             lbSongs.SelectionMode = SelectionMode.MultiExtended;
-            lbSongs.Size = new Size(901, 306);
+            lbSongs.Size = new Size(901, 303);
             lbSongs.TabIndex = 0;
             // 
             // songBindingSource
@@ -221,7 +221,7 @@
             tableLayoutPanel1.Controls.Add(btnRemoveFromOrder, 1, 0);
             tableLayoutPanel1.Controls.Add(btnAddToOrder, 0, 0);
             tableLayoutPanel1.Dock = DockStyle.Bottom;
-            tableLayoutPanel1.Location = new Point(0, 306);
+            tableLayoutPanel1.Location = new Point(0, 303);
             tableLayoutPanel1.MaximumSize = new Size(0, 34);
             tableLayoutPanel1.MinimumSize = new Size(0, 34);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -275,11 +275,10 @@
             lvSongOrder.FullRowSelect = true;
             lvSongOrder.GridLines = true;
             lvSongOrder.HeaderStyle = ColumnHeaderStyle.Nonclickable;
-            lvSongOrder.HoverSelection = true;
             lvSongOrder.Location = new Point(0, 0);
             lvSongOrder.MultiSelect = false;
             lvSongOrder.Name = "lvSongOrder";
-            lvSongOrder.Size = new Size(901, 306);
+            lvSongOrder.Size = new Size(901, 305);
             lvSongOrder.TabIndex = 0;
             lvSongOrder.UseCompatibleStateImageBehavior = false;
             lvSongOrder.View = View.Details;

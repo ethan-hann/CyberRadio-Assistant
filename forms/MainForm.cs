@@ -19,26 +19,29 @@ namespace RadioExt_Helper.forms
     public partial class MainForm : Form
     {
         private readonly BindingList<Station> _stations = [];
-        private readonly StationEditor _stationEditorCtrl = new();
+
+        private readonly List<StationEditor> _stationEditors = [];
         private readonly NoStationsCtl _noStationsCtrl = new();
 
-        private readonly Json<MetaData> metaDataJson = new Json<MetaData>();
-        private readonly Json<SongList> songListJson = new Json<SongList>();
+        private readonly Json<MetaData> metaDataJson = new();
+        private readonly Json<SongList> songListJson = new();
 
         private readonly ImageComboBox<ImageComboBoxItem> _languageComboBox = new();
 
         public MainForm()
         {
             InitializeComponent();
+
+            GlobalData.Initialize();
+
             InitializeLanguageDropDown();
         }
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            GlobalData.Initialize();
             ApplyFontsToControls(this);
 
-            _stationEditorCtrl.StationUpdated += UpdateStation;
+            splitContainer1.Panel2.Controls.Add(_noStationsCtrl);
         }
 
         private void MainForm_Shown(object sender, EventArgs e)
@@ -46,11 +49,8 @@ namespace RadioExt_Helper.forms
             SelectLanguage();
             Translate();
             CheckGamePath();
+
             PopulateStations();
-
-            splitContainer1.Panel2.Controls.Add(_noStationsCtrl);
-            splitContainer1.Panel2.Controls.Add(_stationEditorCtrl);
-
             HandleUserControlVisibility();
         }
 
@@ -100,8 +100,12 @@ namespace RadioExt_Helper.forms
 
         private void HandleUserControlVisibility()
         {
-            _noStationsCtrl.Visible = _stations.Count <= 0;
-            _stationEditorCtrl.Visible = !_noStationsCtrl.Visible;
+            if (_stations.Count <= 0)
+            {
+                splitContainer1.Panel2.Controls.Clear();
+                splitContainer1.Panel2.Controls.Add(_noStationsCtrl);
+                _noStationsCtrl.Visible = true;
+            }
         }
 
         private void ApplyFontsToControls(Control control)
@@ -146,6 +150,7 @@ namespace RadioExt_Helper.forms
             if (!Settings.Default.BackupPath.Equals(string.Empty))
             {
                 _stations.Clear();
+                _stationEditors.Clear();
 
                 foreach (var directory in Directory.EnumerateDirectories(Settings.Default.BackupPath))
                 {
@@ -174,9 +179,12 @@ namespace RadioExt_Helper.forms
                         s.MetaData = metaData;
 
                     if (songList != null)
-                        s.SongList = songList;
+                        s.SongsAsList = [.. songList];
 
                     _stations.Add(s);
+                    StationEditor editor = new(s);
+                    editor.StationUpdated += UpdateStation;
+                    _stationEditors.Add(editor);
                 }
             }
 
@@ -212,7 +220,7 @@ namespace RadioExt_Helper.forms
                 if (!metadataSaved) continue;
 
                 //Create the song list json (if needed)
-                if (station.SongList.Count() <= 0) continue;
+                if (station.Songs.Count <= 0) continue;
                 var songListSaved = CreateSongListJSON(stationPath, station);
 
                 //Copy songs to staging folder
@@ -246,7 +254,7 @@ namespace RadioExt_Helper.forms
             if (Settings.Default.BackupPath.Equals(string.Empty)) return false;
 
             var songPath = Path.Combine(stationPath, "songs.sgls");
-            return songListJson.SaveJson(songPath, station.SongList);
+            return songListJson.SaveJson(songPath, station.Songs);
         }
 
         private void CopySongsToStaging(string stationPath, Station station)
@@ -263,7 +271,7 @@ namespace RadioExt_Helper.forms
                 File.Delete(file);
             }
 
-            foreach (var song in station.SongList)
+            foreach (var song in station.Songs)
             {
                 var songPath = Path.Combine(stationPath, Path.GetFileName(song.OriginalFilePath));
                 if (FileHelper.DoesFileExist(song.OriginalFilePath))
@@ -304,27 +312,33 @@ namespace RadioExt_Helper.forms
         private void lbStations_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (lbStations.SelectedItem is not Station station) return;
-            _stationEditorCtrl.SetMetaData(station.MetaData, station.SongList);
+
+            splitContainer1.Panel2.SuspendLayout();
+            splitContainer1.Panel2.Controls.Clear();
+            splitContainer1.Panel2.Controls.Add(_stationEditors.Find(
+                s => s.Station.MetaData.DisplayName.Equals(station.MetaData.DisplayName)));
+            splitContainer1.Panel2.ResumeLayout();
+            //_stationEditorCtrl.SetMetaData(station.MetaData, station.SongList);
         }
 
         private int _newStationCount = 1;
         private void btnAddStation_Click(object sender, EventArgs e)
         {
-            Station blankStation = new()
-            {
-                MetaData = new MetaData() { DisplayName = $"{GlobalData.Strings.GetString("NewStationListBoxEntry")} {_newStationCount}" },
-                SongList = []
-            };
+            Station blankStation = new();
+            blankStation.MetaData.DisplayName = $"{GlobalData.Strings.GetString("NewStationListBoxEntry")} {_newStationCount}";
 
             _stations.Add(blankStation);
+            _stationEditors.Add(new StationEditor(blankStation));
             lbStations.SelectedItem = blankStation;
             _newStationCount++;
-
-            //Re-show our station editor if the station count has increased again.
+            
             if (_stations.Count <= 0) return;
 
+            //Re-show our station editor if the station count has increased again.
             _noStationsCtrl.Visible = false;
-            _stationEditorCtrl.Visible = true;
+            var editor = _stationEditors.Find(s => s.Station.MetaData.DisplayName.Equals(blankStation.MetaData.DisplayName));
+            if (editor != null)
+                editor.Visible = true;
         }
 
         private void btnDeleteStation_Click(object sender, EventArgs e)
@@ -332,6 +346,10 @@ namespace RadioExt_Helper.forms
             if (lbStations.SelectedItem is not Station station) return;
 
             _stations.Remove(station);
+            _stationEditors.Remove(_stationEditors
+                .Where(s => s.Station.MetaData.DisplayName
+                .Equals(station.MetaData.DisplayName))
+                .First());
 
             //If the station to be removed contains "[New Station]" in the name, decrement our new station count.
             if (station.MetaData.DisplayName.Contains(
@@ -345,30 +363,52 @@ namespace RadioExt_Helper.forms
                     throw new InvalidOperationException())))
                 _newStationCount = 1;
 
-            //Hide the station editor (and reset it) if there are no stations to edit.
             if (_stations.Count > 0) return;
 
-            _stationEditorCtrl.Visible = false;
-            _stationEditorCtrl.SetMetaData(new MetaData(), new SongList());
-            _noStationsCtrl.Visible = true;
+            //Hide the station editor (and reset it) if there are no stations to edit.
+            HandleUserControlVisibility();
+
+            //_stationEditorCtrl.Visible = false;
+            //_stationEditorCtrl.SetMetaData(new MetaData(), new SongList());
+            //_noStationsCtrl.Visible = true;
         }
 
         private void UpdateStation(object? sender, EventArgs e)
         {
             if (e is StationUpdatedEventArgs args)
             {
-                if (lbStations.SelectedItem is Station station)
-                {
-                    station.MetaData = args.MetaData;
-                    station.SongList = args.Songs;
-                }
+                int index = _stations.IndexOf(_stations.Where(s => s.MetaData.DisplayName.Equals(args.PreviousStationName)).FirstOrDefault());
+                if (index != -1)
+                    _stations[index] = args.UpdatedStation;
+                //RefreshListBox();
+                //if (lbStations.SelectedItem is Station station)
+                //{
+                //    lbStations.BeginUpdate();
+                //    station.MetaData = args.UpdatedStation.MetaData;
+                //    station.StreamInfo = args.UpdatedStation.StreamInfo;
+                //    station.CustomIcon = args.UpdatedStation.CustomIcon;
+                //    station.SongsAsList = args.UpdatedStation.SongsAsList;
+                //    lbStations.EndUpdate();
+                //}
             }
+        }
+
+        private void RefreshListBox()
+        {
+            var selectedIndex = lbStations.SelectedIndex;
+            lbStations.BeginUpdate();
+            lbStations.DataSource = null;
+            lbStations.DataSource = _stations;
+            lbStations.DisplayMember = "MetaData";
+            lbStations.SelectedIndex = selectedIndex;
+            lbStations.EndUpdate();
         }
 
         private void cmbLanguageSelect_SelectedIndexChanged(object? sender, EventArgs e)
         {
             if (_languageComboBox.SelectedItem is ImageComboBoxItem culture)
             {
+                SuspendLayout();
                 GlobalData.SetCulture(culture.Text);
                 Translate();
                 foreach (Control c in splitContainer1.Panel2.Controls)
@@ -386,9 +426,13 @@ namespace RadioExt_Helper.forms
                     }
                 }
 
+                foreach (StationEditor se in _stationEditors)
+                    se.Translate();
+
                 Focus(); //re-focus the main form
 
                 languageToolStripMenuItem.HideDropDown();
+                ResumeLayout();
             }
         }
     }

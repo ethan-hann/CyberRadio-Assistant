@@ -14,17 +14,12 @@ namespace RadioExt_Helper.utility
         /// </summary>
         /// <param name="metaData">The metadata describing the station.</param>
         /// <param name="previousStationName">The name of the station, before it was modified.</param>
-        public class StationUpdatedEventArgs(MetaData metaData, SongList songList, string previousStationName) : EventArgs
+        public class StationUpdatedEventArgs(Station station, string previousStationName) : EventArgs
         {
             /// <summary>
-            /// The metadata describing the station.
+            /// The data describing the station.
             /// </summary>
-            public MetaData MetaData { get; private set; } = metaData;
-
-            /// <summary>
-            /// The list of songs for the station. Empty if using stream instead.
-            /// </summary>
-            public SongList Songs { get; private set; } = songList;
+            public Station UpdatedStation { get; private set; } = station;
 
             /// <summary>
             /// The name of the station, before it was modified.
@@ -36,12 +31,12 @@ namespace RadioExt_Helper.utility
         /// Passed when a song list is modified.
         /// </summary>
         /// <param name="songList">The modified song list.</param>
-        public class SongListUpdatedEventArgs(SongList songList) : EventArgs
+        public class SongListUpdatedEventArgs(List<Song> songList) : EventArgs
         {
             /// <summary>
             /// The list of songs for the station.
             /// </summary>
-            public SongList Songs { get; private set; } = songList;
+            public List<Song> Songs { get; private set; } = songList;
         }
     }
 }

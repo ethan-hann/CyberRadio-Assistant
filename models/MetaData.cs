@@ -1,16 +1,27 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace RadioExt_Helper.models
 {
-    public class MetaData
+    public class MetaData : INotifyPropertyChanged
     {
+        private string _displayName = "69.9 Your Station Name";
+
         [JsonProperty("displayName")]
-        public string DisplayName { get; set; } = "69.9 Your Station Name";
+        public string DisplayName
+        {
+            get { return _displayName; }
+            set
+            {
+                _displayName = value;
+                OnPropertyChanged(nameof(DisplayName));
+            }
+        }
 
         [JsonProperty("fm")]
         public float Fm { get; set; } = 69.9f;
@@ -29,6 +40,13 @@ namespace RadioExt_Helper.models
 
         [JsonProperty("order")]
         public string[] Order { get; set; } = [];
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
 
         public override string ToString() => DisplayName;
     }

@@ -108,7 +108,7 @@
             lblIcon.Anchor = AnchorStyles.Right;
             lblIcon.AutoSize = true;
             lblIcon.Font = new Font("CF Notche Demo", 9F);
-            lblIcon.Location = new Point(68, 40);
+            lblIcon.Location = new Point(68, 51);
             lblIcon.Name = "lblIcon";
             lblIcon.Size = new Size(36, 12);
             lblIcon.TabIndex = 2;
@@ -120,7 +120,7 @@
             // 
             txtDisplayName.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             txtDisplayName.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            txtDisplayName.Location = new Point(110, 4);
+            txtDisplayName.Location = new Point(110, 6);
             txtDisplayName.Name = "txtDisplayName";
             txtDisplayName.Size = new Size(849, 23);
             txtDisplayName.TabIndex = 1;
@@ -131,7 +131,7 @@
             lblName.Anchor = AnchorStyles.Right;
             lblName.AutoSize = true;
             lblName.Font = new Font("CF Notche Demo", 9F);
-            lblName.Location = new Point(60, 9);
+            lblName.Location = new Point(60, 11);
             lblName.Name = "lblName";
             lblName.Size = new Size(44, 12);
             lblName.TabIndex = 0;
@@ -157,7 +157,7 @@
             grpDisplay.Font = new Font("CF Notche Demo", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             grpDisplay.Location = new Point(0, 0);
             grpDisplay.Name = "grpDisplay";
-            grpDisplay.Size = new Size(968, 82);
+            grpDisplay.Size = new Size(968, 99);
             grpDisplay.TabIndex = 2;
             grpDisplay.TabStop = false;
             grpDisplay.Text = "Display";
@@ -175,9 +175,9 @@
             tableLayoutPanel3.Location = new Point(3, 17);
             tableLayoutPanel3.Name = "tableLayoutPanel3";
             tableLayoutPanel3.RowCount = 2;
-            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel3.Size = new Size(962, 62);
+            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 44.3038F));
+            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 55.6962F));
+            tableLayoutPanel3.Size = new Size(962, 79);
             tableLayoutPanel3.TabIndex = 0;
             // 
             // cmbUIIcons
@@ -187,7 +187,7 @@
             cmbUIIcons.AutoCompleteSource = AutoCompleteSource.ListItems;
             cmbUIIcons.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             cmbUIIcons.FormattingEnabled = true;
-            cmbUIIcons.Location = new Point(110, 35);
+            cmbUIIcons.Location = new Point(110, 45);
             cmbUIIcons.Name = "cmbUIIcons";
             cmbUIIcons.Size = new Size(849, 23);
             cmbUIIcons.Sorted = true;
@@ -239,9 +239,9 @@
             // 
             panel3.BackColor = Color.White;
             panel3.Dock = DockStyle.Fill;
-            panel3.Location = new Point(0, 299);
+            panel3.Location = new Point(0, 316);
             panel3.Name = "panel3";
-            panel3.Size = new Size(968, 351);
+            panel3.Size = new Size(968, 334);
             panel3.TabIndex = 5;
             // 
             // grpSettings
@@ -250,7 +250,7 @@
             grpSettings.Controls.Add(tableLayoutPanel1);
             grpSettings.Dock = DockStyle.Top;
             grpSettings.Font = new Font("CF Notche Demo", 9F, FontStyle.Bold);
-            grpSettings.Location = new Point(0, 195);
+            grpSettings.Location = new Point(0, 212);
             grpSettings.Name = "grpSettings";
             grpSettings.Size = new Size(968, 104);
             grpSettings.TabIndex = 4;
@@ -409,7 +409,7 @@
             grpCustomIcon.Controls.Add(tableLayoutPanel2);
             grpCustomIcon.Dock = DockStyle.Top;
             grpCustomIcon.Font = new Font("CF Notche Demo", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            grpCustomIcon.Location = new Point(0, 82);
+            grpCustomIcon.Location = new Point(0, 99);
             grpCustomIcon.Name = "grpCustomIcon";
             grpCustomIcon.Size = new Size(968, 113);
             grpCustomIcon.TabIndex = 3;
