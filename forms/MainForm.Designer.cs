@@ -82,20 +82,20 @@
             // 
             exportStationsToolStripMenuItem.Image = Properties.Resources.export_file;
             exportStationsToolStripMenuItem.Name = "exportStationsToolStripMenuItem";
-            exportStationsToolStripMenuItem.Size = new Size(166, 22);
+            exportStationsToolStripMenuItem.Size = new Size(180, 22);
             exportStationsToolStripMenuItem.Text = "Export Stations";
             exportStationsToolStripMenuItem.Click += exportStationsToolStripMenuItem_Click;
             // 
             // toolStripSeparator2
             // 
             toolStripSeparator2.Name = "toolStripSeparator2";
-            toolStripSeparator2.Size = new Size(163, 6);
+            toolStripSeparator2.Size = new Size(177, 6);
             // 
             // pathsToolStripMenuItem
             // 
             pathsToolStripMenuItem.Image = Properties.Resources.folder;
             pathsToolStripMenuItem.Name = "pathsToolStripMenuItem";
-            pathsToolStripMenuItem.Size = new Size(166, 22);
+            pathsToolStripMenuItem.Size = new Size(180, 22);
             pathsToolStripMenuItem.Text = "Game Paths";
             pathsToolStripMenuItem.Click += pathsToolStripMenuItem_Click;
             // 
@@ -103,7 +103,7 @@
             // 
             refreshStationsToolStripMenuItem.Image = Properties.Resources.refresh;
             refreshStationsToolStripMenuItem.Name = "refreshStationsToolStripMenuItem";
-            refreshStationsToolStripMenuItem.Size = new Size(166, 22);
+            refreshStationsToolStripMenuItem.Size = new Size(180, 22);
             refreshStationsToolStripMenuItem.Text = "Refresh Stations";
             refreshStationsToolStripMenuItem.Click += refreshStationsToolStripMenuItem_Click;
             // 
@@ -129,6 +129,7 @@
             // 
             // radioExtOnNexusModsToolStripMenuItem
             // 
+            radioExtOnNexusModsToolStripMenuItem.Image = Properties.Resources.external_link;
             radioExtOnNexusModsToolStripMenuItem.Name = "radioExtOnNexusModsToolStripMenuItem";
             radioExtOnNexusModsToolStripMenuItem.Size = new Size(204, 22);
             radioExtOnNexusModsToolStripMenuItem.Text = "radioExt on NexusMods";
@@ -136,6 +137,7 @@
             // 
             // radioExtGitHubToolStripMenuItem
             // 
+            radioExtGitHubToolStripMenuItem.Image = Properties.Resources.external_link;
             radioExtGitHubToolStripMenuItem.Name = "radioExtGitHubToolStripMenuItem";
             radioExtGitHubToolStripMenuItem.Size = new Size(204, 22);
             radioExtGitHubToolStripMenuItem.Text = "radioExt GitHub";

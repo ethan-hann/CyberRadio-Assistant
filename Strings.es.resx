@@ -345,4 +345,16 @@
   <data name="Stations" xml:space="preserve">
     <value>Emisoras</value>
   </data>
+  <data name="SongListing" xml:space="preserve">
+    <value>Listado de canciones</value>
+  </data>
+  <data name="SongOrder" xml:space="preserve">
+    <value>Orden de las canciones</value>
+  </data>
+  <data name="RemoveSelected" xml:space="preserve">
+    <value>  Quitar Seleccionado</value>
+  </data>
+  <data name="AddSelected" xml:space="preserve">
+    <value>Agregar seleccionado  </value>
+  </data>
 </root>

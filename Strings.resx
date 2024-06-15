@@ -345,4 +345,16 @@
   <data name="Stations" xml:space="preserve">
     <value>Stations</value>
   </data>
+  <data name="SongListing" xml:space="preserve">
+    <value>Song Listing</value>
+  </data>
+  <data name="SongOrder" xml:space="preserve">
+    <value>Song Order</value>
+  </data>
+  <data name="AddSelected" xml:space="preserve">
+    <value>Add Selected  </value>
+  </data>
+  <data name="RemoveSelected" xml:space="preserve">
+    <value>  Remove Selected</value>
+  </data>
 </root>

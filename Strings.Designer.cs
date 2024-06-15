@@ -69,6 +69,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add Selected  .
+        /// </summary>
+        internal static string AddSelected {
+            get {
+                return ResourceManager.GetString("AddSelected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add Song(s).
         /// </summary>
         internal static string AddSongsToolStrip {
@@ -555,6 +564,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to   Remove Selected.
+        /// </summary>
+        internal static string RemoveSelected {
+            get {
+                return ResourceManager.GetString("RemoveSelected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Remove Selected Song(s).
         /// </summary>
         internal static string RemoveSongsToolStrip {
@@ -600,11 +618,29 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Song Listing.
+        /// </summary>
+        internal static string SongListing {
+            get {
+                return ResourceManager.GetString("SongListing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Name.
         /// </summary>
         internal static string SongNameHeader {
             get {
                 return ResourceManager.GetString("SongNameHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Song Order.
+        /// </summary>
+        internal static string SongOrder {
+            get {
+                return ResourceManager.GetString("SongOrder", resourceCulture);
             }
         }
         

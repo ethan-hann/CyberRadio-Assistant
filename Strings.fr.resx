@@ -268,7 +268,7 @@
     <value>Valeur:</value>
   </data>
   <data name="Volume" xml:space="preserve">
-    <value>Volume:</value>
+    <value>Le volume:</value>
   </data>
   <data name="StreamSettings" xml:space="preserve">
     <value>Paramètres de flux</value>
@@ -344,5 +344,17 @@
   </data>
   <data name="Stations" xml:space="preserve">
     <value>Gares</value>
+  </data>
+  <data name="SongListing" xml:space="preserve">
+    <value>Liste des chansons</value>
+  </data>
+  <data name="SongOrder" xml:space="preserve">
+    <value>Ordre des morceaux</value>
+  </data>
+  <data name="RemoveSelected" xml:space="preserve">
+    <value>  Enlever la sélection</value>
+  </data>
+  <data name="AddSelected" xml:space="preserve">
+    <value>Ajouter sélectionnée  </value>
   </data>
 </root>

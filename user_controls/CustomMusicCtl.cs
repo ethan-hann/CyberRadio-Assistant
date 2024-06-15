@@ -46,7 +46,11 @@ namespace RadioExt_Helper.user_controls
             lvSongs.Columns[3].Text = GlobalData.Strings.GetString("SongFileSizeHeader");
 
             fdlgOpenSongs.Title = GlobalData.Strings.GetString("Open");
-            btnSongOrder.Text = GlobalData.Strings.GetString("EditSongOrder");
+            pgSongs.Text = GlobalData.Strings.GetString("SongListing");
+            pgSongOrder.Text = GlobalData.Strings.GetString("SongOrder");
+            btnAddToOrder.Text = GlobalData.Strings.GetString("AddSelected");
+            btnRemoveFromOrder.Text = GlobalData.Strings.GetString("RemoveSelected");
+            //btnSongOrder.Text = GlobalData.Strings.GetString("EditSongOrder");
         }
 
         public void SetSongList(SongList songList)
@@ -108,7 +112,7 @@ namespace RadioExt_Helper.user_controls
 
             if (lvSongs.SelectedItems.Count == lvSongs.Items.Count)
             {
-                if (MessageBox.Show(this, GlobalData.Strings.GetString("DeleteAllSongsConfirm"), 
+                if (MessageBox.Show(this, GlobalData.Strings.GetString("DeleteAllSongsConfirm"),
                     GlobalData.Strings.GetString("Confirm"), MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No) return;
             }
 
@@ -146,5 +150,28 @@ namespace RadioExt_Helper.user_controls
                 if (Directory.GetParent(song.OriginalFilePath) is DirectoryInfo parentDir)
                     Process.Start("explorer.exe", parentDir.FullName);
         }
+
+        #region Song Order
+
+        private void btnAddToOrder_MouseEnter(object sender, EventArgs e)
+        {
+            btnAddToOrder.BackColor = Color.FromArgb(255, 255, 0); //CyberPunk Yellow
+        }
+
+        private void btnAddToOrder_MouseLeave(object sender, EventArgs e)
+        {
+            btnAddToOrder.BackColor = Color.Transparent;
+        }
+
+        private void btnRemoveFromOrder_MouseEnter(object sender, EventArgs e)
+        {
+            btnRemoveFromOrder.BackColor = Color.FromArgb(255, 255, 0); //CyberPunk Yellow
+        }
+
+        private void btnRemoveFromOrder_MouseLeave(object sender, EventArgs e)
+        {
+            btnRemoveFromOrder.BackColor = Color.Transparent;
+        }
+        #endregion
     }
 }
