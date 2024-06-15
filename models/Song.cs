@@ -41,5 +41,7 @@ namespace RadioExt_Helper.models
         /// </summary>
         [JsonProperty("original_path")]
         public string OriginalFilePath { get; set; } = string.Empty;
+
+        public override string ToString() => Name;
     }
 }

@@ -67,7 +67,7 @@
             menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, languageToolStripMenuItem, helpToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new Size(1053, 24);
+            menuStrip1.Size = new Size(1380, 24);
             menuStrip1.TabIndex = 0;
             menuStrip1.Text = "menuStrip1";
             // 
@@ -82,20 +82,20 @@
             // 
             exportStationsToolStripMenuItem.Image = Properties.Resources.export_file;
             exportStationsToolStripMenuItem.Name = "exportStationsToolStripMenuItem";
-            exportStationsToolStripMenuItem.Size = new Size(180, 22);
+            exportStationsToolStripMenuItem.Size = new Size(166, 22);
             exportStationsToolStripMenuItem.Text = "Export Stations";
             exportStationsToolStripMenuItem.Click += exportStationsToolStripMenuItem_Click;
             // 
             // toolStripSeparator2
             // 
             toolStripSeparator2.Name = "toolStripSeparator2";
-            toolStripSeparator2.Size = new Size(177, 6);
+            toolStripSeparator2.Size = new Size(163, 6);
             // 
             // pathsToolStripMenuItem
             // 
             pathsToolStripMenuItem.Image = Properties.Resources.folder;
             pathsToolStripMenuItem.Name = "pathsToolStripMenuItem";
-            pathsToolStripMenuItem.Size = new Size(180, 22);
+            pathsToolStripMenuItem.Size = new Size(166, 22);
             pathsToolStripMenuItem.Text = "Game Paths";
             pathsToolStripMenuItem.Click += pathsToolStripMenuItem_Click;
             // 
@@ -103,7 +103,7 @@
             // 
             refreshStationsToolStripMenuItem.Image = Properties.Resources.refresh;
             refreshStationsToolStripMenuItem.Name = "refreshStationsToolStripMenuItem";
-            refreshStationsToolStripMenuItem.Size = new Size(180, 22);
+            refreshStationsToolStripMenuItem.Size = new Size(166, 22);
             refreshStationsToolStripMenuItem.Text = "Refresh Stations";
             refreshStationsToolStripMenuItem.Click += refreshStationsToolStripMenuItem_Click;
             // 
@@ -175,8 +175,8 @@
             // splitContainer1.Panel2
             // 
             splitContainer1.Panel2.BackColor = Color.Transparent;
-            splitContainer1.Size = new Size(1053, 592);
-            splitContainer1.SplitterDistance = 251;
+            splitContainer1.Size = new Size(1380, 856);
+            splitContainer1.SplitterDistance = 328;
             splitContainer1.TabIndex = 1;
             // 
             // grpStations
@@ -186,7 +186,7 @@
             grpStations.Font = new Font("CF Notche Demo", 9F, FontStyle.Bold);
             grpStations.Location = new Point(0, 0);
             grpStations.Name = "grpStations";
-            grpStations.Size = new Size(251, 555);
+            grpStations.Size = new Size(328, 819);
             grpStations.TabIndex = 2;
             grpStations.TabStop = false;
             grpStations.Text = "Stations";
@@ -202,7 +202,7 @@
             lbStations.Location = new Point(3, 17);
             lbStations.Margin = new Padding(3, 2, 3, 2);
             lbStations.Name = "lbStations";
-            lbStations.Size = new Size(245, 535);
+            lbStations.Size = new Size(322, 799);
             lbStations.TabIndex = 0;
             lbStations.SelectedIndexChanged += lbStations_SelectedIndexChanged;
             // 
@@ -218,22 +218,22 @@
             tableLayoutPanel1.Controls.Add(btnDeleteStation, 1, 0);
             tableLayoutPanel1.Controls.Add(btnAddStation, 0, 0);
             tableLayoutPanel1.Dock = DockStyle.Bottom;
-            tableLayoutPanel1.Location = new Point(0, 555);
+            tableLayoutPanel1.Location = new Point(0, 819);
             tableLayoutPanel1.Margin = new Padding(3, 2, 3, 2);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 1;
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel1.Size = new Size(251, 37);
+            tableLayoutPanel1.Size = new Size(328, 37);
             tableLayoutPanel1.TabIndex = 1;
             // 
             // btnDeleteStation
             // 
             btnDeleteStation.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             btnDeleteStation.Font = new Font("CF Notche Demo", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnDeleteStation.Location = new Point(128, 2);
+            btnDeleteStation.Location = new Point(167, 2);
             btnDeleteStation.Margin = new Padding(3, 2, 3, 2);
             btnDeleteStation.Name = "btnDeleteStation";
-            btnDeleteStation.Size = new Size(120, 33);
+            btnDeleteStation.Size = new Size(158, 33);
             btnDeleteStation.TabIndex = 1;
             btnDeleteStation.Text = "Delete Station";
             btnDeleteStation.UseVisualStyleBackColor = true;
@@ -246,7 +246,7 @@
             btnAddStation.Location = new Point(3, 2);
             btnAddStation.Margin = new Padding(3, 2, 3, 2);
             btnAddStation.Name = "btnAddStation";
-            btnAddStation.Size = new Size(119, 33);
+            btnAddStation.Size = new Size(158, 33);
             btnAddStation.TabIndex = 0;
             btnAddStation.Text = "New Station";
             btnAddStation.UseVisualStyleBackColor = true;
@@ -257,7 +257,7 @@
             AutoScaleDimensions = new SizeF(7F, 12F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;
-            ClientSize = new Size(1053, 616);
+            ClientSize = new Size(1380, 880);
             Controls.Add(splitContainer1);
             Controls.Add(menuStrip1);
             DoubleBuffered = true;
@@ -265,7 +265,6 @@
             Icon = (Icon)resources.GetObject("$this.Icon");
             MainMenuStrip = menuStrip1;
             Margin = new Padding(3, 2, 3, 2);
-            MaximizeBox = false;
             Name = "MainForm";
             StartPosition = FormStartPosition.CenterParent;
             Text = "Cyber Radio Assistant";

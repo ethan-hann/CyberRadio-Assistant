@@ -1,5 +1,6 @@
 ﻿using AetherUtils.Core.Extensions;
 using AetherUtils.Core.Files;
+using RadioExt_Helper.forms;
 using RadioExt_Helper.models;
 using RadioExt_Helper.utility;
 using System;
@@ -13,6 +14,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using ListView = System.Windows.Forms.ListView;
 
 namespace RadioExt_Helper.user_controls
 {
@@ -21,6 +23,7 @@ namespace RadioExt_Helper.user_controls
         public EventHandler? SongListUpdated;
 
         private SongList _songList = [];
+        private List<Song> _songListDataSource = [];
 
         public CustomMusicCtl()
         {
@@ -33,6 +36,7 @@ namespace RadioExt_Helper.user_controls
         {
             Translate();
             PopulateListView();
+            PopulateSongListBox();
         }
 
         public void Translate()
@@ -48,14 +52,15 @@ namespace RadioExt_Helper.user_controls
             fdlgOpenSongs.Title = GlobalData.Strings.GetString("Open");
             pgSongs.Text = GlobalData.Strings.GetString("SongListing");
             pgSongOrder.Text = GlobalData.Strings.GetString("SongOrder");
-            btnAddToOrder.Text = GlobalData.Strings.GetString("AddSelected");
-            btnRemoveFromOrder.Text = GlobalData.Strings.GetString("RemoveSelected");
-            //btnSongOrder.Text = GlobalData.Strings.GetString("EditSongOrder");
+
+            lvSongOrder.Columns[0].Text = GlobalData.Strings.GetString("Order");
+            lvSongOrder.Columns[1].Text = GlobalData.Strings.GetString("SongNameHeader");
         }
 
         public void SetSongList(SongList songList)
         {
             _songList = songList;
+            _songListDataSource.AddRange(_songList);
             PopulateListView();
         }
 
@@ -101,9 +106,11 @@ namespace RadioExt_Helper.user_controls
                 song.Duration = file.Properties.Duration;
 
                 _songList.Add(song);
+                _songListDataSource.Add(song);
             }
 
             PopulateListView();
+            PopulateSongListBox();
         }
 
         private void removeSongsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -119,9 +126,13 @@ namespace RadioExt_Helper.user_controls
             for (int i = 0; i < lvSongs.SelectedItems.Count; i++)
             {
                 if (lvSongs.SelectedItems[i].Tag is Song song)
+                {
                     _songList.Remove(song);
+                    _songListDataSource.Remove(song);
+                }
             }
             PopulateListView();
+            PopulateSongListBox();
         }
 
         private void lvSongs_ColumnClick(object sender, ColumnClickEventArgs e)
@@ -152,26 +163,113 @@ namespace RadioExt_Helper.user_controls
         }
 
         #region Song Order
-
-        private void btnAddToOrder_MouseEnter(object sender, EventArgs e)
+        private void PopulateSongListBox()
         {
-            btnAddToOrder.BackColor = Color.FromArgb(255, 255, 0); //CyberPunk Yellow
+            lbSongs.BeginUpdate();
+            lbSongs.DataSource = null;
+
+            lbSongs.DataSource = _songListDataSource;
+            lbSongs.EndUpdate();
         }
 
-        private void btnAddToOrder_MouseLeave(object sender, EventArgs e)
+        private void btnAddToOrder_Click(object sender, EventArgs e)
         {
-            btnAddToOrder.BackColor = Color.Transparent;
+            if (lbSongs.SelectedItems.Count <= 0) return;
+
+            List<Song> selectedSongs = lbSongs.SelectedItems.Cast<Song>().ToList();
+            foreach (var item in selectedSongs)
+            {
+                if (item is not Song song) continue;
+
+                AddSongToOrderListView(song);
+                _songListDataSource.Remove(song);
+
+                PopulateSongListBox();
+                UpdateOrderColumn();
+            }
         }
 
-        private void btnRemoveFromOrder_MouseEnter(object sender, EventArgs e)
+        private void btnRemoveFromOrder_Click(object sender, EventArgs e)
         {
-            btnRemoveFromOrder.BackColor = Color.FromArgb(255, 255, 0); //CyberPunk Yellow
+            if (lvSongOrder.SelectedItems.Count <= 0) return;
+
+            foreach (var item in lvSongOrder.SelectedItems)
+            {
+                if (item is not ListViewItem lvItem) continue;
+                if (lvItem.Tag is not Song song) continue;
+
+                lvSongOrder.Items.Remove(lvItem);
+                _songListDataSource.Add(song);
+            }
+
+            PopulateSongListBox();
+            UpdateOrderColumn();
         }
 
-        private void btnRemoveFromOrder_MouseLeave(object sender, EventArgs e)
+        private void lvSongOrder_DragEnter(object sender, DragEventArgs e)
         {
-            btnRemoveFromOrder.BackColor = Color.Transparent;
+            if (!e.Data.GetDataPresent(typeof(Song))) return;
+
+            e.Effect = DragDropEffects.Move;
+        }
+
+        private void lvSongOrder_DragDrop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(typeof(ListViewItem)))
+            {
+                Point cp = lvSongOrder.PointToClient(new Point(e.X, e.Y));
+                ListViewItem hoverItem = lvSongOrder.GetItemAt(cp.X, cp.Y);
+                ListViewItem dragItem = (ListViewItem)e.Data.GetData(typeof(ListViewItem));
+
+                if (hoverItem != null && dragItem != hoverItem)
+                {
+                    int hoverIndex = hoverItem.Index;
+                    lvSongOrder.Items.Remove(dragItem);
+                    lvSongOrder.Items.Insert(hoverIndex, dragItem);
+                    UpdateOrderColumn();
+                }
+            }
+        }
+
+        private void lvSongOrder_DragOver(object sender, DragEventArgs e)
+        {
+            e.Effect = DragDropEffects.Move;
+
+            // Auto-scroll
+            ListView lv = sender as ListView;
+            Point pt = lv.PointToClient(new Point(e.X, e.Y));
+            ListViewItem hoverItem = lv.GetItemAt(pt.X, pt.Y);
+            if (hoverItem != null)
+            {
+                hoverItem.EnsureVisible();
+            }
+        }
+
+        private void lvSongOrder_ItemDrag(object sender, ItemDragEventArgs e)
+        {
+            lvSongOrder.DoDragDrop(e.Item, DragDropEffects.Move);
+        }
+
+        private void AddSongToOrderListView(Song song)
+        {
+            ListViewItem item = new(new string[] { (lvSongOrder.Items.Count + 1).ToString(), song.Name })
+            {
+                Name = song.Name,
+                Tag = song
+            };
+
+            lvSongOrder.Items.Add(item);
+            UpdateOrderColumn();
+
+            lvSongOrder.ResizeColumns();
+        }
+
+        private void UpdateOrderColumn()
+        {
+            for (int i = 0; i < lvSongOrder.Items.Count; i++)
+                lvSongOrder.Items[i].SubItems[0].Text = (i + 1).ToString();
         }
         #endregion
+
     }
 }

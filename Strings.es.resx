@@ -357,4 +357,7 @@
   <data name="AddSelected" xml:space="preserve">
     <value>Agregar seleccionado  </value>
   </data>
+  <data name="Order" xml:space="preserve">
+    <value>Orden</value>
+  </data>
 </root>

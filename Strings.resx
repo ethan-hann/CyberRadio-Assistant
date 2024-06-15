@@ -357,4 +357,7 @@
   <data name="RemoveSelected" xml:space="preserve">
     <value>  Remove Selected</value>
   </data>
+  <data name="Order" xml:space="preserve">
+    <value>Order</value>
+  </data>
 </root>

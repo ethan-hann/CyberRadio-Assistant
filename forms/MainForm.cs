@@ -267,6 +267,7 @@ namespace RadioExt_Helper.forms
         private void ExportFromStagingToLive()
         {
             //TODO: export stations from staging to live radioExt directory
+            throw new NotImplementedException();
         }
 
         private void pathsToolStripMenuItem_Click(object sender, EventArgs e)
