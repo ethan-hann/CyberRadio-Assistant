@@ -1,4 +1,5 @@
-﻿using RadioExt_Helper.models;
+﻿using AetherUtils.Core.Reflection;
+using RadioExt_Helper.models;
 using RadioExt_Helper.utility;
 using System.ComponentModel;
 using System.Globalization;
@@ -32,45 +33,37 @@ namespace RadioExt_Helper.user_controls
             grpSongs.Controls.Add(_musicCtl);
 
             //Populate combobox of UIIcons
-            GlobalData.UiIcons.ToList().ForEach(icon => cmbUIIcons.Items.Add(icon));
+            cmbUIIcons.DataSource = GlobalData.UiIcons;
+            cmbUIIcons.DisplayMember = "Name";
+            //GlobalData.UiIcons.ToList().ForEach(icon => cmbUIIcons.Items.Add(icon));
+            ApplyFonts();
         }
 
         public void ApplyFonts()
         {
-            throw new NotImplementedException();
+            ApplyFontsToControls(this);
         }
 
-        //public void UpdateStation(Station station)
-        //{
-        //    _station.MetaData = station.MetaData;
-        //    _station.CustomIcon = station.CustomIcon;
-        //    _station.StreamInfo = station.StreamInfo;
-        //    _station.SongsAsList = station.SongsAsList;
-        //    _initialStationName = _station.MetaData.DisplayName;
+        private void ApplyFontsToControls(Control control)
+        {
+            switch (control)
+            {
+                case MenuStrip:
+                case GroupBox:
+                case Button:
+                    FontHandler.Instance.ApplyFont(control, "CyberPunk_Regular", 9, FontStyle.Bold);
+                    break;
+                case TabControl:
+                    FontHandler.Instance.ApplyFont(control, "CyberPunk_Regular", 12, FontStyle.Bold);
+                    break;
+                case Label:
+                    FontHandler.Instance.ApplyFont(control, "CyberPunk_Regular", 9, FontStyle.Regular);
+                    break;
+            }
 
-        //    _musicCtl.SetSongList(_station.SongsAsList);
-
-        //    SetDisplayTabValues();
-        //    SetMusicTabValues();
-        //    Translate();
-        //}
-
-        //public void SetMetaData(MetaData metaData, SongList songList)
-        //{
-        //    _metaData = metaData;
-        //    _icon = _metaData.CustomIcon;
-        //    _streamInfo = _metaData.StreamInfo;
-        //    _songList = songList;
-
-        //    _initialStationName = _metaData.DisplayName;
-
-        //    if (grpSongs.Controls["CustomMusicCtl"] is CustomMusicCtl musicCtl)
-        //        musicCtl.SetSongList(_songList);
-
-        //    SetDisplayTabValues();
-        //    SetMusicTabValues();
-        //    Translate();
-        //}
+            foreach (Control child in control.Controls)
+                ApplyFontsToControls(child);
+        }
 
         private void StationEditor_Load(object sender, EventArgs e)
         {

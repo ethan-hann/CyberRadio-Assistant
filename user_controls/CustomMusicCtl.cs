@@ -1,5 +1,6 @@
 ﻿using AetherUtils.Core.Extensions;
 using AetherUtils.Core.Files;
+using AetherUtils.Core.Reflection;
 using RadioExt_Helper.forms;
 using RadioExt_Helper.models;
 using RadioExt_Helper.utility;
@@ -14,6 +15,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using Button = System.Windows.Forms.Button;
 using ListView = System.Windows.Forms.ListView;
 
 namespace RadioExt_Helper.user_controls
@@ -35,6 +37,7 @@ namespace RadioExt_Helper.user_controls
             Dock = DockStyle.Fill;
             _station = station;
             SetSongList(_station.SongsAsList);
+            ApplyFonts();
         }
 
         private void CustomMusicCtl_Load(object sender, EventArgs e)
@@ -59,6 +62,32 @@ namespace RadioExt_Helper.user_controls
 
             lvSongOrder.Columns[0].Text = GlobalData.Strings.GetString("Order");
             lvSongOrder.Columns[1].Text = GlobalData.Strings.GetString("SongNameHeader");
+        }
+
+        public void ApplyFonts()
+        {
+            ApplyFontsToControls(this);
+        }
+
+        private void ApplyFontsToControls(Control control)
+        {
+            switch (control)
+            {
+                case MenuStrip:
+                case GroupBox:
+                case Button:
+                    FontHandler.Instance.ApplyFont(control, "CyberPunk_Regular", 9, FontStyle.Bold);
+                    break;
+                case TabControl:
+                    FontHandler.Instance.ApplyFont(control, "CyberPunk_Regular", 12, FontStyle.Bold);
+                    break;
+                case Label:
+                    FontHandler.Instance.ApplyFont(control, "CyberPunk_Regular", 9, FontStyle.Regular);
+                    break;
+            }
+
+            foreach (Control child in control.Controls)
+                ApplyFontsToControls(child);
         }
 
         public void SetSongList(List<Song> songList)
@@ -92,7 +121,7 @@ namespace RadioExt_Helper.user_controls
             lvSongs.ResumeLayout();
         }
 
-        private bool CanBeAdded(Song song)
+        private bool CanSongBeAdded(Song song)
         {
             return !_station.SongsAsList.Where(s => s.Name.Equals(song.Name) && s.Artist.Equals(song.Artist)
                                             && s.OriginalFilePath.Equals(song.OriginalFilePath)).Any();
@@ -113,7 +142,7 @@ namespace RadioExt_Helper.user_controls
                 song.Duration = file.Properties.Duration;
 
                 
-                if (CanBeAdded(song))
+                if (CanSongBeAdded(song))
                 {
                     _station.SongsAsList.Add(song);
                     _bindingSongList.Add(song);
@@ -302,11 +331,6 @@ namespace RadioExt_Helper.user_controls
         {
             for (int i = 0; i < lvSongOrder.Items.Count; i++)
                 lvSongOrder.Items[i].SubItems[0].Text = (i + 1).ToString();
-        }
-
-        public void ApplyFonts()
-        {
-            throw new NotImplementedException();
         }
         #endregion
 

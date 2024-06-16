@@ -39,9 +39,9 @@ namespace RadioExt_Helper.forms
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            ApplyFontsToControls(this);
-
             splitContainer1.Panel2.Controls.Add(_noStationsCtrl);
+
+            ApplyFontsToControls(this);
         }
 
         private void MainForm_Shown(object sender, EventArgs e)
@@ -119,6 +119,12 @@ namespace RadioExt_Helper.forms
                     break;
                 case TabControl:
                     FontHandler.Instance.ApplyFont(control, "CyberPunk_Regular", 12, FontStyle.Bold);
+                    break;
+                case Label:
+                    FontHandler.Instance.ApplyFont(control, "CyberPunk_Regular", 9, FontStyle.Regular);
+                    break;
+                case IUserControl:
+                    ((IUserControl)control).ApplyFonts();
                     break;
             }
 
@@ -365,6 +371,9 @@ namespace RadioExt_Helper.forms
 
             if (_stations.Count > 0) return;
 
+            if (_stations.Count <= 0)
+                _newStationCount = 1;
+
             //Hide the station editor (and reset it) if there are no stations to edit.
             HandleUserControlVisibility();
 
@@ -375,22 +384,22 @@ namespace RadioExt_Helper.forms
 
         private void UpdateStation(object? sender, EventArgs e)
         {
-            if (e is StationUpdatedEventArgs args)
-            {
-                int index = _stations.IndexOf(_stations.Where(s => s.MetaData.DisplayName.Equals(args.PreviousStationName)).FirstOrDefault());
-                if (index != -1)
-                    _stations[index] = args.UpdatedStation;
-                //RefreshListBox();
-                //if (lbStations.SelectedItem is Station station)
-                //{
-                //    lbStations.BeginUpdate();
-                //    station.MetaData = args.UpdatedStation.MetaData;
-                //    station.StreamInfo = args.UpdatedStation.StreamInfo;
-                //    station.CustomIcon = args.UpdatedStation.CustomIcon;
-                //    station.SongsAsList = args.UpdatedStation.SongsAsList;
-                //    lbStations.EndUpdate();
-                //}
-            }
+            //if (e is StationUpdatedEventArgs args)
+            //{
+            //    int index = _stations.IndexOf(_stations.Where(s => s.MetaData.DisplayName.Equals(args.PreviousStationName)).FirstOrDefault());
+            //    if (index != -1)
+            //        _stations[index] = args.UpdatedStation;
+            //    //RefreshListBox();
+            //    //if (lbStations.SelectedItem is Station station)
+            //    //{
+            //    //    lbStations.BeginUpdate();
+            //    //    station.MetaData = args.UpdatedStation.MetaData;
+            //    //    station.StreamInfo = args.UpdatedStation.StreamInfo;
+            //    //    station.CustomIcon = args.UpdatedStation.CustomIcon;
+            //    //    station.SongsAsList = args.UpdatedStation.SongsAsList;
+            //    //    lbStations.EndUpdate();
+            //    //}
+            //}
         }
 
         private void RefreshListBox()

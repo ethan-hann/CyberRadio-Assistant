@@ -395,10 +395,10 @@
             // 
             lblVolumeMinMax.Anchor = AnchorStyles.Left;
             lblVolumeMinMax.AutoSize = true;
-            lblVolumeMinMax.Font = new Font("CF Notche Demo", 9.749999F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblVolumeMinMax.Font = new Font("CF Notche Demo", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             lblVolumeMinMax.Location = new Point(386, 19);
             lblVolumeMinMax.Name = "lblVolumeMinMax";
-            lblVolumeMinMax.Size = new Size(104, 13);
+            lblVolumeMinMax.Size = new Size(98, 12);
             lblVolumeMinMax.TabIndex = 7;
             lblVolumeMinMax.Text = "Min: 0.0 - Max: 25.0";
             lblVolumeMinMax.TextAlign = ContentAlignment.MiddleCenter;
