@@ -25,12 +25,32 @@ namespace RadioExt_Helper.models
         /// <summary>
         /// The stream info associated with this station.
         /// </summary>
-        public StreamInfo StreamInfo { get; set; } = new();
+        public StreamInfo StreamInfo
+        {
+            get
+            {
+                return MetaData.StreamInfo;
+            }
+            set
+            {
+                MetaData.StreamInfo = value;
+            }
+        }
 
         /// <summary>
         /// The custom icon associated with this station.
         /// </summary>
-        public CustomIcon CustomIcon { get; set; } = new();
+        public CustomIcon CustomIcon
+        {
+            get
+            {
+                return MetaData.CustomIcon;
+            }
+            set
+            {
+                MetaData.CustomIcon = value;
+            }
+        }
 
         /// <summary>
         /// The song list for this station as a <see cref="List{T}"/>. Empty if <see cref="MetaData.StreamInfo.IsStream"/> is <c>true</c>.

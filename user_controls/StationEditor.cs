@@ -33,9 +33,9 @@ namespace RadioExt_Helper.user_controls
             grpSongs.Controls.Add(_musicCtl);
 
             //Populate combobox of UIIcons
-            cmbUIIcons.DataSource = GlobalData.UiIcons;
-            cmbUIIcons.DisplayMember = "Name";
-            //GlobalData.UiIcons.ToList().ForEach(icon => cmbUIIcons.Items.Add(icon));
+            //cmbUIIcons.DataSource = GlobalData.UiIcons;
+            //cmbUIIcons.DisplayMember = "Name";
+            GlobalData.UiIcons.ToList().ForEach(icon => cmbUIIcons.Items.Add(icon));
             ApplyFonts();
         }
 
@@ -57,6 +57,8 @@ namespace RadioExt_Helper.user_controls
                     FontHandler.Instance.ApplyFont(control, "CyberPunk_Regular", 12, FontStyle.Bold);
                     break;
                 case Label:
+                    if (control.Name.Equals("lblSelectedVolume"))
+                        break;
                     FontHandler.Instance.ApplyFont(control, "CyberPunk_Regular", 9, FontStyle.Regular);
                     break;
             }
@@ -67,7 +69,7 @@ namespace RadioExt_Helper.user_controls
 
         public void PreLoad()
         {
-            StationEditor_Load(this, EventArgs.Empty);
+            //StationEditor_Load(this, EventArgs.Empty);
         }
 
         private void StationEditor_Load(object sender, EventArgs e)
@@ -126,7 +128,7 @@ namespace RadioExt_Helper.user_controls
         private void SetDisplayTabValues()
         {
             txtDisplayName.Text = _station.MetaData.DisplayName;
-            cmbUIIcons.Text = _station.MetaData.Icon;
+            cmbUIIcons.SelectedIndex = cmbUIIcons.Items.IndexOf(_station.MetaData.Icon);
 
             if (_station.CustomIcon.UseCustom)
             {

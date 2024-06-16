@@ -108,7 +108,7 @@
             lblIcon.Anchor = AnchorStyles.Right;
             lblIcon.AutoSize = true;
             lblIcon.Font = new Font("CF Notche Demo", 9F);
-            lblIcon.Location = new Point(68, 51);
+            lblIcon.Location = new Point(68, 63);
             lblIcon.Name = "lblIcon";
             lblIcon.Size = new Size(36, 12);
             lblIcon.TabIndex = 2;
@@ -120,7 +120,7 @@
             // 
             txtDisplayName.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             txtDisplayName.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            txtDisplayName.Location = new Point(110, 6);
+            txtDisplayName.Location = new Point(110, 9);
             txtDisplayName.Name = "txtDisplayName";
             txtDisplayName.Size = new Size(849, 23);
             txtDisplayName.TabIndex = 1;
@@ -131,7 +131,7 @@
             lblName.Anchor = AnchorStyles.Right;
             lblName.AutoSize = true;
             lblName.Font = new Font("CF Notche Demo", 9F);
-            lblName.Location = new Point(60, 11);
+            lblName.Location = new Point(60, 15);
             lblName.Name = "lblName";
             lblName.Size = new Size(44, 12);
             lblName.TabIndex = 0;
@@ -157,7 +157,7 @@
             grpDisplay.Font = new Font("CF Notche Demo", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             grpDisplay.Location = new Point(0, 0);
             grpDisplay.Name = "grpDisplay";
-            grpDisplay.Size = new Size(968, 99);
+            grpDisplay.Size = new Size(968, 116);
             grpDisplay.TabIndex = 2;
             grpDisplay.TabStop = false;
             grpDisplay.Text = "Display";
@@ -177,7 +177,7 @@
             tableLayoutPanel3.RowCount = 2;
             tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 44.3038F));
             tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 55.6962F));
-            tableLayoutPanel3.Size = new Size(962, 79);
+            tableLayoutPanel3.Size = new Size(962, 96);
             tableLayoutPanel3.TabIndex = 0;
             // 
             // cmbUIIcons
@@ -187,7 +187,7 @@
             cmbUIIcons.AutoCompleteSource = AutoCompleteSource.ListItems;
             cmbUIIcons.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             cmbUIIcons.FormattingEnabled = true;
-            cmbUIIcons.Location = new Point(110, 45);
+            cmbUIIcons.Location = new Point(110, 57);
             cmbUIIcons.Name = "cmbUIIcons";
             cmbUIIcons.Size = new Size(849, 23);
             cmbUIIcons.Sorted = true;
@@ -239,9 +239,9 @@
             // 
             panel3.BackColor = Color.White;
             panel3.Dock = DockStyle.Fill;
-            panel3.Location = new Point(0, 316);
+            panel3.Location = new Point(0, 377);
             panel3.Name = "panel3";
-            panel3.Size = new Size(968, 334);
+            panel3.Size = new Size(968, 273);
             panel3.TabIndex = 5;
             // 
             // grpSettings
@@ -250,9 +250,9 @@
             grpSettings.Controls.Add(tableLayoutPanel1);
             grpSettings.Dock = DockStyle.Top;
             grpSettings.Font = new Font("CF Notche Demo", 9F, FontStyle.Bold);
-            grpSettings.Location = new Point(0, 212);
+            grpSettings.Location = new Point(0, 250);
             grpSettings.Name = "grpSettings";
-            grpSettings.Size = new Size(968, 104);
+            grpSettings.Size = new Size(968, 127);
             grpSettings.TabIndex = 4;
             grpSettings.TabStop = false;
             grpSettings.Text = "Settings";
@@ -272,7 +272,7 @@
             tableLayoutPanel1.RowCount = 2;
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 41.09589F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 58.90411F));
-            tableLayoutPanel1.Size = new Size(962, 84);
+            tableLayoutPanel1.Size = new Size(962, 107);
             tableLayoutPanel1.TabIndex = 0;
             // 
             // lblVolume
@@ -280,7 +280,7 @@
             lblVolume.Anchor = AnchorStyles.Right;
             lblVolume.AutoSize = true;
             lblVolume.Font = new Font("CF Notche Demo", 9F);
-            lblVolume.Location = new Point(103, 53);
+            lblVolume.Location = new Point(103, 69);
             lblVolume.Name = "lblVolume";
             lblVolume.Size = new Size(52, 12);
             lblVolume.TabIndex = 3;
@@ -294,7 +294,7 @@
             nudFM.DecimalPlaces = 1;
             nudFM.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             nudFM.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
-            nudFM.Location = new Point(161, 5);
+            nudFM.Location = new Point(161, 10);
             nudFM.Maximum = new decimal(new int[] { 9999999, 0, 0, 0 });
             nudFM.Name = "nudFM";
             nudFM.Size = new Size(91, 23);
@@ -306,7 +306,7 @@
             lblFM.Anchor = AnchorStyles.Right;
             lblFM.AutoSize = true;
             lblFM.Font = new Font("CF Notche Demo", 9F);
-            lblFM.Location = new Point(128, 11);
+            lblFM.Location = new Point(128, 15);
             lblFM.Name = "lblFM";
             lblFM.Size = new Size(27, 12);
             lblFM.TabIndex = 2;
@@ -322,9 +322,9 @@
             flowLayoutPanel4.Controls.Add(panel2);
             flowLayoutPanel4.Controls.Add(lblVolumeMinMax);
             flowLayoutPanel4.Dock = DockStyle.Fill;
-            flowLayoutPanel4.Location = new Point(161, 37);
+            flowLayoutPanel4.Location = new Point(161, 46);
             flowLayoutPanel4.Name = "flowLayoutPanel4";
-            flowLayoutPanel4.Size = new Size(798, 44);
+            flowLayoutPanel4.Size = new Size(798, 58);
             flowLayoutPanel4.TabIndex = 8;
             // 
             // volumeSlider
@@ -409,9 +409,9 @@
             grpCustomIcon.Controls.Add(tableLayoutPanel2);
             grpCustomIcon.Dock = DockStyle.Top;
             grpCustomIcon.Font = new Font("CF Notche Demo", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            grpCustomIcon.Location = new Point(0, 99);
+            grpCustomIcon.Location = new Point(0, 116);
             grpCustomIcon.Name = "grpCustomIcon";
-            grpCustomIcon.Size = new Size(968, 113);
+            grpCustomIcon.Size = new Size(968, 134);
             grpCustomIcon.TabIndex = 3;
             grpCustomIcon.TabStop = false;
             grpCustomIcon.Text = "Custom Icon";
@@ -434,14 +434,14 @@
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 32.9545441F));
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 30.681818F));
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 36.363636F));
-            tableLayoutPanel2.Size = new Size(962, 93);
+            tableLayoutPanel2.Size = new Size(962, 114);
             tableLayoutPanel2.TabIndex = 0;
             // 
             // txtInkAtlasPart
             // 
             txtInkAtlasPart.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             txtInkAtlasPart.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            txtInkAtlasPart.Location = new Point(161, 64);
+            txtInkAtlasPart.Location = new Point(161, 81);
             txtInkAtlasPart.Name = "txtInkAtlasPart";
             txtInkAtlasPart.Size = new Size(798, 23);
             txtInkAtlasPart.TabIndex = 2;
@@ -451,7 +451,7 @@
             // 
             txtInkAtlasPath.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             txtInkAtlasPath.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            txtInkAtlasPath.Location = new Point(161, 33);
+            txtInkAtlasPath.Location = new Point(161, 42);
             txtInkAtlasPath.Name = "txtInkAtlasPath";
             txtInkAtlasPath.Size = new Size(798, 23);
             txtInkAtlasPath.TabIndex = 3;
@@ -462,7 +462,7 @@
             lblUsingCustomIcon.Anchor = AnchorStyles.Right;
             lblUsingCustomIcon.AutoSize = true;
             lblUsingCustomIcon.Font = new Font("CF Notche Demo", 9F);
-            lblUsingCustomIcon.Location = new Point(111, 9);
+            lblUsingCustomIcon.Location = new Point(111, 12);
             lblUsingCustomIcon.Name = "lblUsingCustomIcon";
             lblUsingCustomIcon.Size = new Size(44, 12);
             lblUsingCustomIcon.TabIndex = 3;
@@ -477,7 +477,7 @@
             flowLayoutPanel1.Dock = DockStyle.Fill;
             flowLayoutPanel1.Location = new Point(161, 3);
             flowLayoutPanel1.Name = "flowLayoutPanel1";
-            flowLayoutPanel1.Size = new Size(798, 24);
+            flowLayoutPanel1.Size = new Size(798, 31);
             flowLayoutPanel1.TabIndex = 0;
             // 
             // radUseCustomYes
@@ -514,7 +514,7 @@
             lblInkPart.Anchor = AnchorStyles.Right;
             lblInkPart.AutoSize = true;
             lblInkPart.Font = new Font("CF Notche Demo", 9F);
-            lblInkPart.Location = new Point(67, 69);
+            lblInkPart.Location = new Point(67, 86);
             lblInkPart.Name = "lblInkPart";
             lblInkPart.Size = new Size(88, 12);
             lblInkPart.TabIndex = 1;
@@ -527,7 +527,7 @@
             lblInkPath.Anchor = AnchorStyles.Right;
             lblInkPath.AutoSize = true;
             lblInkPath.Font = new Font("CF Notche Demo", 9F);
-            lblInkPath.Location = new Point(64, 38);
+            lblInkPath.Location = new Point(64, 48);
             lblInkPath.Name = "lblInkPath";
             lblInkPath.Size = new Size(91, 12);
             lblInkPath.TabIndex = 0;
@@ -554,9 +554,9 @@
             // 
             grpSongs.Dock = DockStyle.Fill;
             grpSongs.Font = new Font("CF Notche Demo", 9F, FontStyle.Bold);
-            grpSongs.Location = new Point(3, 122);
+            grpSongs.Location = new Point(3, 135);
             grpSongs.Name = "grpSongs";
-            grpSongs.Size = new Size(968, 531);
+            grpSongs.Size = new Size(968, 518);
             grpSongs.TabIndex = 1;
             grpSongs.TabStop = false;
             grpSongs.Text = "Songs";
@@ -568,7 +568,7 @@
             grpStreamSettings.Font = new Font("CF Notche Demo", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             grpStreamSettings.Location = new Point(3, 3);
             grpStreamSettings.Name = "grpStreamSettings";
-            grpStreamSettings.Size = new Size(968, 119);
+            grpStreamSettings.Size = new Size(968, 132);
             grpStreamSettings.TabIndex = 0;
             grpStreamSettings.TabStop = false;
             grpStreamSettings.Text = "Stream Settings";
@@ -588,7 +588,7 @@
             tableLayoutPanel5.RowCount = 2;
             tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Percent, 29.1262131F));
             tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Percent, 70.87379F));
-            tableLayoutPanel5.Size = new Size(962, 99);
+            tableLayoutPanel5.Size = new Size(962, 112);
             tableLayoutPanel5.TabIndex = 0;
             // 
             // lblStreamURL
@@ -596,7 +596,7 @@
             lblStreamURL.Anchor = AnchorStyles.Right;
             lblStreamURL.AutoSize = true;
             lblStreamURL.Font = new Font("CF Notche Demo", 9F);
-            lblStreamURL.Location = new Point(67, 57);
+            lblStreamURL.Location = new Point(67, 66);
             lblStreamURL.Name = "lblStreamURL";
             lblStreamURL.Size = new Size(75, 12);
             lblStreamURL.TabIndex = 3;
@@ -609,7 +609,7 @@
             lblUseStream.Anchor = AnchorStyles.Right;
             lblUseStream.AutoSize = true;
             lblUseStream.Font = new Font("CF Notche Demo", 9F);
-            lblUseStream.Location = new Point(64, 8);
+            lblUseStream.Location = new Point(64, 10);
             lblUseStream.Name = "lblUseStream";
             lblUseStream.Size = new Size(78, 12);
             lblUseStream.TabIndex = 1;
@@ -624,7 +624,7 @@
             flowLayoutPanel2.Dock = DockStyle.Fill;
             flowLayoutPanel2.Location = new Point(148, 3);
             flowLayoutPanel2.Name = "flowLayoutPanel2";
-            flowLayoutPanel2.Size = new Size(811, 22);
+            flowLayoutPanel2.Size = new Size(811, 26);
             flowLayoutPanel2.TabIndex = 2;
             // 
             // radUseStreamYes
@@ -664,12 +664,12 @@
             tableLayoutPanel6.Controls.Add(flowLayoutPanel3, 0, 1);
             tableLayoutPanel6.Controls.Add(txtStreamURL, 0, 0);
             tableLayoutPanel6.Dock = DockStyle.Fill;
-            tableLayoutPanel6.Location = new Point(148, 31);
+            tableLayoutPanel6.Location = new Point(148, 35);
             tableLayoutPanel6.Name = "tableLayoutPanel6";
             tableLayoutPanel6.RowCount = 2;
             tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
             tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel6.Size = new Size(811, 65);
+            tableLayoutPanel6.Size = new Size(811, 74);
             tableLayoutPanel6.TabIndex = 4;
             // 
             // flowLayoutPanel3
@@ -678,9 +678,9 @@
             flowLayoutPanel3.Controls.Add(btnGetRadioGardenURL);
             flowLayoutPanel3.Controls.Add(txtPastedURL);
             flowLayoutPanel3.Dock = DockStyle.Fill;
-            flowLayoutPanel3.Location = new Point(3, 35);
+            flowLayoutPanel3.Location = new Point(3, 40);
             flowLayoutPanel3.Name = "flowLayoutPanel3";
-            flowLayoutPanel3.Size = new Size(805, 27);
+            flowLayoutPanel3.Size = new Size(805, 31);
             flowLayoutPanel3.TabIndex = 1;
             // 
             // btnGetRadioGardenURL
@@ -712,7 +712,7 @@
             txtStreamURL.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             tableLayoutPanel6.SetColumnSpan(txtStreamURL, 2);
             txtStreamURL.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            txtStreamURL.Location = new Point(3, 4);
+            txtStreamURL.Location = new Point(3, 7);
             txtStreamURL.Name = "txtStreamURL";
             txtStreamURL.Size = new Size(805, 23);
             txtStreamURL.TabIndex = 0;

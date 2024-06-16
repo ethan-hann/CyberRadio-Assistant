@@ -61,7 +61,7 @@ namespace RadioExt_Helper.forms
             _languages.Add(new ImageComboBoxItem("English (en)", Resources.united_kingdom));
             _languages.Add(new ImageComboBoxItem("Español (es)", Resources.spain));
             _languages.Add(new ImageComboBoxItem("Français (fr)", Resources.france));
-            
+
             foreach (var language in _languages)
                 _languageComboBox.Items.Add(language);
 
@@ -203,7 +203,6 @@ namespace RadioExt_Helper.forms
                     _stations.Add(s);
                     StationEditor editor = new(s);
                     editor.StationUpdated += UpdateStation;
-                    editor.PreLoad();
 
                     _stationEditors.Add(editor);
                 }
@@ -300,6 +299,11 @@ namespace RadioExt_Helper.forms
             }
         }
 
+        private void exportToGameToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            new ExportWindow([.. _stations]).ShowDialog();
+        }
+
         private void ExportFromStagingToLive()
         {
             //TODO: export stations from staging to live radioExt directory
@@ -352,7 +356,7 @@ namespace RadioExt_Helper.forms
             _stationEditors.Add(new StationEditor(blankStation));
             lbStations.SelectedItem = blankStation;
             _newStationCount++;
-            
+
             if (_stations.Count <= 0) return;
 
             //Re-show our station editor if the station count has increased again.
@@ -463,7 +467,7 @@ namespace RadioExt_Helper.forms
                 //    //}
                 //}
 
-                
+
 
                 Focus(); //re-focus the main form
 

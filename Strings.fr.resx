@@ -256,7 +256,7 @@
     <value>Paramètres</value>
   </data>
   <data name="StreamURL" xml:space="preserve">
-    <value>URL du flux:</value>
+    <value>URL du streaming:</value>
   </data>
   <data name="UseStream" xml:space="preserve">
     <value>Utiliser Stream?</value>
@@ -365,5 +365,44 @@
   </data>
   <data name="ExportToStaging" xml:space="preserve">
     <value>Exporter vers la mise en scène</value>
+  </data>
+  <data name="ExportHelp" xml:space="preserve">
+    <value>En cliquant sur "Exporter", les stations ci-dessus seront d'abord copiées vers la scène puis vers le jeu en direct.
+Vous pourrez consulter les stations avant de les copier dans le répertoire du jeu.
+
+Si quelque chose ne semble pas correct, quittez cette fenêtre et apportez des modifications dans l'application principale.</value>
+  </data>
+  <data name="Export" xml:space="preserve">
+    <value>Exporter</value>
+  </data>
+  <data name="LVDisplayName" xml:space="preserve">
+    <value>Afficher un nom</value>
+  </data>
+  <data name="LVProposedPath" xml:space="preserve">
+    <value>Chemin proposé</value>
+  </data>
+  <data name="LVSongCount" xml:space="preserve">
+    <value>Nombre de chansons</value>
+  </data>
+  <data name="LVStationIcon" xml:space="preserve">
+    <value>Icône</value>
+  </data>
+  <data name="LVStreamURL" xml:space="preserve">
+    <value>URL du streaming</value>
+  </data>
+  <data name="ExportCompleteStatus" xml:space="preserve">
+    <value>Exporté vers Staging!</value>
+  </data>
+  <data name="ExportCanceled" xml:space="preserve">
+    <value>Exportation annulée</value>
+  </data>
+  <data name="ExportingStationStatus" xml:space="preserve">
+    <value>Station d'exportation : {0}</value>
+  </data>
+  <data name="IsStream" xml:space="preserve">
+    <value>Est en Streaming</value>
+  </data>
+  <data name="UsingSongs" xml:space="preserve">
+    <value>Utilisation de morceaux</value>
   </data>
 </root>

@@ -83,7 +83,7 @@
             // 
             exportStationsToolStripMenuItem.Image = Properties.Resources.export_file;
             exportStationsToolStripMenuItem.Name = "exportStationsToolStripMenuItem";
-            exportStationsToolStripMenuItem.Size = new Size(180, 22);
+            exportStationsToolStripMenuItem.Size = new Size(170, 22);
             exportStationsToolStripMenuItem.Text = "Export to Staging";
             exportStationsToolStripMenuItem.Click += exportStationsToolStripMenuItem_Click;
             // 
@@ -91,19 +91,20 @@
             // 
             exportToGameToolStripMenuItem.Image = Properties.Resources.console;
             exportToGameToolStripMenuItem.Name = "exportToGameToolStripMenuItem";
-            exportToGameToolStripMenuItem.Size = new Size(180, 22);
+            exportToGameToolStripMenuItem.Size = new Size(170, 22);
             exportToGameToolStripMenuItem.Text = "Export to Game";
+            exportToGameToolStripMenuItem.Click += exportToGameToolStripMenuItem_Click;
             // 
             // toolStripSeparator2
             // 
             toolStripSeparator2.Name = "toolStripSeparator2";
-            toolStripSeparator2.Size = new Size(177, 6);
+            toolStripSeparator2.Size = new Size(167, 6);
             // 
             // pathsToolStripMenuItem
             // 
             pathsToolStripMenuItem.Image = Properties.Resources.folder;
             pathsToolStripMenuItem.Name = "pathsToolStripMenuItem";
-            pathsToolStripMenuItem.Size = new Size(180, 22);
+            pathsToolStripMenuItem.Size = new Size(170, 22);
             pathsToolStripMenuItem.Text = "Game Paths";
             pathsToolStripMenuItem.Click += pathsToolStripMenuItem_Click;
             // 
@@ -111,7 +112,7 @@
             // 
             refreshStationsToolStripMenuItem.Image = Properties.Resources.refresh;
             refreshStationsToolStripMenuItem.Name = "refreshStationsToolStripMenuItem";
-            refreshStationsToolStripMenuItem.Size = new Size(180, 22);
+            refreshStationsToolStripMenuItem.Size = new Size(170, 22);
             refreshStationsToolStripMenuItem.Text = "Refresh Stations";
             refreshStationsToolStripMenuItem.Click += refreshStationsToolStripMenuItem_Click;
             // 
@@ -191,7 +192,6 @@
             // 
             grpStations.Controls.Add(lbStations);
             grpStations.Dock = DockStyle.Fill;
-            grpStations.Font = new Font("Comic Sans MS", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             grpStations.Location = new Point(0, 0);
             grpStations.Name = "grpStations";
             grpStations.Size = new Size(328, 819);
@@ -207,10 +207,10 @@
             lbStations.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lbStations.FormattingEnabled = true;
             lbStations.ItemHeight = 17;
-            lbStations.Location = new Point(3, 20);
+            lbStations.Location = new Point(3, 17);
             lbStations.Margin = new Padding(3, 2, 3, 2);
             lbStations.Name = "lbStations";
-            lbStations.Size = new Size(322, 796);
+            lbStations.Size = new Size(322, 799);
             lbStations.TabIndex = 0;
             lbStations.SelectedIndexChanged += lbStations_SelectedIndexChanged;
             // 
@@ -237,7 +237,6 @@
             // btnDeleteStation
             // 
             btnDeleteStation.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            btnDeleteStation.Font = new Font("Comic Sans MS", 14.25F);
             btnDeleteStation.Location = new Point(167, 2);
             btnDeleteStation.Margin = new Padding(3, 2, 3, 2);
             btnDeleteStation.Name = "btnDeleteStation";
@@ -250,7 +249,6 @@
             // btnAddStation
             // 
             btnAddStation.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            btnAddStation.Font = new Font("Comic Sans MS", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
             btnAddStation.Location = new Point(3, 2);
             btnAddStation.Margin = new Padding(3, 2, 3, 2);
             btnAddStation.Name = "btnAddStation";

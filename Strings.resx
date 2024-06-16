@@ -366,4 +366,43 @@
   <data name="ExportToStaging" xml:space="preserve">
     <value>Export to Staging</value>
   </data>
+  <data name="Export" xml:space="preserve">
+    <value>Export</value>
+  </data>
+  <data name="ExportHelp" xml:space="preserve">
+    <value>Upon clicking "Export", the stations above will be first copied to staging and then to the live game.
+You will be able to review the stations before copying to the game directory.
+
+If something doesn't look correct, exit out of this window and make changes in the main application.</value>
+  </data>
+  <data name="LVDisplayName" xml:space="preserve">
+    <value>Display Name</value>
+  </data>
+  <data name="LVStationIcon" xml:space="preserve">
+    <value>Icon</value>
+  </data>
+  <data name="LVSongCount" xml:space="preserve">
+    <value>Song Count</value>
+  </data>
+  <data name="LVStreamURL" xml:space="preserve">
+    <value>Stream URL</value>
+  </data>
+  <data name="LVProposedPath" xml:space="preserve">
+    <value>Proposed Path</value>
+  </data>
+  <data name="ExportCompleteStatus" xml:space="preserve">
+    <value>Exported to Staging!</value>
+  </data>
+  <data name="ExportCanceled" xml:space="preserve">
+    <value>Export Canceled</value>
+  </data>
+  <data name="ExportingStationStatus" xml:space="preserve">
+    <value>Exporting station: {0}</value>
+  </data>
+  <data name="IsStream" xml:space="preserve">
+    <value>Is Streaming</value>
+  </data>
+  <data name="UsingSongs" xml:space="preserve">
+    <value>Using Songs</value>
+  </data>
 </root>

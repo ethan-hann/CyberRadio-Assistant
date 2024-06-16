@@ -61,5 +61,7 @@ namespace RadioExt_Helper.utility
                 return string.Empty;
             }
         }
+
+        public static string GetRadiosPath(string gameBasePath) => Path.Combine(GetRadioExtPath(gameBasePath), "radios");
     }
 }

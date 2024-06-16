@@ -213,6 +213,16 @@ namespace RadioExt_Helper.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap status {
+            get {
+                object obj = ResourceManager.GetObject("status", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap united_kingdom {
             get {
                 object obj = ResourceManager.GetObject("united_kingdom", resourceCulture);
