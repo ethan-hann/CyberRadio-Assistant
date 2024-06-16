@@ -18,5 +18,10 @@ namespace RadioExt_Helper.user_controls
         /// Specify how embedded fonts are to be applied to children of this control.
         /// </summary>
         public void ApplyFonts();
+
+        /// <summary>
+        /// Specify how to translate the strings of this control.
+        /// </summary>
+        public void Translate();
     }
 }

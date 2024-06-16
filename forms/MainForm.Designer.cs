@@ -33,6 +33,7 @@
             menuStrip1 = new MenuStrip();
             fileToolStripMenuItem = new ToolStripMenuItem();
             exportStationsToolStripMenuItem = new ToolStripMenuItem();
+            exportToGameToolStripMenuItem = new ToolStripMenuItem();
             toolStripSeparator2 = new ToolStripSeparator();
             pathsToolStripMenuItem = new ToolStripMenuItem();
             refreshStationsToolStripMenuItem = new ToolStripMenuItem();
@@ -73,7 +74,7 @@
             // 
             // fileToolStripMenuItem
             // 
-            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { exportStationsToolStripMenuItem, toolStripSeparator2, pathsToolStripMenuItem, refreshStationsToolStripMenuItem });
+            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { exportStationsToolStripMenuItem, exportToGameToolStripMenuItem, toolStripSeparator2, pathsToolStripMenuItem, refreshStationsToolStripMenuItem });
             fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             fileToolStripMenuItem.Size = new Size(37, 20);
             fileToolStripMenuItem.Text = "File";
@@ -82,20 +83,27 @@
             // 
             exportStationsToolStripMenuItem.Image = Properties.Resources.export_file;
             exportStationsToolStripMenuItem.Name = "exportStationsToolStripMenuItem";
-            exportStationsToolStripMenuItem.Size = new Size(166, 22);
-            exportStationsToolStripMenuItem.Text = "Export Stations";
+            exportStationsToolStripMenuItem.Size = new Size(180, 22);
+            exportStationsToolStripMenuItem.Text = "Export to Staging";
             exportStationsToolStripMenuItem.Click += exportStationsToolStripMenuItem_Click;
+            // 
+            // exportToGameToolStripMenuItem
+            // 
+            exportToGameToolStripMenuItem.Image = Properties.Resources.console;
+            exportToGameToolStripMenuItem.Name = "exportToGameToolStripMenuItem";
+            exportToGameToolStripMenuItem.Size = new Size(180, 22);
+            exportToGameToolStripMenuItem.Text = "Export to Game";
             // 
             // toolStripSeparator2
             // 
             toolStripSeparator2.Name = "toolStripSeparator2";
-            toolStripSeparator2.Size = new Size(163, 6);
+            toolStripSeparator2.Size = new Size(177, 6);
             // 
             // pathsToolStripMenuItem
             // 
             pathsToolStripMenuItem.Image = Properties.Resources.folder;
             pathsToolStripMenuItem.Name = "pathsToolStripMenuItem";
-            pathsToolStripMenuItem.Size = new Size(166, 22);
+            pathsToolStripMenuItem.Size = new Size(180, 22);
             pathsToolStripMenuItem.Text = "Game Paths";
             pathsToolStripMenuItem.Click += pathsToolStripMenuItem_Click;
             // 
@@ -103,7 +111,7 @@
             // 
             refreshStationsToolStripMenuItem.Image = Properties.Resources.refresh;
             refreshStationsToolStripMenuItem.Name = "refreshStationsToolStripMenuItem";
-            refreshStationsToolStripMenuItem.Size = new Size(166, 22);
+            refreshStationsToolStripMenuItem.Size = new Size(180, 22);
             refreshStationsToolStripMenuItem.Text = "Refresh Stations";
             refreshStationsToolStripMenuItem.Click += refreshStationsToolStripMenuItem_Click;
             // 
@@ -305,5 +313,6 @@
         private ToolStripMenuItem exportStationsToolStripMenuItem;
         private ToolStripSeparator toolStripSeparator2;
         private GroupBox grpStations;
+        private ToolStripMenuItem exportToGameToolStripMenuItem;
     }
 }

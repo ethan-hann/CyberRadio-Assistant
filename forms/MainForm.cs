@@ -27,6 +27,7 @@ namespace RadioExt_Helper.forms
         private readonly Json<SongList> songListJson = new();
 
         private readonly ImageComboBox<ImageComboBoxItem> _languageComboBox = new();
+        private readonly List<ImageComboBoxItem> _languages = [];
 
         public MainForm()
         {
@@ -57,15 +58,18 @@ namespace RadioExt_Helper.forms
         private void InitializeLanguageDropDown()
         {
             //Populate the language combo box
-            _languageComboBox.Items.Add(new ImageComboBoxItem("English (en)", Resources.united_kingdom));
-            _languageComboBox.Items.Add(new ImageComboBoxItem("Español (es)", Resources.spain));
-            _languageComboBox.Items.Add(new ImageComboBoxItem("Français (fr)", Resources.france));
+            _languages.Add(new ImageComboBoxItem("English (en)", Resources.united_kingdom));
+            _languages.Add(new ImageComboBoxItem("Español (es)", Resources.spain));
+            _languages.Add(new ImageComboBoxItem("Français (fr)", Resources.france));
+            
+            foreach (var language in _languages)
+                _languageComboBox.Items.Add(language);
 
             _languageComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             _languageComboBox.SelectedIndexChanged += cmbLanguageSelect_SelectedIndexChanged;
 
             // Create a ToolStripControlHost to host the ImageComboBox
-            ToolStripControlHost toolStripControlHost = new ToolStripControlHost(_languageComboBox);
+            ToolStripControlHost toolStripControlHost = new(_languageComboBox);
 
             // Add the ToolStripControlHost to the "Language" tool strip menu
             languageToolStripMenuItem.DropDownItems.Add(toolStripControlHost);
@@ -73,7 +77,12 @@ namespace RadioExt_Helper.forms
 
         private void SelectLanguage()
         {
-            _languageComboBox.SelectedIndex = 0;
+            if (!Settings.Default.SelectedLanguage.Equals(string.Empty))
+                _languageComboBox.SelectedIndex = _languageComboBox.Items.IndexOf(
+                    _languages.Find(l => l.Text.Equals(Settings.Default.SelectedLanguage)));
+            else
+                _languageComboBox.SelectedIndex = 0;
+
             cmbLanguageSelect_SelectedIndexChanged(_languageComboBox, EventArgs.Empty);
         }
 
@@ -81,6 +90,8 @@ namespace RadioExt_Helper.forms
         {
             Text = GlobalData.Strings.GetString("MainTitle");
             fileToolStripMenuItem.Text = GlobalData.Strings.GetString("File");
+            exportStationsToolStripMenuItem.Text = GlobalData.Strings.GetString("ExportToStaging");
+            exportToGameToolStripMenuItem.Text = GlobalData.Strings.GetString("ExportToGame");
             languageToolStripMenuItem.Text = GlobalData.Strings.GetString("Language");
             helpToolStripMenuItem.Text = GlobalData.Strings.GetString("Help");
             pathsToolStripMenuItem.Text = GlobalData.Strings.GetString("GamePaths");
@@ -110,26 +121,28 @@ namespace RadioExt_Helper.forms
 
         private void ApplyFontsToControls(Control control)
         {
-            switch (control)
+            if (control is IUserControl userControl)
+                userControl.ApplyFonts();
+            else
             {
-                case MenuStrip:
-                case GroupBox:
-                case Button:
-                    FontHandler.Instance.ApplyFont(control, "CyberPunk_Regular", 9, FontStyle.Bold);
-                    break;
-                case TabControl:
-                    FontHandler.Instance.ApplyFont(control, "CyberPunk_Regular", 12, FontStyle.Bold);
-                    break;
-                case Label:
-                    FontHandler.Instance.ApplyFont(control, "CyberPunk_Regular", 9, FontStyle.Regular);
-                    break;
-                case IUserControl:
-                    ((IUserControl)control).ApplyFonts();
-                    break;
-            }
+                switch (control)
+                {
+                    case MenuStrip:
+                    case GroupBox:
+                    case Button:
+                        FontHandler.Instance.ApplyFont(control, "CyberPunk_Regular", 9, FontStyle.Bold);
+                        break;
+                    case TabControl:
+                        FontHandler.Instance.ApplyFont(control, "CyberPunk_Regular", 12, FontStyle.Bold);
+                        break;
+                    case Label:
+                        FontHandler.Instance.ApplyFont(control, "CyberPunk_Regular", 9, FontStyle.Regular);
+                        break;
+                }
 
-            foreach (Control child in control.Controls)
-                ApplyFontsToControls(child);
+                foreach (Control child in control.Controls)
+                    ApplyFontsToControls(child);
+            }
         }
 
         private void CheckGamePath()
@@ -344,9 +357,11 @@ namespace RadioExt_Helper.forms
 
             //Re-show our station editor if the station count has increased again.
             _noStationsCtrl.Visible = false;
-            var editor = _stationEditors.Find(s => s.Station.MetaData.DisplayName.Equals(blankStation.MetaData.DisplayName));
-            if (editor != null)
-                editor.Visible = true;
+            lbStations_SelectedIndexChanged(this, EventArgs.Empty);
+
+            //var editor = _stationEditors.Find(s => s.Station.MetaData.DisplayName.Equals(blankStation.MetaData.DisplayName));
+            //if (editor != null)
+            //    editor.Visible = true;
         }
 
         private void btnDeleteStation_Click(object sender, EventArgs e)
@@ -370,6 +385,8 @@ namespace RadioExt_Helper.forms
                     GlobalData.Strings.GetString("NewStationListBoxEntry") ??
                     throw new InvalidOperationException())))
                 _newStationCount = 1;
+
+            lbStations_SelectedIndexChanged(this, EventArgs.Empty);
 
             if (_stations.Count > 0) return;
 
@@ -421,29 +438,40 @@ namespace RadioExt_Helper.forms
             {
                 SuspendLayout();
                 GlobalData.SetCulture(culture.Text);
+
                 Translate();
-                foreach (Control c in splitContainer1.Panel2.Controls)
-                {
-                    switch (c)
-                    {
-                        case StationEditor se:
-                            se.Translate();
-                            break;
-                        case NoStationsCtl nsc:
-                            nsc.Translate();
-                            break;
-                        default:
-                            continue;
-                    }
-                }
 
                 foreach (StationEditor se in _stationEditors)
                     se.Translate();
+
+                _noStationsCtrl.Translate();
+
+                //foreach (Control c in splitContainer1.Panel2.Controls)
+                //{
+                //    if (c is IUserControl userControl)
+                //        userControl.Translate();
+                //    //switch (c)
+                //    //{
+                //    //    case StationEditor se:
+                //    //        se.Translate();
+                //    //        break;
+                //    //    case NoStationsCtl nsc:
+                //    //        nsc.Translate();
+                //    //        break;
+                //    //    default:
+                //    //        continue;
+                //    //}
+                //}
+
+                
 
                 Focus(); //re-focus the main form
 
                 languageToolStripMenuItem.HideDropDown();
                 ResumeLayout();
+
+                Settings.Default.SelectedLanguage = culture.Text;
+                Settings.Default.Save();
             }
         }
     }

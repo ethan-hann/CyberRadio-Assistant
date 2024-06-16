@@ -360,4 +360,10 @@
   <data name="Order" xml:space="preserve">
     <value>Commande</value>
   </data>
+  <data name="ExportToGame" xml:space="preserve">
+    <value>Exporter vers le jeu</value>
+  </data>
+  <data name="ExportToStaging" xml:space="preserve">
+    <value>Exporter vers la mise en scène</value>
+  </data>
 </root>
