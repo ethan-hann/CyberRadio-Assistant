@@ -65,11 +65,20 @@ namespace RadioExt_Helper.user_controls
                 ApplyFontsToControls(child);
         }
 
+        public void PreLoad()
+        {
+            StationEditor_Load(this, EventArgs.Empty);
+        }
+
         private void StationEditor_Load(object sender, EventArgs e)
         {
+            SuspendLayout();
+
             SetDisplayTabValues();
             SetMusicTabValues();
             Translate();
+
+            ResumeLayout();
         }
 
         private void UpdateSongList(object? sender, EventArgs e)

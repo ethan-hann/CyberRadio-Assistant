@@ -190,6 +190,8 @@ namespace RadioExt_Helper.forms
                     _stations.Add(s);
                     StationEditor editor = new(s);
                     editor.StationUpdated += UpdateStation;
+                    editor.PreLoad();
+
                     _stationEditors.Add(editor);
                 }
             }
