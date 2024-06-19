@@ -267,7 +267,7 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Upon clicking &quot;Export&quot;, the stations above will be first copied to staging and then to the live game.
+        ///   Looks up a localized string similar to Click &quot;Export to Staging&quot; to export the stations above to the staging folder first.
         ///You will be able to review the stations before copying to the game directory.
         ///
         ///If something doesn&apos;t look correct, exit out of this window and make changes in the main application..
@@ -288,11 +288,29 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Export Stations.
+        /// </summary>
+        internal static string ExportStations {
+            get {
+                return ResourceManager.GetString("ExportStations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Export to Game.
         /// </summary>
         internal static string ExportToGame {
             get {
                 return ResourceManager.GetString("ExportToGame", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exported to Game!.
+        /// </summary>
+        internal static string ExportToGameComplete {
+            get {
+                return ResourceManager.GetString("ExportToGameComplete", resourceCulture);
             }
         }
         
@@ -608,6 +626,24 @@ namespace RadioExt_Helper {
         internal static string Open {
             get {
                 return ResourceManager.GetString("Open", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open Game Folder.
+        /// </summary>
+        internal static string OpenGameFolder {
+            get {
+                return ResourceManager.GetString("OpenGameFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open Staging Folder.
+        /// </summary>
+        internal static string OpenStagingFolder {
+            get {
+                return ResourceManager.GetString("OpenStagingFolder", resourceCulture);
             }
         }
         

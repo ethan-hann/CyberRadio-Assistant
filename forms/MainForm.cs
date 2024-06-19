@@ -29,6 +29,9 @@ namespace RadioExt_Helper.forms
         private readonly ImageComboBox<ImageComboBoxItem> _languageComboBox = new();
         private readonly List<ImageComboBoxItem> _languages = [];
 
+        private int previousStationIndex = -1;
+        private bool ignoreSelectedIndexChanged = false;
+
         public MainForm()
         {
             InitializeComponent();
@@ -90,8 +93,7 @@ namespace RadioExt_Helper.forms
         {
             Text = GlobalData.Strings.GetString("MainTitle");
             fileToolStripMenuItem.Text = GlobalData.Strings.GetString("File");
-            exportStationsToolStripMenuItem.Text = GlobalData.Strings.GetString("ExportToStaging");
-            exportToGameToolStripMenuItem.Text = GlobalData.Strings.GetString("ExportToGame");
+            exportToGameToolStripMenuItem.Text = GlobalData.Strings.GetString("ExportStations");
             languageToolStripMenuItem.Text = GlobalData.Strings.GetString("Language");
             helpToolStripMenuItem.Text = GlobalData.Strings.GetString("Help");
             pathsToolStripMenuItem.Text = GlobalData.Strings.GetString("GamePaths");
@@ -221,93 +223,9 @@ namespace RadioExt_Helper.forms
         }
 
         #region File Menu
-        private void exportStationsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (lbStations.Items.Count <= 0) return;
-
-            //TODO: Export radio stations
-            foreach (var item in lbStations.Items)
-            {
-                if (item is not Station station) continue;
-
-                //Create the directory(ies) for the station in the staging path
-                var stationPath = CreateStationDirectory(station);
-
-                if (stationPath.Equals(string.Empty)) continue;
-
-                //Create the metadata json
-                var metadataSaved = CreateMetaDataJSON(stationPath, station);
-                if (!metadataSaved) continue;
-
-                //Create the song list json (if needed)
-                if (station.Songs.Count <= 0) continue;
-                var songListSaved = CreateSongListJSON(stationPath, station);
-
-                //Copy songs to staging folder
-                CopySongsToStaging(stationPath, station);
-            }
-
-            //Refresh stations list box
-            PopulateStations();
-        }
-
-        private string CreateStationDirectory(Station station)
-        {
-            if (Settings.Default.BackupPath.Equals(string.Empty)) return string.Empty;
-
-            //string cleanName = FileHelper.RemoveInvalidFileNameChars(station.MetaData.DisplayName);
-            var stationPath = Path.Combine(Settings.Default.BackupPath, station.MetaData.DisplayName);
-            FileHelper.CreateDirectories(stationPath);
-            return stationPath;
-        }
-
-        private bool CreateMetaDataJSON(string stationPath, Station station)
-        {
-            if (Settings.Default.BackupPath.Equals(string.Empty)) return false;
-
-            var mdPath = Path.Combine(stationPath, "metadata.json");
-            return metaDataJson.SaveJson(mdPath, station.MetaData);
-        }
-
-        private bool CreateSongListJSON(string stationPath, Station station)
-        {
-            if (Settings.Default.BackupPath.Equals(string.Empty)) return false;
-
-            var songPath = Path.Combine(stationPath, "songs.sgls");
-            return songListJson.SaveJson(songPath, station.Songs);
-        }
-
-        private void CopySongsToStaging(string stationPath, Station station)
-        {
-            if (Settings.Default.BackupPath.Equals(string.Empty)) return;
-
-            var files = Directory.GetFiles(stationPath);
-
-            //Remove original song files from staging folder
-            foreach (var file in files)
-            {
-                if (FileHelper.GetExtension(file, false).Equals(".json") || FileHelper.GetExtension(file, false).Equals(".sgls"))
-                    continue;
-                File.Delete(file);
-            }
-
-            foreach (var song in station.Songs)
-            {
-                var songPath = Path.Combine(stationPath, Path.GetFileName(song.OriginalFilePath));
-                if (FileHelper.DoesFileExist(song.OriginalFilePath))
-                    File.Copy(song.OriginalFilePath, songPath, true);
-            }
-        }
-
         private void exportToGameToolStripMenuItem_Click(object sender, EventArgs e)
         {
             new ExportWindow([.. _stations]).ShowDialog();
-        }
-
-        private void ExportFromStagingToLive()
-        {
-            //TODO: export stations from staging to live radioExt directory
-            throw new NotImplementedException();
         }
 
         private void pathsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -334,9 +252,18 @@ namespace RadioExt_Helper.forms
 
         #endregion
 
-        private void lbStations_SelectedIndexChanged(object sender, EventArgs e)
+        private void lbStations_SelectedIndexChanged(object? sender, EventArgs e)
         {
+            if (ignoreSelectedIndexChanged)
+            {
+                ignoreSelectedIndexChanged = false;
+                return;
+            }
+
             if (lbStations.SelectedItem is not Station station) return;
+
+            if (lbStations.SelectedIndex != ListBox.NoMatches)
+                previousStationIndex = lbStations.SelectedIndex;
 
             splitContainer1.Panel2.SuspendLayout();
             splitContainer1.Panel2.Controls.Clear();
@@ -476,6 +403,20 @@ namespace RadioExt_Helper.forms
 
                 Settings.Default.SelectedLanguage = culture.Text;
                 Settings.Default.Save();
+            }
+        }
+
+        private void lbStations_MouseDown(object sender, MouseEventArgs e)
+        {
+            int index = lbStations.IndexFromPoint(e.Location);
+            if (index == ListBox.NoMatches)
+            {
+                ignoreSelectedIndexChanged = true;
+                lbStations.SelectedIndex = previousStationIndex;
+            }
+            else
+            {
+                previousStationIndex = lbStations.SelectedIndex;
             }
         }
     }

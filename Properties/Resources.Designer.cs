@@ -103,6 +103,16 @@ namespace RadioExt_Helper.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap export_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("export_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap export_file {
             get {
                 object obj = ResourceManager.GetObject("export_file", resourceCulture);
@@ -126,6 +136,16 @@ namespace RadioExt_Helper.Properties {
         internal static System.Drawing.Bitmap folder {
             get {
                 object obj = ResourceManager.GetObject("folder", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap folder_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("folder_16x16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

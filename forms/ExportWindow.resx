@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="lblConfirm.Text" xml:space="preserve">
-    <value>Upon clicking "Export", the stations above will be first copied to staging and then to the live game.
+    <value>Click "Export to Staging" to export the stations above to the staging folder first.
 You will be able to review the stations before copying to the game directory.
 
 If something doesn't look correct, exit out of this window and make changes in the main application.</value>
@@ -128,6 +128,9 @@ If something doesn't look correct, exit out of this window and make changes in t
   </metadata>
   <metadata name="bgWorkerExport.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>132, 17</value>
+  </metadata>
+  <metadata name="bgWorkerExportGame.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>272, 17</value>
   </metadata>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">

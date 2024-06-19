@@ -44,7 +44,12 @@
             btnExportToStaging = new Button();
             btnExportToGame = new Button();
             btnCancel = new Button();
+            btnOpenStagingFolder = new Button();
+            flowLayoutPanel1 = new FlowLayoutPanel();
+            btnOpenGameFolder = new Button();
+            bgWorkerExportGame = new System.ComponentModel.BackgroundWorker();
             statusStrip1.SuspendLayout();
+            flowLayoutPanel1.SuspendLayout();
             SuspendLayout();
             // 
             // lvStations
@@ -90,9 +95,10 @@
             // 
             lblConfirm.AutoSize = true;
             lblConfirm.Font = new Font("CF Notche Demo", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblConfirm.Location = new Point(12, 309);
+            lblConfirm.Location = new Point(3, 0);
             lblConfirm.Name = "lblConfirm";
-            lblConfirm.Size = new Size(701, 60);
+            lblConfirm.Padding = new Padding(0, 10, 0, 0);
+            lblConfirm.Size = new Size(701, 70);
             lblConfirm.TabIndex = 1;
             lblConfirm.Text = resources.GetString("lblConfirm.Text");
             // 
@@ -137,11 +143,14 @@
             // 
             btnExportToStaging.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             btnExportToStaging.Font = new Font("CF Notche Demo", 9.749999F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnExportToStaging.Image = Properties.Resources.export_16x16;
             btnExportToStaging.Location = new Point(666, 453);
             btnExportToStaging.Name = "btnExportToStaging";
             btnExportToStaging.Size = new Size(247, 43);
             btnExportToStaging.TabIndex = 4;
             btnExportToStaging.Text = "Export to Staging";
+            btnExportToStaging.TextAlign = ContentAlignment.MiddleRight;
+            btnExportToStaging.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnExportToStaging.UseVisualStyleBackColor = true;
             btnExportToStaging.Click += btnExportToStaging_Click;
             // 
@@ -150,11 +159,14 @@
             btnExportToGame.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             btnExportToGame.Enabled = false;
             btnExportToGame.Font = new Font("CF Notche Demo", 9.749999F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnExportToGame.Image = Properties.Resources.export_16x16;
             btnExportToGame.Location = new Point(919, 453);
             btnExportToGame.Name = "btnExportToGame";
             btnExportToGame.Size = new Size(259, 43);
             btnExportToGame.TabIndex = 5;
             btnExportToGame.Text = "Export to Game";
+            btnExportToGame.TextAlign = ContentAlignment.MiddleRight;
+            btnExportToGame.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnExportToGame.UseVisualStyleBackColor = true;
             btnExportToGame.Click += btnExportToGame_Click;
             // 
@@ -171,18 +183,66 @@
             btnCancel.Visible = false;
             btnCancel.Click += btnCancel_Click;
             // 
+            // btnOpenStagingFolder
+            // 
+            btnOpenStagingFolder.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            btnOpenStagingFolder.Font = new Font("CF Notche Demo", 9.749999F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnOpenStagingFolder.Image = Properties.Resources.folder_16x16;
+            btnOpenStagingFolder.Location = new Point(831, 302);
+            btnOpenStagingFolder.Name = "btnOpenStagingFolder";
+            btnOpenStagingFolder.Size = new Size(347, 43);
+            btnOpenStagingFolder.TabIndex = 7;
+            btnOpenStagingFolder.Text = "Open Staging Folder";
+            btnOpenStagingFolder.TextAlign = ContentAlignment.MiddleRight;
+            btnOpenStagingFolder.TextImageRelation = TextImageRelation.ImageBeforeText;
+            btnOpenStagingFolder.UseVisualStyleBackColor = true;
+            btnOpenStagingFolder.Click += btnOpenStagingFolder_Click;
+            // 
+            // flowLayoutPanel1
+            // 
+            flowLayoutPanel1.Controls.Add(lblConfirm);
+            flowLayoutPanel1.Location = new Point(12, 302);
+            flowLayoutPanel1.Name = "flowLayoutPanel1";
+            flowLayoutPanel1.Size = new Size(813, 145);
+            flowLayoutPanel1.TabIndex = 8;
+            // 
+            // btnOpenGameFolder
+            // 
+            btnOpenGameFolder.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            btnOpenGameFolder.Font = new Font("CF Notche Demo", 9.749999F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnOpenGameFolder.Image = Properties.Resources.folder_16x16;
+            btnOpenGameFolder.Location = new Point(831, 351);
+            btnOpenGameFolder.Name = "btnOpenGameFolder";
+            btnOpenGameFolder.Size = new Size(347, 43);
+            btnOpenGameFolder.TabIndex = 9;
+            btnOpenGameFolder.Text = "Open Game Folder";
+            btnOpenGameFolder.TextAlign = ContentAlignment.MiddleRight;
+            btnOpenGameFolder.TextImageRelation = TextImageRelation.ImageBeforeText;
+            btnOpenGameFolder.UseVisualStyleBackColor = true;
+            btnOpenGameFolder.Click += btnOpenGameFolder_Click;
+            // 
+            // bgWorkerExportGame
+            // 
+            bgWorkerExportGame.WorkerReportsProgress = true;
+            bgWorkerExportGame.WorkerSupportsCancellation = true;
+            bgWorkerExportGame.DoWork += bgWorkerExportGame_DoWork;
+            bgWorkerExportGame.ProgressChanged += bgWorkerExportGame_ProgressChanged;
+            bgWorkerExportGame.RunWorkerCompleted += bgWorkerExportGame_RunWorkerCompleted;
+            // 
             // ExportWindow
             // 
             AutoScaleDimensions = new SizeF(8F, 13F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;
             ClientSize = new Size(1190, 521);
+            Controls.Add(flowLayoutPanel1);
+            Controls.Add(btnOpenGameFolder);
+            Controls.Add(btnOpenStagingFolder);
             Controls.Add(btnCancel);
             Controls.Add(btnExportToGame);
             Controls.Add(btnExportToStaging);
             Controls.Add(statusStrip1);
             Controls.Add(lvStations);
-            Controls.Add(lblConfirm);
             Font = new Font("CF Notche Demo", 9.749999F, FontStyle.Bold, GraphicsUnit.Point, 0);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Icon = (Icon)resources.GetObject("$this.Icon");
@@ -195,6 +255,8 @@
             Load += ExportWindow_Load;
             statusStrip1.ResumeLayout(false);
             statusStrip1.PerformLayout();
+            flowLayoutPanel1.ResumeLayout(false);
+            flowLayoutPanel1.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -215,5 +277,9 @@
         private Button btnExportToStaging;
         private Button btnExportToGame;
         private Button btnCancel;
+        private Button btnOpenStagingFolder;
+        private FlowLayoutPanel flowLayoutPanel1;
+        private Button btnOpenGameFolder;
+        private System.ComponentModel.BackgroundWorker bgWorkerExportGame;
     }
 }

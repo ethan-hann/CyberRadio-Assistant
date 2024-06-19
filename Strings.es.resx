@@ -367,10 +367,10 @@
     <value>Exportar a puesta en escena</value>
   </data>
   <data name="ExportHelp" xml:space="preserve">
-    <value>Al hacer clic en "Exportar", las estaciones anteriores se copiarán primero al escenario y luego al juego en vivo.
-Podrás revisar las estaciones antes de copiarlas al directorio del juego.
+    <value>Haga clic en "Exportar a la puesta en escena" para exportar primero las estaciones anteriores a la carpeta de puesta en escena.
+Podrá revisar las estaciones antes de copiar en el directorio de juegos.
 
-Si algo no parece correcto, salga de esta ventana y realice cambios en la aplicación principal.</value>
+Si algo no se ve correcto, salga de esta ventana y realice cambios en la aplicación principal.</value>
   </data>
   <data name="Export" xml:space="preserve">
     <value>Exportar</value>
@@ -404,5 +404,17 @@ Si algo no parece correcto, salga de esta ventana y realice cambios en la aplica
   </data>
   <data name="UsingSongs" xml:space="preserve">
     <value>Usando sanciones</value>
+  </data>
+  <data name="OpenStagingFolder" xml:space="preserve">
+    <value>Carpeta de etapa abierta</value>
+  </data>
+  <data name="OpenGameFolder" xml:space="preserve">
+    <value>Carpeta de juego abierta</value>
+  </data>
+  <data name="ExportToGameComplete" xml:space="preserve">
+    <value>Exportado al juego!</value>
+  </data>
+  <data name="ExportStations" xml:space="preserve">
+    <value>Estaciones de exportación</value>
   </data>
 </root>

@@ -291,9 +291,9 @@
             // nudFM
             // 
             nudFM.Anchor = AnchorStyles.Left;
-            nudFM.DecimalPlaces = 1;
+            nudFM.DecimalPlaces = 2;
             nudFM.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            nudFM.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
+            nudFM.Increment = new decimal(new int[] { 1, 0, 0, 131072 });
             nudFM.Location = new Point(161, 10);
             nudFM.Maximum = new decimal(new int[] { 9999999, 0, 0, 0 });
             nudFM.Name = "nudFM";

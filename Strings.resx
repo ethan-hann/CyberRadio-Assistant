@@ -370,7 +370,7 @@
     <value>Export</value>
   </data>
   <data name="ExportHelp" xml:space="preserve">
-    <value>Upon clicking "Export", the stations above will be first copied to staging and then to the live game.
+    <value>Click "Export to Staging" to export the stations above to the staging folder first.
 You will be able to review the stations before copying to the game directory.
 
 If something doesn't look correct, exit out of this window and make changes in the main application.</value>
@@ -404,5 +404,17 @@ If something doesn't look correct, exit out of this window and make changes in t
   </data>
   <data name="UsingSongs" xml:space="preserve">
     <value>Using Songs</value>
+  </data>
+  <data name="OpenStagingFolder" xml:space="preserve">
+    <value>Open Staging Folder</value>
+  </data>
+  <data name="OpenGameFolder" xml:space="preserve">
+    <value>Open Game Folder</value>
+  </data>
+  <data name="ExportToGameComplete" xml:space="preserve">
+    <value>Exported to Game!</value>
+  </data>
+  <data name="ExportStations" xml:space="preserve">
+    <value>Export Stations</value>
   </data>
 </root>

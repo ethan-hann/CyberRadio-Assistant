@@ -367,10 +367,10 @@
     <value>Exporter vers la mise en scène</value>
   </data>
   <data name="ExportHelp" xml:space="preserve">
-    <value>En cliquant sur "Exporter", les stations ci-dessus seront d'abord copiées vers la scène puis vers le jeu en direct.
-Vous pourrez consulter les stations avant de les copier dans le répertoire du jeu.
+    <value>Cliquez sur "Exporter vers la stadification" pour exporter les stations ci-dessus vers le dossier de mise en scène d'abord.
+Vous pourrez revoir les stations avant de copier dans le répertoire du jeu.
 
-Si quelque chose ne semble pas correct, quittez cette fenêtre et apportez des modifications dans l'application principale.</value>
+Si quelque chose ne semble pas correct, sortez de cette fenêtre et apportez des modifications dans l'application principale.</value>
   </data>
   <data name="Export" xml:space="preserve">
     <value>Exporter</value>
@@ -404,5 +404,17 @@ Si quelque chose ne semble pas correct, quittez cette fenêtre et apportez des m
   </data>
   <data name="UsingSongs" xml:space="preserve">
     <value>Utilisation de morceaux</value>
+  </data>
+  <data name="OpenStagingFolder" xml:space="preserve">
+    <value>Dossier en scène ouverte</value>
+  </data>
+  <data name="OpenGameFolder" xml:space="preserve">
+    <value>Dossier de jeu ouvert</value>
+  </data>
+  <data name="ExportToGameComplete" xml:space="preserve">
+    <value>Exporté vers le jeu!</value>
+  </data>
+  <data name="ExportStations" xml:space="preserve">
+    <value>Stations d'exportation</value>
   </data>
 </root>
