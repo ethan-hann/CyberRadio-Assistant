@@ -553,9 +553,9 @@
             // 
             grpSongs.Dock = DockStyle.Fill;
             grpSongs.Font = new Font("CF Notche Demo", 9F, FontStyle.Bold);
-            grpSongs.Location = new Point(3, 137);
+            grpSongs.Location = new Point(3, 152);
             grpSongs.Name = "grpSongs";
-            grpSongs.Size = new Size(968, 516);
+            grpSongs.Size = new Size(968, 501);
             grpSongs.TabIndex = 1;
             grpSongs.TabStop = false;
             grpSongs.Text = "Songs";
@@ -567,7 +567,7 @@
             grpStreamSettings.Font = new Font("CF Notche Demo", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             grpStreamSettings.Location = new Point(3, 3);
             grpStreamSettings.Name = "grpStreamSettings";
-            grpStreamSettings.Size = new Size(968, 134);
+            grpStreamSettings.Size = new Size(968, 149);
             grpStreamSettings.TabIndex = 0;
             grpStreamSettings.TabStop = false;
             grpStreamSettings.Text = "Stream Settings";
@@ -587,7 +587,7 @@
             tableLayoutPanel5.RowCount = 2;
             tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Percent, 29.1262131F));
             tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Percent, 70.87379F));
-            tableLayoutPanel5.Size = new Size(962, 114);
+            tableLayoutPanel5.Size = new Size(962, 129);
             tableLayoutPanel5.TabIndex = 0;
             // 
             // lblStreamURL
@@ -595,7 +595,7 @@
             lblStreamURL.Anchor = AnchorStyles.Right;
             lblStreamURL.AutoSize = true;
             lblStreamURL.Font = new Font("CF Notche Demo", 9F);
-            lblStreamURL.Location = new Point(67, 67);
+            lblStreamURL.Location = new Point(67, 77);
             lblStreamURL.Name = "lblStreamURL";
             lblStreamURL.Size = new Size(75, 12);
             lblStreamURL.TabIndex = 3;
@@ -608,7 +608,7 @@
             lblUseStream.Anchor = AnchorStyles.Right;
             lblUseStream.AutoSize = true;
             lblUseStream.Font = new Font("CF Notche Demo", 9F);
-            lblUseStream.Location = new Point(64, 10);
+            lblUseStream.Location = new Point(64, 12);
             lblUseStream.Name = "lblUseStream";
             lblUseStream.Size = new Size(78, 12);
             lblUseStream.TabIndex = 1;
@@ -623,7 +623,7 @@
             flowLayoutPanel2.Dock = DockStyle.Fill;
             flowLayoutPanel2.Location = new Point(148, 3);
             flowLayoutPanel2.Name = "flowLayoutPanel2";
-            flowLayoutPanel2.Size = new Size(811, 27);
+            flowLayoutPanel2.Size = new Size(811, 31);
             flowLayoutPanel2.TabIndex = 2;
             // 
             // radUseStreamYes
@@ -663,12 +663,12 @@
             tableLayoutPanel6.Controls.Add(flowLayoutPanel3, 0, 1);
             tableLayoutPanel6.Controls.Add(txtStreamURL, 0, 0);
             tableLayoutPanel6.Dock = DockStyle.Fill;
-            tableLayoutPanel6.Location = new Point(148, 36);
+            tableLayoutPanel6.Location = new Point(148, 40);
             tableLayoutPanel6.Name = "tableLayoutPanel6";
             tableLayoutPanel6.RowCount = 2;
             tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
             tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel6.Size = new Size(811, 75);
+            tableLayoutPanel6.Size = new Size(811, 86);
             tableLayoutPanel6.TabIndex = 4;
             // 
             // flowLayoutPanel3
@@ -676,9 +676,9 @@
             tableLayoutPanel6.SetColumnSpan(flowLayoutPanel3, 2);
             flowLayoutPanel3.Controls.Add(mpStreamPlayer);
             flowLayoutPanel3.Dock = DockStyle.Fill;
-            flowLayoutPanel3.Location = new Point(3, 40);
+            flowLayoutPanel3.Location = new Point(3, 46);
             flowLayoutPanel3.Name = "flowLayoutPanel3";
-            flowLayoutPanel3.Size = new Size(805, 32);
+            flowLayoutPanel3.Size = new Size(805, 37);
             flowLayoutPanel3.TabIndex = 1;
             // 
             // mpStreamPlayer
@@ -696,7 +696,7 @@
             txtStreamURL.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             tableLayoutPanel6.SetColumnSpan(txtStreamURL, 2);
             txtStreamURL.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            txtStreamURL.Location = new Point(3, 7);
+            txtStreamURL.Location = new Point(3, 10);
             txtStreamURL.Name = "txtStreamURL";
             txtStreamURL.Size = new Size(805, 23);
             txtStreamURL.TabIndex = 0;
