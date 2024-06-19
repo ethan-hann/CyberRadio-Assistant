@@ -262,6 +262,8 @@ namespace RadioExt_Helper.forms
 
             if (lbStations.SelectedItem is not Station station) return;
 
+            _stationEditors.ForEach((editor) => { editor.GetMusicPlayer().StopStream(); });
+
             if (lbStations.SelectedIndex != ListBox.NoMatches)
                 previousStationIndex = lbStations.SelectedIndex;
 

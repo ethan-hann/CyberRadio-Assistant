@@ -43,6 +43,8 @@ namespace RadioExt_Helper.user_controls
             ApplyFontsToControls(this);
         }
 
+        public MusicPlayer GetMusicPlayer() => mpStreamPlayer;
+
         private void ApplyFontsToControls(Control control)
         {
             switch (control)

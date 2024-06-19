@@ -249,6 +249,24 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error pausing stream: {0}.
+        /// </summary>
+        internal static string ErrorPausingStream {
+            get {
+                return ResourceManager.GetString("ErrorPausingStream", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error streaming audio: {0}.
+        /// </summary>
+        internal static string ErrorStreamingAudio {
+            get {
+                return ResourceManager.GetString("ErrorStreamingAudio", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Export.
         /// </summary>
         internal static string Export {

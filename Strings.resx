@@ -417,4 +417,10 @@ If something doesn't look correct, exit out of this window and make changes in t
   <data name="Error" xml:space="preserve">
     <value>Error</value>
   </data>
+  <data name="ErrorStreamingAudio" xml:space="preserve">
+    <value>Error streaming audio: {0}</value>
+  </data>
+  <data name="ErrorPausingStream" xml:space="preserve">
+    <value>Error pausing stream: {0}</value>
+  </data>
 </root>

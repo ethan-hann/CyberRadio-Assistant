@@ -411,4 +411,16 @@ Si quelque chose ne semble pas correct, sortez de cette fenêtre et apportez des
   <data name="ExportStations" xml:space="preserve">
     <value>Stations d'exportation</value>
   </data>
+  <data name="Error" xml:space="preserve">
+    <value>Erreur</value>
+  </data>
+  <data name="StreamURLError" xml:space="preserve">
+    <value>Veuillez saisir une URL de streaming valide.</value>
+  </data>
+  <data name="ErrorStreamingAudio" xml:space="preserve">
+    <value>Erreur de diffusion audio : {0}</value>
+  </data>
+  <data name="ErrorPausingStream" xml:space="preserve">
+    <value>Erreur lors de la mise en veille du flux: {0}</value>
+  </data>
 </root>

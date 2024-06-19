@@ -1,4 +1,5 @@
 ﻿using NAudio.Wave;
+using RadioExt_Helper.utility;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -53,7 +54,9 @@ namespace RadioExt_Helper.user_controls
         {
             if (string.IsNullOrEmpty(StreamURL))
             {
-                MessageBox.Show(this, "Please enter a valid stream URL.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                var message = GlobalData.Strings.GetString("StreamURLError") ?? "Please enter a valid stream URL.";
+                var error = GlobalData.Strings.GetString("Error") ?? "Error";
+                MessageBox.Show(this, message, error, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -84,7 +87,9 @@ namespace RadioExt_Helper.user_controls
                 waveOut?.Play();
             } catch (Exception ex)
             {
-                MessageBox.Show(this, $"Error streaming audio: {ex.Message}");
+                var message = GlobalData.Strings.GetString("ErrorStreamingAudio") ?? "Error streaming audio: {0}";
+                var error = GlobalData.Strings.GetString("Error") ?? "Error";
+                MessageBox.Show(this, string.Format(message, ex.Message), error, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 btnPlayPause.ImageIndex = 0;
             }
         }
@@ -99,7 +104,9 @@ namespace RadioExt_Helper.user_controls
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, $"Error streaming audio: {ex.Message}");
+                var message = GlobalData.Strings.GetString("ErrorStreamingAudio") ?? "Error streaming audio: {0}";
+                var error = GlobalData.Strings.GetString("Error") ?? "Error";
+                MessageBox.Show(this, string.Format(message, ex.Message), error, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 btnPlayPause.ImageIndex = 0;
             }
         }
@@ -113,7 +120,9 @@ namespace RadioExt_Helper.user_controls
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, $"Error pausing stream: {ex.Message}");
+                var message = GlobalData.Strings.GetString("ErrorPausingStream") ?? "Error pausing stream: {0}";
+                var error = GlobalData.Strings.GetString("Error") ?? "Error";
+                MessageBox.Show(this, string.Format(message, ex.Message), error, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 btnPlayPause.ImageIndex = 1;
             }
         }

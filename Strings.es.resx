@@ -411,4 +411,16 @@ Si algo no se ve correcto, salga de esta ventana y realice cambios en la aplicac
   <data name="ExportStations" xml:space="preserve">
     <value>Estaciones de exportación</value>
   </data>
+  <data name="Error" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="StreamURLError" xml:space="preserve">
+    <value>Ingrese una URL de transmisión válida.</value>
+  </data>
+  <data name="ErrorStreamingAudio" xml:space="preserve">
+    <value>Error en la transmisión de audio: {0}</value>
+  </data>
+  <data name="ErrorPausingStream" xml:space="preserve">
+    <value>Error al pausar la secuencia: {0}</value>
+  </data>
 </root>
