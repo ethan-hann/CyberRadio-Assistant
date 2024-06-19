@@ -240,6 +240,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error.
+        /// </summary>
+        internal static string Error {
+            get {
+                return ResourceManager.GetString("Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Export.
         /// </summary>
         internal static string Export {
@@ -374,15 +383,6 @@ namespace RadioExt_Helper {
         internal static string GamePaths {
             get {
                 return ResourceManager.GetString("GamePaths", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Get URL from Radio Garden.
-        /// </summary>
-        internal static string GetURLFromRadioGarden {
-            get {
-                return ResourceManager.GetString("GetURLFromRadioGarden", resourceCulture);
             }
         }
         
@@ -855,20 +855,20 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please enter a valid stream URL..
+        /// </summary>
+        internal static string StreamURLError {
+            get {
+                return ResourceManager.GetString("StreamURLError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The URL of the web stream to use..
         /// </summary>
         internal static string StreamURLHelp {
             get {
                 return ResourceManager.GetString("StreamURLHelp", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to (Ctrl + V) - Paste Radio Garden URL here.
-        /// </summary>
-        internal static string URLHint {
-            get {
-                return ResourceManager.GetString("URLHint", resourceCulture);
             }
         }
         

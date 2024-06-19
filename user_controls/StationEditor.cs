@@ -14,7 +14,6 @@ namespace RadioExt_Helper.user_controls
         private readonly Station _station;
         private readonly CustomMusicCtl _musicCtl;
 
-        private bool _isPasteOperation;
         private string _initialStationName = string.Empty;
 
         public Station Station { get => _station; }
@@ -109,8 +108,6 @@ namespace RadioExt_Helper.user_controls
             lblStreamURL.Text = GlobalData.Strings.GetString("StreamURL");
             grpStreamSettings.Text = GlobalData.Strings.GetString("StreamSettings");
             grpSongs.Text = GlobalData.Strings.GetString("Songs");
-            btnGetRadioGardenURL.Text = GlobalData.Strings.GetString("GetURLFromRadioGarden");
-            txtPastedURL.PlaceholderText = GlobalData.Strings.GetString("URLHint");
             radUseStreamYes.Text = GlobalData.Strings.GetString("Yes");
             radUseStreamNo.Text = GlobalData.Strings.GetString("No");
 
@@ -278,6 +275,7 @@ namespace RadioExt_Helper.user_controls
         private void txtStreamURL_TextChanged(object sender, EventArgs e)
         {
             _station.StreamInfo.StreamUrl = txtStreamURL.Text;
+            mpStreamPlayer.StreamURL = _station.StreamInfo.StreamUrl;
             UpdateEvent();
         }
 
@@ -285,78 +283,15 @@ namespace RadioExt_Helper.user_controls
         {
             lblStreamURL.Visible = onOff;
             txtStreamURL.Visible = onOff;
-            btnGetRadioGardenURL.Visible = onOff;
+            mpStreamPlayer.Visible = onOff;
 
             if (!txtStreamURL.Visible)
-                txtStreamURL.Text = string.Empty;
+                mpStreamPlayer.StopStream();
 
-            if (txtPastedURL.Visible && radUseStreamNo.Checked)
-                HideRadioGardenTextInput();
+            //if (!txtStreamURL.Visible)
+            //    txtStreamURL.Text = string.Empty;
 
             grpSongs.Visible = !onOff;
-        }
-
-        private void HideRadioGardenTextInput()
-        {
-            txtPastedURL.Visible = false;
-            txtStreamURL.Enabled = true;
-            btnGetRadioGardenURL.Text = GlobalData.Strings.GetString("GetURLFromRadioGarden");
-            txtPastedURL.Text = string.Empty;
-        }
-
-        private void ShowRadioGardenTextInput()
-        {
-            txtPastedURL.Visible = true;
-            txtStreamURL.Enabled = false;
-            btnGetRadioGardenURL.Text = GlobalData.Strings.GetString("Cancel");
-        }
-
-        private void btnGetRadioGardenURL_Click(object sender, EventArgs e)
-        {
-            if (txtPastedURL.Visible)
-                HideRadioGardenTextInput();
-            else
-                ShowRadioGardenTextInput();
-        }
-
-        private void txtPastedURL_TextChanged(object sender, EventArgs e)
-        {
-            if (_isPasteOperation)
-            {
-                HandlePasteOperation();
-                _isPasteOperation = false;
-            }
-            else
-            {
-                txtPastedURL.Text = string.Empty;
-            }
-        }
-
-        private void txtPastedURL_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e is { Control: true, KeyCode: Keys.V })
-                _isPasteOperation = true;
-        }
-
-        private void HandlePasteOperation()
-        {
-            var pastedText = txtPastedURL.Text;
-            if (pastedText.StartsWith("https://") && pastedText.Contains("radio.garden"))
-            {
-                txtStreamURL.Text = ParseRadioGardenURL(pastedText);
-                _station.StreamInfo.StreamUrl = txtStreamURL.Text;
-                HideRadioGardenTextInput();
-            }
-            else
-            {
-                txtPastedURL.Text = string.Empty;
-            }
-        }
-
-        private string ParseRadioGardenURL(string rawURL)
-        {
-            //TODO: Get actual stream url from pasted text
-            return string.Empty;
         }
 
         #endregion
@@ -415,12 +350,6 @@ namespace RadioExt_Helper.user_controls
         private void lblStreamURL_MouseEnter(object sender, EventArgs e)
         {
             lblStatus.Text = GlobalData.Strings.GetString("StreamURLHelp");
-        }
-
-        private void btnGetRadioGardenURL_MouseEnter(object sender, EventArgs e)
-        {
-            if (!btnGetRadioGardenURL.Text.Equals(GlobalData.Strings.GetString("Cancel")))
-                lblStatus.Text = GlobalData.Strings.GetString("RadioGardenBtnHelp");
         }
 
         private void lbl_MouseLeave(object sender, EventArgs e)

@@ -74,8 +74,7 @@
             radUseStreamNo = new RadioButton();
             tableLayoutPanel6 = new TableLayoutPanel();
             flowLayoutPanel3 = new FlowLayoutPanel();
-            btnGetRadioGardenURL = new Button();
-            txtPastedURL = new TextBox();
+            mpStreamPlayer = new MusicPlayer();
             txtStreamURL = new TextBox();
             tabImages = new ImageList(components);
             statusStrip1 = new StatusStrip();
@@ -554,9 +553,9 @@
             // 
             grpSongs.Dock = DockStyle.Fill;
             grpSongs.Font = new Font("CF Notche Demo", 9F, FontStyle.Bold);
-            grpSongs.Location = new Point(3, 135);
+            grpSongs.Location = new Point(3, 137);
             grpSongs.Name = "grpSongs";
-            grpSongs.Size = new Size(968, 518);
+            grpSongs.Size = new Size(968, 516);
             grpSongs.TabIndex = 1;
             grpSongs.TabStop = false;
             grpSongs.Text = "Songs";
@@ -568,7 +567,7 @@
             grpStreamSettings.Font = new Font("CF Notche Demo", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             grpStreamSettings.Location = new Point(3, 3);
             grpStreamSettings.Name = "grpStreamSettings";
-            grpStreamSettings.Size = new Size(968, 132);
+            grpStreamSettings.Size = new Size(968, 134);
             grpStreamSettings.TabIndex = 0;
             grpStreamSettings.TabStop = false;
             grpStreamSettings.Text = "Stream Settings";
@@ -588,7 +587,7 @@
             tableLayoutPanel5.RowCount = 2;
             tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Percent, 29.1262131F));
             tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Percent, 70.87379F));
-            tableLayoutPanel5.Size = new Size(962, 112);
+            tableLayoutPanel5.Size = new Size(962, 114);
             tableLayoutPanel5.TabIndex = 0;
             // 
             // lblStreamURL
@@ -596,7 +595,7 @@
             lblStreamURL.Anchor = AnchorStyles.Right;
             lblStreamURL.AutoSize = true;
             lblStreamURL.Font = new Font("CF Notche Demo", 9F);
-            lblStreamURL.Location = new Point(67, 66);
+            lblStreamURL.Location = new Point(67, 67);
             lblStreamURL.Name = "lblStreamURL";
             lblStreamURL.Size = new Size(75, 12);
             lblStreamURL.TabIndex = 3;
@@ -624,7 +623,7 @@
             flowLayoutPanel2.Dock = DockStyle.Fill;
             flowLayoutPanel2.Location = new Point(148, 3);
             flowLayoutPanel2.Name = "flowLayoutPanel2";
-            flowLayoutPanel2.Size = new Size(811, 26);
+            flowLayoutPanel2.Size = new Size(811, 27);
             flowLayoutPanel2.TabIndex = 2;
             // 
             // radUseStreamYes
@@ -664,48 +663,33 @@
             tableLayoutPanel6.Controls.Add(flowLayoutPanel3, 0, 1);
             tableLayoutPanel6.Controls.Add(txtStreamURL, 0, 0);
             tableLayoutPanel6.Dock = DockStyle.Fill;
-            tableLayoutPanel6.Location = new Point(148, 35);
+            tableLayoutPanel6.Location = new Point(148, 36);
             tableLayoutPanel6.Name = "tableLayoutPanel6";
             tableLayoutPanel6.RowCount = 2;
             tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
             tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel6.Size = new Size(811, 74);
+            tableLayoutPanel6.Size = new Size(811, 75);
             tableLayoutPanel6.TabIndex = 4;
             // 
             // flowLayoutPanel3
             // 
             tableLayoutPanel6.SetColumnSpan(flowLayoutPanel3, 2);
-            flowLayoutPanel3.Controls.Add(btnGetRadioGardenURL);
-            flowLayoutPanel3.Controls.Add(txtPastedURL);
+            flowLayoutPanel3.Controls.Add(mpStreamPlayer);
             flowLayoutPanel3.Dock = DockStyle.Fill;
             flowLayoutPanel3.Location = new Point(3, 40);
             flowLayoutPanel3.Name = "flowLayoutPanel3";
-            flowLayoutPanel3.Size = new Size(805, 31);
+            flowLayoutPanel3.Size = new Size(805, 32);
             flowLayoutPanel3.TabIndex = 1;
             // 
-            // btnGetRadioGardenURL
+            // mpStreamPlayer
             // 
-            btnGetRadioGardenURL.Location = new Point(3, 3);
-            btnGetRadioGardenURL.Name = "btnGetRadioGardenURL";
-            btnGetRadioGardenURL.Size = new Size(245, 22);
-            btnGetRadioGardenURL.TabIndex = 1;
-            btnGetRadioGardenURL.Text = "Get URL from Radio Garden";
-            btnGetRadioGardenURL.UseVisualStyleBackColor = true;
-            btnGetRadioGardenURL.Click += btnGetRadioGardenURL_Click;
-            btnGetRadioGardenURL.MouseEnter += btnGetRadioGardenURL_MouseEnter;
-            btnGetRadioGardenURL.MouseLeave += lbl_MouseLeave;
-            // 
-            // txtPastedURL
-            // 
-            txtPastedURL.Font = new Font("Segoe UI", 9F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
-            txtPastedURL.Location = new Point(254, 3);
-            txtPastedURL.Name = "txtPastedURL";
-            txtPastedURL.PlaceholderText = "(Ctrl + V) - Paste Radio Garden URL here";
-            txtPastedURL.Size = new Size(262, 23);
-            txtPastedURL.TabIndex = 2;
-            txtPastedURL.Visible = false;
-            txtPastedURL.TextChanged += txtPastedURL_TextChanged;
-            txtPastedURL.KeyDown += txtPastedURL_KeyDown;
+            mpStreamPlayer.BackColor = Color.Transparent;
+            mpStreamPlayer.Location = new Point(3, 2);
+            mpStreamPlayer.Margin = new Padding(3, 2, 3, 2);
+            mpStreamPlayer.Name = "mpStreamPlayer";
+            mpStreamPlayer.Size = new Size(32, 32);
+            mpStreamPlayer.StreamURL = "";
+            mpStreamPlayer.TabIndex = 3;
             // 
             // txtStreamURL
             // 
@@ -786,7 +770,6 @@
             tableLayoutPanel6.ResumeLayout(false);
             tableLayoutPanel6.PerformLayout();
             flowLayoutPanel3.ResumeLayout(false);
-            flowLayoutPanel3.PerformLayout();
             statusStrip1.ResumeLayout(false);
             statusStrip1.PerformLayout();
             ResumeLayout(false);
@@ -835,14 +818,13 @@
         private Label lblStreamURL;
         private TableLayoutPanel tableLayoutPanel6;
         private TextBox txtStreamURL;
-        private Button btnGetRadioGardenURL;
         private FlowLayoutPanel flowLayoutPanel3;
-        private TextBox txtPastedURL;
         private TrackBar volumeSlider;
         private FlowLayoutPanel flowLayoutPanel4;
         private Panel panel2;
         private StatusStrip statusStrip1;
         private ToolStripStatusLabel lblStatus;
         private GroupBox grpSongs;
+        private MusicPlayer mpStreamPlayer;
     }
 }

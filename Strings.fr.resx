@@ -213,9 +213,6 @@
   <data name="Open" xml:space="preserve">
     <value>Ouvrir</value>
   </data>
-  <data name="URLHint" xml:space="preserve">
-    <value>(Ctrl + V) - Collez l'URL de Radio Garden ici</value>
-  </data>
   <data name="Yes" xml:space="preserve">
     <value>Oui</value>
   </data>
@@ -233,9 +230,6 @@
   </data>
   <data name="FM" xml:space="preserve">
     <value>FM:</value>
-  </data>
-  <data name="GetURLFromRadioGarden" xml:space="preserve">
-    <value>Obtenir l'URL de Radio Garden</value>
   </data>
   <data name="InkAtlasPart" xml:space="preserve">
     <value>Pièce Atlas d'encre:</value>

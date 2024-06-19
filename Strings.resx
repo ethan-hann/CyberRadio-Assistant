@@ -264,12 +264,6 @@
   <data name="StreamURL" xml:space="preserve">
     <value>Stream URL:</value>
   </data>
-  <data name="GetURLFromRadioGarden" xml:space="preserve">
-    <value>Get URL from Radio Garden</value>
-  </data>
-  <data name="URLHint" xml:space="preserve">
-    <value>(Ctrl + V) - Paste Radio Garden URL here</value>
-  </data>
   <data name="StreamSettings" xml:space="preserve">
     <value>Stream Settings</value>
   </data>
@@ -416,5 +410,11 @@ If something doesn't look correct, exit out of this window and make changes in t
   </data>
   <data name="ExportStations" xml:space="preserve">
     <value>Export Stations</value>
+  </data>
+  <data name="StreamURLError" xml:space="preserve">
+    <value>Please enter a valid stream URL.</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Error</value>
   </data>
 </root>
