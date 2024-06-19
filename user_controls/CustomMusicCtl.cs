@@ -44,6 +44,7 @@ namespace RadioExt_Helper.user_controls
         {
             Translate();
             UpdateListsAndViews();
+            SetOrderedList();
         }
 
         public void Translate()
@@ -168,8 +169,12 @@ namespace RadioExt_Helper.user_controls
                 {
                     _station.SongsAsList.Remove(song);
                     _bindingSongList.Remove(song);
+                    var fileName = Path.GetFileName(song.OriginalFilePath);
+                    if (_station.MetaData.SongOrder.Contains(fileName))
+                        _station.MetaData.SongOrder.Remove(fileName);
                 }
             }
+
             UpdateListsAndViews();
         }
 
@@ -290,6 +295,7 @@ namespace RadioExt_Helper.user_controls
                     lvSongOrder.Items.Remove(dragItem);
                     lvSongOrder.Items.Insert(hoverIndex, dragItem);
                     UpdateOrderColumn();
+                    UpdateOrderedList();
                 }
             }
         }
@@ -313,7 +319,7 @@ namespace RadioExt_Helper.user_controls
             lvSongOrder.DoDragDrop(e.Item, DragDropEffects.Move);
         }
 
-        private void AddSongToOrderListView(Song song)
+        private void AddSongToOrderListView(Song song, bool updateOrderedList = true)
         {
             ListViewItem item = new(new string[] { (lvSongOrder.Items.Count + 1).ToString(), song.Name })
             {
@@ -324,6 +330,9 @@ namespace RadioExt_Helper.user_controls
             lvSongOrder.Items.Add(item);
             UpdateOrderColumn();
 
+            if (updateOrderedList)
+                UpdateOrderedList();
+
             lvSongOrder.ResizeColumns();
         }
 
@@ -332,7 +341,45 @@ namespace RadioExt_Helper.user_controls
             for (int i = 0; i < lvSongOrder.Items.Count; i++)
                 lvSongOrder.Items[i].SubItems[0].Text = (i + 1).ToString();
         }
-        #endregion
 
+        private void SetOrderedList()
+        {
+            List<Song> tempSongs = lbSongs.Items.Cast<Song>().ToList();
+
+            foreach (string item in _station.MetaData.SongOrder)
+            {
+                var song = tempSongs.Find(x => x.OriginalFilePath.EndsWith(item));
+                if (song != null)
+                {
+                    AddSongToOrderListView(song, false);
+                    _bindingSongList.Remove(song);
+                }
+            }
+            UpdateListsAndViews();
+
+            /*foreach (var songItem in lbSongs.Items)
+            {
+                if (songItem is Song song)
+                {
+                    var fileName = Path.GetFileName(song.OriginalFilePath);
+                    var songString = _station.MetaData.SongOrder.Find(s => s.EndsWith(fileName));
+                    if (songString != null)
+                    {
+                        AddSongToOrderListView(song, false);
+                    }                        
+                }
+            }*/
+        }
+
+        private void UpdateOrderedList()
+        {
+            _station.MetaData.SongOrder.Clear();
+            foreach (ListViewItem item in lvSongOrder.Items)
+            {
+                if (item.Tag is Song song)
+                    _station.MetaData.SongOrder.Add(Path.GetFileName(song.OriginalFilePath));
+            }
+        }
+        #endregion
     }
 }

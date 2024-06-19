@@ -39,7 +39,7 @@ namespace RadioExt_Helper.models
         public StreamInfo StreamInfo { get; set; } = new();
 
         [JsonProperty("order")]
-        public string[] Order { get; set; } = [];
+        public List<string> SongOrder { get; set; } = [];
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
