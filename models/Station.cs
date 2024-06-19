@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace RadioExt_Helper.models
+﻿namespace RadioExt_Helper.models
 {
     /// <summary>
     /// Wrapper that represents a single radio station. Contains all information related to the station.

@@ -1,21 +1,11 @@
-﻿using AetherUtils.Core.Extensions;
-using AetherUtils.Core.Files;
+﻿using System.ComponentModel;
+using System.Diagnostics;
+using AetherUtils.Core.Extensions;
 using AetherUtils.Core.Reflection;
-using RadioExt_Helper.forms;
 using RadioExt_Helper.models;
 using RadioExt_Helper.utility;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Diagnostics;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using Button = System.Windows.Forms.Button;
+using File = TagLib.File;
 using ListView = System.Windows.Forms.ListView;
 
 namespace RadioExt_Helper.user_controls
@@ -135,7 +125,7 @@ namespace RadioExt_Helper.user_controls
             foreach (string path in fdlgOpenSongs.FileNames)
             {
                 Song song = new();
-                var file = TagLib.File.Create(path);
+                var file = File.Create(path);
                 song.OriginalFilePath = path;
                 song.Name = file.Tag.Title ?? file.Name;
                 song.Artist = file.Tag.FirstPerformer ?? string.Empty;

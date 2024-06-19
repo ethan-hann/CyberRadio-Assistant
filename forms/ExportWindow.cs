@@ -1,24 +1,22 @@
-﻿using AetherUtils.Core.Extensions;
+﻿using System.ComponentModel;
+using System.Diagnostics;
+using AetherUtils.Core.Extensions;
 using AetherUtils.Core.Files;
 using AetherUtils.Core.Reflection;
 using RadioExt_Helper.models;
 using RadioExt_Helper.Properties;
 using RadioExt_Helper.utility;
-using System.ComponentModel;
-using System.Diagnostics;
 
 namespace RadioExt_Helper.forms
 {
     public partial class ExportWindow : Form
     {
         private readonly List<Station> _stationsToExport;
-
-        private readonly Json<MetaData> metaDataJson = new();
-        private readonly Json<SongList> songListJson = new();
-
-        private bool isCancelling = false;
-        private bool exportToStagingComplete = false;
-        private bool exportToGameComplete = false;
+        private readonly Json<MetaData> _metaDataJson = new();
+        private readonly Json<SongList> _songListJson = new();
+        private bool _isCancelling = false;
+        private bool _exportToStagingComplete = false;
+        private bool _exportToGameComplete = false;
 
         public ExportWindow(List<Station> stations)
         {
@@ -46,7 +44,7 @@ namespace RadioExt_Helper.forms
             btnOpenGameFolder.Text = GlobalData.Strings.GetString("OpenGameFolder");
             lblStatus.Text = GlobalData.Strings.GetString("Ready");
 
-            //ListView Translations
+            // ListView Translations
             lvStations.Columns[0].Text = GlobalData.Strings.GetString("LVDisplayName");
             lvStations.Columns[1].Text = GlobalData.Strings.GetString("LVStationIcon");
             lvStations.Columns[2].Text = GlobalData.Strings.GetString("LVSongCount");
@@ -56,17 +54,10 @@ namespace RadioExt_Helper.forms
 
         private void ApplyFonts(Control control)
         {
-            switch (control)
-            {
-                case MenuStrip:
-                case GroupBox:
-                case Button:
-                    FontHandler.Instance.ApplyFont(control, "CyberPunk_Regular", 10, FontStyle.Bold);
-                    break;
-                case Label:
-                    FontHandler.Instance.ApplyFont(control, "CyberPunk_Regular", 13, FontStyle.Regular);
-                    break;
-            }
+            if (control is MenuStrip or GroupBox or Button)
+                FontHandler.Instance.ApplyFont(control, "CyberPunk_Regular", 10, FontStyle.Bold);
+            else if (control is Label)
+                FontHandler.Instance.ApplyFont(control, "CyberPunk_Regular", 13, FontStyle.Regular);
 
             foreach (Control child in control.Controls)
                 ApplyFonts(child);
@@ -76,23 +67,23 @@ namespace RadioExt_Helper.forms
         {
             var radioExtPath = PathHelper.GetRadiosPath(Settings.Default.GameBasePath);
 
-            foreach (Station s in _stationsToExport)
+            foreach (var station in _stationsToExport)
             {
-                var customIconString = s.CustomIcon.UseCustom ? GlobalData.Strings.GetString("CustomIcon") : s.MetaData.Icon;
-                var songString = s.MetaData.StreamInfo.IsStream ? GlobalData.Strings.GetString("IsStream") : s.Songs.Count.ToString();
-                var streamString = s.MetaData.StreamInfo.IsStream ? s.MetaData.StreamInfo.StreamUrl : GlobalData.Strings.GetString("UsingSongs");
-                var proposedPath = Path.Combine(radioExtPath, s.MetaData.DisplayName);
+                var customIconString = station.CustomIcon.UseCustom ? GlobalData.Strings.GetString("CustomIcon") : station.MetaData.Icon;
+                var songString = station.MetaData.StreamInfo.IsStream ? GlobalData.Strings.GetString("IsStream") : station.Songs.Count.ToString();
+                var streamString = station.MetaData.StreamInfo.IsStream ? station.MetaData.StreamInfo.StreamUrl : GlobalData.Strings.GetString("UsingSongs");
+                var proposedPath = Path.Combine(radioExtPath, station.MetaData.DisplayName);
 
-                ListViewItem lvItem = new ListViewItem(new string[]
+                var lvItem = new ListViewItem(new[]
                 {
-                    s.MetaData.DisplayName,
-                    customIconString ?? "",
-                    songString ?? "",
-                    streamString ?? "",
+                    station.MetaData.DisplayName,
+                    customIconString ?? string.Empty,
+                    songString ?? string.Empty,
+                    streamString ?? string.Empty,
                     proposedPath
                 })
                 {
-                    Tag = s
+                    Tag = station
                 };
 
                 lvStations.Items.Add(lvItem);
@@ -117,7 +108,7 @@ namespace RadioExt_Helper.forms
         {
             if (!bgWorkerExport.CancellationPending && bgWorkerExport.IsBusy)
             {
-                isCancelling = true;
+                _isCancelling = true;
                 bgWorkerExport.CancelAsync();
             }
         }
@@ -128,9 +119,9 @@ namespace RadioExt_Helper.forms
             UpdateStatus(GlobalData.Strings.GetString("ExportCanceled"));
             pgExportProgress.Value = 0;
 
-            isCancelling = false;
-            exportToStagingComplete = false;
-            exportToGameComplete = false;
+            _isCancelling = false;
+            _exportToStagingComplete = false;
+            _exportToGameComplete = false;
         }
 
         private void bgWorkerExport_DoWork(object sender, DoWorkEventArgs e)
@@ -138,7 +129,7 @@ namespace RadioExt_Helper.forms
             var statusString = GlobalData.Strings.GetString("ExportingStationStatus") ?? "Exporting station: {0}";
 
             ToggleButtons();
-            for (int i = 0; i < _stationsToExport.Count; i++)
+            for (var i = 0; i < _stationsToExport.Count; i++)
             {
                 if (bgWorkerExport.CancellationPending)
                 {
@@ -146,25 +137,19 @@ namespace RadioExt_Helper.forms
                     return;
                 }
 
-                Station station = _stationsToExport[i];
+                var station = _stationsToExport[i];
                 UpdateStatus(string.Format(statusString, station.MetaData.DisplayName));
-                int progressPercentage = (int)((i / (float)_stationsToExport.Count) * 100);
+                var progressPercentage = (int)((i / (float)_stationsToExport.Count) * 100);
                 bgWorkerExport.ReportProgress(progressPercentage);
 
-                //Create the directory(ies) for the station in the staging path
                 var stationPath = CreateStationDirectory(station);
-                if (stationPath.Equals(string.Empty)) continue;
+                if (string.IsNullOrEmpty(stationPath)) continue;
 
-                //Create the metadata json
-                var metaDataSaved = CreateMetaDataJSON(stationPath, station);
-                if (!metaDataSaved) continue;
+                if (!CreateMetaDataJSON(stationPath, station)) continue;
 
-                //Create the song list json (if needed)
                 if (station.Songs.Count > 0)
                 {
                     _ = CreateSongListJSON(stationPath, station);
-
-                    //Copy songs to staging folder
                     CopySongsToStaging(stationPath, station);
                 }
             }
@@ -172,7 +157,7 @@ namespace RadioExt_Helper.forms
 
         private string CreateStationDirectory(Station station)
         {
-            if (Settings.Default.BackupPath.Equals(string.Empty)) return string.Empty;
+            if (string.IsNullOrEmpty(Settings.Default.BackupPath)) return string.Empty;
 
             var stationPath = Path.Combine(Settings.Default.BackupPath, station.MetaData.DisplayName);
             FileHelper.CreateDirectories(stationPath);
@@ -181,28 +166,25 @@ namespace RadioExt_Helper.forms
 
         private bool CreateMetaDataJSON(string stationPath, Station station)
         {
-            if (Settings.Default.BackupPath.Equals(string.Empty)) return false;
+            if (string.IsNullOrEmpty(Settings.Default.BackupPath)) return false;
 
             var mdPath = Path.Combine(stationPath, "metadata.json");
-            return metaDataJson.SaveJson(mdPath, station.MetaData);
+            return _metaDataJson.SaveJson(mdPath, station.MetaData);
         }
 
         private bool CreateSongListJSON(string stationPath, Station station)
         {
-            if (Settings.Default.BackupPath.Equals(string.Empty)) return false;
+            if (string.IsNullOrEmpty(Settings.Default.BackupPath)) return false;
 
             var songPath = Path.Combine(stationPath, "songs.sgls");
-            return songListJson.SaveJson(songPath, station.Songs);
+            return _songListJson.SaveJson(songPath, station.Songs);
         }
 
         private void CopySongsToStaging(string stationPath, Station station)
         {
-            if (Settings.Default.BackupPath.Equals(string.Empty)) return;
+            if (string.IsNullOrEmpty(Settings.Default.BackupPath)) return;
 
-            var files = Directory.GetFiles(stationPath);
-
-            //Remove original song files from staging folder
-            foreach (var file in files)
+            foreach (var file in Directory.GetFiles(stationPath))
             {
                 if (FileHelper.GetExtension(file, false).Equals(".json") || FileHelper.GetExtension(file, false).Equals(".sgls"))
                     continue;
@@ -224,13 +206,13 @@ namespace RadioExt_Helper.forms
 
         private void bgWorkerExport_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            if (isCancelling)
+            if (_isCancelling)
             {
                 Reset();
             }
             else
             {
-                exportToStagingComplete = true;
+                _exportToStagingComplete = true;
                 pgExportProgress.Value = 100;
                 ToggleButtons();
                 UpdateStatus(GlobalData.Strings.GetString("ExportCompleteStatus"));
@@ -240,18 +222,16 @@ namespace RadioExt_Helper.forms
         private void bgWorkerExportGame_DoWork(object sender, DoWorkEventArgs e)
         {
             ToggleButtons();
-            for (int i = 0; i < 10000; i++)
+            for (var i = 0; i < 10000; i++)
             {
                 if (bgWorkerExportGame.CancellationPending)
                 {
                     e.Cancel = true;
                     return;
                 }
-                //TODO: actucally export files!
                 var statusString = GlobalData.Strings.GetString("ExportingStationStatus");
                 UpdateStatus(string.Format(statusString, i));
-                //UpdateStatus($"Exporting station {i}");
-                int progressPercentage = (int)((i / (float)10000) * 100);
+                var progressPercentage = (int)((i / (float)10000) * 100);
                 bgWorkerExportGame.ReportProgress(progressPercentage);
             }
         }
@@ -263,7 +243,7 @@ namespace RadioExt_Helper.forms
 
         private void bgWorkerExportGame_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            exportToGameComplete = true;
+            _exportToGameComplete = true;
             pgExportProgress.Value = 100;
             ToggleButtons();
             UpdateStatus(GlobalData.Strings.GetString("ExportToGameComplete"));
@@ -273,76 +253,52 @@ namespace RadioExt_Helper.forms
         {
             if (InvokeRequired)
             {
-                Invoke(() =>
-                {
-                    if (isCancelling)
-                    {
-                        btnExportToGame.Enabled = false;
-                        btnExportToStaging.Enabled = true;
-                        btnCancel.Visible = false;
-                    }
-                    else if (exportToStagingComplete && !exportToGameComplete)
-                    {
-                        btnExportToGame.Enabled = true;
-                        btnExportToStaging.Enabled = false;
-                        btnCancel.Visible = false;
-                    }
-                    else if (exportToGameComplete && exportToStagingComplete)
-                    {
-                        btnExportToGame.Enabled = false;
-                        btnExportToStaging.Enabled = false;
-                        btnCancel.Visible = false;
-                    }
-                    else
-                    {
-                        btnExportToGame.Enabled = false;
-                        btnExportToStaging.Enabled = false;
-                        btnCancel.Visible = true;
-                    }
-                });
+                Invoke(ToggleButtonsImplementation);
             }
             else
             {
-                if (isCancelling)
-                {
-                    btnExportToGame.Enabled = false;
-                    btnExportToStaging.Enabled = true;
-                    btnCancel.Visible = false;
-                }
-                else if (exportToStagingComplete && !exportToGameComplete)
-                {
-                    btnExportToGame.Enabled = true;
-                    btnExportToStaging.Enabled = false;
-                    btnCancel.Visible = false;
-                }
-                else if (exportToGameComplete)
-                {
-                    btnExportToGame.Enabled = false;
-                    btnExportToStaging.Enabled = false;
-                    btnCancel.Visible = false;
-                }
-                else
-                {
-                    btnExportToGame.Enabled = false;
-                    btnExportToStaging.Enabled = false;
-                    btnCancel.Visible = true;
-                }
+                ToggleButtonsImplementation();
             }
         }
 
-        private void UpdateStatus(string? status)
+        private void ToggleButtonsImplementation()
         {
-            if (status == null) return;
-
-            if (InvokeRequired)
+            if (_isCancelling)
             {
-                Invoke(() =>
-                {
-                    lblStatus.Text = status;
-                });
+                btnExportToGame.Enabled = false;
+                btnExportToStaging.Enabled = true;
+                btnCancel.Visible = false;
+            }
+            else if (_exportToStagingComplete && !_exportToGameComplete)
+            {
+                btnExportToGame.Enabled = true;
+                btnExportToStaging.Enabled = false;
+                btnCancel.Visible = false;
+            }
+            else if (_exportToGameComplete && _exportToStagingComplete)
+            {
+                btnExportToGame.Enabled = false;
+                btnExportToStaging.Enabled = false;
+                btnCancel.Visible = false;
             }
             else
+            {
+                btnExportToGame.Enabled = false;
+                btnExportToStaging.Enabled = false;
+                btnCancel.Visible = true;
+            }
+        }
+
+        private void UpdateStatus(string status)
+        {
+            if (InvokeRequired)
+            {
+                Invoke(() => lblStatus.Text = status);
+            }
+            else
+            {
                 lblStatus.Text = status;
+            }
         }
 
         private void btnOpenStagingFolder_Click(object sender, EventArgs e)
