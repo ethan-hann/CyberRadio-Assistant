@@ -11,6 +11,8 @@ using RadioExt_Helper.utility;
 
 namespace RadioExt_Helper.forms;
 
+//TODO: Add ability to read radio stations from NexusMods and populate a songs.sgls file if it doesn't exist. This would allow users to edit the songs and song order
+// of custom radio stations built by others on NexusMods.
 public partial class MainForm : Form
 {
     private readonly ImageComboBox<ImageComboBoxItem> _languageComboBox = new();
