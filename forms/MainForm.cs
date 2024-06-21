@@ -9,412 +9,353 @@ using RadioExt_Helper.Properties;
 using RadioExt_Helper.user_controls;
 using RadioExt_Helper.utility;
 
-namespace RadioExt_Helper.forms
+namespace RadioExt_Helper.forms;
+
+public partial class MainForm : Form
 {
-    public partial class MainForm : Form
+    private readonly ImageComboBox<ImageComboBoxItem> _languageComboBox = new();
+    private readonly List<ImageComboBoxItem> _languages = [];
+
+    private readonly Json<MetaData> _metaDataJson = new();
+    private readonly NoStationsCtl _noStationsCtrl = new();
+    private readonly Json<SongList> _songListJson = new();
+
+    private readonly List<StationEditor> _stationEditors = [];
+    private readonly BindingList<Station> _stations = [];
+    private bool _ignoreSelectedIndexChanged;
+
+    private int _newStationCount = 1;
+
+    private int _previousStationIndex = -1;
+
+    public MainForm()
     {
-        private readonly BindingList<Station> _stations = [];
+        InitializeComponent();
 
-        private readonly List<StationEditor> _stationEditors = [];
-        private readonly NoStationsCtl _noStationsCtrl = new();
+        GlobalData.Initialize();
 
-        private readonly Json<MetaData> metaDataJson = new();
-        private readonly Json<SongList> songListJson = new();
+        InitializeLanguageDropDown();
+    }
 
-        private readonly ImageComboBox<ImageComboBoxItem> _languageComboBox = new();
-        private readonly List<ImageComboBoxItem> _languages = [];
+    private void MainForm_Load(object sender, EventArgs e)
+    {
+        splitContainer1.Panel2.Controls.Add(_noStationsCtrl);
 
-        private int previousStationIndex = -1;
-        private bool ignoreSelectedIndexChanged = false;
+        ApplyFontsToControls(this);
+    }
 
-        public MainForm()
+    private void MainForm_Shown(object sender, EventArgs e)
+    {
+        SelectLanguage();
+        Translate();
+        CheckGamePath();
+
+        PopulateStations();
+        HandleUserControlVisibility();
+    }
+
+    private void InitializeLanguageDropDown()
+    {
+        //Populate the language combo box
+        _languages.Add(new ImageComboBoxItem("English (en)", Resources.united_kingdom));
+        _languages.Add(new ImageComboBoxItem("Español (es)", Resources.spain));
+        _languages.Add(new ImageComboBoxItem("Français (fr)", Resources.france));
+
+        foreach (var language in _languages)
+            _languageComboBox.Items.Add(language);
+
+        _languageComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+        _languageComboBox.SelectedIndexChanged += cmbLanguageSelect_SelectedIndexChanged;
+
+        // Create a ToolStripControlHost to host the ImageComboBox
+        ToolStripControlHost toolStripControlHost = new(_languageComboBox);
+
+        // Add the ToolStripControlHost to the "Language" tool strip menu
+        languageToolStripMenuItem.DropDownItems.Add(toolStripControlHost);
+    }
+
+    private void SelectLanguage()
+    {
+        if (!Settings.Default.SelectedLanguage.Equals(string.Empty))
+            _languageComboBox.SelectedIndex = _languageComboBox.Items.IndexOf(
+                _languages.Find(l => l.Text.Equals(Settings.Default.SelectedLanguage)));
+        else
+            _languageComboBox.SelectedIndex = 0;
+
+        cmbLanguageSelect_SelectedIndexChanged(_languageComboBox, EventArgs.Empty);
+    }
+
+    private void Translate()
+    {
+        Text = GlobalData.Strings.GetString("MainTitle");
+        fileToolStripMenuItem.Text = GlobalData.Strings.GetString("File");
+        exportToGameToolStripMenuItem.Text = GlobalData.Strings.GetString("ExportStations");
+        languageToolStripMenuItem.Text = GlobalData.Strings.GetString("Language");
+        helpToolStripMenuItem.Text = GlobalData.Strings.GetString("Help");
+        pathsToolStripMenuItem.Text = GlobalData.Strings.GetString("GamePaths");
+        refreshStationsToolStripMenuItem.Text = GlobalData.Strings.GetString("RefreshStations");
+        howToUseToolStripMenuItem.Text = GlobalData.Strings.GetString("HowToUse");
+        radioExtGitHubToolStripMenuItem.Text = GlobalData.Strings.GetString("RadioExtGithub");
+        radioExtOnNexusModsToolStripMenuItem.Text = GlobalData.Strings.GetString("RadioExtNexusMods");
+        aboutToolStripMenuItem.Text = GlobalData.Strings.GetString("About");
+
+        grpStations.Text = GlobalData.Strings.GetString("Stations");
+
+        //Buttons
+        btnAddStation.Text = GlobalData.Strings.GetString("NewStation");
+        btnDeleteStation.Text = GlobalData.Strings.GetString("DeleteStation");
+    }
+
+    private void HandleUserControlVisibility()
+    {
+        if (_stations.Count > 0) return;
+        
+        splitContainer1.Panel2.Controls.Clear();
+        splitContainer1.Panel2.Controls.Add(_noStationsCtrl);
+        _noStationsCtrl.Visible = true;
+    }
+
+    private static void ApplyFontsToControls(Control control)
+    {
+        if (control is IUserControl userControl)
         {
-            InitializeComponent();
-
-            GlobalData.Initialize();
-
-            InitializeLanguageDropDown();
+            userControl.ApplyFonts();
         }
-
-        private void MainForm_Load(object sender, EventArgs e)
+        else
         {
-            splitContainer1.Panel2.Controls.Add(_noStationsCtrl);
-
-            ApplyFontsToControls(this);
-        }
-
-        private void MainForm_Shown(object sender, EventArgs e)
-        {
-            SelectLanguage();
-            Translate();
-            CheckGamePath();
-
-            PopulateStations();
-            HandleUserControlVisibility();
-        }
-
-        private void InitializeLanguageDropDown()
-        {
-            //Populate the language combo box
-            _languages.Add(new ImageComboBoxItem("English (en)", Resources.united_kingdom));
-            _languages.Add(new ImageComboBoxItem("Español (es)", Resources.spain));
-            _languages.Add(new ImageComboBoxItem("Français (fr)", Resources.france));
-
-            foreach (var language in _languages)
-                _languageComboBox.Items.Add(language);
-
-            _languageComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
-            _languageComboBox.SelectedIndexChanged += cmbLanguageSelect_SelectedIndexChanged;
-
-            // Create a ToolStripControlHost to host the ImageComboBox
-            ToolStripControlHost toolStripControlHost = new(_languageComboBox);
-
-            // Add the ToolStripControlHost to the "Language" tool strip menu
-            languageToolStripMenuItem.DropDownItems.Add(toolStripControlHost);
-        }
-
-        private void SelectLanguage()
-        {
-            if (!Settings.Default.SelectedLanguage.Equals(string.Empty))
-                _languageComboBox.SelectedIndex = _languageComboBox.Items.IndexOf(
-                    _languages.Find(l => l.Text.Equals(Settings.Default.SelectedLanguage)));
-            else
-                _languageComboBox.SelectedIndex = 0;
-
-            cmbLanguageSelect_SelectedIndexChanged(_languageComboBox, EventArgs.Empty);
-        }
-
-        private void Translate()
-        {
-            Text = GlobalData.Strings.GetString("MainTitle");
-            fileToolStripMenuItem.Text = GlobalData.Strings.GetString("File");
-            exportToGameToolStripMenuItem.Text = GlobalData.Strings.GetString("ExportStations");
-            languageToolStripMenuItem.Text = GlobalData.Strings.GetString("Language");
-            helpToolStripMenuItem.Text = GlobalData.Strings.GetString("Help");
-            pathsToolStripMenuItem.Text = GlobalData.Strings.GetString("GamePaths");
-            refreshStationsToolStripMenuItem.Text = GlobalData.Strings.GetString("RefreshStations");
-            howToUseToolStripMenuItem.Text = GlobalData.Strings.GetString("HowToUse");
-            radioExtGitHubToolStripMenuItem.Text = GlobalData.Strings.GetString("RadioExtGithub");
-            radioExtOnNexusModsToolStripMenuItem.Text = GlobalData.Strings.GetString("RadioExtNexusMods");
-            aboutToolStripMenuItem.Text = GlobalData.Strings.GetString("About");
-
-            grpStations.Text = GlobalData.Strings.GetString("Stations");
-
-            //Buttons
-            btnAddStation.Text = GlobalData.Strings.GetString("NewStation");
-            btnDeleteStation.Text = GlobalData.Strings.GetString("DeleteStation");
-
-        }
-
-        private void HandleUserControlVisibility()
-        {
-            if (_stations.Count <= 0)
+            switch (control)
             {
-                splitContainer1.Panel2.Controls.Clear();
-                splitContainer1.Panel2.Controls.Add(_noStationsCtrl);
-                _noStationsCtrl.Visible = true;
+                case MenuStrip:
+                case GroupBox:
+                case Button:
+                    FontHandler.Instance.ApplyFont(control, "CyberPunk_Regular", 9, FontStyle.Bold);
+                    break;
+                case TabControl:
+                    FontHandler.Instance.ApplyFont(control, "CyberPunk_Regular", 12, FontStyle.Bold);
+                    break;
+                case Label:
+                    FontHandler.Instance.ApplyFont(control, "CyberPunk_Regular", 9, FontStyle.Regular);
+                    break;
             }
-        }
 
-        private void ApplyFontsToControls(Control control)
+            foreach (Control child in control.Controls)
+                ApplyFontsToControls(child);
+        }
+    }
+
+    private void CheckGamePath()
+    {
+        if (!Settings.Default.GameBasePath.Equals(string.Empty)) return;
+
+        var caption = GlobalData.Strings.GetString("NoGamePath");
+        var text = GlobalData.Strings.GetString("NoExeFound");
+        var result = MessageBox.Show(text, caption, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+
+        if (result is not (DialogResult.OK or DialogResult.Cancel)) return;
+
+        var basePath = PathHelper.GetGamePath(fdlgOpenGameExe, true);
+        if (basePath != null && basePath.Equals(string.Empty)) return;
+
+        Settings.Default.GameBasePath = basePath;
+        Settings.Default.Save();
+    }
+
+    private void PopulateStations()
+    {
+        lbStations.BeginUpdate();
+
+        if (!Settings.Default.BackupPath.Equals(string.Empty))
         {
-            if (control is IUserControl userControl)
-                userControl.ApplyFonts();
-            else
+            _stations.Clear();
+            _stationEditors.Clear();
+
+            foreach (var directory in Directory.EnumerateDirectories(Settings.Default.BackupPath))
             {
-                switch (control)
+                MetaData? metaData = null;
+                SongList? songList = null;
+
+                foreach (var file in Directory.EnumerateFiles(directory))
                 {
-                    case MenuStrip:
-                    case GroupBox:
-                    case Button:
-                        FontHandler.Instance.ApplyFont(control, "CyberPunk_Regular", 9, FontStyle.Bold);
-                        break;
-                    case TabControl:
-                        FontHandler.Instance.ApplyFont(control, "CyberPunk_Regular", 12, FontStyle.Bold);
-                        break;
-                    case Label:
-                        FontHandler.Instance.ApplyFont(control, "CyberPunk_Regular", 9, FontStyle.Regular);
-                        break;
-                }
+                    var extension = FileHelper.GetExtension(file);
 
-                foreach (Control child in control.Controls)
-                    ApplyFontsToControls(child);
-            }
-        }
-
-        private void CheckGamePath()
-        {
-            if (!Settings.Default.GameBasePath.Equals(string.Empty)) return;
-
-            var caption = GlobalData.Strings.GetString("NoGamePath");
-            var text = GlobalData.Strings.GetString("NoExeFound");
-            var result = MessageBox.Show(text, caption, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-
-            if (result is not (DialogResult.OK or DialogResult.Cancel)) return;
-
-            var basePath = PathHelper.GetGamePath(fdlgOpenGameExe, true);
-            if (basePath != null && basePath.Equals(string.Empty)) return;
-
-            Settings.Default.GameBasePath = basePath;
-            Settings.Default.Save();
-        }
-
-        private void PopulateStations()
-        {
-            lbStations.BeginUpdate();
-
-            if (!Settings.Default.BackupPath.Equals(string.Empty))
-            {
-                _stations.Clear();
-                _stationEditors.Clear();
-
-                foreach (var directory in Directory.EnumerateDirectories(Settings.Default.BackupPath))
-                {
-                    MetaData? metaData = null;
-                    SongList? songList = null;
-
-                    foreach (var file in Directory.EnumerateFiles(directory))
+                    switch (extension)
                     {
-                        var extension = FileHelper.GetExtension(file);
-
-                        switch (extension)
-                        {
-                            case ".json":
-                                metaData = metaDataJson.LoadJson(file);
-                                break;
-                            case ".sgls":
-                                songList = songListJson.LoadJson(file);
-                                break;
-                            default:
-                                continue;
-                        }
+                        case ".json":
+                            metaData = _metaDataJson.LoadJson(file);
+                            break;
+                        case ".sgls":
+                            songList = _songListJson.LoadJson(file);
+                            break;
+                        default:
+                            continue;
                     }
-
-                    Station s = new();
-                    if (metaData != null)
-                        s.MetaData = metaData;
-
-                    if (songList != null)
-                        s.SongsAsList = [.. songList];
-
-                    _stations.Add(s);
-                    StationEditor editor = new(s);
-                    editor.StationUpdated += UpdateStation;
-
-                    _stationEditors.Add(editor);
                 }
+
+                Station s = new();
+                if (metaData != null)
+                    s.MetaData = metaData;
+
+                if (songList != null)
+                    s.SongsAsList = [.. songList];
+
+                _stations.Add(s);
+                StationEditor editor = new(s);
+
+                _stationEditors.Add(editor);
             }
+        }
 
-            lbStations.DataSource = _stations;
-            if (lbStations.Items.Count > 0)
+        lbStations.DataSource = _stations;
+        if (lbStations.Items.Count > 0)
+        {
+            lbStations.SelectedIndex = 0;
+            lbStations_SelectedIndexChanged(lbStations, EventArgs.Empty);
+        }
+
+        HandleUserControlVisibility();
+
+        lbStations.EndUpdate();
+    }
+
+    private void lbStations_SelectedIndexChanged(object? sender, EventArgs e)
+    {
+        if (_ignoreSelectedIndexChanged)
+        {
+            _ignoreSelectedIndexChanged = false;
+            return;
+        }
+
+        if (lbStations.SelectedItem is not Station station) return;
+
+        _stationEditors.ForEach(editor => { editor.GetMusicPlayer().StopStream(); });
+
+        if (lbStations.SelectedIndex != ListBox.NoMatches)
+            _previousStationIndex = lbStations.SelectedIndex;
+
+        splitContainer1.Panel2.SuspendLayout();
+        splitContainer1.Panel2.Controls.Clear();
+        splitContainer1.Panel2.Controls.Add(_stationEditors.Find(
+            s => s.Station.MetaData.DisplayName.Equals(station.MetaData.DisplayName)));
+        splitContainer1.Panel2.ResumeLayout();
+    }
+
+    private void btnAddStation_Click(object sender, EventArgs e)
+    {
+        Station blankStation = new()
+        {
+            MetaData =
             {
-                lbStations.SelectedIndex = 0;
-                lbStations_SelectedIndexChanged(lbStations, EventArgs.Empty);
+                DisplayName = $"{GlobalData.Strings.GetString("NewStationListBoxEntry")} {_newStationCount}"
             }
+        };
 
-            HandleUserControlVisibility();
+        _stations.Add(blankStation);
+        _stationEditors.Add(new StationEditor(blankStation));
+        lbStations.SelectedItem = blankStation;
+        _newStationCount++;
 
-            lbStations.EndUpdate();
-        }
+        if (_stations.Count <= 0) return;
 
-        #region File Menu
-        private void exportToGameToolStripMenuItem_Click(object sender, EventArgs e)
+        //Re-show our station editor if the station count has increased again.
+        _noStationsCtrl.Visible = false;
+        lbStations_SelectedIndexChanged(this, EventArgs.Empty);
+    }
+
+    private void btnDeleteStation_Click(object sender, EventArgs e)
+    {
+        if (lbStations.SelectedItem is not Station station) return;
+
+        _stations.Remove(station);
+        _stationEditors.Remove(_stationEditors
+            .First(s => s.Station.MetaData.DisplayName
+                .Equals(station.MetaData.DisplayName)));
+
+        //If the station to be removed contains "[New Station]" in the name, decrement our new station count.
+        if (station.MetaData.DisplayName.Contains(
+                GlobalData.Strings.GetString("NewStationListBoxEntry") ??
+                throw new InvalidOperationException()))
+            _newStationCount--;
+
+        //Reset new station count if there are no more "New stations" in the list box.
+        if (!_stations.Any(s => s.MetaData.DisplayName.Contains(
+                GlobalData.Strings.GetString("NewStationListBoxEntry") ??
+                throw new InvalidOperationException())))
+            _newStationCount = 1;
+
+        lbStations_SelectedIndexChanged(this, EventArgs.Empty);
+
+        switch (_stations.Count)
         {
-            new ExportWindow([.. _stations]).ShowDialog();
-        }
-
-        private void pathsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            new PathSettings().ShowDialog();
-        }
-
-        private void refreshStationsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            PopulateStations();
-        }
-        #endregion
-
-        #region Help Menu
-        private void radioExtHelpToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            "https://github.com/justarandomguyintheinternet/CP77_radioExt".OpenUrl();
-        }
-
-        private void radioExtOnNexusModsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            "https://www.nexusmods.com/cyberpunk2077/mods/4591".OpenUrl();
-        }
-
-        #endregion
-
-        private void lbStations_SelectedIndexChanged(object? sender, EventArgs e)
-        {
-            if (ignoreSelectedIndexChanged)
-            {
-                ignoreSelectedIndexChanged = false;
+            case > 0:
                 return;
-            }
-
-            if (lbStations.SelectedItem is not Station station) return;
-
-            _stationEditors.ForEach((editor) => { editor.GetMusicPlayer().StopStream(); });
-
-            if (lbStations.SelectedIndex != ListBox.NoMatches)
-                previousStationIndex = lbStations.SelectedIndex;
-
-            splitContainer1.Panel2.SuspendLayout();
-            splitContainer1.Panel2.Controls.Clear();
-            splitContainer1.Panel2.Controls.Add(_stationEditors.Find(
-                s => s.Station.MetaData.DisplayName.Equals(station.MetaData.DisplayName)));
-            splitContainer1.Panel2.ResumeLayout();
-            //_stationEditorCtrl.SetMetaData(station.MetaData, station.SongList);
-        }
-
-        private int _newStationCount = 1;
-        private void btnAddStation_Click(object sender, EventArgs e)
-        {
-            Station blankStation = new();
-            blankStation.MetaData.DisplayName = $"{GlobalData.Strings.GetString("NewStationListBoxEntry")} {_newStationCount}";
-
-            _stations.Add(blankStation);
-            _stationEditors.Add(new StationEditor(blankStation));
-            lbStations.SelectedItem = blankStation;
-            _newStationCount++;
-
-            if (_stations.Count <= 0) return;
-
-            //Re-show our station editor if the station count has increased again.
-            _noStationsCtrl.Visible = false;
-            lbStations_SelectedIndexChanged(this, EventArgs.Empty);
-
-            //var editor = _stationEditors.Find(s => s.Station.MetaData.DisplayName.Equals(blankStation.MetaData.DisplayName));
-            //if (editor != null)
-            //    editor.Visible = true;
-        }
-
-        private void btnDeleteStation_Click(object sender, EventArgs e)
-        {
-            if (lbStations.SelectedItem is not Station station) return;
-
-            _stations.Remove(station);
-            _stationEditors.Remove(_stationEditors
-                .Where(s => s.Station.MetaData.DisplayName
-                .Equals(station.MetaData.DisplayName))
-                .First());
-
-            //If the station to be removed contains "[New Station]" in the name, decrement our new station count.
-            if (station.MetaData.DisplayName.Contains(
-                    GlobalData.Strings.GetString("NewStationListBoxEntry") ??
-                    throw new InvalidOperationException()))
-                _newStationCount--;
-
-            //Reset new station count if there are no more "New stations" in the list box.
-            if (!_stations.Any(s => s.MetaData.DisplayName.Contains(
-                    GlobalData.Strings.GetString("NewStationListBoxEntry") ??
-                    throw new InvalidOperationException())))
+            case <= 0:
                 _newStationCount = 1;
-
-            lbStations_SelectedIndexChanged(this, EventArgs.Empty);
-
-            if (_stations.Count > 0) return;
-
-            if (_stations.Count <= 0)
-                _newStationCount = 1;
-
-            //Hide the station editor (and reset it) if there are no stations to edit.
-            HandleUserControlVisibility();
-
-            //_stationEditorCtrl.Visible = false;
-            //_stationEditorCtrl.SetMetaData(new MetaData(), new SongList());
-            //_noStationsCtrl.Visible = true;
+                break;
         }
 
-        private void UpdateStation(object? sender, EventArgs e)
+        //Hide the station editor (and reset it) if there are no stations to edit.
+        HandleUserControlVisibility();
+    }
+
+    private void cmbLanguageSelect_SelectedIndexChanged(object? sender, EventArgs e)
+    {
+        if (_languageComboBox.SelectedItem is not ImageComboBoxItem culture) return;
+        
+        SuspendLayout();
+        GlobalData.SetCulture(culture.Text);
+
+        Translate();
+
+        foreach (var se in _stationEditors)
+            se.Translate();
+
+        _noStationsCtrl.Translate();
+
+        Focus(); //re-focus the main form
+
+        languageToolStripMenuItem.HideDropDown();
+        ResumeLayout();
+
+        Settings.Default.SelectedLanguage = culture.Text;
+        Settings.Default.Save();
+    }
+
+    private void lbStations_MouseDown(object sender, MouseEventArgs e)
+    {
+        var index = lbStations.IndexFromPoint(e.Location);
+        if (index == ListBox.NoMatches)
         {
-            //if (e is StationUpdatedEventArgs args)
-            //{
-            //    int index = _stations.IndexOf(_stations.Where(s => s.MetaData.DisplayName.Equals(args.PreviousStationName)).FirstOrDefault());
-            //    if (index != -1)
-            //        _stations[index] = args.UpdatedStation;
-            //    //RefreshListBox();
-            //    //if (lbStations.SelectedItem is Station station)
-            //    //{
-            //    //    lbStations.BeginUpdate();
-            //    //    station.MetaData = args.UpdatedStation.MetaData;
-            //    //    station.StreamInfo = args.UpdatedStation.StreamInfo;
-            //    //    station.CustomIcon = args.UpdatedStation.CustomIcon;
-            //    //    station.SongsAsList = args.UpdatedStation.SongsAsList;
-            //    //    lbStations.EndUpdate();
-            //    //}
-            //}
+            _ignoreSelectedIndexChanged = true;
+            lbStations.SelectedIndex = _previousStationIndex;
         }
-
-        private void RefreshListBox()
+        else
         {
-            var selectedIndex = lbStations.SelectedIndex;
-            lbStations.BeginUpdate();
-            lbStations.DataSource = null;
-            lbStations.DataSource = _stations;
-            lbStations.DisplayMember = "MetaData";
-            lbStations.SelectedIndex = selectedIndex;
-            lbStations.EndUpdate();
+            _previousStationIndex = lbStations.SelectedIndex;
         }
+    }
 
-        private void cmbLanguageSelect_SelectedIndexChanged(object? sender, EventArgs e)
-        {
-            if (_languageComboBox.SelectedItem is ImageComboBoxItem culture)
-            {
-                SuspendLayout();
-                GlobalData.SetCulture(culture.Text);
+    private void exportToGameToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        new ExportWindow([.. _stations]).ShowDialog();
+    }
 
-                Translate();
+    private void pathsToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        new PathSettings().ShowDialog();
+    }
 
-                foreach (StationEditor se in _stationEditors)
-                    se.Translate();
+    private void refreshStationsToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        PopulateStations();
+    }
 
-                _noStationsCtrl.Translate();
+    private void radioExtHelpToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        "https://github.com/justarandomguyintheinternet/CP77_radioExt".OpenUrl();
+    }
 
-                //foreach (Control c in splitContainer1.Panel2.Controls)
-                //{
-                //    if (c is IUserControl userControl)
-                //        userControl.Translate();
-                //    //switch (c)
-                //    //{
-                //    //    case StationEditor se:
-                //    //        se.Translate();
-                //    //        break;
-                //    //    case NoStationsCtl nsc:
-                //    //        nsc.Translate();
-                //    //        break;
-                //    //    default:
-                //    //        continue;
-                //    //}
-                //}
-
-
-
-                Focus(); //re-focus the main form
-
-                languageToolStripMenuItem.HideDropDown();
-                ResumeLayout();
-
-                Settings.Default.SelectedLanguage = culture.Text;
-                Settings.Default.Save();
-            }
-        }
-
-        private void lbStations_MouseDown(object sender, MouseEventArgs e)
-        {
-            int index = lbStations.IndexFromPoint(e.Location);
-            if (index == ListBox.NoMatches)
-            {
-                ignoreSelectedIndexChanged = true;
-                lbStations.SelectedIndex = previousStationIndex;
-            }
-            else
-            {
-                previousStationIndex = lbStations.SelectedIndex;
-            }
-        }
+    private void radioExtOnNexusModsToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        "https://www.nexusmods.com/cyberpunk2077/mods/4591".OpenUrl();
     }
 }

@@ -1,48 +1,44 @@
 ﻿using System.ComponentModel;
 using Newtonsoft.Json;
 
-namespace RadioExt_Helper.models
+namespace RadioExt_Helper.models;
+
+public class MetaData : INotifyPropertyChanged
 {
-    public class MetaData : INotifyPropertyChanged
+    private string _displayName = "69.9 Your Station Name";
+
+    [JsonProperty("displayName")]
+    public string DisplayName
     {
-        private string _displayName = "69.9 Your Station Name";
-
-        [JsonProperty("displayName")]
-        public string DisplayName
+        get => _displayName;
+        set
         {
-            get { return _displayName; }
-            set
-            {
-                _displayName = value;
-                OnPropertyChanged(nameof(DisplayName));
-            }
+            _displayName = value;
+            OnPropertyChanged(nameof(DisplayName));
         }
+    }
 
-        [JsonProperty("fm")]
-        public float Fm { get; set; } = 69.9f;
+    [JsonProperty("fm")] public float Fm { get; set; } = 69.9f;
 
-        [JsonProperty("volume")]
-        public float Volume { get; set; } = 1.0f;
+    [JsonProperty("volume")] public float Volume { get; set; } = 1.0f;
 
-        [JsonProperty("icon")]
-        public string Icon { get; set; } = "UIIcon.alcohol_absynth";
+    [JsonProperty("icon")] public string Icon { get; set; } = "UIIcon.alcohol_absynth";
 
-        [JsonProperty("customIcon")]
-        public CustomIcon CustomIcon { get; set; } = new();
+    [JsonProperty("customIcon")] public CustomIcon CustomIcon { get; set; } = new();
 
-        [JsonProperty("streamInfo")]
-        public StreamInfo StreamInfo { get; set; } = new();
+    [JsonProperty("streamInfo")] public StreamInfo StreamInfo { get; set; } = new();
 
-        [JsonProperty("order")]
-        public List<string> SongOrder { get; set; } = [];
+    [JsonProperty("order")] public List<string> SongOrder { get; set; } = [];
 
-        public event PropertyChangedEventHandler? PropertyChanged;
+    public event PropertyChangedEventHandler? PropertyChanged;
 
-        protected virtual void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+    protected virtual void OnPropertyChanged(string propertyName)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
 
-        public override string ToString() => DisplayName;
+    public override string ToString()
+    {
+        return DisplayName;
     }
 }

@@ -688,7 +688,7 @@
             mpStreamPlayer.Margin = new Padding(3, 2, 3, 2);
             mpStreamPlayer.Name = "mpStreamPlayer";
             mpStreamPlayer.Size = new Size(32, 32);
-            mpStreamPlayer.StreamURL = "";
+            mpStreamPlayer.StreamUrl = "";
             mpStreamPlayer.TabIndex = 3;
             // 
             // txtStreamURL

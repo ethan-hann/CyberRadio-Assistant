@@ -1,6 +1,6 @@
 ﻿namespace RadioExt_Helper.user_controls
 {
-    partial class NoStationsCtl
+    sealed partial class NoStationsCtl
     {
         /// <summary> 
         /// Required designer variable.

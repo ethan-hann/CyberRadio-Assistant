@@ -1,6 +1,6 @@
 ﻿namespace RadioExt_Helper.user_controls
 {
-    partial class CustomMusicCtl
+    sealed partial class CustomMusicCtl
     {
         /// <summary> 
         /// Required designer variable.

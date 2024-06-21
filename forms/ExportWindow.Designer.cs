@@ -142,6 +142,10 @@
             // btnExportToStaging
             // 
             btnExportToStaging.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            btnExportToStaging.BackColor = Color.Yellow;
+            btnExportToStaging.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
+            btnExportToStaging.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
+            btnExportToStaging.FlatStyle = FlatStyle.Flat;
             btnExportToStaging.Font = new Font("CF Notche Demo", 9.749999F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnExportToStaging.Image = Properties.Resources.export_16x16;
             btnExportToStaging.Location = new Point(666, 453);
@@ -151,13 +155,17 @@
             btnExportToStaging.Text = "Export to Staging";
             btnExportToStaging.TextAlign = ContentAlignment.MiddleRight;
             btnExportToStaging.TextImageRelation = TextImageRelation.ImageBeforeText;
-            btnExportToStaging.UseVisualStyleBackColor = true;
+            btnExportToStaging.UseVisualStyleBackColor = false;
             btnExportToStaging.Click += btnExportToStaging_Click;
             // 
             // btnExportToGame
             // 
             btnExportToGame.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            btnExportToGame.BackColor = Color.Yellow;
             btnExportToGame.Enabled = false;
+            btnExportToGame.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
+            btnExportToGame.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
+            btnExportToGame.FlatStyle = FlatStyle.Flat;
             btnExportToGame.Font = new Font("CF Notche Demo", 9.749999F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnExportToGame.Image = Properties.Resources.export_16x16;
             btnExportToGame.Location = new Point(919, 453);
@@ -167,25 +175,33 @@
             btnExportToGame.Text = "Export to Game";
             btnExportToGame.TextAlign = ContentAlignment.MiddleRight;
             btnExportToGame.TextImageRelation = TextImageRelation.ImageBeforeText;
-            btnExportToGame.UseVisualStyleBackColor = true;
+            btnExportToGame.UseVisualStyleBackColor = false;
             btnExportToGame.Click += btnExportToGame_Click;
             // 
             // btnCancel
             // 
             btnCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            btnCancel.BackColor = Color.Yellow;
+            btnCancel.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
+            btnCancel.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
+            btnCancel.FlatStyle = FlatStyle.Flat;
             btnCancel.Font = new Font("CF Notche Demo", 9.749999F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnCancel.Location = new Point(12, 460);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(138, 36);
             btnCancel.TabIndex = 6;
             btnCancel.Text = "Cancel";
-            btnCancel.UseVisualStyleBackColor = true;
+            btnCancel.UseVisualStyleBackColor = false;
             btnCancel.Visible = false;
             btnCancel.Click += btnCancel_Click;
             // 
             // btnOpenStagingFolder
             // 
             btnOpenStagingFolder.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            btnOpenStagingFolder.BackColor = Color.Yellow;
+            btnOpenStagingFolder.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
+            btnOpenStagingFolder.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
+            btnOpenStagingFolder.FlatStyle = FlatStyle.Flat;
             btnOpenStagingFolder.Font = new Font("CF Notche Demo", 9.749999F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnOpenStagingFolder.Image = Properties.Resources.folder_16x16;
             btnOpenStagingFolder.Location = new Point(831, 302);
@@ -195,7 +211,7 @@
             btnOpenStagingFolder.Text = "Open Staging Folder";
             btnOpenStagingFolder.TextAlign = ContentAlignment.MiddleRight;
             btnOpenStagingFolder.TextImageRelation = TextImageRelation.ImageBeforeText;
-            btnOpenStagingFolder.UseVisualStyleBackColor = true;
+            btnOpenStagingFolder.UseVisualStyleBackColor = false;
             btnOpenStagingFolder.Click += btnOpenStagingFolder_Click;
             // 
             // flowLayoutPanel1
@@ -209,6 +225,10 @@
             // btnOpenGameFolder
             // 
             btnOpenGameFolder.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            btnOpenGameFolder.BackColor = Color.Yellow;
+            btnOpenGameFolder.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
+            btnOpenGameFolder.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
+            btnOpenGameFolder.FlatStyle = FlatStyle.Flat;
             btnOpenGameFolder.Font = new Font("CF Notche Demo", 9.749999F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnOpenGameFolder.Image = Properties.Resources.folder_16x16;
             btnOpenGameFolder.Location = new Point(831, 351);
@@ -218,7 +238,7 @@
             btnOpenGameFolder.Text = "Open Game Folder";
             btnOpenGameFolder.TextAlign = ContentAlignment.MiddleRight;
             btnOpenGameFolder.TextImageRelation = TextImageRelation.ImageBeforeText;
-            btnOpenGameFolder.UseVisualStyleBackColor = true;
+            btnOpenGameFolder.UseVisualStyleBackColor = false;
             btnOpenGameFolder.Click += btnOpenGameFolder_Click;
             // 
             // bgWorkerExportGame

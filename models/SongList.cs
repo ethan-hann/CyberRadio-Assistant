@@ -1,71 +1,69 @@
 ﻿using System.Collections;
 using Newtonsoft.Json;
 
-namespace RadioExt_Helper.models
+namespace RadioExt_Helper.models;
+
+/// <summary>
+///     Represents a list of songs associated with a radio station.
+/// </summary>
+public class SongList : ICollection<Song>
 {
-    /// <summary>
-    /// Represents a list of songs associated with a radio station.
-    /// </summary>
-    public class SongList : ICollection<Song>
+    [JsonProperty("songs")] public List<Song> Songs { get; set; } = [];
+
+    public int Count => Songs.Count;
+
+    public bool IsReadOnly => false;
+
+    public void Add(Song song)
     {
-        [JsonProperty("songs")]
-        public List<Song> Songs { get; set; } = [];
+        ArgumentNullException.ThrowIfNull(song);
 
-        public int Count => Songs.Count;
+        if (Songs.Any(s => s.Name.Equals(song.Name))) return;
 
-        public bool IsReadOnly => false;
+        Songs.Add(song);
+    }
 
-        public void Add(Song song)
-        {
-            ArgumentNullException.ThrowIfNull(song);
+    public IEnumerator<Song> GetEnumerator()
+    {
+        return Songs.GetEnumerator();
+    }
 
-            if (Songs.Any(s => s.Name.Equals(song.Name))) return;
+    public void Clear()
+    {
+        Songs.Clear();
+    }
 
-            Songs.Add(song);
-        }
+    public bool Contains(Song item)
+    {
+        return Songs.Contains(item);
+    }
 
-        public void Remove(Song song)
-        {
-            ArgumentNullException.ThrowIfNull(song);
-            Songs.Remove(song);
-        }
+    public void CopyTo(Song[] array, int arrayIndex)
+    {
+        Songs.ForEach(s => array[arrayIndex++] = s);
+    }
 
-        public void Remove(string songName)
-        {
-            ArgumentException.ThrowIfNullOrEmpty(songName);
+    bool ICollection<Song>.Remove(Song item)
+    {
+        Remove(item);
+        return true;
+    }
 
-            Songs.Remove(Songs.First(s => s.Name.Equals(songName)));
-        }
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
+    }
 
-        public IEnumerator<Song> GetEnumerator()
-        {
-            return Songs.GetEnumerator();
-        }
+    public void Remove(Song song)
+    {
+        ArgumentNullException.ThrowIfNull(song);
+        Songs.Remove(song);
+    }
 
-        public void Clear()
-        {
-            Songs.Clear();
-        }
+    public void Remove(string songName)
+    {
+        ArgumentException.ThrowIfNullOrEmpty(songName);
 
-        public bool Contains(Song item)
-        {
-            return Songs.Contains(item);
-        }
-
-        public void CopyTo(Song[] array, int arrayIndex)
-        {
-            Songs.ForEach(s => array[arrayIndex++] = s);
-        }
-
-        bool ICollection<Song>.Remove(Song item)
-        {
-            Remove(item);
-            return true;
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+        Songs.Remove(Songs.First(s => s.Name.Equals(songName)));
     }
 }
