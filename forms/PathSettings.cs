@@ -7,6 +7,9 @@ namespace RadioExt_Helper.forms;
 
 public partial class PathSettings : Form
 {
+    private bool _stageFolderChanged = false;
+    private bool _gameFolderChanged = false;
+
     public PathSettings()
     {
         InitializeComponent();
@@ -51,6 +54,9 @@ public partial class PathSettings : Form
         var basePath = PathHelper.GetGamePath(false);
         if (basePath == null || basePath.Equals(string.Empty)) return;
 
+        if (!Settings.Default.GameBasePath.Equals(basePath))
+            _gameFolderChanged = true;
+
         Settings.Default.GameBasePath = basePath;
         Settings.Default.Save();
         SetLabels();
@@ -61,6 +67,9 @@ public partial class PathSettings : Form
         var stagingPath = PathHelper.GetStagingPath(false);
         if (stagingPath.Equals(string.Empty) || stagingPath.Equals(Settings.Default.StagingPath)) return;
 
+        if (!Settings.Default.StagingPath.Equals(stagingPath))
+            _stageFolderChanged = true;
+
         Settings.Default.StagingPath = stagingPath;
         Settings.Default.Save();
         SetLabels();
@@ -68,6 +77,9 @@ public partial class PathSettings : Form
 
     private void PathSettings_FormClosed(object sender, FormClosedEventArgs e)
     {
-        DialogResult = DialogResult.OK;
+        if (_stageFolderChanged || _gameFolderChanged)
+            DialogResult = DialogResult.OK;
+        else
+            DialogResult = DialogResult.Cancel;
     }
 }

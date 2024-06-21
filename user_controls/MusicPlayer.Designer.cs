@@ -54,6 +54,8 @@
             // 
             btnPlayPause.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             btnPlayPause.BackColor = Color.Yellow;
+            btnPlayPause.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
+            btnPlayPause.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
             btnPlayPause.FlatStyle = FlatStyle.Flat;
             btnPlayPause.ImageIndex = 0;
             btnPlayPause.ImageList = images;

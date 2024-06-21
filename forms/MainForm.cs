@@ -213,25 +213,28 @@ public partial class MainForm : Form
     public void PopulateStations()
     {
         lbStations.BeginUpdate();
+        lbStations.DataSource = null;
 
         if (!string.IsNullOrEmpty(Settings.Default.StagingPath))
         {
             _stations.Clear();
             _stationEditors.Clear();
 
-            foreach (var directory in Directory.EnumerateDirectories(Settings.Default.StagingPath))
+            foreach (var directory in FileEnumerator.SafeEnumerateDirectories(Settings.Default.StagingPath))
             {
-                var files = Directory.EnumerateFiles(directory).ToList();
+                var files = FileEnumerator.SafeEnumerateFiles(directory);
 
                 var metaData = files
-                    .Where(file => FileHelper.GetExtension(file) == ".json")
+                    .Where(file => file.EndsWith("metadata.json"))
                     .Select(_metaDataJson.LoadJson)
-                    .FirstOrDefault() ?? new MetaData();
+                    .FirstOrDefault();
 
                 var songList = files
-                    .Where(file => FileHelper.GetExtension(file) == ".sgls")
+                    .Where(file => file.EndsWith("songs.sgls"))
                     .Select(_songListJson.LoadJson)
                     .FirstOrDefault() ?? [];
+
+                if (metaData == null) continue;
 
                 var station = new Station
                 {
@@ -245,6 +248,7 @@ public partial class MainForm : Form
         }
 
         lbStations.DataSource = _stations;
+        lbStations.DisplayMember = "MetaData";
         if (lbStations.Items.Count > 0)
         {
             lbStations.SelectedIndex = 0;
@@ -390,7 +394,9 @@ public partial class MainForm : Form
 
     private void pathsToolStripMenuItem_Click(object sender, EventArgs e)
     {
-        new PathSettings().ShowDialog();
+        var result = new PathSettings().ShowDialog();
+        if (result == DialogResult.OK)
+            PopulateStations();
     }
 
     private void refreshStationsToolStripMenuItem_Click(object sender, EventArgs e)

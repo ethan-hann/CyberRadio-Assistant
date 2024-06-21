@@ -71,25 +71,25 @@
             // menuStrip1
             // 
             menuStrip1.BackColor = Color.Yellow;
-            menuStrip1.Font = new Font("CF Notche Demo", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            menuStrip1.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             menuStrip1.Items.AddRange(new ToolStripItem[] { addSongsToolStripMenuItem, removeSongsToolStripMenuItem });
             menuStrip1.Location = new Point(3, 3);
             menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new Size(905, 27);
+            menuStrip1.Size = new Size(905, 29);
             menuStrip1.TabIndex = 0;
             menuStrip1.Text = "menuStrip1";
             // 
             // addSongsToolStripMenuItem
             // 
             addSongsToolStripMenuItem.Name = "addSongsToolStripMenuItem";
-            addSongsToolStripMenuItem.Size = new Size(129, 23);
+            addSongsToolStripMenuItem.Size = new Size(112, 25);
             addSongsToolStripMenuItem.Text = "Add Song(s)";
             addSongsToolStripMenuItem.Click += addSongsToolStripMenuItem_Click;
             // 
             // removeSongsToolStripMenuItem
             // 
             removeSongsToolStripMenuItem.Name = "removeSongsToolStripMenuItem";
-            removeSongsToolStripMenuItem.Size = new Size(250, 23);
+            removeSongsToolStripMenuItem.Size = new Size(209, 25);
             removeSongsToolStripMenuItem.Text = "Remove Selected Song(s)";
             removeSongsToolStripMenuItem.Click += removeSongsToolStripMenuItem_Click;
             // 
@@ -100,9 +100,9 @@
             lvSongs.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
             lvSongs.FullRowSelect = true;
             lvSongs.GridLines = true;
-            lvSongs.Location = new Point(3, 30);
+            lvSongs.Location = new Point(3, 32);
             lvSongs.Name = "lvSongs";
-            lvSongs.Size = new Size(905, 631);
+            lvSongs.Size = new Size(905, 629);
             lvSongs.TabIndex = 1;
             lvSongs.UseCompatibleStateImageBehavior = false;
             lvSongs.View = View.Details;
