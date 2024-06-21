@@ -16,7 +16,7 @@ public static class GlobalData
     public static readonly ResourceManager Strings = new("RadioExt_Helper.Strings", typeof(MainForm).Assembly);
 
     private static bool _uiIconsInitialized;
-    private const bool GlobalDataInitialized = false;
+    private static bool GlobalDataInitialized = false;
 
     /// <summary>
     ///     A list of strings containing all UIIcon records in the game. This list is populated from an embedded text file.
@@ -32,15 +32,8 @@ public static class GlobalData
         
         GetUiIcons();
         SetCulture("English (en)");
-        AddFontsToAssembly();
-    }
 
-    private static void AddFontsToAssembly()
-    {
-        FontHandler.Instance.AddFont(ExecAssembly, "CyberPunk_Regular",
-            "RadioExt_Helper.resources.fonts.CFNotcheDemo-Regular.ttf");
-        FontHandler.Instance.AddFont(ExecAssembly, "CyberPunk_Bold",
-            "RadioExt_Helper.resources.fonts.CFNotcheDemo-Bold.ttf");
+        GlobalDataInitialized = true;
     }
 
     /// <summary>

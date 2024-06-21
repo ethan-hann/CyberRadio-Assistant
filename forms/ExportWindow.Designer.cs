@@ -35,7 +35,6 @@
             colSongCount = new ColumnHeader();
             colStreamURL = new ColumnHeader();
             colProposedPath = new ColumnHeader();
-            lblConfirm = new Label();
             statusStrip1 = new StatusStrip();
             lblStatus = new ToolStripStatusLabel();
             toolStripStatusLabel2 = new ToolStripStatusLabel();
@@ -45,22 +44,27 @@
             btnExportToGame = new Button();
             btnCancel = new Button();
             btnOpenStagingFolder = new Button();
-            flowLayoutPanel1 = new FlowLayoutPanel();
             btnOpenGameFolder = new Button();
             bgWorkerExportGame = new System.ComponentModel.BackgroundWorker();
+            splitContainer1 = new SplitContainer();
+            tableLayoutPanel1 = new TableLayoutPanel();
             statusStrip1.SuspendLayout();
-            flowLayoutPanel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
+            splitContainer1.Panel1.SuspendLayout();
+            splitContainer1.Panel2.SuspendLayout();
+            splitContainer1.SuspendLayout();
+            tableLayoutPanel1.SuspendLayout();
             SuspendLayout();
             // 
             // lvStations
             // 
             lvStations.Columns.AddRange(new ColumnHeader[] { colStationName, colIcon, colSongCount, colStreamURL, colProposedPath });
-            lvStations.Dock = DockStyle.Top;
+            lvStations.Dock = DockStyle.Fill;
             lvStations.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             lvStations.Location = new Point(0, 0);
             lvStations.MultiSelect = false;
             lvStations.Name = "lvStations";
-            lvStations.Size = new Size(1190, 296);
+            lvStations.Size = new Size(927, 420);
             lvStations.Sorting = SortOrder.Ascending;
             lvStations.TabIndex = 0;
             lvStations.UseCompatibleStateImageBehavior = false;
@@ -91,23 +95,12 @@
             colProposedPath.Text = "Proposed Path";
             colProposedPath.Width = 200;
             // 
-            // lblConfirm
-            // 
-            lblConfirm.AutoSize = true;
-            lblConfirm.Font = new Font("CF Notche Demo", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblConfirm.Location = new Point(3, 0);
-            lblConfirm.Name = "lblConfirm";
-            lblConfirm.Padding = new Padding(0, 10, 0, 0);
-            lblConfirm.Size = new Size(701, 70);
-            lblConfirm.TabIndex = 1;
-            lblConfirm.Text = resources.GetString("lblConfirm.Text");
-            // 
             // statusStrip1
             // 
             statusStrip1.Items.AddRange(new ToolStripItem[] { lblStatus, toolStripStatusLabel2, pgExportProgress });
-            statusStrip1.Location = new Point(0, 499);
+            statusStrip1.Location = new Point(0, 420);
             statusStrip1.Name = "statusStrip1";
-            statusStrip1.Size = new Size(1190, 22);
+            statusStrip1.Size = new Size(1204, 22);
             statusStrip1.SizingGrip = false;
             statusStrip1.TabIndex = 3;
             statusStrip1.Text = "statusStrip1";
@@ -123,7 +116,7 @@
             // toolStripStatusLabel2
             // 
             toolStripStatusLabel2.Name = "toolStripStatusLabel2";
-            toolStripStatusLabel2.Size = new Size(713, 17);
+            toolStripStatusLabel2.Size = new Size(727, 17);
             toolStripStatusLabel2.Spring = true;
             // 
             // pgExportProgress
@@ -141,16 +134,16 @@
             // 
             // btnExportToStaging
             // 
-            btnExportToStaging.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            btnExportToStaging.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             btnExportToStaging.BackColor = Color.Yellow;
             btnExportToStaging.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
             btnExportToStaging.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
             btnExportToStaging.FlatStyle = FlatStyle.Flat;
-            btnExportToStaging.Font = new Font("CF Notche Demo", 9.749999F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnExportToStaging.Font = new Font("Segoe UI Variable Display Semib", 9.75F, FontStyle.Bold);
             btnExportToStaging.Image = Properties.Resources.export_16x16;
-            btnExportToStaging.Location = new Point(666, 453);
+            btnExportToStaging.Location = new Point(3, 143);
             btnExportToStaging.Name = "btnExportToStaging";
-            btnExportToStaging.Size = new Size(247, 43);
+            btnExportToStaging.Size = new Size(267, 43);
             btnExportToStaging.TabIndex = 4;
             btnExportToStaging.Text = "Export to Staging";
             btnExportToStaging.TextAlign = ContentAlignment.MiddleRight;
@@ -160,17 +153,17 @@
             // 
             // btnExportToGame
             // 
-            btnExportToGame.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            btnExportToGame.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             btnExportToGame.BackColor = Color.Yellow;
             btnExportToGame.Enabled = false;
             btnExportToGame.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
             btnExportToGame.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
             btnExportToGame.FlatStyle = FlatStyle.Flat;
-            btnExportToGame.Font = new Font("CF Notche Demo", 9.749999F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnExportToGame.Font = new Font("Segoe UI Variable Display Semib", 9.75F, FontStyle.Bold);
             btnExportToGame.Image = Properties.Resources.export_16x16;
-            btnExportToGame.Location = new Point(919, 453);
+            btnExportToGame.Location = new Point(3, 209);
             btnExportToGame.Name = "btnExportToGame";
-            btnExportToGame.Size = new Size(259, 43);
+            btnExportToGame.Size = new Size(267, 43);
             btnExportToGame.TabIndex = 5;
             btnExportToGame.Text = "Export to Game";
             btnExportToGame.TextAlign = ContentAlignment.MiddleRight;
@@ -180,15 +173,16 @@
             // 
             // btnCancel
             // 
-            btnCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            btnCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             btnCancel.BackColor = Color.Yellow;
             btnCancel.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
             btnCancel.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
             btnCancel.FlatStyle = FlatStyle.Flat;
-            btnCancel.Font = new Font("CF Notche Demo", 9.749999F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnCancel.Location = new Point(12, 460);
+            btnCancel.Font = new Font("Segoe UI Variable Display Semib", 9.75F, FontStyle.Bold);
+            btnCancel.Location = new Point(3, 374);
+            btnCancel.Margin = new Padding(3, 3, 3, 10);
             btnCancel.Name = "btnCancel";
-            btnCancel.Size = new Size(138, 36);
+            btnCancel.Size = new Size(267, 36);
             btnCancel.TabIndex = 6;
             btnCancel.Text = "Cancel";
             btnCancel.UseVisualStyleBackColor = false;
@@ -197,16 +191,16 @@
             // 
             // btnOpenStagingFolder
             // 
-            btnOpenStagingFolder.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            btnOpenStagingFolder.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             btnOpenStagingFolder.BackColor = Color.Yellow;
             btnOpenStagingFolder.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
             btnOpenStagingFolder.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
             btnOpenStagingFolder.FlatStyle = FlatStyle.Flat;
-            btnOpenStagingFolder.Font = new Font("CF Notche Demo", 9.749999F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnOpenStagingFolder.Font = new Font("Segoe UI Variable Display Semib", 9.75F, FontStyle.Bold);
             btnOpenStagingFolder.Image = Properties.Resources.folder_16x16;
-            btnOpenStagingFolder.Location = new Point(831, 302);
+            btnOpenStagingFolder.Location = new Point(3, 11);
             btnOpenStagingFolder.Name = "btnOpenStagingFolder";
-            btnOpenStagingFolder.Size = new Size(347, 43);
+            btnOpenStagingFolder.Size = new Size(267, 43);
             btnOpenStagingFolder.TabIndex = 7;
             btnOpenStagingFolder.Text = "Open Staging Folder";
             btnOpenStagingFolder.TextAlign = ContentAlignment.MiddleRight;
@@ -214,28 +208,20 @@
             btnOpenStagingFolder.UseVisualStyleBackColor = false;
             btnOpenStagingFolder.Click += btnOpenStagingFolder_Click;
             // 
-            // flowLayoutPanel1
-            // 
-            flowLayoutPanel1.Controls.Add(lblConfirm);
-            flowLayoutPanel1.Location = new Point(12, 302);
-            flowLayoutPanel1.Name = "flowLayoutPanel1";
-            flowLayoutPanel1.Size = new Size(813, 145);
-            flowLayoutPanel1.TabIndex = 8;
-            // 
             // btnOpenGameFolder
             // 
-            btnOpenGameFolder.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            btnOpenGameFolder.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             btnOpenGameFolder.BackColor = Color.Yellow;
             btnOpenGameFolder.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
             btnOpenGameFolder.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
             btnOpenGameFolder.FlatStyle = FlatStyle.Flat;
-            btnOpenGameFolder.Font = new Font("CF Notche Demo", 9.749999F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnOpenGameFolder.Font = new Font("Segoe UI Variable Display Semib", 9.75F, FontStyle.Bold);
             btnOpenGameFolder.Image = Properties.Resources.folder_16x16;
-            btnOpenGameFolder.Location = new Point(831, 351);
+            btnOpenGameFolder.Location = new Point(3, 77);
             btnOpenGameFolder.Name = "btnOpenGameFolder";
-            btnOpenGameFolder.Size = new Size(347, 43);
+            btnOpenGameFolder.Size = new Size(267, 43);
             btnOpenGameFolder.TabIndex = 9;
-            btnOpenGameFolder.Text = "Open Game Folder";
+            btnOpenGameFolder.Text = "Open Game Radios Folder";
             btnOpenGameFolder.TextAlign = ContentAlignment.MiddleRight;
             btnOpenGameFolder.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnOpenGameFolder.UseVisualStyleBackColor = false;
@@ -249,22 +235,55 @@
             bgWorkerExportGame.ProgressChanged += bgWorkerExportGame_ProgressChanged;
             bgWorkerExportGame.RunWorkerCompleted += bgWorkerExportGame_RunWorkerCompleted;
             // 
+            // splitContainer1
+            // 
+            splitContainer1.Dock = DockStyle.Fill;
+            splitContainer1.FixedPanel = FixedPanel.Panel2;
+            splitContainer1.Location = new Point(0, 0);
+            splitContainer1.Name = "splitContainer1";
+            // 
+            // splitContainer1.Panel1
+            // 
+            splitContainer1.Panel1.Controls.Add(lvStations);
+            // 
+            // splitContainer1.Panel2
+            // 
+            splitContainer1.Panel2.Controls.Add(tableLayoutPanel1);
+            splitContainer1.Size = new Size(1204, 420);
+            splitContainer1.SplitterDistance = 927;
+            splitContainer1.TabIndex = 11;
+            // 
+            // tableLayoutPanel1
+            // 
+            tableLayoutPanel1.ColumnCount = 1;
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tableLayoutPanel1.Controls.Add(btnOpenStagingFolder, 0, 0);
+            tableLayoutPanel1.Controls.Add(btnCancel, 0, 4);
+            tableLayoutPanel1.Controls.Add(btnOpenGameFolder, 0, 1);
+            tableLayoutPanel1.Controls.Add(btnExportToGame, 0, 3);
+            tableLayoutPanel1.Controls.Add(btnExportToStaging, 0, 2);
+            tableLayoutPanel1.Dock = DockStyle.Fill;
+            tableLayoutPanel1.Location = new Point(0, 0);
+            tableLayoutPanel1.Name = "tableLayoutPanel1";
+            tableLayoutPanel1.RowCount = 5;
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 66F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 66F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 66F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 66F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle());
+            tableLayoutPanel1.Size = new Size(273, 420);
+            tableLayoutPanel1.TabIndex = 0;
+            // 
             // ExportWindow
             // 
-            AutoScaleDimensions = new SizeF(8F, 13F);
-            AutoScaleMode = AutoScaleMode.Font;
+            AutoScaleDimensions = new SizeF(96F, 96F);
+            AutoScaleMode = AutoScaleMode.Dpi;
             BackColor = Color.White;
-            ClientSize = new Size(1190, 521);
-            Controls.Add(flowLayoutPanel1);
-            Controls.Add(btnOpenGameFolder);
-            Controls.Add(btnOpenStagingFolder);
-            Controls.Add(btnCancel);
-            Controls.Add(btnExportToGame);
-            Controls.Add(btnExportToStaging);
+            ClientSize = new Size(1204, 442);
+            Controls.Add(splitContainer1);
             Controls.Add(statusStrip1);
-            Controls.Add(lvStations);
             Font = new Font("CF Notche Demo", 9.749999F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            FormBorderStyle = FormBorderStyle.FixedSingle;
+            HelpButton = true;
             Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
             MinimizeBox = false;
@@ -272,18 +291,22 @@
             ShowInTaskbar = false;
             StartPosition = FormStartPosition.CenterParent;
             Text = "Export";
+            TopMost = true;
+            HelpButtonClicked += ExportWindow_HelpButtonClicked;
             Load += ExportWindow_Load;
             statusStrip1.ResumeLayout(false);
             statusStrip1.PerformLayout();
-            flowLayoutPanel1.ResumeLayout(false);
-            flowLayoutPanel1.PerformLayout();
+            splitContainer1.Panel1.ResumeLayout(false);
+            splitContainer1.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
+            splitContainer1.ResumeLayout(false);
+            tableLayoutPanel1.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
         private ListView lvStations;
-        private Label lblConfirm;
         private ColumnHeader colStationName;
         private ColumnHeader colIcon;
         private ColumnHeader colSongCount;
@@ -298,8 +321,9 @@
         private Button btnExportToGame;
         private Button btnCancel;
         private Button btnOpenStagingFolder;
-        private FlowLayoutPanel flowLayoutPanel1;
         private Button btnOpenGameFolder;
         private System.ComponentModel.BackgroundWorker bgWorkerExportGame;
+        private SplitContainer splitContainer1;
+        private TableLayoutPanel tableLayoutPanel1;
     }
 }

@@ -12,19 +12,9 @@ public partial class PathSettings : Form
         InitializeComponent();
     }
 
-    private void btnChangeGameBasePath_Click(object sender, EventArgs e)
-    {
-        var basePath = PathHelper.GetGamePath(fdlgOpenGameExe);
-        if (basePath != null && basePath.Equals(string.Empty)) return;
-
-        Settings.Default.GameBasePath = basePath;
-        Settings.Default.Save();
-    }
-
     private void PathSettings_Load(object sender, EventArgs e)
     {
         SetLabels();
-        ApplyFontsToControls(this);
         Translate();
     }
 
@@ -34,80 +24,50 @@ public partial class PathSettings : Form
 
         label1.Text = GlobalData.Strings.GetString("GameBasePath");
         label2.Text = GlobalData.Strings.GetString("RadioStationPath");
-        label4.Text = GlobalData.Strings.GetString("BackUpPath");
+        label4.Text = GlobalData.Strings.GetString("StagingPath");
 
         btnChangeGameBasePath.Text = GlobalData.Strings.GetString("Change") + GlobalData.Strings.GetString("DotDotDot");
         btnChangeBackUpPath.Text = GlobalData.Strings.GetString("Change") + GlobalData.Strings.GetString("DotDotDot");
-        btnClearBackupPath.Text = GlobalData.Strings.GetString("Clear");
-
-        fdlgBackupPath.Description = GlobalData.Strings.GetString("BackupPathHelp") ?? string.Empty;
-        fdlgOpenGameExe.Title = GlobalData.Strings.GetString("Open");
 
         SetLabels();
     }
 
     private void SetLabels()
     {
-        lblGameBasePath.Text = !Settings.Default.GameBasePath.Equals(string.Empty) ? 
+        lblGameBasePath.Text = !Settings.Default.GameBasePath.Equals(string.Empty) ?
             Settings.Default.GameBasePath : GlobalData.Strings.GetString("GameBasePathPlaceholder");
 
-        lblBackupPath.Text = !Settings.Default.BackupPath.Equals(string.Empty) ? 
-            Settings.Default.BackupPath : GlobalData.Strings.GetString("BackupPathPlaceholder");
+        lblBackupPath.Text = !Settings.Default.StagingPath.Equals(string.Empty) ?
+            Settings.Default.StagingPath : GlobalData.Strings.GetString("StagingPathPlaceholder");
 
         var radioPath = PathHelper.GetRadioExtPath(Settings.Default.GameBasePath);
         lblRadioPath.Text = radioPath.Equals(string.Empty)
             ? GlobalData.Strings.GetString("RadioExtPathPlaceholder")
             : radioPath;
     }
-    
-    private static void ApplyFontsToControls(Control control)
-    {
-        if (control is IUserControl userControl)
-        {
-            userControl.ApplyFonts();
-        }
-        else
-        {
-            switch (control)
-            {
-                case MenuStrip:
-                case GroupBox:
-                case Button:
-                    FontHandler.Instance.ApplyFont(control, "CyberPunk_Regular", 9, FontStyle.Bold);
-                    break;
-                case TabControl:
-                    FontHandler.Instance.ApplyFont(control, "CyberPunk_Regular", 12, FontStyle.Bold);
-                    break;
-                case Label:
-                    FontHandler.Instance.ApplyFont(control, "CyberPunk_Regular", 9, FontStyle.Regular);
-                    break;
-            }
 
-            foreach (Control child in control.Controls)
-                ApplyFontsToControls(child);
-        }
+    private void btnChangeGameBasePath_Click(object sender, EventArgs e)
+    {
+        var basePath = PathHelper.GetGamePath(false);
+        if (basePath == null || basePath.Equals(string.Empty)) return;
+
+        Settings.Default.GameBasePath = basePath;
+        Settings.Default.Save();
+        SetLabels();
     }
 
     private void btnChangeBackUpPath_Click(object sender, EventArgs e)
     {
-        if (fdlgBackupPath.ShowDialog() != DialogResult.OK) return;
+        var stagingPath = PathHelper.GetStagingPath(false);
+        if (stagingPath.Equals(string.Empty) || stagingPath.Equals(Settings.Default.StagingPath)) return;
 
-        Settings.Default.BackupPath = fdlgBackupPath.SelectedPath;
-        Settings.Default.Save();
-        lblBackupPath.Text = fdlgBackupPath.SelectedPath;
-    }
-
-    private void btnClearBackupPath_Click(object sender, EventArgs e)
-    {
-        if (lblBackupPath.Text.Equals(GlobalData.Strings.GetString("BackupPathPlaceholder"))) return;
-
-        var text = GlobalData.Strings.GetString("AreYouSure");
-        var caption = GlobalData.Strings.GetString("Confirm");
-        if (MessageBox.Show(this, text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) !=
-            DialogResult.Yes) return;
-
-        Settings.Default.BackupPath = string.Empty;
+        Settings.Default.StagingPath = stagingPath;
         Settings.Default.Save();
         SetLabels();
+    }
+
+    private void PathSettings_FormClosed(object sender, FormClosedEventArgs e)
+    {
+        DialogResult = DialogResult.OK;
     }
 }

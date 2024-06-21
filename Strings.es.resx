@@ -132,17 +132,18 @@
     <value>Controla el nombre de tu estación que se mostrará en el juego. Los caracteres especiales se escapan correctamente.</value>
   </data>
     <data name="NoExeFound" xml:space="preserve">
-    <value>No se ha establecido la ruta hacia el ejecutable de Cyberpunk 2077.\nPor favor configúrelo ahora.</value>
-  </data>
+      <value>No se ha establecido la ruta hacia el ejecutable de Cyberpunk 2077.
+Por favor configúrelo ahora.</value>
+    </data>
     <data name="NoGamePath" xml:space="preserve">
     <value>Sin camino de juego</value>
   </data>
     <data name="RadioExtPathPlaceholder" xml:space="preserve">
     <value>&lt;sin ruta establecida; radioExt no está instalado&gt;</value>
   </data>
-    <data name="BackupPathPlaceholder" xml:space="preserve">
-    <value>&lt;sin ruta establecida; NO se realizarán copias de seguridad de las estaciones de radio&gt;</value>
-  </data>
+    <data name="StagingPathPlaceholder" xml:space="preserve">
+      <value>&lt;sin ruta establecida; Las estaciones de radio deben montarse primero&gt;</value>
+    </data>
     <data name="AreYouSure" xml:space="preserve">
     <value>Estas seguro?</value>
   </data>
@@ -161,7 +162,7 @@
     <data name="RadioStationPath" xml:space="preserve">
     <value>Ruta de estaciones de radio</value>
   </data>
-    <data name="BackUpPath" xml:space="preserve">
+    <data name="StagingPath" xml:space="preserve">
     <value>Camino de preparación</value>
   </data>
     <data name="Change" xml:space="preserve">
@@ -186,8 +187,8 @@
     <value>Acerca de</value>
   </data>
     <data name="DeleteStation" xml:space="preserve">
-    <value>Eliminar estación</value>
-  </data>
+      <value>Eliminar Estación</value>
+    </data>
     <data name="File" xml:space="preserve">
     <value>Archivo</value>
   </data>
@@ -212,12 +213,9 @@
     <data name="Music" xml:space="preserve">
     <value>Música</value>
   </data>
-    <data name="BackupPathHelp" xml:space="preserve">
-    <value>Seleccione la ruta para organizar estaciones de radio personalizadas.</value>
-  </data>
     <data name="Open" xml:space="preserve">
-    <value>Abierto</value>
-  </data>
+      <value>Ejecutable del juego abierto</value>
+    </data>
     <data name="Yes" xml:space="preserve">
     <value>Sí</value>
   </data>
@@ -295,9 +293,6 @@
   </data>
     <data name="StreamURLHelp" xml:space="preserve">
     <value>La URL de la transmisión web que se utilizará.</value>
-  </data>
-    <data name="RadioGardenBtnHelp" xml:space="preserve">
-    <value>Appuyez pour obtenir une boîte dans laquelle vous pouvez coller une URL de radio.garden et analyser le flux Web final.</value>
   </data>
     <data name="OpenURLErrorOccured" xml:space="preserve">
     <value>Se produjo un error al intentar abrir la URL: </value>
@@ -408,8 +403,8 @@ Si algo no se ve correcto, salga de esta ventana y realice cambios en la aplicac
     <value>Carpeta de etapa abierta</value>
   </data>
     <data name="OpenGameFolder" xml:space="preserve">
-    <value>Carpeta de juego abierta</value>
-  </data>
+      <value>Abra la carpeta Radios de juegos</value>
+    </data>
     <data name="ExportToGameComplete" xml:space="preserve">
     <value>Exportado al juego!</value>
   </data>
@@ -428,4 +423,24 @@ Si algo no se ve correcto, salga de esta ventana y realice cambios en la aplicac
     <data name="ErrorPausingStream" xml:space="preserve">
     <value>Error al pausar la secuencia: {0}</value>
   </data>
+    <data name="StagingPathHelp" xml:space="preserve">
+      <value>Seleccione la ruta de puesta en escena de la estación de radio.</value>
+    </data>
+    <data name="NoStagingPath" xml:space="preserve">
+      <value>Sin camino de preparación</value>
+    </data>
+    <data name="NoStagingPathFound" xml:space="preserve">
+      <value>La carpeta de preparación para las estaciones de radio aún no está configurada.
+Por favor configúrelo ahora.</value>
+    </data>
+    <data name="Paths" xml:space="preserve">
+      <value>Rutas...</value>
+    </data>
+    <data name="NoModInstalled" xml:space="preserve">
+      <value>No hay mod instalado</value>
+    </data>
+    <data name="NoRadioExtMsg" xml:space="preserve">
+      <value>No tienes instalado el mod radioExt.
+No se pueden exportar estaciones de radio al juego.</value>
+    </data>
 </root>

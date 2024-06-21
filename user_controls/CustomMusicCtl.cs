@@ -21,7 +21,6 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
         Dock = DockStyle.Fill;
         Station = station;
         SetSongList(Station.SongsAsList);
-        ApplyFonts();
     }
 
     public Station Station { get; }
@@ -44,37 +43,11 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
         lvSongOrder.Columns[1].Text = GlobalData.Strings.GetString("SongNameHeader");
     }
 
-    public void ApplyFonts()
-    {
-        ApplyFontsToControls(this);
-    }
-
     private void CustomMusicCtl_Load(object sender, EventArgs e)
     {
         Translate();
         UpdateListsAndViews();
         SetOrderedList();
-    }
-
-    private static void ApplyFontsToControls(Control control)
-    {
-        switch (control)
-        {
-            case MenuStrip:
-            case GroupBox:
-            case Button:
-                FontHandler.Instance.ApplyFont(control, "CyberPunk_Regular", 9, FontStyle.Bold);
-                break;
-            case TabControl:
-                FontHandler.Instance.ApplyFont(control, "CyberPunk_Regular", 12, FontStyle.Bold);
-                break;
-            case Label:
-                FontHandler.Instance.ApplyFont(control, "CyberPunk_Regular", 9, FontStyle.Regular);
-                break;
-        }
-
-        foreach (Control child in control.Controls)
-            ApplyFontsToControls(child);
     }
 
     private void SetSongList(List<Song> songList)

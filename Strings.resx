@@ -132,17 +132,18 @@
     <value>Controls the name of your station that will be displayed in the game. Special characters are escaped properly.</value>
   </data>
     <data name="NoExeFound" xml:space="preserve">
-    <value>The path to the Cyberpunk 2077 executable has not been set.\nPlease set it now.</value>
-  </data>
+      <value>The path to the Cyberpunk 2077 executable has not been set.
+Please set it now.</value>
+    </data>
     <data name="NoGamePath" xml:space="preserve">
     <value>No Game Path</value>
   </data>
     <data name="RadioExtPathPlaceholder" xml:space="preserve">
     <value>&lt;no path set; radioExt is not installed&gt;</value>
   </data>
-    <data name="BackupPathPlaceholder" xml:space="preserve">
-    <value>&lt;no path set; radio stations will NOT be backed up&gt;</value>
-  </data>
+    <data name="StagingPathPlaceholder" xml:space="preserve">
+      <value>&lt;no path set; radio stations need to be staged first&gt;</value>
+    </data>
     <data name="AreYouSure" xml:space="preserve">
     <value>Are you sure?</value>
   </data>
@@ -161,7 +162,7 @@
     <data name="RadioStationPath" xml:space="preserve">
     <value>Radio Stations Path</value>
   </data>
-    <data name="BackUpPath" xml:space="preserve">
+    <data name="StagingPath" xml:space="preserve">
     <value>Staging Path</value>
   </data>
     <data name="Change" xml:space="preserve">
@@ -212,12 +213,9 @@
     <data name="Music" xml:space="preserve">
     <value>Music</value>
   </data>
-    <data name="BackupPathHelp" xml:space="preserve">
-    <value>Select the path to stage custom radio stations to.</value>
-  </data>
     <data name="Open" xml:space="preserve">
-    <value>Open</value>
-  </data>
+      <value>Open Game Executable</value>
+    </data>
     <data name="DisplayName" xml:space="preserve">
     <value>Name:</value>
   </data>
@@ -296,9 +294,6 @@
     <data name="StreamURLHelp" xml:space="preserve">
     <value>The URL of the web stream to use.</value>
   </data>
-    <data name="RadioGardenBtnHelp" xml:space="preserve">
-    <value>Press to get a box where you can paste a URL from radio.garden and parse the final web stream.</value>
-  </data>
     <data name="OpenURLErrorOccured" xml:space="preserve">
     <value>An error occurred while trying to open the URL: </value>
   </data>
@@ -354,8 +349,8 @@
     <value>Add Selected  </value>
   </data>
     <data name="RemoveSelected" xml:space="preserve">
-    <value>  Remove Selected</value>
-  </data>
+      <value>  Remove Selected</value>
+    </data>
     <data name="Order" xml:space="preserve">
     <value>Order</value>
   </data>
@@ -408,8 +403,8 @@ If something doesn't look correct, exit out of this window and make changes in t
     <value>Open Staging Folder</value>
   </data>
     <data name="OpenGameFolder" xml:space="preserve">
-    <value>Open Game Folder</value>
-  </data>
+      <value>Open Game Radios Folder</value>
+    </data>
     <data name="ExportToGameComplete" xml:space="preserve">
     <value>Exported to Game!</value>
   </data>
@@ -428,4 +423,24 @@ If something doesn't look correct, exit out of this window and make changes in t
     <data name="ErrorPausingStream" xml:space="preserve">
     <value>Error pausing stream: {0}</value>
   </data>
+    <data name="StagingPathHelp" xml:space="preserve">
+      <value>Select the radio station staging path.</value>
+    </data>
+    <data name="NoStagingPath" xml:space="preserve">
+      <value>No Staging Path</value>
+    </data>
+    <data name="NoStagingPathFound" xml:space="preserve">
+      <value>The staging folder for radio stations is not yet set.
+Please set it now.</value>
+    </data>
+    <data name="Paths" xml:space="preserve">
+      <value>Paths...</value>
+    </data>
+    <data name="NoModInstalled" xml:space="preserve">
+      <value>No Mod Installed</value>
+    </data>
+    <data name="NoRadioExtMsg" xml:space="preserve">
+      <value>You do not have the radioExt mod installed.
+Can't export radio stations to game.</value>
+    </data>
 </root>

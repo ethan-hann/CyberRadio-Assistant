@@ -35,20 +35,23 @@ public partial class MainForm : Form
         GlobalData.Initialize();
 
         InitializeLanguageDropDown();
+        SelectLanguage();
     }
 
     private void MainForm_Load(object sender, EventArgs e)
     {
+        _noStationsCtrl.PathsSet += RefreshAfterPathsChanged;
         splitContainer1.Panel2.Controls.Add(_noStationsCtrl);
-
-        ApplyFontsToControls(this);
+        
+        Translate();
     }
 
     private void MainForm_Shown(object sender, EventArgs e)
     {
         SelectLanguage();
         Translate();
-        CheckGamePath();
+        //CheckStagingPath();
+        //CheckGamePath();
 
         PopulateStations();
         HandleUserControlVisibility();
@@ -115,34 +118,6 @@ public partial class MainForm : Form
         _noStationsCtrl.Visible = true;
     }
 
-    private static void ApplyFontsToControls(Control control)
-    {
-        if (control is IUserControl userControl)
-        {
-            userControl.ApplyFonts();
-        }
-        else
-        {
-            switch (control)
-            {
-                case MenuStrip:
-                case GroupBox:
-                case Button:
-                    FontHandler.Instance.ApplyFont(control, "CyberPunk_Regular", 9, FontStyle.Bold);
-                    break;
-                case TabControl:
-                    FontHandler.Instance.ApplyFont(control, "CyberPunk_Regular", 12, FontStyle.Bold);
-                    break;
-                case Label:
-                    FontHandler.Instance.ApplyFont(control, "CyberPunk_Regular", 9, FontStyle.Regular);
-                    break;
-            }
-
-            foreach (Control child in control.Controls)
-                ApplyFontsToControls(child);
-        }
-    }
-
     private void CheckGamePath()
     {
         if (!Settings.Default.GameBasePath.Equals(string.Empty)) return;
@@ -153,55 +128,119 @@ public partial class MainForm : Form
 
         if (result is not (DialogResult.OK or DialogResult.Cancel)) return;
 
-        var basePath = PathHelper.GetGamePath(fdlgOpenGameExe, true);
+        var basePath = PathHelper.GetGamePath(true);
         if (basePath != null && basePath.Equals(string.Empty)) return;
 
         Settings.Default.GameBasePath = basePath;
         Settings.Default.Save();
     }
 
-    private void PopulateStations()
+    private void CheckStagingPath()
+    {
+        if (!Settings.Default.StagingPath.Equals(string.Empty)) return;
+
+        var caption = GlobalData.Strings.GetString("NoStagingPath");
+        var text = GlobalData.Strings.GetString("NoStagingPathFound");
+        var result = MessageBox.Show(text, caption, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+
+        if (result is not (DialogResult.OK or DialogResult.Cancel)) return;
+
+        var stagingPath = PathHelper.GetStagingPath(true);
+        if (stagingPath.Equals(string.Empty)) return;
+
+        Settings.Default.StagingPath = stagingPath;
+        Settings.Default.Save();
+        
+    }
+
+    //private void PopulateStations()
+    //{
+    //    lbStations.BeginUpdate();
+
+    //    if (!Settings.Default.BackupPath.Equals(string.Empty))
+    //    {
+    //        _stations.Clear();
+    //        _stationEditors.Clear();
+
+    //        foreach (var directory in Directory.EnumerateDirectories(Settings.Default.BackupPath))
+    //        {
+    //            MetaData? metaData = null;
+    //            SongList? songList = null;
+
+    //            foreach (var file in Directory.EnumerateFiles(directory))
+    //            {
+    //                var extension = FileHelper.GetExtension(file);
+
+    //                switch (extension)
+    //                {
+    //                    case ".json":
+    //                        metaData = _metaDataJson.LoadJson(file);
+    //                        break;
+    //                    case ".sgls":
+    //                        songList = _songListJson.LoadJson(file);
+    //                        break;
+    //                    default:
+    //                        continue;
+    //                }
+    //            }
+
+    //            Station s = new();
+    //            if (metaData != null)
+    //                s.MetaData = metaData;
+
+    //            if (songList != null)
+    //                s.SongsAsList = [.. songList];
+
+    //            _stations.Add(s);
+    //            StationEditor editor = new(s);
+
+    //            _stationEditors.Add(editor);
+    //        }
+    //    }
+
+    //    lbStations.DataSource = _stations;
+    //    if (lbStations.Items.Count > 0)
+    //    {
+    //        lbStations.SelectedIndex = 0;
+    //        lbStations_SelectedIndexChanged(lbStations, EventArgs.Empty);
+    //    }
+
+    //    HandleUserControlVisibility();
+
+    //    lbStations.EndUpdate();
+    //}
+
+    public void PopulateStations()
     {
         lbStations.BeginUpdate();
 
-        if (!Settings.Default.BackupPath.Equals(string.Empty))
+        if (!string.IsNullOrEmpty(Settings.Default.StagingPath))
         {
             _stations.Clear();
             _stationEditors.Clear();
 
-            foreach (var directory in Directory.EnumerateDirectories(Settings.Default.BackupPath))
+            foreach (var directory in Directory.EnumerateDirectories(Settings.Default.StagingPath))
             {
-                MetaData? metaData = null;
-                SongList? songList = null;
+                var files = Directory.EnumerateFiles(directory).ToList();
 
-                foreach (var file in Directory.EnumerateFiles(directory))
+                var metaData = files
+                    .Where(file => FileHelper.GetExtension(file) == ".json")
+                    .Select(_metaDataJson.LoadJson)
+                    .FirstOrDefault() ?? new MetaData();
+
+                var songList = files
+                    .Where(file => FileHelper.GetExtension(file) == ".sgls")
+                    .Select(_songListJson.LoadJson)
+                    .FirstOrDefault() ?? [];
+
+                var station = new Station
                 {
-                    var extension = FileHelper.GetExtension(file);
+                    MetaData = metaData,
+                    SongsAsList = [.. songList]
+                };
 
-                    switch (extension)
-                    {
-                        case ".json":
-                            metaData = _metaDataJson.LoadJson(file);
-                            break;
-                        case ".sgls":
-                            songList = _songListJson.LoadJson(file);
-                            break;
-                        default:
-                            continue;
-                    }
-                }
-
-                Station s = new();
-                if (metaData != null)
-                    s.MetaData = metaData;
-
-                if (songList != null)
-                    s.SongsAsList = [.. songList];
-
-                _stations.Add(s);
-                StationEditor editor = new(s);
-
-                _stationEditors.Add(editor);
+                _stations.Add(station);
+                _stationEditors.Add(new StationEditor(station));
             }
         }
 
@@ -213,8 +252,17 @@ public partial class MainForm : Form
         }
 
         HandleUserControlVisibility();
-
         lbStations.EndUpdate();
+    }
+
+    private void RefreshAfterPathsChanged(object? sender, EventArgs e)
+    {
+        PopulateStations();
+        if (_stations.Count > 0)
+        {
+            lbStations.SelectedIndex = 0;
+            lbStations_SelectedIndexChanged(this, EventArgs.Empty);
+        }
     }
 
     private void lbStations_SelectedIndexChanged(object? sender, EventArgs e)
@@ -241,6 +289,9 @@ public partial class MainForm : Form
 
     private void btnAddStation_Click(object sender, EventArgs e)
     {
+        if (Settings.Default.GameBasePath.Equals(string.Empty) || Settings.Default.StagingPath.Equals(string.Empty))
+            return;
+
         Station blankStation = new()
         {
             MetaData =
@@ -263,6 +314,9 @@ public partial class MainForm : Form
 
     private void btnDeleteStation_Click(object sender, EventArgs e)
     {
+        if (Settings.Default.GameBasePath.Equals(string.Empty) || Settings.Default.StagingPath.Equals(string.Empty))
+            return;
+
         if (lbStations.SelectedItem is not Station station) return;
 
         _stations.Remove(station);
@@ -324,14 +378,9 @@ public partial class MainForm : Form
     {
         var index = lbStations.IndexFromPoint(e.Location);
         if (index == ListBox.NoMatches)
-        {
             _ignoreSelectedIndexChanged = true;
-            lbStations.SelectedIndex = _previousStationIndex;
-        }
         else
-        {
             _previousStationIndex = lbStations.SelectedIndex;
-        }
     }
 
     private void exportToGameToolStripMenuItem_Click(object sender, EventArgs e)

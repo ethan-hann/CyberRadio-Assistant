@@ -96,33 +96,6 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Staging Path.
-        /// </summary>
-        internal static string BackUpPath {
-            get {
-                return ResourceManager.GetString("BackUpPath", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Select the path to stage custom radio stations to..
-        /// </summary>
-        internal static string BackupPathHelp {
-            get {
-                return ResourceManager.GetString("BackupPathHelp", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &lt;no path set; radio stations will NOT be backed up&gt;.
-        /// </summary>
-        internal static string BackupPathPlaceholder {
-            get {
-                return ResourceManager.GetString("BackupPathPlaceholder", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
         internal static string Cancel {
@@ -603,7 +576,8 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The path to the Cyberpunk 2077 executable has not been set.\nPlease set it now..
+        ///   Looks up a localized string similar to The path to the Cyberpunk 2077 executable has not been set.
+        ///Please set it now..
         /// </summary>
         internal static string NoExeFound {
             get {
@@ -621,11 +595,49 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No Mod Installed.
+        /// </summary>
+        internal static string NoModInstalled {
+            get {
+                return ResourceManager.GetString("NoModInstalled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The selected file did not look like Cyberpunk 2077. Please try again..
         /// </summary>
         internal static string NonCyberpunkExe {
             get {
                 return ResourceManager.GetString("NonCyberpunkExe", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You do not have the radioExt mod installed.
+        ///Can&apos;t export radio stations to game..
+        /// </summary>
+        internal static string NoRadioExtMsg {
+            get {
+                return ResourceManager.GetString("NoRadioExtMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No Staging Path.
+        /// </summary>
+        internal static string NoStagingPath {
+            get {
+                return ResourceManager.GetString("NoStagingPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The staging folder for radio stations is not yet set.
+        ///Please set it now..
+        /// </summary>
+        internal static string NoStagingPathFound {
+            get {
+                return ResourceManager.GetString("NoStagingPathFound", resourceCulture);
             }
         }
         
@@ -639,7 +651,7 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Open.
+        ///   Looks up a localized string similar to Open Game Executable.
         /// </summary>
         internal static string Open {
             get {
@@ -648,7 +660,7 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Open Game Folder.
+        ///   Looks up a localized string similar to Open Game Radios Folder.
         /// </summary>
         internal static string OpenGameFolder {
             get {
@@ -684,6 +696,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Paths....
+        /// </summary>
+        internal static string Paths {
+            get {
+                return ResourceManager.GetString("Paths", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to radioExt GitHub.
         /// </summary>
         internal static string RadioExtGithub {
@@ -707,15 +728,6 @@ namespace RadioExt_Helper {
         internal static string RadioExtPathPlaceholder {
             get {
                 return ResourceManager.GetString("RadioExtPathPlaceholder", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Press to get a box where you can paste a URL from radio.garden and parse the final web stream..
-        /// </summary>
-        internal static string RadioGardenBtnHelp {
-            get {
-                return ResourceManager.GetString("RadioGardenBtnHelp", resourceCulture);
             }
         }
         
@@ -833,6 +845,33 @@ namespace RadioExt_Helper {
         internal static string Songs {
             get {
                 return ResourceManager.GetString("Songs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Staging Path.
+        /// </summary>
+        internal static string StagingPath {
+            get {
+                return ResourceManager.GetString("StagingPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select the radio station staging path..
+        /// </summary>
+        internal static string StagingPathHelp {
+            get {
+                return ResourceManager.GetString("StagingPathHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;no path set; radio stations need to be staged first&gt;.
+        /// </summary>
+        internal static string StagingPathPlaceholder {
+            get {
+                return ResourceManager.GetString("StagingPathPlaceholder", resourceCulture);
             }
         }
         

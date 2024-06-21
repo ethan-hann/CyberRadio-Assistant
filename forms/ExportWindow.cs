@@ -26,7 +26,6 @@ public partial class ExportWindow : Form
 
     private void ExportWindow_Load(object sender, EventArgs e)
     {
-        ApplyFonts(this);
         Translate();
         PopulateListView();
     }
@@ -36,7 +35,7 @@ public partial class ExportWindow : Form
         GlobalData.SetCulture(Settings.Default.SelectedLanguage);
 
         Text = GlobalData.Strings.GetString("Export");
-        lblConfirm.Text = GlobalData.Strings.GetString("ExportHelp");
+        //lblConfirm.Text = GlobalData.Strings.GetString("ExportHelp");
         btnCancel.Text = GlobalData.Strings.GetString("Cancel");
         btnExportToGame.Text = GlobalData.Strings.GetString("ExportToGame");
         btnExportToStaging.Text = GlobalData.Strings.GetString("ExportToStaging");
@@ -52,44 +51,29 @@ public partial class ExportWindow : Form
         lvStations.Columns[4].Text = GlobalData.Strings.GetString("LVProposedPath");
     }
 
-    private static void ApplyFonts(Control control)
-    {
-        switch (control)
-        {
-            case MenuStrip or GroupBox or Button:
-                FontHandler.Instance.ApplyFont(control, "CyberPunk_Regular", 10, FontStyle.Bold);
-                break;
-            case Label:
-                FontHandler.Instance.ApplyFont(control, "CyberPunk_Regular", 13, FontStyle.Regular);
-                break;
-        }
-
-        foreach (Control child in control.Controls)
-            ApplyFonts(child);
-    }
-
     private void PopulateListView()
     {
         var radioExtPath = PathHelper.GetRadiosPath(Settings.Default.GameBasePath);
 
         foreach (var lvItem in from station in _stationsToExport
-                 let customIconString = station.CustomIcon.UseCustom
-                     ? GlobalData.Strings.GetString("CustomIcon")
-                     : station.MetaData.Icon
-                 let songString = station.MetaData.StreamInfo.IsStream
-                     ? GlobalData.Strings.GetString("IsStream")
-                     : station.Songs.Count.ToString()
-                 let streamString = station.MetaData.StreamInfo.IsStream
-                     ? station.MetaData.StreamInfo.StreamUrl
-                     : GlobalData.Strings.GetString("UsingSongs")
-                 let proposedPath = Path.Combine(radioExtPath, station.MetaData.DisplayName)
-                 select new ListViewItem([
-                     station.MetaData.DisplayName,
-                     customIconString ?? string.Empty,
-                     songString ?? string.Empty,
-                     streamString ?? string.Empty,
-                     proposedPath
-                 ]) { Tag = station })
+                               let customIconString = station.CustomIcon.UseCustom
+                                   ? GlobalData.Strings.GetString("CustomIcon")
+                                   : station.MetaData.Icon
+                               let songString = station.MetaData.StreamInfo.IsStream
+                                   ? GlobalData.Strings.GetString("IsStream")
+                                   : station.Songs.Count.ToString()
+                               let streamString = station.MetaData.StreamInfo.IsStream
+                                   ? station.MetaData.StreamInfo.StreamUrl
+                                   : GlobalData.Strings.GetString("UsingSongs")
+                               let proposedPath = Path.Combine(radioExtPath, station.MetaData.DisplayName)
+                               select new ListViewItem([
+                                   station.MetaData.DisplayName,
+                                   customIconString ?? string.Empty,
+                                   songString ?? string.Empty,
+                                   streamString ?? string.Empty,
+                                   proposedPath
+                               ])
+                               { Tag = station })
             lvStations.Items.Add(lvItem);
 
         lvStations.ResizeColumns();
@@ -103,6 +87,8 @@ public partial class ExportWindow : Form
 
     private void btnExportToGame_Click(object sender, EventArgs e)
     {
+        if (!ShowNoModDialogIfRequired()) return;
+
         if (!bgWorkerExportGame.CancellationPending && !bgWorkerExportGame.IsBusy)
             bgWorkerExportGame.RunWorkerAsync();
     }
@@ -114,6 +100,18 @@ public partial class ExportWindow : Form
             _isCancelling = true;
             bgWorkerExport.CancelAsync();
         }
+    }
+
+    private bool ShowNoModDialogIfRequired()
+    {
+        if (PathHelper.GetRadioExtPath(Settings.Default.GameBasePath).Equals(string.Empty))
+        {
+            var caption = GlobalData.Strings.GetString("NoModInstalled") ?? "No Mod Installed";
+            var text = GlobalData.Strings.GetString("NoRadioExtMsg") ?? "You do not have the radioExt mod installed. Can't export radio stations to game.";
+            MessageBox.Show(this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            return false;
+        }
+        return true;
     }
 
     private void Reset()
@@ -160,16 +158,16 @@ public partial class ExportWindow : Form
 
     private string CreateStationDirectory(Station station)
     {
-        if (string.IsNullOrEmpty(Settings.Default.BackupPath)) return string.Empty;
+        if (string.IsNullOrEmpty(Settings.Default.StagingPath)) return string.Empty;
 
-        var stationPath = Path.Combine(Settings.Default.BackupPath, station.MetaData.DisplayName);
+        var stationPath = Path.Combine(Settings.Default.StagingPath, station.MetaData.DisplayName);
         FileHelper.CreateDirectories(stationPath);
         return stationPath;
     }
 
     private bool CreateMetaDataJson(string stationPath, Station station)
     {
-        if (string.IsNullOrEmpty(Settings.Default.BackupPath)) return false;
+        if (string.IsNullOrEmpty(Settings.Default.StagingPath)) return false;
 
         var mdPath = Path.Combine(stationPath, "metadata.json");
         return _metaDataJson.SaveJson(mdPath, station.MetaData);
@@ -177,7 +175,7 @@ public partial class ExportWindow : Form
 
     private bool CreateSongListJson(string stationPath, Station station)
     {
-        if (string.IsNullOrEmpty(Settings.Default.BackupPath)) return false;
+        if (string.IsNullOrEmpty(Settings.Default.StagingPath)) return false;
 
         var songPath = Path.Combine(stationPath, "songs.sgls");
         return _songListJson.SaveJson(songPath, station.Songs);
@@ -185,7 +183,7 @@ public partial class ExportWindow : Form
 
     private static void CopySongsToStaging(string stationPath, Station station)
     {
-        if (string.IsNullOrEmpty(Settings.Default.BackupPath)) return;
+        if (string.IsNullOrEmpty(Settings.Default.StagingPath)) return;
 
         foreach (var file in Directory.GetFiles(stationPath))
         {
@@ -301,11 +299,19 @@ public partial class ExportWindow : Form
 
     private void btnOpenStagingFolder_Click(object sender, EventArgs e)
     {
-        Process.Start("explorer.exe", Settings.Default.BackupPath);
+        Process.Start("explorer.exe", Settings.Default.StagingPath);
     }
 
     private void btnOpenGameFolder_Click(object sender, EventArgs e)
     {
+        if (!ShowNoModDialogIfRequired()) return;
+
         Process.Start("explorer.exe", PathHelper.GetRadiosPath(Settings.Default.GameBasePath));
+    }
+
+    private void ExportWindow_HelpButtonClicked(object sender, CancelEventArgs e)
+    {
+        //TODO: Open help documentation for this export window
+        //"https://google.com".OpenUrl();
     }
 }

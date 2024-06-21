@@ -1,11 +1,14 @@
-﻿using AetherUtils.Core.Reflection;
+﻿using RadioExt_Helper.forms;
 using RadioExt_Helper.models;
+using RadioExt_Helper.Properties;
 using RadioExt_Helper.utility;
 
 namespace RadioExt_Helper.user_controls;
 
 public sealed partial class NoStationsCtl : UserControl, IUserControl
 {
+    public EventHandler? PathsSet;
+
     public NoStationsCtl()
     {
         InitializeComponent();
@@ -17,36 +20,47 @@ public sealed partial class NoStationsCtl : UserControl, IUserControl
     public void Translate()
     {
         lblNoStations.Text = GlobalData.Strings.GetString("NoStationsYet");
-    }
+        lblNoGamePath.Text = GlobalData.Strings.GetString("NoExeFound");
+        lblNoStagingPath.Text = GlobalData.Strings.GetString("NoStagingPathFound");
 
-    public void ApplyFonts()
-    {
-        ApplyFontsToControls(this);
+        btnPaths.Text = GlobalData.Strings.GetString("Paths");
+        btnPaths.Text = GlobalData.Strings.GetString("Paths");
     }
 
     private void NoStationsCtl_Load(object sender, EventArgs e)
     {
         Translate();
+        CheckPaths();
     }
 
-    private static void ApplyFontsToControls(Control control)
+    private void CheckPaths()
     {
-        switch (control)
-        {
-            case MenuStrip:
-            case GroupBox:
-            case Button:
-                FontHandler.Instance.ApplyFont(control, "CyberPunk_Regular", 9, FontStyle.Bold);
-                break;
-            case TabControl:
-                FontHandler.Instance.ApplyFont(control, "CyberPunk_Regular", 12, FontStyle.Bold);
-                break;
-            case Label:
-                FontHandler.Instance.ApplyFont(control, "CyberPunk_Regular", 28, FontStyle.Bold);
-                break;
-        }
+        var showNoGamePath = false;
+        var showNoStagePath = false;
+        
+        if (Settings.Default.GameBasePath.Equals(string.Empty))
+            showNoGamePath = true;
+        if (Settings.Default.StagingPath.Equals(string.Empty))
+            showNoStagePath = true;
 
-        foreach (Control child in control.Controls)
-            ApplyFontsToControls(child);
+        ToggleControls(showNoGamePath, showNoStagePath);
+    }
+
+    private void ToggleControls(bool gamePath, bool stagePath)
+    {
+        tlpNoGamePath.Visible = gamePath;
+        tlpNoStagingPath.Visible = stagePath;
+
+        //Trigger population of stations
+        if (!tlpNoGamePath.Visible && !tlpNoStagingPath.Visible)
+            PathsSet?.Invoke(this, EventArgs.Empty);
+    }
+
+    private void btnPaths_Click(object sender, EventArgs e)
+    {
+        var result = new PathSettings().ShowDialog();
+
+        if (result == DialogResult.OK)
+            CheckPaths();
     }
 }

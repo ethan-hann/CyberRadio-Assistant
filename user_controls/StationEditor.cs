@@ -20,15 +20,9 @@ public sealed partial class StationEditor : UserControl, IUserControl
         grpSongs.Controls.Add(_musicCtl);
         
         GlobalData.UiIcons.ToList().ForEach(icon => cmbUIIcons.Items.Add(icon));
-        ApplyFonts();
     }
 
     public Station Station { get; }
-
-    public void ApplyFonts()
-    {
-        ApplyFontsToControls(this);
-    }
 
     public void Translate()
     {
@@ -63,29 +57,6 @@ public sealed partial class StationEditor : UserControl, IUserControl
     public MusicPlayer GetMusicPlayer()
     {
         return mpStreamPlayer;
-    }
-
-    private static void ApplyFontsToControls(Control control)
-    {
-        switch (control)
-        {
-            case MenuStrip:
-            case GroupBox:
-            case Button:
-                FontHandler.Instance.ApplyFont(control, "CyberPunk_Regular", 9, FontStyle.Bold);
-                break;
-            case TabControl:
-                FontHandler.Instance.ApplyFont(control, "CyberPunk_Regular", 12, FontStyle.Bold);
-                break;
-            case Label:
-                if (control.Name.Equals("lblSelectedVolume"))
-                    break;
-                FontHandler.Instance.ApplyFont(control, "CyberPunk_Regular", 9, FontStyle.Regular);
-                break;
-        }
-
-        foreach (Control child in control.Controls)
-            ApplyFontsToControls(child);
     }
 
     private void StationEditor_Load(object sender, EventArgs e)

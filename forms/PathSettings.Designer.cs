@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PathSettings));
-            tableLayoutPanel1 = new TableLayoutPanel();
             label4 = new Label();
             lblRadioPath = new Label();
             label2 = new Label();
@@ -37,61 +36,37 @@
             label1 = new Label();
             btnChangeGameBasePath = new Button();
             btnChangeBackUpPath = new Button();
-            btnClearBackupPath = new Button();
             lblBackupPath = new Label();
-            fdlgBackupPath = new FolderBrowserDialog();
-            fdlgOpenGameExe = new OpenFileDialog();
-            tableLayoutPanel1.SuspendLayout();
+            splitContainer1 = new SplitContainer();
+            tableLayoutPanel2 = new TableLayoutPanel();
+            tableLayoutPanel3 = new TableLayoutPanel();
+            ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
+            splitContainer1.Panel1.SuspendLayout();
+            splitContainer1.Panel2.SuspendLayout();
+            splitContainer1.SuspendLayout();
+            tableLayoutPanel2.SuspendLayout();
+            tableLayoutPanel3.SuspendLayout();
             SuspendLayout();
-            // 
-            // tableLayoutPanel1
-            // 
-            tableLayoutPanel1.BackColor = Color.Transparent;
-            tableLayoutPanel1.ColumnCount = 4;
-            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 16.9863014F));
-            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 83.0137F));
-            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 120F));
-            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 75F));
-            tableLayoutPanel1.Controls.Add(label4, 0, 2);
-            tableLayoutPanel1.Controls.Add(lblRadioPath, 1, 1);
-            tableLayoutPanel1.Controls.Add(label2, 0, 1);
-            tableLayoutPanel1.Controls.Add(lblGameBasePath, 1, 0);
-            tableLayoutPanel1.Controls.Add(label1, 0, 0);
-            tableLayoutPanel1.Controls.Add(btnChangeGameBasePath, 2, 0);
-            tableLayoutPanel1.Controls.Add(btnChangeBackUpPath, 2, 2);
-            tableLayoutPanel1.Controls.Add(btnClearBackupPath, 2, 2);
-            tableLayoutPanel1.Controls.Add(lblBackupPath, 1, 2);
-            tableLayoutPanel1.Dock = DockStyle.Fill;
-            tableLayoutPanel1.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            tableLayoutPanel1.Location = new Point(0, 0);
-            tableLayoutPanel1.Name = "tableLayoutPanel1";
-            tableLayoutPanel1.RowCount = 3;
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333321F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333359F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333359F));
-            tableLayoutPanel1.Size = new Size(947, 131);
-            tableLayoutPanel1.TabIndex = 0;
             // 
             // label4
             // 
             label4.Anchor = AnchorStyles.Right;
             label4.AutoSize = true;
-            label4.Location = new Point(33, 100);
+            label4.Location = new Point(25, 108);
             label4.Name = "label4";
-            label4.Size = new Size(91, 17);
+            label4.Size = new Size(84, 17);
             label4.TabIndex = 6;
-            label4.Text = "Back Up Path: ";
+            label4.Text = "Staging Path:";
             // 
             // lblRadioPath
             // 
             lblRadioPath.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             lblRadioPath.AutoSize = true;
-            tableLayoutPanel1.SetColumnSpan(lblRadioPath, 3);
             lblRadioPath.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold | FontStyle.Italic);
             lblRadioPath.ForeColor = Color.Green;
-            lblRadioPath.Location = new Point(130, 56);
+            lblRadioPath.Location = new Point(115, 61);
             lblRadioPath.Name = "lblRadioPath";
-            lblRadioPath.Size = new Size(814, 17);
+            lblRadioPath.Size = new Size(444, 17);
             lblRadioPath.TabIndex = 4;
             lblRadioPath.Text = "<no path set; radioExt is not installed>";
             // 
@@ -99,9 +74,9 @@
             // 
             label2.Anchor = AnchorStyles.Right;
             label2.AutoSize = true;
-            label2.Location = new Point(6, 56);
+            label2.Location = new Point(19, 52);
             label2.Name = "label2";
-            label2.Size = new Size(118, 17);
+            label2.Size = new Size(90, 34);
             label2.TabIndex = 3;
             label2.Text = "Radio Station Path: ";
             // 
@@ -111,9 +86,9 @@
             lblGameBasePath.AutoSize = true;
             lblGameBasePath.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold | FontStyle.Italic);
             lblGameBasePath.ForeColor = Color.Green;
-            lblGameBasePath.Location = new Point(130, 13);
+            lblGameBasePath.Location = new Point(115, 14);
             lblGameBasePath.Name = "lblGameBasePath";
-            lblGameBasePath.Size = new Size(618, 17);
+            lblGameBasePath.Size = new Size(444, 17);
             lblGameBasePath.TabIndex = 2;
             lblGameBasePath.Text = "<no path set; game executable missing>";
             // 
@@ -121,45 +96,51 @@
             // 
             label1.Anchor = AnchorStyles.Right;
             label1.AutoSize = true;
-            label1.Location = new Point(15, 13);
+            label1.Location = new Point(4, 14);
             label1.Name = "label1";
-            label1.Size = new Size(109, 17);
+            label1.Size = new Size(105, 17);
             label1.TabIndex = 0;
             label1.Text = "Game Base Path: ";
             // 
             // btnChangeGameBasePath
             // 
             btnChangeGameBasePath.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            tableLayoutPanel1.SetColumnSpan(btnChangeGameBasePath, 2);
-            btnChangeGameBasePath.Location = new Point(754, 9);
+            btnChangeGameBasePath.BackColor = Color.Yellow;
+            tableLayoutPanel3.SetColumnSpan(btnChangeGameBasePath, 2);
+            btnChangeGameBasePath.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
+            btnChangeGameBasePath.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
+            btnChangeGameBasePath.FlatStyle = FlatStyle.Flat;
+            btnChangeGameBasePath.Font = new Font("Segoe UI Variable Display Semib", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnChangeGameBasePath.Image = Properties.Resources.change_16x16;
+            btnChangeGameBasePath.Location = new Point(3, 8);
             btnChangeGameBasePath.Name = "btnChangeGameBasePath";
-            btnChangeGameBasePath.Size = new Size(190, 25);
+            btnChangeGameBasePath.Size = new Size(172, 30);
             btnChangeGameBasePath.TabIndex = 1;
             btnChangeGameBasePath.Text = "Change...";
-            btnChangeGameBasePath.UseVisualStyleBackColor = true;
+            btnChangeGameBasePath.TextAlign = ContentAlignment.MiddleRight;
+            btnChangeGameBasePath.TextImageRelation = TextImageRelation.ImageBeforeText;
+            btnChangeGameBasePath.UseVisualStyleBackColor = false;
             btnChangeGameBasePath.Click += btnChangeGameBasePath_Click;
             // 
             // btnChangeBackUpPath
             // 
             btnChangeBackUpPath.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            btnChangeBackUpPath.Location = new Point(754, 95);
+            btnChangeBackUpPath.BackColor = Color.Yellow;
+            tableLayoutPanel3.SetColumnSpan(btnChangeBackUpPath, 2);
+            btnChangeBackUpPath.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
+            btnChangeBackUpPath.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
+            btnChangeBackUpPath.FlatStyle = FlatStyle.Flat;
+            btnChangeBackUpPath.Font = new Font("Segoe UI Variable Display Semib", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnChangeBackUpPath.Image = Properties.Resources.change_16x16;
+            btnChangeBackUpPath.Location = new Point(3, 102);
             btnChangeBackUpPath.Name = "btnChangeBackUpPath";
-            btnChangeBackUpPath.Size = new Size(114, 26);
+            btnChangeBackUpPath.Size = new Size(172, 30);
             btnChangeBackUpPath.TabIndex = 9;
             btnChangeBackUpPath.Text = "Change...";
-            btnChangeBackUpPath.UseVisualStyleBackColor = true;
+            btnChangeBackUpPath.TextAlign = ContentAlignment.MiddleRight;
+            btnChangeBackUpPath.TextImageRelation = TextImageRelation.ImageBeforeText;
+            btnChangeBackUpPath.UseVisualStyleBackColor = false;
             btnChangeBackUpPath.Click += btnChangeBackUpPath_Click;
-            // 
-            // btnClearBackupPath
-            // 
-            btnClearBackupPath.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            btnClearBackupPath.Location = new Point(874, 95);
-            btnClearBackupPath.Name = "btnClearBackupPath";
-            btnClearBackupPath.Size = new Size(70, 26);
-            btnClearBackupPath.TabIndex = 7;
-            btnClearBackupPath.Text = "Clear";
-            btnClearBackupPath.UseVisualStyleBackColor = true;
-            btnClearBackupPath.Click += btnClearBackupPath_Click;
             // 
             // lblBackupPath
             // 
@@ -167,58 +148,110 @@
             lblBackupPath.AutoSize = true;
             lblBackupPath.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold | FontStyle.Italic);
             lblBackupPath.ForeColor = Color.Green;
-            lblBackupPath.Location = new Point(130, 100);
+            lblBackupPath.Location = new Point(115, 108);
             lblBackupPath.Name = "lblBackupPath";
-            lblBackupPath.Size = new Size(618, 17);
+            lblBackupPath.Size = new Size(444, 17);
             lblBackupPath.TabIndex = 8;
-            lblBackupPath.Text = "<no path set; radio stations will NOT be backed up>";
+            lblBackupPath.Text = "<no path set; radio stations need to be staged first>";
             // 
-            // fdlgBackupPath
+            // splitContainer1
             // 
-            fdlgBackupPath.Description = "Select the path to backup custom radio stations to.";
-            fdlgBackupPath.UseDescriptionForTitle = true;
+            splitContainer1.Dock = DockStyle.Fill;
+            splitContainer1.Location = new Point(0, 0);
+            splitContainer1.Name = "splitContainer1";
             // 
-            // fdlgOpenGameExe
+            // splitContainer1.Panel1
             // 
-            fdlgOpenGameExe.Filter = "Game Executable|Cyberpunk2077.exe";
+            splitContainer1.Panel1.Controls.Add(tableLayoutPanel2);
+            // 
+            // splitContainer1.Panel2
+            // 
+            splitContainer1.Panel2.Controls.Add(tableLayoutPanel3);
+            splitContainer1.Size = new Size(744, 141);
+            splitContainer1.SplitterDistance = 562;
+            splitContainer1.TabIndex = 1;
+            // 
+            // tableLayoutPanel2
+            // 
+            tableLayoutPanel2.BackColor = Color.Transparent;
+            tableLayoutPanel2.ColumnCount = 2;
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 80F));
+            tableLayoutPanel2.Controls.Add(lblBackupPath, 1, 2);
+            tableLayoutPanel2.Controls.Add(lblRadioPath, 1, 1);
+            tableLayoutPanel2.Controls.Add(label4, 0, 2);
+            tableLayoutPanel2.Controls.Add(lblGameBasePath, 1, 0);
+            tableLayoutPanel2.Controls.Add(label1, 0, 0);
+            tableLayoutPanel2.Controls.Add(label2, 0, 1);
+            tableLayoutPanel2.Dock = DockStyle.Fill;
+            tableLayoutPanel2.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            tableLayoutPanel2.Location = new Point(0, 0);
+            tableLayoutPanel2.Name = "tableLayoutPanel2";
+            tableLayoutPanel2.RowCount = 3;
+            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 33.33333F));
+            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333359F));
+            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333359F));
+            tableLayoutPanel2.Size = new Size(562, 141);
+            tableLayoutPanel2.TabIndex = 1;
+            // 
+            // tableLayoutPanel3
+            // 
+            tableLayoutPanel3.ColumnCount = 2;
+            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tableLayoutPanel3.Controls.Add(btnChangeGameBasePath, 0, 0);
+            tableLayoutPanel3.Controls.Add(btnChangeBackUpPath, 0, 2);
+            tableLayoutPanel3.Dock = DockStyle.Fill;
+            tableLayoutPanel3.Location = new Point(0, 0);
+            tableLayoutPanel3.Name = "tableLayoutPanel3";
+            tableLayoutPanel3.RowCount = 3;
+            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333321F));
+            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333321F));
+            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333321F));
+            tableLayoutPanel3.Size = new Size(178, 141);
+            tableLayoutPanel3.TabIndex = 0;
             // 
             // PathSettings
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
-            AutoScaleMode = AutoScaleMode.Font;
+            AutoScaleDimensions = new SizeF(96F, 96F);
+            AutoScaleMode = AutoScaleMode.Dpi;
             BackColor = Color.White;
-            ClientSize = new Size(947, 126);
-            Controls.Add(tableLayoutPanel1);
+            ClientSize = new Size(744, 141);
+            Controls.Add(splitContainer1);
             Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            FormBorderStyle = FormBorderStyle.FixedSingle;
             Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
+            MaximumSize = new Size(1920, 180);
             MinimizeBox = false;
+            MinimumSize = new Size(0, 180);
             Name = "PathSettings";
             ShowInTaskbar = false;
-            SizeGripStyle = SizeGripStyle.Hide;
             StartPosition = FormStartPosition.CenterParent;
             Text = "Game Paths";
             TopMost = true;
+            FormClosed += PathSettings_FormClosed;
             Load += PathSettings_Load;
-            tableLayoutPanel1.ResumeLayout(false);
-            tableLayoutPanel1.PerformLayout();
+            splitContainer1.Panel1.ResumeLayout(false);
+            splitContainer1.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
+            splitContainer1.ResumeLayout(false);
+            tableLayoutPanel2.ResumeLayout(false);
+            tableLayoutPanel2.PerformLayout();
+            tableLayoutPanel3.ResumeLayout(false);
             ResumeLayout(false);
         }
 
         #endregion
-
-        private TableLayoutPanel tableLayoutPanel1;
         private Label label1;
         private Button btnChangeGameBasePath;
         private Label lblGameBasePath;
         private Label label4;
         private Label lblRadioPath;
         private Label label2;
-        private Button btnClearBackupPath;
         private Label lblBackupPath;
-        private FolderBrowserDialog fdlgBackupPath;
-        private OpenFileDialog fdlgOpenGameExe;
         private Button btnChangeBackUpPath;
+        private SplitContainer splitContainer1;
+        private TableLayoutPanel tableLayoutPanel2;
+        private TableLayoutPanel tableLayoutPanel3;
     }
 }
