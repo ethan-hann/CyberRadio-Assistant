@@ -42,7 +42,7 @@ public partial class MainForm : Form
     {
         _noStationsCtrl.PathsSet += RefreshAfterPathsChanged;
         splitContainer1.Panel2.Controls.Add(_noStationsCtrl);
-        
+
         Translate();
     }
 
@@ -112,7 +112,7 @@ public partial class MainForm : Form
     private void HandleUserControlVisibility()
     {
         if (_stations.Count > 0) return;
-        
+
         splitContainer1.Panel2.Controls.Clear();
         splitContainer1.Panel2.Controls.Add(_noStationsCtrl);
         _noStationsCtrl.Visible = true;
@@ -150,7 +150,7 @@ public partial class MainForm : Form
 
         Settings.Default.StagingPath = stagingPath;
         Settings.Default.Save();
-        
+
     }
 
     //private void PopulateStations()
@@ -354,7 +354,7 @@ public partial class MainForm : Form
     private void cmbLanguageSelect_SelectedIndexChanged(object? sender, EventArgs e)
     {
         if (_languageComboBox.SelectedItem is not ImageComboBoxItem culture) return;
-        
+
         SuspendLayout();
         GlobalData.SetCulture(culture.Text);
 
@@ -406,5 +406,10 @@ public partial class MainForm : Form
     private void radioExtOnNexusModsToolStripMenuItem_Click(object sender, EventArgs e)
     {
         "https://www.nexusmods.com/cyberpunk2077/mods/4591".OpenUrl();
+    }
+
+    private void MainForm_HelpButtonClicked(object sender, CancelEventArgs e)
+    {
+        //TODO: show web help for this form.
     }
 }

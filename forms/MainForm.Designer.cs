@@ -263,6 +263,7 @@
             Name = "MainForm";
             StartPosition = FormStartPosition.CenterParent;
             Text = "Cyber Radio Assistant";
+            HelpButtonClicked += MainForm_HelpButtonClicked;
             Load += MainForm_Load;
             Shown += MainForm_Shown;
             menuStrip1.ResumeLayout(false);

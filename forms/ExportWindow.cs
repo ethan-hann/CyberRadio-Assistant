@@ -28,6 +28,18 @@ public partial class ExportWindow : Form
     {
         Translate();
         PopulateListView();
+
+        if (Settings.Default.GameBasePath.Equals(string.Empty))
+        {
+            btnExportToGame.Enabled = false;
+            btnOpenGameFolder.Enabled = false;
+        }
+
+        if (Settings.Default.StagingPath.Equals(string.Empty))
+        {
+            btnExportToStaging.Enabled = false;
+            btnOpenStagingFolder.Enabled = false;
+        }
     }
 
     private void Translate()
