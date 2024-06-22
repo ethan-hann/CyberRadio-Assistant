@@ -23,6 +23,6 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build CyberRadio.Code --no-restore
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test CyberRadio.Code --no-build --verbosity normal
