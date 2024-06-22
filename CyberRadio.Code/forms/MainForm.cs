@@ -10,8 +10,6 @@ using RadioExt_Helper.utility;
 
 namespace RadioExt_Helper.forms;
 
-//TODO: Add ability to read radio stations from NexusMods and populate a songs.sgls file if it doesn't exist. This would allow users to edit the songs and song order
-// of custom radio stations built by others on NexusMods.
 public partial class MainForm : Form
 {
     private readonly ImageComboBox<ImageComboBoxItem> _languageComboBox = new();
@@ -117,42 +115,7 @@ public partial class MainForm : Form
         _noStationsCtrl.Visible = true;
     }
 
-    private void CheckGamePath()
-    {
-        if (!Settings.Default.GameBasePath.Equals(string.Empty)) return;
-
-        var caption = GlobalData.Strings.GetString("NoGamePath");
-        var text = GlobalData.Strings.GetString("NoExeFound");
-        var result = MessageBox.Show(text, caption, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-
-        if (result is not (DialogResult.OK or DialogResult.Cancel)) return;
-
-        var basePath = PathHelper.GetGamePath(true);
-        if (basePath != null && basePath.Equals(string.Empty)) return;
-
-        Settings.Default.GameBasePath = basePath;
-        Settings.Default.Save();
-    }
-
-    private void CheckStagingPath()
-    {
-        if (!Settings.Default.StagingPath.Equals(string.Empty)) return;
-
-        var caption = GlobalData.Strings.GetString("NoStagingPath");
-        var text = GlobalData.Strings.GetString("NoStagingPathFound");
-        var result = MessageBox.Show(text, caption, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-
-        if (result is not (DialogResult.OK or DialogResult.Cancel)) return;
-
-        var stagingPath = PathHelper.GetStagingPath(true);
-        if (stagingPath.Equals(string.Empty)) return;
-
-        Settings.Default.StagingPath = stagingPath;
-        Settings.Default.Save();
-
-    }
-
-    public void PopulateStations()
+    private void PopulateStations()
     {
         lbStations.BeginUpdate();
         lbStations.DataSource = null;
@@ -162,10 +125,12 @@ public partial class MainForm : Form
             _stations.Clear();
             _stationEditors.Clear();
 
+            var validExtensions = EnumHelper.GetEnumDescriptions<ValidAudioFiles>();
+
             foreach (var directory in FileHelper.SafeEnumerateDirectories(Settings.Default.StagingPath))
             {
-                var files = FileHelper.SafeEnumerateFiles(directory);
-
+                var files = FileHelper.SafeEnumerateFiles(directory).ToList();
+                
                 var metaData = files
                     .Where(file => file.EndsWith("metadata.json"))
                     .Select(_metaDataJson.LoadJson)
@@ -176,8 +141,23 @@ public partial class MainForm : Form
                     .Select(_songListJson.LoadJson)
                     .FirstOrDefault() ?? [];
 
+                //Get the actual audio files in the directory if they exist.
+                var songFiles = files
+                    .Where(file => validExtensions.Contains(Path.GetExtension(file).ToLower()))
+                    .ToList();
+
                 if (metaData == null) continue;
 
+                if (songList.Count == 0)
+                {
+                    songFiles.ForEach(path =>
+                    {
+                        var song = Song.ParseFromFile(path);
+                        if (song != null)
+                            songList.Add(song);
+                    });
+                }
+                
                 var station = new Station
                 {
                     MetaData = metaData,

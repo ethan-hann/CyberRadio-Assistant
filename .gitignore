@@ -3,7 +3,8 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/main/VisualStudio.gitignore
 
-images/*
+CyberRadio.Code/images/*
+CyberRadio.Code/test/*
 
 # User-specific files
 *.rsuser
@@ -403,4 +404,3 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
-test/*

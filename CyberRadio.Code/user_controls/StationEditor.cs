@@ -8,7 +8,8 @@ namespace RadioExt_Helper.user_controls;
 public sealed partial class StationEditor : UserControl, IUserControl
 {
     private readonly CustomMusicCtl _musicCtl;
-
+    private readonly ComboBox _cmbUiIcons;
+    
     public StationEditor(Station station)
     {
         InitializeComponent();
@@ -18,8 +19,8 @@ public sealed partial class StationEditor : UserControl, IUserControl
         _musicCtl = new CustomMusicCtl(Station);
 
         grpSongs.Controls.Add(_musicCtl);
-        
-        GlobalData.UiIcons.ToList().ForEach(icon => cmbUIIcons.Items.Add(icon));
+        _cmbUiIcons = GlobalData.CloneTemplateComboBox();
+        _cmbUiIcons.SelectedIndexChanged += cmbUIIcons_SelectedIndexChanged;
     }
 
     public Station Station { get; }
@@ -62,7 +63,8 @@ public sealed partial class StationEditor : UserControl, IUserControl
     private void StationEditor_Load(object sender, EventArgs e)
     {
         SuspendLayout();
-
+        tlpDisplayTable.Controls.Add(_cmbUiIcons, 1, 1);
+        
         SetDisplayTabValues();
         SetMusicTabValues();
         Translate();
@@ -74,7 +76,7 @@ public sealed partial class StationEditor : UserControl, IUserControl
     private void SetDisplayTabValues()
     {
         txtDisplayName.Text = Station.MetaData.DisplayName;
-        cmbUIIcons.SelectedIndex = cmbUIIcons.Items.IndexOf(Station.MetaData.Icon);
+        _cmbUiIcons.SelectedIndex = _cmbUiIcons.Items.IndexOf(Station.MetaData.Icon);
 
         if (Station.CustomIcon.UseCustom)
         {
@@ -103,9 +105,9 @@ public sealed partial class StationEditor : UserControl, IUserControl
         Station.MetaData.DisplayName = txtDisplayName.Text;
     }
 
-    private void cmbUIIcons_SelectedIndexChanged(object sender, EventArgs e)
+    private void cmbUIIcons_SelectedIndexChanged(object? sender, EventArgs e)
     {
-        if (cmbUIIcons.SelectedItem is string iconStr)
+        if (_cmbUiIcons.SelectedItem is string iconStr)
             Station.MetaData.Icon = iconStr;
     }
 

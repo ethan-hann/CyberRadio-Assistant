@@ -1,11 +1,8 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics;
 using AetherUtils.Core.Extensions;
-using AetherUtils.Core.Reflection;
 using RadioExt_Helper.models;
 using RadioExt_Helper.utility;
-using Button = System.Windows.Forms.Button;
-using File = TagLib.File;
 using ListView = System.Windows.Forms.ListView;
 
 namespace RadioExt_Helper.user_controls;
@@ -92,15 +89,9 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
 
         foreach (var path in fdlgOpenSongs.FileNames)
         {
-            Song song = new();
-            var file = File.Create(path);
-            song.OriginalFilePath = path;
-            song.Name = file.Tag.Title ?? file.Name;
-            song.Artist = file.Tag.FirstPerformer ?? string.Empty;
-            song.Size = (ulong)new FileInfo(path).Length;
-            song.Duration = file.Properties.Duration;
-
-
+            var song = Song.ParseFromFile(path);
+            if (song == null) continue;
+            
             if (!CanSongBeAdded(song)) continue;
             
             Station.SongsAsList.Add(song);

@@ -3,7 +3,6 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Reflection;
 using System.Resources;
-using AetherUtils.Core.Reflection;
 using RadioExt_Helper.forms;
 
 namespace RadioExt_Helper.utility;
@@ -16,24 +15,93 @@ public static class GlobalData
     public static readonly ResourceManager Strings = new("RadioExt_Helper.Strings", typeof(MainForm).Assembly);
 
     private static bool _uiIconsInitialized;
-    private static bool GlobalDataInitialized = false;
+    private static bool _globalDataInitialized;
 
     /// <summary>
     ///     A list of strings containing all UIIcon records in the game. This list is populated from an embedded text file.
     /// </summary>
-    public static BindingList<string> UiIcons { get; private set; } = [];
+    private static BindingList<string> UiIcons { get; set; } = [];
 
+    private static ComboBox UiIconsComboTemplate { get; set; } = new();
+    
     private static Assembly ExecAssembly { get; } = Assembly.GetExecutingAssembly();
 
     //Initialize all global data.
     public static void Initialize()
     {
-        if (GlobalDataInitialized) return;
+        if (_globalDataInitialized) return;
         
         GetUiIcons();
         SetCulture("English (en)");
 
-        GlobalDataInitialized = true;
+        CreateComboBoxTemplate();
+        
+        _globalDataInitialized = true;
+    }
+
+    private static void CreateComboBoxTemplate()
+    {
+        UiIconsComboTemplate = new ComboBox
+        {
+            Font = new Font("Segoe UI", 9, FontStyle.Bold),
+            BackColor = Color.White,
+            DropDownStyle = ComboBoxStyle.DropDown,
+            Name = "cmbUIIconsTemplate",
+            Anchor = AnchorStyles.Left | AnchorStyles.Right,
+            Dock = DockStyle.None,
+            AutoCompleteMode = AutoCompleteMode.Suggest,
+            AutoCompleteSource = AutoCompleteSource.ListItems,
+            DataSource = UiIcons,
+            DisplayMember = "Name",
+            MaxDropDownItems = 24
+        };
+    }
+    
+    /// <summary>
+    /// Get a clone of the combo box holding all the UIIcons. This is faster than creating new combo boxes and
+    /// manually setting the data source.
+    /// </summary>
+    /// <returns>A ComboBox that is a clone of the template combo box. The data source is already set.</returns>
+    public static ComboBox CloneTemplateComboBox()
+    {
+        var clone = new ComboBox
+        {
+            // Copy basic properties
+            Location = UiIconsComboTemplate.Location,
+            Size = UiIconsComboTemplate.Size,
+            DropDownStyle = UiIconsComboTemplate.DropDownStyle,
+            FormattingEnabled = UiIconsComboTemplate.FormattingEnabled,
+            MaxDropDownItems = UiIconsComboTemplate.MaxDropDownItems,
+            IntegralHeight = UiIconsComboTemplate.IntegralHeight,
+            ItemHeight = UiIconsComboTemplate.ItemHeight,
+            MaxLength = UiIconsComboTemplate.MaxLength,
+            Sorted = UiIconsComboTemplate.Sorted,
+            TabIndex = UiIconsComboTemplate.TabIndex,
+            Enabled = UiIconsComboTemplate.Enabled,
+            Visible = UiIconsComboTemplate.Visible,
+            Anchor = UiIconsComboTemplate.Anchor,
+            Dock = UiIconsComboTemplate.Dock,
+            Margin = UiIconsComboTemplate.Margin,
+            Padding = UiIconsComboTemplate.Padding,
+            RightToLeft = UiIconsComboTemplate.RightToLeft,
+            Font = UiIconsComboTemplate.Font,
+            ForeColor = UiIconsComboTemplate.ForeColor,
+            BackColor = UiIconsComboTemplate.BackColor,
+            DropDownWidth = UiIconsComboTemplate.DropDownWidth,
+            DropDownHeight = UiIconsComboTemplate.DropDownHeight,
+            FlatStyle = UiIconsComboTemplate.FlatStyle,
+            DataSource = UiIconsComboTemplate.DataSource,
+            DisplayMember = UiIconsComboTemplate.DisplayMember,
+            ValueMember = UiIconsComboTemplate.ValueMember,
+            BindingContext = UiIconsComboTemplate.BindingContext,
+            SelectedIndex = UiIconsComboTemplate.SelectedIndex,
+            SelectedItem = UiIconsComboTemplate.SelectedItem,
+            SelectedValue = UiIconsComboTemplate.SelectedValue,
+            AutoCompleteMode = UiIconsComboTemplate.AutoCompleteMode,
+            AutoCompleteSource = UiIconsComboTemplate.AutoCompleteSource
+        };
+        
+        return clone;
     }
 
     /// <summary>

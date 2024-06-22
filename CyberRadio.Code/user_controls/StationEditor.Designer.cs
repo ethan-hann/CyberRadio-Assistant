@@ -35,8 +35,7 @@
             lblName = new Label();
             label3 = new Label();
             grpDisplay = new GroupBox();
-            tableLayoutPanel3 = new TableLayoutPanel();
-            cmbUIIcons = new ComboBox();
+            tlpDisplayTable = new TableLayoutPanel();
             tabControl = new TabControl();
             tabDisplayAndIcon = new TabPage();
             panel1 = new Panel();
@@ -80,7 +79,7 @@
             statusStrip1 = new StatusStrip();
             lblStatus = new ToolStripStatusLabel();
             grpDisplay.SuspendLayout();
-            tableLayoutPanel3.SuspendLayout();
+            tlpDisplayTable.SuspendLayout();
             tabControl.SuspendLayout();
             tabDisplayAndIcon.SuspendLayout();
             panel1.SuspendLayout();
@@ -151,7 +150,7 @@
             // grpDisplay
             // 
             grpDisplay.BackColor = Color.White;
-            grpDisplay.Controls.Add(tableLayoutPanel3);
+            grpDisplay.Controls.Add(tlpDisplayTable);
             grpDisplay.Dock = DockStyle.Top;
             grpDisplay.Font = new Font("Segoe UI Variable Display", 9.75F, FontStyle.Bold);
             grpDisplay.Location = new Point(0, 0);
@@ -161,37 +160,22 @@
             grpDisplay.TabStop = false;
             grpDisplay.Text = "Display";
             // 
-            // tableLayoutPanel3
+            // tlpDisplayTable
             // 
-            tableLayoutPanel3.ColumnCount = 2;
-            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 11.141304F));
-            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 88.858696F));
-            tableLayoutPanel3.Controls.Add(lblName, 0, 0);
-            tableLayoutPanel3.Controls.Add(lblIcon, 0, 1);
-            tableLayoutPanel3.Controls.Add(txtDisplayName, 1, 0);
-            tableLayoutPanel3.Controls.Add(cmbUIIcons, 1, 1);
-            tableLayoutPanel3.Dock = DockStyle.Fill;
-            tableLayoutPanel3.Location = new Point(3, 21);
-            tableLayoutPanel3.Name = "tableLayoutPanel3";
-            tableLayoutPanel3.RowCount = 2;
-            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 44.3038F));
-            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 55.6962F));
-            tableLayoutPanel3.Size = new Size(962, 92);
-            tableLayoutPanel3.TabIndex = 0;
-            // 
-            // cmbUIIcons
-            // 
-            cmbUIIcons.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            cmbUIIcons.AutoCompleteMode = AutoCompleteMode.Suggest;
-            cmbUIIcons.AutoCompleteSource = AutoCompleteSource.ListItems;
-            cmbUIIcons.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            cmbUIIcons.FormattingEnabled = true;
-            cmbUIIcons.Location = new Point(110, 54);
-            cmbUIIcons.Name = "cmbUIIcons";
-            cmbUIIcons.Size = new Size(849, 23);
-            cmbUIIcons.Sorted = true;
-            cmbUIIcons.TabIndex = 3;
-            cmbUIIcons.SelectedIndexChanged += cmbUIIcons_SelectedIndexChanged;
+            tlpDisplayTable.ColumnCount = 2;
+            tlpDisplayTable.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 11.141304F));
+            tlpDisplayTable.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 88.858696F));
+            tlpDisplayTable.Controls.Add(lblName, 0, 0);
+            tlpDisplayTable.Controls.Add(lblIcon, 0, 1);
+            tlpDisplayTable.Controls.Add(txtDisplayName, 1, 0);
+            tlpDisplayTable.Dock = DockStyle.Fill;
+            tlpDisplayTable.Location = new Point(3, 21);
+            tlpDisplayTable.Name = "tlpDisplayTable";
+            tlpDisplayTable.RowCount = 2;
+            tlpDisplayTable.RowStyles.Add(new RowStyle(SizeType.Percent, 44.3038F));
+            tlpDisplayTable.RowStyles.Add(new RowStyle(SizeType.Percent, 55.6962F));
+            tlpDisplayTable.Size = new Size(962, 92);
+            tlpDisplayTable.TabIndex = 0;
             // 
             // tabControl
             // 
@@ -742,8 +726,8 @@
             Size = new Size(984, 716);
             Load += StationEditor_Load;
             grpDisplay.ResumeLayout(false);
-            tableLayoutPanel3.ResumeLayout(false);
-            tableLayoutPanel3.PerformLayout();
+            tlpDisplayTable.ResumeLayout(false);
+            tlpDisplayTable.PerformLayout();
             tabControl.ResumeLayout(false);
             tabDisplayAndIcon.ResumeLayout(false);
             panel1.ResumeLayout(false);
@@ -782,7 +766,7 @@
         private Label lblIcon;
         private Label label3;
         private GroupBox grpDisplay;
-        private TableLayoutPanel tableLayoutPanel3;
+        private TableLayoutPanel tlpDisplayTable;
         private TabControl tabControl;
         private TabPage tabDisplayAndIcon;
         private TabPage tabMusic;
@@ -797,7 +781,6 @@
         private RadioButton radUseCustomNo;
         private Label lblInkPart;
         private Label lblInkPath;
-        private ComboBox cmbUIIcons;
         private Panel panel1;
         private GroupBox grpSettings;
         private TableLayoutPanel tableLayoutPanel1;
