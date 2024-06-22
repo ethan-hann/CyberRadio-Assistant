@@ -160,11 +160,10 @@ public partial class ExportWindow : Form
 
             if (!CreateMetaDataJson(stationPath, station)) continue;
 
-            if (station.Songs.Count > 0)
-            {
-                _ = CreateSongListJson(stationPath, station);
-                CopySongsToStaging(stationPath, station);
-            }
+            if (station.Songs.Count <= 0) continue;
+            
+            _ = CreateSongListJson(stationPath, station);
+            CopySongsToStaging(stationPath, station);
         }
     }
 
@@ -233,28 +232,24 @@ public partial class ExportWindow : Form
         }
     }
 
+    private DirectoryCopier? _dirCopier;
+    private readonly string _statusString = GlobalData.Strings.GetString("ExportingStationStatus")
+                                  ?? "Exporting station: {0}";
     private void bgWorkerExportGame_DoWork(object sender, DoWorkEventArgs e)
     {
         ToggleButtons();
-        for (var i = 0; i < 10000; i++)
-        {
-            if (bgWorkerExportGame.CancellationPending)
-            {
-                e.Cancel = true;
-                return;
-            }
-
-            var statusString = GlobalData.Strings.GetString("ExportingStationStatus")
-                               ?? "Exporting station: {0}";
-            UpdateStatus(string.Format(statusString, i));
-            var progressPercentage = (int)(i / (float)10000 * 100);
-            bgWorkerExportGame.ReportProgress(progressPercentage);
-        }
+        _dirCopier = new DirectoryCopier((BackgroundWorker)sender);
+        var radiosPath = PathHelper.GetRadiosPath(Settings.Default.GameBasePath);
+        
+        if (bgWorkerExportGame.CancellationPending)
+            e.Cancel = true;
+        _dirCopier.CopyDirectory(Settings.Default.StagingPath, radiosPath, true);
     }
 
     private void bgWorkerExportGame_ProgressChanged(object sender, ProgressChangedEventArgs e)
     {
         pgExportProgress.Value = e.ProgressPercentage;
+        UpdateStatus(string.Format(_statusString, _dirCopier?.CurrentFile));
     }
 
     private void bgWorkerExportGame_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
