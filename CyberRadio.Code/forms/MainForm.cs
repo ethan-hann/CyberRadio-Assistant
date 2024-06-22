@@ -1,7 +1,6 @@
 using System.ComponentModel;
 using AetherUtils.Core.Extensions;
 using AetherUtils.Core.Files;
-using AetherUtils.Core.Reflection;
 using AetherUtils.Core.WinForms.Controls;
 using AetherUtils.Core.WinForms.Models;
 using RadioExt_Helper.models;
@@ -52,8 +51,6 @@ public partial class MainForm : Form
     {
         SelectLanguage();
         Translate();
-        //CheckStagingPath();
-        //CheckGamePath();
 
         PopulateStations();
         HandleUserControlVisibility();
@@ -155,63 +152,6 @@ public partial class MainForm : Form
 
     }
 
-    //private void PopulateStations()
-    //{
-    //    lbStations.BeginUpdate();
-
-    //    if (!Settings.Default.BackupPath.Equals(string.Empty))
-    //    {
-    //        _stations.Clear();
-    //        _stationEditors.Clear();
-
-    //        foreach (var directory in Directory.EnumerateDirectories(Settings.Default.BackupPath))
-    //        {
-    //            MetaData? metaData = null;
-    //            SongList? songList = null;
-
-    //            foreach (var file in Directory.EnumerateFiles(directory))
-    //            {
-    //                var extension = FileHelper.GetExtension(file);
-
-    //                switch (extension)
-    //                {
-    //                    case ".json":
-    //                        metaData = _metaDataJson.LoadJson(file);
-    //                        break;
-    //                    case ".sgls":
-    //                        songList = _songListJson.LoadJson(file);
-    //                        break;
-    //                    default:
-    //                        continue;
-    //                }
-    //            }
-
-    //            Station s = new();
-    //            if (metaData != null)
-    //                s.MetaData = metaData;
-
-    //            if (songList != null)
-    //                s.SongsAsList = [.. songList];
-
-    //            _stations.Add(s);
-    //            StationEditor editor = new(s);
-
-    //            _stationEditors.Add(editor);
-    //        }
-    //    }
-
-    //    lbStations.DataSource = _stations;
-    //    if (lbStations.Items.Count > 0)
-    //    {
-    //        lbStations.SelectedIndex = 0;
-    //        lbStations_SelectedIndexChanged(lbStations, EventArgs.Empty);
-    //    }
-
-    //    HandleUserControlVisibility();
-
-    //    lbStations.EndUpdate();
-    //}
-
     public void PopulateStations()
     {
         lbStations.BeginUpdate();
@@ -222,9 +162,9 @@ public partial class MainForm : Form
             _stations.Clear();
             _stationEditors.Clear();
 
-            foreach (var directory in FileEnumerator.SafeEnumerateDirectories(Settings.Default.StagingPath))
+            foreach (var directory in FileHelper.SafeEnumerateDirectories(Settings.Default.StagingPath))
             {
-                var files = FileEnumerator.SafeEnumerateFiles(directory);
+                var files = FileHelper.SafeEnumerateFiles(directory);
 
                 var metaData = files
                     .Where(file => file.EndsWith("metadata.json"))
