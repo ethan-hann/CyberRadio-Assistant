@@ -23,19 +23,25 @@ public static class GlobalData
     private static BindingList<string> UiIcons { get; set; } = [];
 
     private static ComboBox UiIconsComboTemplate { get; set; } = new();
-    
+
     private static Assembly ExecAssembly { get; } = Assembly.GetExecutingAssembly();
 
-    //Initialize all global data.
+    /// <summary>
+    ///     <para>
+    ///         Initializes the global data for the application. This includes getting all the embedded resources,
+    ///         setting the initial application culture, and creating the combo box template for the UIIcons.
+    ///     </para>
+    ///     <para>This method should only be called once. Subsequent calls will have no effect.</para>
+    /// </summary>
     public static void Initialize()
     {
         if (_globalDataInitialized) return;
-        
+
         GetUiIcons();
         SetCulture("English (en)");
 
         CreateComboBoxTemplate();
-        
+
         _globalDataInitialized = true;
     }
 
@@ -56,10 +62,10 @@ public static class GlobalData
             MaxDropDownItems = 24
         };
     }
-    
+
     /// <summary>
-    /// Get a clone of the combo box holding all the UIIcons. This is faster than creating new combo boxes and
-    /// manually setting the data source.
+    ///     Get a clone of the combo box holding all the UIIcons. This is faster than creating new combo boxes and
+    ///     manually setting the data source.
     /// </summary>
     /// <returns>A ComboBox that is a clone of the template combo box. The data source is already set.</returns>
     public static ComboBox CloneTemplateComboBox()
@@ -100,7 +106,7 @@ public static class GlobalData
             AutoCompleteMode = UiIconsComboTemplate.AutoCompleteMode,
             AutoCompleteSource = UiIconsComboTemplate.AutoCompleteSource
         };
-        
+
         return clone;
     }
 

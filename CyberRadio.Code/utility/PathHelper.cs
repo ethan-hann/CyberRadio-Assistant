@@ -1,15 +1,14 @@
-﻿using RadioExt_Helper.Properties;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 
 namespace RadioExt_Helper.utility;
 
 /// <summary>
-/// Helper class to get the various paths associated with the game.
+///     Helper class to get the various paths associated with the game.
 /// </summary>
 public static class PathHelper
 {
     /// <summary>
-    /// Retrieves the base game path (the folder containing <c>bin</c>) from the Cyberpunk 2077 executable.
+    ///     Retrieves the base game path (the folder containing <c>bin</c>) from the Cyberpunk 2077 executable.
     /// </summary>
     /// <param name="shouldLoop">Indicates whether the file dialog should continue showing until a valid file is selected.</param>
     /// <returns>The base path of the game or <see cref="string.Empty" /> if path couldn't be determined.</returns>
@@ -20,7 +19,7 @@ public static class PathHelper
             Filter = @"Game Executable|Cyberpunk2077.exe",
             Title = GlobalData.Strings.GetString("Open") ?? "Open Game Executable"
         };
-        
+
         try
         {
             var gamePath = string.Empty;
@@ -55,11 +54,11 @@ public static class PathHelper
     }
 
     /// <summary>
-    /// Retrieves the staging path (the folder containing radio stations before copied to the game).
+    ///     Retrieves the staging path (the folder containing radio stations before copied to the game).
     /// </summary>
     /// <param name="shouldLoop">Indicates whether the file dialog should continue showing until a valid file is selected.</param>
-    /// <returns>The base path of the game or <see cref="string.Empty"/> if path couldn't be determined.</returns>
-    public static string GetStagingPath(bool shouldLoop = false) 
+    /// <returns>The base path of the game or <see cref="string.Empty" /> if path couldn't be determined.</returns>
+    public static string GetStagingPath(bool shouldLoop = false)
     {
         FolderBrowserDialog dialog = new()
         {
@@ -76,8 +75,10 @@ public static class PathHelper
 
                 stagingPath = dialog.SelectedPath;
             } while (stagingPath.Equals(string.Empty) && shouldLoop);
+
             return stagingPath;
-        } catch (Exception ex)
+        }
+        catch (Exception ex)
         {
             Debug.WriteLine(ex);
             return string.Empty;
@@ -102,6 +103,12 @@ public static class PathHelper
         }
     }
 
+    /// <summary>
+    ///     Get the path to the <c>radios</c> folder under the radioExt mod folder. This method does not check if the path
+    ///     exists.
+    /// </summary>
+    /// <param name="gameBasePath">The base path of the game.</param>
+    /// <returns>The path to the <c>radios</c> folder, based on the base path of the game.</returns>
     public static string GetRadiosPath(string gameBasePath)
     {
         return Path.Combine(GetRadioExtPath(gameBasePath), "radios");

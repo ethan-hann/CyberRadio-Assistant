@@ -25,8 +25,6 @@ public partial class MainForm : Form
 
     private int _newStationCount = 1;
 
-    private int _previousStationIndex = -1;
-
     public MainForm()
     {
         InitializeComponent();
@@ -130,7 +128,7 @@ public partial class MainForm : Form
             foreach (var directory in FileHelper.SafeEnumerateDirectories(Settings.Default.StagingPath))
             {
                 var files = FileHelper.SafeEnumerateFiles(directory).ToList();
-                
+
                 var metaData = files
                     .Where(file => file.EndsWith("metadata.json"))
                     .Select(_metaDataJson.LoadJson)
@@ -149,15 +147,13 @@ public partial class MainForm : Form
                 if (metaData == null) continue;
 
                 if (songList.Count == 0)
-                {
                     songFiles.ForEach(path =>
                     {
                         var song = Song.ParseFromFile(path);
                         if (song != null)
                             songList.Add(song);
                     });
-                }
-                
+
                 var station = new Station
                 {
                     MetaData = metaData,
@@ -202,9 +198,6 @@ public partial class MainForm : Form
         if (lbStations.SelectedItem is not Station station) return;
 
         _stationEditors.ForEach(editor => { editor.GetMusicPlayer().StopStream(); });
-
-        if (lbStations.SelectedIndex != ListBox.NoMatches)
-            _previousStationIndex = lbStations.SelectedIndex;
 
         splitContainer1.Panel2.SuspendLayout();
         splitContainer1.Panel2.Controls.Clear();
@@ -305,8 +298,6 @@ public partial class MainForm : Form
         var index = lbStations.IndexFromPoint(e.Location);
         if (index == ListBox.NoMatches)
             _ignoreSelectedIndexChanged = true;
-        else
-            _previousStationIndex = lbStations.SelectedIndex;
     }
 
     private void exportToGameToolStripMenuItem_Click(object sender, EventArgs e)

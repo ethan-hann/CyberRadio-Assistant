@@ -4,14 +4,19 @@ using RadioExt_Helper.utility;
 namespace RadioExt_Helper.user_controls;
 
 /// <summary>
-/// A simple music player control that allows you to stream audio from a URL.
+///     A simple music player control that allows you to stream audio from a URL in real time.
 /// </summary>
 public partial class MusicPlayer : UserControl
 {
-    private string _streamUrl = string.Empty;
     private MediaFoundationReader? _mediaReader;
+    private string _streamUrl = string.Empty;
     private WaveOutEvent? _waveOut;
-    
+
+    public MusicPlayer()
+    {
+        InitializeComponent();
+    }
+
     public string StreamUrl
     {
         get => _streamUrl;
@@ -24,11 +29,6 @@ public partial class MusicPlayer : UserControl
         }
     }
 
-    public MusicPlayer()
-    {
-        InitializeComponent();
-    }
-    
     ~MusicPlayer()
     {
         _waveOut?.Dispose();

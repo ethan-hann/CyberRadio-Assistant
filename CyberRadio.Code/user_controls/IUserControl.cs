@@ -3,8 +3,8 @@
 namespace RadioExt_Helper.user_controls;
 
 /// <summary>
-/// Interface for a custom user control. Implementors should define how to apply fonts and how to translate
-/// their controls.
+///     Interface for a custom user control. Implementors should define how to apply fonts and how to translate
+///     their controls.
 /// </summary>
 public interface IUserControl
 {

@@ -1,5 +1,4 @@
 ﻿using System.Globalization;
-using AetherUtils.Core.Reflection;
 using RadioExt_Helper.models;
 using RadioExt_Helper.utility;
 
@@ -7,9 +6,9 @@ namespace RadioExt_Helper.user_controls;
 
 public sealed partial class StationEditor : UserControl, IUserControl
 {
-    private readonly CustomMusicCtl _musicCtl;
     private readonly ComboBox _cmbUiIcons;
-    
+    private readonly CustomMusicCtl _musicCtl;
+
     public StationEditor(Station station)
     {
         InitializeComponent();
@@ -64,7 +63,7 @@ public sealed partial class StationEditor : UserControl, IUserControl
     {
         SuspendLayout();
         tlpDisplayTable.Controls.Add(_cmbUiIcons, 1, 1);
-        
+
         SetDisplayTabValues();
         SetMusicTabValues();
         Translate();
@@ -73,6 +72,7 @@ public sealed partial class StationEditor : UserControl, IUserControl
     }
 
     #region Display and Icon Tab
+
     private void SetDisplayTabValues()
     {
         txtDisplayName.Text = Station.MetaData.DisplayName;
@@ -238,6 +238,7 @@ public sealed partial class StationEditor : UserControl, IUserControl
     #endregion
 
     #region Hover Help
+
     private void lblName_MouseEnter(object sender, EventArgs e)
     {
         lblStatus.Text = GlobalData.Strings.GetString("StationNameHelp");
@@ -292,5 +293,6 @@ public sealed partial class StationEditor : UserControl, IUserControl
     {
         lblStatus.Text = GlobalData.Strings.GetString("Ready");
     }
+
     #endregion
 }

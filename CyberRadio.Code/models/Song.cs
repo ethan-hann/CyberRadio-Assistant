@@ -40,10 +40,10 @@ public class Song
     public string OriginalFilePath { get; set; } = string.Empty;
 
     /// <summary>
-    /// Get metadata about an audio file and return a new <see cref="Song"/> object.
+    ///     Get metadata about an audio file and return a new <see cref="Song" /> object.
     /// </summary>
     /// <param name="filePath">The path to the audio file.</param>
-    /// <returns>A new <see cref="Song"/> with the metadata or <c>null</c> if an exception occurred.</returns>
+    /// <returns>A new <see cref="Song" /> with the metadata or <c>null</c> if an exception occurred.</returns>
     public static Song? ParseFromFile(string filePath)
     {
         Song? song = new();
@@ -64,7 +64,11 @@ public class Song
 
         return song;
     }
-    
+
+    /// <summary>
+    ///     Get a display friendly value representing this metadata.
+    /// </summary>
+    /// <returns>The <see cref="Name" /> of the song.</returns>
     public override string ToString()
     {
         return Name;

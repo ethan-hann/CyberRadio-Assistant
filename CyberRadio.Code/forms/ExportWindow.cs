@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using AetherUtils.Core.Extensions;
 using AetherUtils.Core.Files;
-using AetherUtils.Core.Reflection;
 using RadioExt_Helper.models;
 using RadioExt_Helper.Properties;
 using RadioExt_Helper.utility;
@@ -47,7 +46,6 @@ public partial class ExportWindow : Form
         GlobalData.SetCulture(Settings.Default.SelectedLanguage);
 
         Text = GlobalData.Strings.GetString("Export");
-        //lblConfirm.Text = GlobalData.Strings.GetString("ExportHelp");
         btnCancel.Text = GlobalData.Strings.GetString("Cancel");
         btnExportToGame.Text = GlobalData.Strings.GetString("ExportToGame");
         btnExportToStaging.Text = GlobalData.Strings.GetString("ExportToStaging");
@@ -68,24 +66,24 @@ public partial class ExportWindow : Form
         var radioExtPath = PathHelper.GetRadiosPath(Settings.Default.GameBasePath);
 
         foreach (var lvItem in from station in _stationsToExport
-                               let customIconString = station.CustomIcon.UseCustom
-                                   ? GlobalData.Strings.GetString("CustomIcon")
-                                   : station.MetaData.Icon
-                               let songString = station.MetaData.StreamInfo.IsStream
-                                   ? GlobalData.Strings.GetString("IsStream")
-                                   : station.Songs.Count.ToString()
-                               let streamString = station.MetaData.StreamInfo.IsStream
-                                   ? station.MetaData.StreamInfo.StreamUrl
-                                   : GlobalData.Strings.GetString("UsingSongs")
-                               let proposedPath = Path.Combine(radioExtPath, station.MetaData.DisplayName)
-                               select new ListViewItem([
-                                   station.MetaData.DisplayName,
-                                   customIconString ?? string.Empty,
-                                   songString ?? string.Empty,
-                                   streamString ?? string.Empty,
-                                   proposedPath
-                               ])
-                               { Tag = station })
+                 let customIconString = station.CustomIcon.UseCustom
+                     ? GlobalData.Strings.GetString("CustomIcon")
+                     : station.MetaData.Icon
+                 let songString = station.MetaData.StreamInfo.IsStream
+                     ? GlobalData.Strings.GetString("IsStream")
+                     : station.Songs.Count.ToString()
+                 let streamString = station.MetaData.StreamInfo.IsStream
+                     ? station.MetaData.StreamInfo.StreamUrl
+                     : GlobalData.Strings.GetString("UsingSongs")
+                 let proposedPath = Path.Combine(radioExtPath, station.MetaData.DisplayName)
+                 select new ListViewItem([
+                         station.MetaData.DisplayName,
+                         customIconString ?? string.Empty,
+                         songString ?? string.Empty,
+                         streamString ?? string.Empty,
+                         proposedPath
+                     ])
+                     { Tag = station })
             lvStations.Items.Add(lvItem);
 
         lvStations.ResizeColumns();
@@ -119,10 +117,12 @@ public partial class ExportWindow : Form
         if (PathHelper.GetRadioExtPath(Settings.Default.GameBasePath).Equals(string.Empty))
         {
             var caption = GlobalData.Strings.GetString("NoModInstalled") ?? "No Mod Installed";
-            var text = GlobalData.Strings.GetString("NoRadioExtMsg") ?? "You do not have the radioExt mod installed. Can't export radio stations to game.";
+            var text = GlobalData.Strings.GetString("NoRadioExtMsg") ??
+                       "You do not have the radioExt mod installed. Can't export radio stations to game.";
             MessageBox.Show(this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
             return false;
         }
+
         return true;
     }
 
@@ -324,6 +324,5 @@ public partial class ExportWindow : Form
     private void ExportWindow_HelpButtonClicked(object sender, CancelEventArgs e)
     {
         //TODO: Open help documentation for this export window
-        //"https://google.com".OpenUrl();
     }
 }

@@ -62,15 +62,13 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
 
         foreach (var lvItem in Station.SongsAsList
                      .Select(song => new ListViewItem([
-                         song.Name,
-                         song.Artist,
-                         $"{song.Duration:hh\\:mm\\:ss}",
-                         song.Size.FormatSize()
-                     ])
-                     { Tag = song }))
-        {
+                             song.Name,
+                             song.Artist,
+                             $"{song.Duration:hh\\:mm\\:ss}",
+                             song.Size.FormatSize()
+                         ])
+                         { Tag = song }))
             lvSongs.Items.Add(lvItem);
-        }
 
         lvSongs.ResizeColumns();
         lvSongs.ResumeLayout();
@@ -91,9 +89,9 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
         {
             var song = Song.ParseFromFile(path);
             if (song == null) continue;
-            
+
             if (!CanSongBeAdded(song)) continue;
-            
+
             Station.SongsAsList.Add(song);
             _bindingSongList.Add(song);
         }
@@ -137,7 +135,7 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
         {
             var item = lvSongOrder.Items[i];
             if (item.Tag is not Song song) continue;
-            
+
             if (!Station.SongsAsList.Contains(song))
                 lvSongOrder.Items.Remove(item);
         }
@@ -165,7 +163,7 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
         if (lvSongs.SelectedItems.Count != 1) return;
 
         if (lvSongs.SelectedItems[0].Tag is not Song song) return;
-        
+
         if (Directory.GetParent(song.OriginalFilePath) is { } parentDir)
             Process.Start("explorer.exe", parentDir.FullName);
     }
@@ -211,7 +209,7 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
         UpdateListsAndViews();
 
         if (lvSongOrder.Items.Count <= 0) return;
-        
+
         lvSongOrder.Items[0].Selected = true;
         lvSongOrder.EnsureVisible(0);
     }
@@ -226,13 +224,13 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
     private void lvSongOrder_DragDrop(object sender, DragEventArgs e)
     {
         if (e.Data == null || !e.Data.GetDataPresent(typeof(ListViewItem))) return;
-        
+
         var cp = lvSongOrder.PointToClient(new Point(e.X, e.Y));
         var hoverItem = lvSongOrder.GetItemAt(cp.X, cp.Y);
         var dragItem = e.Data.GetData(typeof(ListViewItem));
 
         if (hoverItem == null || dragItem == hoverItem || dragItem?.GetType() != typeof(ListViewItem)) return;
-            
+
         var item = (ListViewItem)dragItem;
         var hoverIndex = hoverItem.Index;
         lvSongOrder.Items.Remove(item);
@@ -247,7 +245,7 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
 
         // Auto-scroll
         if (sender is not ListView lv) return;
-        
+
         var pt = lv.PointToClient(new Point(e.X, e.Y));
         var hoverItem = lv.GetItemAt(pt.X, pt.Y);
         hoverItem?.EnsureVisible();
@@ -255,7 +253,7 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
 
     private void lvSongOrder_ItemDrag(object sender, ItemDragEventArgs e)
     {
-        if (e.Item != null) 
+        if (e.Item != null)
             lvSongOrder.DoDragDrop(e.Item, DragDropEffects.Move);
     }
 

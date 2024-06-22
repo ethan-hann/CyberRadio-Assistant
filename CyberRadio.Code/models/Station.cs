@@ -1,19 +1,14 @@
 ﻿namespace RadioExt_Helper.models;
 
 /// <summary>
-///     Wrapper that represents a single radio station. Contains all information related to the station.
+///     Represents a single radio station. Contains all information related to the station.
 /// </summary>
 public class Station
 {
     /// <summary>
     ///     The metadata associated with this station.
     /// </summary>
-    public MetaData MetaData { get; set; } = new();
-
-    ///// <summary>
-    ///// The metadata associated with this station.
-    ///// </summary>
-    //public MetaData MetaData { get; set; } = new();
+    public MetaData MetaData { get; init; } = new();
 
     /// <summary>
     ///     The stream info associated with this station.
@@ -21,7 +16,7 @@ public class Station
     public StreamInfo StreamInfo
     {
         get => MetaData.StreamInfo;
-        set => MetaData.StreamInfo = value;
+        init => MetaData.StreamInfo = value;
     }
 
     /// <summary>
@@ -30,7 +25,7 @@ public class Station
     public CustomIcon CustomIcon
     {
         get => MetaData.CustomIcon;
-        set => MetaData.CustomIcon = value;
+        init => MetaData.CustomIcon = value;
     }
 
     /// <summary>

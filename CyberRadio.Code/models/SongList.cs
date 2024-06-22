@@ -8,7 +8,11 @@ namespace RadioExt_Helper.models;
 /// </summary>
 public class SongList : ICollection<Song>
 {
-    [JsonProperty("songs")] public List<Song> Songs { get; set; } = [];
+    /// <summary>
+    ///     The songs for the radio station, as a serializable list.
+    /// </summary>
+    [JsonProperty("songs")]
+    public List<Song> Songs { get; set; } = [];
 
     public int Count => Songs.Count;
 
@@ -45,25 +49,11 @@ public class SongList : ICollection<Song>
 
     bool ICollection<Song>.Remove(Song item)
     {
-        Remove(item);
-        return true;
+        return Songs.Remove(item);
     }
 
     IEnumerator IEnumerable.GetEnumerator()
     {
         return GetEnumerator();
-    }
-
-    public void Remove(Song song)
-    {
-        ArgumentNullException.ThrowIfNull(song);
-        Songs.Remove(song);
-    }
-
-    public void Remove(string songName)
-    {
-        ArgumentException.ThrowIfNullOrEmpty(songName);
-
-        Songs.Remove(Songs.First(s => s.Name.Equals(songName)));
     }
 }

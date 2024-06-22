@@ -1,14 +1,12 @@
-﻿using AetherUtils.Core.Reflection;
-using RadioExt_Helper.Properties;
-using RadioExt_Helper.user_controls;
+﻿using RadioExt_Helper.Properties;
 using RadioExt_Helper.utility;
 
 namespace RadioExt_Helper.forms;
 
 public partial class PathSettings : Form
 {
-    private bool _stageFolderChanged = false;
-    private bool _gameFolderChanged = false;
+    private bool _gameFolderChanged;
+    private bool _stageFolderChanged;
 
     public PathSettings()
     {
@@ -37,11 +35,13 @@ public partial class PathSettings : Form
 
     private void SetLabels()
     {
-        lblGameBasePath.Text = !Settings.Default.GameBasePath.Equals(string.Empty) ?
-            Settings.Default.GameBasePath : GlobalData.Strings.GetString("GameBasePathPlaceholder");
+        lblGameBasePath.Text = !Settings.Default.GameBasePath.Equals(string.Empty)
+            ? Settings.Default.GameBasePath
+            : GlobalData.Strings.GetString("GameBasePathPlaceholder");
 
-        lblBackupPath.Text = !Settings.Default.StagingPath.Equals(string.Empty) ?
-            Settings.Default.StagingPath : GlobalData.Strings.GetString("StagingPathPlaceholder");
+        lblBackupPath.Text = !Settings.Default.StagingPath.Equals(string.Empty)
+            ? Settings.Default.StagingPath
+            : GlobalData.Strings.GetString("StagingPathPlaceholder");
 
         var radioPath = PathHelper.GetRadioExtPath(Settings.Default.GameBasePath);
         lblRadioPath.Text = radioPath.Equals(string.Empty)
@@ -51,7 +51,7 @@ public partial class PathSettings : Form
 
     private void btnChangeGameBasePath_Click(object sender, EventArgs e)
     {
-        var basePath = PathHelper.GetGamePath(false);
+        var basePath = PathHelper.GetGamePath();
         if (basePath == null || basePath.Equals(string.Empty)) return;
 
         if (!Settings.Default.GameBasePath.Equals(basePath))
@@ -64,7 +64,7 @@ public partial class PathSettings : Form
 
     private void btnChangeBackUpPath_Click(object sender, EventArgs e)
     {
-        var stagingPath = PathHelper.GetStagingPath(false);
+        var stagingPath = PathHelper.GetStagingPath();
         if (stagingPath.Equals(string.Empty) || stagingPath.Equals(Settings.Default.StagingPath)) return;
 
         if (!Settings.Default.StagingPath.Equals(stagingPath))

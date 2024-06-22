@@ -37,7 +37,7 @@ public sealed partial class NoStationsCtl : UserControl, IUserControl
     {
         var showNoGamePath = false;
         var showNoStagePath = false;
-        
+
         if (Settings.Default.GameBasePath.Equals(string.Empty))
             showNoGamePath = true;
         if (Settings.Default.StagingPath.Equals(string.Empty))
