@@ -13,34 +13,34 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Compile Remove="images\**"/>
-        <Compile Remove="resources\images\**"/>
-        <EmbeddedResource Remove="images\**"/>
-        <EmbeddedResource Remove="resources\images\**"/>
-        <None Remove="images\**"/>
-        <None Remove="resources\images\**"/>
+        <Compile Remove="images\**" />
+        <Compile Remove="resources\images\**" />
+        <EmbeddedResource Remove="images\**" />
+        <EmbeddedResource Remove="resources\images\**" />
+        <None Remove="images\**" />
+        <None Remove="resources\images\**" />
     </ItemGroup>
 
     <ItemGroup>
-        <None Remove="resources\final_ui_icon_strings.txt"/>
-        <None Remove="resources\fonts\CFNotcheDemo-Bold.ttf"/>
-        <None Remove="resources\fonts\CFNotcheDemo-Regular.ttf"/>
+        <None Remove="resources\final_ui_icon_strings.txt" />
+        <None Remove="resources\fonts\CFNotcheDemo-Bold.ttf" />
+        <None Remove="resources\fonts\CFNotcheDemo-Regular.ttf" />
     </ItemGroup>
 
     <ItemGroup>
-        <EmbeddedResource Include="resources\cyber-radio-assistant.ico"/>
+        <EmbeddedResource Include="resources\cyber-radio-assistant.ico" />
     </ItemGroup>
 
     <ItemGroup>
-        <EmbeddedResource Include="resources\final_ui_icon_strings.txt"/>
-        <EmbeddedResource Include="resources\fonts\CFNotcheDemo-Bold.ttf"/>
-        <EmbeddedResource Include="resources\fonts\CFNotcheDemo-Regular.ttf"/>
+        <EmbeddedResource Include="resources\final_ui_icon_strings.txt" />
+        <EmbeddedResource Include="resources\fonts\CFNotcheDemo-Bold.ttf" />
+        <EmbeddedResource Include="resources\fonts\CFNotcheDemo-Regular.ttf" />
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="AetherUtils.Core" Version="1.0.6"/>
-        <PackageReference Include="NAudio" Version="2.2.1"/>
-        <PackageReference Include="TagLibSharp" Version="2.3.0"/>
+        <PackageReference Include="AetherUtils.Core" Version="1.0.6" />
+        <PackageReference Include="NAudio" Version="2.2.1" />
+        <PackageReference Include="TagLibSharp" Version="2.3.0" />
     </ItemGroup>
 
     <ItemGroup>
