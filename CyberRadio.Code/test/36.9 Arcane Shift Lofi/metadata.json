@@ -1,0 +1,21 @@
+{
+  "displayName": "36.9 Arcane Shift Lofi",
+  "fm": 36.9,
+  "volume": 1.0,
+  "icon": "UIIcon.Stealth",
+  "customIcon": {
+    "inkAtlasPath": "base\\icon\\arcane_shift_atlas.inkatlas",
+    "inkAtlasPart": "icon_part",
+    "useCustom": true
+  },
+  "streamInfo": {
+    "streamURL": "",
+    "isStream": false
+  },
+  "order": [
+    "08-Goosestaf - Lunarize.mp3",
+    "09-Gill Chang - Knowhere.mp3",
+    "07-Dilip - Pulse.mp3",
+    "10-Toyko - Ever Fall.mp3"
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "displayName": "35.8 Arcane Shift Lofi Vol.2",
+  "fm": 35.8,
+  "volume": 1.0,
+  "icon": "UIIcon.Stealth",
+  "customIcon": {
+    "inkAtlasPath": "base\\icon\\arcane_shift2_atlas.inkatlas",
+    "inkAtlasPart": "icon_part",
+    "useCustom": true
+  },
+  "streamInfo": {
+    "streamURL": "",
+    "isStream": false
+  },
+  "order": []
+}
