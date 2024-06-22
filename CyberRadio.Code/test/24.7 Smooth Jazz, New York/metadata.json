@@ -1,0 +1,16 @@
+{
+  "displayName": "24.7 Smooth Jazz, New York",
+  "fm": 24.7,
+  "volume": 1.0,
+  "icon": "UIIcon.alcohol_absynth",
+  "customIcon": {
+    "inkAtlasPath": "path\\to\\custom\\atlas.inkatlas",
+    "inkAtlasPart": "custom_texture_part",
+    "useCustom": false
+  },
+  "streamInfo": {
+    "streamURL": "https://radio.garden/api/ara/content/listen/1vlrqH6v/channel.mp3",
+    "isStream": true
+  },
+  "order": []
+}

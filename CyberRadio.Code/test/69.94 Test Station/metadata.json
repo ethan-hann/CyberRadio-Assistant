@@ -1,0 +1,20 @@
+{
+  "displayName": "69.94 Test Station",
+  "fm": 69.94,
+  "volume": 6.3,
+  "icon": "UIIcon.alcohol_xibalba",
+  "customIcon": {
+    "inkAtlasPath": "path\\to\\custom\\atlas.inkatlas",
+    "inkAtlasPart": "custom_texture_part",
+    "useCustom": false
+  },
+  "streamInfo": {
+    "streamURL": "https://radio.garden/api/ara/content/listen/TP8NDBv7/channel.mp3",
+    "isStream": false
+  },
+  "order": [
+    "Aero Chord Surface_remixed.mp3",
+    "HorrorPen - Dramatic Action.mp3",
+    "Sad Music - Violin.mp3"
+  ]
+}
