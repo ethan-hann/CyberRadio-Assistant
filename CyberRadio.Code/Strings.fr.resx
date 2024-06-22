@@ -444,4 +444,22 @@ Veuillez le définir maintenant.</value>
       <value>Vous n'avez pas installé le mod radioExt.
 Impossible d'exporter les stations de radio vers le jeu.</value>
     </data>
+    <data name="AboutInfo" xml:space="preserve">
+      <value>Un outil pour aider à créer et gérer des stations de radio personnalisées dans Cyberpunk 2077 lors de l'utilisation du module radioExt.</value>
+    </data>
+    <data name="AboutSpecialThanks1" xml:space="preserve">
+      <value>Remerciement spécial à</value>
+    </data>
+    <data name="AboutSpecialThanks2" xml:space="preserve">
+      <value>pour le super mod radioExt!</value>
+    </data>
+    <data name="AboutVersion" xml:space="preserve">
+      <value>Version {0}</value>
+    </data>
+    <data name="AboutGithubRepo" xml:space="preserve">
+      <value>Dépôt Github</value>
+    </data>
+    <data name="AboutLicense" xml:space="preserve">
+      <value>Licence</value>
+    </data>
 </root>

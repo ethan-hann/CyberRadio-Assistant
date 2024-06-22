@@ -146,6 +146,11 @@ public sealed partial class StationEditor : UserControl, IUserControl
         lblSelectedVolume.Text = $@"{Station.MetaData.Volume:F1}";
     }
 
+    private void lblVolumeVal_DoubleClick(object sender, EventArgs e)
+    {
+        lblSelectedVolume_DoubleClick(sender, e);
+    }
+
     private void lblSelectedVolume_DoubleClick(object sender, EventArgs e)
     {
         txtVolumeEdit.Text = lblSelectedVolume.Text;
@@ -295,4 +300,5 @@ public sealed partial class StationEditor : UserControl, IUserControl
     }
 
     #endregion
+
 }

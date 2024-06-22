@@ -335,6 +335,7 @@
             lblVolumeVal.TabIndex = 6;
             lblVolumeVal.Text = "Value:";
             lblVolumeVal.TextAlign = ContentAlignment.MiddleCenter;
+            lblVolumeVal.DoubleClick += lblVolumeVal_DoubleClick;
             lblVolumeVal.MouseEnter += lblVolumeVal_MouseEnter;
             lblVolumeVal.MouseLeave += lbl_MouseLeave;
             // 

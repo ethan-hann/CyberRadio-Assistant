@@ -326,9 +326,18 @@ public partial class MainForm : Form
     {
         "https://www.nexusmods.com/cyberpunk2077/mods/4591".OpenUrl();
     }
+    private void howToUseToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        "https://ethan-hann.github.io/CyberRadio-Assistant/index.html".OpenUrl();
+    }
 
     private void MainForm_HelpButtonClicked(object sender, CancelEventArgs e)
     {
-        //TODO: show web help for this form.
+        "https://ethan-hann.github.io/CyberRadio-Assistant/index.html".OpenUrl();
+    }
+
+    private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        new AboutBox().ShowDialog();
     }
 }

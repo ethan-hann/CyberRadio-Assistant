@@ -318,6 +318,6 @@ public partial class ExportWindow : Form
 
     private void ExportWindow_HelpButtonClicked(object sender, CancelEventArgs e)
     {
-        //TODO: Open help documentation for this export window
+        "https://ethan-hann.github.io/CyberRadio-Assistant/docs/export.html".OpenUrl();
     }
 }

@@ -69,6 +69,60 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Github Repo.
+        /// </summary>
+        internal static string AboutGithubRepo {
+            get {
+                return ResourceManager.GetString("AboutGithubRepo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A tool to help create and manage custom radio stations in Cyberpunk 2077 when using the radioExt Mod..
+        /// </summary>
+        internal static string AboutInfo {
+            get {
+                return ResourceManager.GetString("AboutInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to License.
+        /// </summary>
+        internal static string AboutLicense {
+            get {
+                return ResourceManager.GetString("AboutLicense", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Special thanks to.
+        /// </summary>
+        internal static string AboutSpecialThanks1 {
+            get {
+                return ResourceManager.GetString("AboutSpecialThanks1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to for the awesome radioExt mod!.
+        /// </summary>
+        internal static string AboutSpecialThanks2 {
+            get {
+                return ResourceManager.GetString("AboutSpecialThanks2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Version {0}.
+        /// </summary>
+        internal static string AboutVersion {
+            get {
+                return ResourceManager.GetString("AboutVersion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add Selected  .
         /// </summary>
         internal static string AddSelected {

@@ -124,6 +124,7 @@
             howToUseToolStripMenuItem.Name = "howToUseToolStripMenuItem";
             howToUseToolStripMenuItem.Size = new Size(200, 22);
             howToUseToolStripMenuItem.Text = "How To Use";
+            howToUseToolStripMenuItem.Click += howToUseToolStripMenuItem_Click;
             // 
             // radioExtOnNexusModsToolStripMenuItem
             // 
@@ -152,6 +153,7 @@
             aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
             aboutToolStripMenuItem.Size = new Size(200, 22);
             aboutToolStripMenuItem.Text = "About";
+            aboutToolStripMenuItem.Click += aboutToolStripMenuItem_Click;
             // 
             // splitContainer1
             // 
@@ -223,24 +225,30 @@
             // btnDeleteStation
             // 
             btnDeleteStation.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            btnDeleteStation.Image = Properties.Resources.cancel_16x16;
             btnDeleteStation.Location = new Point(167, 2);
             btnDeleteStation.Margin = new Padding(3, 2, 3, 2);
             btnDeleteStation.Name = "btnDeleteStation";
             btnDeleteStation.Size = new Size(158, 33);
             btnDeleteStation.TabIndex = 1;
             btnDeleteStation.Text = "Delete Station";
+            btnDeleteStation.TextAlign = ContentAlignment.MiddleRight;
+            btnDeleteStation.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnDeleteStation.UseVisualStyleBackColor = true;
             btnDeleteStation.Click += btnDeleteStation_Click;
             // 
             // btnAddStation
             // 
             btnAddStation.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            btnAddStation.Image = Properties.Resources.plus_16x16;
             btnAddStation.Location = new Point(3, 2);
             btnAddStation.Margin = new Padding(3, 2, 3, 2);
             btnAddStation.Name = "btnAddStation";
             btnAddStation.Size = new Size(158, 33);
             btnAddStation.TabIndex = 0;
             btnAddStation.Text = "New Station";
+            btnAddStation.TextAlign = ContentAlignment.MiddleRight;
+            btnAddStation.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnAddStation.UseVisualStyleBackColor = true;
             btnAddStation.Click += btnAddStation_Click;
             // 
