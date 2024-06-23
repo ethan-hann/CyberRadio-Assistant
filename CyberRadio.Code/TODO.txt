@@ -1,0 +1,4 @@
+﻿TODO: Ensure deleted stations are also deleted from the staging folder!
+TODO: Fix the bug where a new station may not be selected automatically in the list box.
+TODO: Add a check for the FM number in the display name. Add it automatically if not present!
+TODO: Synchronize display name and station name in listbox upon editing the display name in the station properties.

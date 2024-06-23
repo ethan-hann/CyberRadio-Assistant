@@ -31,6 +31,11 @@
         ]
       }
     ],
+    "markdownEngineProperties":{
+      "alerts":{
+        "TODO": "alert alert-secondary"
+      }
+    },
     "output": "_site",
     "template":["default","modern"],
     "postProcessors": ["ExtractSearchIndex"],

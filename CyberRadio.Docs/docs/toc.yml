@@ -3,6 +3,10 @@
 - name: Getting Started
   href: getting-started.md
 - name: Creating Stations
-  href: creating-stations.md
+  href: stations.md
 - name: Exporting
   href: export.md
+- name: How to Get the Stream URL from Radio Garden
+  href: using-radio-garden-streams.md
+- name: Localization
+  href: localization.md

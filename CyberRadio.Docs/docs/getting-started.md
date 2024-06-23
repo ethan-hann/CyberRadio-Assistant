@@ -77,6 +77,8 @@ Most of the labels on the station's properties pane provide help when hovered ov
 
 At any point, you can click the `?` at the top right of the window to open this documentation. The export window also has a `?` on it that will open the help page for exporting stations.
 
+This documentation can also be opened from `Help > How To Use` in the main menu bar.
+
 # Next Steps
 
-**You are now ready to [create some stations](creating-stations.md)!**
+**You are now ready to [create some stations](stations.md)!**

@@ -25,3 +25,20 @@ A brief list of features are below:
 This documentation has two parts:
 1) a [full guide](docs/introduction.md) that goes over how to use Cyber Radio Assistant 📃
 2) an [API reference](api/RadioExt_Helper.forms.yml) that is useful if you want to see the classes and methods behind the scenes 😄
+
+# [Github Repo](https://github.com/ethan-hann/CyberRadio-Assistant)
+
+---
+# To-Do List
+
+> [!TODO]
+> Ensure deleted stations are also deleted from the staging folder!
+
+> [!TODO]
+> Fix the bug where a new station may not be selected automatically in the list box.
+
+> [!TODO]
+> Add a check for the FM number in the display name. Add it automatically if not present!
+
+> [!TODO]
+> Synchronize display name and station name in listbox upon editing the display name in the station properties.
