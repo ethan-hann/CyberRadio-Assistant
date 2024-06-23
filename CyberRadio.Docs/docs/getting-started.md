@@ -2,7 +2,13 @@
 
 This quick walkthrough shows how to get started using Cyber Radio Assistant (CRA).
 
-Obviously, the first thing you should do is double-click the `.exe` to open it up. Upon first startup, you'll see this screen:
+Obviously, the first thing you should do is double-click the `.exe` to open it up. Because I'm not paying exorbiants amount of money to do [code-signing](https://codesigncert.com/blog/code-signing-certificate-cost), you may see the warning from Windows Smartscreen. Just click `More info` and `Run anyway`:
+
+![windows_smartscreen_1](../images/smartscreen_1.png)
+
+![windows_smartscreen_2](../images/smartscreen_2.png)
+
+Upon first startup, you'll see this screen:
 
 ![start-screen](../images/start_screen.png)
 

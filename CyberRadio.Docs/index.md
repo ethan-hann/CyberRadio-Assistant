@@ -28,6 +28,46 @@ This documentation has two parts:
 
 # [Github Repo](https://github.com/ethan-hann/CyberRadio-Assistant)
 
+# VirusTotal Report
+
+Since you should never run `.exe` files from people you don't trust, I urge you to verify the hash of the file you downloaded against the below.
+
+Also, check the VirusTotal report. There were 2 detections out of 71 but both are false positives. If you don't believe me, look through the [source code](https://github.com/ethan-hann/CyberRadio-Assistant) and tell me where the virus is.
+
+## Summary
+
+- **File Name:** `CyberRadioAssistant.exe`
+- **SHA-256:** 
+`a781f290fd4363fd01bf700defbd9e1bc8d13deebe48e2d5527a5d90119721fd`
+- **Detection Ratio:** 2/71
+- **Date:** 2024-06-23 06:35:57 UTC
+
+## Detailed Report
+
+For the full VirusTotal report, please visit the following link:
+
+[View VirusTotal Report](https://www.virustotal.com/gui/file/a781f290fd4363fd01bf700defbd9e1bc8d13deebe48e2d5527a5d90119721fd/detection)
+
+## Key Findings
+
+- **Antivirus Detections:** 
+  - Symantec: **`Clean`**
+  - McAfee: **`Clean`**
+  - Kaspersky: **`Clean`**
+  - Avast: **`Clean`**
+  - BitDefender: **`Clean`**
+  - Bkav Pro: `W64.AIDetectMalware` (**FALSE POSITIVE**)
+  - MaxSecure: `Win.MxResIcn.Heur.Gen` (**FALSE POSITIVE**)
+
+## Screenshots
+
+Here are some screenshots from the VirusTotal report:
+
+### Detection Overview
+![vt_detection_overview](images/vt_detection_overview.png)
+
+### Detailed Analysis
+![vt_detailed_overview](images/vt_detailed_overview.png)
 ---
 # To-Do List
 
