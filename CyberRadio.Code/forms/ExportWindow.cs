@@ -173,7 +173,7 @@ public partial class ExportWindow : Form
 
     private void RemoveDeletedStations()
     {
-        var stationNames = _stationsToExport.Select((s, name) => s.MetaData.DisplayName);
+        var stationNames = _stationsToExport.Select(station => station.MetaData.DisplayName);
         var directories = Directory.GetDirectories(Settings.Default.StagingPath);
         var directoriesToDelete = directories
             .Where(dir => !stationNames.Contains(Path.GetFileName(dir), StringComparer.OrdinalIgnoreCase))
