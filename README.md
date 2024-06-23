@@ -6,6 +6,7 @@
 [![Buy me a coffee](https://img.shields.io/static/v1.svg?label=Buy%20me%20a%20coffee&message=🥨&color=black&logo=buy%20me%20a%20coffee&logoColor=white&labelColor=6f4e37)](https://www.buymeacoffee.com/ethanhann) 
 
 # Welcome to Cyber Radio Assistant! 📻
+
 Cyber Radio Assistant is a standalone tool that helps you create and manage custom radio stations for the Cyberpunk 2077 mod, [radioExt](https://www.nexusmods.com/cyberpunk2077/mods/4591).
 
 A brief list of features are below:
@@ -96,6 +97,7 @@ We welcome suggestions! Please open an issue to discuss the feature before submi
 See also the list of [contributors](https://github.com/ethan-hann/CyberRadio-Assistant/graphs/contributors) who participated in this project.
 
 ## License
+
 This project is licensed under the GPL-v3.0 license. See the [LICENSE](LICENSE) file for details.
 
 By contributing, you agree that your contributions will be licensed under the project's [LICENSE](LICENSE).

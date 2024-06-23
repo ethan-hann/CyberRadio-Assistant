@@ -2,3 +2,7 @@
   href: introduction.md
 - name: Getting Started
   href: getting-started.md
+- name: Creating Stations
+  href: creating-stations.md
+- name: Exporting
+  href: export.md
