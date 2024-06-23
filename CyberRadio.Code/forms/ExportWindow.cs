@@ -142,6 +142,10 @@ public partial class ExportWindow : Form
         var statusString = GlobalData.Strings.GetString("ExportingStationStatus") ?? "Exporting station: {0}";
 
         ToggleButtons();
+
+        //Remove station folders from staging if not present in current station list
+        RemoveDeletedStations();
+
         for (var i = 0; i < _stationsToExport.Count; i++)
         {
             if (bgWorkerExport.CancellationPending)
@@ -164,6 +168,27 @@ public partial class ExportWindow : Form
             
             _ = CreateSongListJson(stationPath, station);
             CopySongsToStaging(stationPath, station);
+        }
+    }
+
+    private void RemoveDeletedStations()
+    {
+        var stationNames = _stationsToExport.Select(station => station.MetaData.DisplayName);
+        var directories = Directory.GetDirectories(Settings.Default.StagingPath);
+        var directoriesToDelete = directories
+            .Where(dir => !stationNames.Contains(Path.GetFileName(dir), StringComparer.OrdinalIgnoreCase))
+            .ToList();
+
+        foreach (var directory in directoriesToDelete)
+        {
+            try
+            {
+                Directory.Delete(directory, true);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Failed to delete {directory}: {ex.Message}");
+            }
         }
     }
 
