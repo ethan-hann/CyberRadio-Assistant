@@ -22,13 +22,59 @@ When ready, click the `Export to Staging` button. The export task will run and t
 
 Once the export to staging has completed, the `Export to Staging` button will be disabled. The dialog expects you to export to the game next, but you can also close out of the dialog and click `File > Refresh Stations` to get an updated list of stations based on the most recent export.
 
+**Any stations that you deleted from within CRA will also be deleted on disk after exporting to staging.**
+
 > [!NOTE]
 > If you decide to close the dialog between exports (i.e. closing after exporting to staging but before exporting to the game), you will have to perform the export to staging again before you can export to the game.
 
 ![export_after_staging](../images/export_after_staging.png)
 
 > [!WARNING]
-> When you export the stations, a file not related to [radioExt](https://www.nexusmods.com/cyberpunk2077/mods/4591) is created: `songs.sgls`. This file is needed by CRA to keep track of the songs in the station. Since song files can reside anywhere on your disk, this file keeps the original file path of the songs as well as some metadata about the file. 
+> When you export the stations, a file not related to [radioExt](https://www.nexusmods.com/cyberpunk2077/mods/4591) is created: `songs.sgls`. This file is needed by CRA to keep track of the songs in the station. Since song files can reside anywhere on your disk, this file keeps the original file path of the songs as well as some metadata about the file.
+> 
+> <details>
+>   <summary>Example contents of <code>songs.sgls</code> file</summary>
+>   <pre><code class="language-json">
+>       [
+>        {
+>            "name": "2 Sad 4 Me.mp3",
+>            "artist": "",
+>            "duration": "00:00:14.9598750",
+>            "size": 243402,
+>            "original_path": "X:\\Files\\Music\\2 Sad 4 Me.mp3"
+>        },
+>        {
+>            "name": "Surface Monstercat Release",
+>            "artist": "Aero Chord",
+>            "duration": "00:00:12.0408750",
+>            "size": 192434,
+>            "original_path": "X:\\Files\\Music\\Aero Chord Surface_2.mp3"
+>        },
+>        {
+>            "name": "Dramatic Action",
+>            "artist": "Horrorpen",
+>            "duration": "00:02:48.6504375",
+>            "size": 2698487,
+>            "original_path": "X:\\Files\\Music\\HorrorPen - Dramatic Action mp3"
+>        },
+>        {
+>            "name": "Sad Romance (Violin Ver.)",
+>            "artist": "지평권",
+>            "duration": "00:04:35.0636250",
+>            "size": 4405028,
+>            "original_path": "X:\\Files\\Music\\Sad Music - Violin.mp3"
+>        },
+>        {
+>            "name": "Trndsttr - Lucian Remix.mp3",
+>            "artist": "",
+>            "duration": "00:02:59.8833750",
+>            "size": 2878066,
+>            "original_path": "X:\\Files\\Music\\Trndsttr - Lucian Remix.mp3"
+>        }
+>        ]
+>   </code></pre>
+> </details>
+>
 > 
 > **If you delete this file, CRA will not be able to tell where your song files are located.**
 
@@ -39,7 +85,9 @@ Once you have made all of your changes to your stations, click the `Export to Ga
 Again, the UI will update to reflect the export status showing the current station being exported and the completion status in the progress bar. This is usually quick but depending on the number of songs your stations have and the speed of your computer, it may take a few seconds to fully export.
 
 > [!NOTE]
-> The export to the game is simply copying the contents of your staging folder to the [radioExt](https://www.nexusmods.com/cyberpunk2077/mods/4591) `radios` folder. Thus, your staging folder is left untouched by the game. This allows you to make changes without affecting the game's live radios.
+> The export to the game is simply copying the contents of your staging folder to the [radioExt](https://www.nexusmods.com/cyberpunk2077/mods/4591) `radios` folder. Thus, your staging folder is left untouched by the game. This allows you to make changes without affecting the game's live radios. 
+> 
+> *Also, exporting to the game does not delete station's folders from the game currently (unlike when exporting to staging).*
 
 ![export_after_game](../images/export_after_game.png)
 

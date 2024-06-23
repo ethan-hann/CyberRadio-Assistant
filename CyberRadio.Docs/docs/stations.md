@@ -89,13 +89,13 @@ Some examples of streams can be found [here](https://truck-simulator.fandom.com/
 > 
 > Be wary of the volume though! It might be quite loud depending on the stream. If it's too loud here, it will probably be too loud in the game and you should adjust the `Volume` on the `Display and Icon` tab.
 
-### Songs
+## Songs
 
 If you don't want to use a stream and instead opt to use audio files, you can configure that here.
 
-#### Song Listing
+### Song Listing
 
-##### Adding Songs
+### Adding Songs
 To add songs, click the `Add Song(s)` button on the `Song Listing` tab.
 
 This will open a file selection where you can select one or more supported audio files. Supported formats are below:
@@ -122,7 +122,7 @@ Once the songs have been added to the station, they will appear in the list view
 > [!NOTE]
 > It's important to note that nothing has been copied or touched on your file system at this point. Everything is done "in memory" until you initiate an export.
 
-##### Removing Songs
+### Removing Songs
    
 To remove songs, click the `Remove Selected Song(s)` button on the `Song Listing` tab. You must have selected one or more songs in the list view first. 
 
@@ -134,7 +134,7 @@ Once your songs are selected, click the remove button to delete them from the st
 
 This is to help prevent accidental removals of all songs in the station.
 
-#### Song Order
+## Song Order
 
 Once you have added the songs for the station, you are basically done! However, there is one more optional step if you want to edit the order of the songs. [radioExt](https://www.nexusmods.com/cyberpunk2077/mods/4591) allows for songs to be ordered in the station.
 
@@ -162,8 +162,6 @@ Basically, any songs in the order will be played **in order** as they appear. An
 > [!NOTE]
 > If you remove a song from the station all together, it will also remove it from the ordered list.
 
-**Once you've set all of the station's properties, you are ready to [export](export.md)!**
-
 # Removing Stations
 
 To remove a radio station, make sure it is selected in the `Stations` list and click the `Delete Station` button at the bottom left.
@@ -174,3 +172,6 @@ To remove a radio station, make sure it is selected in the `Stations` list and c
 > If you haven't [exported](export.md) the station yet to the staging folder, then it's gone for good. Otherwise, you can click `File > Refresh Stations` to re-read the staging folder and bring it back (minus whatever changes you've made).
 >
 > **Be sure you really want to delete the station!**
+>
+
+**Once you've set all of the station's properties, you are ready to [export](export.md)!**

@@ -5,5 +5,8 @@ Cyber Radio Assistant (CRA) is run as a standalone tool; no installation is requ
 - Cyberpunk 2077 Game
 - [radioExt](https://www.nexusmods.com/cyberpunk2077/mods/4591) mod (and all of its dependencies)
 
-You should have a basic understanding of JSON so you can edit the files if needed. Though, by using this tool, you shouldn't need to 😉
+You should also have a basic understanding of JSON so you can edit the files if needed. **Though, by using this tool, you shouldn't need to** 😉
 
+---
+
+# Time to [get started](getting-started.md)!
