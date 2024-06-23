@@ -274,6 +274,7 @@
             HelpButtonClicked += MainForm_HelpButtonClicked;
             Load += MainForm_Load;
             Shown += MainForm_Shown;
+            Resize += MainForm_Resize;
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
             splitContainer1.Panel1.ResumeLayout(false);

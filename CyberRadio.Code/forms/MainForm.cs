@@ -40,6 +40,9 @@ public partial class MainForm : Form
         _noStationsCtrl.PathsSet += RefreshAfterPathsChanged;
         splitContainer1.Panel2.Controls.Add(_noStationsCtrl);
 
+        if (Settings.Default.WindowSize != Size.Empty)
+            Size = Settings.Default.WindowSize;
+
         Translate();
     }
 
@@ -339,5 +342,11 @@ public partial class MainForm : Form
     private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
     {
         new AboutBox().ShowDialog();
+    }
+
+    private void MainForm_Resize(object sender, EventArgs e)
+    {
+        Settings.Default.WindowSize = Size;
+        Settings.Default.Save();
     }
 }
