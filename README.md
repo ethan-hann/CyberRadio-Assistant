@@ -14,7 +14,7 @@ A brief list of features are below:
 - Add/delete songs from the radio station (even ones downloaded from Nexus).
 - Export to a staging folder first so the game directory doesn't get messed up.
 - Add a web stream for the audio instead of songs and preview the audio directly from the application.
-- Localization for English, Spanish, and French. More localizations can be added by cloning the GitHub and submitting a pull request.
+- Localization for English, Spanish, and French. More localizations can be added by following the steps [here](https://ethan-hann.github.io/CyberRadio-Assistant/docs/localization.html).
 
 Full documentation here: [Docs](https://ethan-hann.github.io/CyberRadio-Assistant/)
 
