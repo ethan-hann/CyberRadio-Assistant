@@ -6,8 +6,12 @@ name: .NET
 on:
   push:
     branches: [ "main" ]
+    paths:
+      - "CyberRadio.Code/**"
   pull_request:
     branches: [ "main" ]
+    paths:
+      - "CyberRadio.Code/**"
 
 jobs:
   build:
