@@ -5,21 +5,13 @@
 
 version: 2
 updates:
-  # Enable version updates for .NET (NuGet)
+  # Enable version and security updates for .NET (NuGet)
   - package-ecosystem: "nuget"
     directory: "/CyberRadio.Code"
     schedule:
       interval: "weekly"
-    open-pull-requests-limit: 10
-  
-  # Enable security updates for .NET (NuGet)
-  - package-ecosystem: "nuget"
-    directory: "/CyberRadio.Code"
-    schedule:
-      interval: "weekly"
-    allow:
-      - dependency-type: "direct"
-      - dependency-type: "indirect"
     commit-message:
-      prefix: "security"
+      prefix: "update"
     open-pull-requests-limit: 10
+    ignore:
+      - dependency-type: "development"
