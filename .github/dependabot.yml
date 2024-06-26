@@ -13,5 +13,3 @@ updates:
     commit-message:
       prefix: "update"
     open-pull-requests-limit: 10
-    ignore:
-      - dependency-type: "development"
