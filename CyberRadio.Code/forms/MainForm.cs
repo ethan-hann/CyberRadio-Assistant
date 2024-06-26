@@ -33,6 +33,8 @@ public partial class MainForm : Form
 
         InitializeLanguageDropDown();
         SelectLanguage();
+
+        Updater.CheckForUpdates();
     }
 
     private void MainForm_Load(object sender, EventArgs e)
@@ -99,6 +101,7 @@ public partial class MainForm : Form
         radioExtGitHubToolStripMenuItem.Text = GlobalData.Strings.GetString("RadioExtGithub");
         radioExtOnNexusModsToolStripMenuItem.Text = GlobalData.Strings.GetString("RadioExtNexusMods");
         aboutToolStripMenuItem.Text = GlobalData.Strings.GetString("About");
+        checkForUpdatesToolStripMenuItem.Text = GlobalData.Strings.GetString("CheckForUpdates");
 
         grpStations.Text = GlobalData.Strings.GetString("Stations");
 
@@ -342,6 +345,11 @@ public partial class MainForm : Form
     private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
     {
         new AboutBox().ShowDialog();
+    }
+
+    private void checkForUpdatesToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        Updater.CheckForUpdates();
     }
 
     private void MainForm_Resize(object sender, EventArgs e)

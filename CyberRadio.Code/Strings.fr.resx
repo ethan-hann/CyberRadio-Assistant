@@ -462,4 +462,43 @@ Impossible d'exporter les stations de radio vers le jeu.</value>
     <data name="AboutLicense" xml:space="preserve">
       <value>Licence</value>
     </data>
+    <data name="CheckForUpdates" xml:space="preserve">
+      <value>Vérifier les mises à jour</value>
+    </data>
+    <data name="UpdateDownloadPercent" xml:space="preserve">
+      <value>Téléchargé {0} %</value>
+    </data>
+    <data name="UpdateDownloadComplete" xml:space="preserve">
+      <value>Téléchargement terminé ! Démarrage de la mise à jour...</value>
+    </data>
+    <data name="UpdateDownloadError" xml:space="preserve">
+      <value>Erreur de téléchargement : {0}</value>
+    </data>
+    <data name="UpdateCheckError" xml:space="preserve">
+      <value>Erreur lors de la vérification des mises à jour : {0}</value>
+    </data>
+    <data name="UpdateCurrentVersion" xml:space="preserve">
+      <value>Version actuelle:</value>
+    </data>
+    <data name="UpdateNewVersion" xml:space="preserve">
+      <value>Nouvelle version:</value>
+    </data>
+    <data name="UpdateDownloadButton" xml:space="preserve">
+      <value>Télécharger</value>
+    </data>
+    <data name="UpdateChangelog" xml:space="preserve">
+      <value>Journal des modifications :</value>
+    </data>
+    <data name="UpdateAvailable" xml:space="preserve">
+      <value>Mise à jour disponible</value>
+    </data>
+    <data name="UpdateAvailableNotice" xml:space="preserve">
+      <value>Il y a une nouvelle mise à jour pour l'CRA. Voulez-vous ouvrir le téléchargeur maintenant ?</value>
+    </data>
+    <data name="NoUpdateAvailable" xml:space="preserve">
+      <value>Vous êtes sur la dernière version. Aucune mise à jour disponible.</value>
+    </data>
+    <data name="NoUpdateCaption" xml:space="preserve">
+      <value>À jour</value>
+    </data>
 </root>
