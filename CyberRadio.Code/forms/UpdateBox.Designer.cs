@@ -203,7 +203,6 @@
         }
 
         private System.Windows.Forms.Button btnDownload;
-        private System.Windows.Forms.ProgressBar progressBar;
         private StatusStrip statusStrip1;
         private ToolStripStatusLabel lblStatus;
         private ToolStripStatusLabel toolStripStatusLabel2;
