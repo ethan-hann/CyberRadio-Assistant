@@ -1,4 +1,5 @@
 ﻿using AetherUtils.Core.Extensions;
+using AetherUtils.Core.Files;
 using RadioExt_Helper.utility;
 using System.Diagnostics;
 using System.Reflection;
@@ -145,11 +146,12 @@ namespace RadioExt_Helper.forms
 
         private void StartUpdatedApplication(string filePath)
         {
-            var startInfo = new ProcessStartInfo
-            {
-                FileName = filePath,
-                UseShellExecute = true
-            };
+            if (!File.Exists(filePath)) { return; }
+            if (!FileHelper.GetExtension(filePath).Equals(".exe")) { return; }
+
+            var startInfo = new ProcessStartInfo(filePath);
+            startInfo.UseShellExecute = true;
+
             Process.Start(startInfo);
         }
 

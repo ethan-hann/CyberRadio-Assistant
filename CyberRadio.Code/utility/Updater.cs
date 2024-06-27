@@ -7,14 +7,14 @@ namespace RadioExt_Helper.utility
     /// <summary>
     /// Facilitates checking for application updates based on a <c>version.json</c> file on the main branch of the GitHub.
     /// </summary>
-    public sealed class Updater
+    public static class Updater
     {
         private const string VersionUrl = "https://raw.githubusercontent.com/ethan-hann/CyberRadio-Assistant/main/version.json";
 
         /// <summary>
         /// Checks for a new application update and displays a dialog allowing the user to choose if they want to update now or not.
         /// </summary>
-        public static async void CheckForUpdates()
+        public static async Task CheckForUpdates()
         {
             try
             {
@@ -22,25 +22,30 @@ namespace RadioExt_Helper.utility
                 var latestVersion = new Version(version);
                 var currentVersion = Assembly.GetExecutingAssembly().GetName().Version;
 
-                //Strip the build from the version number
-                currentVersion = new Version(currentVersion.Major, currentVersion.Minor, currentVersion.Build);
-
-                if (latestVersion > currentVersion)
+                if (currentVersion != null)
                 {
-                    var text = GlobalData.Strings.GetString("UpdateAvailableNotice");
-                    var caption = GlobalData.Strings.GetString("UpdateAvailable");
-                    if (MessageBox.Show(text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                    //Strip the build from the version number
+                    currentVersion = new Version(currentVersion.Major, currentVersion.Minor, currentVersion.Build);
+
+                    if (latestVersion == currentVersion)
                     {
-                        var vInfo = new VersionInfo(latestVersion, url);
-                        new UpdateBox(vInfo).ShowDialog();
+                        var text = GlobalData.Strings.GetString("UpdateAvailableNotice");
+                        var caption = GlobalData.Strings.GetString("UpdateAvailable");
+                        if (MessageBox.Show(text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                        {
+                            var vInfo = new VersionInfo(latestVersion, url);
+                            new UpdateBox(vInfo).ShowDialog();
+                        }
+                    }
+                    else
+                    {
+                        var text = GlobalData.Strings.GetString("NoUpdateAvailable");
+                        var caption = GlobalData.Strings.GetString("NoUpdateCaption");
+                        MessageBox.Show(text, caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                 }
                 else
-                {
-                    var text = GlobalData.Strings.GetString("NoUpdateAvailable");
-                    var caption = GlobalData.Strings.GetString("NoUpdateCaption");
-                    MessageBox.Show(text, caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
+                    throw new InvalidOperationException("No current version found.");
             }
             catch (Exception ex)
             {
