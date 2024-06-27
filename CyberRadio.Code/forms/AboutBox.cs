@@ -15,7 +15,7 @@ namespace RadioExt_Helper.forms
 {
     public partial class AboutBox : Form
     {
-        private Version _currentVersion;
+        private readonly Version _currentVersion;
 
         public AboutBox()
         {
