@@ -15,9 +15,17 @@ namespace RadioExt_Helper.forms
 {
     public partial class AboutBox : Form
     {
+        private readonly Version _currentVersion;
+
         public AboutBox()
         {
             InitializeComponent();
+
+            var v = Assembly.GetExecutingAssembly().GetName().Version;
+            if (v != null)
+                _currentVersion = new Version(v.Major, v.Minor, v.Build);
+            else
+                _currentVersion = new Version(0, 0, 0); //This should never happen, but just in case!
         }
 
         private void AboutBox_Load(object sender, EventArgs e)
@@ -32,7 +40,7 @@ namespace RadioExt_Helper.forms
                 "in Cyberpunk 2077 when using the radioExt Mod.";
             lblSpecialThanks1.Text = GlobalData.Strings.GetString("AboutSpecialThanks1") ?? "Special thanks to";
             lblSpecialThanks2.Text = GlobalData.Strings.GetString("AboutSpecialThanks2") ?? "for the awesome radioExt mod!";
-            lblVersion.Text = string.Format(GlobalData.Strings.GetString("AboutVersion") ?? "Version {0}", Assembly.GetExecutingAssembly().GetName().Version);
+            lblVersion.Text = string.Format(GlobalData.Strings.GetString("AboutVersion") ?? "Version {0}", _currentVersion);
             lnkGithubRepo.Text = GlobalData.Strings.GetString("AboutGithubRepo") ?? "Github Repo";
         }
 

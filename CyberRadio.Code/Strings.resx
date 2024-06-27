@@ -462,4 +462,49 @@ Can't export radio stations to game.</value>
     <data name="AboutLicense" xml:space="preserve">
       <value>License</value>
     </data>
+    <data name="CheckForUpdates" xml:space="preserve">
+      <value>Check For Updates</value>
+    </data>
+    <data name="UpdateDownloadPercent" xml:space="preserve">
+      <value>Downloaded {0}%</value>
+    </data>
+    <data name="UpdateDownloadComplete" xml:space="preserve">
+      <value>Download completed! Starting the update...</value>
+    </data>
+    <data name="UpdateDownloadError" xml:space="preserve">
+      <value>Download error: {0}</value>
+    </data>
+    <data name="UpdateCheckError" xml:space="preserve">
+      <value>Error checking for updates: {0}</value>
+    </data>
+    <data name="UpdateCurrentVersion" xml:space="preserve">
+      <value>Current Version:</value>
+    </data>
+    <data name="UpdateNewVersion" xml:space="preserve">
+      <value>New Version:</value>
+    </data>
+    <data name="UpdateChangelog" xml:space="preserve">
+      <value>Changelog:</value>
+    </data>
+    <data name="UpdateDownloadButton" xml:space="preserve">
+      <value>Download</value>
+    </data>
+    <data name="UpdateAvailable" xml:space="preserve">
+      <value>Update Available</value>
+    </data>
+    <data name="UpdateAvailableNotice" xml:space="preserve">
+      <value>There is a new update for CRA. Do you want to open the downloader now?</value>
+    </data>
+    <data name="NoUpdateAvailable" xml:space="preserve">
+      <value>You are on the latest version. No update available.</value>
+    </data>
+    <data name="NoUpdateCaption" xml:space="preserve">
+      <value>Up To Date</value>
+    </data>
+    <data name="UpdateFolderOpening" xml:space="preserve">
+      <value>Update complete. The containing folder will now be opened and the application will be closed.</value>
+    </data>
+    <data name="UpdateFolderOpeningCaption" xml:space="preserve">
+      <value>Opening Folder</value>
+    </data>
 </root>

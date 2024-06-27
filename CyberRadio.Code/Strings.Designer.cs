@@ -168,6 +168,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Check For Updates.
+        /// </summary>
+        internal static string CheckForUpdates {
+            get {
+                return ResourceManager.GetString("CheckForUpdates", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Clear.
         /// </summary>
         internal static string Clear {
@@ -705,6 +714,24 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You are on the latest version. No update available..
+        /// </summary>
+        internal static string NoUpdateAvailable {
+            get {
+                return ResourceManager.GetString("NoUpdateAvailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Up To Date.
+        /// </summary>
+        internal static string NoUpdateCaption {
+            get {
+                return ResourceManager.GetString("NoUpdateCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Open Game Executable.
         /// </summary>
         internal static string Open {
@@ -980,6 +1007,114 @@ namespace RadioExt_Helper {
         internal static string StreamURLHelp {
             get {
                 return ResourceManager.GetString("StreamURLHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update Available.
+        /// </summary>
+        internal static string UpdateAvailable {
+            get {
+                return ResourceManager.GetString("UpdateAvailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There is a new update for CRA. Do you want to open the downloader now?.
+        /// </summary>
+        internal static string UpdateAvailableNotice {
+            get {
+                return ResourceManager.GetString("UpdateAvailableNotice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Changelog:.
+        /// </summary>
+        internal static string UpdateChangelog {
+            get {
+                return ResourceManager.GetString("UpdateChangelog", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error checking for updates: {0}.
+        /// </summary>
+        internal static string UpdateCheckError {
+            get {
+                return ResourceManager.GetString("UpdateCheckError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Current Version:.
+        /// </summary>
+        internal static string UpdateCurrentVersion {
+            get {
+                return ResourceManager.GetString("UpdateCurrentVersion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Download.
+        /// </summary>
+        internal static string UpdateDownloadButton {
+            get {
+                return ResourceManager.GetString("UpdateDownloadButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Download completed! Starting the update....
+        /// </summary>
+        internal static string UpdateDownloadComplete {
+            get {
+                return ResourceManager.GetString("UpdateDownloadComplete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Download error: {0}.
+        /// </summary>
+        internal static string UpdateDownloadError {
+            get {
+                return ResourceManager.GetString("UpdateDownloadError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Downloaded {0}%.
+        /// </summary>
+        internal static string UpdateDownloadPercent {
+            get {
+                return ResourceManager.GetString("UpdateDownloadPercent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update complete. The containing folder will now be opened and the application will be closed..
+        /// </summary>
+        internal static string UpdateFolderOpening {
+            get {
+                return ResourceManager.GetString("UpdateFolderOpening", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Opening Folder.
+        /// </summary>
+        internal static string UpdateFolderOpeningCaption {
+            get {
+                return ResourceManager.GetString("UpdateFolderOpeningCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New Version:.
+        /// </summary>
+        internal static string UpdateNewVersion {
+            get {
+                return ResourceManager.GetString("UpdateNewVersion", resourceCulture);
             }
         }
         
