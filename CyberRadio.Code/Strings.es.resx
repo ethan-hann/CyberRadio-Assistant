@@ -501,4 +501,10 @@ No se pueden exportar estaciones de radio al juego.</value>
     <data name="NoUpdateCaption" xml:space="preserve">
       <value>A hoy</value>
     </data>
+    <data name="UpdateFolderOpening" xml:space="preserve">
+      <value>Actualización terminada. La carpeta que contiene ahora se abrirá y se cerrará la aplicación.</value>
+    </data>
+    <data name="UpdateFolderOpeningCaption" xml:space="preserve">
+      <value>Carpeta de apertura</value>
+    </data>
 </root>

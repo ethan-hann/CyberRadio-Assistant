@@ -28,6 +28,7 @@
             lblNewVersion = new Label();
             lblChangelogTxt = new Label();
             lnkChangelog = new LinkLabel();
+            bgDownloadUpdate = new System.ComponentModel.BackgroundWorker();
             statusStrip1.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
             SuspendLayout();
@@ -167,6 +168,12 @@
             lnkChangelog.Text = "linkLabel1";
             lnkChangelog.LinkClicked += lnkChangelog_LinkClicked;
             // 
+            // bgDownloadUpdate
+            // 
+            bgDownloadUpdate.WorkerReportsProgress = true;
+            bgDownloadUpdate.DoWork += bgDownloadUpdate_DoWork;
+            bgDownloadUpdate.RunWorkerCompleted += bgDownloadUpdate_RunWorkerCompleted;
+            // 
             // UpdateBox
             // 
             AutoScaleDimensions = new SizeF(96F, 96F);
@@ -208,5 +215,6 @@
         private Label lblNewVersion;
         private Label lblChangelogTxt;
         private LinkLabel lnkChangelog;
+        private System.ComponentModel.BackgroundWorker bgDownloadUpdate;
     }
 }

@@ -1,8 +1,14 @@
 ﻿using AetherUtils.Core.Extensions;
 using AetherUtils.Core.Files;
 using RadioExt_Helper.utility;
+using System;
+using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
+using System.Net.Http;
 using System.Reflection;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace RadioExt_Helper.forms
 {
@@ -11,6 +17,7 @@ namespace RadioExt_Helper.forms
         private readonly VersionInfo _versionInfo;
         private readonly HttpClient _httpClient;
         private readonly string _newFileName;
+        private readonly Progress<int> _progressReporter = new();
 
         public UpdateBox(VersionInfo info)
         {
@@ -20,6 +27,14 @@ namespace RadioExt_Helper.forms
             _newFileName = $"CyberRadioAssistant-{_versionInfo.LatestVersion}.exe";
 
             _httpClient = new HttpClient();
+
+            _progressReporter.ProgressChanged += _progressReporter_ProgressChanged;
+        }
+
+        private void _progressReporter_ProgressChanged(object? sender, int e)
+        {
+            pgDownloadProgress.Value = e;
+            SetStatus(string.Format(GlobalData.Strings.GetString("UpdateDownloadPercent") ?? "Downloaded {0}%", e));
         }
 
         private void UpdateBox_Load(object sender, EventArgs e)
@@ -41,54 +56,61 @@ namespace RadioExt_Helper.forms
         private void SetValues()
         {
             Version? v = Assembly.GetExecutingAssembly().GetName().Version;
-            var currentVersion = new Version(v.Major, v.Minor, v.Build);
+            Version? currentVersion = null;
 
-            lblCurrentVersion.Text = currentVersion.ToString() ?? "Unknown";
+            if (v != null)
+                currentVersion = new Version(v.Major, v.Minor, v.Build);
+
+            lblCurrentVersion.Text = currentVersion?.ToString() ?? "Unknown";
             lblNewVersion.Text = _versionInfo.LatestVersion.ToString();
             lnkChangelog.Text = "https://github.com/ethan-hann/CyberRadio-Assistant";
         }
 
-        private async void btnDownload_Click(object sender, EventArgs e)
+        private void btnDownload_Click(object sender, EventArgs e)
         {
-            var tempFilePath = Path.Combine(Path.GetTempPath(), _newFileName);
-            var progress = new Progress<int>(percent =>
-            {
-                if (InvokeRequired)
-                {
-                    Invoke(() =>
-                    {
-                        pgDownloadProgress.Value = percent;
-                        lblStatus.Text = string.Format(GlobalData.Strings.GetString("UpdateDownloadPercent") ?? "Downloaded {0}%", percent);
-                    });
-                }
-                else
-                {
-                    pgDownloadProgress.Value = percent;
-                    lblStatus.Text = string.Format(GlobalData.Strings.GetString("UpdateDownloadPercent") ?? "Downloaded {0}%", percent);
-                }
-                
-            });
+            if (bgDownloadUpdate.IsBusy || bgDownloadUpdate.CancellationPending)
+                return;
 
-            try
-            {
-                await DownloadFileAsync(_versionInfo.DownloadUrl, tempFilePath, progress);
-                lblStatus.Text = GlobalData.Strings.GetString("UpdateDownloadComplete") ?? "Download completed! Starting the update...";
-                SaveSettingsBeforeExit();
+            btnDownload.Enabled = false; // Disable the button
+            bgDownloadUpdate.RunWorkerAsync(_progressReporter);
+        }
 
-                //Start the updated application and close the current instance
-                var newFilePath = CopyToOriginalLocation(tempFilePath);
-                StartUpdatedApplication(newFilePath);
-                Application.Exit();
-            }
-            catch (Exception ex)
+        private void bgDownloadUpdate_DoWork(object sender, DoWorkEventArgs e)
+        {
+            if (e.Argument is IProgress<int> progressReporter)
             {
-                MessageBox.Show(string.Format(GlobalData.Strings.GetString("UpdateDownloadError") ?? "Download error: {0}", ex.Message),
-                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Task.Run(async () =>
+                {
+                    await DownloadFileAsync(_versionInfo.DownloadUrl, _newFileName, progressReporter);
+                }).GetAwaiter().GetResult();
             }
         }
 
-        private async Task DownloadFileAsync(string url, string destinationPath, IProgress<int> progress)
+        private void bgDownloadUpdate_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
+            if (e.Error != null)
+            {
+                MessageBox.Show(string.Format(GlobalData.Strings.GetString("UpdateDownloadError") ?? "Download error: {0}", e.Error.Message),
+                "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            SetStatus(GlobalData.Strings.GetString("UpdateDownloadComplete") ?? "Download completed! Starting the update...");
+            SaveSettingsBeforeExit();
+            var newFilePath = CopyToOriginalLocation(Path.Combine(Path.GetTempPath(), _newFileName));
+
+            var text = GlobalData.Strings.GetString("UpdateFolderOpening") ?? "Update complete. The containing folder will now be opened and the application will be closed.";
+            var caption = GlobalData.Strings.GetString("UpdateFolderOpeningCaption") ?? "Opening Folder";
+            MessageBox.Show(text, caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            StartUpdatedApplication(newFilePath);
+            Application.Exit();
+        }
+
+        private async Task DownloadFileAsync(string url, string destinationFileName, IProgress<int> progress)
+        {
+            var tempFilePath = Path.Combine(Path.GetTempPath(), destinationFileName);
+
             using var response = await _httpClient.GetAsync(url, HttpCompletionOption.ResponseHeadersRead);
             response.EnsureSuccessStatusCode();
 
@@ -96,7 +118,7 @@ namespace RadioExt_Helper.forms
             var canReportProgress = totalBytes != -1L;
 
             using var contentStream = await response.Content.ReadAsStreamAsync();
-            using var fileStream = new FileStream(destinationPath, FileMode.Create, FileAccess.Write, FileShare.None, 8192, true);
+            using var fileStream = new FileStream(tempFilePath, FileMode.Create, FileAccess.Write, FileShare.None, 8192, true);
 
             var totalBytesRead = 0L;
             var buffer = new byte[8192];
@@ -117,9 +139,17 @@ namespace RadioExt_Helper.forms
                 if (canReportProgress)
                 {
                     var percentComplete = (int)((totalBytesRead * 1.0 / totalBytes) * 100);
-                    progress.Report(percentComplete);
+                    progress?.Report(percentComplete);
                 }
             }
+        }
+
+        private void SetStatus(string status)
+        {
+            if (InvokeRequired)
+                Invoke(() => { lblStatus.Text = status; });
+            else
+                lblStatus.Text = status;
         }
 
         private void SaveSettingsBeforeExit()
@@ -149,10 +179,16 @@ namespace RadioExt_Helper.forms
             if (!File.Exists(filePath)) { return; }
             if (!FileHelper.GetExtension(filePath).Equals(".exe")) { return; }
 
-            var startInfo = new ProcessStartInfo(filePath);
-            startInfo.UseShellExecute = true;
+            if (Directory.GetParent(filePath) is DirectoryInfo parent)
+            {
+                var startInfo = new ProcessStartInfo("explorer.exe")
+                {
+                    Arguments = parent.FullName,
+                    UseShellExecute = true
+                };
 
-            Process.Start(startInfo);
+                Process.Start(startInfo);
+            }
         }
 
         private void lnkChangelog_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

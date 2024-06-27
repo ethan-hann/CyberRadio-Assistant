@@ -501,4 +501,10 @@ Impossible d'exporter les stations de radio vers le jeu.</value>
     <data name="NoUpdateCaption" xml:space="preserve">
       <value>À jour</value>
     </data>
+    <data name="UpdateFolderOpening" xml:space="preserve">
+      <value>Mise à jour terminée. Le dossier contenant sera maintenant ouvert et l'application sera fermée.</value>
+    </data>
+    <data name="UpdateFolderOpeningCaption" xml:space="preserve">
+      <value>Dossier d'ouverture</value>
+    </data>
 </root>

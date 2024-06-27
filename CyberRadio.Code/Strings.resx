@@ -501,4 +501,10 @@ Can't export radio stations to game.</value>
     <data name="NoUpdateCaption" xml:space="preserve">
       <value>Up To Date</value>
     </data>
+    <data name="UpdateFolderOpening" xml:space="preserve">
+      <value>Update complete. The containing folder will now be opened and the application will be closed.</value>
+    </data>
+    <data name="UpdateFolderOpeningCaption" xml:space="preserve">
+      <value>Opening Folder</value>
+    </data>
 </root>

@@ -1092,6 +1092,24 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Update complete. The containing folder will now be opened and the application will be closed..
+        /// </summary>
+        internal static string UpdateFolderOpening {
+            get {
+                return ResourceManager.GetString("UpdateFolderOpening", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Opening Folder.
+        /// </summary>
+        internal static string UpdateFolderOpeningCaption {
+            get {
+                return ResourceManager.GetString("UpdateFolderOpeningCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to New Version:.
         /// </summary>
         internal static string UpdateNewVersion {

@@ -34,7 +34,7 @@ public partial class MainForm : Form
         InitializeLanguageDropDown();
         SelectLanguage();
 
-        Updater.CheckForUpdates();
+        _ = Updater.CheckForUpdates();
     }
 
     private void MainForm_Load(object sender, EventArgs e)
@@ -349,7 +349,7 @@ public partial class MainForm : Form
 
     private void checkForUpdatesToolStripMenuItem_Click(object sender, EventArgs e)
     {
-        Updater.CheckForUpdates();
+        _ = Updater.CheckForUpdates();
     }
 
     private void MainForm_Resize(object sender, EventArgs e)
