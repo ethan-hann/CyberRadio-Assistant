@@ -26,7 +26,7 @@ namespace RadioExt_Helper.utility
                 currentVersion = new Version(currentVersion.Major, currentVersion.Minor, currentVersion.Build);
 
                 //TODO: change back to '>' for production
-                if (latestVersion > currentVersion)
+                if (latestVersion == currentVersion)
                 {
                     var text = GlobalData.Strings.GetString("UpdateAvailableNotice");
                     var caption = GlobalData.Strings.GetString("UpdateAvailable");

@@ -131,7 +131,7 @@ namespace RadioExt_Helper.forms
         {
             try
             {
-                var executingPath = Assembly.GetExecutingAssembly().Location;
+                var executingPath = Application.StartupPath;
                 var newPath = Path.Combine(executingPath, _newFileName);
                 File.Copy(tempFilePath, newPath, true);
 
