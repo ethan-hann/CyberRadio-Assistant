@@ -507,4 +507,16 @@ Impossible d'exporter les stations de radio vers le jeu.</value>
     <data name="UpdateFolderOpeningCaption" xml:space="preserve">
       <value>Dossier d'ouverture</value>
     </data>
+    <data name="ParseFromRadioGarden" xml:space="preserve">
+      <value>Analyser depuis radio.garden</value>
+    </data>
+    <data name="InvalidStream" xml:space="preserve">
+      <value>Flux invalide – ne fonctionnera pas dans le jeu</value>
+    </data>
+    <data name="RadioGardenURLCaption" xml:space="preserve">
+      <value>URL du jardin radio</value>
+    </data>
+    <data name="RadioGardenInput" xml:space="preserve">
+      <value>Saisissez l'URL radio.garden à partir de l'adresse Web de la station :</value>
+    </data>
 </root>

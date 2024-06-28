@@ -74,6 +74,7 @@
             tableLayoutPanel6 = new TableLayoutPanel();
             flowLayoutPanel3 = new FlowLayoutPanel();
             mpStreamPlayer = new MusicPlayer();
+            btnGetFromRadioGarden = new Button();
             txtStreamURL = new TextBox();
             tabImages = new ImageList(components);
             statusStrip1 = new StatusStrip();
@@ -643,9 +644,10 @@
             // tableLayoutPanel6
             // 
             tableLayoutPanel6.ColumnCount = 2;
-            tableLayoutPanel6.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 90.03165F));
-            tableLayoutPanel6.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 9.968354F));
+            tableLayoutPanel6.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 71.39334F));
+            tableLayoutPanel6.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 28.6066589F));
             tableLayoutPanel6.Controls.Add(flowLayoutPanel3, 0, 1);
+            tableLayoutPanel6.Controls.Add(btnGetFromRadioGarden, 1, 0);
             tableLayoutPanel6.Controls.Add(txtStreamURL, 0, 0);
             tableLayoutPanel6.Dock = DockStyle.Fill;
             tableLayoutPanel6.Location = new Point(148, 42);
@@ -676,14 +678,29 @@
             mpStreamPlayer.StreamUrl = "";
             mpStreamPlayer.TabIndex = 3;
             // 
+            // btnGetFromRadioGarden
+            // 
+            btnGetFromRadioGarden.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            btnGetFromRadioGarden.BackColor = Color.Yellow;
+            btnGetFromRadioGarden.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
+            btnGetFromRadioGarden.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
+            btnGetFromRadioGarden.FlatStyle = FlatStyle.Flat;
+            btnGetFromRadioGarden.Font = new Font("Segoe UI Variable Display", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnGetFromRadioGarden.Location = new Point(582, 7);
+            btnGetFromRadioGarden.Name = "btnGetFromRadioGarden";
+            btnGetFromRadioGarden.Size = new Size(226, 32);
+            btnGetFromRadioGarden.TabIndex = 4;
+            btnGetFromRadioGarden.Text = "Parse From Radio.Garden";
+            btnGetFromRadioGarden.UseVisualStyleBackColor = false;
+            btnGetFromRadioGarden.Click += btnGetFromRadioGarden_Click;
+            // 
             // txtStreamURL
             // 
             txtStreamURL.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            tableLayoutPanel6.SetColumnSpan(txtStreamURL, 2);
             txtStreamURL.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             txtStreamURL.Location = new Point(3, 11);
             txtStreamURL.Name = "txtStreamURL";
-            txtStreamURL.Size = new Size(805, 23);
+            txtStreamURL.Size = new Size(573, 23);
             txtStreamURL.TabIndex = 0;
             txtStreamURL.TextChanged += txtStreamURL_TextChanged;
             // 
@@ -810,5 +827,6 @@
         private ToolStripStatusLabel lblStatus;
         private GroupBox grpSongs;
         private MusicPlayer mpStreamPlayer;
+        private Button btnGetFromRadioGarden;
     }
 }

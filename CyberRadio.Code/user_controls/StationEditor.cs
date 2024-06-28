@@ -1,4 +1,6 @@
 ﻿using System.Globalization;
+using AetherUtils.Core.WinForms.Controls;
+using AetherUtils.Core.WinForms.CustomArgs;
 using RadioExt_Helper.models;
 using RadioExt_Helper.utility;
 
@@ -44,6 +46,7 @@ public sealed partial class StationEditor : UserControl, IUserControl
         tabMusic.Text = GlobalData.Strings.GetString("Music");
         lblUseStream.Text = GlobalData.Strings.GetString("UseStream");
         lblStreamURL.Text = GlobalData.Strings.GetString("StreamURL");
+        btnGetFromRadioGarden.Text = GlobalData.Strings.GetString("ParseFromRadioGarden");
         grpStreamSettings.Text = GlobalData.Strings.GetString("StreamSettings");
         grpSongs.Text = GlobalData.Strings.GetString("Songs");
         radUseStreamYes.Text = GlobalData.Strings.GetString("Yes");
@@ -228,11 +231,33 @@ public sealed partial class StationEditor : UserControl, IUserControl
         mpStreamPlayer.StreamUrl = Station.StreamInfo.StreamUrl;
     }
 
+    private void btnGetFromRadioGarden_Click(object sender, EventArgs e)
+    {
+        string text = GlobalData.Strings.GetString("RadioGardenInput") ?? "Enter the radio.garden URL from the web address of the station: ";
+        string caption = GlobalData.Strings.GetString("RadioGardenURLCaption") ?? "Radio Garden URL";
+
+        InputBox input = new(caption, text, (sender, e) =>
+        {
+            if (e is InputBoxEventArgs args)
+            {
+                string streamURL = URLParser.ConvertRadioGardenURL(args.InputText);
+                Task<bool> isValid = URLParser.TestStreamURL(streamURL);
+                if (isValid.Result)
+                    txtStreamURL.Text = streamURL;
+                else
+                    txtStreamURL.Text = GlobalData.Strings.GetString("InvalidStream") ?? "Invalid stream - Will not work in game";
+            }
+        });
+        
+        input.ShowDialog();
+    }
+
     private void ToggleStreamControls(bool onOff)
     {
         lblStreamURL.Visible = onOff;
         txtStreamURL.Visible = onOff;
         mpStreamPlayer.Visible = onOff;
+        btnGetFromRadioGarden.Visible = onOff;
 
         if (!txtStreamURL.Visible)
             mpStreamPlayer.StopStream();
@@ -300,5 +325,4 @@ public sealed partial class StationEditor : UserControl, IUserControl
     }
 
     #endregion
-
 }

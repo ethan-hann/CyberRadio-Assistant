@@ -513,6 +513,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invalid stream - Will not work in game.
+        /// </summary>
+        internal static string InvalidStream {
+            get {
+                return ResourceManager.GetString("InvalidStream", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Is Streaming.
         /// </summary>
         internal static string IsStream {
@@ -777,6 +786,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Parse from radio.garden.
+        /// </summary>
+        internal static string ParseFromRadioGarden {
+            get {
+                return ResourceManager.GetString("ParseFromRadioGarden", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Paths....
         /// </summary>
         internal static string Paths {
@@ -809,6 +827,24 @@ namespace RadioExt_Helper {
         internal static string RadioExtPathPlaceholder {
             get {
                 return ResourceManager.GetString("RadioExtPathPlaceholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter the radio.garden URL from the web address of the station: .
+        /// </summary>
+        internal static string RadioGardenInput {
+            get {
+                return ResourceManager.GetString("RadioGardenInput", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Radio Garden URL.
+        /// </summary>
+        internal static string RadioGardenURLCaption {
+            get {
+                return ResourceManager.GetString("RadioGardenURLCaption", resourceCulture);
             }
         }
         
