@@ -338,6 +338,8 @@ public partial class ExportWindow : Form
             string targetPath = Path.Combine(radiosPath, Path.GetFileName(path));
             _dirCopier?.CopyDirectory(path, targetPath, true);
 
+            Invoke(() => pgExportProgress.Value = 0); //reset progress bar after copy operation
+
             if (bgWorkerExportGame.CancellationPending)
             {
                 bgWorkerExportGame.CancelAsync();
