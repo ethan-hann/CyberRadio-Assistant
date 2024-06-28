@@ -235,14 +235,15 @@ public sealed partial class StationEditor : UserControl, IUserControl
     {
         string text = GlobalData.Strings.GetString("RadioGardenInput") ?? "Enter the radio.garden URL from the web address of the station: ";
         string caption = GlobalData.Strings.GetString("RadioGardenURLCaption") ?? "Radio Garden URL";
+        var streamChecker = new AudioStreamChecker(TimeSpan.FromSeconds(5));
 
-        InputBox input = new(caption, text, (sender, e) =>
+        InputBox input = new(caption, text, async (sender, e) =>
         {
             if (e is InputBoxEventArgs args)
             {
-                string streamURL = URLParser.ConvertRadioGardenURL(args.InputText);
-                Task<bool> isValid = URLParser.TestStreamURL(streamURL);
-                if (isValid.Result)
+                string streamURL = AudioStreamChecker.ConvertRadioGardenURL(args.InputText);
+                var isValid = await streamChecker.IsAudioStreamValidAsync(streamURL);
+                if (isValid)
                     txtStreamURL.Text = streamURL;
                 else
                     txtStreamURL.Text = GlobalData.Strings.GetString("InvalidStream") ?? "Invalid stream - Will not work in game";
