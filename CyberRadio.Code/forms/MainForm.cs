@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using System.Diagnostics;
 using AetherUtils.Core.Extensions;
 using AetherUtils.Core.Files;
 using AetherUtils.Core.WinForms.Controls;
@@ -92,6 +93,8 @@ public partial class MainForm : Form
     {
         Text = GlobalData.Strings.GetString("MainTitle");
         fileToolStripMenuItem.Text = GlobalData.Strings.GetString("File");
+        openStagingPathToolStripMenuItem.Text = GlobalData.Strings.GetString("OpenStagingFolder");
+        openGamePathToolStripMenuItem.Text = GlobalData.Strings.GetString("OpenGameFolder");
         exportToGameToolStripMenuItem.Text = GlobalData.Strings.GetString("ExportStations");
         languageToolStripMenuItem.Text = GlobalData.Strings.GetString("Language");
         helpToolStripMenuItem.Text = GlobalData.Strings.GetString("Help");
@@ -354,6 +357,18 @@ public partial class MainForm : Form
         var index = lbStations.IndexFromPoint(e.Location);
         if (index == ListBox.NoMatches)
             _ignoreSelectedIndexChanged = true;
+    }
+
+    private void openStagingPathToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        Process.Start("explorer.exe", Settings.Default.StagingPath);
+    }
+
+    private void openGamePathToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        if (!ExportWindow.ShowNoModDialogIfRequired()) return;
+
+        Process.Start("explorer.exe", PathHelper.GetRadiosPath(Settings.Default.GameBasePath));
     }
 
     private void exportToGameToolStripMenuItem_Click(object sender, EventArgs e)

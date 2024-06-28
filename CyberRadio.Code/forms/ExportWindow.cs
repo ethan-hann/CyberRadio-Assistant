@@ -112,14 +112,14 @@ public partial class ExportWindow : Form
         }
     }
 
-    private bool ShowNoModDialogIfRequired()
+    public static bool ShowNoModDialogIfRequired()
     {
         if (PathHelper.GetRadioExtPath(Settings.Default.GameBasePath).Equals(string.Empty))
         {
             var caption = GlobalData.Strings.GetString("NoModInstalled") ?? "No Mod Installed";
             var text = GlobalData.Strings.GetString("NoRadioExtMsg") ??
                        "You do not have the radioExt mod installed. Can't export radio stations to game.";
-            MessageBox.Show(this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show(text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
             return false;
         }
 
@@ -170,11 +170,6 @@ public partial class ExportWindow : Form
             CopySongsToStaging(stationPath, station);
         }
     }
-
-    //private void CreateStationListJson()
-    //{
-    //    List<Station> activeStations = _stationsToExport.Where(s => s.IsActive).ToList();
-    //}
 
     private void RemoveDeletedStations()
     {
