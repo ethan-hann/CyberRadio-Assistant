@@ -507,4 +507,16 @@ No se pueden exportar estaciones de radio al juego.</value>
     <data name="UpdateFolderOpeningCaption" xml:space="preserve">
       <value>Carpeta de apertura</value>
     </data>
+    <data name="ParseFromRadioGarden" xml:space="preserve">
+      <value>Analizar desde radio.garden</value>
+    </data>
+    <data name="InvalidStream" xml:space="preserve">
+      <value>Transmisión no válida: no funcionará en el juego</value>
+    </data>
+    <data name="RadioGardenURLCaption" xml:space="preserve">
+      <value>URL del jardín de radio</value>
+    </data>
+    <data name="RadioGardenInput" xml:space="preserve">
+      <value>Ingrese la URL de radio.garden desde la dirección web de la estación:</value>
+    </data>
 </root>

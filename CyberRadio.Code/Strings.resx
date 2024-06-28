@@ -507,4 +507,16 @@ Can't export radio stations to game.</value>
     <data name="UpdateFolderOpeningCaption" xml:space="preserve">
       <value>Opening Folder</value>
     </data>
+    <data name="ParseFromRadioGarden" xml:space="preserve">
+      <value>Parse from radio.garden</value>
+    </data>
+    <data name="InvalidStream" xml:space="preserve">
+      <value>Invalid stream - Will not work in game</value>
+    </data>
+    <data name="RadioGardenURLCaption" xml:space="preserve">
+      <value>Radio Garden URL</value>
+    </data>
+    <data name="RadioGardenInput" xml:space="preserve">
+      <value>Enter the radio.garden URL from the web address of the station: </value>
+    </data>
 </root>
