@@ -108,6 +108,10 @@ public partial class MainForm : Form
         //Buttons
         btnAddStation.Text = GlobalData.Strings.GetString("NewStation");
         btnDeleteStation.Text = GlobalData.Strings.GetString("DeleteStation");
+        btnEnableSelected.Text = GlobalData.Strings.GetString("EnableSelectedStation");
+        btnEnableAll.Text = GlobalData.Strings.GetString("EnableAllStations");
+        btnDisableSelected.Text = GlobalData.Strings.GetString("DisableSelectedStation");
+        btnDisableAll.Text = GlobalData.Strings.GetString("DisableAllStations");
     }
 
     private void HandleUserControlVisibility()
@@ -210,6 +214,52 @@ public partial class MainForm : Form
         splitContainer1.Panel2.Controls.Add(_stationEditors.Find(
             s => s.Station.MetaData.DisplayName.Equals(station.MetaData.DisplayName)));
         splitContainer1.Panel2.ResumeLayout();
+    }
+
+    private void btnEnableStation_Click(object sender, EventArgs e)
+    {
+        if (lbStations.SelectedItem is Station s)
+        {
+            s.MetaData.IsActive = true;
+            lbStations.BeginUpdate();
+            lbStations.Invalidate();
+            lbStations.EndUpdate();
+        }
+    }
+
+    private void btnEnableAll_Click(object sender, EventArgs e)
+    {
+        lbStations.BeginUpdate();
+        foreach (var station in lbStations.Items)
+        {
+            if (station is Station s)
+                s.MetaData.IsActive = true;
+        }
+        lbStations.Invalidate();
+        lbStations.EndUpdate();
+    }
+
+    private void btnDisableStation_Click(object sender, EventArgs e)
+    {
+        if (lbStations.SelectedItem is Station s)
+        {
+            s.MetaData.IsActive = false;
+            lbStations.BeginUpdate();
+            lbStations.Invalidate();
+            lbStations.EndUpdate();
+        }
+    }
+
+    private void btnDisableAll_Click(object sender, EventArgs e)
+    {
+        lbStations.BeginUpdate();
+        foreach (var station in lbStations.Items)
+        {
+            if (station is Station s)
+                s.MetaData.IsActive = false;
+        }
+        lbStations.Invalidate();
+        lbStations.EndUpdate();
     }
 
     private void btnAddStation_Click(object sender, EventArgs e)

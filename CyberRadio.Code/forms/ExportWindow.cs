@@ -171,6 +171,11 @@ public partial class ExportWindow : Form
         }
     }
 
+    //private void CreateStationListJson()
+    //{
+    //    List<Station> activeStations = _stationsToExport.Where(s => s.IsActive).ToList();
+    //}
+
     private void RemoveDeletedStations()
     {
         var stationNames = _stationsToExport.Select(station => station.MetaData.DisplayName);

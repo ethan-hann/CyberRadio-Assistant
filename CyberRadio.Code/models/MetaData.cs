@@ -64,6 +64,12 @@ public sealed class MetaData : INotifyPropertyChanged
     [JsonProperty("order")]
     public List<string> SongOrder { get; set; } = [];
 
+    /// <summary>
+    ///     Indicates whether this station is enabled in game or not.
+    /// </summary>
+    [JsonProperty("enabled")]
+    public bool IsActive { get; set; } = true;
+
     public event PropertyChangedEventHandler? PropertyChanged;
 
     private void OnPropertyChanged(string propertyName)

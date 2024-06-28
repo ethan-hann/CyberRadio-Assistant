@@ -103,6 +103,26 @@ namespace RadioExt_Helper.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap disabled {
+            get {
+                object obj = ResourceManager.GetObject("disabled", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap disabled_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("disabled_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap display_frame {
             get {
                 object obj = ResourceManager.GetObject("display_frame", resourceCulture);
@@ -116,6 +136,26 @@ namespace RadioExt_Helper.Properties {
         internal static System.Drawing.Bitmap download_32x32 {
             get {
                 object obj = ResourceManager.GetObject("download_32x32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap enabled {
+            get {
+                object obj = ResourceManager.GetObject("enabled", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap enabled_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("enabled_16x16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

@@ -29,6 +29,12 @@ public class Station
     }
 
     /// <summary>
+    ///     Get a value indicating if this station is active in game or not.
+    /// </summary>
+    /// <returns></returns>
+    public bool GetStatus() => MetaData.IsActive;
+
+    /// <summary>
     ///     The song list for this station as a <see cref="List{T}" />. Empty if <see cref="StreamInfo.IsStream" /> is
     ///     <c>true</c>.
     /// </summary>
