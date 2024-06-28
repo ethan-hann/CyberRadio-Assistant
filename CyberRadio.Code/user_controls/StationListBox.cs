@@ -71,6 +71,7 @@ namespace RadioExt_Helper.user_controls
             InitializeComponent();
 
             DrawMode = DrawMode.OwnerDrawFixed;
+            DoubleBuffered = true;
             ItemHeight = 16;
 
             _imageList ??= new ImageList();
@@ -86,6 +87,7 @@ namespace RadioExt_Helper.user_controls
             InitializeComponent();
 
             DrawMode = DrawMode.OwnerDrawFixed;
+            DoubleBuffered = true;
             ItemHeight = 16;
 
             _imageList ??= new ImageList();

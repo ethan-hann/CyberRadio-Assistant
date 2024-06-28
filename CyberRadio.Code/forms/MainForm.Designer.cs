@@ -54,6 +54,10 @@ namespace RadioExt_Helper.forms
             lbStations = new StationListBox(components);
             stationBindingSource = new BindingSource(components);
             stationImageList = new ImageList(components);
+            statusStrip1 = new StatusStrip();
+            toolStripStatusLabel1 = new ToolStripStatusLabel();
+            lblStationCount = new ToolStripStatusLabel();
+            toolStripStatusLabel3 = new ToolStripStatusLabel();
             tableLayoutPanel2 = new TableLayoutPanel();
             btnDisableSelected = new AetherUtils.Core.WinForms.Controls.SplitButton();
             cmsDisable = new ContextMenuStrip(components);
@@ -70,6 +74,7 @@ namespace RadioExt_Helper.forms
             splitContainer1.SuspendLayout();
             grpStations.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)stationBindingSource).BeginInit();
+            statusStrip1.SuspendLayout();
             tableLayoutPanel2.SuspendLayout();
             cmsDisable.SuspendLayout();
             cmsEnable.SuspendLayout();
@@ -224,6 +229,7 @@ namespace RadioExt_Helper.forms
             // grpStations
             // 
             grpStations.Controls.Add(lbStations);
+            grpStations.Controls.Add(statusStrip1);
             grpStations.Controls.Add(tableLayoutPanel2);
             grpStations.Dock = DockStyle.Fill;
             grpStations.Location = new Point(0, 0);
@@ -248,7 +254,7 @@ namespace RadioExt_Helper.forms
             lbStations.Location = new Point(3, 53);
             lbStations.Margin = new Padding(3, 2, 3, 2);
             lbStations.Name = "lbStations";
-            lbStations.Size = new Size(322, 763);
+            lbStations.Size = new Size(322, 741);
             lbStations.TabIndex = 0;
             lbStations.SelectedIndexChanged += lbStations_SelectedIndexChanged;
             lbStations.MouseDown += lbStations_MouseDown;
@@ -264,6 +270,36 @@ namespace RadioExt_Helper.forms
             stationImageList.TransparentColor = Color.Transparent;
             stationImageList.Images.SetKeyName(0, "enabled");
             stationImageList.Images.SetKeyName(1, "disabled");
+            // 
+            // statusStrip1
+            // 
+            statusStrip1.BackColor = Color.White;
+            statusStrip1.Items.AddRange(new ToolStripItem[] { toolStripStatusLabel1, lblStationCount, toolStripStatusLabel3 });
+            statusStrip1.Location = new Point(3, 794);
+            statusStrip1.Name = "statusStrip1";
+            statusStrip1.Size = new Size(322, 22);
+            statusStrip1.SizingGrip = false;
+            statusStrip1.TabIndex = 2;
+            statusStrip1.Text = "statusStrip1";
+            // 
+            // toolStripStatusLabel1
+            // 
+            toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+            toolStripStatusLabel1.Size = new Size(54, 17);
+            toolStripStatusLabel1.Spring = true;
+            // 
+            // lblStationCount
+            // 
+            lblStationCount.Font = new Font("Segoe UI Variable Small", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblStationCount.Name = "lblStationCount";
+            lblStationCount.Size = new Size(167, 17);
+            lblStationCount.Text = "Enabled Stations: {0} / {1}";
+            // 
+            // toolStripStatusLabel3
+            // 
+            toolStripStatusLabel3.Name = "toolStripStatusLabel3";
+            toolStripStatusLabel3.Size = new Size(54, 17);
+            toolStripStatusLabel3.Spring = true;
             // 
             // tableLayoutPanel2
             // 
@@ -424,7 +460,10 @@ namespace RadioExt_Helper.forms
             ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
             splitContainer1.ResumeLayout(false);
             grpStations.ResumeLayout(false);
+            grpStations.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)stationBindingSource).EndInit();
+            statusStrip1.ResumeLayout(false);
+            statusStrip1.PerformLayout();
             tableLayoutPanel2.ResumeLayout(false);
             cmsDisable.ResumeLayout(false);
             cmsEnable.ResumeLayout(false);
@@ -467,5 +506,9 @@ namespace RadioExt_Helper.forms
         private ToolStripMenuItem openStagingPathToolStripMenuItem;
         private ToolStripMenuItem openGamePathToolStripMenuItem;
         private ToolStripSeparator toolStripSeparator3;
+        private StatusStrip statusStrip1;
+        private ToolStripStatusLabel toolStripStatusLabel1;
+        private ToolStripStatusLabel lblStationCount;
+        private ToolStripStatusLabel toolStripStatusLabel3;
     }
 }

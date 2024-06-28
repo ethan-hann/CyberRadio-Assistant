@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Linq;
 using AetherUtils.Core.Extensions;
 using AetherUtils.Core.Files;
 using AetherUtils.Core.WinForms.Controls;
@@ -24,6 +25,7 @@ public partial class MainForm : Form
     private readonly BindingList<Station> _stations = [];
     private bool _ignoreSelectedIndexChanged;
 
+    private string _stationCountFormat = GlobalData.Strings.GetString("EnabledStationsCount") ?? "Enabled Stations: {0} / {1}";
     private int _newStationCount = 1;
 
     public MainForm()
@@ -106,6 +108,7 @@ public partial class MainForm : Form
         aboutToolStripMenuItem.Text = GlobalData.Strings.GetString("About");
         checkForUpdatesToolStripMenuItem.Text = GlobalData.Strings.GetString("CheckForUpdates");
 
+        _stationCountFormat = GlobalData.Strings.GetString("EnabledStationsCount") ?? "Enabled Stations: {0} / {1}";
         grpStations.Text = GlobalData.Strings.GetString("Stations");
 
         //Buttons
@@ -115,6 +118,8 @@ public partial class MainForm : Form
         btnEnableAll.Text = GlobalData.Strings.GetString("EnableAllStations");
         btnDisableSelected.Text = GlobalData.Strings.GetString("DisableSelectedStation");
         btnDisableAll.Text = GlobalData.Strings.GetString("DisableAllStations");
+
+        UpdateEnabledStationCount();
     }
 
     private void HandleUserControlVisibility()
@@ -174,7 +179,9 @@ public partial class MainForm : Form
                 };
 
                 _stations.Add(station);
-                _stationEditors.Add(new StationEditor(station));
+                StationEditor editor = new(station);
+                editor.StationUpdated += StationUpdatedEvent;
+                _stationEditors.Add(editor);
             }
         }
 
@@ -187,6 +194,8 @@ public partial class MainForm : Form
         }
 
         HandleUserControlVisibility();
+
+        UpdateEnabledStationCount();
         lbStations.EndUpdate();
     }
 
@@ -198,6 +207,12 @@ public partial class MainForm : Form
             lbStations.SelectedIndex = 0;
             lbStations_SelectedIndexChanged(this, EventArgs.Empty);
         }
+    }
+
+    private void UpdateEnabledStationCount()
+    {
+        int enabledCount = _stations.Where(s => s.GetStatus() == true).Count();
+        lblStationCount.Text = string.Format(_stationCountFormat, enabledCount, _stations.Count);
     }
 
     private void lbStations_SelectedIndexChanged(object? sender, EventArgs e)
@@ -227,6 +242,7 @@ public partial class MainForm : Form
             lbStations.BeginUpdate();
             lbStations.Invalidate();
             lbStations.EndUpdate();
+            UpdateEnabledStationCount();
         }
     }
 
@@ -240,6 +256,7 @@ public partial class MainForm : Form
         }
         lbStations.Invalidate();
         lbStations.EndUpdate();
+        UpdateEnabledStationCount();
     }
 
     private void btnDisableStation_Click(object sender, EventArgs e)
@@ -250,6 +267,7 @@ public partial class MainForm : Form
             lbStations.BeginUpdate();
             lbStations.Invalidate();
             lbStations.EndUpdate();
+            UpdateEnabledStationCount();
         }
     }
 
@@ -263,6 +281,7 @@ public partial class MainForm : Form
         }
         lbStations.Invalidate();
         lbStations.EndUpdate();
+        UpdateEnabledStationCount();
     }
 
     private void btnAddStation_Click(object sender, EventArgs e)
@@ -279,7 +298,11 @@ public partial class MainForm : Form
         };
 
         _stations.Add(blankStation);
-        _stationEditors.Add(new StationEditor(blankStation));
+
+        StationEditor editor = new(blankStation);
+        editor.StationUpdated += StationUpdatedEvent;
+        _stationEditors.Add(editor);
+
         lbStations.SelectedItem = blankStation;
         _newStationCount++;
 
@@ -288,6 +311,13 @@ public partial class MainForm : Form
         //Re-show our station editor if the station count has increased again.
         _noStationsCtrl.Visible = false;
         lbStations_SelectedIndexChanged(this, EventArgs.Empty);
+
+        UpdateEnabledStationCount();
+    }
+
+    private void StationUpdatedEvent(object? sender, EventArgs e)
+    {
+        lbStations.Invalidate();
     }
 
     private void btnDeleteStation_Click(object sender, EventArgs e)
@@ -296,11 +326,6 @@ public partial class MainForm : Form
             return;
 
         if (lbStations.SelectedItem is not Station station) return;
-
-        _stations.Remove(station);
-        _stationEditors.Remove(_stationEditors
-            .First(s => s.Station.MetaData.DisplayName
-                .Equals(station.MetaData.DisplayName)));
 
         //If the station to be removed contains "[New Station]" in the name, decrement our new station count.
         if (station.MetaData.DisplayName.Contains(
@@ -314,6 +339,12 @@ public partial class MainForm : Form
                 throw new InvalidOperationException())))
             _newStationCount = 1;
 
+        _stations.Remove(station);
+        var editor = _stationEditors.First(s => s.Station.MetaData.DisplayName
+                .Equals(station.MetaData.DisplayName));
+        editor.StationUpdated -= StationUpdatedEvent; //Remove the event handler
+        _stationEditors.Remove(editor); //Remove the editor
+
         lbStations_SelectedIndexChanged(this, EventArgs.Empty);
 
         switch (_stations.Count)
@@ -325,8 +356,10 @@ public partial class MainForm : Form
                 break;
         }
 
+        UpdateEnabledStationCount();
+
         //Hide the station editor (and reset it) if there are no stations to edit.
-        HandleUserControlVisibility();
+        HandleUserControlVisibility();        
     }
 
     private void cmbLanguageSelect_SelectedIndexChanged(object? sender, EventArgs e)

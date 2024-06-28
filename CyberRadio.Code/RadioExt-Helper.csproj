@@ -23,8 +23,6 @@
 
     <ItemGroup>
         <None Remove="resources\final_ui_icon_strings.txt" />
-        <None Remove="resources\fonts\CFNotcheDemo-Bold.ttf" />
-        <None Remove="resources\fonts\CFNotcheDemo-Regular.ttf" />
     </ItemGroup>
 
     <ItemGroup>
@@ -33,8 +31,6 @@
 
     <ItemGroup>
         <EmbeddedResource Include="resources\final_ui_icon_strings.txt" />
-        <EmbeddedResource Include="resources\fonts\CFNotcheDemo-Bold.ttf" />
-        <EmbeddedResource Include="resources\fonts\CFNotcheDemo-Regular.ttf" />
     </ItemGroup>
 
     <ItemGroup>

@@ -8,6 +8,8 @@ namespace RadioExt_Helper.user_controls;
 
 public sealed partial class StationEditor : UserControl, IUserControl
 {
+    public EventHandler? StationUpdated;
+
     private readonly ComboBox _cmbUiIcons;
     private readonly CustomMusicCtl _musicCtl;
 
@@ -106,6 +108,7 @@ public sealed partial class StationEditor : UserControl, IUserControl
     private void txtDisplayName_TextChanged(object sender, EventArgs e)
     {
         Station.MetaData.DisplayName = txtDisplayName.Text;
+        StationUpdated?.Invoke(this, EventArgs.Empty);
     }
 
     private void cmbUIIcons_SelectedIndexChanged(object? sender, EventArgs e)

@@ -531,4 +531,13 @@ Impossible d'exporter les stations de radio vers le jeu.</value>
     <data name="DisableSelectedStation" xml:space="preserve">
       <value>Désactiver Sélectionné</value>
     </data>
+    <data name="EnabledStationsCount" xml:space="preserve">
+      <value>Stations activées : {0} / {1}</value>
+    </data>
+    <data name="DisabledStation" xml:space="preserve">
+      <value>Station Désactivée</value>
+    </data>
+    <data name="LVStationStatus" xml:space="preserve">
+      <value>Activé ?</value>
+    </data>
 </root>
