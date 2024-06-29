@@ -27,7 +27,7 @@ public partial class UpdateBox : Form
         _progressReporter.ProgressChanged += _progressReporter_ProgressChanged;
     }
 
-    private void _progressReporter_ProgressChanged(object? _, int e)
+    private void _progressReporter_ProgressChanged(object? sender, int e)
     {
         pgDownloadProgress.Value = e;
         SetStatus(string.Format(GlobalData.Strings.GetString("UpdateDownloadPercent") ?? "Downloaded {0}%", e));
