@@ -1,6 +1,5 @@
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Linq;
 using AetherUtils.Core.Extensions;
 using AetherUtils.Core.Files;
 using AetherUtils.Core.WinForms.Controls;
@@ -24,9 +23,10 @@ public partial class MainForm : Form
     private readonly List<StationEditor> _stationEditors = [];
     private readonly BindingList<Station> _stations = [];
     private bool _ignoreSelectedIndexChanged;
-
-    private string _stationCountFormat = GlobalData.Strings.GetString("EnabledStationsCount") ?? "Enabled Stations: {0} / {1}";
     private int _newStationCount = 1;
+
+    private string _stationCountFormat =
+        GlobalData.Strings.GetString("EnabledStationsCount") ?? "Enabled Stations: {0} / {1}";
 
     public MainForm()
     {
@@ -202,16 +202,15 @@ public partial class MainForm : Form
     private void RefreshAfterPathsChanged(object? sender, EventArgs e)
     {
         PopulateStations();
-        if (_stations.Count > 0)
-        {
-            lbStations.SelectedIndex = 0;
-            lbStations_SelectedIndexChanged(this, EventArgs.Empty);
-        }
+        if (_stations.Count <= 0) return;
+        
+        lbStations.SelectedIndex = 0;
+        lbStations_SelectedIndexChanged(this, EventArgs.Empty);
     }
 
     private void UpdateEnabledStationCount()
     {
-        int enabledCount = _stations.Where(s => s.GetStatus() == true).Count();
+        var enabledCount = _stations.Count(s => s.GetStatus());
         lblStationCount.Text = string.Format(_stationCountFormat, enabledCount, _stations.Count);
     }
 
@@ -236,24 +235,21 @@ public partial class MainForm : Form
 
     private void btnEnableStation_Click(object sender, EventArgs e)
     {
-        if (lbStations.SelectedItem is Station s)
-        {
-            s.MetaData.IsActive = true;
-            lbStations.BeginUpdate();
-            lbStations.Invalidate();
-            lbStations.EndUpdate();
-            UpdateEnabledStationCount();
-        }
+        if (lbStations.SelectedItem is not Station s) return;
+        
+        s.MetaData.IsActive = true;
+        lbStations.BeginUpdate();
+        lbStations.Invalidate();
+        lbStations.EndUpdate();
+        UpdateEnabledStationCount();
     }
 
     private void btnEnableAll_Click(object sender, EventArgs e)
     {
         lbStations.BeginUpdate();
         foreach (var station in lbStations.Items)
-        {
             if (station is Station s)
                 s.MetaData.IsActive = true;
-        }
         lbStations.Invalidate();
         lbStations.EndUpdate();
         UpdateEnabledStationCount();
@@ -261,24 +257,21 @@ public partial class MainForm : Form
 
     private void btnDisableStation_Click(object sender, EventArgs e)
     {
-        if (lbStations.SelectedItem is Station s)
-        {
-            s.MetaData.IsActive = false;
-            lbStations.BeginUpdate();
-            lbStations.Invalidate();
-            lbStations.EndUpdate();
-            UpdateEnabledStationCount();
-        }
+        if (lbStations.SelectedItem is not Station s) return;
+        
+        s.MetaData.IsActive = false;
+        lbStations.BeginUpdate();
+        lbStations.Invalidate();
+        lbStations.EndUpdate();
+        UpdateEnabledStationCount();
     }
 
     private void btnDisableAll_Click(object sender, EventArgs e)
     {
         lbStations.BeginUpdate();
         foreach (var station in lbStations.Items)
-        {
             if (station is Station s)
                 s.MetaData.IsActive = false;
-        }
         lbStations.Invalidate();
         lbStations.EndUpdate();
         UpdateEnabledStationCount();
@@ -341,7 +334,7 @@ public partial class MainForm : Form
 
         _stations.Remove(station);
         var editor = _stationEditors.First(s => s.Station.MetaData.DisplayName
-                .Equals(station.MetaData.DisplayName));
+            .Equals(station.MetaData.DisplayName));
         editor.StationUpdated -= StationUpdatedEvent; //Remove the event handler
         _stationEditors.Remove(editor); //Remove the editor
 
@@ -359,7 +352,7 @@ public partial class MainForm : Form
         UpdateEnabledStationCount();
 
         //Hide the station editor (and reset it) if there are no stations to edit.
-        HandleUserControlVisibility();        
+        HandleUserControlVisibility();
     }
 
     private void cmbLanguageSelect_SelectedIndexChanged(object? sender, EventArgs e)
@@ -430,6 +423,7 @@ public partial class MainForm : Form
     {
         "https://www.nexusmods.com/cyberpunk2077/mods/4591".OpenUrl();
     }
+
     private void howToUseToolStripMenuItem_Click(object sender, EventArgs e)
     {
         "https://ethan-hann.github.io/CyberRadio-Assistant/index.html".OpenUrl();

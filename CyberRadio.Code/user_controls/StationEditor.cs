@@ -8,10 +8,9 @@ namespace RadioExt_Helper.user_controls;
 
 public sealed partial class StationEditor : UserControl, IUserControl
 {
-    public EventHandler? StationUpdated;
-
     private readonly ComboBox _cmbUiIcons;
     private readonly CustomMusicCtl _musicCtl;
+    public EventHandler? StationUpdated;
 
     public StationEditor(Station station)
     {
@@ -236,24 +235,26 @@ public sealed partial class StationEditor : UserControl, IUserControl
 
     private void btnGetFromRadioGarden_Click(object sender, EventArgs e)
     {
-        string text = GlobalData.Strings.GetString("RadioGardenInput") ?? "Enter the radio.garden URL from the web address of the station: ";
-        string caption = GlobalData.Strings.GetString("RadioGardenURLCaption") ?? "Radio Garden URL";
-        var streamChecker = new AudioStreamChecker(TimeSpan.FromSeconds(5));
+        var text = GlobalData.Strings.GetString("RadioGardenInput") ??
+                   "Enter the radio.garden URL from the web: ";
+        var caption = GlobalData.Strings.GetString("RadioGardenURLCaption") ?? "Radio Garden URL";
 
-        InputBox input = new(caption, text, async (sender, e) =>
-        {
-            if (e is InputBoxEventArgs args)
-            {
-                string streamURL = AudioStreamChecker.ConvertRadioGardenURL(args.InputText);
-                var isValid = await streamChecker.IsAudioStreamValidAsync(streamURL);
-                if (isValid)
-                    txtStreamURL.Text = streamURL;
-                else
-                    txtStreamURL.Text = GlobalData.Strings.GetString("InvalidStream") ?? "Invalid stream - Will not work in game";
-            }
-        });
-        
+        InputBox input = new(caption, text, RetrieveUrlFromInputBox);
         input.ShowDialog();
+    }
+
+    private async void RetrieveUrlFromInputBox(object? sender, EventArgs e)
+    {
+        var streamChecker = new AudioStreamChecker(TimeSpan.FromSeconds(5));
+        if (e is not InputBoxEventArgs args) return;
+        
+        var streamUrl = AudioStreamChecker.ConvertRadioGardenURL(args.InputText);
+        var isValid = await streamChecker.IsAudioStreamValidAsync(streamUrl);
+        if (isValid)
+            txtStreamURL.Text = streamUrl;
+        else
+            txtStreamURL.Text = GlobalData.Strings.GetString("InvalidStream") ??
+                                "Invalid stream - Will not work in game";
     }
 
     private void ToggleStreamControls(bool onOff)

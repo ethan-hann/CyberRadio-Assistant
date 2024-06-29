@@ -517,7 +517,7 @@ Can't export radio stations to game.</value>
       <value>Radio Garden URL</value>
     </data>
     <data name="RadioGardenInput" xml:space="preserve">
-      <value>Enter the radio.garden URL from the web address of the station: </value>
+      <value>Enter the radio.garden URL from the web: </value>
     </data>
     <data name="EnableSelectedStation" xml:space="preserve">
       <value>Enable Selected</value>

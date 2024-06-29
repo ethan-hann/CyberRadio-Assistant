@@ -894,7 +894,7 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter the radio.garden URL from the web address of the station: .
+        ///   Looks up a localized string similar to Enter the radio.garden URL from the web: .
         /// </summary>
         internal static string RadioGardenInput {
             get {

@@ -1,6 +1,6 @@
 ﻿namespace RadioExt_Helper.user_controls
 {
-    partial class StationListBox
+    sealed partial class StationListBox
     {
         /// <summary>
         /// Required designer variable.

@@ -13,11 +13,14 @@ public partial class ExportWindow : Form
     private readonly Json<MetaData> _metaDataJson = new();
     private readonly Json<SongList> _songListJson = new();
     private readonly List<Station> _stationsToExport;
+
+    private readonly string _statusString =
+        GlobalData.Strings.GetString("ExportingStationStatus") ?? "Exporting station: {0}";
+
+    private DirectoryCopier? _dirCopier;
     private bool _exportToGameComplete;
     private bool _exportToStagingComplete;
     private bool _isCancelling;
-    private DirectoryCopier? _dirCopier;
-    private readonly string _statusString = GlobalData.Strings.GetString("ExportingStationStatus") ?? "Exporting station: {0}";
 
     public ExportWindow(List<Station> stations)
     {
@@ -31,7 +34,7 @@ public partial class ExportWindow : Form
 
         // Enable owner drawing
         lvStations.OwnerDraw = true;
-        lvStations.DrawColumnHeader += (s, e) => e.DrawDefault = true;
+        lvStations.DrawColumnHeader += (_, args) => args.DrawDefault = true;
         lvStations.DrawSubItem += LvStations_DrawSubItem;
 
         PopulateListView();
@@ -96,7 +99,9 @@ public partial class ExportWindow : Form
             var streamString = station.MetaData.StreamInfo.IsStream
                 ? station.MetaData.StreamInfo.StreamUrl
                 : GlobalData.Strings.GetString("UsingSongs");
-            var proposedPath = isActive ? Path.Combine(radioExtPath, station.MetaData.DisplayName) : GlobalData.Strings.GetString("DisabledStation");
+            var proposedPath = isActive
+                ? Path.Combine(radioExtPath, station.MetaData.DisplayName)
+                : GlobalData.Strings.GetString("DisabledStation");
 
             var lvItem = new ListViewItem(new[]
             {
@@ -178,7 +183,7 @@ public partial class ExportWindow : Form
     private void bgWorkerExport_DoWork(object sender, DoWorkEventArgs e)
     {
         ToggleButtons();
-        
+
         for (var i = 0; i < _stationsToExport.Count; i++)
         {
             if (bgWorkerExport.CancellationPending)
@@ -197,8 +202,10 @@ public partial class ExportWindow : Form
             if (!CreateMetaDataJson(stationPath, station)) continue;
             if (station.Songs.Count <= 0) continue;
 
-            CreateSongListJson(stationPath, station);
-            CopySongsToStaging(stationPath, station);
+            if (CreateSongListJson(stationPath, station))
+                CopySongsToStaging(stationPath, station);
+            else
+                Debug.WriteLine("Couldn't save songs.sgls file.");
         }
 
         RemoveDeletedStations();
@@ -212,7 +219,6 @@ public partial class ExportWindow : Form
             .ToList();
 
         foreach (var directory in directoriesToDelete)
-        {
             try
             {
                 Directory.Delete(directory, true);
@@ -221,7 +227,6 @@ public partial class ExportWindow : Form
             {
                 Debug.WriteLine($"Failed to delete {directory}: {ex.Message}");
             }
-        }
     }
 
     private string CreateStationDirectory(Station station)
@@ -248,35 +253,32 @@ public partial class ExportWindow : Form
     private static void CopySongsToStaging(string stationPath, Station station)
     {
         var existingSongFiles = Directory.GetFiles(stationPath)
-            .Where(file => !FileHelper.GetExtension(file, false).Equals(".json") && !FileHelper.GetExtension(file, false).Equals(".sgls"))
+            .Where(file => !FileHelper.GetExtension(file, false).Equals(".json") &&
+                           !FileHelper.GetExtension(file, false).Equals(".sgls"))
             .ToList();
 
         var songFilesToCopy = station.Songs
-            .Select(song => new { SourcePath = song.OriginalFilePath, TargetPath = Path.Combine(stationPath, Path.GetFileName(song.OriginalFilePath)) })
+            .Select(song => new
+            {
+                SourcePath = song.OriginalFilePath,
+                TargetPath = Path.Combine(stationPath, Path.GetFileName(song.OriginalFilePath))
+            })
             .ToList();
 
         // Identify songs to delete by excluding those that match the source and target paths
         var filesToDelete = existingSongFiles
-            .Where(existingFile => !songFilesToCopy.Any(s => s.TargetPath.Equals(existingFile, StringComparison.OrdinalIgnoreCase)))
+            .Where(existingFile =>
+                !songFilesToCopy.Any(s => s.TargetPath.Equals(existingFile, StringComparison.OrdinalIgnoreCase)))
             .ToList();
 
         // Delete old song files
-        foreach (var fileToDelete in filesToDelete)
-        {
-            File.Delete(fileToDelete);
-        }
+        foreach (var fileToDelete in filesToDelete) File.Delete(fileToDelete);
 
         // Copy new or updated song files
         foreach (var songFile in songFilesToCopy)
-        {
             if (FileHelper.DoesFileExist(songFile.SourcePath))
-            {
                 if (!songFile.SourcePath.Equals(songFile.TargetPath, StringComparison.OrdinalIgnoreCase))
-                {
                     File.Copy(songFile.SourcePath, songFile.TargetPath, true);
-                }
-            }
-        }
     }
 
     private void bgWorkerExport_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -311,20 +313,20 @@ public partial class ExportWindow : Form
             return;
         }
 
-        List<Station> activeStations = _stationsToExport.Where(s => s.GetStatus() == true).ToList();
-        List<string> activeStationNames = activeStations.Select(s => s.MetaData.DisplayName).ToList();
+        var activeStations = _stationsToExport.Where(s => s.GetStatus()).ToList();
+        var activeStationNames = activeStations.Select(s => s.MetaData.DisplayName).ToList();
 
-        List<string> stagingPaths = FileHelper.SafeEnumerateDirectories(Settings.Default.StagingPath, "*", SearchOption.TopDirectoryOnly).ToList();
+        var stagingPaths = FileHelper.SafeEnumerateDirectories(Settings.Default.StagingPath).ToList();
 
-        List<string> activeStationPaths = stagingPaths
+        var activeStationPaths = stagingPaths
             .Where(path => activeStationNames.Any(name => path.Contains(name, StringComparison.OrdinalIgnoreCase)))
             .ToList();
 
         CopyDirectoriesToGame(radiosPath, activeStationPaths);
 
-        List<string> liveStationPaths = FileHelper.SafeEnumerateDirectories(radiosPath, "*", SearchOption.TopDirectoryOnly).ToList();
+        var liveStationPaths = FileHelper.SafeEnumerateDirectories(radiosPath).ToList();
 
-        List<string> inactiveStationPaths = liveStationPaths
+        var inactiveStationPaths = liveStationPaths
             .Where(path => !activeStationNames.Any(name => path.Contains(name, StringComparison.OrdinalIgnoreCase)))
             .ToList();
 
@@ -333,9 +335,9 @@ public partial class ExportWindow : Form
 
     private void CopyDirectoriesToGame(string radiosPath, List<string> activeStationPaths)
     {
-        foreach (string path in activeStationPaths)
+        foreach (var path in activeStationPaths)
         {
-            string targetPath = Path.Combine(radiosPath, Path.GetFileName(path));
+            var targetPath = Path.Combine(radiosPath, Path.GetFileName(path));
             _dirCopier?.CopyDirectory(path, targetPath, true);
 
             Invoke(() => pgExportProgress.Value = 0); //reset progress bar after copy operation
@@ -350,8 +352,7 @@ public partial class ExportWindow : Form
 
     private void DeleteInactiveDirectories(List<string> inactiveStationPaths)
     {
-        foreach (string path in inactiveStationPaths)
-        {
+        foreach (var path in inactiveStationPaths)
             try
             {
                 Directory.Delete(path, true);
@@ -366,7 +367,6 @@ public partial class ExportWindow : Form
             {
                 Debug.WriteLine($"Failed to delete directory {path}: {ex.Message}");
             }
-        }
     }
 
     private void bgWorkerExportGame_ProgressChanged(object sender, ProgressChangedEventArgs e)
