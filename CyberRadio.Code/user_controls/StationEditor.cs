@@ -8,9 +8,10 @@ namespace RadioExt_Helper.user_controls;
 
 public sealed partial class StationEditor : UserControl, IUserControl
 {
+    public event EventHandler? StationUpdated;
+
     private readonly ComboBox _cmbUiIcons;
     private readonly CustomMusicCtl _musicCtl;
-    public EventHandler? StationUpdated;
 
     public StationEditor(Station station)
     {

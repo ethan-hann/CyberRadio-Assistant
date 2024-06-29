@@ -27,7 +27,7 @@ public partial class UpdateBox : Form
         _progressReporter.ProgressChanged += _progressReporter_ProgressChanged;
     }
 
-    private void _progressReporter_ProgressChanged(object? sender, int e)
+    private void _progressReporter_ProgressChanged(object? _, int e)
     {
         pgDownloadProgress.Value = e;
         SetStatus(string.Format(GlobalData.Strings.GetString("UpdateDownloadPercent") ?? "Downloaded {0}%", e));
@@ -59,7 +59,7 @@ public partial class UpdateBox : Form
 
         lblCurrentVersion.Text = currentVersion?.ToString() ?? "Unknown";
         lblNewVersion.Text = _versionInfo.LatestVersion.ToString();
-        lnkChangelog.Text = @"https://github.com/ethan-hann/CyberRadio-Assistant";
+        lnkChangelog.Text = $"https://github.com/ethan-hann/CyberRadio-Assistant/CHANGELOG.md#{_versionInfo.LatestVersion}";
     }
 
     private void btnDownload_Click(object sender, EventArgs e)
