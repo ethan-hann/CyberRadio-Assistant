@@ -7,7 +7,7 @@ namespace RadioExt_Helper.user_controls;
 
 public sealed partial class NoStationsCtl : UserControl, IUserControl
 {
-    public EventHandler? PathsSet;
+    public event EventHandler? PathsSet;
 
     public NoStationsCtl()
     {

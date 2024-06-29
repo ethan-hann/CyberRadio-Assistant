@@ -231,6 +231,33 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Disable All.
+        /// </summary>
+        internal static string DisableAllStations {
+            get {
+                return ResourceManager.GetString("DisableAllStations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Disabled Station.
+        /// </summary>
+        internal static string DisabledStation {
+            get {
+                return ResourceManager.GetString("DisabledStation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Disable Selected.
+        /// </summary>
+        internal static string DisableSelectedStation {
+            get {
+                return ResourceManager.GetString("DisableSelectedStation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Display.
         /// </summary>
         internal static string Display {
@@ -272,6 +299,33 @@ namespace RadioExt_Helper {
         internal static string EditSongOrder {
             get {
                 return ResourceManager.GetString("EditSongOrder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enable All.
+        /// </summary>
+        internal static string EnableAllStations {
+            get {
+                return ResourceManager.GetString("EnableAllStations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enabled Stations: {0} / {1}.
+        /// </summary>
+        internal static string EnabledStationsCount {
+            get {
+                return ResourceManager.GetString("EnabledStationsCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enable Selected.
+        /// </summary>
+        internal static string EnableSelectedStation {
+            get {
+                return ResourceManager.GetString("EnableSelectedStation", resourceCulture);
             }
         }
         
@@ -576,6 +630,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enabled?.
+        /// </summary>
+        internal static string LVStationStatus {
+            get {
+                return ResourceManager.GetString("LVStationStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Stream URL.
         /// </summary>
         internal static string LVStreamURL {
@@ -831,7 +894,7 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter the radio.garden URL from the web address of the station: .
+        ///   Looks up a localized string similar to Enter the radio.garden URL from the web: .
         /// </summary>
         internal static string RadioGardenInput {
             get {

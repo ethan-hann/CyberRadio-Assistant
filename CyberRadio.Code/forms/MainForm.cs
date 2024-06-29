@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using System.Diagnostics;
 using AetherUtils.Core.Extensions;
 using AetherUtils.Core.Files;
 using AetherUtils.Core.WinForms.Controls;
@@ -22,8 +23,10 @@ public partial class MainForm : Form
     private readonly List<StationEditor> _stationEditors = [];
     private readonly BindingList<Station> _stations = [];
     private bool _ignoreSelectedIndexChanged;
-
     private int _newStationCount = 1;
+
+    private string _stationCountFormat =
+        GlobalData.Strings.GetString("EnabledStationsCount") ?? "Enabled Stations: {0} / {1}";
 
     public MainForm()
     {
@@ -92,6 +95,8 @@ public partial class MainForm : Form
     {
         Text = GlobalData.Strings.GetString("MainTitle");
         fileToolStripMenuItem.Text = GlobalData.Strings.GetString("File");
+        openStagingPathToolStripMenuItem.Text = GlobalData.Strings.GetString("OpenStagingFolder");
+        openGamePathToolStripMenuItem.Text = GlobalData.Strings.GetString("OpenGameFolder");
         exportToGameToolStripMenuItem.Text = GlobalData.Strings.GetString("ExportStations");
         languageToolStripMenuItem.Text = GlobalData.Strings.GetString("Language");
         helpToolStripMenuItem.Text = GlobalData.Strings.GetString("Help");
@@ -103,11 +108,18 @@ public partial class MainForm : Form
         aboutToolStripMenuItem.Text = GlobalData.Strings.GetString("About");
         checkForUpdatesToolStripMenuItem.Text = GlobalData.Strings.GetString("CheckForUpdates");
 
+        _stationCountFormat = GlobalData.Strings.GetString("EnabledStationsCount") ?? "Enabled Stations: {0} / {1}";
         grpStations.Text = GlobalData.Strings.GetString("Stations");
 
         //Buttons
         btnAddStation.Text = GlobalData.Strings.GetString("NewStation");
         btnDeleteStation.Text = GlobalData.Strings.GetString("DeleteStation");
+        btnEnableSelected.Text = GlobalData.Strings.GetString("EnableSelectedStation");
+        btnEnableAll.Text = GlobalData.Strings.GetString("EnableAllStations");
+        btnDisableSelected.Text = GlobalData.Strings.GetString("DisableSelectedStation");
+        btnDisableAll.Text = GlobalData.Strings.GetString("DisableAllStations");
+
+        UpdateEnabledStationCount();
     }
 
     private void HandleUserControlVisibility()
@@ -167,7 +179,9 @@ public partial class MainForm : Form
                 };
 
                 _stations.Add(station);
-                _stationEditors.Add(new StationEditor(station));
+                StationEditor editor = new(station);
+                editor.StationUpdated += StationUpdatedEvent;
+                _stationEditors.Add(editor);
             }
         }
 
@@ -180,17 +194,24 @@ public partial class MainForm : Form
         }
 
         HandleUserControlVisibility();
+
+        UpdateEnabledStationCount();
         lbStations.EndUpdate();
     }
 
     private void RefreshAfterPathsChanged(object? sender, EventArgs e)
     {
         PopulateStations();
-        if (_stations.Count > 0)
-        {
-            lbStations.SelectedIndex = 0;
-            lbStations_SelectedIndexChanged(this, EventArgs.Empty);
-        }
+        if (_stations.Count <= 0) return;
+        
+        lbStations.SelectedIndex = 0;
+        lbStations_SelectedIndexChanged(this, EventArgs.Empty);
+    }
+
+    private void UpdateEnabledStationCount()
+    {
+        var enabledCount = _stations.Count(s => s.GetStatus());
+        lblStationCount.Text = string.Format(_stationCountFormat, enabledCount, _stations.Count);
     }
 
     private void lbStations_SelectedIndexChanged(object? sender, EventArgs e)
@@ -212,6 +233,50 @@ public partial class MainForm : Form
         splitContainer1.Panel2.ResumeLayout();
     }
 
+    private void btnEnableStation_Click(object sender, EventArgs e)
+    {
+        if (lbStations.SelectedItem is not Station s) return;
+        
+        s.MetaData.IsActive = true;
+        lbStations.BeginUpdate();
+        lbStations.Invalidate();
+        lbStations.EndUpdate();
+        UpdateEnabledStationCount();
+    }
+
+    private void btnEnableAll_Click(object sender, EventArgs e)
+    {
+        lbStations.BeginUpdate();
+        foreach (var station in lbStations.Items)
+            if (station is Station s)
+                s.MetaData.IsActive = true;
+        lbStations.Invalidate();
+        lbStations.EndUpdate();
+        UpdateEnabledStationCount();
+    }
+
+    private void btnDisableStation_Click(object sender, EventArgs e)
+    {
+        if (lbStations.SelectedItem is not Station s) return;
+        
+        s.MetaData.IsActive = false;
+        lbStations.BeginUpdate();
+        lbStations.Invalidate();
+        lbStations.EndUpdate();
+        UpdateEnabledStationCount();
+    }
+
+    private void btnDisableAll_Click(object sender, EventArgs e)
+    {
+        lbStations.BeginUpdate();
+        foreach (var station in lbStations.Items)
+            if (station is Station s)
+                s.MetaData.IsActive = false;
+        lbStations.Invalidate();
+        lbStations.EndUpdate();
+        UpdateEnabledStationCount();
+    }
+
     private void btnAddStation_Click(object sender, EventArgs e)
     {
         if (Settings.Default.GameBasePath.Equals(string.Empty) || Settings.Default.StagingPath.Equals(string.Empty))
@@ -226,7 +291,11 @@ public partial class MainForm : Form
         };
 
         _stations.Add(blankStation);
-        _stationEditors.Add(new StationEditor(blankStation));
+
+        StationEditor editor = new(blankStation);
+        editor.StationUpdated += StationUpdatedEvent;
+        _stationEditors.Add(editor);
+
         lbStations.SelectedItem = blankStation;
         _newStationCount++;
 
@@ -235,6 +304,13 @@ public partial class MainForm : Form
         //Re-show our station editor if the station count has increased again.
         _noStationsCtrl.Visible = false;
         lbStations_SelectedIndexChanged(this, EventArgs.Empty);
+
+        UpdateEnabledStationCount();
+    }
+
+    private void StationUpdatedEvent(object? sender, EventArgs e)
+    {
+        lbStations.Invalidate();
     }
 
     private void btnDeleteStation_Click(object sender, EventArgs e)
@@ -243,11 +319,6 @@ public partial class MainForm : Form
             return;
 
         if (lbStations.SelectedItem is not Station station) return;
-
-        _stations.Remove(station);
-        _stationEditors.Remove(_stationEditors
-            .First(s => s.Station.MetaData.DisplayName
-                .Equals(station.MetaData.DisplayName)));
 
         //If the station to be removed contains "[New Station]" in the name, decrement our new station count.
         if (station.MetaData.DisplayName.Contains(
@@ -261,6 +332,12 @@ public partial class MainForm : Form
                 throw new InvalidOperationException())))
             _newStationCount = 1;
 
+        _stations.Remove(station);
+        var editor = _stationEditors.First(s => s.Station.MetaData.DisplayName
+            .Equals(station.MetaData.DisplayName));
+        editor.StationUpdated -= StationUpdatedEvent; //Remove the event handler
+        _stationEditors.Remove(editor); //Remove the editor
+
         lbStations_SelectedIndexChanged(this, EventArgs.Empty);
 
         switch (_stations.Count)
@@ -271,6 +348,8 @@ public partial class MainForm : Form
                 _newStationCount = 1;
                 break;
         }
+
+        UpdateEnabledStationCount();
 
         //Hide the station editor (and reset it) if there are no stations to edit.
         HandleUserControlVisibility();
@@ -306,6 +385,18 @@ public partial class MainForm : Form
             _ignoreSelectedIndexChanged = true;
     }
 
+    private void openStagingPathToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        Process.Start("explorer.exe", Settings.Default.StagingPath);
+    }
+
+    private void openGamePathToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        if (!ExportWindow.ShowNoModDialogIfRequired()) return;
+
+        Process.Start("explorer.exe", PathHelper.GetRadiosPath(Settings.Default.GameBasePath));
+    }
+
     private void exportToGameToolStripMenuItem_Click(object sender, EventArgs e)
     {
         new ExportWindow([.. _stations]).ShowDialog();
@@ -332,6 +423,7 @@ public partial class MainForm : Form
     {
         "https://www.nexusmods.com/cyberpunk2077/mods/4591".OpenUrl();
     }
+
     private void howToUseToolStripMenuItem_Click(object sender, EventArgs e)
     {
         "https://ethan-hann.github.io/CyberRadio-Assistant/index.html".OpenUrl();

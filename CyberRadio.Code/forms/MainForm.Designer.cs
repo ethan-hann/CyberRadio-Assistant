@@ -1,4 +1,6 @@
-﻿namespace RadioExt_Helper.forms
+﻿using RadioExt_Helper.user_controls;
+
+namespace RadioExt_Helper.forms
 {
     partial class MainForm
     {
@@ -32,6 +34,9 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             menuStrip1 = new MenuStrip();
             fileToolStripMenuItem = new ToolStripMenuItem();
+            openStagingPathToolStripMenuItem = new ToolStripMenuItem();
+            openGamePathToolStripMenuItem = new ToolStripMenuItem();
+            toolStripSeparator3 = new ToolStripSeparator();
             exportToGameToolStripMenuItem = new ToolStripMenuItem();
             toolStripSeparator2 = new ToolStripSeparator();
             pathsToolStripMenuItem = new ToolStripMenuItem();
@@ -43,20 +48,36 @@
             radioExtGitHubToolStripMenuItem = new ToolStripMenuItem();
             toolStripSeparator1 = new ToolStripSeparator();
             aboutToolStripMenuItem = new ToolStripMenuItem();
+            checkForUpdatesToolStripMenuItem = new ToolStripMenuItem();
             splitContainer1 = new SplitContainer();
             grpStations = new GroupBox();
-            lbStations = new ListBox();
+            lbStations = new StationListBox(components);
             stationBindingSource = new BindingSource(components);
+            stationImageList = new ImageList(components);
+            statusStrip1 = new StatusStrip();
+            toolStripStatusLabel1 = new ToolStripStatusLabel();
+            lblStationCount = new ToolStripStatusLabel();
+            toolStripStatusLabel3 = new ToolStripStatusLabel();
+            tableLayoutPanel2 = new TableLayoutPanel();
+            btnDisableSelected = new AetherUtils.Core.WinForms.Controls.SplitButton();
+            cmsDisable = new ContextMenuStrip(components);
+            btnDisableAll = new ToolStripMenuItem();
+            btnEnableSelected = new AetherUtils.Core.WinForms.Controls.SplitButton();
+            cmsEnable = new ContextMenuStrip(components);
+            btnEnableAll = new ToolStripMenuItem();
             tableLayoutPanel1 = new TableLayoutPanel();
             btnDeleteStation = new Button();
             btnAddStation = new Button();
-            checkForUpdatesToolStripMenuItem = new ToolStripMenuItem();
             menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.SuspendLayout();
             grpStations.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)stationBindingSource).BeginInit();
+            statusStrip1.SuspendLayout();
+            tableLayoutPanel2.SuspendLayout();
+            cmsDisable.SuspendLayout();
+            cmsEnable.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
             SuspendLayout();
             // 
@@ -72,29 +93,50 @@
             // 
             // fileToolStripMenuItem
             // 
-            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { exportToGameToolStripMenuItem, toolStripSeparator2, pathsToolStripMenuItem, refreshStationsToolStripMenuItem });
+            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { openStagingPathToolStripMenuItem, openGamePathToolStripMenuItem, toolStripSeparator3, exportToGameToolStripMenuItem, toolStripSeparator2, pathsToolStripMenuItem, refreshStationsToolStripMenuItem });
             fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             fileToolStripMenuItem.Size = new Size(37, 20);
             fileToolStripMenuItem.Text = "File";
+            // 
+            // openStagingPathToolStripMenuItem
+            // 
+            openStagingPathToolStripMenuItem.Image = Properties.Resources.external_link;
+            openStagingPathToolStripMenuItem.Name = "openStagingPathToolStripMenuItem";
+            openStagingPathToolStripMenuItem.Size = new Size(211, 22);
+            openStagingPathToolStripMenuItem.Text = "Open Staging Folder";
+            openStagingPathToolStripMenuItem.Click += openStagingPathToolStripMenuItem_Click;
+            // 
+            // openGamePathToolStripMenuItem
+            // 
+            openGamePathToolStripMenuItem.Image = Properties.Resources.external_link;
+            openGamePathToolStripMenuItem.Name = "openGamePathToolStripMenuItem";
+            openGamePathToolStripMenuItem.Size = new Size(211, 22);
+            openGamePathToolStripMenuItem.Text = "Open Game Radios Folder";
+            openGamePathToolStripMenuItem.Click += openGamePathToolStripMenuItem_Click;
+            // 
+            // toolStripSeparator3
+            // 
+            toolStripSeparator3.Name = "toolStripSeparator3";
+            toolStripSeparator3.Size = new Size(208, 6);
             // 
             // exportToGameToolStripMenuItem
             // 
             exportToGameToolStripMenuItem.Image = Properties.Resources.export_16x16;
             exportToGameToolStripMenuItem.Name = "exportToGameToolStripMenuItem";
-            exportToGameToolStripMenuItem.Size = new Size(158, 22);
+            exportToGameToolStripMenuItem.Size = new Size(211, 22);
             exportToGameToolStripMenuItem.Text = "Export Stations";
             exportToGameToolStripMenuItem.Click += exportToGameToolStripMenuItem_Click;
             // 
             // toolStripSeparator2
             // 
             toolStripSeparator2.Name = "toolStripSeparator2";
-            toolStripSeparator2.Size = new Size(155, 6);
+            toolStripSeparator2.Size = new Size(208, 6);
             // 
             // pathsToolStripMenuItem
             // 
             pathsToolStripMenuItem.Image = Properties.Resources.folder;
             pathsToolStripMenuItem.Name = "pathsToolStripMenuItem";
-            pathsToolStripMenuItem.Size = new Size(158, 22);
+            pathsToolStripMenuItem.Size = new Size(211, 22);
             pathsToolStripMenuItem.Text = "Game Paths";
             pathsToolStripMenuItem.Click += pathsToolStripMenuItem_Click;
             // 
@@ -102,7 +144,7 @@
             // 
             refreshStationsToolStripMenuItem.Image = Properties.Resources.refresh;
             refreshStationsToolStripMenuItem.Name = "refreshStationsToolStripMenuItem";
-            refreshStationsToolStripMenuItem.Size = new Size(158, 22);
+            refreshStationsToolStripMenuItem.Size = new Size(211, 22);
             refreshStationsToolStripMenuItem.Text = "Refresh Stations";
             refreshStationsToolStripMenuItem.Click += refreshStationsToolStripMenuItem_Click;
             // 
@@ -156,6 +198,14 @@
             aboutToolStripMenuItem.Text = "About";
             aboutToolStripMenuItem.Click += aboutToolStripMenuItem_Click;
             // 
+            // checkForUpdatesToolStripMenuItem
+            // 
+            checkForUpdatesToolStripMenuItem.Image = Properties.Resources.updated;
+            checkForUpdatesToolStripMenuItem.Name = "checkForUpdatesToolStripMenuItem";
+            checkForUpdatesToolStripMenuItem.Size = new Size(200, 22);
+            checkForUpdatesToolStripMenuItem.Text = "Check For Updates";
+            checkForUpdatesToolStripMenuItem.Click += checkForUpdatesToolStripMenuItem_Click;
+            // 
             // splitContainer1
             // 
             splitContainer1.BackColor = Color.Transparent;
@@ -179,6 +229,8 @@
             // grpStations
             // 
             grpStations.Controls.Add(lbStations);
+            grpStations.Controls.Add(statusStrip1);
+            grpStations.Controls.Add(tableLayoutPanel2);
             grpStations.Dock = DockStyle.Fill;
             grpStations.Location = new Point(0, 0);
             grpStations.Name = "grpStations";
@@ -190,15 +242,19 @@
             // lbStations
             // 
             lbStations.DataSource = stationBindingSource;
+            lbStations.DisabledIconKey = "disabled";
             lbStations.DisplayMember = "MetaData";
             lbStations.Dock = DockStyle.Fill;
+            lbStations.DrawMode = DrawMode.OwnerDrawFixed;
+            lbStations.EnabledIconKey = "enabled";
             lbStations.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lbStations.FormattingEnabled = true;
+            lbStations.ImageList = stationImageList;
             lbStations.ItemHeight = 17;
-            lbStations.Location = new Point(3, 19);
+            lbStations.Location = new Point(3, 53);
             lbStations.Margin = new Padding(3, 2, 3, 2);
             lbStations.Name = "lbStations";
-            lbStations.Size = new Size(322, 797);
+            lbStations.Size = new Size(322, 741);
             lbStations.TabIndex = 0;
             lbStations.SelectedIndexChanged += lbStations_SelectedIndexChanged;
             lbStations.MouseDown += lbStations_MouseDown;
@@ -206,6 +262,120 @@
             // stationBindingSource
             // 
             stationBindingSource.DataSource = typeof(models.Station);
+            // 
+            // stationImageList
+            // 
+            stationImageList.ColorDepth = ColorDepth.Depth32Bit;
+            stationImageList.ImageStream = (ImageListStreamer)resources.GetObject("stationImageList.ImageStream");
+            stationImageList.TransparentColor = Color.Transparent;
+            stationImageList.Images.SetKeyName(0, "enabled");
+            stationImageList.Images.SetKeyName(1, "disabled");
+            // 
+            // statusStrip1
+            // 
+            statusStrip1.BackColor = Color.White;
+            statusStrip1.Items.AddRange(new ToolStripItem[] { toolStripStatusLabel1, lblStationCount, toolStripStatusLabel3 });
+            statusStrip1.Location = new Point(3, 794);
+            statusStrip1.Name = "statusStrip1";
+            statusStrip1.Size = new Size(322, 22);
+            statusStrip1.SizingGrip = false;
+            statusStrip1.TabIndex = 2;
+            statusStrip1.Text = "statusStrip1";
+            // 
+            // toolStripStatusLabel1
+            // 
+            toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+            toolStripStatusLabel1.Size = new Size(54, 17);
+            toolStripStatusLabel1.Spring = true;
+            // 
+            // lblStationCount
+            // 
+            lblStationCount.Font = new Font("Segoe UI Variable Small", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblStationCount.Name = "lblStationCount";
+            lblStationCount.Size = new Size(167, 17);
+            lblStationCount.Text = "Enabled Stations: {0} / {1}";
+            // 
+            // toolStripStatusLabel3
+            // 
+            toolStripStatusLabel3.Name = "toolStripStatusLabel3";
+            toolStripStatusLabel3.Size = new Size(54, 17);
+            toolStripStatusLabel3.Spring = true;
+            // 
+            // tableLayoutPanel2
+            // 
+            tableLayoutPanel2.ColumnCount = 2;
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tableLayoutPanel2.Controls.Add(btnDisableSelected, 1, 0);
+            tableLayoutPanel2.Controls.Add(btnEnableSelected, 0, 0);
+            tableLayoutPanel2.Dock = DockStyle.Top;
+            tableLayoutPanel2.Location = new Point(3, 19);
+            tableLayoutPanel2.Name = "tableLayoutPanel2";
+            tableLayoutPanel2.RowCount = 1;
+            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tableLayoutPanel2.Size = new Size(322, 34);
+            tableLayoutPanel2.TabIndex = 1;
+            // 
+            // btnDisableSelected
+            // 
+            btnDisableSelected.BackColor = Color.Yellow;
+            btnDisableSelected.Dock = DockStyle.Fill;
+            btnDisableSelected.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
+            btnDisableSelected.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
+            btnDisableSelected.FlatStyle = FlatStyle.Flat;
+            btnDisableSelected.Location = new Point(164, 3);
+            btnDisableSelected.Menu = cmsDisable;
+            btnDisableSelected.Name = "btnDisableSelected";
+            btnDisableSelected.Size = new Size(155, 28);
+            btnDisableSelected.TabIndex = 1;
+            btnDisableSelected.Text = "Disable Selected";
+            btnDisableSelected.UseVisualStyleBackColor = false;
+            btnDisableSelected.Click += btnDisableStation_Click;
+            // 
+            // cmsDisable
+            // 
+            cmsDisable.BackColor = Color.White;
+            cmsDisable.Items.AddRange(new ToolStripItem[] { btnDisableAll });
+            cmsDisable.Name = "cmsDisable";
+            cmsDisable.Size = new Size(130, 26);
+            // 
+            // btnDisableAll
+            // 
+            btnDisableAll.BackColor = Color.White;
+            btnDisableAll.Name = "btnDisableAll";
+            btnDisableAll.Size = new Size(129, 22);
+            btnDisableAll.Text = "Disable All";
+            btnDisableAll.Click += btnDisableAll_Click;
+            // 
+            // btnEnableSelected
+            // 
+            btnEnableSelected.BackColor = Color.Yellow;
+            btnEnableSelected.Dock = DockStyle.Fill;
+            btnEnableSelected.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
+            btnEnableSelected.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
+            btnEnableSelected.FlatStyle = FlatStyle.Flat;
+            btnEnableSelected.Location = new Point(3, 3);
+            btnEnableSelected.Menu = cmsEnable;
+            btnEnableSelected.Name = "btnEnableSelected";
+            btnEnableSelected.Size = new Size(155, 28);
+            btnEnableSelected.TabIndex = 0;
+            btnEnableSelected.Text = "Enable Selected";
+            btnEnableSelected.UseVisualStyleBackColor = false;
+            btnEnableSelected.Click += btnEnableStation_Click;
+            // 
+            // cmsEnable
+            // 
+            cmsEnable.BackColor = Color.White;
+            cmsEnable.Items.AddRange(new ToolStripItem[] { btnEnableAll });
+            cmsEnable.Name = "cmsDisable";
+            cmsEnable.Size = new Size(127, 26);
+            // 
+            // btnEnableAll
+            // 
+            btnEnableAll.Name = "btnEnableAll";
+            btnEnableAll.Size = new Size(126, 22);
+            btnEnableAll.Text = "Enable All";
+            btnEnableAll.Click += btnEnableAll_Click;
             // 
             // tableLayoutPanel1
             // 
@@ -226,6 +396,10 @@
             // btnDeleteStation
             // 
             btnDeleteStation.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            btnDeleteStation.BackColor = Color.Yellow;
+            btnDeleteStation.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
+            btnDeleteStation.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
+            btnDeleteStation.FlatStyle = FlatStyle.Flat;
             btnDeleteStation.Image = Properties.Resources.cancel_16x16;
             btnDeleteStation.Location = new Point(167, 2);
             btnDeleteStation.Margin = new Padding(3, 2, 3, 2);
@@ -235,12 +409,16 @@
             btnDeleteStation.Text = "Delete Station";
             btnDeleteStation.TextAlign = ContentAlignment.MiddleRight;
             btnDeleteStation.TextImageRelation = TextImageRelation.ImageBeforeText;
-            btnDeleteStation.UseVisualStyleBackColor = true;
+            btnDeleteStation.UseVisualStyleBackColor = false;
             btnDeleteStation.Click += btnDeleteStation_Click;
             // 
             // btnAddStation
             // 
             btnAddStation.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            btnAddStation.BackColor = Color.Yellow;
+            btnAddStation.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
+            btnAddStation.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
+            btnAddStation.FlatStyle = FlatStyle.Flat;
             btnAddStation.Image = Properties.Resources.plus_16x16;
             btnAddStation.Location = new Point(3, 2);
             btnAddStation.Margin = new Padding(3, 2, 3, 2);
@@ -250,16 +428,8 @@
             btnAddStation.Text = "New Station";
             btnAddStation.TextAlign = ContentAlignment.MiddleRight;
             btnAddStation.TextImageRelation = TextImageRelation.ImageBeforeText;
-            btnAddStation.UseVisualStyleBackColor = true;
+            btnAddStation.UseVisualStyleBackColor = false;
             btnAddStation.Click += btnAddStation_Click;
-            // 
-            // checkForUpdatesToolStripMenuItem
-            // 
-            checkForUpdatesToolStripMenuItem.Image = Properties.Resources.updated;
-            checkForUpdatesToolStripMenuItem.Name = "checkForUpdatesToolStripMenuItem";
-            checkForUpdatesToolStripMenuItem.Size = new Size(200, 22);
-            checkForUpdatesToolStripMenuItem.Text = "Check For Updates";
-            checkForUpdatesToolStripMenuItem.Click += checkForUpdatesToolStripMenuItem_Click;
             // 
             // MainForm
             // 
@@ -290,7 +460,13 @@
             ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
             splitContainer1.ResumeLayout(false);
             grpStations.ResumeLayout(false);
+            grpStations.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)stationBindingSource).EndInit();
+            statusStrip1.ResumeLayout(false);
+            statusStrip1.PerformLayout();
+            tableLayoutPanel2.ResumeLayout(false);
+            cmsDisable.ResumeLayout(false);
+            cmsEnable.ResumeLayout(false);
             tableLayoutPanel1.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
@@ -306,7 +482,7 @@
         private ToolStripMenuItem aboutToolStripMenuItem;
         private SplitContainer splitContainer1;
         private TableLayoutPanel tableLayoutPanel1;
-        private ListBox lbStations;
+        private StationListBox lbStations;
         private Button btnDeleteStation;
         private Button btnAddStation;
         private ToolStripMenuItem refreshStationsToolStripMenuItem;
@@ -319,5 +495,20 @@
         private GroupBox grpStations;
         private ToolStripMenuItem exportToGameToolStripMenuItem;
         private ToolStripMenuItem checkForUpdatesToolStripMenuItem;
+        private ImageList stationImageList;
+        private TableLayoutPanel tableLayoutPanel2;
+        private AetherUtils.Core.WinForms.Controls.SplitButton btnEnableSelected;
+        private AetherUtils.Core.WinForms.Controls.SplitButton btnDisableSelected;
+        private ContextMenuStrip cmsDisable;
+        private ToolStripMenuItem btnDisableAll;
+        private ContextMenuStrip cmsEnable;
+        private ToolStripMenuItem btnEnableAll;
+        private ToolStripMenuItem openStagingPathToolStripMenuItem;
+        private ToolStripMenuItem openGamePathToolStripMenuItem;
+        private ToolStripSeparator toolStripSeparator3;
+        private StatusStrip statusStrip1;
+        private ToolStripStatusLabel toolStripStatusLabel1;
+        private ToolStripStatusLabel lblStationCount;
+        private ToolStripStatusLabel toolStripStatusLabel3;
     }
 }

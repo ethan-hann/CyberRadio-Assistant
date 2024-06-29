@@ -28,8 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ExportWindow));
             lvStations = new ListView();
+            colIsActive = new ColumnHeader();
             colStationName = new ColumnHeader();
             colIcon = new ColumnHeader();
             colSongCount = new ColumnHeader();
@@ -48,6 +50,7 @@
             bgWorkerExportGame = new System.ComponentModel.BackgroundWorker();
             splitContainer1 = new SplitContainer();
             tableLayoutPanel1 = new TableLayoutPanel();
+            statusImageList = new ImageList(components);
             statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
@@ -58,17 +61,22 @@
             // 
             // lvStations
             // 
-            lvStations.Columns.AddRange(new ColumnHeader[] { colStationName, colIcon, colSongCount, colStreamURL, colProposedPath });
+            lvStations.Columns.AddRange(new ColumnHeader[] { colIsActive, colStationName, colIcon, colSongCount, colStreamURL, colProposedPath });
             lvStations.Dock = DockStyle.Fill;
             lvStations.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             lvStations.Location = new Point(0, 0);
             lvStations.MultiSelect = false;
             lvStations.Name = "lvStations";
             lvStations.Size = new Size(927, 420);
+            lvStations.SmallImageList = statusImageList;
             lvStations.Sorting = SortOrder.Ascending;
             lvStations.TabIndex = 0;
             lvStations.UseCompatibleStateImageBehavior = false;
             lvStations.View = View.Details;
+            // 
+            // colIsActive
+            // 
+            colIsActive.Text = "Enabled In Game?";
             // 
             // colStationName
             // 
@@ -274,6 +282,14 @@
             tableLayoutPanel1.Size = new Size(273, 420);
             tableLayoutPanel1.TabIndex = 0;
             // 
+            // statusImageList
+            // 
+            statusImageList.ColorDepth = ColorDepth.Depth32Bit;
+            statusImageList.ImageStream = (ImageListStreamer)resources.GetObject("statusImageList.ImageStream");
+            statusImageList.TransparentColor = Color.Transparent;
+            statusImageList.Images.SetKeyName(0, "disabled");
+            statusImageList.Images.SetKeyName(1, "enabled");
+            // 
             // ExportWindow
             // 
             AutoScaleDimensions = new SizeF(96F, 96F);
@@ -325,5 +341,7 @@
         private System.ComponentModel.BackgroundWorker bgWorkerExportGame;
         private SplitContainer splitContainer1;
         private TableLayoutPanel tableLayoutPanel1;
+        private ColumnHeader colIsActive;
+        private ImageList statusImageList;
     }
 }

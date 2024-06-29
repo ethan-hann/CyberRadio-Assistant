@@ -517,6 +517,27 @@ No se pueden exportar estaciones de radio al juego.</value>
       <value>URL del jardín de radio</value>
     </data>
     <data name="RadioGardenInput" xml:space="preserve">
-      <value>Ingrese la URL de radio.garden desde la dirección web de la estación:</value>
+      <value>Introduce la URL de radio.garden desde la web:</value>
+    </data>
+    <data name="EnableSelectedStation" xml:space="preserve">
+      <value>Habilitar Sseleccionado</value>
+    </data>
+    <data name="EnableAllStations" xml:space="preserve">
+      <value>Habilitar Todo</value>
+    </data>
+    <data name="DisableAllStations" xml:space="preserve">
+      <value>Deshabilitar Todo</value>
+    </data>
+    <data name="DisableSelectedStation" xml:space="preserve">
+      <value>Deshabilitar Seleccionado</value>
+    </data>
+    <data name="EnabledStationsCount" xml:space="preserve">
+      <value>Estaciones habilitadas: {0} / {1}</value>
+    </data>
+    <data name="DisabledStation" xml:space="preserve">
+      <value>Estación para Discapacitados</value>
+    </data>
+    <data name="LVStationStatus" xml:space="preserve">
+      <value>¿Habilitado?</value>
     </data>
 </root>

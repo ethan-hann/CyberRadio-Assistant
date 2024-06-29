@@ -1,25 +1,19 @@
-﻿using AetherUtils.Core.Files;
+﻿using System.ComponentModel;
+using AetherUtils.Core.Files;
 
 namespace RadioExt_Helper.utility;
 
-using System;
-using System.IO;
-using System.Linq;
-using System.ComponentModel;
-
 /// <summary>
-/// Provides methods to copy all directories and files within a parent directory to a different directory.
+///     Provides methods to copy all directories and files within a parent directory to a different directory.
 /// </summary>
 public class DirectoryCopier
 {
-    private int _totalFiles;
-    private int _copiedFiles;
     private readonly BackgroundWorker _worker;
-
-    public string CurrentFile { get; private set; } = string.Empty;
+    private int _copiedFiles;
+    private int _totalFiles;
 
     /// <summary>
-    /// Initializes the DirectoryCopier with a BackgroundWorker for progress reporting.
+    ///     Initializes the DirectoryCopier with a BackgroundWorker for progress reporting.
     /// </summary>
     /// <param name="worker">The BackgroundWorker to use for progress reporting.</param>
     public DirectoryCopier(BackgroundWorker worker)
@@ -27,8 +21,10 @@ public class DirectoryCopier
         _worker = worker;
     }
 
+    public string CurrentFile { get; private set; } = string.Empty;
+
     /// <summary>
-    /// Copies all directories and files from the source directory to the destination directory.
+    ///     Copies all directories and files from the source directory to the destination directory.
     /// </summary>
     /// <param name="sourceDir">The source directory path.</param>
     /// <param name="destDir">The destination directory path.</param>
@@ -50,7 +46,7 @@ public class DirectoryCopier
         // Copy all files using LINQ
         var files = FileHelper.SafeEnumerateFiles(sourceDir)
             .Select(file => new FileInfo(file));
-        
+
         foreach (var file in files)
         {
             if (_worker.CancellationPending) return;
@@ -61,13 +57,13 @@ public class DirectoryCopier
             _copiedFiles++;
             ReportProgress();
         }
-        
+
         if (!copySubDirs) return;
-        
+
         // Copy all subdirectories recursively if specified
         var subDirs = FileHelper.SafeEnumerateDirectories(sourceDir)
             .Select(dir => new DirectoryInfo(dir));
-        
+
         foreach (var subDir in subDirs)
         {
             if (_worker.CancellationPending) return;
@@ -83,4 +79,3 @@ public class DirectoryCopier
         _worker.ReportProgress(progressPercentage);
     }
 }
-

@@ -38,4 +38,13 @@ public class Station
     ///     Get a <see cref="SongList" /> representing the current songs in the <see cref="SongsAsList" /> list.
     /// </summary>
     public SongList Songs => [.. SongsAsList];
+
+    /// <summary>
+    ///     Get a value indicating if this station is active in game or not.
+    /// </summary>
+    /// <returns></returns>
+    public bool GetStatus()
+    {
+        return MetaData.IsActive;
+    }
 }
