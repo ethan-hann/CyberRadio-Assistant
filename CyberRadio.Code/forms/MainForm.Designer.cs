@@ -87,7 +87,7 @@ namespace RadioExt_Helper.forms
             menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, languageToolStripMenuItem, helpToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new Size(1380, 24);
+            menuStrip1.Size = new Size(1227, 24);
             menuStrip1.TabIndex = 0;
             menuStrip1.Text = "menuStrip1";
             // 
@@ -102,7 +102,7 @@ namespace RadioExt_Helper.forms
             // 
             openStagingPathToolStripMenuItem.Image = Properties.Resources.external_link;
             openStagingPathToolStripMenuItem.Name = "openStagingPathToolStripMenuItem";
-            openStagingPathToolStripMenuItem.Size = new Size(211, 22);
+            openStagingPathToolStripMenuItem.Size = new Size(210, 22);
             openStagingPathToolStripMenuItem.Text = "Open Staging Folder";
             openStagingPathToolStripMenuItem.Click += openStagingPathToolStripMenuItem_Click;
             // 
@@ -110,33 +110,33 @@ namespace RadioExt_Helper.forms
             // 
             openGamePathToolStripMenuItem.Image = Properties.Resources.external_link;
             openGamePathToolStripMenuItem.Name = "openGamePathToolStripMenuItem";
-            openGamePathToolStripMenuItem.Size = new Size(211, 22);
+            openGamePathToolStripMenuItem.Size = new Size(210, 22);
             openGamePathToolStripMenuItem.Text = "Open Game Radios Folder";
             openGamePathToolStripMenuItem.Click += openGamePathToolStripMenuItem_Click;
             // 
             // toolStripSeparator3
             // 
             toolStripSeparator3.Name = "toolStripSeparator3";
-            toolStripSeparator3.Size = new Size(208, 6);
+            toolStripSeparator3.Size = new Size(207, 6);
             // 
             // exportToGameToolStripMenuItem
             // 
             exportToGameToolStripMenuItem.Image = Properties.Resources.export_16x16;
             exportToGameToolStripMenuItem.Name = "exportToGameToolStripMenuItem";
-            exportToGameToolStripMenuItem.Size = new Size(211, 22);
+            exportToGameToolStripMenuItem.Size = new Size(210, 22);
             exportToGameToolStripMenuItem.Text = "Export Stations";
             exportToGameToolStripMenuItem.Click += exportToGameToolStripMenuItem_Click;
             // 
             // toolStripSeparator2
             // 
             toolStripSeparator2.Name = "toolStripSeparator2";
-            toolStripSeparator2.Size = new Size(208, 6);
+            toolStripSeparator2.Size = new Size(207, 6);
             // 
             // pathsToolStripMenuItem
             // 
             pathsToolStripMenuItem.Image = Properties.Resources.folder;
             pathsToolStripMenuItem.Name = "pathsToolStripMenuItem";
-            pathsToolStripMenuItem.Size = new Size(211, 22);
+            pathsToolStripMenuItem.Size = new Size(210, 22);
             pathsToolStripMenuItem.Text = "Game Paths";
             pathsToolStripMenuItem.Click += pathsToolStripMenuItem_Click;
             // 
@@ -144,7 +144,7 @@ namespace RadioExt_Helper.forms
             // 
             refreshStationsToolStripMenuItem.Image = Properties.Resources.refresh;
             refreshStationsToolStripMenuItem.Name = "refreshStationsToolStripMenuItem";
-            refreshStationsToolStripMenuItem.Size = new Size(211, 22);
+            refreshStationsToolStripMenuItem.Size = new Size(210, 22);
             refreshStationsToolStripMenuItem.Text = "Refresh Stations";
             refreshStationsToolStripMenuItem.Click += refreshStationsToolStripMenuItem_Click;
             // 
@@ -222,8 +222,8 @@ namespace RadioExt_Helper.forms
             // splitContainer1.Panel2
             // 
             splitContainer1.Panel2.BackColor = Color.Transparent;
-            splitContainer1.Size = new Size(1380, 856);
-            splitContainer1.SplitterDistance = 328;
+            splitContainer1.Size = new Size(1227, 537);
+            splitContainer1.SplitterDistance = 316;
             splitContainer1.TabIndex = 1;
             // 
             // grpStations
@@ -234,7 +234,7 @@ namespace RadioExt_Helper.forms
             grpStations.Dock = DockStyle.Fill;
             grpStations.Location = new Point(0, 0);
             grpStations.Name = "grpStations";
-            grpStations.Size = new Size(328, 819);
+            grpStations.Size = new Size(316, 500);
             grpStations.TabIndex = 2;
             grpStations.TabStop = false;
             grpStations.Text = "Stations";
@@ -254,7 +254,7 @@ namespace RadioExt_Helper.forms
             lbStations.Location = new Point(3, 53);
             lbStations.Margin = new Padding(3, 2, 3, 2);
             lbStations.Name = "lbStations";
-            lbStations.Size = new Size(322, 741);
+            lbStations.Size = new Size(310, 422);
             lbStations.TabIndex = 0;
             lbStations.SelectedIndexChanged += lbStations_SelectedIndexChanged;
             lbStations.MouseDown += lbStations_MouseDown;
@@ -275,9 +275,9 @@ namespace RadioExt_Helper.forms
             // 
             statusStrip1.BackColor = Color.White;
             statusStrip1.Items.AddRange(new ToolStripItem[] { toolStripStatusLabel1, lblStationCount, toolStripStatusLabel3 });
-            statusStrip1.Location = new Point(3, 794);
+            statusStrip1.Location = new Point(3, 475);
             statusStrip1.Name = "statusStrip1";
-            statusStrip1.Size = new Size(322, 22);
+            statusStrip1.Size = new Size(310, 22);
             statusStrip1.SizingGrip = false;
             statusStrip1.TabIndex = 2;
             statusStrip1.Text = "statusStrip1";
@@ -285,7 +285,7 @@ namespace RadioExt_Helper.forms
             // toolStripStatusLabel1
             // 
             toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            toolStripStatusLabel1.Size = new Size(54, 17);
+            toolStripStatusLabel1.Size = new Size(64, 17);
             toolStripStatusLabel1.Spring = true;
             // 
             // lblStationCount
@@ -298,7 +298,7 @@ namespace RadioExt_Helper.forms
             // toolStripStatusLabel3
             // 
             toolStripStatusLabel3.Name = "toolStripStatusLabel3";
-            toolStripStatusLabel3.Size = new Size(54, 17);
+            toolStripStatusLabel3.Size = new Size(64, 17);
             toolStripStatusLabel3.Spring = true;
             // 
             // tableLayoutPanel2
@@ -313,7 +313,7 @@ namespace RadioExt_Helper.forms
             tableLayoutPanel2.Name = "tableLayoutPanel2";
             tableLayoutPanel2.RowCount = 1;
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel2.Size = new Size(322, 34);
+            tableLayoutPanel2.Size = new Size(310, 34);
             tableLayoutPanel2.TabIndex = 1;
             // 
             // btnDisableSelected
@@ -323,10 +323,10 @@ namespace RadioExt_Helper.forms
             btnDisableSelected.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
             btnDisableSelected.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
             btnDisableSelected.FlatStyle = FlatStyle.Flat;
-            btnDisableSelected.Location = new Point(164, 3);
+            btnDisableSelected.Location = new Point(158, 3);
             btnDisableSelected.Menu = cmsDisable;
             btnDisableSelected.Name = "btnDisableSelected";
-            btnDisableSelected.Size = new Size(155, 28);
+            btnDisableSelected.Size = new Size(149, 28);
             btnDisableSelected.TabIndex = 1;
             btnDisableSelected.Text = "Disable Selected";
             btnDisableSelected.UseVisualStyleBackColor = false;
@@ -357,7 +357,7 @@ namespace RadioExt_Helper.forms
             btnEnableSelected.Location = new Point(3, 3);
             btnEnableSelected.Menu = cmsEnable;
             btnEnableSelected.Name = "btnEnableSelected";
-            btnEnableSelected.Size = new Size(155, 28);
+            btnEnableSelected.Size = new Size(149, 28);
             btnEnableSelected.TabIndex = 0;
             btnEnableSelected.Text = "Enable Selected";
             btnEnableSelected.UseVisualStyleBackColor = false;
@@ -385,12 +385,12 @@ namespace RadioExt_Helper.forms
             tableLayoutPanel1.Controls.Add(btnDeleteStation, 1, 0);
             tableLayoutPanel1.Controls.Add(btnAddStation, 0, 0);
             tableLayoutPanel1.Dock = DockStyle.Bottom;
-            tableLayoutPanel1.Location = new Point(0, 819);
+            tableLayoutPanel1.Location = new Point(0, 500);
             tableLayoutPanel1.Margin = new Padding(3, 2, 3, 2);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 1;
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel1.Size = new Size(328, 37);
+            tableLayoutPanel1.Size = new Size(316, 37);
             tableLayoutPanel1.TabIndex = 1;
             // 
             // btnDeleteStation
@@ -401,10 +401,10 @@ namespace RadioExt_Helper.forms
             btnDeleteStation.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
             btnDeleteStation.FlatStyle = FlatStyle.Flat;
             btnDeleteStation.Image = Properties.Resources.cancel_16x16;
-            btnDeleteStation.Location = new Point(167, 2);
+            btnDeleteStation.Location = new Point(161, 2);
             btnDeleteStation.Margin = new Padding(3, 2, 3, 2);
             btnDeleteStation.Name = "btnDeleteStation";
-            btnDeleteStation.Size = new Size(158, 33);
+            btnDeleteStation.Size = new Size(152, 33);
             btnDeleteStation.TabIndex = 1;
             btnDeleteStation.Text = "Delete Station";
             btnDeleteStation.TextAlign = ContentAlignment.MiddleRight;
@@ -423,7 +423,7 @@ namespace RadioExt_Helper.forms
             btnAddStation.Location = new Point(3, 2);
             btnAddStation.Margin = new Padding(3, 2, 3, 2);
             btnAddStation.Name = "btnAddStation";
-            btnAddStation.Size = new Size(158, 33);
+            btnAddStation.Size = new Size(152, 33);
             btnAddStation.TabIndex = 0;
             btnAddStation.Text = "New Station";
             btnAddStation.TextAlign = ContentAlignment.MiddleRight;
@@ -436,7 +436,7 @@ namespace RadioExt_Helper.forms
             AutoScaleDimensions = new SizeF(96F, 96F);
             AutoScaleMode = AutoScaleMode.Dpi;
             BackColor = Color.White;
-            ClientSize = new Size(1380, 880);
+            ClientSize = new Size(1227, 561);
             Controls.Add(splitContainer1);
             Controls.Add(menuStrip1);
             DoubleBuffered = true;

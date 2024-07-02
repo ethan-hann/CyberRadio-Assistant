@@ -21,6 +21,15 @@ public static class Updater
         try
         {
             var (version, url) = await GetLatestVersionInfoAsync();
+
+            if (version.Equals(string.Empty) ||  url.Equals(string.Empty))
+            {
+                var text = GlobalData.Strings.GetString("NoInternetMsg");
+                var caption = GlobalData.Strings.GetString("NoInternetCaption");
+                MessageBox.Show(text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             var latestVersion = new Version(version);
             var currentVersion = Assembly.GetExecutingAssembly().GetName().Version;
 
@@ -64,7 +73,12 @@ public static class Updater
     private static async Task<(string version, string url)> GetLatestVersionInfoAsync()
     {
         using var client = new HttpClient();
+        client.Timeout = TimeSpan.FromSeconds(5);
+
         var response = await client.GetStringAsync(VersionUrl);
+        if (response == null)
+            return (string.Empty, string.Empty);
+
         var json = JObject.Parse(response);
         var version = json["version"]?.ToString();
         var url = json["url"]?.ToString();
