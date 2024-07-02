@@ -202,10 +202,10 @@ public partial class ExportWindow : Form
             if (!CreateMetaDataJson(stationPath, station)) continue;
             if (station.Songs.Count <= 0) continue;
 
-            if (CreateSongListJson(stationPath, station))
-                CopySongsToStaging(stationPath, station);
-            else
+            if (!CreateSongListJson(stationPath, station))
                 Debug.WriteLine("Couldn't save songs.sgls file.");
+            //else
+            //    CopySongsToStaging(stationPath, station);
         }
 
         RemoveDeletedStations();
@@ -332,6 +332,8 @@ public partial class ExportWindow : Form
 
         DeleteInactiveDirectories(inactiveStationPaths);
     }
+
+    //TODO: Copy song files to game based on songs.sgls
 
     private void CopyDirectoriesToGame(string radiosPath, List<string> activeStationPaths)
     {
