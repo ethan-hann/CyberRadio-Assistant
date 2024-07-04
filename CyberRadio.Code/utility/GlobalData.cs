@@ -16,7 +16,7 @@ public static class GlobalData
     /// </summary>
     public static readonly ResourceManager Strings = new("RadioExt_Helper.Strings", typeof(MainForm).Assembly);
 
-    public static CyberConfigManager? ConfigManager;
+    public static CyberConfigManager? ConfigManager { get; private set; }
 
     private static bool _uiIconsInitialized;
     private static bool _globalDataInitialized;

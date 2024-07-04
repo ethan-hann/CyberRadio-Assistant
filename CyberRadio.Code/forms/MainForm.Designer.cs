@@ -68,6 +68,7 @@ namespace RadioExt_Helper.forms
             tableLayoutPanel1 = new TableLayoutPanel();
             btnDeleteStation = new Button();
             btnAddStation = new Button();
+            configurationToolStripMenuItem = new ToolStripMenuItem();
             menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
@@ -93,7 +94,7 @@ namespace RadioExt_Helper.forms
             // 
             // fileToolStripMenuItem
             // 
-            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { openStagingPathToolStripMenuItem, openGamePathToolStripMenuItem, toolStripSeparator3, exportToGameToolStripMenuItem, toolStripSeparator2, pathsToolStripMenuItem, refreshStationsToolStripMenuItem });
+            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { openStagingPathToolStripMenuItem, openGamePathToolStripMenuItem, toolStripSeparator3, exportToGameToolStripMenuItem, toolStripSeparator2, configurationToolStripMenuItem, pathsToolStripMenuItem, refreshStationsToolStripMenuItem });
             fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             fileToolStripMenuItem.Size = new Size(37, 20);
             fileToolStripMenuItem.Text = "File";
@@ -431,6 +432,14 @@ namespace RadioExt_Helper.forms
             btnAddStation.UseVisualStyleBackColor = false;
             btnAddStation.Click += btnAddStation_Click;
             // 
+            // configurationToolStripMenuItem
+            // 
+            configurationToolStripMenuItem.Image = Properties.Resources.configuration;
+            configurationToolStripMenuItem.Name = "configurationToolStripMenuItem";
+            configurationToolStripMenuItem.Size = new Size(211, 22);
+            configurationToolStripMenuItem.Text = "Configuration";
+            configurationToolStripMenuItem.Click += configurationToolStripMenuItem_Click;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(96F, 96F);
@@ -510,5 +519,6 @@ namespace RadioExt_Helper.forms
         private ToolStripStatusLabel toolStripStatusLabel1;
         private ToolStripStatusLabel lblStationCount;
         private ToolStripStatusLabel toolStripStatusLabel3;
+        private ToolStripMenuItem configurationToolStripMenuItem;
     }
 }

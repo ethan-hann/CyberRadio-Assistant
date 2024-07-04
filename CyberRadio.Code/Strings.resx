@@ -540,4 +540,55 @@ Can't export radio stations to game.</value>
   <data name="NoInternetMsg" xml:space="preserve">
     <value>Could not check for updates. Please check your internet and try again.</value>
   </data>
+  <data name="Configuration" xml:space="preserve">
+    <value>Configuration</value>
+  </data>
+  <data name="GeneralSettings" xml:space="preserve">
+    <value>General</value>
+  </data>
+  <data name="LogSettings" xml:space="preserve">
+    <value>Logging</value>
+  </data>
+  <data name="CheckForUpdatesOption" xml:space="preserve">
+    <value>Check for Updates at Startup?</value>
+  </data>
+  <data name="AutoExportOption" xml:space="preserve">
+    <value>Auto-Export to Game?</value>
+  </data>
+  <data name="EditPathsOption" xml:space="preserve">
+    <value>Edit Paths...</value>
+  </data>
+  <data name="CheckForUpdatesOptionHelp" xml:space="preserve">
+    <value>If checked, enables the application to check for updates immediately after started.</value>
+  </data>
+  <data name="AutoExportOptionHelp" xml:space="preserve">
+    <value>If checked, your stations will immediately export to the game after successfully exporting to staging.</value>
+  </data>
+  <data name="EditPathsOptionHelp" xml:space="preserve">
+    <value>Opens the path's dialog to edit the staging and game base path.</value>
+  </data>
+  <data name="NewLogFileOption" xml:space="preserve">
+    <value>New File Every Launch?</value>
+  </data>
+  <data name="NewLogFileOptionHelp" xml:space="preserve">
+    <value>If checked, specifies that a new log file will be created on every run of the app.</value>
+  </data>
+  <data name="SaveAndClose" xml:space="preserve">
+    <value>Save and Close</value>
+  </data>
+  <data name="ResetToDefaults" xml:space="preserve">
+    <value>Reset to Defaults</value>
+  </data>
+  <data name="ConfigResetConfirm" xml:space="preserve">
+    <value>Are you sure you want to reset the configuration to default values?</value>
+  </data>
+  <data name="ConfigSaveError" xml:space="preserve">
+    <value>There was an error saving the configuration. Please make sure the config.yml file exists.</value>
+  </data>
+  <data name="ConfigSaveSuccess" xml:space="preserve">
+    <value>Configuration saved!</value>
+  </data>
+  <data name="Success" xml:space="preserve">
+    <value>Success</value>
+  </data>
 </root>

@@ -540,4 +540,55 @@ No se pueden exportar estaciones de radio al juego.</value>
   <data name="NoInternetMsg" xml:space="preserve">
     <value>No se pudo comprobar si había actualizaciones. Por favor, compruebe su Internet e inténtelo de nuevo.</value>
   </data>
+  <data name="Configuration" xml:space="preserve">
+    <value>Configuración</value>
+  </data>
+  <data name="AutoExportOption" xml:space="preserve">
+    <value>¿Exportar automáticamente al juego?</value>
+  </data>
+  <data name="AutoExportOptionHelp" xml:space="preserve">
+    <value>Si está marcado, tus estaciones se exportarán inmediatamente al juego después de exportarlas exitosamente al escenario.</value>
+  </data>
+  <data name="CheckForUpdatesOption" xml:space="preserve">
+    <value>¿Buscar actualizaciones al iniciar?</value>
+  </data>
+  <data name="CheckForUpdatesOptionHelp" xml:space="preserve">
+    <value>Si está marcado, habilita la aplicación para buscar actualizaciones inmediatamente después de iniciarse.</value>
+  </data>
+  <data name="EditPathsOption" xml:space="preserve">
+    <value>Editar rutas...</value>
+  </data>
+  <data name="EditPathsOptionHelp" xml:space="preserve">
+    <value>Abre el cuadro de diálogo de la ruta para editar la ruta de preparación y base del juego.</value>
+  </data>
+  <data name="GeneralSettings" xml:space="preserve">
+    <value>General</value>
+  </data>
+  <data name="LogSettings" xml:space="preserve">
+    <value>Registro</value>
+  </data>
+  <data name="NewLogFileOption" xml:space="preserve">
+    <value>¿Nuevo archivo cada inicio?</value>
+  </data>
+  <data name="NewLogFileOptionHelp" xml:space="preserve">
+    <value>Si está marcado, especifica que se creará un nuevo archivo de registro en cada ejecución de la aplicación.</value>
+  </data>
+  <data name="ResetToDefaults" xml:space="preserve">
+    <value>Restablecer los valores predeterminados</value>
+  </data>
+  <data name="SaveAndClose" xml:space="preserve">
+    <value>Guardar y cerrar</value>
+  </data>
+  <data name="ConfigResetConfirm" xml:space="preserve">
+    <value>¿Está seguro de que desea restablecer la configuración a los valores predeterminados?</value>
+  </data>
+  <data name="ConfigSaveError" xml:space="preserve">
+    <value>Hubo un error al guardar la configuración. Asegúrese de que exista el archivo config.yml.</value>
+  </data>
+  <data name="Success" xml:space="preserve">
+    <value>Éxito</value>
+  </data>
+  <data name="ConfigSaveSuccess" xml:space="preserve">
+    <value>¡Configuración salvada!</value>
+  </data>
 </root>

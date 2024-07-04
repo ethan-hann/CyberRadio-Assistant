@@ -102,6 +102,7 @@ public partial class MainForm : Form
         exportToGameToolStripMenuItem.Text = GlobalData.Strings.GetString("ExportStations");
         languageToolStripMenuItem.Text = GlobalData.Strings.GetString("Language");
         helpToolStripMenuItem.Text = GlobalData.Strings.GetString("Help");
+        configurationToolStripMenuItem.Text = GlobalData.Strings.GetString("Configuration");
         pathsToolStripMenuItem.Text = GlobalData.Strings.GetString("GamePaths");
         refreshStationsToolStripMenuItem.Text = GlobalData.Strings.GetString("RefreshStations");
         howToUseToolStripMenuItem.Text = GlobalData.Strings.GetString("HowToUse");
@@ -205,7 +206,7 @@ public partial class MainForm : Form
     {
         PopulateStations();
         if (_stations.Count <= 0) return;
-        
+
         lbStations.SelectedIndex = 0;
         lbStations_SelectedIndexChanged(this, EventArgs.Empty);
     }
@@ -238,7 +239,7 @@ public partial class MainForm : Form
     private void btnEnableStation_Click(object sender, EventArgs e)
     {
         if (lbStations.SelectedItem is not Station s) return;
-        
+
         s.MetaData.IsActive = true;
         lbStations.BeginUpdate();
         lbStations.Invalidate();
@@ -260,7 +261,7 @@ public partial class MainForm : Form
     private void btnDisableStation_Click(object sender, EventArgs e)
     {
         if (lbStations.SelectedItem is not Station s) return;
-        
+
         s.MetaData.IsActive = false;
         lbStations.BeginUpdate();
         lbStations.Invalidate();
@@ -401,12 +402,17 @@ public partial class MainForm : Form
 
     private void exportToGameToolStripMenuItem_Click(object sender, EventArgs e)
     {
-        new ExportWindow([.. _stations]).ShowDialog();
+        new ExportWindow([.. _stations]).ShowDialog(this);
+    }
+
+    private void configurationToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        new ConfigForm().ShowDialog(this);
     }
 
     private void pathsToolStripMenuItem_Click(object sender, EventArgs e)
     {
-        var result = new PathSettings().ShowDialog();
+        var result = new PathSettings().ShowDialog(this);
         if (result == DialogResult.OK)
             PopulateStations();
     }
