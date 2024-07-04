@@ -3,6 +3,8 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Reflection;
 using System.Resources;
+using AetherUtils.Core.Configuration;
+using RadioExt_Helper.config;
 using RadioExt_Helper.forms;
 
 namespace RadioExt_Helper.utility;
@@ -13,6 +15,8 @@ public static class GlobalData
     ///     The resource manager responsible for keeping translations of strings.
     /// </summary>
     public static readonly ResourceManager Strings = new("RadioExt_Helper.Strings", typeof(MainForm).Assembly);
+
+    public static CyberConfigManager? ConfigManager;
 
     private static bool _uiIconsInitialized;
     private static bool _globalDataInitialized;
@@ -38,11 +42,28 @@ public static class GlobalData
         if (_globalDataInitialized) return;
 
         GetUiIcons();
-        SetCulture("English (en)");
-
         CreateComboBoxTemplate();
 
+        InitializeConfig();
+
+        SetCulture(ConfigManager?.Get("language") as string ?? "English (en)");
+
         _globalDataInitialized = true;
+    }
+
+    private static void InitializeConfig()
+    {
+        string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "RadioExt-Helper", "config.yml");
+        ConfigManager = new CyberConfigManager(path);
+        if (ConfigManager.ConfigExists)
+        {
+            ConfigManager.Load();
+        }
+        else
+        {
+            ConfigManager.CreateDefaultConfig();
+            ConfigManager.Save();
+        }
     }
 
     private static void CreateComboBoxTemplate()

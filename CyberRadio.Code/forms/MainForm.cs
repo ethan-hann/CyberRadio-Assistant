@@ -2,6 +2,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using AetherUtils.Core.Extensions;
 using AetherUtils.Core.Files;
+using AetherUtils.Core.Structs;
 using AetherUtils.Core.WinForms.Controls;
 using AetherUtils.Core.WinForms.Models;
 using RadioExt_Helper.models;
@@ -37,7 +38,8 @@ public partial class MainForm : Form
         InitializeLanguageDropDown();
         SelectLanguage();
 
-        _ = Updater.CheckForUpdates();
+        if (GlobalData.ConfigManager?.Get("autoCheckForUpdates") as bool? ?? true)
+            _ = Updater.CheckForUpdates();
     }
 
     private void MainForm_Load(object sender, EventArgs e)
