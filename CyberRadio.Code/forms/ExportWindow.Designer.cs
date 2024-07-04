@@ -136,9 +136,9 @@
             // 
             bgWorkerExport.WorkerReportsProgress = true;
             bgWorkerExport.WorkerSupportsCancellation = true;
-            bgWorkerExport.DoWork += bgWorkerExport_DoWork;
-            bgWorkerExport.ProgressChanged += bgWorkerExport_ProgressChanged;
-            bgWorkerExport.RunWorkerCompleted += bgWorkerExport_RunWorkerCompleted;
+            bgWorkerExport.DoWork += BgWorkerExport_DoWork;
+            bgWorkerExport.ProgressChanged += BgWorkerExport_ProgressChanged;
+            bgWorkerExport.RunWorkerCompleted += BgWorkerExport_RunWorkerCompleted;
             // 
             // btnExportToStaging
             // 
@@ -157,7 +157,7 @@
             btnExportToStaging.TextAlign = ContentAlignment.MiddleRight;
             btnExportToStaging.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnExportToStaging.UseVisualStyleBackColor = false;
-            btnExportToStaging.Click += btnExportToStaging_Click;
+            btnExportToStaging.Click += BtnExportToStaging_Click;
             // 
             // btnExportToGame
             // 
@@ -177,7 +177,7 @@
             btnExportToGame.TextAlign = ContentAlignment.MiddleRight;
             btnExportToGame.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnExportToGame.UseVisualStyleBackColor = false;
-            btnExportToGame.Click += btnExportToGame_Click;
+            btnExportToGame.Click += BtnExportToGame_Click;
             // 
             // btnCancel
             // 
@@ -195,7 +195,7 @@
             btnCancel.Text = "Cancel";
             btnCancel.UseVisualStyleBackColor = false;
             btnCancel.Visible = false;
-            btnCancel.Click += btnCancel_Click;
+            btnCancel.Click += BtnCancel_Click;
             // 
             // btnOpenStagingFolder
             // 
@@ -214,7 +214,7 @@
             btnOpenStagingFolder.TextAlign = ContentAlignment.MiddleRight;
             btnOpenStagingFolder.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnOpenStagingFolder.UseVisualStyleBackColor = false;
-            btnOpenStagingFolder.Click += btnOpenStagingFolder_Click;
+            btnOpenStagingFolder.Click += BtnOpenStagingFolder_Click;
             // 
             // btnOpenGameFolder
             // 
@@ -233,15 +233,15 @@
             btnOpenGameFolder.TextAlign = ContentAlignment.MiddleRight;
             btnOpenGameFolder.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnOpenGameFolder.UseVisualStyleBackColor = false;
-            btnOpenGameFolder.Click += btnOpenGameFolder_Click;
+            btnOpenGameFolder.Click += BtnOpenGameFolder_Click;
             // 
             // bgWorkerExportGame
             // 
             bgWorkerExportGame.WorkerReportsProgress = true;
             bgWorkerExportGame.WorkerSupportsCancellation = true;
-            bgWorkerExportGame.DoWork += bgWorkerExportGame_DoWork;
-            bgWorkerExportGame.ProgressChanged += bgWorkerExportGame_ProgressChanged;
-            bgWorkerExportGame.RunWorkerCompleted += bgWorkerExportGame_RunWorkerCompleted;
+            bgWorkerExportGame.DoWork += BgWorkerExportGame_DoWork;
+            bgWorkerExportGame.ProgressChanged += BgWorkerExportGame_ProgressChanged;
+            bgWorkerExportGame.RunWorkerCompleted += BgWorkerExportGame_RunWorkerCompleted;
             // 
             // splitContainer1
             // 
