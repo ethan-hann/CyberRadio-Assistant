@@ -257,8 +257,6 @@ public partial class ExportWindow : Form
 
             if (!CreateSongListJson(stationPath, station))
                 Debug.WriteLine("Couldn't save songs.sgls file.");
-            //else
-            //    CopySongsToStaging(stationPath, station);
         }
 
         RemoveDeletedStations();
