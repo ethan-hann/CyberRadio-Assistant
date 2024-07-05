@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel;
-using System.Diagnostics;
 using System.Globalization;
 using System.Reflection;
 using System.Resources;
 using AetherUtils.Core.Configuration;
+using AetherUtils.Core.Logging;
 using RadioExt_Helper.config;
 using RadioExt_Helper.forms;
 
@@ -16,10 +16,10 @@ public static class GlobalData
     /// </summary>
     public static readonly ResourceManager Strings = new("RadioExt_Helper.Strings", typeof(MainForm).Assembly);
 
-    public static CyberConfigManager ConfigManager { get; private set; } = new("");
-
     private static bool _uiIconsInitialized;
     private static bool _globalDataInitialized;
+
+    public static CyberConfigManager ConfigManager { get; private set; } = new("");
 
     /// <summary>
     ///     A list of strings containing all UIIcon records in the game. This list is populated from an embedded text file.
@@ -45,6 +45,7 @@ public static class GlobalData
         CreateComboBoxTemplate();
 
         InitializeConfig();
+        InitializeLogging();
 
         SetCulture(ConfigManager.Get("language") as string ?? "English (en)");
 
@@ -65,6 +66,14 @@ public static class GlobalData
             ConfigManager.CreateDefaultConfig();
             ConfigManager.Save();
         }
+    }
+
+    private static void InitializeLogging()
+    {
+        if (ConfigManager.Get("logOptions") is not LogOptions options) return;
+
+        AuLogger.Initialize(options);
+        AuLogger.GetCurrentLogger("GlobalData.InitializeLogging").Info("Logging initialized!");
     }
 
     private static void CreateComboBoxTemplate()
@@ -159,7 +168,8 @@ public static class GlobalData
         }
         catch (Exception ex)
         {
-            Debug.WriteLine(ex);
+            AuLogger.GetCurrentLogger("GlobalData.GetUiIcons")
+                .Error(ex, "Couldn't initialize list of UIIcons.");
         }
     }
 }

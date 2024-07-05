@@ -8,8 +8,6 @@ namespace RadioExt_Helper.user_controls;
 
 public sealed partial class StationEditor : UserControl, IUserControl
 {
-    public event EventHandler? StationUpdated;
-
     private readonly ComboBox _cmbUiIcons;
     private readonly CustomMusicCtl _musicCtl;
 
@@ -58,6 +56,8 @@ public sealed partial class StationEditor : UserControl, IUserControl
 
         _musicCtl.Translate();
     }
+
+    public event EventHandler? StationUpdated;
 
     public MusicPlayer GetMusicPlayer()
     {
@@ -248,7 +248,7 @@ public sealed partial class StationEditor : UserControl, IUserControl
     {
         var streamChecker = new AudioStreamChecker(TimeSpan.FromSeconds(5));
         if (e is not InputBoxEventArgs args) return;
-        
+
         var streamUrl = AudioStreamChecker.ConvertRadioGardenURL(args.InputText);
         var isValid = await streamChecker.IsAudioStreamValidAsync(streamUrl);
         if (isValid)

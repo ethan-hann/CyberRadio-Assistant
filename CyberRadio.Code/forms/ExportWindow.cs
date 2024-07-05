@@ -2,14 +2,14 @@
 using System.Diagnostics;
 using AetherUtils.Core.Extensions;
 using AetherUtils.Core.Files;
+using AetherUtils.Core.Logging;
 using RadioExt_Helper.models;
-using RadioExt_Helper.Properties;
 using RadioExt_Helper.utility;
 
 namespace RadioExt_Helper.forms;
 
 /// <summary>
-/// Represents the export window form, allowing users to export radio stations to the game or staging area.
+///     Represents the export window form, allowing users to export radio stations to the game or staging area.
 /// </summary>
 public partial class ExportWindow : Form
 {
@@ -24,13 +24,9 @@ public partial class ExportWindow : Form
     private bool _exportToGameComplete;
     private bool _exportToStagingComplete;
     private bool _isCancelling;
-    
-    private static string GameBasePath => GlobalData.ConfigManager.Get("gameBasePath") as string ?? string.Empty;
-    private static string StagingPath => GlobalData.ConfigManager.Get("stagingPath") as string ?? string.Empty;
-    private static bool ShouldAutoExportToGame => (bool)(GlobalData.ConfigManager.Get("autoExportToGame") ?? false);
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="ExportWindow"/> class with the specified stations to export.
+    ///     Initializes a new instance of the <see cref="ExportWindow" /> class with the specified stations to export.
     /// </summary>
     /// <param name="stations">The list of stations to be exported.</param>
     public ExportWindow(List<Station> stations)
@@ -39,11 +35,15 @@ public partial class ExportWindow : Form
         _stationsToExport = stations;
     }
 
+    private static string GameBasePath => GlobalData.ConfigManager.Get("gameBasePath") as string ?? string.Empty;
+    private static string StagingPath => GlobalData.ConfigManager.Get("stagingPath") as string ?? string.Empty;
+    private static bool ShouldAutoExportToGame => (bool)(GlobalData.ConfigManager.Get("autoExportToGame") ?? false);
+
     /// <summary>
-    /// Handles the Load event of the ExportWindow form.
+    ///     Handles the Load event of the ExportWindow form.
     /// </summary>
     /// <param name="sender">The source of the event.</param>
-    /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+    /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
     private void ExportWindow_Load(object sender, EventArgs e)
     {
         Translate();
@@ -58,25 +58,23 @@ public partial class ExportWindow : Form
     }
 
     /// <summary>
-    /// Draws the sub-items of the stations ListView, including custom icons.
+    ///     Draws the sub-items of the stations ListView, including custom icons.
     /// </summary>
     /// <param name="sender">The source of the event.</param>
-    /// <param name="e">The <see cref="DrawListViewSubItemEventArgs"/> instance containing the event data.</param>
+    /// <param name="e">The <see cref="DrawListViewSubItemEventArgs" /> instance containing the event data.</param>
     private void LvStations_DrawSubItem(object? sender, DrawListViewSubItemEventArgs e)
     {
         if (e.ColumnIndex == 0) // Assuming the icon is in the first column
         {
-            if (e.Item != null && lvStations.SmallImageList != null && e.Item.Tag is Station station)
-            {
-                var image = lvStations.SmallImageList.Images[station.GetStatus() ? "enabled" : "disabled"];
-                if (image != null)
-                {
-                    // Calculate the position to center the image in the cell
-                    var iconX = e.Bounds.Left + (e.Bounds.Width - image.Width) / 2;
-                    var iconY = e.Bounds.Top + (e.Bounds.Height - image.Height) / 2;
-                    e.Graphics.DrawImage(image, iconX, iconY);
-                }
-            }
+            if (e.Item == null || lvStations.SmallImageList == null || e.Item.Tag is not Station station) return;
+
+            var image = lvStations.SmallImageList.Images[station.GetStatus() ? "enabled" : "disabled"];
+            if (image == null) return;
+
+            // Calculate the position to center the image in the cell
+            var iconX = e.Bounds.Left + (e.Bounds.Width - image.Width) / 2;
+            var iconY = e.Bounds.Top + (e.Bounds.Height - image.Height) / 2;
+            e.Graphics.DrawImage(image, iconX, iconY);
         }
         else
         {
@@ -85,7 +83,7 @@ public partial class ExportWindow : Form
     }
 
     /// <summary>
-    /// Translates the UI elements of the form based on the selected language.
+    ///     Translates the UI elements of the form based on the selected language.
     /// </summary>
     private void Translate()
     {
@@ -108,23 +106,27 @@ public partial class ExportWindow : Form
     }
 
     /// <summary>
-    /// Populates the ListView with the stations to be exported.
+    ///     Populates the ListView with the stations to be exported.
     /// </summary>
     private void PopulateListView()
     {
         var radioExtPath = PathHelper.GetRadiosPath(GameBasePath);
 
-        foreach (var lvItem in from station in _stationsToExport 
-                 let isActive = station.GetStatus() 
+        foreach (var lvItem in from station in _stationsToExport
+                 let isActive = station.GetStatus()
                  let customIconString = station.CustomIcon.UseCustom
                      ? GlobalData.Strings.GetString("CustomIcon")
-                     : station.MetaData.Icon let songString = station.MetaData.StreamInfo.IsStream
+                     : station.MetaData.Icon
+                 let songString = station.MetaData.StreamInfo.IsStream
                      ? GlobalData.Strings.GetString("IsStream")
-                     : station.Songs.Count.ToString() let streamString = station.MetaData.StreamInfo.IsStream
+                     : station.Songs.Count.ToString()
+                 let streamString = station.MetaData.StreamInfo.IsStream
                      ? station.MetaData.StreamInfo.StreamUrl
-                     : GlobalData.Strings.GetString("UsingSongs") let proposedPath = isActive
+                     : GlobalData.Strings.GetString("UsingSongs")
+                 let proposedPath = isActive
                      ? Path.Combine(radioExtPath, station.MetaData.DisplayName)
-                     : GlobalData.Strings.GetString("DisabledStation") select new ListViewItem(new[]
+                     : GlobalData.Strings.GetString("DisabledStation")
+                 select new ListViewItem(new[]
                  {
                      string.Empty, // Placeholder for the icon column
                      station.MetaData.DisplayName,
@@ -133,15 +135,13 @@ public partial class ExportWindow : Form
                      streamString ?? string.Empty,
                      proposedPath ?? string.Empty
                  }) { Tag = station })
-        {
             lvStations.Items.Add(lvItem);
-        }
 
         lvStations.ResizeColumns();
     }
 
     /// <summary>
-    /// Configures the state of the buttons based on the current settings.
+    ///     Configures the state of the buttons based on the current settings.
     /// </summary>
     private void ConfigureButtons()
     {
@@ -153,10 +153,10 @@ public partial class ExportWindow : Form
     }
 
     /// <summary>
-    /// Handles the Click event of the btnExportToStaging button.
+    ///     Handles the Click event of the btnExportToStaging button.
     /// </summary>
     /// <param name="sender">The source of the event.</param>
-    /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+    /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
     private void BtnExportToStaging_Click(object sender, EventArgs e)
     {
         if (!bgWorkerExport.CancellationPending && !bgWorkerExport.IsBusy)
@@ -164,10 +164,10 @@ public partial class ExportWindow : Form
     }
 
     /// <summary>
-    /// Handles the Click event of the btnExportToGame button.
+    ///     Handles the Click event of the btnExportToGame button.
     /// </summary>
     /// <param name="sender">The source of the event.</param>
-    /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+    /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
     private void BtnExportToGame_Click(object sender, EventArgs e)
     {
         if (ShowNoModDialogIfRequired() && !bgWorkerExportGame.CancellationPending && !bgWorkerExportGame.IsBusy)
@@ -175,10 +175,10 @@ public partial class ExportWindow : Form
     }
 
     /// <summary>
-    /// Handles the Click event of the btnCancel button.
+    ///     Handles the Click event of the btnCancel button.
     /// </summary>
     /// <param name="sender">The source of the event.</param>
-    /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+    /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
     private void BtnCancel_Click(object sender, EventArgs e)
     {
         if (!bgWorkerExport.CancellationPending && bgWorkerExport.IsBusy)
@@ -187,21 +187,20 @@ public partial class ExportWindow : Form
             bgWorkerExport.CancelAsync();
         }
 
-        if (!bgWorkerExportGame.CancellationPending && bgWorkerExportGame.IsBusy)
-        {
-            _isCancelling = true;
-            bgWorkerExportGame.CancelAsync();
-        }
+        if (bgWorkerExportGame.CancellationPending || !bgWorkerExportGame.IsBusy) return;
+
+        _isCancelling = true;
+        bgWorkerExportGame.CancelAsync();
     }
 
     /// <summary>
-    /// Shows a dialog if the radioExt mod is not installed.
+    ///     Shows a dialog if the radioExt mod is not installed.
     /// </summary>
     /// <returns><c>true</c> if the mod is installed; otherwise, <c>false</c>.</returns>
     public static bool ShowNoModDialogIfRequired()
     {
         if (!string.IsNullOrEmpty(PathHelper.GetRadioExtPath(GameBasePath))) return true;
-        
+
         MessageBox.Show(GlobalData.Strings.GetString("NoRadioExtMsg") ??
                         "You do not have the radioExt mod installed. Can't export radio stations to game.",
             GlobalData.Strings.GetString("NoModInstalled") ?? "No Mod Installed",
@@ -210,7 +209,7 @@ public partial class ExportWindow : Form
     }
 
     /// <summary>
-    /// Resets the form to its initial state.
+    ///     Resets the form to its initial state.
     /// </summary>
     private void Reset()
     {
@@ -224,10 +223,10 @@ public partial class ExportWindow : Form
     }
 
     /// <summary>
-    /// Handles the DoWork event of the bgWorkerExport background worker.
+    ///     Handles the DoWork event of the bgWorkerExport background worker.
     /// </summary>
     /// <param name="sender">The source of the event.</param>
-    /// <param name="e">The <see cref="DoWorkEventArgs"/> instance containing the event data.</param>
+    /// <param name="e">The <see cref="DoWorkEventArgs" /> instance containing the event data.</param>
     private void BgWorkerExport_DoWork(object sender, DoWorkEventArgs e)
     {
         ToggleButtons();
@@ -251,41 +250,42 @@ public partial class ExportWindow : Form
             if (station.Songs.Count <= 0) continue;
 
             if (!CreateSongListJson(stationPath, station))
-                Debug.WriteLine("Couldn't save songs.sgls file.");
+                AuLogger.GetCurrentLogger<ExportWindow>("BG_ExportStaging")
+                    .Error("Couldn't save the songs.sgls file.");
         }
 
         RemoveDeletedStations();
+        AuLogger.GetCurrentLogger<ExportWindow>("BG_ExportToStaging")
+            .Info($"Exported {_stationsToExport.Count} stations to staging directory: {StagingPath}");
     }
 
     /// <summary>
-    /// Handles the ProgressChanged event of the bgWorkerExport background worker.
+    ///     Removes deleted station directories from the staging path.
     /// </summary>
-    /// <param name="sender">The source of the event.</param>
-    /// <param name="e">The <see cref="ProgressChangedEventArgs"/> instance containing the event data.</param>
     private void RemoveDeletedStations()
     {
-        var stationNames = new HashSet<string>(_stationsToExport.Select(station => station.MetaData.DisplayName), StringComparer.OrdinalIgnoreCase);
+        var stationNames = new HashSet<string>(_stationsToExport.Select(station => station.MetaData.DisplayName),
+            StringComparer.OrdinalIgnoreCase);
         var directoriesToDelete = Directory.EnumerateDirectories(StagingPath)
             .Where(dir => !stationNames.Contains(Path.GetFileName(dir)));
 
         foreach (var directory in directoriesToDelete)
-        {
             try
             {
                 Directory.Delete(directory, true);
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Failed to delete {directory}: {ex.Message}");
+                AuLogger.GetCurrentLogger<ExportWindow>("RemoveDeletedStations")
+                    .Error(ex, $"Failed to delete {directory}.");
             }
-        }
     }
 
     /// <summary>
-    /// Handles the RunWorkerCompleted event of the bgWorkerExport background worker.
+    ///     Creates the station directory in the staging path for the specified <see cref="Station" />.
     /// </summary>
-    /// <param name="sender">The source of the event.</param>
-    /// <param name="e">The <see cref="RunWorkerCompletedEventArgs"/> instance containing the event data.</param>
+    /// <param name="station">The station to create the directory for.</param>
+    /// <returns>The path to the station's directory.</returns>
     private static string CreateStationDirectory(Station station)
     {
         if (string.IsNullOrEmpty(StagingPath)) return string.Empty;
@@ -296,7 +296,7 @@ public partial class ExportWindow : Form
     }
 
     /// <summary>
-    /// Creates a metadata JSON file for a station in the specified path.
+    ///     Creates a metadata JSON file for a station in the specified path.
     /// </summary>
     /// <param name="stationPath">The path where the metadata JSON file will be created.</param>
     /// <param name="station">The station object containing the metadata to be saved.</param>
@@ -308,7 +308,7 @@ public partial class ExportWindow : Form
     }
 
     /// <summary>
-    /// Creates a song list JSON file for a station in the specified path.
+    ///     Creates a song list JSON file for a station in the specified path.
     /// </summary>
     /// <param name="stationPath">The path where the song list JSON file will be created.</param>
     /// <param name="station">The station object containing the songs to be saved.</param>
@@ -320,7 +320,7 @@ public partial class ExportWindow : Form
     }
 
     /// <summary>
-    /// Handles the ProgressChanged event of the background worker for exporting.
+    ///     Handles the ProgressChanged event of the background worker for exporting.
     /// </summary>
     /// <param name="sender">The source of the event.</param>
     /// <param name="e">Event data containing the progress percentage.</param>
@@ -331,7 +331,7 @@ public partial class ExportWindow : Form
     }
 
     /// <summary>
-    /// Handles the RunWorkerCompleted event of the background worker for exporting.
+    ///     Handles the RunWorkerCompleted event of the background worker for exporting.
     /// </summary>
     /// <param name="sender">The source of the event.</param>
     /// <param name="e">Event data indicating the operation has completed.</param>
@@ -354,7 +354,7 @@ public partial class ExportWindow : Form
     }
 
     /// <summary>
-    /// Performs the work of exporting stations to the game directory in the background.
+    ///     Performs the work of exporting stations to the game directory in the background.
     /// </summary>
     /// <param name="sender">The source of the event.</param>
     /// <param name="e">Event data for the background operation.</param>
@@ -388,10 +388,13 @@ public partial class ExportWindow : Form
             .ToList();
 
         DeleteInactiveDirectories(inactiveStationPaths);
+
+        AuLogger.GetCurrentLogger<ExportWindow>("BG_ExportToGame")
+            .Info($"Exported {activeStations.Count} stations to game radios directory: {radiosPath}");
     }
 
     /// <summary>
-    /// Copies directories of active stations to the game directory.
+    ///     Copies directories of active stations to the game directory.
     /// </summary>
     /// <param name="radiosPath">The game's radio directory path.</param>
     /// <param name="activeStationPaths">List of paths of active stations to be copied.</param>
@@ -405,31 +408,32 @@ public partial class ExportWindow : Form
 
             Invoke(() => pgExportProgress.Value = 0); //reset progress bar after copy operation
 
-            if (bgWorkerExportGame.CancellationPending)
-            {
-                bgWorkerExportGame.CancelAsync();
-                return;
-            }
+            if (!bgWorkerExportGame.CancellationPending) continue;
+
+            bgWorkerExportGame.CancelAsync();
+            return;
         }
     }
 
     /// <summary>
-    /// Copies songs specified in the .sgls file from the original path to the target path.
+    ///     Copies songs specified in the .sgls file from the original path to the target path.
     /// </summary>
     /// <param name="originalPath">The original path of the station.</param>
     /// <param name="targetPath">The target path in the game directory.</param>
     /// <returns>True if songs were successfully copied; otherwise, false.</returns>
     private bool CopySongsToGame(string originalPath, string targetPath)
     {
-        var songFile = Directory.GetFiles(originalPath).FirstOrDefault(file => Path.GetExtension(file).Equals(".sgls", StringComparison.OrdinalIgnoreCase));
+        var songFile = Directory.GetFiles(originalPath).FirstOrDefault(file =>
+            Path.GetExtension(file).Equals(".sgls", StringComparison.OrdinalIgnoreCase));
         if (songFile == null)
             return false;
 
-        SongList? songs = _songListJson.LoadJson(songFile);
+        var songs = _songListJson.LoadJson(songFile);
         if (songs == null)
             return false;
 
-        var songPathsInSgls = songs.Select(s => Path.Combine(targetPath, Path.GetFileName(s.OriginalFilePath))).ToList();
+        var songPathsInSgls =
+            songs.Select(s => Path.Combine(targetPath, Path.GetFileName(s.OriginalFilePath))).ToList();
 
         // Delete songs not present in the .sgls file
         var existingFiles = Directory.GetFiles(targetPath)
@@ -438,16 +442,16 @@ public partial class ExportWindow : Form
 
         foreach (var file in existingFiles)
         {
-            if (!songPathsInSgls.Contains(file, StringComparer.OrdinalIgnoreCase))
+            if (songPathsInSgls.Contains(file, StringComparer.OrdinalIgnoreCase)) continue;
+
+            try
             {
-                try
-                {
-                    File.Delete(file);
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine($"Failed to delete {file}: {ex.Message}");
-                }
+                File.Delete(file);
+            }
+            catch (Exception ex)
+            {
+                AuLogger.GetCurrentLogger<ExportWindow>("CopySongsToGame")
+                    .Error(ex, $"Failed to delete {file}.");
             }
         }
 
@@ -459,10 +463,13 @@ public partial class ExportWindow : Form
             try
             {
                 File.Copy(sourcePath, targetFilePath, true);
+                AuLogger.GetCurrentLogger<ExportWindow>("CopySongsToGame")
+                    .Info($"Copied song: {sourcePath} to {targetFilePath}");
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Failed to copy {sourcePath} to {targetFilePath}: {ex.Message}");
+                AuLogger.GetCurrentLogger<ExportWindow>("CopySongsToGame")
+                    .Error(ex, $"Failed to copy {sourcePath} to {targetFilePath}");
                 return false;
             }
         }
@@ -471,7 +478,7 @@ public partial class ExportWindow : Form
     }
 
     /// <summary>
-    /// Deletes directories of inactive stations from the game directory.
+    ///     Deletes directories of inactive stations from the game directory.
     /// </summary>
     /// <param name="inactiveStationPaths">List of paths of inactive stations to be deleted.</param>
     private void DeleteInactiveDirectories(List<string> inactiveStationPaths)
@@ -481,34 +488,33 @@ public partial class ExportWindow : Form
             {
                 Directory.Delete(path, true);
 
-                if (bgWorkerExportGame.CancellationPending)
-                {
-                    bgWorkerExportGame.CancelAsync();
-                    return;
-                }
+                if (!bgWorkerExportGame.CancellationPending) continue;
+
+                bgWorkerExportGame.CancelAsync();
+                return;
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Failed to delete directory {path}: {ex.Message}");
+                AuLogger.GetCurrentLogger<ExportWindow>("DeleteInactiveDirectories")
+                    .Error(ex, $"Failed to delete directory {path}");
             }
     }
 
     /// <summary>
-    /// Handles the ProgressChanged event of the background worker for exporting to the game.
+    ///     Handles the ProgressChanged event of the background worker for exporting to the game.
     /// </summary>
     /// <param name="sender">The source of the event.</param>
     /// <param name="e">Event data containing the progress percentage.</param>
     private void BgWorkerExportGame_ProgressChanged(object sender, ProgressChangedEventArgs e)
     {
-        if (pgExportProgress.Value != e.ProgressPercentage)
-        {
-            pgExportProgress.Value = e.ProgressPercentage;
-            UpdateStatus(string.Format(_statusString, _dirCopier?.CurrentFile));
-        }
+        if (pgExportProgress.Value == e.ProgressPercentage) return;
+
+        pgExportProgress.Value = e.ProgressPercentage;
+        UpdateStatus(string.Format(_statusString, _dirCopier?.CurrentFile));
     }
 
     /// <summary>
-    /// Handles the RunWorkerCompleted event of the background worker for exporting to the game.
+    ///     Handles the RunWorkerCompleted event of the background worker for exporting to the game.
     /// </summary>
     /// <param name="sender">The source of the event.</param>
     /// <param name="e">Event data indicating the operation has completed.</param>
@@ -528,7 +534,7 @@ public partial class ExportWindow : Form
     }
 
     /// <summary>
-    /// Toggles the enabled state of the buttons based on the current operation status.
+    ///     Toggles the enabled state of the buttons based on the current operation status.
     /// </summary>
     private void ToggleButtons()
     {
@@ -546,7 +552,7 @@ public partial class ExportWindow : Form
     }
 
     /// <summary>
-    /// Updates the status label with the specified status message.
+    ///     Updates the status label with the specified status message.
     /// </summary>
     /// <param name="status">The status message to display.</param>
     private void UpdateStatus(string status)
@@ -558,20 +564,20 @@ public partial class ExportWindow : Form
     }
 
     /// <summary>
-    /// Handles the Click event of the btnOpenStagingFolder button.
+    ///     Handles the Click event of the btnOpenStagingFolder button.
     /// </summary>
     /// <param name="sender">The source of the event.</param>
-    /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+    /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
     private void BtnOpenStagingFolder_Click(object sender, EventArgs e)
     {
         Process.Start("explorer.exe", StagingPath);
     }
 
     /// <summary>
-    /// Handles the Click event of the btnOpenGameFolder button.
+    ///     Handles the Click event of the btnOpenGameFolder button.
     /// </summary>
     /// <param name="sender">The source of the event.</param>
-    /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+    /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
     private void BtnOpenGameFolder_Click(object sender, EventArgs e)
     {
         if (ShowNoModDialogIfRequired())
@@ -579,10 +585,10 @@ public partial class ExportWindow : Form
     }
 
     /// <summary>
-    /// Handles the HelpButtonClicked event of the ExportWindow form.
+    ///     Handles the HelpButtonClicked event of the ExportWindow form.
     /// </summary>
     /// <param name="sender">The source of the event.</param>
-    /// <param name="e">The <see cref="CancelEventArgs"/> instance containing the event data.</param>
+    /// <param name="e">The <see cref="CancelEventArgs" /> instance containing the event data.</param>
     private void ExportWindow_HelpButtonClicked(object sender, CancelEventArgs e)
     {
         "https://ethan-hann.github.io/CyberRadio-Assistant/docs/export.html".OpenUrl();

@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+﻿using AetherUtils.Core.Logging;
 
 namespace RadioExt_Helper.utility;
 
@@ -46,7 +46,8 @@ public static class PathHelper
         }
         catch (Exception ex)
         {
-            Debug.WriteLine(ex);
+            AuLogger.GetCurrentLogger("PathHelper.GetGamePath")
+                .Error(ex, "Error retrieving base game path.");
             return string.Empty;
         }
 
@@ -80,7 +81,8 @@ public static class PathHelper
         }
         catch (Exception ex)
         {
-            Debug.WriteLine(ex);
+            AuLogger.GetCurrentLogger("PathHelper.GetStagingPath")
+                .Error(ex, "Error retrieving staging path.");
             return string.Empty;
         }
     }
@@ -98,7 +100,8 @@ public static class PathHelper
         }
         catch (Exception ex)
         {
-            Debug.WriteLine(ex);
+            AuLogger.GetCurrentLogger("PathHelper.GetRadioExtPath")
+                .Error(ex, "Error retrieving path to radioExt mod's folder.");
             return string.Empty;
         }
     }

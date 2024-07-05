@@ -1,15 +1,11 @@
-﻿using RadioExt_Helper.config;
-using RadioExt_Helper.forms;
+﻿using RadioExt_Helper.forms;
 using RadioExt_Helper.models;
-using RadioExt_Helper.Properties;
 using RadioExt_Helper.utility;
 
 namespace RadioExt_Helper.user_controls;
 
 public sealed partial class NoStationsCtl : UserControl, IUserControl
 {
-    public event EventHandler? PathsSet;
-
     public NoStationsCtl()
     {
         InitializeComponent();
@@ -28,6 +24,8 @@ public sealed partial class NoStationsCtl : UserControl, IUserControl
         btnPaths.Text = GlobalData.Strings.GetString("Paths");
     }
 
+    public event EventHandler? PathsSet;
+
     private void NoStationsCtl_Load(object sender, EventArgs e)
     {
         Translate();
@@ -41,10 +39,10 @@ public sealed partial class NoStationsCtl : UserControl, IUserControl
 
         var gameBasePath = GlobalData.ConfigManager.Get("gameBasePath") as string ?? string.Empty;
         var stagingPath = GlobalData.ConfigManager.Get("stagingPath") as string ?? string.Empty;
-        
+
         if (gameBasePath.Equals(string.Empty))
             showNoGamePath = true;
-        
+
         if (stagingPath.Equals(string.Empty))
             showNoStagePath = true;
 

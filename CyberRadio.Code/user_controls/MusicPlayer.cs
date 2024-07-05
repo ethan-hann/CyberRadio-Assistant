@@ -1,4 +1,5 @@
-﻿using NAudio.Wave;
+﻿using AetherUtils.Core.Logging;
+using NAudio.Wave;
 using RadioExt_Helper.utility;
 
 namespace RadioExt_Helper.user_controls;
@@ -49,6 +50,7 @@ public partial class MusicPlayer : UserControl
             var message = GlobalData.Strings.GetString("StreamURLError") ?? "Please enter a valid stream URL.";
             var error = GlobalData.Strings.GetString("Error") ?? "Error";
             MessageBox.Show(this, message, error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            AuLogger.GetCurrentLogger<MusicPlayer>("Btn_PlayPause").Error("Stream URL was invalid or empty.");
             return;
         }
 
@@ -85,6 +87,7 @@ public partial class MusicPlayer : UserControl
             var error = GlobalData.Strings.GetString("Error") ?? "Error";
             MessageBox.Show(this, string.Format(message, ex.Message), error, MessageBoxButtons.OK,
                 MessageBoxIcon.Error);
+            AuLogger.GetCurrentLogger<MusicPlayer>("PlayStream").Error(ex, "Error streaming audio");
             btnPlayPause.ImageIndex = 0;
         }
     }
@@ -102,6 +105,7 @@ public partial class MusicPlayer : UserControl
             var error = GlobalData.Strings.GetString("Error") ?? "Error";
             MessageBox.Show(this, string.Format(message, ex.Message), error, MessageBoxButtons.OK,
                 MessageBoxIcon.Error);
+            AuLogger.GetCurrentLogger<MusicPlayer>("ResumeStream").Error(ex, "Error streaming audio");
             btnPlayPause.ImageIndex = 0;
         }
     }
@@ -119,6 +123,7 @@ public partial class MusicPlayer : UserControl
             var error = GlobalData.Strings.GetString("Error") ?? "Error";
             MessageBox.Show(this, string.Format(message, ex.Message), error, MessageBoxButtons.OK,
                 MessageBoxIcon.Error);
+            AuLogger.GetCurrentLogger<MusicPlayer>("PauseStream").Error(ex, "Error pausing stream");
             btnPlayPause.ImageIndex = 1;
         }
     }
