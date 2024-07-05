@@ -1,4 +1,4 @@
-﻿using AetherUtils.Core.Attributes;
+using AetherUtils.Core.Attributes;
 using AetherUtils.Core.Configuration;
 using RadioExt_Helper.utility;
 
