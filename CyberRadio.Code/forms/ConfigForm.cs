@@ -24,7 +24,7 @@ namespace RadioExt_Helper.forms
 
         private void ConfigForm_Load(object sender, EventArgs e)
         {
-            _config = GlobalData.ConfigManager?.GetConfig();
+            _config = GlobalData.ConfigManager.GetConfig();
             _config ??= new();
 
             Translate();
@@ -70,11 +70,11 @@ namespace RadioExt_Helper.forms
         {
             if (_config == null) return false;
 
-            GlobalData.ConfigManager?.Set("automaticallyCheckForUpdates", _config.AutomaticallyCheckForUpdates);
-            GlobalData.ConfigManager?.Set("autoExportToGame", _config.AutoExportToGame);
-            GlobalData.ConfigManager?.Set("newFileEveryLaunch", _config.LogOptions.NewFileEveryLaunch);
+            GlobalData.ConfigManager.Set("automaticallyCheckForUpdates", _config.AutomaticallyCheckForUpdates);
+            GlobalData.ConfigManager.Set("autoExportToGame", _config.AutoExportToGame);
+            GlobalData.ConfigManager.Set("newFileEveryLaunch", _config.LogOptions.NewFileEveryLaunch);
 
-            return await GlobalData.ConfigManager?.SaveAsync();
+            return await GlobalData.ConfigManager.SaveAsync();
         }
 
         private void chkCheckForUpdates_CheckedChanged(object sender, EventArgs e)
