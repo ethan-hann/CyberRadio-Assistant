@@ -24,6 +24,9 @@ public partial class ExportWindow : Form
     private bool _exportToGameComplete;
     private bool _exportToStagingComplete;
     private bool _isCancelling;
+    
+    private static string GameBasePath => GlobalData.ConfigManager.Get("gameBasePath") as string ?? string.Empty;
+    private static string StagingPath => GlobalData.ConfigManager.Get("stagingPath") as string ?? string.Empty;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ExportWindow"/> class with the specified stations to export.
@@ -85,7 +88,7 @@ public partial class ExportWindow : Form
     /// </summary>
     private void Translate()
     {
-        GlobalData.SetCulture(Settings.Default.SelectedLanguage);
+        GlobalData.SetCulture(GlobalData.ConfigManager.Get("language") as string ?? "English (en)");
 
         Text = GlobalData.Strings.GetString("Export");
         btnCancel.Text = GlobalData.Strings.GetString("Cancel");
@@ -108,34 +111,28 @@ public partial class ExportWindow : Form
     /// </summary>
     private void PopulateListView()
     {
-        var radioExtPath = PathHelper.GetRadiosPath(Settings.Default.GameBasePath);
+        var radioExtPath = PathHelper.GetRadiosPath(GameBasePath);
 
-        foreach (var station in _stationsToExport)
+        foreach (var lvItem in from station in _stationsToExport 
+                 let isActive = station.GetStatus() 
+                 let customIconString = station.CustomIcon.UseCustom
+                     ? GlobalData.Strings.GetString("CustomIcon")
+                     : station.MetaData.Icon let songString = station.MetaData.StreamInfo.IsStream
+                     ? GlobalData.Strings.GetString("IsStream")
+                     : station.Songs.Count.ToString() let streamString = station.MetaData.StreamInfo.IsStream
+                     ? station.MetaData.StreamInfo.StreamUrl
+                     : GlobalData.Strings.GetString("UsingSongs") let proposedPath = isActive
+                     ? Path.Combine(radioExtPath, station.MetaData.DisplayName)
+                     : GlobalData.Strings.GetString("DisabledStation") select new ListViewItem(new[]
+                 {
+                     string.Empty, // Placeholder for the icon column
+                     station.MetaData.DisplayName,
+                     customIconString ?? string.Empty,
+                     songString ?? string.Empty,
+                     streamString ?? string.Empty,
+                     proposedPath ?? string.Empty
+                 }) { Tag = station })
         {
-            var isActive = station.GetStatus();
-            var customIconString = station.CustomIcon.UseCustom
-                ? GlobalData.Strings.GetString("CustomIcon")
-                : station.MetaData.Icon;
-            var songString = station.MetaData.StreamInfo.IsStream
-                ? GlobalData.Strings.GetString("IsStream")
-                : station.Songs.Count.ToString();
-            var streamString = station.MetaData.StreamInfo.IsStream
-                ? station.MetaData.StreamInfo.StreamUrl
-                : GlobalData.Strings.GetString("UsingSongs");
-            var proposedPath = isActive
-                ? Path.Combine(radioExtPath, station.MetaData.DisplayName)
-                : GlobalData.Strings.GetString("DisabledStation");
-
-            var lvItem = new ListViewItem(new[]
-            {
-                string.Empty, // Placeholder for the icon column
-                station.MetaData.DisplayName,
-                customIconString ?? string.Empty,
-                songString ?? string.Empty,
-                streamString ?? string.Empty,
-                proposedPath ?? string.Empty
-            }) { Tag = station };
-
             lvStations.Items.Add(lvItem);
         }
 
@@ -147,10 +144,10 @@ public partial class ExportWindow : Form
     /// </summary>
     private void ConfigureButtons()
     {
-        btnExportToGame.Enabled = !string.IsNullOrEmpty(Settings.Default.GameBasePath);
+        btnExportToGame.Enabled = !string.IsNullOrEmpty(GameBasePath);
         btnOpenGameFolder.Enabled = btnExportToGame.Enabled;
 
-        btnExportToStaging.Enabled = !string.IsNullOrEmpty(Settings.Default.StagingPath);
+        btnExportToStaging.Enabled = !string.IsNullOrEmpty(StagingPath);
         btnOpenStagingFolder.Enabled = btnExportToStaging.Enabled;
     }
 
@@ -202,16 +199,13 @@ public partial class ExportWindow : Form
     /// <returns><c>true</c> if the mod is installed; otherwise, <c>false</c>.</returns>
     public static bool ShowNoModDialogIfRequired()
     {
-        if (string.IsNullOrEmpty(PathHelper.GetRadioExtPath(Settings.Default.GameBasePath)))
-        {
-            MessageBox.Show(GlobalData.Strings.GetString("NoRadioExtMsg") ??
-                            "You do not have the radioExt mod installed. Can't export radio stations to game.",
-                GlobalData.Strings.GetString("NoModInstalled") ?? "No Mod Installed",
-                MessageBoxButtons.OK, MessageBoxIcon.Error);
-            return false;
-        }
-
-        return true;
+        if (!string.IsNullOrEmpty(PathHelper.GetRadioExtPath(GameBasePath))) return true;
+        
+        MessageBox.Show(GlobalData.Strings.GetString("NoRadioExtMsg") ??
+                        "You do not have the radioExt mod installed. Can't export radio stations to game.",
+            GlobalData.Strings.GetString("NoModInstalled") ?? "No Mod Installed",
+            MessageBoxButtons.OK, MessageBoxIcon.Error);
+        return false;
     }
 
     /// <summary>
@@ -270,7 +264,7 @@ public partial class ExportWindow : Form
     private void RemoveDeletedStations()
     {
         var stationNames = new HashSet<string>(_stationsToExport.Select(station => station.MetaData.DisplayName), StringComparer.OrdinalIgnoreCase);
-        var directoriesToDelete = Directory.EnumerateDirectories(Settings.Default.StagingPath)
+        var directoriesToDelete = Directory.EnumerateDirectories(StagingPath)
             .Where(dir => !stationNames.Contains(Path.GetFileName(dir)));
 
         foreach (var directory in directoriesToDelete)
@@ -293,9 +287,9 @@ public partial class ExportWindow : Form
     /// <param name="e">The <see cref="RunWorkerCompletedEventArgs"/> instance containing the event data.</param>
     private static string CreateStationDirectory(Station station)
     {
-        if (string.IsNullOrEmpty(Settings.Default.StagingPath)) return string.Empty;
+        if (string.IsNullOrEmpty(StagingPath)) return string.Empty;
 
-        var stationPath = Path.Combine(Settings.Default.StagingPath, station.MetaData.DisplayName);
+        var stationPath = Path.Combine(StagingPath, station.MetaData.DisplayName);
         FileHelper.CreateDirectories(stationPath);
         return stationPath;
     }
@@ -364,7 +358,7 @@ public partial class ExportWindow : Form
     {
         ToggleButtons();
         _dirCopier = new DirectoryCopier((BackgroundWorker)sender);
-        var radiosPath = PathHelper.GetRadiosPath(Settings.Default.GameBasePath);
+        var radiosPath = PathHelper.GetRadiosPath(GameBasePath);
 
         if (bgWorkerExportGame.CancellationPending)
         {
@@ -375,7 +369,7 @@ public partial class ExportWindow : Form
         var activeStations = _stationsToExport.Where(s => s.GetStatus()).ToList();
         var activeStationNames = activeStations.Select(s => s.MetaData.DisplayName).ToList();
 
-        var stagingPaths = FileHelper.SafeEnumerateDirectories(Settings.Default.StagingPath).ToList();
+        var stagingPaths = FileHelper.SafeEnumerateDirectories(StagingPath).ToList();
 
         var activeStationPaths = stagingPaths
             .Where(path => activeStationNames.Any(name => path.Contains(name, StringComparison.OrdinalIgnoreCase)))
@@ -566,7 +560,7 @@ public partial class ExportWindow : Form
     /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
     private void BtnOpenStagingFolder_Click(object sender, EventArgs e)
     {
-        Process.Start("explorer.exe", Settings.Default.StagingPath);
+        Process.Start("explorer.exe", StagingPath);
     }
 
     /// <summary>
@@ -577,7 +571,7 @@ public partial class ExportWindow : Form
     private void BtnOpenGameFolder_Click(object sender, EventArgs e)
     {
         if (ShowNoModDialogIfRequired())
-            Process.Start("explorer.exe", PathHelper.GetRadiosPath(Settings.Default.GameBasePath));
+            Process.Start("explorer.exe", PathHelper.GetRadiosPath(GameBasePath));
     }
 
     /// <summary>

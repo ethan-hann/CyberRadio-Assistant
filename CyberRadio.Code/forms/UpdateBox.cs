@@ -149,11 +149,7 @@ public partial class UpdateBox : Form
             lblStatus.Text = status;
     }
 
-    private void SaveSettingsBeforeExit()
-    {
-        // Save any settings changes before exit
-        Settings.Default.Save();
-    }
+    private static void SaveSettingsBeforeExit() => GlobalData.ConfigManager?.Save();
 
     private string CopyToOriginalLocation(string tempFilePath)
     {

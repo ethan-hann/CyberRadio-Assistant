@@ -16,7 +16,7 @@ public static class GlobalData
     /// </summary>
     public static readonly ResourceManager Strings = new("RadioExt_Helper.Strings", typeof(MainForm).Assembly);
 
-    public static CyberConfigManager? ConfigManager { get; private set; }
+    public static CyberConfigManager ConfigManager { get; private set; } = new("");
 
     private static bool _uiIconsInitialized;
     private static bool _globalDataInitialized;
@@ -46,14 +46,15 @@ public static class GlobalData
 
         InitializeConfig();
 
-        SetCulture(ConfigManager?.Get("language") as string ?? "English (en)");
+        SetCulture(ConfigManager.Get("language") as string ?? "English (en)");
 
         _globalDataInitialized = true;
     }
 
     private static void InitializeConfig()
     {
-        string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "RadioExt-Helper", "config.yml");
+        var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+            "RadioExt-Helper", "config.yml");
         ConfigManager = new CyberConfigManager(path);
         if (ConfigManager.ConfigExists)
         {

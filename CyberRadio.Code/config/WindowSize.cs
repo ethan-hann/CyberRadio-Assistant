@@ -30,5 +30,7 @@ namespace RadioExt_Helper.config
         /// Create a new window size with the default values.
         /// </summary>
         public WindowSize() : this(1240, 600) { }
+
+        public bool IsEmpty() => Width == 0 && Height == 0;
     }
 }
