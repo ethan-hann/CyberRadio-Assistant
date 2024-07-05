@@ -23,7 +23,7 @@ public static class Updater
         {
             var (version, url) = await GetLatestVersionInfoAsync();
 
-            if (version.Equals(string.Empty) ||  url.Equals(string.Empty))
+            if (version.Equals(string.Empty) || url.Equals(string.Empty))
             {
                 var text = GlobalData.Strings.GetString("NoInternetMsg");
                 var caption = GlobalData.Strings.GetString("NoInternetCaption");

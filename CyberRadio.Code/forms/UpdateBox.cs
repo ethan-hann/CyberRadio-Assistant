@@ -4,7 +4,6 @@ using System.Reflection;
 using AetherUtils.Core.Extensions;
 using AetherUtils.Core.Files;
 using AetherUtils.Core.Logging;
-using RadioExt_Helper.Properties;
 using RadioExt_Helper.utility;
 
 namespace RadioExt_Helper.forms;
@@ -60,7 +59,8 @@ public partial class UpdateBox : Form
 
         lblCurrentVersion.Text = currentVersion?.ToString() ?? "Unknown";
         lblNewVersion.Text = _versionInfo.LatestVersion.ToString();
-        lnkChangelog.Text = $"https://github.com/ethan-hann/CyberRadio-Assistant/CHANGELOG.md#{_versionInfo.LatestVersion}";
+        lnkChangelog.Text =
+            $"https://github.com/ethan-hann/CyberRadio-Assistant/CHANGELOG.md#{_versionInfo.LatestVersion}";
     }
 
     private void btnDownload_Click(object sender, EventArgs e)
@@ -150,7 +150,10 @@ public partial class UpdateBox : Form
             lblStatus.Text = status;
     }
 
-    private static void SaveSettingsBeforeExit() => GlobalData.ConfigManager?.Save();
+    private static void SaveSettingsBeforeExit()
+    {
+        GlobalData.ConfigManager?.Save();
+    }
 
     private string CopyToOriginalLocation(string tempFilePath)
     {
@@ -176,7 +179,7 @@ public partial class UpdateBox : Form
         if (!FileHelper.GetExtension(filePath).Equals(".exe")) return;
 
         if (Directory.GetParent(filePath) is not { } parent) return;
-        
+
         var startInfo = new ProcessStartInfo("explorer.exe")
         {
             Arguments = parent.FullName,

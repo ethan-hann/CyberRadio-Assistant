@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using AetherUtils.Core.Logging;
+﻿using AetherUtils.Core.Logging;
 using Newtonsoft.Json;
 using File = TagLib.File;
 

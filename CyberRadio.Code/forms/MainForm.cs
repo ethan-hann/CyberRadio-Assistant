@@ -2,7 +2,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using AetherUtils.Core.Extensions;
 using AetherUtils.Core.Files;
-using AetherUtils.Core.Structs;
 using AetherUtils.Core.WinForms.Controls;
 using AetherUtils.Core.WinForms.Models;
 using RadioExt_Helper.config;
@@ -29,9 +28,6 @@ public partial class MainForm : Form
 
     private string _stationCountFormat =
         GlobalData.Strings.GetString("EnabledStationsCount") ?? "Enabled Stations: {0} / {1}";
-    
-    private string GameBasePath => GlobalData.ConfigManager.Get("gameBasePath") as string ?? string.Empty;
-    private string StagingPath => GlobalData.ConfigManager.Get("stagingPath") as string ?? string.Empty;
 
     public MainForm()
     {
@@ -46,14 +42,17 @@ public partial class MainForm : Form
             _ = Updater.CheckForUpdates();
     }
 
+    private string GameBasePath => GlobalData.ConfigManager.Get("gameBasePath") as string ?? string.Empty;
+    private string StagingPath => GlobalData.ConfigManager.Get("stagingPath") as string ?? string.Empty;
+
     private void MainForm_Load(object sender, EventArgs e)
     {
         _noStationsCtrl.PathsSet += RefreshAfterPathsChanged;
         splitContainer1.Panel2.Controls.Add(_noStationsCtrl);
 
-        var windowSize = GlobalData.ConfigManager.Get("windowSize") as WindowSize 
+        var windowSize = GlobalData.ConfigManager.Get("windowSize") as WindowSize
                          ?? new WindowSize(0, 0);
-        
+
         if (!windowSize.IsEmpty())
             Size = new Size(windowSize.Width, windowSize.Height);
 

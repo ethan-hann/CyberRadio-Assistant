@@ -1,594 +1,599 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
-  <!-- 
-    Microsoft ResX Schema 
-    
-    Version 2.0
-    
-    The primary goals of this format is to allow a simple XML format 
-    that is mostly human readable. The generation and parsing of the 
-    various data types are done through the TypeConverter classes 
-    associated with the data types.
-    
-    Example:
-    
-    ... ado.net/XML headers & schema ...
-    <resheader name="resmimetype">text/microsoft-resx</resheader>
-    <resheader name="version">2.0</resheader>
-    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
-    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
-    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
-    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
-    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
-        <value>[base64 mime encoded serialized .NET Framework object]</value>
-    </data>
-    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
-        <comment>This is a comment</comment>
-    </data>
-                
-    There are any number of "resheader" rows that contain simple 
-    name/value pairs.
-    
-    Each data row contains a name, and value. The row also contains a 
-    type or mimetype. Type corresponds to a .NET class that support 
-    text/value conversion through the TypeConverter architecture. 
-    Classes that don't support this are serialized and stored with the 
-    mimetype set.
-    
-    The mimetype is used for serialized objects, and tells the 
-    ResXResourceReader how to depersist the object. This is currently not 
-    extensible. For a given mimetype the value must be set accordingly:
-    
-    Note - application/x-microsoft.net.object.binary.base64 is the format 
-    that the ResXResourceWriter will generate, however the reader can 
-    read any of the formats listed below.
-    
-    mimetype: application/x-microsoft.net.object.binary.base64
-    value   : The object must be serialized with 
-            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
-            : and then encoded with base64 encoding.
-    
-    mimetype: application/x-microsoft.net.object.soap.base64
-    value   : The object must be serialized with 
-            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
-            : and then encoded with base64 encoding.
-
-    mimetype: application/x-microsoft.net.object.bytearray.base64
-    value   : The object must be serialized into a byte array 
-            : using a System.ComponentModel.TypeConverter
-            : and then encoded with base64 encoding.
-    -->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
-    <xsd:element name="root" msdata:IsDataSet="true">
-      <xsd:complexType>
-        <xsd:choice maxOccurs="unbounded">
-          <xsd:element name="metadata">
+    <!-- 
+      Microsoft ResX Schema 
+      
+      Version 2.0
+      
+      The primary goals of this format is to allow a simple XML format 
+      that is mostly human readable. The generation and parsing of the 
+      various data types are done through the TypeConverter classes 
+      associated with the data types.
+      
+      Example:
+      
+      ... ado.net/XML headers & schema ...
+      <resheader name="resmimetype">text/microsoft-resx</resheader>
+      <resheader name="version">2.0</resheader>
+      <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+      <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+      <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+      <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+      <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+          <value>[base64 mime encoded serialized .NET Framework object]</value>
+      </data>
+      <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+          <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+          <comment>This is a comment</comment>
+      </data>
+                  
+      There are any number of "resheader" rows that contain simple 
+      name/value pairs.
+      
+      Each data row contains a name, and value. The row also contains a 
+      type or mimetype. Type corresponds to a .NET class that support 
+      text/value conversion through the TypeConverter architecture. 
+      Classes that don't support this are serialized and stored with the 
+      mimetype set.
+      
+      The mimetype is used for serialized objects, and tells the 
+      ResXResourceReader how to depersist the object. This is currently not 
+      extensible. For a given mimetype the value must be set accordingly:
+      
+      Note - application/x-microsoft.net.object.binary.base64 is the format 
+      that the ResXResourceWriter will generate, however the reader can 
+      read any of the formats listed below.
+      
+      mimetype: application/x-microsoft.net.object.binary.base64
+      value   : The object must be serialized with 
+              : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+              : and then encoded with base64 encoding.
+      
+      mimetype: application/x-microsoft.net.object.soap.base64
+      value   : The object must be serialized with 
+              : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+              : and then encoded with base64 encoding.
+  
+      mimetype: application/x-microsoft.net.object.bytearray.base64
+      value   : The object must be serialized into a byte array 
+              : using a System.ComponentModel.TypeConverter
+              : and then encoded with base64 encoding.
+      -->
+    <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root"
+                xmlns="">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
+        <xsd:element name="root" msdata:IsDataSet="true">
             <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
-              </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string"/>
+                            <xsd:attribute name="type" type="xsd:string"/>
+                            <xsd:attribute name="mimetype" type="xsd:string"/>
+                            <xsd:attribute ref="xml:space"/>
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string"/>
+                            <xsd:attribute name="name" type="xsd:string"/>
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+                            <xsd:attribute ref="xml:space"/>
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required"/>
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
             </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="assembly">
-            <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="data">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
-              </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="resheader">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-              </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
-            </xsd:complexType>
-          </xsd:element>
-        </xsd:choice>
-      </xsd:complexType>
-    </xsd:element>
-  </xsd:schema>
-  <resheader name="resmimetype">
-    <value>text/microsoft-resx</value>
-  </resheader>
-  <resheader name="version">
-    <value>2.0</value>
-  </resheader>
-  <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </resheader>
-  <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </resheader>
-  <data name="IconHelp" xml:space="preserve">
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral,
+            PublicKeyToken=b77a5c561934e089
+        </value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral,
+            PublicKeyToken=b77a5c561934e089
+        </value>
+    </resheader>
+    <data name="IconHelp" xml:space="preserve">
     <value>L'icône de la station, si vous n'en utilisez pas une personnalisée. Il peut s'agir de n'importe quel enregistrement UIIcon.</value>
   </data>
-  <data name="Ready" xml:space="preserve">
+    <data name="Ready" xml:space="preserve">
     <value>Prêt</value>
   </data>
-  <data name="StationNameHelp" xml:space="preserve">
+    <data name="StationNameHelp" xml:space="preserve">
     <value>Contrôle le nom de votre station qui sera affiché dans le jeu. Les caractères spéciaux sont échappés correctement.</value>
   </data>
-  <data name="NoExeFound" xml:space="preserve">
+    <data name="NoExeFound" xml:space="preserve">
     <value>Le chemin vers l’exécutable Cyberpunk 2077 n’a pas été défini.
 Veuillez le définir maintenant.</value>
   </data>
-  <data name="NoGamePath" xml:space="preserve">
+    <data name="NoGamePath" xml:space="preserve">
     <value>Aucun chemin de jeu</value>
   </data>
-  <data name="RadioExtPathPlaceholder" xml:space="preserve">
+    <data name="RadioExtPathPlaceholder" xml:space="preserve">
     <value>&lt;aucun chemin défini ; radioExt n'est pas installé&gt;</value>
   </data>
-  <data name="StagingPathPlaceholder" xml:space="preserve">
+    <data name="StagingPathPlaceholder" xml:space="preserve">
     <value>&lt;aucun chemin défini ; les stations de radio doivent d'abord être mises en scène&gt;</value>
   </data>
-  <data name="AreYouSure" xml:space="preserve">
+    <data name="AreYouSure" xml:space="preserve">
     <value>Es-tu sûr?</value>
   </data>
-  <data name="Confirm" xml:space="preserve">
+    <data name="Confirm" xml:space="preserve">
     <value>Confirmer</value>
   </data>
-  <data name="NonCyberpunkExe" xml:space="preserve">
+    <data name="NonCyberpunkExe" xml:space="preserve">
     <value>Le fichier sélectionné ne ressemble pas à Cyberpunk 2077. Veuillez réessayer.</value>
   </data>
-  <data name="Cancel" xml:space="preserve">
+    <data name="Cancel" xml:space="preserve">
     <value>Annuler</value>
   </data>
-  <data name="GameBasePath" xml:space="preserve">
+    <data name="GameBasePath" xml:space="preserve">
     <value>Chemin de base du jeu</value>
   </data>
-  <data name="RadioStationPath" xml:space="preserve">
+    <data name="RadioStationPath" xml:space="preserve">
     <value>Chemin des stations de radio</value>
   </data>
-  <data name="StagingPath" xml:space="preserve">
+    <data name="StagingPath" xml:space="preserve">
     <value>Chemin de préparation</value>
   </data>
-  <data name="Change" xml:space="preserve">
+    <data name="Change" xml:space="preserve">
     <value>Changement</value>
   </data>
-  <data name="Clear" xml:space="preserve">
+    <data name="Clear" xml:space="preserve">
     <value>Clair</value>
   </data>
-  <data name="GameBasePathPlaceholder" xml:space="preserve">
+    <data name="GameBasePathPlaceholder" xml:space="preserve">
     <value>&lt;aucun chemin défini ; exécutable du jeu manquant&gt;</value>
   </data>
-  <data name="DotDotDot" xml:space="preserve">
+    <data name="DotDotDot" xml:space="preserve">
     <value>...</value>
   </data>
-  <data name="GamePaths" xml:space="preserve">
+    <data name="GamePaths" xml:space="preserve">
     <value>Chemins de jeu</value>
   </data>
-  <data name="MainTitle" xml:space="preserve">
+    <data name="MainTitle" xml:space="preserve">
     <value>Assistant cyberradio</value>
   </data>
-  <data name="About" xml:space="preserve">
+    <data name="About" xml:space="preserve">
     <value>À propos</value>
   </data>
-  <data name="DeleteStation" xml:space="preserve">
+    <data name="DeleteStation" xml:space="preserve">
     <value>Supprimer une Station</value>
   </data>
-  <data name="File" xml:space="preserve">
+    <data name="File" xml:space="preserve">
     <value>Déposer</value>
   </data>
-  <data name="Help" xml:space="preserve">
+    <data name="Help" xml:space="preserve">
     <value>Aide</value>
   </data>
-  <data name="HowToUse" xml:space="preserve">
+    <data name="HowToUse" xml:space="preserve">
     <value>Comment utiliser</value>
   </data>
-  <data name="Language" xml:space="preserve">
+    <data name="Language" xml:space="preserve">
     <value>Langue</value>
   </data>
-  <data name="NewStation" xml:space="preserve">
+    <data name="NewStation" xml:space="preserve">
     <value>Nouvelle Gare</value>
   </data>
-  <data name="RefreshStations" xml:space="preserve">
+    <data name="RefreshStations" xml:space="preserve">
     <value>Actualiser les stations</value>
   </data>
-  <data name="Music" xml:space="preserve">
+    <data name="Music" xml:space="preserve">
     <value>Musique</value>
   </data>
-  <data name="DisplayAndIcon" xml:space="preserve">
+    <data name="DisplayAndIcon" xml:space="preserve">
     <value>Affichage et icône</value>
   </data>
-  <data name="Open" xml:space="preserve">
+    <data name="Open" xml:space="preserve">
     <value>Exécutable de jeu ouvert</value>
   </data>
-  <data name="Yes" xml:space="preserve">
+    <data name="Yes" xml:space="preserve">
     <value>Oui</value>
   </data>
-  <data name="Icon" xml:space="preserve">
+    <data name="Icon" xml:space="preserve">
     <value>Icône:</value>
   </data>
-  <data name="DisplayName" xml:space="preserve">
+    <data name="DisplayName" xml:space="preserve">
     <value>Nom:</value>
   </data>
-  <data name="CustomIcon" xml:space="preserve">
+    <data name="CustomIcon" xml:space="preserve">
     <value>Icône personnalisée</value>
   </data>
-  <data name="Display" xml:space="preserve">
+    <data name="Display" xml:space="preserve">
     <value>Afficher</value>
   </data>
-  <data name="FM" xml:space="preserve">
+    <data name="FM" xml:space="preserve">
     <value>FM:</value>
   </data>
-  <data name="InkAtlasPart" xml:space="preserve">
+    <data name="InkAtlasPart" xml:space="preserve">
     <value>Pièce Atlas d'encre:</value>
   </data>
-  <data name="InkAtlasPath" xml:space="preserve">
+    <data name="InkAtlasPath" xml:space="preserve">
     <value>Chemin de l'Atlas de l'encre:</value>
   </data>
-  <data name="Max" xml:space="preserve">
+    <data name="Max" xml:space="preserve">
     <value>Max:</value>
   </data>
-  <data name="Min" xml:space="preserve">
+    <data name="Min" xml:space="preserve">
     <value>Min:</value>
   </data>
-  <data name="No" xml:space="preserve">
+    <data name="No" xml:space="preserve">
     <value>Non</value>
   </data>
-  <data name="Settings" xml:space="preserve">
+    <data name="Settings" xml:space="preserve">
     <value>Paramètres</value>
   </data>
-  <data name="StreamURL" xml:space="preserve">
+    <data name="StreamURL" xml:space="preserve">
     <value>URL du streaming:</value>
   </data>
-  <data name="UseStream" xml:space="preserve">
+    <data name="UseStream" xml:space="preserve">
     <value>Utiliser Stream?</value>
   </data>
-  <data name="Using?" xml:space="preserve">
+    <data name="Using?" xml:space="preserve">
     <value>En utilisant?</value>
   </data>
-  <data name="Value" xml:space="preserve">
+    <data name="Value" xml:space="preserve">
     <value>Valeur:</value>
   </data>
-  <data name="Volume" xml:space="preserve">
+    <data name="Volume" xml:space="preserve">
     <value>Le volume:</value>
   </data>
-  <data name="StreamSettings" xml:space="preserve">
+    <data name="StreamSettings" xml:space="preserve">
     <value>Paramètres de flux</value>
   </data>
-  <data name="CustomIconHelp" xml:space="preserve">
+    <data name="CustomIconHelp" xml:space="preserve">
     <value>Spécifie si vous souhaitez ou non utiliser une icône personnalisée pour la station de radio.</value>
   </data>
-  <data name="InkPathHelp" xml:space="preserve">
+    <data name="InkPathHelp" xml:space="preserve">
     <value>Pointe vers le .inkatlas qui contient la texture de l’icône.</value>
   </data>
-  <data name="InkPartHelp" xml:space="preserve">
+    <data name="InkPartHelp" xml:space="preserve">
     <value>Spécifie quelle partie du .inkatlas doit être utilisée pour l'icône, par exemple, gryphon_5</value>
   </data>
-  <data name="FMHelp" xml:space="preserve">
+    <data name="FMHelp" xml:space="preserve">
     <value>Permet de placer la station au bon endroit dans la liste des stations. Si le nom de la station comporte un numéro FM, il devrait être le même.</value>
   </data>
-  <data name="VolumeHelp" xml:space="preserve">
+    <data name="VolumeHelp" xml:space="preserve">
     <value>Multiplicateur de volume global pour la station. Assurez-vous que toutes les chansons ont le même volume, puis ajustez le volume global de la station avec cette valeur pour qu'il corresponde aux stations vanille.</value>
   </data>
-  <data name="VolumeValHelp" xml:space="preserve">
+    <data name="VolumeValHelp" xml:space="preserve">
     <value>Le volume actuellement sélectionné. Utilisez le curseur ou double-cliquez sur la valeur pour la modifier.</value>
   </data>
-  <data name="UseStreamHelp" xml:space="preserve">
+    <data name="UseStreamHelp" xml:space="preserve">
     <value>Indique si cette station doit utiliser un flux Web comme source audio.</value>
   </data>
-  <data name="StreamURLHelp" xml:space="preserve">
+    <data name="StreamURLHelp" xml:space="preserve">
     <value>L'URL du flux Web à utiliser.</value>
   </data>
-  <data name="OpenURLErrorOccured" xml:space="preserve">
+    <data name="OpenURLErrorOccured" xml:space="preserve">
     <value>Une erreur s'est produite lors de la tentative d'ouverture de l'URL: </value>
   </data>
-  <data name="RadioExtGithub" xml:space="preserve">
+    <data name="RadioExtGithub" xml:space="preserve">
     <value>radioExt GitHub</value>
   </data>
-  <data name="RadioExtNexusMods" xml:space="preserve">
+    <data name="RadioExtNexusMods" xml:space="preserve">
     <value>radioExt sur NexusMods</value>
   </data>
-  <data name="NoStationsYet" xml:space="preserve">
+    <data name="NoStationsYet" xml:space="preserve">
     <value>Aucune station pour l'instant!</value>
   </data>
-  <data name="NewStationListBoxEntry" xml:space="preserve">
+    <data name="NewStationListBoxEntry" xml:space="preserve">
     <value>[Nouvelle gare]</value>
   </data>
-  <data name="RemoveSongsToolStrip" xml:space="preserve">
+    <data name="RemoveSongsToolStrip" xml:space="preserve">
     <value>Supprimer les chansons sélectionnées</value>
   </data>
-  <data name="AddSongsToolStrip" xml:space="preserve">
+    <data name="AddSongsToolStrip" xml:space="preserve">
     <value>Ajouter des chansons</value>
   </data>
-  <data name="SongFileSizeHeader" xml:space="preserve">
+    <data name="SongFileSizeHeader" xml:space="preserve">
     <value>Taille du fichier</value>
   </data>
-  <data name="SongLengthHeader" xml:space="preserve">
+    <data name="SongLengthHeader" xml:space="preserve">
     <value>Longueur</value>
   </data>
-  <data name="SongNameHeader" xml:space="preserve">
+    <data name="SongNameHeader" xml:space="preserve">
     <value>Nom</value>
   </data>
-  <data name="EditSongOrder" xml:space="preserve">
+    <data name="EditSongOrder" xml:space="preserve">
     <value>Modifier l'ordre des chansons</value>
   </data>
-  <data name="SongArtistHeader" xml:space="preserve">
+    <data name="SongArtistHeader" xml:space="preserve">
     <value>Artiste</value>
   </data>
-  <data name="DeleteAllSongsConfirm" xml:space="preserve">
+    <data name="DeleteAllSongsConfirm" xml:space="preserve">
     <value>Êtes-vous sûr de vouloir supprimer toutes les chansons?</value>
   </data>
-  <data name="Songs" xml:space="preserve">
+    <data name="Songs" xml:space="preserve">
     <value>Chansons</value>
   </data>
-  <data name="Stations" xml:space="preserve">
+    <data name="Stations" xml:space="preserve">
     <value>Gares</value>
   </data>
-  <data name="SongListing" xml:space="preserve">
+    <data name="SongListing" xml:space="preserve">
     <value>Liste des chansons</value>
   </data>
-  <data name="SongOrder" xml:space="preserve">
+    <data name="SongOrder" xml:space="preserve">
     <value>Ordre des morceaux</value>
   </data>
-  <data name="RemoveSelected" xml:space="preserve">
+    <data name="RemoveSelected" xml:space="preserve">
     <value>  Enlever la sélection</value>
   </data>
-  <data name="AddSelected" xml:space="preserve">
+    <data name="AddSelected" xml:space="preserve">
     <value>Ajouter sélectionnée  </value>
   </data>
-  <data name="Order" xml:space="preserve">
+    <data name="Order" xml:space="preserve">
     <value>Commande</value>
   </data>
-  <data name="ExportToGame" xml:space="preserve">
+    <data name="ExportToGame" xml:space="preserve">
     <value>Exporter vers le jeu</value>
   </data>
-  <data name="ExportToStaging" xml:space="preserve">
+    <data name="ExportToStaging" xml:space="preserve">
     <value>Exporter vers la mise en scène</value>
   </data>
-  <data name="ExportHelp" xml:space="preserve">
+    <data name="ExportHelp" xml:space="preserve">
     <value>Cliquez sur "Exporter vers la stadification" pour exporter les stations ci-dessus vers le dossier de mise en scène d'abord.
 Vous pourrez revoir les stations avant de copier dans le répertoire du jeu.
 
 Si quelque chose ne semble pas correct, sortez de cette fenêtre et apportez des modifications dans l'application principale.</value>
   </data>
-  <data name="Export" xml:space="preserve">
+    <data name="Export" xml:space="preserve">
     <value>Exporter</value>
   </data>
-  <data name="LVDisplayName" xml:space="preserve">
+    <data name="LVDisplayName" xml:space="preserve">
     <value>Afficher un nom</value>
   </data>
-  <data name="LVProposedPath" xml:space="preserve">
+    <data name="LVProposedPath" xml:space="preserve">
     <value>Chemin proposé</value>
   </data>
-  <data name="LVSongCount" xml:space="preserve">
+    <data name="LVSongCount" xml:space="preserve">
     <value>Nombre de chansons</value>
   </data>
-  <data name="LVStationIcon" xml:space="preserve">
+    <data name="LVStationIcon" xml:space="preserve">
     <value>Icône</value>
   </data>
-  <data name="LVStreamURL" xml:space="preserve">
+    <data name="LVStreamURL" xml:space="preserve">
     <value>URL du streaming</value>
   </data>
-  <data name="ExportCompleteStatus" xml:space="preserve">
+    <data name="ExportCompleteStatus" xml:space="preserve">
     <value>Exporté vers Staging!</value>
   </data>
-  <data name="ExportCanceled" xml:space="preserve">
+    <data name="ExportCanceled" xml:space="preserve">
     <value>Exportation annulée</value>
   </data>
-  <data name="ExportingStationStatus" xml:space="preserve">
+    <data name="ExportingStationStatus" xml:space="preserve">
     <value>Station d'exportation : {0}</value>
   </data>
-  <data name="IsStream" xml:space="preserve">
+    <data name="IsStream" xml:space="preserve">
     <value>Est en Streaming</value>
   </data>
-  <data name="UsingSongs" xml:space="preserve">
+    <data name="UsingSongs" xml:space="preserve">
     <value>Utilisation de morceaux</value>
   </data>
-  <data name="OpenStagingFolder" xml:space="preserve">
+    <data name="OpenStagingFolder" xml:space="preserve">
     <value>Dossier en scène ouverte</value>
   </data>
-  <data name="OpenGameFolder" xml:space="preserve">
+    <data name="OpenGameFolder" xml:space="preserve">
     <value>Ouvrir le dossier Radios de jeu</value>
   </data>
-  <data name="ExportToGameComplete" xml:space="preserve">
+    <data name="ExportToGameComplete" xml:space="preserve">
     <value>Exporté vers le jeu!</value>
   </data>
-  <data name="ExportStations" xml:space="preserve">
+    <data name="ExportStations" xml:space="preserve">
     <value>Stations d'exportation</value>
   </data>
-  <data name="Error" xml:space="preserve">
+    <data name="Error" xml:space="preserve">
     <value>Erreur</value>
   </data>
-  <data name="StreamURLError" xml:space="preserve">
+    <data name="StreamURLError" xml:space="preserve">
     <value>Veuillez saisir une URL de streaming valide.</value>
   </data>
-  <data name="ErrorStreamingAudio" xml:space="preserve">
+    <data name="ErrorStreamingAudio" xml:space="preserve">
     <value>Erreur de diffusion audio : {0}</value>
   </data>
-  <data name="ErrorPausingStream" xml:space="preserve">
+    <data name="ErrorPausingStream" xml:space="preserve">
     <value>Erreur lors de la mise en veille du flux: {0}</value>
   </data>
-  <data name="StagingPathHelp" xml:space="preserve">
+    <data name="StagingPathHelp" xml:space="preserve">
     <value>Sélectionnez le chemin de préparation de la station de radio.</value>
   </data>
-  <data name="NoStagingPath" xml:space="preserve">
+    <data name="NoStagingPath" xml:space="preserve">
     <value>Aucun chemin intermédiaire</value>
   </data>
-  <data name="NoStagingPathFound" xml:space="preserve">
+    <data name="NoStagingPathFound" xml:space="preserve">
     <value>Le dossier de transfert pour les stations de radio n'est pas encore défini.
 Veuillez le définir maintenant.</value>
   </data>
-  <data name="Paths" xml:space="preserve">
+    <data name="Paths" xml:space="preserve">
     <value>Des chemins...</value>
   </data>
-  <data name="NoModInstalled" xml:space="preserve">
+    <data name="NoModInstalled" xml:space="preserve">
     <value>Aucun mod installé</value>
   </data>
-  <data name="NoRadioExtMsg" xml:space="preserve">
+    <data name="NoRadioExtMsg" xml:space="preserve">
     <value>Vous n'avez pas installé le mod radioExt.
 Impossible d'exporter les stations de radio vers le jeu.</value>
   </data>
-  <data name="AboutInfo" xml:space="preserve">
+    <data name="AboutInfo" xml:space="preserve">
     <value>Un outil pour aider à créer et gérer des stations de radio personnalisées dans Cyberpunk 2077 lors de l'utilisation du module radioExt.</value>
   </data>
-  <data name="AboutSpecialThanks1" xml:space="preserve">
+    <data name="AboutSpecialThanks1" xml:space="preserve">
     <value>Remerciement spécial à</value>
   </data>
-  <data name="AboutSpecialThanks2" xml:space="preserve">
+    <data name="AboutSpecialThanks2" xml:space="preserve">
     <value>pour le super mod radioExt!</value>
   </data>
-  <data name="AboutVersion" xml:space="preserve">
+    <data name="AboutVersion" xml:space="preserve">
     <value>Version {0}</value>
   </data>
-  <data name="AboutGithubRepo" xml:space="preserve">
+    <data name="AboutGithubRepo" xml:space="preserve">
     <value>Dépôt Github</value>
   </data>
-  <data name="AboutLicense" xml:space="preserve">
+    <data name="AboutLicense" xml:space="preserve">
     <value>Licence</value>
   </data>
-  <data name="CheckForUpdates" xml:space="preserve">
+    <data name="CheckForUpdates" xml:space="preserve">
     <value>Vérifier les mises à jour</value>
   </data>
-  <data name="UpdateDownloadPercent" xml:space="preserve">
+    <data name="UpdateDownloadPercent" xml:space="preserve">
     <value>Téléchargé {0} %</value>
   </data>
-  <data name="UpdateDownloadComplete" xml:space="preserve">
+    <data name="UpdateDownloadComplete" xml:space="preserve">
     <value>Téléchargement terminé ! Démarrage de la mise à jour...</value>
   </data>
-  <data name="UpdateDownloadError" xml:space="preserve">
+    <data name="UpdateDownloadError" xml:space="preserve">
     <value>Erreur de téléchargement : {0}</value>
   </data>
-  <data name="UpdateCheckError" xml:space="preserve">
+    <data name="UpdateCheckError" xml:space="preserve">
     <value>Erreur lors de la vérification des mises à jour : {0}</value>
   </data>
-  <data name="UpdateCurrentVersion" xml:space="preserve">
+    <data name="UpdateCurrentVersion" xml:space="preserve">
     <value>Version actuelle:</value>
   </data>
-  <data name="UpdateNewVersion" xml:space="preserve">
+    <data name="UpdateNewVersion" xml:space="preserve">
     <value>Nouvelle version:</value>
   </data>
-  <data name="UpdateDownloadButton" xml:space="preserve">
+    <data name="UpdateDownloadButton" xml:space="preserve">
     <value>Télécharger</value>
   </data>
-  <data name="UpdateChangelog" xml:space="preserve">
+    <data name="UpdateChangelog" xml:space="preserve">
     <value>Journal des modifications :</value>
   </data>
-  <data name="UpdateAvailable" xml:space="preserve">
+    <data name="UpdateAvailable" xml:space="preserve">
     <value>Mise à jour disponible</value>
   </data>
-  <data name="UpdateAvailableNotice" xml:space="preserve">
+    <data name="UpdateAvailableNotice" xml:space="preserve">
     <value>Il y a une nouvelle mise à jour pour l'CRA. Voulez-vous ouvrir le téléchargeur maintenant ?</value>
   </data>
-  <data name="NoUpdateAvailable" xml:space="preserve">
+    <data name="NoUpdateAvailable" xml:space="preserve">
     <value>Vous êtes sur la dernière version. Aucune mise à jour disponible.</value>
   </data>
-  <data name="NoUpdateCaption" xml:space="preserve">
+    <data name="NoUpdateCaption" xml:space="preserve">
     <value>À jour</value>
   </data>
-  <data name="UpdateFolderOpening" xml:space="preserve">
+    <data name="UpdateFolderOpening" xml:space="preserve">
     <value>Mise à jour terminée. Le dossier contenant sera maintenant ouvert et l'application sera fermée.</value>
   </data>
-  <data name="UpdateFolderOpeningCaption" xml:space="preserve">
+    <data name="UpdateFolderOpeningCaption" xml:space="preserve">
     <value>Dossier d'ouverture</value>
   </data>
-  <data name="ParseFromRadioGarden" xml:space="preserve">
+    <data name="ParseFromRadioGarden" xml:space="preserve">
     <value>Analyser depuis radio.garden</value>
   </data>
-  <data name="InvalidStream" xml:space="preserve">
+    <data name="InvalidStream" xml:space="preserve">
     <value>Flux invalide – ne fonctionnera pas dans le jeu</value>
   </data>
-  <data name="RadioGardenURLCaption" xml:space="preserve">
+    <data name="RadioGardenURLCaption" xml:space="preserve">
     <value>URL du jardin radio</value>
   </data>
-  <data name="RadioGardenInput" xml:space="preserve">
+    <data name="RadioGardenInput" xml:space="preserve">
     <value>Entrez l'URL radio.garden à partir du Web :</value>
   </data>
-  <data name="EnableSelectedStation" xml:space="preserve">
+    <data name="EnableSelectedStation" xml:space="preserve">
     <value>Activer Sélectionné</value>
   </data>
-  <data name="EnableAllStations" xml:space="preserve">
+    <data name="EnableAllStations" xml:space="preserve">
     <value>Activer Tout</value>
   </data>
-  <data name="DisableAllStations" xml:space="preserve">
+    <data name="DisableAllStations" xml:space="preserve">
     <value>Désactiver Tout</value>
   </data>
-  <data name="DisableSelectedStation" xml:space="preserve">
+    <data name="DisableSelectedStation" xml:space="preserve">
     <value>Désactiver Sélectionné</value>
   </data>
-  <data name="EnabledStationsCount" xml:space="preserve">
+    <data name="EnabledStationsCount" xml:space="preserve">
     <value>Stations activées : {0} / {1}</value>
   </data>
-  <data name="DisabledStation" xml:space="preserve">
+    <data name="DisabledStation" xml:space="preserve">
     <value>Station Désactivée</value>
   </data>
-  <data name="LVStationStatus" xml:space="preserve">
+    <data name="LVStationStatus" xml:space="preserve">
     <value>Activé ?</value>
   </data>
-  <data name="NoInternetCaption" xml:space="preserve">
+    <data name="NoInternetCaption" xml:space="preserve">
     <value>Pas de Connexion</value>
   </data>
-  <data name="NoInternetMsg" xml:space="preserve">
+    <data name="NoInternetMsg" xml:space="preserve">
     <value>Impossible de vérifier les mises à jour. Veuillez vérifier votre connexion Internet et réessayer.</value>
   </data>
-  <data name="Configuration" xml:space="preserve">
+    <data name="Configuration" xml:space="preserve">
     <value>Paramètres</value>
   </data>
-  <data name="AutoExportOption" xml:space="preserve">
+    <data name="AutoExportOption" xml:space="preserve">
     <value>Exporter automatiquement vers le jeu ?</value>
   </data>
-  <data name="AutoExportOptionHelp" xml:space="preserve">
+    <data name="AutoExportOptionHelp" xml:space="preserve">
     <value>Si cette case est cochée, vos stations seront immédiatement exportées vers le jeu après avoir réussi l'exportation vers la scène.</value>
   </data>
-  <data name="CheckForUpdatesOption" xml:space="preserve">
+    <data name="CheckForUpdatesOption" xml:space="preserve">
     <value>Rechercher les mises à jour au démarrage ?</value>
   </data>
-  <data name="CheckForUpdatesOptionHelp" xml:space="preserve">
+    <data name="CheckForUpdatesOptionHelp" xml:space="preserve">
     <value>Si cette case est cochée, permet à l'application de rechercher les mises à jour immédiatement après son démarrage.</value>
   </data>
-  <data name="EditPathsOption" xml:space="preserve">
+    <data name="EditPathsOption" xml:space="preserve">
     <value>Modifier les chemins...</value>
   </data>
-  <data name="EditPathsOptionHelp" xml:space="preserve">
+    <data name="EditPathsOptionHelp" xml:space="preserve">
     <value>Ouvre la boîte de dialogue du chemin pour modifier le chemin de préparation et de base du jeu.</value>
   </data>
-  <data name="GeneralSettings" xml:space="preserve">
+    <data name="GeneralSettings" xml:space="preserve">
     <value>Général</value>
   </data>
-  <data name="LogSettings" xml:space="preserve">
+    <data name="LogSettings" xml:space="preserve">
     <value>Journalisation</value>
   </data>
-  <data name="NewLogFileOption" xml:space="preserve">
+    <data name="NewLogFileOption" xml:space="preserve">
     <value>Nouveau fichier à chaque lancement ?</value>
   </data>
-  <data name="NewLogFileOptionHelp" xml:space="preserve">
+    <data name="NewLogFileOptionHelp" xml:space="preserve">
     <value>Si cette case est cochée, spécifie qu'un nouveau fichier journal sera créé à chaque exécution de l'application.</value>
   </data>
-  <data name="ResetToDefaults" xml:space="preserve">
+    <data name="ResetToDefaults" xml:space="preserve">
     <value>Réinitialiser aux valeurs par défaut</value>
   </data>
-  <data name="SaveAndClose" xml:space="preserve">
+    <data name="SaveAndClose" xml:space="preserve">
     <value>Sauver et fermer</value>
   </data>
-  <data name="ConfigResetConfirm" xml:space="preserve">
+    <data name="ConfigResetConfirm" xml:space="preserve">
     <value>Êtes-vous sûr de vouloir réinitialiser la configuration aux valeurs par défaut ?</value>
   </data>
-  <data name="ConfigSaveError" xml:space="preserve">
+    <data name="ConfigSaveError" xml:space="preserve">
     <value>Une erreur s'est produite lors de l'enregistrement de la configuration. Veuillez vous assurer que le fichier config.yml existe.</value>
   </data>
-  <data name="Success" xml:space="preserve">
+    <data name="Success" xml:space="preserve">
     <value>Succès</value>
   </data>
-  <data name="ConfigSaveSuccess" xml:space="preserve">
+    <data name="ConfigSaveSuccess" xml:space="preserve">
     <value>Configuration enregistrée !</value>
   </data>
 </root>

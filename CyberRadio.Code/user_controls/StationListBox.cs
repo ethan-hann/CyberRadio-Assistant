@@ -28,16 +28,9 @@ public sealed partial class StationListBox : ListBox
         container.Add(this);
 
         InitializeComponent();
-        
+
         SetValues();
         _imageList ??= new ImageList();
-    }
-
-    private void SetValues()
-    {
-        DrawMode = DrawMode.OwnerDrawFixed;
-        DoubleBuffered = true;
-        ItemHeight = 16;
     }
 
     /// <summary>
@@ -87,7 +80,14 @@ public sealed partial class StationListBox : ListBox
             Invalidate();
         }
     }
-    
+
+    private void SetValues()
+    {
+        DrawMode = DrawMode.OwnerDrawFixed;
+        DoubleBuffered = true;
+        ItemHeight = 16;
+    }
+
     protected override void OnDrawItem(DrawItemEventArgs e)
     {
         if (e.Index < 0) return;
@@ -114,7 +114,7 @@ public sealed partial class StationListBox : ListBox
 
         e.DrawFocusRectangle();
     }
-    
+
     protected override void OnMeasureItem(MeasureItemEventArgs e)
     {
         e.ItemHeight = 16; // Adjust height based on icon size
