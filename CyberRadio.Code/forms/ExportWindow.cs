@@ -27,6 +27,7 @@ public partial class ExportWindow : Form
     
     private static string GameBasePath => GlobalData.ConfigManager.Get("gameBasePath") as string ?? string.Empty;
     private static string StagingPath => GlobalData.ConfigManager.Get("stagingPath") as string ?? string.Empty;
+    private static bool ShouldAutoExportToGame => (bool)(GlobalData.ConfigManager.Get("autoExportToGame") ?? false);
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ExportWindow"/> class with the specified stations to export.
@@ -144,8 +145,8 @@ public partial class ExportWindow : Form
     /// </summary>
     private void ConfigureButtons()
     {
-        btnExportToGame.Enabled = !string.IsNullOrEmpty(GameBasePath);
-        btnOpenGameFolder.Enabled = btnExportToGame.Enabled;
+        btnExportToGame.Enabled = false;
+        btnOpenGameFolder.Enabled = !string.IsNullOrEmpty(GameBasePath);
 
         btnExportToStaging.Enabled = !string.IsNullOrEmpty(StagingPath);
         btnOpenStagingFolder.Enabled = btnExportToStaging.Enabled;
@@ -346,6 +347,9 @@ public partial class ExportWindow : Form
             pgExportProgress.Value = 100;
             ToggleButtons();
             UpdateStatus(GlobalData.Strings.GetString("ExportCompleteStatus") ?? "Exported to Staging!");
+
+            if (ShouldAutoExportToGame)
+                BtnExportToGame_Click(this, EventArgs.Empty);
         }
     }
 
