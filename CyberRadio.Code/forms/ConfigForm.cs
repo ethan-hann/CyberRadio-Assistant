@@ -6,8 +6,6 @@ namespace RadioExt_Helper.forms;
 
 public partial class ConfigForm : Form
 {
-    private CyberConfig? _config;
-
     public ConfigForm()
     {
         InitializeComponent();
@@ -15,13 +13,13 @@ public partial class ConfigForm : Form
 
     private void ConfigForm_Load(object sender, EventArgs e)
     {
-        _config = GlobalData.ConfigManager.GetConfig();
-        _config ??= new CyberConfig();
-
         Translate();
         SetValues();
     }
 
+    /// <summary>
+    /// Translates the text of the form and its controls based on the language settings.
+    /// </summary>
     private void Translate()
     {
         Text = GlobalData.Strings.GetString("Configuration");
@@ -37,10 +35,14 @@ public partial class ConfigForm : Form
         lblUpdatesHelp.Text = GlobalData.Strings.GetString("CheckForUpdatesOptionHelp");
         lblAutoExportHelp.Text = GlobalData.Strings.GetString("AutoExportOptionHelp");
         lblEditPathsHelp.Text = GlobalData.Strings.GetString("EditPathsOptionHelp");
+        lblLogPathLabel.Text = GlobalData.Strings.GetString("LogPathLabel");
+        lblCurrentLogPath.Text = GlobalData.Strings.GetString("NoLogPathSet");
 
         //Logging Tab
         chkNewFileEveryLaunch.Text = GlobalData.Strings.GetString("NewLogFileOption");
         lblNewFileEveryLaunchHelp.Text = GlobalData.Strings.GetString("NewLogFileOptionHelp");
+        btnEditLogsPath.Text = GlobalData.Strings.GetString("EditLogsPathOption");
+        lblEditLogPathHelp.Text = GlobalData.Strings.GetString("EditLogsPathOptionHelp");
 
         //Buttons
         btnSaveAndClose.Text = GlobalData.Strings.GetString("SaveAndClose");
@@ -48,38 +50,60 @@ public partial class ConfigForm : Form
         btnCancel.Text = GlobalData.Strings.GetString("Cancel");
     }
 
+    /// <summary>
+    /// Set the values in the form to the configuration values.
+    /// </summary>
     private void SetValues()
     {
-        if (_config == null) return;
+        var config = GlobalData.ConfigManager.GetConfig();
+        if (config == null) return;
 
-        chkCheckForUpdates.Checked = _config.AutomaticallyCheckForUpdates;
-        chkAutoExportToGame.Checked = _config.AutoExportToGame;
-        chkNewFileEveryLaunch.Checked = _config.LogOptions.NewFileEveryLaunch;
+        chkCheckForUpdates.Checked = config.AutomaticallyCheckForUpdates;
+        chkAutoExportToGame.Checked = config.AutoExportToGame;
+        chkNewFileEveryLaunch.Checked = config.LogOptions.NewFileEveryLaunch;
+
+        lblCurrentLogPath.Text = config.LogOptions.LogFileDirectory == string.Empty 
+            ? lblCurrentLogPath.Text : config.LogOptions.LogFileDirectory;
     }
 
+    /// <summary>
+    /// Resets the configuration to the default values.
+    /// </summary>
+    private void ResetConfig()
+    {
+        var currentConfig = GlobalData.ConfigManager.GetConfig();
+        if (currentConfig == null) return;
+
+        //Create a new default config
+        if (GlobalData.ConfigManager.CreateDefaultConfig())
+        {
+            var defaultConfig = GlobalData.ConfigManager.GetConfig();
+            if (defaultConfig == null) return;
+
+            //Set the values from the current config for the paths to the default config
+            defaultConfig.StagingPath = currentConfig.StagingPath;
+            defaultConfig.GameBasePath = currentConfig.GameBasePath;
+
+            //Finally, set the values on the form to use the new, default config
+            SetValues();
+        }
+    }
+
+
+    /// <summary>
+    /// Sets the configuration values based on the form inputs.
+    /// </summary>
+    /// <returns>A task representing the asynchronous operation. The task result is a boolean indicating whether the configuration was successfully saved.</returns>
     private async Task<bool> SetConfig()
     {
-        if (_config == null) return false;
+        GlobalData.ConfigManager.Set("automaticallyCheckForUpdates", chkCheckForUpdates.Checked);
+        GlobalData.ConfigManager.Set("autoExportToGame", chkAutoExportToGame.Checked);
+        GlobalData.ConfigManager.Set("newFileEveryLaunch", chkNewFileEveryLaunch.Checked);
 
-        GlobalData.ConfigManager.Set("automaticallyCheckForUpdates", _config.AutomaticallyCheckForUpdates);
-        GlobalData.ConfigManager.Set("autoExportToGame", _config.AutoExportToGame);
-        GlobalData.ConfigManager.Set("newFileEveryLaunch", _config.LogOptions.NewFileEveryLaunch);
+        if (!lblCurrentLogPath.Text.Equals(GlobalData.Strings.GetString("NoLogPathSet")))
+            GlobalData.ConfigManager.Set("logFileDirectory", lblCurrentLogPath.Text);
 
         return await GlobalData.ConfigManager.SaveAsync();
-    }
-
-    private void chkCheckForUpdates_CheckedChanged(object sender, EventArgs e)
-    {
-        if (_config == null) return;
-
-        _config.AutomaticallyCheckForUpdates = chkCheckForUpdates.Checked;
-    }
-
-    private void chkAutoExportToGame_CheckedChanged(object sender, EventArgs e)
-    {
-        if (_config == null) return;
-
-        _config.AutoExportToGame = chkAutoExportToGame.Checked;
     }
 
     private void btnEditPaths_Click(object sender, EventArgs e)
@@ -87,11 +111,13 @@ public partial class ConfigForm : Form
         new PathSettings().ShowDialog();
     }
 
-    private void chkNewFileEveryLaunch_CheckedChanged(object sender, EventArgs e)
+    private void btnEditLogsPath_Click(object sender, EventArgs e)
     {
-        if (_config == null) return;
+        fldrOpenLogPath.Description = GlobalData.Strings.GetString("SelectLogPathDesc") ?? "Select the location to store log files";
+        fldrOpenLogPath.SelectedPath = lblCurrentLogPath.Text;
 
-        _config.LogOptions.NewFileEveryLaunch = chkNewFileEveryLaunch.Checked;
+        if (fldrOpenLogPath.ShowDialog() == DialogResult.OK)
+            lblCurrentLogPath.Text = fldrOpenLogPath.SelectedPath;
     }
 
     private void btnSaveAndClose_Click(object sender, EventArgs e)
@@ -120,8 +146,7 @@ public partial class ConfigForm : Form
         var result = MessageBox.Show(text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
         if (result != DialogResult.Yes) return;
 
-        _config = new CyberConfig();
-        SetValues();
+        ResetConfig();
     }
 
     private void btnCancel_Click(object sender, EventArgs e)

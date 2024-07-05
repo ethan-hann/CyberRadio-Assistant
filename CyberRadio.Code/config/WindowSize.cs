@@ -28,6 +28,10 @@ public class WindowSize(int width, int height)
     [Config("height")]
     public int Height { get; set; } = height;
 
+    /// <summary>
+    /// Get a value indicating whether the window size is empty.
+    /// </summary>
+    /// <returns>true if both the width and height are equal to 0; false, otherwise.</returns>
     public bool IsEmpty()
     {
         return Width == 0 && Height == 0;

@@ -5,7 +5,8 @@ using RadioExt_Helper.utility;
 namespace RadioExt_Helper.config;
 
 /// <summary>
-///     A DTO representing the configuration for the application. Replaces the need for a settings file.
+///     A DTO representing the configuration for the application; replaces the need for a settings file. All present and future configuration options
+///     will be done via this class.
 /// </summary>
 public sealed class CyberConfig
 {

@@ -13,9 +13,7 @@ public partial class AboutBox : Form
         InitializeComponent();
 
         var v = Assembly.GetExecutingAssembly().GetName().Version;
-        _currentVersion = v != null
-            ? new Version(v.Major, v.Minor, v.Build)
-            : new Version(0, 0, 0); //This should never happen, but just in case!
+        _currentVersion = v != null ? new Version(v.Major, v.Minor, v.Build) : new Version(0, 0, 0); //This should never happen, but just in case!
     }
 
     private void AboutBox_Load(object sender, EventArgs e)

@@ -43,11 +43,16 @@
             tableLayoutPanel3 = new TableLayoutPanel();
             chkNewFileEveryLaunch = new CheckBox();
             lblNewFileEveryLaunchHelp = new Label();
+            btnEditLogsPath = new Button();
+            lblEditLogPathHelp = new Label();
+            lblLogPathLabel = new Label();
+            lblCurrentLogPath = new Label();
             tabImages = new ImageList(components);
             tableLayoutPanel2 = new TableLayoutPanel();
             btnCancel = new Button();
             btnResetToDefault = new Button();
             btnSaveAndClose = new Button();
+            fldrOpenLogPath = new FolderBrowserDialog();
             tableLayoutPanel1.SuspendLayout();
             tabConfigs.SuspendLayout();
             tabGeneral.SuspendLayout();
@@ -76,7 +81,7 @@
             tableLayoutPanel1.RowStyles.Add(new RowStyle());
             tableLayoutPanel1.RowStyles.Add(new RowStyle());
             tableLayoutPanel1.RowStyles.Add(new RowStyle());
-            tableLayoutPanel1.Size = new Size(779, 143);
+            tableLayoutPanel1.Size = new Size(779, 150);
             tableLayoutPanel1.TabIndex = 0;
             // 
             // lblEditPathsHelp
@@ -110,7 +115,6 @@
             chkCheckForUpdates.TabIndex = 1;
             chkCheckForUpdates.Text = "Check for Updates at Startup?";
             chkCheckForUpdates.UseVisualStyleBackColor = true;
-            chkCheckForUpdates.CheckedChanged += chkCheckForUpdates_CheckedChanged;
             // 
             // chkAutoExportToGame
             // 
@@ -123,7 +127,6 @@
             chkAutoExportToGame.TabIndex = 2;
             chkAutoExportToGame.Text = "Auto-Export to Game?";
             chkAutoExportToGame.UseVisualStyleBackColor = true;
-            chkAutoExportToGame.CheckedChanged += chkAutoExportToGame_CheckedChanged;
             // 
             // lblUpdatesHelp
             // 
@@ -167,10 +170,10 @@
             tabGeneral.BackColor = Color.White;
             tabGeneral.Controls.Add(tableLayoutPanel1);
             tabGeneral.ImageKey = "config";
-            tabGeneral.Location = new Point(4, 31);
+            tabGeneral.Location = new Point(4, 24);
             tabGeneral.Name = "tabGeneral";
             tabGeneral.Padding = new Padding(3);
-            tabGeneral.Size = new Size(785, 149);
+            tabGeneral.Size = new Size(785, 156);
             tabGeneral.TabIndex = 0;
             tabGeneral.Text = "General";
             // 
@@ -179,10 +182,10 @@
             tabLogging.BackColor = Color.White;
             tabLogging.Controls.Add(tableLayoutPanel3);
             tabLogging.ImageKey = "logging";
-            tabLogging.Location = new Point(4, 31);
+            tabLogging.Location = new Point(4, 24);
             tabLogging.Name = "tabLogging";
             tabLogging.Padding = new Padding(3);
-            tabLogging.Size = new Size(785, 149);
+            tabLogging.Size = new Size(785, 156);
             tabLogging.TabIndex = 1;
             tabLogging.Text = "Logging";
             // 
@@ -193,17 +196,23 @@
             tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 74.05858F));
             tableLayoutPanel3.Controls.Add(chkNewFileEveryLaunch, 0, 0);
             tableLayoutPanel3.Controls.Add(lblNewFileEveryLaunchHelp, 1, 0);
+            tableLayoutPanel3.Controls.Add(btnEditLogsPath, 0, 5);
+            tableLayoutPanel3.Controls.Add(lblEditLogPathHelp, 1, 5);
+            tableLayoutPanel3.Controls.Add(lblLogPathLabel, 0, 6);
+            tableLayoutPanel3.Controls.Add(lblCurrentLogPath, 1, 6);
             tableLayoutPanel3.Dock = DockStyle.Fill;
             tableLayoutPanel3.Location = new Point(3, 3);
             tableLayoutPanel3.Name = "tableLayoutPanel3";
-            tableLayoutPanel3.RowCount = 6;
+            tableLayoutPanel3.RowCount = 8;
             tableLayoutPanel3.RowStyles.Add(new RowStyle());
             tableLayoutPanel3.RowStyles.Add(new RowStyle());
             tableLayoutPanel3.RowStyles.Add(new RowStyle());
             tableLayoutPanel3.RowStyles.Add(new RowStyle());
             tableLayoutPanel3.RowStyles.Add(new RowStyle());
             tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 37F));
-            tableLayoutPanel3.Size = new Size(779, 143);
+            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel3.Size = new Size(779, 150);
             tableLayoutPanel3.TabIndex = 1;
             // 
             // chkNewFileEveryLaunch
@@ -217,7 +226,6 @@
             chkNewFileEveryLaunch.TabIndex = 1;
             chkNewFileEveryLaunch.Text = "New File Every Launch?";
             chkNewFileEveryLaunch.UseVisualStyleBackColor = true;
-            chkNewFileEveryLaunch.CheckedChanged += chkNewFileEveryLaunch_CheckedChanged;
             // 
             // lblNewFileEveryLaunchHelp
             // 
@@ -228,6 +236,54 @@
             lblNewFileEveryLaunchHelp.Size = new Size(571, 15);
             lblNewFileEveryLaunchHelp.TabIndex = 3;
             lblNewFileEveryLaunchHelp.Text = "If checked, specifies that a new log file will be created on every run of the app.";
+            // 
+            // btnEditLogsPath
+            // 
+            btnEditLogsPath.BackColor = Color.Yellow;
+            btnEditLogsPath.Dock = DockStyle.Fill;
+            btnEditLogsPath.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
+            btnEditLogsPath.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
+            btnEditLogsPath.FlatStyle = FlatStyle.Flat;
+            btnEditLogsPath.Location = new Point(3, 28);
+            btnEditLogsPath.Name = "btnEditLogsPath";
+            btnEditLogsPath.Size = new Size(196, 31);
+            btnEditLogsPath.TabIndex = 7;
+            btnEditLogsPath.Text = "Edit Logs Path...";
+            btnEditLogsPath.UseVisualStyleBackColor = false;
+            btnEditLogsPath.Click += btnEditLogsPath_Click;
+            // 
+            // lblEditLogPathHelp
+            // 
+            lblEditLogPathHelp.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            lblEditLogPathHelp.AutoSize = true;
+            lblEditLogPathHelp.Location = new Point(205, 36);
+            lblEditLogPathHelp.Name = "lblEditLogPathHelp";
+            lblEditLogPathHelp.Size = new Size(571, 15);
+            lblEditLogPathHelp.TabIndex = 8;
+            lblEditLogPathHelp.Text = "Opens a folder dialog where you can choose a new path to save log files.";
+            // 
+            // lblLogPathLabel
+            // 
+            lblLogPathLabel.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            lblLogPathLabel.AutoSize = true;
+            lblLogPathLabel.Location = new Point(3, 64);
+            lblLogPathLabel.Name = "lblLogPathLabel";
+            lblLogPathLabel.Size = new Size(196, 15);
+            lblLogPathLabel.TabIndex = 9;
+            lblLogPathLabel.Text = "Log Path:";
+            lblLogPathLabel.TextAlign = ContentAlignment.MiddleRight;
+            // 
+            // lblCurrentLogPath
+            // 
+            lblCurrentLogPath.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            lblCurrentLogPath.AutoSize = true;
+            lblCurrentLogPath.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
+            lblCurrentLogPath.ForeColor = Color.Green;
+            lblCurrentLogPath.Location = new Point(205, 64);
+            lblCurrentLogPath.Name = "lblCurrentLogPath";
+            lblCurrentLogPath.Size = new Size(571, 15);
+            lblCurrentLogPath.TabIndex = 10;
+            lblCurrentLogPath.Text = "<no path>";
             // 
             // tabImages
             // 
@@ -299,6 +355,11 @@
             btnSaveAndClose.UseVisualStyleBackColor = false;
             btnSaveAndClose.Click += btnSaveAndClose_Click;
             // 
+            // fldrOpenLogPath
+            // 
+            fldrOpenLogPath.Description = "Select the location to store log files";
+            fldrOpenLogPath.UseDescriptionForTitle = true;
+            // 
             // ConfigForm
             // 
             AutoScaleDimensions = new SizeF(96F, 96F);
@@ -349,5 +410,10 @@
         private TableLayoutPanel tableLayoutPanel3;
         private CheckBox chkNewFileEveryLaunch;
         private Label lblNewFileEveryLaunchHelp;
+        private Button btnEditLogsPath;
+        private Label lblEditLogPathHelp;
+        private Label lblLogPathLabel;
+        private Label lblCurrentLogPath;
+        private FolderBrowserDialog fldrOpenLogPath;
     }
 }

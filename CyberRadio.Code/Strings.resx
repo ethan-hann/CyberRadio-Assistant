@@ -602,4 +602,19 @@ Can't export radio stations to game.</value>
     <data name="ConfirmRefreshStations" xml:space="preserve">
       <value>Are you sure you want to refresh your stations from disk? You will lose any pending changes.</value>
     </data>
+    <data name="EditLogsPathOption" xml:space="preserve">
+      <value>Edit Logs Path...</value>
+    </data>
+    <data name="EditLogsPathOptionHelp" xml:space="preserve">
+      <value>Opens a folder dialog where you can choose a new path to save log files.</value>
+    </data>
+    <data name="LogPathLabel" xml:space="preserve">
+      <value>Log Path:</value>
+    </data>
+    <data name="SelectLogPathDesc" xml:space="preserve">
+      <value>Select the location to store log files</value>
+    </data>
+    <data name="NoLogPathSet" xml:space="preserve">
+      <value>&lt;no path&gt;</value>
+    </data>
 </root>

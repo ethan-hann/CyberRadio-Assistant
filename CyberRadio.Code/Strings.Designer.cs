@@ -375,6 +375,24 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Edit Logs Path....
+        /// </summary>
+        internal static string EditLogsPathOption {
+            get {
+                return ResourceManager.GetString("EditLogsPathOption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Opens a folder dialog where you can choose a new path to save log files..
+        /// </summary>
+        internal static string EditLogsPathOptionHelp {
+            get {
+                return ResourceManager.GetString("EditLogsPathOptionHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Edit Paths....
         /// </summary>
         internal static string EditPathsOption {
@@ -702,6 +720,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Log Path:.
+        /// </summary>
+        internal static string LogPathLabel {
+            get {
+                return ResourceManager.GetString("LogPathLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Logging.
         /// </summary>
         internal static string LogSettings {
@@ -879,6 +906,15 @@ namespace RadioExt_Helper {
         internal static string NoInternetMsg {
             get {
                 return ResourceManager.GetString("NoInternetMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;no path&gt;.
+        /// </summary>
+        internal static string NoLogPathSet {
+            get {
+                return ResourceManager.GetString("NoLogPathSet", resourceCulture);
             }
         }
         
@@ -1133,6 +1169,15 @@ namespace RadioExt_Helper {
         internal static string SaveAndClose {
             get {
                 return ResourceManager.GetString("SaveAndClose", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select the location to store log files.
+        /// </summary>
+        internal static string SelectLogPathDesc {
+            get {
+                return ResourceManager.GetString("SelectLogPathDesc", resourceCulture);
             }
         }
         

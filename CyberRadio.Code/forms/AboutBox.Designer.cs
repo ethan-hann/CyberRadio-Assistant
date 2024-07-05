@@ -117,11 +117,11 @@
             // 
             lblVersion.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             lblVersion.AutoSize = true;
-            lblVersion.Location = new Point(294, 48);
+            lblVersion.Location = new Point(291, 48);
             lblVersion.Name = "lblVersion";
-            lblVersion.Size = new Size(63, 15);
+            lblVersion.Size = new Size(72, 15);
             lblVersion.TabIndex = 6;
-            lblVersion.Text = "Version 1.0";
+            lblVersion.Text = "Version 1.0.0";
             // 
             // lblSpecialThanks2
             // 
