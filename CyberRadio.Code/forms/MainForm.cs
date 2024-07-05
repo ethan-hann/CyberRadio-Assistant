@@ -2,6 +2,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using AetherUtils.Core.Extensions;
 using AetherUtils.Core.Files;
+using AetherUtils.Core.Logging;
 using AetherUtils.Core.WinForms.Controls;
 using AetherUtils.Core.WinForms.Models;
 using RadioExt_Helper.config;
@@ -106,6 +107,7 @@ public partial class MainForm : Form
         fileToolStripMenuItem.Text = GlobalData.Strings.GetString("File");
         openStagingPathToolStripMenuItem.Text = GlobalData.Strings.GetString("OpenStagingFolder");
         openGamePathToolStripMenuItem.Text = GlobalData.Strings.GetString("OpenGameFolder");
+        openLogFolderToolStripMenuItem.Text = GlobalData.Strings.GetString("OpenLogFolder");
         exportToGameToolStripMenuItem.Text = GlobalData.Strings.GetString("ExportStations");
         languageToolStripMenuItem.Text = GlobalData.Strings.GetString("Language");
         helpToolStripMenuItem.Text = GlobalData.Strings.GetString("Help");
@@ -405,6 +407,11 @@ public partial class MainForm : Form
         if (!ExportWindow.ShowNoModDialogIfRequired()) return;
 
         Process.Start("explorer.exe", PathHelper.GetRadiosPath(GameBasePath));
+    }
+
+    private void openLogFolderToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        Process.Start("explorer.exe", GlobalData.GetLogPath());
     }
 
     private void exportToGameToolStripMenuItem_Click(object sender, EventArgs e)

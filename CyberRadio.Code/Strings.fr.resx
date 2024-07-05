@@ -596,4 +596,7 @@ Impossible d'exporter les stations de radio vers le jeu.</value>
     <data name="ConfigSaveSuccess" xml:space="preserve">
     <value>Configuration enregistrée !</value>
   </data>
+    <data name="OpenLogFolder" xml:space="preserve">
+      <value>Ouvrir le dossier Log</value>
+    </data>
 </root>

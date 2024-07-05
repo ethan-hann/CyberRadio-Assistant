@@ -34,13 +34,15 @@ namespace RadioExt_Helper.forms
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             menuStrip1 = new MenuStrip();
             fileToolStripMenuItem = new ToolStripMenuItem();
+            exportToGameToolStripMenuItem = new ToolStripMenuItem();
+            refreshStationsToolStripMenuItem = new ToolStripMenuItem();
+            toolStripSeparator2 = new ToolStripSeparator();
             openStagingPathToolStripMenuItem = new ToolStripMenuItem();
             openGamePathToolStripMenuItem = new ToolStripMenuItem();
+            openLogFolderToolStripMenuItem = new ToolStripMenuItem();
             toolStripSeparator3 = new ToolStripSeparator();
-            exportToGameToolStripMenuItem = new ToolStripMenuItem();
-            toolStripSeparator2 = new ToolStripSeparator();
+            configurationToolStripMenuItem = new ToolStripMenuItem();
             pathsToolStripMenuItem = new ToolStripMenuItem();
-            refreshStationsToolStripMenuItem = new ToolStripMenuItem();
             languageToolStripMenuItem = new ToolStripMenuItem();
             helpToolStripMenuItem = new ToolStripMenuItem();
             howToUseToolStripMenuItem = new ToolStripMenuItem();
@@ -68,7 +70,6 @@ namespace RadioExt_Helper.forms
             tableLayoutPanel1 = new TableLayoutPanel();
             btnDeleteStation = new Button();
             btnAddStation = new Button();
-            configurationToolStripMenuItem = new ToolStripMenuItem();
             menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
@@ -94,16 +95,37 @@ namespace RadioExt_Helper.forms
             // 
             // fileToolStripMenuItem
             // 
-            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { openStagingPathToolStripMenuItem, openGamePathToolStripMenuItem, toolStripSeparator3, exportToGameToolStripMenuItem, toolStripSeparator2, configurationToolStripMenuItem, pathsToolStripMenuItem, refreshStationsToolStripMenuItem });
+            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { exportToGameToolStripMenuItem, refreshStationsToolStripMenuItem, toolStripSeparator2, openStagingPathToolStripMenuItem, openGamePathToolStripMenuItem, openLogFolderToolStripMenuItem, toolStripSeparator3, configurationToolStripMenuItem, pathsToolStripMenuItem });
             fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             fileToolStripMenuItem.Size = new Size(37, 20);
             fileToolStripMenuItem.Text = "File";
+            // 
+            // exportToGameToolStripMenuItem
+            // 
+            exportToGameToolStripMenuItem.Image = Properties.Resources.export_16x16;
+            exportToGameToolStripMenuItem.Name = "exportToGameToolStripMenuItem";
+            exportToGameToolStripMenuItem.Size = new Size(210, 22);
+            exportToGameToolStripMenuItem.Text = "Export Stations";
+            exportToGameToolStripMenuItem.Click += exportToGameToolStripMenuItem_Click;
+            // 
+            // refreshStationsToolStripMenuItem
+            // 
+            refreshStationsToolStripMenuItem.Image = Properties.Resources.refresh;
+            refreshStationsToolStripMenuItem.Name = "refreshStationsToolStripMenuItem";
+            refreshStationsToolStripMenuItem.Size = new Size(210, 22);
+            refreshStationsToolStripMenuItem.Text = "Refresh Stations";
+            refreshStationsToolStripMenuItem.Click += refreshStationsToolStripMenuItem_Click;
+            // 
+            // toolStripSeparator2
+            // 
+            toolStripSeparator2.Name = "toolStripSeparator2";
+            toolStripSeparator2.Size = new Size(207, 6);
             // 
             // openStagingPathToolStripMenuItem
             // 
             openStagingPathToolStripMenuItem.Image = Properties.Resources.external_link;
             openStagingPathToolStripMenuItem.Name = "openStagingPathToolStripMenuItem";
-            openStagingPathToolStripMenuItem.Size = new Size(211, 22);
+            openStagingPathToolStripMenuItem.Size = new Size(210, 22);
             openStagingPathToolStripMenuItem.Text = "Open Staging Folder";
             openStagingPathToolStripMenuItem.Click += openStagingPathToolStripMenuItem_Click;
             // 
@@ -111,43 +133,38 @@ namespace RadioExt_Helper.forms
             // 
             openGamePathToolStripMenuItem.Image = Properties.Resources.external_link;
             openGamePathToolStripMenuItem.Name = "openGamePathToolStripMenuItem";
-            openGamePathToolStripMenuItem.Size = new Size(211, 22);
+            openGamePathToolStripMenuItem.Size = new Size(210, 22);
             openGamePathToolStripMenuItem.Text = "Open Game Radios Folder";
             openGamePathToolStripMenuItem.Click += openGamePathToolStripMenuItem_Click;
+            // 
+            // openLogFolderToolStripMenuItem
+            // 
+            openLogFolderToolStripMenuItem.Image = Properties.Resources.external_link;
+            openLogFolderToolStripMenuItem.Name = "openLogFolderToolStripMenuItem";
+            openLogFolderToolStripMenuItem.Size = new Size(210, 22);
+            openLogFolderToolStripMenuItem.Text = "Open Log Folder";
+            openLogFolderToolStripMenuItem.Click += openLogFolderToolStripMenuItem_Click;
             // 
             // toolStripSeparator3
             // 
             toolStripSeparator3.Name = "toolStripSeparator3";
-            toolStripSeparator3.Size = new Size(208, 6);
+            toolStripSeparator3.Size = new Size(207, 6);
             // 
-            // exportToGameToolStripMenuItem
+            // configurationToolStripMenuItem
             // 
-            exportToGameToolStripMenuItem.Image = Properties.Resources.export_16x16;
-            exportToGameToolStripMenuItem.Name = "exportToGameToolStripMenuItem";
-            exportToGameToolStripMenuItem.Size = new Size(211, 22);
-            exportToGameToolStripMenuItem.Text = "Export Stations";
-            exportToGameToolStripMenuItem.Click += exportToGameToolStripMenuItem_Click;
-            // 
-            // toolStripSeparator2
-            // 
-            toolStripSeparator2.Name = "toolStripSeparator2";
-            toolStripSeparator2.Size = new Size(208, 6);
+            configurationToolStripMenuItem.Image = Properties.Resources.configuration;
+            configurationToolStripMenuItem.Name = "configurationToolStripMenuItem";
+            configurationToolStripMenuItem.Size = new Size(210, 22);
+            configurationToolStripMenuItem.Text = "Configuration";
+            configurationToolStripMenuItem.Click += configurationToolStripMenuItem_Click;
             // 
             // pathsToolStripMenuItem
             // 
             pathsToolStripMenuItem.Image = Properties.Resources.folder;
             pathsToolStripMenuItem.Name = "pathsToolStripMenuItem";
-            pathsToolStripMenuItem.Size = new Size(211, 22);
+            pathsToolStripMenuItem.Size = new Size(210, 22);
             pathsToolStripMenuItem.Text = "Game Paths";
             pathsToolStripMenuItem.Click += pathsToolStripMenuItem_Click;
-            // 
-            // refreshStationsToolStripMenuItem
-            // 
-            refreshStationsToolStripMenuItem.Image = Properties.Resources.refresh;
-            refreshStationsToolStripMenuItem.Name = "refreshStationsToolStripMenuItem";
-            refreshStationsToolStripMenuItem.Size = new Size(211, 22);
-            refreshStationsToolStripMenuItem.Text = "Refresh Stations";
-            refreshStationsToolStripMenuItem.Click += refreshStationsToolStripMenuItem_Click;
             // 
             // languageToolStripMenuItem
             // 
@@ -432,14 +449,6 @@ namespace RadioExt_Helper.forms
             btnAddStation.UseVisualStyleBackColor = false;
             btnAddStation.Click += btnAddStation_Click;
             // 
-            // configurationToolStripMenuItem
-            // 
-            configurationToolStripMenuItem.Image = Properties.Resources.configuration;
-            configurationToolStripMenuItem.Name = "configurationToolStripMenuItem";
-            configurationToolStripMenuItem.Size = new Size(211, 22);
-            configurationToolStripMenuItem.Text = "Configuration";
-            configurationToolStripMenuItem.Click += configurationToolStripMenuItem_Click;
-            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(96F, 96F);
@@ -520,5 +529,6 @@ namespace RadioExt_Helper.forms
         private ToolStripStatusLabel lblStationCount;
         private ToolStripStatusLabel toolStripStatusLabel3;
         private ToolStripMenuItem configurationToolStripMenuItem;
+        private ToolStripMenuItem openLogFolderToolStripMenuItem;
     }
 }

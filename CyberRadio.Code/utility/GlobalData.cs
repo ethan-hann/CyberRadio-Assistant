@@ -52,6 +52,16 @@ public static class GlobalData
         _globalDataInitialized = true;
     }
 
+    /// <summary>
+    /// Get the path to the log file directory.
+    /// </summary>
+    /// <returns>The path to the log file directory or <see cref="string.Empty"/> if log options not defined in configuration.</returns>
+    public static string GetLogPath()
+    {
+        if (ConfigManager.Get("logOptions") is not LogOptions options) return string.Empty;
+        return options.LogFileDirectory;
+    }
+
     private static void InitializeConfig()
     {
         var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),

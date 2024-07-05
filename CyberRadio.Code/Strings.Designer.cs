@@ -966,6 +966,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Open Log Folder.
+        /// </summary>
+        internal static string OpenLogFolder {
+            get {
+                return ResourceManager.GetString("OpenLogFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Open Staging Folder.
         /// </summary>
         internal static string OpenStagingFolder {
