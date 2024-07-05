@@ -599,4 +599,7 @@ Can't export radio stations to game.</value>
     <data name="OpenLogFolder" xml:space="preserve">
       <value>Open Log Folder</value>
     </data>
+    <data name="ConfirmRefreshStations" xml:space="preserve">
+      <value>Are you sure you want to refresh your stations from disk? You will lose any pending changes.</value>
+    </data>
 </root>

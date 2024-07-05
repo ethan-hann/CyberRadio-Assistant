@@ -2,7 +2,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using AetherUtils.Core.Extensions;
 using AetherUtils.Core.Files;
-using AetherUtils.Core.Logging;
 using AetherUtils.Core.WinForms.Controls;
 using AetherUtils.Core.WinForms.Models;
 using RadioExt_Helper.config;
@@ -24,8 +23,13 @@ public partial class MainForm : Form
 
     private readonly List<StationEditor> _stationEditors = [];
     private readonly BindingList<Station> _stations = [];
+    private readonly System.Timers.Timer resizeTimer;
+
     private bool _ignoreSelectedIndexChanged;
     private int _newStationCount = 1;
+
+    private string GameBasePath => GlobalData.ConfigManager.Get("gameBasePath") as string ?? string.Empty;
+    private string StagingPath => GlobalData.ConfigManager.Get("stagingPath") as string ?? string.Empty;
 
     private string _stationCountFormat =
         GlobalData.Strings.GetString("EnabledStationsCount") ?? "Enabled Stations: {0} / {1}";
@@ -41,10 +45,29 @@ public partial class MainForm : Form
 
         if (GlobalData.ConfigManager.Get("autoCheckForUpdates") as bool? ?? true)
             _ = Updater.CheckForUpdates();
+
+        //Set up timer for resizing; this is needed to prevent the application from saving the window size too often.
+        resizeTimer = new(500) // 500 ms delay
+        {
+            AutoReset = false // Ensure it only ticks once after being reset
+        };
+
+        // Save the configuration when resizing has stopped
+        resizeTimer.Elapsed += (sender, args) => { SaveWindowSize(); };
     }
 
-    private string GameBasePath => GlobalData.ConfigManager.Get("gameBasePath") as string ?? string.Empty;
-    private string StagingPath => GlobalData.ConfigManager.Get("stagingPath") as string ?? string.Empty;
+    private void SaveWindowSize()
+    {
+        if (InvokeRequired)
+        {
+            Invoke(new Action(SaveWindowSize));
+        }
+        else
+        {
+            GlobalData.ConfigManager.Set("windowSize", new WindowSize(Size.Width, Size.Height));
+            GlobalData.ConfigManager.SaveAsync();
+        }
+    }
 
     private void MainForm_Load(object sender, EventArgs e)
     {
@@ -222,8 +245,15 @@ public partial class MainForm : Form
 
     private void UpdateEnabledStationCount()
     {
-        var enabledCount = _stations.Count(s => s.GetStatus());
-        lblStationCount.Text = string.Format(_stationCountFormat, enabledCount, _stations.Count);
+        if (InvokeRequired)
+        {             
+            Invoke(new Action(UpdateEnabledStationCount));
+        }
+        else
+        {
+            var enabledCount = _stations.Count(s => s.GetStatus());
+            lblStationCount.Text = string.Format(_stationCountFormat, enabledCount, _stations.Count);
+        }
     }
 
     private void lbStations_SelectedIndexChanged(object? sender, EventArgs e)
@@ -332,16 +362,14 @@ public partial class MainForm : Form
 
         if (lbStations.SelectedItem is not Station station) return;
 
+        string newStationPrefix = GlobalData.Strings.GetString("NewStationListBoxEntry") ?? "[New Station]";
+
         //If the station to be removed contains "[New Station]" in the name, decrement our new station count.
-        if (station.MetaData.DisplayName.Contains(
-                GlobalData.Strings.GetString("NewStationListBoxEntry") ??
-                "[New Station]"))
+        if (station.MetaData.DisplayName.StartsWith(newStationPrefix))
             _newStationCount--;
 
         //Reset new station count if there are no more "New stations" in the list box.
-        if (!_stations.Any(s => s.MetaData.DisplayName.Contains(
-                GlobalData.Strings.GetString("NewStationListBoxEntry") ??
-                "[New Station]")))
+        if (!_stations.Select(s => s.MetaData.DisplayName.StartsWith(newStationPrefix)).Contains(true))
             _newStationCount = 1;
 
         _stations.Remove(station);
@@ -352,6 +380,8 @@ public partial class MainForm : Form
 
         lbStations_SelectedIndexChanged(this, EventArgs.Empty);
 
+        UpdateEnabledStationCount();
+
         switch (_stations.Count)
         {
             case > 0:
@@ -360,8 +390,6 @@ public partial class MainForm : Form
                 _newStationCount = 1;
                 break;
         }
-
-        UpdateEnabledStationCount();
 
         //Hide the station editor (and reset it) if there are no stations to edit.
         HandleUserControlVisibility();
@@ -433,7 +461,10 @@ public partial class MainForm : Form
 
     private void refreshStationsToolStripMenuItem_Click(object sender, EventArgs e)
     {
-        PopulateStations();
+        var text = GlobalData.Strings.GetString("ConfirmRefreshStations");
+        var caption = GlobalData.Strings.GetString("Confirm");
+        if (MessageBox.Show(this, text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+            PopulateStations();
     }
 
     private void radioExtHelpToolStripMenuItem_Click(object sender, EventArgs e)
@@ -468,7 +499,8 @@ public partial class MainForm : Form
 
     private void MainForm_Resize(object sender, EventArgs e)
     {
-        GlobalData.ConfigManager.Set("windowSize", new WindowSize(Size.Width, Size.Height));
-        GlobalData.ConfigManager.SaveAsync();
+        // Restart the Timer each time the Resize event is triggered
+        resizeTimer.Stop();
+        resizeTimer.Start();
     }
 }

@@ -104,7 +104,8 @@ namespace RadioExt_Helper.forms
             // 
             exportToGameToolStripMenuItem.Image = Properties.Resources.export_16x16;
             exportToGameToolStripMenuItem.Name = "exportToGameToolStripMenuItem";
-            exportToGameToolStripMenuItem.Size = new Size(210, 22);
+            exportToGameToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.E;
+            exportToGameToolStripMenuItem.Size = new Size(248, 22);
             exportToGameToolStripMenuItem.Text = "Export Stations";
             exportToGameToolStripMenuItem.Click += exportToGameToolStripMenuItem_Click;
             // 
@@ -112,20 +113,22 @@ namespace RadioExt_Helper.forms
             // 
             refreshStationsToolStripMenuItem.Image = Properties.Resources.refresh;
             refreshStationsToolStripMenuItem.Name = "refreshStationsToolStripMenuItem";
-            refreshStationsToolStripMenuItem.Size = new Size(210, 22);
+            refreshStationsToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.R;
+            refreshStationsToolStripMenuItem.Size = new Size(248, 22);
             refreshStationsToolStripMenuItem.Text = "Refresh Stations";
             refreshStationsToolStripMenuItem.Click += refreshStationsToolStripMenuItem_Click;
             // 
             // toolStripSeparator2
             // 
             toolStripSeparator2.Name = "toolStripSeparator2";
-            toolStripSeparator2.Size = new Size(207, 6);
+            toolStripSeparator2.Size = new Size(245, 6);
             // 
             // openStagingPathToolStripMenuItem
             // 
             openStagingPathToolStripMenuItem.Image = Properties.Resources.external_link;
             openStagingPathToolStripMenuItem.Name = "openStagingPathToolStripMenuItem";
-            openStagingPathToolStripMenuItem.Size = new Size(210, 22);
+            openStagingPathToolStripMenuItem.ShortcutKeys = Keys.Alt | Keys.S;
+            openStagingPathToolStripMenuItem.Size = new Size(248, 22);
             openStagingPathToolStripMenuItem.Text = "Open Staging Folder";
             openStagingPathToolStripMenuItem.Click += openStagingPathToolStripMenuItem_Click;
             // 
@@ -133,7 +136,8 @@ namespace RadioExt_Helper.forms
             // 
             openGamePathToolStripMenuItem.Image = Properties.Resources.external_link;
             openGamePathToolStripMenuItem.Name = "openGamePathToolStripMenuItem";
-            openGamePathToolStripMenuItem.Size = new Size(210, 22);
+            openGamePathToolStripMenuItem.ShortcutKeys = Keys.Alt | Keys.G;
+            openGamePathToolStripMenuItem.Size = new Size(248, 22);
             openGamePathToolStripMenuItem.Text = "Open Game Radios Folder";
             openGamePathToolStripMenuItem.Click += openGamePathToolStripMenuItem_Click;
             // 
@@ -141,20 +145,22 @@ namespace RadioExt_Helper.forms
             // 
             openLogFolderToolStripMenuItem.Image = Properties.Resources.external_link;
             openLogFolderToolStripMenuItem.Name = "openLogFolderToolStripMenuItem";
-            openLogFolderToolStripMenuItem.Size = new Size(210, 22);
+            openLogFolderToolStripMenuItem.ShortcutKeys = Keys.Alt | Keys.L;
+            openLogFolderToolStripMenuItem.Size = new Size(248, 22);
             openLogFolderToolStripMenuItem.Text = "Open Log Folder";
             openLogFolderToolStripMenuItem.Click += openLogFolderToolStripMenuItem_Click;
             // 
             // toolStripSeparator3
             // 
             toolStripSeparator3.Name = "toolStripSeparator3";
-            toolStripSeparator3.Size = new Size(207, 6);
+            toolStripSeparator3.Size = new Size(245, 6);
             // 
             // configurationToolStripMenuItem
             // 
             configurationToolStripMenuItem.Image = Properties.Resources.configuration;
             configurationToolStripMenuItem.Name = "configurationToolStripMenuItem";
-            configurationToolStripMenuItem.Size = new Size(210, 22);
+            configurationToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.C;
+            configurationToolStripMenuItem.Size = new Size(248, 22);
             configurationToolStripMenuItem.Text = "Configuration";
             configurationToolStripMenuItem.Click += configurationToolStripMenuItem_Click;
             // 
@@ -162,7 +168,8 @@ namespace RadioExt_Helper.forms
             // 
             pathsToolStripMenuItem.Image = Properties.Resources.folder;
             pathsToolStripMenuItem.Name = "pathsToolStripMenuItem";
-            pathsToolStripMenuItem.Size = new Size(210, 22);
+            pathsToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.P;
+            pathsToolStripMenuItem.Size = new Size(248, 22);
             pathsToolStripMenuItem.Text = "Game Paths";
             pathsToolStripMenuItem.Click += pathsToolStripMenuItem_Click;
             // 
@@ -183,6 +190,7 @@ namespace RadioExt_Helper.forms
             // 
             howToUseToolStripMenuItem.Image = Properties.Resources.guide;
             howToUseToolStripMenuItem.Name = "howToUseToolStripMenuItem";
+            howToUseToolStripMenuItem.ShortcutKeys = Keys.F1;
             howToUseToolStripMenuItem.Size = new Size(200, 22);
             howToUseToolStripMenuItem.Text = "How To Use";
             howToUseToolStripMenuItem.Click += howToUseToolStripMenuItem_Click;
@@ -212,6 +220,7 @@ namespace RadioExt_Helper.forms
             // 
             aboutToolStripMenuItem.Image = Properties.Resources.info;
             aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
+            aboutToolStripMenuItem.ShortcutKeys = Keys.F2;
             aboutToolStripMenuItem.Size = new Size(200, 22);
             aboutToolStripMenuItem.Text = "About";
             aboutToolStripMenuItem.Click += aboutToolStripMenuItem_Click;
@@ -220,6 +229,7 @@ namespace RadioExt_Helper.forms
             // 
             checkForUpdatesToolStripMenuItem.Image = Properties.Resources.updated;
             checkForUpdatesToolStripMenuItem.Name = "checkForUpdatesToolStripMenuItem";
+            checkForUpdatesToolStripMenuItem.ShortcutKeys = Keys.F3;
             checkForUpdatesToolStripMenuItem.Size = new Size(200, 22);
             checkForUpdatesToolStripMenuItem.Text = "Check For Updates";
             checkForUpdatesToolStripMenuItem.Click += checkForUpdatesToolStripMenuItem_Click;
@@ -461,6 +471,7 @@ namespace RadioExt_Helper.forms
             Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             HelpButton = true;
             Icon = (Icon)resources.GetObject("$this.Icon");
+            KeyPreview = true;
             MainMenuStrip = menuStrip1;
             Margin = new Padding(3, 2, 3, 2);
             MaximizeBox = false;

@@ -599,4 +599,7 @@ Impossible d'exporter les stations de radio vers le jeu.</value>
     <data name="OpenLogFolder" xml:space="preserve">
       <value>Ouvrir le dossier Log</value>
     </data>
+    <data name="ConfirmRefreshStations" xml:space="preserve">
+      <value>Êtes-vous sûr de vouloir actualiser vos stations à partir du disque? Vous perdrez les changements en attente.</value>
+    </data>
 </root>

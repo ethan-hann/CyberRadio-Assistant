@@ -599,4 +599,7 @@ No se pueden exportar estaciones de radio al juego.</value>
     <data name="OpenLogFolder" xml:space="preserve">
       <value>Abrir carpeta de registro</value>
     </data>
+    <data name="ConfirmRefreshStations" xml:space="preserve">
+      <value>¿Estás seguro de que quieres actualizar tus estaciones desde el disco? Perderá cualquier cambio pendiente.</value>
+    </data>
 </root>

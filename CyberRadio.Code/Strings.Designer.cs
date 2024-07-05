@@ -267,6 +267,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to refresh your stations from disk? You will lose any pending changes..
+        /// </summary>
+        internal static string ConfirmRefreshStations {
+            get {
+                return ResourceManager.GetString("ConfirmRefreshStations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Custom Icon.
         /// </summary>
         internal static string CustomIcon {
