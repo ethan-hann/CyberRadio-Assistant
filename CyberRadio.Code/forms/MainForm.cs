@@ -2,8 +2,10 @@ using System.ComponentModel;
 using System.Diagnostics;
 using AetherUtils.Core.Extensions;
 using AetherUtils.Core.Files;
+using AetherUtils.Core.Structs;
 using AetherUtils.Core.WinForms.Controls;
 using AetherUtils.Core.WinForms.Models;
+using RadioExt_Helper.config;
 using RadioExt_Helper.models;
 using RadioExt_Helper.Properties;
 using RadioExt_Helper.user_controls;
@@ -27,6 +29,9 @@ public partial class MainForm : Form
 
     private string _stationCountFormat =
         GlobalData.Strings.GetString("EnabledStationsCount") ?? "Enabled Stations: {0} / {1}";
+    
+    private string GameBasePath => GlobalData.ConfigManager.Get("gameBasePath") as string ?? string.Empty;
+    private string StagingPath => GlobalData.ConfigManager.Get("stagingPath") as string ?? string.Empty;
 
     public MainForm()
     {
@@ -37,7 +42,8 @@ public partial class MainForm : Form
         InitializeLanguageDropDown();
         SelectLanguage();
 
-        _ = Updater.CheckForUpdates();
+        if (GlobalData.ConfigManager.Get("autoCheckForUpdates") as bool? ?? true)
+            _ = Updater.CheckForUpdates();
     }
 
     private void MainForm_Load(object sender, EventArgs e)
@@ -45,8 +51,11 @@ public partial class MainForm : Form
         _noStationsCtrl.PathsSet += RefreshAfterPathsChanged;
         splitContainer1.Panel2.Controls.Add(_noStationsCtrl);
 
-        if (Settings.Default.WindowSize != Size.Empty)
-            Size = Settings.Default.WindowSize;
+        var windowSize = GlobalData.ConfigManager.Get("windowSize") as WindowSize 
+                         ?? new WindowSize(0, 0);
+        
+        if (!windowSize.IsEmpty())
+            Size = new Size(windowSize.Width, windowSize.Height);
 
         Translate();
     }
@@ -82,9 +91,10 @@ public partial class MainForm : Form
 
     private void SelectLanguage()
     {
-        if (!Settings.Default.SelectedLanguage.Equals(string.Empty))
+        var language = GlobalData.ConfigManager.Get("language") as string ?? string.Empty;
+        if (!language.Equals(string.Empty))
             _languageComboBox.SelectedIndex = _languageComboBox.Items.IndexOf(
-                _languages.Find(l => l.Text.Equals(Settings.Default.SelectedLanguage)));
+                _languages.Find(l => l.Text.Equals(language)));
         else
             _languageComboBox.SelectedIndex = 0;
 
@@ -100,6 +110,7 @@ public partial class MainForm : Form
         exportToGameToolStripMenuItem.Text = GlobalData.Strings.GetString("ExportStations");
         languageToolStripMenuItem.Text = GlobalData.Strings.GetString("Language");
         helpToolStripMenuItem.Text = GlobalData.Strings.GetString("Help");
+        configurationToolStripMenuItem.Text = GlobalData.Strings.GetString("Configuration");
         pathsToolStripMenuItem.Text = GlobalData.Strings.GetString("GamePaths");
         refreshStationsToolStripMenuItem.Text = GlobalData.Strings.GetString("RefreshStations");
         howToUseToolStripMenuItem.Text = GlobalData.Strings.GetString("HowToUse");
@@ -136,14 +147,14 @@ public partial class MainForm : Form
         lbStations.BeginUpdate();
         lbStations.DataSource = null;
 
-        if (!string.IsNullOrEmpty(Settings.Default.StagingPath))
+        if (!string.IsNullOrEmpty(StagingPath))
         {
             _stations.Clear();
             _stationEditors.Clear();
 
             var validExtensions = EnumHelper.GetEnumDescriptions<ValidAudioFiles>();
 
-            foreach (var directory in FileHelper.SafeEnumerateDirectories(Settings.Default.StagingPath))
+            foreach (var directory in FileHelper.SafeEnumerateDirectories(StagingPath))
             {
                 var files = FileHelper.SafeEnumerateFiles(directory).ToList();
 
@@ -203,7 +214,7 @@ public partial class MainForm : Form
     {
         PopulateStations();
         if (_stations.Count <= 0) return;
-        
+
         lbStations.SelectedIndex = 0;
         lbStations_SelectedIndexChanged(this, EventArgs.Empty);
     }
@@ -236,7 +247,7 @@ public partial class MainForm : Form
     private void btnEnableStation_Click(object sender, EventArgs e)
     {
         if (lbStations.SelectedItem is not Station s) return;
-        
+
         s.MetaData.IsActive = true;
         lbStations.BeginUpdate();
         lbStations.Invalidate();
@@ -258,7 +269,7 @@ public partial class MainForm : Form
     private void btnDisableStation_Click(object sender, EventArgs e)
     {
         if (lbStations.SelectedItem is not Station s) return;
-        
+
         s.MetaData.IsActive = false;
         lbStations.BeginUpdate();
         lbStations.Invalidate();
@@ -279,7 +290,7 @@ public partial class MainForm : Form
 
     private void btnAddStation_Click(object sender, EventArgs e)
     {
-        if (Settings.Default.GameBasePath.Equals(string.Empty) || Settings.Default.StagingPath.Equals(string.Empty))
+        if (GameBasePath.Equals(string.Empty) || StagingPath.Equals(string.Empty))
             return;
 
         Station blankStation = new()
@@ -315,7 +326,7 @@ public partial class MainForm : Form
 
     private void btnDeleteStation_Click(object sender, EventArgs e)
     {
-        if (Settings.Default.GameBasePath.Equals(string.Empty) || Settings.Default.StagingPath.Equals(string.Empty))
+        if (GameBasePath.Equals(string.Empty) || StagingPath.Equals(string.Empty))
             return;
 
         if (lbStations.SelectedItem is not Station station) return;
@@ -323,13 +334,13 @@ public partial class MainForm : Form
         //If the station to be removed contains "[New Station]" in the name, decrement our new station count.
         if (station.MetaData.DisplayName.Contains(
                 GlobalData.Strings.GetString("NewStationListBoxEntry") ??
-                throw new InvalidOperationException()))
+                "[New Station]"))
             _newStationCount--;
 
         //Reset new station count if there are no more "New stations" in the list box.
         if (!_stations.Any(s => s.MetaData.DisplayName.Contains(
                 GlobalData.Strings.GetString("NewStationListBoxEntry") ??
-                throw new InvalidOperationException())))
+                "[New Station]")))
             _newStationCount = 1;
 
         _stations.Remove(station);
@@ -374,8 +385,8 @@ public partial class MainForm : Form
         languageToolStripMenuItem.HideDropDown();
         ResumeLayout();
 
-        Settings.Default.SelectedLanguage = culture.Text;
-        Settings.Default.Save();
+        GlobalData.ConfigManager.Set("language", culture.Text);
+        GlobalData.ConfigManager.Save();
     }
 
     private void lbStations_MouseDown(object sender, MouseEventArgs e)
@@ -387,24 +398,29 @@ public partial class MainForm : Form
 
     private void openStagingPathToolStripMenuItem_Click(object sender, EventArgs e)
     {
-        Process.Start("explorer.exe", Settings.Default.StagingPath);
+        Process.Start("explorer.exe", StagingPath);
     }
 
     private void openGamePathToolStripMenuItem_Click(object sender, EventArgs e)
     {
         if (!ExportWindow.ShowNoModDialogIfRequired()) return;
 
-        Process.Start("explorer.exe", PathHelper.GetRadiosPath(Settings.Default.GameBasePath));
+        Process.Start("explorer.exe", PathHelper.GetRadiosPath(GameBasePath));
     }
 
     private void exportToGameToolStripMenuItem_Click(object sender, EventArgs e)
     {
-        new ExportWindow([.. _stations]).ShowDialog();
+        new ExportWindow([.. _stations]).ShowDialog(this);
+    }
+
+    private void configurationToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        new ConfigForm().ShowDialog(this);
     }
 
     private void pathsToolStripMenuItem_Click(object sender, EventArgs e)
     {
-        var result = new PathSettings().ShowDialog();
+        var result = new PathSettings().ShowDialog(this);
         if (result == DialogResult.OK)
             PopulateStations();
     }
@@ -446,7 +462,7 @@ public partial class MainForm : Form
 
     private void MainForm_Resize(object sender, EventArgs e)
     {
-        Settings.Default.WindowSize = Size;
-        Settings.Default.Save();
+        GlobalData.ConfigManager.Set("windowSize", new WindowSize(Size.Width, Size.Height));
+        GlobalData.ConfigManager.SaveAsync();
     }
 }

@@ -1,4 +1,5 @@
-﻿using RadioExt_Helper.forms;
+﻿using RadioExt_Helper.config;
+using RadioExt_Helper.forms;
 using RadioExt_Helper.models;
 using RadioExt_Helper.Properties;
 using RadioExt_Helper.utility;
@@ -38,9 +39,13 @@ public sealed partial class NoStationsCtl : UserControl, IUserControl
         var showNoGamePath = false;
         var showNoStagePath = false;
 
-        if (Settings.Default.GameBasePath.Equals(string.Empty))
+        var gameBasePath = GlobalData.ConfigManager.Get("gameBasePath") as string ?? string.Empty;
+        var stagingPath = GlobalData.ConfigManager.Get("stagingPath") as string ?? string.Empty;
+        
+        if (gameBasePath.Equals(string.Empty))
             showNoGamePath = true;
-        if (Settings.Default.StagingPath.Equals(string.Empty))
+        
+        if (stagingPath.Equals(string.Empty))
             showNoStagePath = true;
 
         ToggleControls(showNoGamePath, showNoStagePath);

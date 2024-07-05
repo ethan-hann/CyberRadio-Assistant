@@ -540,4 +540,55 @@ Impossible d'exporter les stations de radio vers le jeu.</value>
   <data name="NoInternetMsg" xml:space="preserve">
     <value>Impossible de vérifier les mises à jour. Veuillez vérifier votre connexion Internet et réessayer.</value>
   </data>
+  <data name="Configuration" xml:space="preserve">
+    <value>Paramètres</value>
+  </data>
+  <data name="AutoExportOption" xml:space="preserve">
+    <value>Exporter automatiquement vers le jeu ?</value>
+  </data>
+  <data name="AutoExportOptionHelp" xml:space="preserve">
+    <value>Si cette case est cochée, vos stations seront immédiatement exportées vers le jeu après avoir réussi l'exportation vers la scène.</value>
+  </data>
+  <data name="CheckForUpdatesOption" xml:space="preserve">
+    <value>Rechercher les mises à jour au démarrage ?</value>
+  </data>
+  <data name="CheckForUpdatesOptionHelp" xml:space="preserve">
+    <value>Si cette case est cochée, permet à l'application de rechercher les mises à jour immédiatement après son démarrage.</value>
+  </data>
+  <data name="EditPathsOption" xml:space="preserve">
+    <value>Modifier les chemins...</value>
+  </data>
+  <data name="EditPathsOptionHelp" xml:space="preserve">
+    <value>Ouvre la boîte de dialogue du chemin pour modifier le chemin de préparation et de base du jeu.</value>
+  </data>
+  <data name="GeneralSettings" xml:space="preserve">
+    <value>Général</value>
+  </data>
+  <data name="LogSettings" xml:space="preserve">
+    <value>Journalisation</value>
+  </data>
+  <data name="NewLogFileOption" xml:space="preserve">
+    <value>Nouveau fichier à chaque lancement ?</value>
+  </data>
+  <data name="NewLogFileOptionHelp" xml:space="preserve">
+    <value>Si cette case est cochée, spécifie qu'un nouveau fichier journal sera créé à chaque exécution de l'application.</value>
+  </data>
+  <data name="ResetToDefaults" xml:space="preserve">
+    <value>Réinitialiser aux valeurs par défaut</value>
+  </data>
+  <data name="SaveAndClose" xml:space="preserve">
+    <value>Sauver et fermer</value>
+  </data>
+  <data name="ConfigResetConfirm" xml:space="preserve">
+    <value>Êtes-vous sûr de vouloir réinitialiser la configuration aux valeurs par défaut ?</value>
+  </data>
+  <data name="ConfigSaveError" xml:space="preserve">
+    <value>Une erreur s'est produite lors de l'enregistrement de la configuration. Veuillez vous assurer que le fichier config.yml existe.</value>
+  </data>
+  <data name="Success" xml:space="preserve">
+    <value>Succès</value>
+  </data>
+  <data name="ConfigSaveSuccess" xml:space="preserve">
+    <value>Configuration enregistrée !</value>
+  </data>
 </root>

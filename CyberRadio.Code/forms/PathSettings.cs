@@ -7,6 +7,9 @@ public partial class PathSettings : Form
 {
     private bool _gameFolderChanged;
     private bool _stageFolderChanged;
+    
+    private static string GameBasePath => GlobalData.ConfigManager.Get("gameBasePath") as string ?? string.Empty;
+    private static string StagingPath => GlobalData.ConfigManager.Get("stagingPath") as string ?? string.Empty;
 
     public PathSettings()
     {
@@ -35,15 +38,15 @@ public partial class PathSettings : Form
 
     private void SetLabels()
     {
-        lblGameBasePath.Text = !Settings.Default.GameBasePath.Equals(string.Empty)
-            ? Settings.Default.GameBasePath
+        lblGameBasePath.Text = !GameBasePath.Equals(string.Empty)
+            ? GameBasePath
             : GlobalData.Strings.GetString("GameBasePathPlaceholder");
 
-        lblBackupPath.Text = !Settings.Default.StagingPath.Equals(string.Empty)
-            ? Settings.Default.StagingPath
+        lblBackupPath.Text = !StagingPath.Equals(string.Empty)
+            ? StagingPath
             : GlobalData.Strings.GetString("StagingPathPlaceholder");
 
-        var radioPath = PathHelper.GetRadioExtPath(Settings.Default.GameBasePath);
+        var radioPath = PathHelper.GetRadioExtPath(GameBasePath);
         lblRadioPath.Text = radioPath.Equals(string.Empty)
             ? GlobalData.Strings.GetString("RadioExtPathPlaceholder")
             : radioPath;
@@ -54,24 +57,24 @@ public partial class PathSettings : Form
         var basePath = PathHelper.GetGamePath();
         if (basePath == null || basePath.Equals(string.Empty)) return;
 
-        if (!Settings.Default.GameBasePath.Equals(basePath))
+        if (!GameBasePath.Equals(basePath))
             _gameFolderChanged = true;
 
-        Settings.Default.GameBasePath = basePath;
-        Settings.Default.Save();
+        if (GlobalData.ConfigManager.Set("gameBasePath", basePath))
+            GlobalData.ConfigManager.Save();
         SetLabels();
     }
 
     private void btnChangeBackUpPath_Click(object sender, EventArgs e)
     {
         var stagingPath = PathHelper.GetStagingPath();
-        if (stagingPath.Equals(string.Empty) || stagingPath.Equals(Settings.Default.StagingPath)) return;
+        if (stagingPath.Equals(string.Empty) || stagingPath.Equals(StagingPath)) return;
 
-        if (!Settings.Default.StagingPath.Equals(stagingPath))
+        if (!StagingPath.Equals(stagingPath))
             _stageFolderChanged = true;
 
-        Settings.Default.StagingPath = stagingPath;
-        Settings.Default.Save();
+        if (GlobalData.ConfigManager.Set("stagingPath", stagingPath))
+            GlobalData.ConfigManager.Save();
         SetLabels();
     }
 
