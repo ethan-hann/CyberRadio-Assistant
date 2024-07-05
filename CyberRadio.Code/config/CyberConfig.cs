@@ -23,7 +23,7 @@ namespace RadioExt_Helper.config
         /// Specifies whether the application should automatically export the stations to the game directory after exporting to staging.
         /// </summary>
         [Config("autoExportToGame")]
-        public bool AutoExportToGame { get; set; } = false;
+        public bool AutoExportToGame { get; set; }
 
         /// <summary>
         /// The path to the staging directory.
