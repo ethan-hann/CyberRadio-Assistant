@@ -58,6 +58,7 @@ namespace RadioExt_Helper.config
         {
             AppName = "CyberRadioAssistant",
             WriteLogToConsole = false,
+            NewFileEveryLaunch = true,
             LogFileDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "RadioExt-Helper", "logs"),
             LogHeader = SystemInfo.GetLogFileHeader(),
             IncludeDateTime = true,

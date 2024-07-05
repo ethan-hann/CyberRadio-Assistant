@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using AetherUtils.Core.Logging;
 
 namespace RadioExt_Helper.forms
 {
@@ -114,7 +115,7 @@ namespace RadioExt_Helper.forms
                 var text = GlobalData.Strings.GetString("ConfigSaveError");
                 var caption = GlobalData.Strings.GetString("Error");
                 MessageBox.Show(this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                Debug.WriteLine("Error saving config");
+                AuLogger.GetCurrentLogger<ConfigForm>("SaveAndClose").Error("Could not save configuration file.");
             }
         }
 
@@ -124,11 +125,10 @@ namespace RadioExt_Helper.forms
             var caption = GlobalData.Strings.GetString("Confirm");
 
             var result = MessageBox.Show(text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-            if (result == DialogResult.Yes)
-            {
-                _config = new();
-                SetValues();
-            }
+            if (result != DialogResult.Yes) return;
+            
+            _config = new CyberConfig();
+            SetValues();
         }
 
         private void btnCancel_Click(object sender, EventArgs e)

@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using AetherUtils.Core.Extensions;
 using AetherUtils.Core.Files;
+using AetherUtils.Core.Logging;
 using RadioExt_Helper.models;
 using RadioExt_Helper.Properties;
 using RadioExt_Helper.utility;
@@ -66,17 +67,15 @@ public partial class ExportWindow : Form
     {
         if (e.ColumnIndex == 0) // Assuming the icon is in the first column
         {
-            if (e.Item != null && lvStations.SmallImageList != null && e.Item.Tag is Station station)
-            {
-                var image = lvStations.SmallImageList.Images[station.GetStatus() ? "enabled" : "disabled"];
-                if (image != null)
-                {
-                    // Calculate the position to center the image in the cell
-                    var iconX = e.Bounds.Left + (e.Bounds.Width - image.Width) / 2;
-                    var iconY = e.Bounds.Top + (e.Bounds.Height - image.Height) / 2;
-                    e.Graphics.DrawImage(image, iconX, iconY);
-                }
-            }
+            if (e.Item == null || lvStations.SmallImageList == null || e.Item.Tag is not Station station) return;
+            
+            var image = lvStations.SmallImageList.Images[station.GetStatus() ? "enabled" : "disabled"];
+            if (image == null) return;
+            
+            // Calculate the position to center the image in the cell
+            var iconX = e.Bounds.Left + (e.Bounds.Width - image.Width) / 2;
+            var iconY = e.Bounds.Top + (e.Bounds.Height - image.Height) / 2;
+            e.Graphics.DrawImage(image, iconX, iconY);
         }
         else
         {
@@ -187,11 +186,10 @@ public partial class ExportWindow : Form
             bgWorkerExport.CancelAsync();
         }
 
-        if (!bgWorkerExportGame.CancellationPending && bgWorkerExportGame.IsBusy)
-        {
-            _isCancelling = true;
-            bgWorkerExportGame.CancelAsync();
-        }
+        if (bgWorkerExportGame.CancellationPending || !bgWorkerExportGame.IsBusy) return;
+        
+        _isCancelling = true;
+        bgWorkerExportGame.CancelAsync();
     }
 
     /// <summary>
@@ -251,17 +249,20 @@ public partial class ExportWindow : Form
             if (station.Songs.Count <= 0) continue;
 
             if (!CreateSongListJson(stationPath, station))
-                Debug.WriteLine("Couldn't save songs.sgls file.");
+            {
+                AuLogger.GetCurrentLogger<ExportWindow>("BG_ExportStaging")
+                    .Error("Couldn't save the songs.sgls file.");
+            }
         }
 
         RemoveDeletedStations();
+        AuLogger.GetCurrentLogger<ExportWindow>("BG_ExportToStaging")
+            .Info($"Exported {_stationsToExport.Count} stations to staging directory: {StagingPath}");
     }
 
     /// <summary>
-    /// Handles the ProgressChanged event of the bgWorkerExport background worker.
+    /// Removes deleted station directories from the staging path.
     /// </summary>
-    /// <param name="sender">The source of the event.</param>
-    /// <param name="e">The <see cref="ProgressChangedEventArgs"/> instance containing the event data.</param>
     private void RemoveDeletedStations()
     {
         var stationNames = new HashSet<string>(_stationsToExport.Select(station => station.MetaData.DisplayName), StringComparer.OrdinalIgnoreCase);
@@ -276,16 +277,17 @@ public partial class ExportWindow : Form
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Failed to delete {directory}: {ex.Message}");
+                AuLogger.GetCurrentLogger<ExportWindow>("RemoveDeletedStations")
+                    .Error(ex, $"Failed to delete {directory}.");
             }
         }
     }
 
     /// <summary>
-    /// Handles the RunWorkerCompleted event of the bgWorkerExport background worker.
+    /// Creates the station directory in the staging path for the specified <see cref="Station"/>.
     /// </summary>
-    /// <param name="sender">The source of the event.</param>
-    /// <param name="e">The <see cref="RunWorkerCompletedEventArgs"/> instance containing the event data.</param>
+    /// <param name="station">The station to create the directory for.</param>
+    /// <returns>The path to the station's directory.</returns>
     private static string CreateStationDirectory(Station station)
     {
         if (string.IsNullOrEmpty(StagingPath)) return string.Empty;
@@ -388,6 +390,9 @@ public partial class ExportWindow : Form
             .ToList();
 
         DeleteInactiveDirectories(inactiveStationPaths);
+        
+        AuLogger.GetCurrentLogger<ExportWindow>("BG_ExportToGame")
+            .Info($"Exported {activeStations.Count} stations to game radios directory: {radiosPath}");
     }
 
     /// <summary>
@@ -405,11 +410,10 @@ public partial class ExportWindow : Form
 
             Invoke(() => pgExportProgress.Value = 0); //reset progress bar after copy operation
 
-            if (bgWorkerExportGame.CancellationPending)
-            {
-                bgWorkerExportGame.CancelAsync();
-                return;
-            }
+            if (!bgWorkerExportGame.CancellationPending) continue;
+            
+            bgWorkerExportGame.CancelAsync();
+            return;
         }
     }
 
@@ -425,7 +429,7 @@ public partial class ExportWindow : Form
         if (songFile == null)
             return false;
 
-        SongList? songs = _songListJson.LoadJson(songFile);
+        var songs = _songListJson.LoadJson(songFile);
         if (songs == null)
             return false;
 
@@ -438,16 +442,16 @@ public partial class ExportWindow : Form
 
         foreach (var file in existingFiles)
         {
-            if (!songPathsInSgls.Contains(file, StringComparer.OrdinalIgnoreCase))
+            if (songPathsInSgls.Contains(file, StringComparer.OrdinalIgnoreCase)) continue;
+            
+            try
             {
-                try
-                {
-                    File.Delete(file);
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine($"Failed to delete {file}: {ex.Message}");
-                }
+                File.Delete(file);
+            }
+            catch (Exception ex)
+            {
+                AuLogger.GetCurrentLogger<ExportWindow>("CopySongsToGame")
+                    .Error(ex, $"Failed to delete {file}.");
             }
         }
 
@@ -459,10 +463,13 @@ public partial class ExportWindow : Form
             try
             {
                 File.Copy(sourcePath, targetFilePath, true);
+                AuLogger.GetCurrentLogger<ExportWindow>("CopySongsToGame")
+                    .Info($"Copied song: {sourcePath} to {targetFilePath}");
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Failed to copy {sourcePath} to {targetFilePath}: {ex.Message}");
+                AuLogger.GetCurrentLogger<ExportWindow>("CopySongsToGame")
+                    .Error(ex, $"Failed to copy {sourcePath} to {targetFilePath}");
                 return false;
             }
         }
@@ -481,15 +488,15 @@ public partial class ExportWindow : Form
             {
                 Directory.Delete(path, true);
 
-                if (bgWorkerExportGame.CancellationPending)
-                {
-                    bgWorkerExportGame.CancelAsync();
-                    return;
-                }
+                if (!bgWorkerExportGame.CancellationPending) continue;
+                
+                bgWorkerExportGame.CancelAsync();
+                return;
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Failed to delete directory {path}: {ex.Message}");
+                AuLogger.GetCurrentLogger<ExportWindow>("DeleteInactiveDirectories")
+                    .Error(ex, $"Failed to delete directory {path}");
             }
     }
 
@@ -500,11 +507,10 @@ public partial class ExportWindow : Form
     /// <param name="e">Event data containing the progress percentage.</param>
     private void BgWorkerExportGame_ProgressChanged(object sender, ProgressChangedEventArgs e)
     {
-        if (pgExportProgress.Value != e.ProgressPercentage)
-        {
-            pgExportProgress.Value = e.ProgressPercentage;
-            UpdateStatus(string.Format(_statusString, _dirCopier?.CurrentFile));
-        }
+        if (pgExportProgress.Value == e.ProgressPercentage) return;
+        
+        pgExportProgress.Value = e.ProgressPercentage;
+        UpdateStatus(string.Format(_statusString, _dirCopier?.CurrentFile));
     }
 
     /// <summary>

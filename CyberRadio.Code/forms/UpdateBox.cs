@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Reflection;
 using AetherUtils.Core.Extensions;
 using AetherUtils.Core.Files;
+using AetherUtils.Core.Logging;
 using RadioExt_Helper.Properties;
 using RadioExt_Helper.utility;
 
@@ -161,8 +162,10 @@ public partial class UpdateBox : Form
 
             return newPath;
         }
-        catch (Exception)
+        catch (Exception ex)
         {
+            AuLogger.GetCurrentLogger<UpdateBox>("CopyToOriginalLocation")
+                .Error(ex, "Couldn't copy the updated file to original .exe location.");
             return tempFilePath;
         }
     }

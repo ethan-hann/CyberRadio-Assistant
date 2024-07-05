@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using AetherUtils.Core.Logging;
 using Newtonsoft.Json.Linq;
 using RadioExt_Helper.forms;
 
@@ -63,10 +64,11 @@ public static class Updater
         }
         catch (Exception ex)
         {
-            MessageBox.Show(
-                string.Format(GlobalData.Strings.GetString("UpdateCheckError") ?? "Error checking for updates: {0}",
-                    ex.Message),
-                "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            var text = string.Format(GlobalData.Strings.GetString("UpdateCheckError") ??
+                                     "Error checking for updates: {0}", ex.Message);
+            var caption = GlobalData.Strings.GetString("Error") ?? "Error";
+            MessageBox.Show(text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            AuLogger.GetCurrentLogger("Updater.CheckForUpdates").Error(ex, "Error checking for updates");
         }
     }
 
@@ -76,8 +78,6 @@ public static class Updater
         client.Timeout = TimeSpan.FromSeconds(5);
 
         var response = await client.GetStringAsync(VersionUrl);
-        if (response == null)
-            return (string.Empty, string.Empty);
 
         var json = JObject.Parse(response);
         var version = json["version"]?.ToString();

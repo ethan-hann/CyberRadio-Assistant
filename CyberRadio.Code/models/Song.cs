@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using AetherUtils.Core.Logging;
 using Newtonsoft.Json;
 using File = TagLib.File;
 
@@ -58,7 +59,8 @@ public class Song
         }
         catch (Exception ex)
         {
-            Debug.WriteLine(ex);
+            AuLogger.GetCurrentLogger<Song>("ParseFromFile")
+                .Error(ex, $"Couldn't read song file: {filePath}");
             song = null;
         }
 

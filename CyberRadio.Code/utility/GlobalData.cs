@@ -171,7 +171,8 @@ public static class GlobalData
         }
         catch (Exception ex)
         {
-            Debug.WriteLine(ex);
+            AuLogger.GetCurrentLogger("GlobalData.GetUiIcons")
+                .Error(ex, "Couldn't initialize list of UIIcons.");
         }
     }
 }

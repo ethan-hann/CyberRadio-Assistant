@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using AetherUtils.Core.Logging;
 
 namespace RadioExt_Helper.utility;
 
@@ -52,7 +53,8 @@ public sealed class AudioStreamChecker
             // Check if the response is successful
             if (!response.IsSuccessStatusCode)
             {
-                Debug.WriteLine($"Request error: {response.StatusCode}");
+                AuLogger.GetCurrentLogger<AudioStreamChecker>("IsAudioStreamValidAsync")
+                    .Error($"Request error: {response.StatusCode}");
                 return false;
             }
 
@@ -60,7 +62,8 @@ public sealed class AudioStreamChecker
             var contentType = response.Content.Headers.ContentType?.MediaType;
             if (contentType != null && contentType.StartsWith("audio/")) return true;
 
-            Debug.WriteLine("The content type is not an audio type.");
+            AuLogger.GetCurrentLogger<AudioStreamChecker>("IsAudioStreamValidAsync")
+                .Warn("The content type is not an audio type.");
             return false;
         }
         catch (TaskCanceledException)
@@ -68,18 +71,21 @@ public sealed class AudioStreamChecker
             // Handle timeout
             if (!_httpClient.DefaultRequestHeaders.ConnectionClose.HasValue)
             {
-                Debug.WriteLine("Request timed out.");
+                AuLogger.GetCurrentLogger<AudioStreamChecker>("IsAudioStreamValidAsync")
+                    .Warn("Request timed out.");
                 return false;
             }
         }
-        catch (HttpRequestException e)
+        catch (HttpRequestException ex)
         {
-            Debug.WriteLine($"Request error: {e.Message}");
+            AuLogger.GetCurrentLogger<AudioStreamChecker>("IsAudioStreamValidAsync")
+                .Error(ex, "Request exception");
             return false;
         }
-        catch (Exception e)
+        catch (Exception ex)
         {
-            Debug.WriteLine($"Unexpected error: {e.Message}");
+            AuLogger.GetCurrentLogger<AudioStreamChecker>("IsAudioStreamValidAsync")
+                .Error(ex, "Unexpected error");
             return false;
         }
 
