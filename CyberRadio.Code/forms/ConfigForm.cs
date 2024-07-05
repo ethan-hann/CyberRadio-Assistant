@@ -84,11 +84,11 @@ public partial class ConfigForm : Form
             defaultConfig.StagingPath = currentConfig.StagingPath;
             defaultConfig.GameBasePath = currentConfig.GameBasePath;
 
-            //Finally, set the values on the form to use the new, default config
+            //Finally, save the configuration changes and set the values on the form to use the new, default config
+            GlobalData.ConfigManager.SaveAsync();
             SetValues();
         }
     }
-
 
     /// <summary>
     /// Sets the configuration values based on the form inputs.
