@@ -1,5 +1,6 @@
 ﻿using AetherUtils.Core.Attributes;
 using AetherUtils.Core.Configuration;
+using RadioExt_Helper.utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +24,7 @@ namespace RadioExt_Helper.config
         /// Specifies whether the application should automatically export the stations to the game directory after exporting to staging.
         /// </summary>
         [Config("autoExportToGame")]
-        public bool AutoExportToGame { get; set; } = false;
+        public bool AutoExportToGame { get; set; }
 
         /// <summary>
         /// The path to the staging directory.
@@ -41,7 +42,7 @@ namespace RadioExt_Helper.config
         /// The selected language for the application.
         /// </summary>
         [Config("language")]
-        public string Language { get; set; } = "(en)";
+        public string Language { get; set; } = "English (en)";
 
         /// <summary>
         /// The window size of the application.
@@ -53,6 +54,14 @@ namespace RadioExt_Helper.config
         /// The log options for the application.
         /// </summary>
         [Config("logOptions")]
-        public LogOptions LogOptions { get; set; } = new();
+        public LogOptions LogOptions { get; set; } = new()
+        {
+            AppName = "CyberRadioAssistant",
+            WriteLogToConsole = false,
+            LogFileDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "RadioExt-Helper", "logs"),
+            LogHeader = SystemInfo.GetLogFileHeader(),
+            IncludeDateTime = true,
+            IncludeDateOnly = false
+        };
     }
 }

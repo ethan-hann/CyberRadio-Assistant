@@ -1,9 +1,12 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
+using System.Net;
 using System.Reflection;
 using System.Resources;
+using System.Text;
 using AetherUtils.Core.Configuration;
+using AetherUtils.Core.Logging;
 using RadioExt_Helper.config;
 using RadioExt_Helper.forms;
 
@@ -45,6 +48,7 @@ public static class GlobalData
         CreateComboBoxTemplate();
 
         InitializeConfig();
+        InitializeLogging();
 
         SetCulture(ConfigManager.Get("language") as string ?? "English (en)");
 
@@ -65,6 +69,14 @@ public static class GlobalData
             ConfigManager.CreateDefaultConfig();
             ConfigManager.Save();
         }
+    }
+
+    private static void InitializeLogging()
+    {
+        if (ConfigManager.Get("logOptions") is not LogOptions options) return;
+
+        AuLogger.Initialize(options);
+        AuLogger.GetCurrentLogger("GlobalData.InitializeLogging").Info("Logging initialized!");
     }
 
     private static void CreateComboBoxTemplate()
