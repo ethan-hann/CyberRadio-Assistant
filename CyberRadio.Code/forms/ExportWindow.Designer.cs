@@ -148,7 +148,7 @@
             btnExportToStaging.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
             btnExportToStaging.FlatStyle = FlatStyle.Flat;
             btnExportToStaging.Font = new Font("Segoe UI Variable Display Semib", 9.75F, FontStyle.Bold);
-            btnExportToStaging.Image = Properties.Resources.export_16x16;
+            btnExportToStaging.Image = Properties.Resources.export;
             btnExportToStaging.Location = new Point(3, 143);
             btnExportToStaging.Name = "btnExportToStaging";
             btnExportToStaging.Size = new Size(267, 43);
@@ -168,7 +168,7 @@
             btnExportToGame.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
             btnExportToGame.FlatStyle = FlatStyle.Flat;
             btnExportToGame.Font = new Font("Segoe UI Variable Display Semib", 9.75F, FontStyle.Bold);
-            btnExportToGame.Image = Properties.Resources.export_16x16;
+            btnExportToGame.Image = Properties.Resources.export;
             btnExportToGame.Location = new Point(3, 209);
             btnExportToGame.Name = "btnExportToGame";
             btnExportToGame.Size = new Size(267, 43);
@@ -205,7 +205,7 @@
             btnOpenStagingFolder.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
             btnOpenStagingFolder.FlatStyle = FlatStyle.Flat;
             btnOpenStagingFolder.Font = new Font("Segoe UI Variable Display Semib", 9.75F, FontStyle.Bold);
-            btnOpenStagingFolder.Image = Properties.Resources.folder_16x16;
+            btnOpenStagingFolder.Image = Properties.Resources.folder_no_fill;
             btnOpenStagingFolder.Location = new Point(3, 11);
             btnOpenStagingFolder.Name = "btnOpenStagingFolder";
             btnOpenStagingFolder.Size = new Size(267, 43);
@@ -224,7 +224,7 @@
             btnOpenGameFolder.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
             btnOpenGameFolder.FlatStyle = FlatStyle.Flat;
             btnOpenGameFolder.Font = new Font("Segoe UI Variable Display Semib", 9.75F, FontStyle.Bold);
-            btnOpenGameFolder.Image = Properties.Resources.folder_16x16;
+            btnOpenGameFolder.Image = Properties.Resources.folder_no_fill;
             btnOpenGameFolder.Location = new Point(3, 77);
             btnOpenGameFolder.Name = "btnOpenGameFolder";
             btnOpenGameFolder.Size = new Size(267, 43);

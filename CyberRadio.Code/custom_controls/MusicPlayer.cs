@@ -9,6 +9,8 @@ namespace RadioExt_Helper.user_controls;
 /// </summary>
 public partial class MusicPlayer : UserControl
 {
+    private readonly ImageList _stateImages = new();
+
     private MediaFoundationReader? _mediaReader;
     private string _streamUrl = string.Empty;
     private WaveOutEvent? _waveOut;
@@ -16,6 +18,17 @@ public partial class MusicPlayer : UserControl
     public MusicPlayer()
     {
         InitializeComponent();
+
+        _stateImages.Images.Add("play", Properties.Resources.play);
+        _stateImages.Images.Add("play_down", Properties.Resources.play_down);
+        _stateImages.Images.Add("play_over", Properties.Resources.play_over);
+        _stateImages.Images.Add("pause", Properties.Resources.pause);
+        _stateImages.Images.Add("pause_down", Properties.Resources.pause_down);
+        _stateImages.Images.Add("pause_over", Properties.Resources.pause_over);
+        _stateImages.ImageSize = new Size(32, 32);
+
+        btnPlayPause.ImageList = _stateImages;
+
         btnPlayPause.ImageKey = "play";
 
         SetStyle(ControlStyles.SupportsTransparentBackColor, true);

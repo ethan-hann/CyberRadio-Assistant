@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ConfigForm));
             tableLayoutPanel1 = new TableLayoutPanel();
             lblEditPathsHelp = new Label();
@@ -47,7 +46,6 @@
             lblEditLogPathHelp = new Label();
             lblLogPathLabel = new Label();
             lblCurrentLogPath = new Label();
-            tabImages = new ImageList(components);
             tableLayoutPanel2 = new TableLayoutPanel();
             btnCancel = new Button();
             btnResetToDefault = new Button();
@@ -158,7 +156,6 @@
             tabConfigs.Controls.Add(tabGeneral);
             tabConfigs.Controls.Add(tabLogging);
             tabConfigs.Dock = DockStyle.Fill;
-            tabConfigs.ImageList = tabImages;
             tabConfigs.Location = new Point(0, 0);
             tabConfigs.Name = "tabConfigs";
             tabConfigs.SelectedIndex = 0;
@@ -285,14 +282,6 @@
             lblCurrentLogPath.TabIndex = 10;
             lblCurrentLogPath.Text = "<no path>";
             // 
-            // tabImages
-            // 
-            tabImages.ColorDepth = ColorDepth.Depth32Bit;
-            tabImages.ImageStream = (ImageListStreamer)resources.GetObject("tabImages.ImageStream");
-            tabImages.TransparentColor = Color.Transparent;
-            tabImages.Images.SetKeyName(0, "config");
-            tabImages.Images.SetKeyName(1, "logging");
-            // 
             // tableLayoutPanel2
             // 
             tableLayoutPanel2.ColumnCount = 3;
@@ -403,7 +392,6 @@
         private TabPage tabGeneral;
         private TabPage tabLogging;
         private TableLayoutPanel tableLayoutPanel2;
-        private ImageList tabImages;
         private Button btnCancel;
         private Button btnResetToDefault;
         private Button btnSaveAndClose;

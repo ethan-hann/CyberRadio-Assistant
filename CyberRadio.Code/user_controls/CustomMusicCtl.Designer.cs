@@ -234,7 +234,7 @@
             // 
             btnRemoveFromOrder.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             btnRemoveFromOrder.BackColor = Color.Yellow;
-            btnRemoveFromOrder.BackgroundImage = Properties.Resources.upload_32x32;
+            btnRemoveFromOrder.BackgroundImage = Properties.Resources.up__32x32;
             btnRemoveFromOrder.BackgroundImageLayout = ImageLayout.Zoom;
             btnRemoveFromOrder.FlatAppearance.BorderSize = 0;
             btnRemoveFromOrder.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
@@ -252,7 +252,7 @@
             // 
             btnAddToOrder.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             btnAddToOrder.BackColor = Color.Yellow;
-            btnAddToOrder.BackgroundImage = Properties.Resources.download_32x32;
+            btnAddToOrder.BackgroundImage = Properties.Resources.down__32x32;
             btnAddToOrder.BackgroundImageLayout = ImageLayout.Zoom;
             btnAddToOrder.FlatAppearance.BorderSize = 0;
             btnAddToOrder.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);

@@ -111,7 +111,7 @@
             btnChangeGameBasePath.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
             btnChangeGameBasePath.FlatStyle = FlatStyle.Flat;
             btnChangeGameBasePath.Font = new Font("Segoe UI Variable Display Semib", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnChangeGameBasePath.Image = Properties.Resources.change_16x16;
+            btnChangeGameBasePath.Image = Properties.Resources.change__16x16;
             btnChangeGameBasePath.Location = new Point(3, 8);
             btnChangeGameBasePath.Name = "btnChangeGameBasePath";
             btnChangeGameBasePath.Size = new Size(172, 30);
@@ -131,7 +131,7 @@
             btnChangeBackUpPath.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
             btnChangeBackUpPath.FlatStyle = FlatStyle.Flat;
             btnChangeBackUpPath.Font = new Font("Segoe UI Variable Display Semib", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnChangeBackUpPath.Image = Properties.Resources.change_16x16;
+            btnChangeBackUpPath.Image = Properties.Resources.change__16x16;
             btnChangeBackUpPath.Location = new Point(3, 102);
             btnChangeBackUpPath.Name = "btnChangeBackUpPath";
             btnChangeBackUpPath.Size = new Size(172, 30);

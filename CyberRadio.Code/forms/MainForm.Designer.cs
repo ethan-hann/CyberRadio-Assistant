@@ -1,4 +1,5 @@
-﻿using RadioExt_Helper.user_controls;
+﻿using RadioExt_Helper.custom_controls;
+using RadioExt_Helper.user_controls;
 
 namespace RadioExt_Helper.forms
 {
@@ -43,7 +44,6 @@ namespace RadioExt_Helper.forms
             toolStripSeparator3 = new ToolStripSeparator();
             configurationToolStripMenuItem = new ToolStripMenuItem();
             pathsToolStripMenuItem = new ToolStripMenuItem();
-            languageToolStripMenuItem = new ToolStripMenuItem();
             helpToolStripMenuItem = new ToolStripMenuItem();
             howToUseToolStripMenuItem = new ToolStripMenuItem();
             radioExtOnNexusModsToolStripMenuItem = new ToolStripMenuItem();
@@ -51,6 +51,7 @@ namespace RadioExt_Helper.forms
             toolStripSeparator1 = new ToolStripSeparator();
             aboutToolStripMenuItem = new ToolStripMenuItem();
             checkForUpdatesToolStripMenuItem = new ToolStripMenuItem();
+            languageToolStripMenuItem = new ToolStripMenuItem();
             splitContainer1 = new SplitContainer();
             grpStations = new GroupBox();
             lbStations = new StationListBox(components);
@@ -86,7 +87,9 @@ namespace RadioExt_Helper.forms
             // menuStrip1
             // 
             menuStrip1.BackColor = Color.Transparent;
-            menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, languageToolStripMenuItem, helpToolStripMenuItem });
+            menuStrip1.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, helpToolStripMenuItem, languageToolStripMenuItem });
+            menuStrip1.LayoutStyle = ToolStripLayoutStyle.HorizontalStackWithOverflow;
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
             menuStrip1.Size = new Size(1224, 24);
@@ -96,13 +99,14 @@ namespace RadioExt_Helper.forms
             // fileToolStripMenuItem
             // 
             fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { exportToGameToolStripMenuItem, refreshStationsToolStripMenuItem, toolStripSeparator2, openStagingPathToolStripMenuItem, openGamePathToolStripMenuItem, openLogFolderToolStripMenuItem, toolStripSeparator3, configurationToolStripMenuItem, pathsToolStripMenuItem });
+            fileToolStripMenuItem.Image = Properties.Resources.file;
             fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            fileToolStripMenuItem.Size = new Size(37, 20);
+            fileToolStripMenuItem.Size = new Size(53, 20);
             fileToolStripMenuItem.Text = "File";
             // 
             // exportToGameToolStripMenuItem
             // 
-            exportToGameToolStripMenuItem.Image = Properties.Resources.export_16x16;
+            exportToGameToolStripMenuItem.Image = Properties.Resources.export;
             exportToGameToolStripMenuItem.Name = "exportToGameToolStripMenuItem";
             exportToGameToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.E;
             exportToGameToolStripMenuItem.Size = new Size(249, 22);
@@ -125,7 +129,7 @@ namespace RadioExt_Helper.forms
             // 
             // openStagingPathToolStripMenuItem
             // 
-            openStagingPathToolStripMenuItem.Image = Properties.Resources.external_link;
+            openStagingPathToolStripMenuItem.Image = Properties.Resources.link;
             openStagingPathToolStripMenuItem.Name = "openStagingPathToolStripMenuItem";
             openStagingPathToolStripMenuItem.ShortcutKeys = Keys.Alt | Keys.S;
             openStagingPathToolStripMenuItem.Size = new Size(249, 22);
@@ -134,7 +138,7 @@ namespace RadioExt_Helper.forms
             // 
             // openGamePathToolStripMenuItem
             // 
-            openGamePathToolStripMenuItem.Image = Properties.Resources.external_link;
+            openGamePathToolStripMenuItem.Image = Properties.Resources.link;
             openGamePathToolStripMenuItem.Name = "openGamePathToolStripMenuItem";
             openGamePathToolStripMenuItem.ShortcutKeys = Keys.Alt | Keys.G;
             openGamePathToolStripMenuItem.Size = new Size(249, 22);
@@ -143,7 +147,7 @@ namespace RadioExt_Helper.forms
             // 
             // openLogFolderToolStripMenuItem
             // 
-            openLogFolderToolStripMenuItem.Image = Properties.Resources.external_link;
+            openLogFolderToolStripMenuItem.Image = Properties.Resources.link;
             openLogFolderToolStripMenuItem.Name = "openLogFolderToolStripMenuItem";
             openLogFolderToolStripMenuItem.ShortcutKeys = Keys.Alt | Keys.L;
             openLogFolderToolStripMenuItem.Size = new Size(249, 22);
@@ -157,7 +161,7 @@ namespace RadioExt_Helper.forms
             // 
             // configurationToolStripMenuItem
             // 
-            configurationToolStripMenuItem.Image = Properties.Resources.configuration;
+            configurationToolStripMenuItem.Image = Properties.Resources.settings;
             configurationToolStripMenuItem.Name = "configurationToolStripMenuItem";
             configurationToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.C;
             configurationToolStripMenuItem.Size = new Size(249, 22);
@@ -173,18 +177,12 @@ namespace RadioExt_Helper.forms
             pathsToolStripMenuItem.Text = "Game Paths";
             pathsToolStripMenuItem.Click += pathsToolStripMenuItem_Click;
             // 
-            // languageToolStripMenuItem
-            // 
-            languageToolStripMenuItem.Image = Properties.Resources.language_exchange;
-            languageToolStripMenuItem.Name = "languageToolStripMenuItem";
-            languageToolStripMenuItem.Size = new Size(87, 20);
-            languageToolStripMenuItem.Text = "Language";
-            // 
             // helpToolStripMenuItem
             // 
             helpToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { howToUseToolStripMenuItem, radioExtOnNexusModsToolStripMenuItem, radioExtGitHubToolStripMenuItem, toolStripSeparator1, aboutToolStripMenuItem, checkForUpdatesToolStripMenuItem });
+            helpToolStripMenuItem.Image = Properties.Resources.info;
             helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            helpToolStripMenuItem.Size = new Size(44, 20);
+            helpToolStripMenuItem.Size = new Size(60, 20);
             helpToolStripMenuItem.Text = "Help";
             // 
             // howToUseToolStripMenuItem
@@ -198,7 +196,7 @@ namespace RadioExt_Helper.forms
             // 
             // radioExtOnNexusModsToolStripMenuItem
             // 
-            radioExtOnNexusModsToolStripMenuItem.Image = Properties.Resources.external_link;
+            radioExtOnNexusModsToolStripMenuItem.Image = Properties.Resources.link;
             radioExtOnNexusModsToolStripMenuItem.Name = "radioExtOnNexusModsToolStripMenuItem";
             radioExtOnNexusModsToolStripMenuItem.Size = new Size(200, 22);
             radioExtOnNexusModsToolStripMenuItem.Text = "radioExt on NexusMods";
@@ -206,7 +204,7 @@ namespace RadioExt_Helper.forms
             // 
             // radioExtGitHubToolStripMenuItem
             // 
-            radioExtGitHubToolStripMenuItem.Image = Properties.Resources.external_link;
+            radioExtGitHubToolStripMenuItem.Image = Properties.Resources.link;
             radioExtGitHubToolStripMenuItem.Name = "radioExtGitHubToolStripMenuItem";
             radioExtGitHubToolStripMenuItem.Size = new Size(200, 22);
             radioExtGitHubToolStripMenuItem.Text = "radioExt GitHub";
@@ -228,12 +226,20 @@ namespace RadioExt_Helper.forms
             // 
             // checkForUpdatesToolStripMenuItem
             // 
-            checkForUpdatesToolStripMenuItem.Image = Properties.Resources.updated;
+            checkForUpdatesToolStripMenuItem.Image = Properties.Resources.update;
             checkForUpdatesToolStripMenuItem.Name = "checkForUpdatesToolStripMenuItem";
             checkForUpdatesToolStripMenuItem.ShortcutKeys = Keys.F3;
             checkForUpdatesToolStripMenuItem.Size = new Size(200, 22);
             checkForUpdatesToolStripMenuItem.Text = "Check For Updates";
             checkForUpdatesToolStripMenuItem.Click += checkForUpdatesToolStripMenuItem_Click;
+            // 
+            // languageToolStripMenuItem
+            // 
+            languageToolStripMenuItem.Alignment = ToolStripItemAlignment.Right;
+            languageToolStripMenuItem.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            languageToolStripMenuItem.Image = Properties.Resources.language;
+            languageToolStripMenuItem.Name = "languageToolStripMenuItem";
+            languageToolStripMenuItem.Size = new Size(28, 20);
             // 
             // splitContainer1
             // 
@@ -356,6 +362,8 @@ namespace RadioExt_Helper.forms
             btnDisableSelected.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
             btnDisableSelected.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
             btnDisableSelected.FlatStyle = FlatStyle.Flat;
+            btnDisableSelected.Image = Properties.Resources.disabled__16x16;
+            btnDisableSelected.ImageAlign = ContentAlignment.MiddleLeft;
             btnDisableSelected.Location = new Point(157, 3);
             btnDisableSelected.Menu = cmsDisable;
             btnDisableSelected.Name = "btnDisableSelected";
@@ -387,6 +395,8 @@ namespace RadioExt_Helper.forms
             btnEnableSelected.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
             btnEnableSelected.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
             btnEnableSelected.FlatStyle = FlatStyle.Flat;
+            btnEnableSelected.Image = Properties.Resources.enabled__16x16;
+            btnEnableSelected.ImageAlign = ContentAlignment.MiddleLeft;
             btnEnableSelected.Location = new Point(3, 3);
             btnEnableSelected.Menu = cmsEnable;
             btnEnableSelected.Name = "btnEnableSelected";
@@ -433,7 +443,7 @@ namespace RadioExt_Helper.forms
             btnDeleteStation.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
             btnDeleteStation.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
             btnDeleteStation.FlatStyle = FlatStyle.Flat;
-            btnDeleteStation.Image = Properties.Resources.cancel_16x16;
+            btnDeleteStation.Image = Properties.Resources.delete__16x16;
             btnDeleteStation.Location = new Point(160, 2);
             btnDeleteStation.Margin = new Padding(3, 2, 3, 2);
             btnDeleteStation.Name = "btnDeleteStation";
@@ -452,7 +462,7 @@ namespace RadioExt_Helper.forms
             btnAddStation.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
             btnAddStation.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
             btnAddStation.FlatStyle = FlatStyle.Flat;
-            btnAddStation.Image = Properties.Resources.plus_16x16;
+            btnAddStation.Image = Properties.Resources.add__16x16;
             btnAddStation.Location = new Point(3, 2);
             btnAddStation.Margin = new Padding(3, 2, 3, 2);
             btnAddStation.Name = "btnAddStation";

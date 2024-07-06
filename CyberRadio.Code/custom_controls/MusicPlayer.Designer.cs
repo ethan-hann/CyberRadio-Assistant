@@ -1,4 +1,6 @@
-﻿namespace RadioExt_Helper.user_controls
+﻿using RadioExt_Helper.custom_controls;
+
+namespace RadioExt_Helper.user_controls
 {
     partial class MusicPlayer
     {
@@ -30,22 +32,9 @@
         {
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MusicPlayer));
-            images = new ImageList(components);
             btnPlayPause = new RoundedPictureBox();
             ((System.ComponentModel.ISupportInitialize)btnPlayPause).BeginInit();
             SuspendLayout();
-            // 
-            // images
-            // 
-            images.ColorDepth = ColorDepth.Depth32Bit;
-            images.ImageStream = (ImageListStreamer)resources.GetObject("images.ImageStream");
-            images.TransparentColor = Color.Transparent;
-            images.Images.SetKeyName(0, "pause");
-            images.Images.SetKeyName(1, "pause_down");
-            images.Images.SetKeyName(2, "pause_over");
-            images.Images.SetKeyName(3, "play");
-            images.Images.SetKeyName(4, "play_down");
-            images.Images.SetKeyName(5, "play_over");
             // 
             // btnPlayPause
             // 
@@ -57,7 +46,6 @@
             btnPlayPause.Dock = DockStyle.Fill;
             btnPlayPause.Image = (Image)resources.GetObject("btnPlayPause.Image");
             btnPlayPause.ImageKey = "play";
-            btnPlayPause.ImageList = images;
             btnPlayPause.IncludeBorder = false;
             btnPlayPause.Location = new Point(0, 0);
             btnPlayPause.Name = "btnPlayPause";
@@ -83,7 +71,6 @@
         }
 
         #endregion
-        private ImageList images;
         private RoundedPictureBox btnPlayPause;
     }
 }

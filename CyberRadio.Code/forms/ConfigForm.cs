@@ -6,6 +6,8 @@ namespace RadioExt_Helper.forms;
 
 public partial class ConfigForm : Form
 {
+    private readonly ImageList _tabImages = new();
+
     public ConfigForm()
     {
         InitializeComponent();
@@ -13,6 +15,12 @@ public partial class ConfigForm : Form
 
     private void ConfigForm_Load(object sender, EventArgs e)
     {
+        _tabImages.Images.Add("general", Properties.Resources.settings__16x16);
+        _tabImages.Images.Add("logging", Properties.Resources.log__16x16);
+        tabConfigs.ImageList = _tabImages;
+        tabGeneral.ImageKey = "general";
+        tabLogging.ImageKey = "logging";
+
         Translate();
         SetValues();
     }

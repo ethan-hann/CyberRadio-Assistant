@@ -3,7 +3,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 
-namespace RadioExt_Helper.user_controls
+namespace RadioExt_Helper.custom_controls
 {
     public class RoundedPictureBox : PictureBox
     {

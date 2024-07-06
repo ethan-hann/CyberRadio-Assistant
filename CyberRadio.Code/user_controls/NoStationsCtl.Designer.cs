@@ -68,7 +68,7 @@
             // pictureBox1
             // 
             pictureBox1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
-            pictureBox1.Image = Properties.Resources.cyber_radio_assistant;
+            pictureBox1.Image = Properties.Resources.logo_cyber_radio_assistant;
             pictureBox1.Location = new Point(314, 3);
             pictureBox1.Name = "pictureBox1";
             pictureBox1.Size = new Size(256, 332);
@@ -143,7 +143,7 @@
             btnPaths.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
             btnPaths.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
             btnPaths.FlatStyle = FlatStyle.Flat;
-            btnPaths.Image = Properties.Resources.folder_16x16;
+            btnPaths.Image = Properties.Resources.folder_no_fill__16x16;
             btnPaths.Location = new Point(755, 11);
             btnPaths.Name = "btnPaths";
             btnPaths.Size = new Size(127, 34);
