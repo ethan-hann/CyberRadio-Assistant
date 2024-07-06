@@ -1,10 +1,14 @@
-﻿namespace RadioExt_Helper.models;
+﻿using System.ComponentModel;
+
+namespace RadioExt_Helper.models;
 
 /// <summary>
 ///     Represents a single radio station. Contains all information related to the station.
 /// </summary>
-public class Station
+public class Station : INotifyPropertyChanged
 {
+    private bool _pendingSave;
+
     /// <summary>
     ///     The metadata associated with this station.
     /// </summary>
@@ -46,5 +50,28 @@ public class Station
     public bool GetStatus()
     {
         return MetaData.IsActive;
+    }
+
+    /// <summary>
+    /// Get a value indicating whether this station is edited or not (i.e., pending save to staging).
+    /// </summary>
+    public bool PendingSave
+    {
+        get
+        {
+            return _pendingSave;
+        }
+        set
+        {
+            _pendingSave = value;
+            OnPropertyChanged(nameof(PendingSave));
+        }
+    }
+
+    public event PropertyChangedEventHandler? PropertyChanged;
+
+    private void OnPropertyChanged(string propertyName)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }

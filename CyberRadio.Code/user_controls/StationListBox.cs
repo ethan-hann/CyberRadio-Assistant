@@ -7,6 +7,9 @@ public sealed partial class StationListBox : ListBox
 {
     private string _disabledIconKey = "disabled";
     private string _enabledIconKey = "enabled";
+    private string _editedStationIconKey = "edited_station";
+    private string _savedStationIconKey = "saved_station";
+
     private ImageList _imageList;
 
     /// <summary>
@@ -81,6 +84,38 @@ public sealed partial class StationListBox : ListBox
         }
     }
 
+    /// <summary>
+    ///     Gets or sets the key for the edited station icon in the ImageList.
+    /// </summary>
+    [Browsable(true)]
+    [Category("Appearance")]
+    [Description("The key for the edited station icon in the ImageList.")]
+    public string EditedStationIconKey
+    {
+        get => _editedStationIconKey;
+        set
+        {
+            _editedStationIconKey = value;
+            Invalidate();
+        }
+    }
+
+    /// <summary>
+    ///     Gets or sets the key for the saved station icon in the ImageList.
+    /// </summary>
+    [Browsable(true)]
+    [Category("Appearance")]
+    [Description("The key for the saved station icon in the ImageList.")]
+    public string SavedStationIconKey
+    {
+        get => _savedStationIconKey;
+        set
+        {
+            _savedStationIconKey = value;
+            Invalidate();
+        }
+    }
+
     private void SetValues()
     {
         DrawMode = DrawMode.OwnerDrawFixed;
@@ -96,20 +131,38 @@ public sealed partial class StationListBox : ListBox
 
         if (Items[e.Index] is Station station)
         {
-            var iconKey = station.GetStatus() ? _enabledIconKey : _disabledIconKey;
+            // Determine the primary icon (enabled/disabled)
+            var primaryIconKey = station.GetStatus() ? _enabledIconKey : _disabledIconKey;
 
-            //Draw the icon
-            if (_imageList.Images.ContainsKey(iconKey))
+            // Draw the primary icon
+            if (_imageList.Images.ContainsKey(primaryIconKey))
             {
-                var icon = _imageList.Images[iconKey];
-                if (icon != null)
-                    e.Graphics.DrawImage(icon, e.Bounds.Left, e.Bounds.Top, 16, 16);
+                var primaryIcon = _imageList.Images[primaryIconKey];
+                if (primaryIcon != null)
+                {
+                    e.Graphics.DrawImage(primaryIcon, e.Bounds.Left, e.Bounds.Top, 16, 16);
+                }
             }
 
-            //Draw the text
-            var textRect = new Rectangle(e.Bounds.Left + 20, e.Bounds.Top, e.Bounds.Width - 20, e.Bounds.Height);
-            TextRenderer.DrawText(e.Graphics, station.MetaData.DisplayName, e.Font, textRect, e.ForeColor,
-                TextFormatFlags.Left);
+            // Determine the secondary icon (changes pending/saved)
+            var secondaryIconKey = station.PendingSave ? _editedStationIconKey : _savedStationIconKey;
+
+            // Calculate the position for the secondary icon at the right edge
+            var iconX = e.Bounds.Right - 16 - 4; // 16 is the icon width, 4 is some padding from the edge
+
+            // Draw the secondary icon
+            if (_imageList.Images.ContainsKey(secondaryIconKey))
+            {
+                var secondaryIcon = _imageList.Images[secondaryIconKey];
+                if (secondaryIcon != null)
+                {
+                    e.Graphics.DrawImage(secondaryIcon, iconX, e.Bounds.Top, 16, 16);
+                }
+            }
+
+            // Draw the text
+            var textRect = new Rectangle(e.Bounds.Left + 20, e.Bounds.Top, e.Bounds.Width - 40 - 4, e.Bounds.Height); // Adjust width to leave space for the secondary icon
+            TextRenderer.DrawText(e.Graphics, station.MetaData.DisplayName, e.Font, textRect, e.ForeColor, TextFormatFlags.Left);
         }
 
         e.DrawFocusRectangle();

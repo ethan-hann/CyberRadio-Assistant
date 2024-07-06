@@ -30,66 +30,60 @@
         {
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MusicPlayer));
-            tableLayoutPanel1 = new TableLayoutPanel();
-            btnPlayPause = new Button();
             images = new ImageList(components);
-            tableLayoutPanel1.SuspendLayout();
+            btnPlayPause = new RoundedPictureBox();
+            ((System.ComponentModel.ISupportInitialize)btnPlayPause).BeginInit();
             SuspendLayout();
-            // 
-            // tableLayoutPanel1
-            // 
-            tableLayoutPanel1.BackColor = Color.Transparent;
-            tableLayoutPanel1.ColumnCount = 1;
-            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tableLayoutPanel1.Controls.Add(btnPlayPause, 0, 0);
-            tableLayoutPanel1.Dock = DockStyle.Fill;
-            tableLayoutPanel1.Location = new Point(0, 0);
-            tableLayoutPanel1.Name = "tableLayoutPanel1";
-            tableLayoutPanel1.RowCount = 1;
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel1.Size = new Size(32, 32);
-            tableLayoutPanel1.TabIndex = 0;
-            // 
-            // btnPlayPause
-            // 
-            btnPlayPause.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            btnPlayPause.BackColor = Color.Yellow;
-            btnPlayPause.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
-            btnPlayPause.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
-            btnPlayPause.FlatStyle = FlatStyle.Flat;
-            btnPlayPause.ImageIndex = 0;
-            btnPlayPause.ImageList = images;
-            btnPlayPause.Location = new Point(3, 3);
-            btnPlayPause.Name = "btnPlayPause";
-            btnPlayPause.Size = new Size(26, 26);
-            btnPlayPause.TabIndex = 0;
-            btnPlayPause.UseVisualStyleBackColor = false;
-            btnPlayPause.Click += btnPlayPause_Click;
             // 
             // images
             // 
             images.ColorDepth = ColorDepth.Depth32Bit;
             images.ImageStream = (ImageListStreamer)resources.GetObject("images.ImageStream");
             images.TransparentColor = Color.Transparent;
-            images.Images.SetKeyName(0, "play_32x32.png");
-            images.Images.SetKeyName(1, "pause_32x32.png");
+            images.Images.SetKeyName(0, "pause");
+            images.Images.SetKeyName(1, "pause_down");
+            images.Images.SetKeyName(2, "pause_over");
+            images.Images.SetKeyName(3, "play");
+            images.Images.SetKeyName(4, "play_down");
+            images.Images.SetKeyName(5, "play_over");
+            // 
+            // btnPlayPause
+            // 
+            btnPlayPause.BackColor = Color.Transparent;
+            btnPlayPause.BackgroundImageLayout = ImageLayout.None;
+            btnPlayPause.BorderColor = Color.Transparent;
+            btnPlayPause.BorderRadius = 0;
+            btnPlayPause.BorderWidth = 0;
+            btnPlayPause.Dock = DockStyle.Fill;
+            btnPlayPause.Image = (Image)resources.GetObject("btnPlayPause.Image");
+            btnPlayPause.ImageKey = "play";
+            btnPlayPause.ImageList = images;
+            btnPlayPause.IncludeBorder = false;
+            btnPlayPause.Location = new Point(0, 0);
+            btnPlayPause.Name = "btnPlayPause";
+            btnPlayPause.Size = new Size(32, 32);
+            btnPlayPause.TabIndex = 5;
+            btnPlayPause.TabStop = false;
+            btnPlayPause.Click += btnPlayPause_Click;
+            btnPlayPause.MouseDown += btnPlayPause_MouseDown;
+            btnPlayPause.MouseLeave += btnPlayPause_MouseLeave;
+            btnPlayPause.MouseHover += btnPlayPause_MouseHover;
             // 
             // MusicPlayer
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Transparent;
-            Controls.Add(tableLayoutPanel1);
+            Controls.Add(btnPlayPause);
+            ForeColor = Color.Transparent;
             Name = "MusicPlayer";
             Size = new Size(32, 32);
-            tableLayoutPanel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)btnPlayPause).EndInit();
             ResumeLayout(false);
         }
 
         #endregion
-
-        private TableLayoutPanel tableLayoutPanel1;
-        private Button btnPlayPause;
         private ImageList images;
+        private RoundedPictureBox btnPlayPause;
     }
 }

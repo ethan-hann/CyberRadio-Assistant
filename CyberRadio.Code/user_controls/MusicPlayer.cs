@@ -16,6 +16,10 @@ public partial class MusicPlayer : UserControl
     public MusicPlayer()
     {
         InitializeComponent();
+        btnPlayPause.ImageKey = "play";
+
+        SetStyle(ControlStyles.SupportsTransparentBackColor, true);
+        BackColor = Color.Transparent;
     }
 
     public string StreamUrl
@@ -26,7 +30,7 @@ public partial class MusicPlayer : UserControl
             _streamUrl = value;
             _waveOut?.Stop();
             _waveOut = null;
-            btnPlayPause.ImageIndex = 0;
+            btnPlayPause.ImageKey = "play";
         }
     }
 
@@ -40,7 +44,7 @@ public partial class MusicPlayer : UserControl
     {
         _waveOut?.Stop();
         _waveOut = null;
-        btnPlayPause.ImageIndex = 0;
+        btnPlayPause.ImageKey = "play";
     }
 
     private void btnPlayPause_Click(object sender, EventArgs e)
@@ -76,7 +80,7 @@ public partial class MusicPlayer : UserControl
     {
         try
         {
-            btnPlayPause.ImageIndex = 1;
+            btnPlayPause.ImageKey = "pause";
             _mediaReader = new MediaFoundationReader(StreamUrl);
             _waveOut?.Init(_mediaReader);
             _waveOut?.Play();
@@ -88,7 +92,7 @@ public partial class MusicPlayer : UserControl
             MessageBox.Show(this, string.Format(message, ex.Message), error, MessageBoxButtons.OK,
                 MessageBoxIcon.Error);
             AuLogger.GetCurrentLogger<MusicPlayer>("PlayStream").Error(ex, "Error streaming audio");
-            btnPlayPause.ImageIndex = 0;
+            btnPlayPause.ImageKey = "play";
         }
     }
 
@@ -96,7 +100,7 @@ public partial class MusicPlayer : UserControl
     {
         try
         {
-            btnPlayPause.ImageIndex = 1;
+            btnPlayPause.ImageKey = "pause";
             _waveOut?.Play();
         }
         catch (Exception ex)
@@ -106,7 +110,7 @@ public partial class MusicPlayer : UserControl
             MessageBox.Show(this, string.Format(message, ex.Message), error, MessageBoxButtons.OK,
                 MessageBoxIcon.Error);
             AuLogger.GetCurrentLogger<MusicPlayer>("ResumeStream").Error(ex, "Error streaming audio");
-            btnPlayPause.ImageIndex = 0;
+            btnPlayPause.ImageKey = "play";
         }
     }
 
@@ -114,7 +118,7 @@ public partial class MusicPlayer : UserControl
     {
         try
         {
-            btnPlayPause.ImageIndex = 0;
+            btnPlayPause.ImageKey = "play";
             _waveOut?.Pause();
         }
         catch (Exception ex)
@@ -124,7 +128,75 @@ public partial class MusicPlayer : UserControl
             MessageBox.Show(this, string.Format(message, ex.Message), error, MessageBoxButtons.OK,
                 MessageBoxIcon.Error);
             AuLogger.GetCurrentLogger<MusicPlayer>("PauseStream").Error(ex, "Error pausing stream");
-            btnPlayPause.ImageIndex = 1;
+            btnPlayPause.ImageKey = "pause";
         }
+    }
+
+    private void btnPlayPause_MouseDown(object sender, MouseEventArgs e)
+    {
+        if (_waveOut == null)
+        {
+            btnPlayPause.ImageKey = "play_down";
+            return;
+        }
+
+        if (_waveOut?.PlaybackState == PlaybackState.Playing)
+        {
+            btnPlayPause.ImageKey = "pause_down";
+        }
+
+        if (_waveOut?.PlaybackState == PlaybackState.Paused || _waveOut?.PlaybackState == PlaybackState.Stopped)
+        {
+            btnPlayPause.ImageKey = "play_down";
+        }
+    }
+
+    private void btnPlayPause_MouseHover(object sender, EventArgs e)
+    {
+        if (_waveOut == null)
+        {
+            btnPlayPause.ImageKey = "play_over";
+            return;
+        }
+
+        if (_waveOut?.PlaybackState == PlaybackState.Playing)
+        {
+            btnPlayPause.ImageKey = "pause_over";
+        }
+
+        if (_waveOut?.PlaybackState == PlaybackState.Paused || _waveOut?.PlaybackState == PlaybackState.Stopped)
+        {
+            btnPlayPause.ImageKey = "play_over";
+        }
+    }
+
+    private void btnPlayPause_MouseLeave(object sender, EventArgs e)
+    {
+        if (_waveOut == null)
+        {
+            btnPlayPause.ImageKey = "play";
+            return;
+        }
+
+        if (_waveOut?.PlaybackState == PlaybackState.Playing)
+        {
+            btnPlayPause.ImageKey = "pause";
+        }
+
+        if (_waveOut?.PlaybackState == PlaybackState.Paused || _waveOut?.PlaybackState == PlaybackState.Stopped)
+        {
+            btnPlayPause.ImageKey = "play";
+        }
+    }
+
+    protected override void OnPaintBackground(PaintEventArgs e)
+    {
+        // Do not paint the background to keep it transparent
+    }
+
+    protected override void OnParentBackColorChanged(EventArgs e)
+    {
+        base.OnParentBackColorChanged(e);
+        Invalidate(); // Invalidate to repaint with the updated parent background
     }
 }

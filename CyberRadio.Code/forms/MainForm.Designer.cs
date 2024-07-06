@@ -105,7 +105,7 @@ namespace RadioExt_Helper.forms
             exportToGameToolStripMenuItem.Image = Properties.Resources.export_16x16;
             exportToGameToolStripMenuItem.Name = "exportToGameToolStripMenuItem";
             exportToGameToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.E;
-            exportToGameToolStripMenuItem.Size = new Size(248, 22);
+            exportToGameToolStripMenuItem.Size = new Size(249, 22);
             exportToGameToolStripMenuItem.Text = "Export Stations";
             exportToGameToolStripMenuItem.Click += exportToGameToolStripMenuItem_Click;
             // 
@@ -114,21 +114,21 @@ namespace RadioExt_Helper.forms
             refreshStationsToolStripMenuItem.Image = Properties.Resources.refresh;
             refreshStationsToolStripMenuItem.Name = "refreshStationsToolStripMenuItem";
             refreshStationsToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.R;
-            refreshStationsToolStripMenuItem.Size = new Size(248, 22);
+            refreshStationsToolStripMenuItem.Size = new Size(249, 22);
             refreshStationsToolStripMenuItem.Text = "Refresh Stations";
             refreshStationsToolStripMenuItem.Click += refreshStationsToolStripMenuItem_Click;
             // 
             // toolStripSeparator2
             // 
             toolStripSeparator2.Name = "toolStripSeparator2";
-            toolStripSeparator2.Size = new Size(245, 6);
+            toolStripSeparator2.Size = new Size(246, 6);
             // 
             // openStagingPathToolStripMenuItem
             // 
             openStagingPathToolStripMenuItem.Image = Properties.Resources.external_link;
             openStagingPathToolStripMenuItem.Name = "openStagingPathToolStripMenuItem";
             openStagingPathToolStripMenuItem.ShortcutKeys = Keys.Alt | Keys.S;
-            openStagingPathToolStripMenuItem.Size = new Size(248, 22);
+            openStagingPathToolStripMenuItem.Size = new Size(249, 22);
             openStagingPathToolStripMenuItem.Text = "Open Staging Folder";
             openStagingPathToolStripMenuItem.Click += openStagingPathToolStripMenuItem_Click;
             // 
@@ -137,7 +137,7 @@ namespace RadioExt_Helper.forms
             openGamePathToolStripMenuItem.Image = Properties.Resources.external_link;
             openGamePathToolStripMenuItem.Name = "openGamePathToolStripMenuItem";
             openGamePathToolStripMenuItem.ShortcutKeys = Keys.Alt | Keys.G;
-            openGamePathToolStripMenuItem.Size = new Size(248, 22);
+            openGamePathToolStripMenuItem.Size = new Size(249, 22);
             openGamePathToolStripMenuItem.Text = "Open Game Radios Folder";
             openGamePathToolStripMenuItem.Click += openGamePathToolStripMenuItem_Click;
             // 
@@ -146,21 +146,21 @@ namespace RadioExt_Helper.forms
             openLogFolderToolStripMenuItem.Image = Properties.Resources.external_link;
             openLogFolderToolStripMenuItem.Name = "openLogFolderToolStripMenuItem";
             openLogFolderToolStripMenuItem.ShortcutKeys = Keys.Alt | Keys.L;
-            openLogFolderToolStripMenuItem.Size = new Size(248, 22);
+            openLogFolderToolStripMenuItem.Size = new Size(249, 22);
             openLogFolderToolStripMenuItem.Text = "Open Log Folder";
             openLogFolderToolStripMenuItem.Click += openLogFolderToolStripMenuItem_Click;
             // 
             // toolStripSeparator3
             // 
             toolStripSeparator3.Name = "toolStripSeparator3";
-            toolStripSeparator3.Size = new Size(245, 6);
+            toolStripSeparator3.Size = new Size(246, 6);
             // 
             // configurationToolStripMenuItem
             // 
             configurationToolStripMenuItem.Image = Properties.Resources.configuration;
             configurationToolStripMenuItem.Name = "configurationToolStripMenuItem";
             configurationToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.C;
-            configurationToolStripMenuItem.Size = new Size(248, 22);
+            configurationToolStripMenuItem.Size = new Size(249, 22);
             configurationToolStripMenuItem.Text = "Configuration";
             configurationToolStripMenuItem.Click += configurationToolStripMenuItem_Click;
             // 
@@ -169,14 +169,15 @@ namespace RadioExt_Helper.forms
             pathsToolStripMenuItem.Image = Properties.Resources.folder;
             pathsToolStripMenuItem.Name = "pathsToolStripMenuItem";
             pathsToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.P;
-            pathsToolStripMenuItem.Size = new Size(248, 22);
+            pathsToolStripMenuItem.Size = new Size(249, 22);
             pathsToolStripMenuItem.Text = "Game Paths";
             pathsToolStripMenuItem.Click += pathsToolStripMenuItem_Click;
             // 
             // languageToolStripMenuItem
             // 
+            languageToolStripMenuItem.Image = Properties.Resources.language_exchange;
             languageToolStripMenuItem.Name = "languageToolStripMenuItem";
-            languageToolStripMenuItem.Size = new Size(71, 20);
+            languageToolStripMenuItem.Size = new Size(87, 20);
             languageToolStripMenuItem.Text = "Language";
             // 
             // helpToolStripMenuItem
@@ -274,6 +275,7 @@ namespace RadioExt_Helper.forms
             lbStations.DisplayMember = "MetaData";
             lbStations.Dock = DockStyle.Fill;
             lbStations.DrawMode = DrawMode.OwnerDrawFixed;
+            lbStations.EditedStationIconKey = "edited_station";
             lbStations.EnabledIconKey = "enabled";
             lbStations.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lbStations.FormattingEnabled = true;
@@ -282,6 +284,7 @@ namespace RadioExt_Helper.forms
             lbStations.Location = new Point(3, 53);
             lbStations.Margin = new Padding(3, 2, 3, 2);
             lbStations.Name = "lbStations";
+            lbStations.SavedStationIconKey = "saved_station";
             lbStations.Size = new Size(309, 422);
             lbStations.TabIndex = 0;
             lbStations.SelectedIndexChanged += lbStations_SelectedIndexChanged;
@@ -298,6 +301,8 @@ namespace RadioExt_Helper.forms
             stationImageList.TransparentColor = Color.Transparent;
             stationImageList.Images.SetKeyName(0, "enabled");
             stationImageList.Images.SetKeyName(1, "disabled");
+            stationImageList.Images.SetKeyName(2, "edited_station");
+            stationImageList.Images.SetKeyName(3, "saved_station");
             // 
             // statusStrip1
             // 

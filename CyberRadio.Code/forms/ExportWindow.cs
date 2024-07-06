@@ -13,6 +13,9 @@ namespace RadioExt_Helper.forms;
 /// </summary>
 public partial class ExportWindow : Form
 {
+    public event EventHandler? OnExportToStagingComplete;
+    public event EventHandler? OnExportToGameComplete;
+
     private readonly Json<MetaData> _metaDataJson = new();
     private readonly Json<SongList> _songListJson = new();
     private readonly List<Station> _stationsToExport;
@@ -348,6 +351,8 @@ public partial class ExportWindow : Form
             ToggleButtons();
             UpdateStatus(GlobalData.Strings.GetString("ExportCompleteStatus") ?? "Exported to Staging!");
 
+            OnExportToStagingComplete?.Invoke(this, EventArgs.Empty);
+
             if (ShouldAutoExportToGame)
                 BtnExportToGame_Click(this, EventArgs.Empty);
         }
@@ -530,6 +535,8 @@ public partial class ExportWindow : Form
             pgExportProgress.Value = 100;
             ToggleButtons();
             UpdateStatus(GlobalData.Strings.GetString("ExportToGameComplete") ?? "Exported to Game!");
+
+            OnExportToGameComplete?.Invoke(this, EventArgs.Empty);
         }
     }
 

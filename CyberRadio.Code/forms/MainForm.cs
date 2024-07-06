@@ -168,70 +168,77 @@ public partial class MainForm : Form
 
     private void PopulateStations()
     {
-        lbStations.BeginUpdate();
-        lbStations.DataSource = null;
-
-        if (!string.IsNullOrEmpty(StagingPath))
+        if (InvokeRequired)
         {
-            _stations.Clear();
-            _stationEditors.Clear();
+            Invoke(new Action(PopulateStations));
+        }
+        else
+        {
+            lbStations.BeginUpdate();
+            lbStations.DataSource = null;
 
-            var validExtensions = EnumHelper.GetEnumDescriptions<ValidAudioFiles>();
-
-            foreach (var directory in FileHelper.SafeEnumerateDirectories(StagingPath))
+            if (!string.IsNullOrEmpty(StagingPath))
             {
-                var files = FileHelper.SafeEnumerateFiles(directory).ToList();
+                _stations.Clear();
+                _stationEditors.Clear();
 
-                var metaData = files
-                    .Where(file => file.EndsWith("metadata.json"))
-                    .Select(_metaDataJson.LoadJson)
-                    .FirstOrDefault();
+                var validExtensions = EnumHelper.GetEnumDescriptions<ValidAudioFiles>();
 
-                var songList = files
-                    .Where(file => file.EndsWith("songs.sgls"))
-                    .Select(_songListJson.LoadJson)
-                    .FirstOrDefault() ?? [];
-
-                //Get the actual audio files in the directory if they exist.
-                var songFiles = files
-                    .Where(file => validExtensions.Contains(Path.GetExtension(file).ToLower()))
-                    .ToList();
-
-                if (metaData == null) continue;
-
-                if (songList.Count == 0)
-                    songFiles.ForEach(path =>
-                    {
-                        var song = Song.ParseFromFile(path);
-                        if (song != null)
-                            songList.Add(song);
-                    });
-
-                var station = new Station
+                foreach (var directory in FileHelper.SafeEnumerateDirectories(StagingPath))
                 {
-                    MetaData = metaData,
-                    SongsAsList = [.. songList]
-                };
+                    var files = FileHelper.SafeEnumerateFiles(directory).ToList();
 
-                _stations.Add(station);
-                StationEditor editor = new(station);
-                editor.StationUpdated += StationUpdatedEvent;
-                _stationEditors.Add(editor);
+                    var metaData = files
+                        .Where(file => file.EndsWith("metadata.json"))
+                        .Select(_metaDataJson.LoadJson)
+                        .FirstOrDefault();
+
+                    var songList = files
+                        .Where(file => file.EndsWith("songs.sgls"))
+                        .Select(_songListJson.LoadJson)
+                        .FirstOrDefault() ?? [];
+
+                    //Get the actual audio files in the directory if they exist.
+                    var songFiles = files
+                        .Where(file => validExtensions.Contains(Path.GetExtension(file).ToLower()))
+                        .ToList();
+
+                    if (metaData == null) continue;
+
+                    if (songList.Count == 0)
+                        songFiles.ForEach(path =>
+                        {
+                            var song = Song.ParseFromFile(path);
+                            if (song != null)
+                                songList.Add(song);
+                        });
+
+                    var station = new Station
+                    {
+                        MetaData = metaData,
+                        SongsAsList = [.. songList]
+                    };
+
+                    _stations.Add(station);
+                    StationEditor editor = new(station);
+                    editor.StationUpdated += StationUpdatedEvent;
+                    _stationEditors.Add(editor);
+                }
             }
+
+            lbStations.DataSource = _stations;
+            lbStations.DisplayMember = "MetaData";
+            if (lbStations.Items.Count > 0)
+            {
+                lbStations.SelectedIndex = 0;
+                lbStations_SelectedIndexChanged(lbStations, EventArgs.Empty);
+            }
+
+            HandleUserControlVisibility();
+
+            UpdateEnabledStationCount();
+            lbStations.EndUpdate();
         }
-
-        lbStations.DataSource = _stations;
-        lbStations.DisplayMember = "MetaData";
-        if (lbStations.Items.Count > 0)
-        {
-            lbStations.SelectedIndex = 0;
-            lbStations_SelectedIndexChanged(lbStations, EventArgs.Empty);
-        }
-
-        HandleUserControlVisibility();
-
-        UpdateEnabledStationCount();
-        lbStations.EndUpdate();
     }
 
     private void RefreshAfterPathsChanged(object? sender, EventArgs e)
@@ -280,6 +287,8 @@ public partial class MainForm : Form
         if (lbStations.SelectedItem is not Station s) return;
 
         s.MetaData.IsActive = true;
+        s.PendingSave = true;
+
         lbStations.BeginUpdate();
         lbStations.Invalidate();
         lbStations.EndUpdate();
@@ -290,8 +299,14 @@ public partial class MainForm : Form
     {
         lbStations.BeginUpdate();
         foreach (var station in lbStations.Items)
+        {
             if (station is Station s)
+            {
                 s.MetaData.IsActive = true;
+                s.PendingSave = true;
+            }
+        }
+
         lbStations.Invalidate();
         lbStations.EndUpdate();
         UpdateEnabledStationCount();
@@ -302,6 +317,8 @@ public partial class MainForm : Form
         if (lbStations.SelectedItem is not Station s) return;
 
         s.MetaData.IsActive = false;
+        s.PendingSave = true;
+
         lbStations.BeginUpdate();
         lbStations.Invalidate();
         lbStations.EndUpdate();
@@ -312,8 +329,14 @@ public partial class MainForm : Form
     {
         lbStations.BeginUpdate();
         foreach (var station in lbStations.Items)
+        {
             if (station is Station s)
+            {
                 s.MetaData.IsActive = false;
+                s.PendingSave = true;
+            }
+        }
+
         lbStations.Invalidate();
         lbStations.EndUpdate();
         UpdateEnabledStationCount();
@@ -329,7 +352,8 @@ public partial class MainForm : Form
             MetaData =
             {
                 DisplayName = $"{GlobalData.Strings.GetString("NewStationListBoxEntry")} {_newStationCount}"
-            }
+            },
+            PendingSave = true
         };
 
         _stations.Add(blankStation);
@@ -444,7 +468,9 @@ public partial class MainForm : Form
 
     private void exportToGameToolStripMenuItem_Click(object sender, EventArgs e)
     {
-        new ExportWindow([.. _stations]).ShowDialog(this);
+        var exportWindow = new ExportWindow([.. _stations]);
+        exportWindow.OnExportToStagingComplete += (sender, args) => { PopulateStations(); };
+        exportWindow.ShowDialog(this);
     }
 
     private void configurationToolStripMenuItem_Click(object sender, EventArgs e)

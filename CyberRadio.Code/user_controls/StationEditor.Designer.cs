@@ -72,7 +72,7 @@
             radUseStreamYes = new RadioButton();
             radUseStreamNo = new RadioButton();
             tableLayoutPanel6 = new TableLayoutPanel();
-            flowLayoutPanel3 = new FlowLayoutPanel();
+            flpStreamUrlTesting = new FlowLayoutPanel();
             mpStreamPlayer = new MusicPlayer();
             btnGetFromRadioGarden = new Button();
             txtStreamURL = new TextBox();
@@ -98,7 +98,7 @@
             tableLayoutPanel5.SuspendLayout();
             flowLayoutPanel2.SuspendLayout();
             tableLayoutPanel6.SuspendLayout();
-            flowLayoutPanel3.SuspendLayout();
+            flpStreamUrlTesting.SuspendLayout();
             statusStrip1.SuspendLayout();
             SuspendLayout();
             // 
@@ -646,7 +646,7 @@
             tableLayoutPanel6.ColumnCount = 2;
             tableLayoutPanel6.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 71.39334F));
             tableLayoutPanel6.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 28.6066589F));
-            tableLayoutPanel6.Controls.Add(flowLayoutPanel3, 0, 1);
+            tableLayoutPanel6.Controls.Add(flpStreamUrlTesting, 0, 1);
             tableLayoutPanel6.Controls.Add(btnGetFromRadioGarden, 1, 0);
             tableLayoutPanel6.Controls.Add(txtStreamURL, 0, 0);
             tableLayoutPanel6.Dock = DockStyle.Fill;
@@ -658,25 +658,26 @@
             tableLayoutPanel6.Size = new Size(811, 92);
             tableLayoutPanel6.TabIndex = 4;
             // 
-            // flowLayoutPanel3
+            // flpStreamUrlTesting
             // 
-            tableLayoutPanel6.SetColumnSpan(flowLayoutPanel3, 2);
-            flowLayoutPanel3.Controls.Add(mpStreamPlayer);
-            flowLayoutPanel3.Dock = DockStyle.Fill;
-            flowLayoutPanel3.Location = new Point(3, 49);
-            flowLayoutPanel3.Name = "flowLayoutPanel3";
-            flowLayoutPanel3.Size = new Size(805, 40);
-            flowLayoutPanel3.TabIndex = 1;
+            flpStreamUrlTesting.BackColor = Color.Transparent;
+            tableLayoutPanel6.SetColumnSpan(flpStreamUrlTesting, 2);
+            flpStreamUrlTesting.Controls.Add(mpStreamPlayer);
+            flpStreamUrlTesting.Dock = DockStyle.Fill;
+            flpStreamUrlTesting.Location = new Point(3, 49);
+            flpStreamUrlTesting.Name = "flpStreamUrlTesting";
+            flpStreamUrlTesting.Size = new Size(805, 40);
+            flpStreamUrlTesting.TabIndex = 1;
             // 
             // mpStreamPlayer
             // 
             mpStreamPlayer.BackColor = Color.Transparent;
-            mpStreamPlayer.Location = new Point(3, 2);
-            mpStreamPlayer.Margin = new Padding(3, 2, 3, 2);
+            mpStreamPlayer.ForeColor = Color.Transparent;
+            mpStreamPlayer.Location = new Point(3, 3);
             mpStreamPlayer.Name = "mpStreamPlayer";
-            mpStreamPlayer.Size = new Size(37, 36);
+            mpStreamPlayer.Size = new Size(32, 32);
             mpStreamPlayer.StreamUrl = "";
-            mpStreamPlayer.TabIndex = 3;
+            mpStreamPlayer.TabIndex = 4;
             // 
             // btnGetFromRadioGarden
             // 
@@ -771,7 +772,7 @@
             flowLayoutPanel2.PerformLayout();
             tableLayoutPanel6.ResumeLayout(false);
             tableLayoutPanel6.PerformLayout();
-            flowLayoutPanel3.ResumeLayout(false);
+            flpStreamUrlTesting.ResumeLayout(false);
             statusStrip1.ResumeLayout(false);
             statusStrip1.PerformLayout();
             ResumeLayout(false);
@@ -819,14 +820,14 @@
         private Label lblStreamURL;
         private TableLayoutPanel tableLayoutPanel6;
         private TextBox txtStreamURL;
-        private FlowLayoutPanel flowLayoutPanel3;
+        private FlowLayoutPanel flpStreamUrlTesting;
         private TrackBar volumeSlider;
         private FlowLayoutPanel flowLayoutPanel4;
         private Panel panel2;
         private StatusStrip statusStrip1;
         private ToolStripStatusLabel lblStatus;
         private GroupBox grpSongs;
-        private MusicPlayer mpStreamPlayer;
         private Button btnGetFromRadioGarden;
+        private MusicPlayer mpStreamPlayer;
     }
 }
