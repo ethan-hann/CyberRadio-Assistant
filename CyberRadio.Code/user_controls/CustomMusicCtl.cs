@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics;
+using System.Windows.Forms;
 using AetherUtils.Core.Extensions;
 using RadioExt_Helper.models;
 using RadioExt_Helper.utility;
@@ -9,13 +10,17 @@ namespace RadioExt_Helper.user_controls;
 
 public sealed partial class CustomMusicCtl : UserControl, IUserControl
 {
+    private readonly ImageList _tabImages = new();
+
     private BindingList<Song> _bindingSongList = [];
 
     public CustomMusicCtl(Station station)
     {
         InitializeComponent();
-
         Dock = DockStyle.Fill;
+
+        SetTabImages();
+
         Station = station;
         SetSongList(Station.SongsAsList);
     }
@@ -24,8 +29,8 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
 
     public void Translate()
     {
-        addSongsToolStripMenuItem.Text = GlobalData.Strings.GetString("AddSongsToolStrip");
-        removeSongsToolStripMenuItem.Text = GlobalData.Strings.GetString("RemoveSongsToolStrip");
+        btnAddSongs.Text = GlobalData.Strings.GetString("AddSongsToolStrip");
+        btnRemoveSongs.Text = GlobalData.Strings.GetString("RemoveSongsToolStrip");
 
         lvSongs.Columns[0].Text = GlobalData.Strings.GetString("SongNameHeader");
         lvSongs.Columns[1].Text = GlobalData.Strings.GetString("SongArtistHeader");
@@ -33,8 +38,8 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
         lvSongs.Columns[3].Text = GlobalData.Strings.GetString("SongFileSizeHeader");
 
         fdlgOpenSongs.Title = GlobalData.Strings.GetString("Open");
-        pgSongs.Text = GlobalData.Strings.GetString("SongListing");
-        pgSongOrder.Text = GlobalData.Strings.GetString("SongOrder");
+        tabSongs.Text = GlobalData.Strings.GetString("SongListing");
+        tabSongOrder.Text = GlobalData.Strings.GetString("SongOrder");
 
         lvSongOrder.Columns[0].Text = GlobalData.Strings.GetString("Order");
         lvSongOrder.Columns[1].Text = GlobalData.Strings.GetString("SongNameHeader");
@@ -45,6 +50,15 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
         Translate();
         UpdateListsAndViews();
         SetOrderedList();
+    }
+
+    private void SetTabImages()
+    {
+        _tabImages.Images.Add("listing", Properties.Resources.music_list);
+        _tabImages.Images.Add("order", Properties.Resources.order);
+        tabControl.ImageList = _tabImages;
+        tabSongs.ImageKey = "listing";
+        tabSongOrder.ImageKey = "order";
     }
 
     private void SetSongList(List<Song> songList)
@@ -67,7 +81,7 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
                              $"{song.Duration:hh\\:mm\\:ss}",
                              song.Size.FormatSize()
                          ])
-                         { Tag = song }))
+                     { Tag = song }))
             lvSongs.Items.Add(lvItem);
 
         lvSongs.ResizeColumns();
@@ -81,7 +95,7 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
                                                                           song.OriginalFilePath));
     }
 
-    private void addSongsToolStripMenuItem_Click(object sender, EventArgs e)
+    private void btnAddSongs_Click(object sender, EventArgs e)
     {
         if (fdlgOpenSongs.ShowDialog() != DialogResult.OK) return;
 
@@ -99,7 +113,7 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
         UpdateListsAndViews();
     }
 
-    private void removeSongsToolStripMenuItem_Click(object sender, EventArgs e)
+    private void btnRemoveSongs_Click(object sender, EventArgs e)
     {
         if (lvSongs.SelectedItems.Count <= 0) return;
 

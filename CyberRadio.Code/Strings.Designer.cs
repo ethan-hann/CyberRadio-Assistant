@@ -558,6 +558,16 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to      Only Enabled stations are 
+        ///exported to the game..
+        /// </summary>
+        internal static string ExportWindowTip {
+            get {
+                return ResourceManager.GetString("ExportWindowTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to File.
         /// </summary>
         internal static string File {

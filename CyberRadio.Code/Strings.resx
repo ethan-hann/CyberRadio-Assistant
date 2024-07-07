@@ -617,4 +617,8 @@ Can't export radio stations to game.</value>
     <data name="NoLogPathSet" xml:space="preserve">
       <value>&lt;no path&gt;</value>
     </data>
+    <data name="ExportWindowTip" xml:space="preserve">
+      <value>     Only Enabled stations are 
+exported to the game.</value>
+    </data>
 </root>

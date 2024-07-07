@@ -66,7 +66,7 @@ public partial class ConfigForm : Form
         var config = GlobalData.ConfigManager.GetConfig();
         if (config == null) return;
 
-        chkCheckForUpdates.Checked = config.AutomaticallyCheckForUpdates;
+        chkCheckForUpdates.Checked = config.AutoCheckForUpdates;
         chkAutoExportToGame.Checked = config.AutoExportToGame;
         chkNewFileEveryLaunch.Checked = config.LogOptions.NewFileEveryLaunch;
 
@@ -102,16 +102,16 @@ public partial class ConfigForm : Form
     /// Sets the configuration values based on the form inputs.
     /// </summary>
     /// <returns>A task representing the asynchronous operation. The task result is a boolean indicating whether the configuration was successfully saved.</returns>
-    private async Task<bool> SetConfig()
+    private bool SetConfig()
     {
-        GlobalData.ConfigManager.Set("automaticallyCheckForUpdates", chkCheckForUpdates.Checked);
-        GlobalData.ConfigManager.Set("autoExportToGame", chkAutoExportToGame.Checked);
-        GlobalData.ConfigManager.Set("newFileEveryLaunch", chkNewFileEveryLaunch.Checked);
+        var saved = GlobalData.ConfigManager.Set("autoCheckForUpdates", chkCheckForUpdates.Checked);
+        saved &= GlobalData.ConfigManager.Set("autoExportToGame", chkAutoExportToGame.Checked);
+        saved &= GlobalData.ConfigManager.Set("newFileEveryLaunch", chkNewFileEveryLaunch.Checked);
 
         if (!lblCurrentLogPath.Text.Equals(GlobalData.Strings.GetString("NoLogPathSet")))
-            GlobalData.ConfigManager.Set("logFileDirectory", lblCurrentLogPath.Text);
+            saved &= GlobalData.ConfigManager.Set("logFileDirectory", lblCurrentLogPath.Text);
 
-        return await GlobalData.ConfigManager.SaveAsync();
+        return saved && GlobalData.ConfigManager.Save();
     }
 
     private void btnEditPaths_Click(object sender, EventArgs e)
@@ -130,7 +130,7 @@ public partial class ConfigForm : Form
 
     private void btnSaveAndClose_Click(object sender, EventArgs e)
     {
-        if (SetConfig().Result)
+        if (SetConfig())
         {
             var text = GlobalData.Strings.GetString("ConfigSaveSuccess");
             var caption = GlobalData.Strings.GetString("Success");

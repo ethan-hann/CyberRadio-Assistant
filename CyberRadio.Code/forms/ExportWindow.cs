@@ -99,6 +99,7 @@ public partial class ExportWindow : Form
         btnOpenStagingFolder.Text = GlobalData.Strings.GetString("OpenStagingFolder");
         btnOpenGameFolder.Text = GlobalData.Strings.GetString("OpenGameFolder");
         lblStatus.Text = GlobalData.Strings.GetString("Ready");
+        lblTip.Text = GlobalData.Strings.GetString("ExportWindowTip");
 
         lvStations.Columns[0].Text = GlobalData.Strings.GetString("LVStationStatus");
         lvStations.Columns[1].Text = GlobalData.Strings.GetString("LVDisplayName");

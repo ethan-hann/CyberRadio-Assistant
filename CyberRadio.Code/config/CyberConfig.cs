@@ -14,7 +14,7 @@ public sealed class CyberConfig
     ///     Specifies whether the application should automatically check for updates on startup.
     /// </summary>
     [Config("autoCheckForUpdates")]
-    public bool AutomaticallyCheckForUpdates { get; set; } = true;
+    public bool AutoCheckForUpdates { get; set; } = true;
 
     /// <summary>
     ///     Specifies whether the application should automatically export the stations to the game directory after exporting to

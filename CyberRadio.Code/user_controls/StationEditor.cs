@@ -8,6 +8,8 @@ namespace RadioExt_Helper.user_controls;
 
 public sealed partial class StationEditor : UserControl, IUserControl
 {
+    private readonly ImageList _tabImages = new();
+
     private readonly ComboBox _cmbUiIcons;
     private readonly CustomMusicCtl _musicCtl;
 
@@ -15,6 +17,8 @@ public sealed partial class StationEditor : UserControl, IUserControl
     {
         InitializeComponent();
         Dock = DockStyle.Fill;
+
+        SetTabImages();
 
         Station = station;
         _musicCtl = new CustomMusicCtl(Station);
@@ -76,6 +80,15 @@ public sealed partial class StationEditor : UserControl, IUserControl
         ResumeLayout();
     }
 
+    private void SetTabImages()
+    {
+        _tabImages.Images.Add("display", Properties.Resources.display_frame);
+        _tabImages.Images.Add("music", Properties.Resources.sound_waves);
+        tabControl.ImageList = _tabImages;
+        tabDisplayAndIcon.ImageKey = "display";
+        tabMusic.ImageKey = "music";
+    }
+
     #region Display and Icon Tab
 
     private void SetDisplayTabValues()
@@ -111,15 +124,22 @@ public sealed partial class StationEditor : UserControl, IUserControl
         StationUpdated?.Invoke(this, EventArgs.Empty);
     }
 
+    private void txtDisplayName_Leave(object sender, EventArgs e)
+    {
+        EnsureDisplayNameFormat();
+    }
+
     private void cmbUIIcons_SelectedIndexChanged(object? sender, EventArgs e)
     {
         if (_cmbUiIcons.SelectedItem is string iconStr)
             Station.MetaData.Icon = iconStr;
+        StationUpdated?.Invoke(this, EventArgs.Empty);
     }
 
     private void radUseCustomYes_CheckedChanged(object sender, EventArgs e)
     {
         Station.CustomIcon.UseCustom = radUseCustomYes.Checked;
+        StationUpdated?.Invoke(this, EventArgs.Empty);
     }
 
     private void radUseCustomNo_CheckedChanged(object sender, EventArgs e)
@@ -134,22 +154,46 @@ public sealed partial class StationEditor : UserControl, IUserControl
     private void txtInkAtlasPath_TextChanged(object sender, EventArgs e)
     {
         Station.CustomIcon.InkAtlasPath = txtInkAtlasPath.Text;
+        StationUpdated?.Invoke(this, EventArgs.Empty);
     }
 
     private void txtInkAtlasPart_TextChanged(object sender, EventArgs e)
     {
         Station.CustomIcon.InkAtlasPart = txtInkAtlasPart.Text;
+        StationUpdated?.Invoke(this, EventArgs.Empty);
     }
 
     private void nudFM_ValueChanged(object sender, EventArgs e)
     {
         Station.MetaData.Fm = (float)nudFM.Value;
+        EnsureDisplayNameFormat();
+        StationUpdated?.Invoke(this, EventArgs.Empty);
+    }
+
+    private void EnsureDisplayNameFormat()
+    {
+        string fmValue = nudFM.Value.ToString("00.00", CultureInfo.InvariantCulture); // Format to two decimal places
+        string currentText = txtDisplayName.Text;
+
+        // Use a regular expression to detect and remove any existing FM value at the start
+        var regex = new System.Text.RegularExpressions.Regex(@"^\d+(\.\d+)?\s*");
+        var match = regex.Match(currentText);
+
+        if (match.Success)
+        {
+            // Remove the existing FM value from the start
+            currentText = currentText.Substring(match.Length).TrimStart();
+        }
+
+        // Combine FM value and station name with the correct format
+        txtDisplayName.Text = $"{fmValue} {currentText}";
     }
 
     private void volumeSlider_Scroll(object sender, EventArgs e)
     {
         Station.MetaData.Volume = volumeSlider.Value * 0.1f;
         lblSelectedVolume.Text = $@"{Station.MetaData.Volume:F1}";
+        StationUpdated?.Invoke(this, EventArgs.Empty);
     }
 
     private void lblVolumeVal_DoubleClick(object sender, EventArgs e)
@@ -220,18 +264,21 @@ public sealed partial class StationEditor : UserControl, IUserControl
     {
         ToggleStreamControls(true);
         Station.StreamInfo.IsStream = radUseStreamYes.Checked;
+        StationUpdated?.Invoke(this, EventArgs.Empty);
     }
 
     private void radUseStreamNo_CheckedChanged(object sender, EventArgs e)
     {
         ToggleStreamControls(false);
         Station.StreamInfo.IsStream = !radUseStreamNo.Checked;
+        StationUpdated?.Invoke(this, EventArgs.Empty);
     }
 
     private void txtStreamURL_TextChanged(object sender, EventArgs e)
     {
         Station.StreamInfo.StreamUrl = txtStreamURL.Text;
         mpStreamPlayer.StreamUrl = Station.StreamInfo.StreamUrl;
+        StationUpdated?.Invoke(this, EventArgs.Empty);
     }
 
     private void btnGetFromRadioGarden_Click(object sender, EventArgs e)
@@ -256,6 +303,7 @@ public sealed partial class StationEditor : UserControl, IUserControl
         else
             txtStreamURL.Text = GlobalData.Strings.GetString("InvalidStream") ??
                                 "Invalid stream - Will not work in game";
+        StationUpdated?.Invoke(this, EventArgs.Empty);
     }
 
     private void ToggleStreamControls(bool onOff)
@@ -331,4 +379,6 @@ public sealed partial class StationEditor : UserControl, IUserControl
     }
 
     #endregion
+
+    
 }

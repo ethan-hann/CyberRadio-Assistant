@@ -32,6 +32,7 @@
             lblAppName = new Label();
             tableLayoutPanel1 = new TableLayoutPanel();
             panel1 = new Panel();
+            lnkNexusMods = new LinkLabel();
             lnkLicense = new LinkLabel();
             lblVersion = new Label();
             lblSpecialThanks2 = new Label();
@@ -50,7 +51,7 @@
             // pictureBox1
             // 
             pictureBox1.Dock = DockStyle.Left;
-            pictureBox1.Image = Properties.Resources.logo_cyber_radio_assistant;
+            pictureBox1.Image = Properties.Resources.cyber_radio_assistant2;
             pictureBox1.Location = new Point(0, 0);
             pictureBox1.Name = "pictureBox1";
             pictureBox1.Size = new Size(124, 181);
@@ -84,14 +85,15 @@
             tableLayoutPanel1.RowCount = 4;
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 39.5833321F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 60.4166679F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 79F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 29F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 82F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 26F));
             tableLayoutPanel1.Size = new Size(372, 181);
             tableLayoutPanel1.TabIndex = 2;
             // 
             // panel1
             // 
-            panel1.Controls.Add(lnkLicense);
+            panel1.Controls.Add(lnkNexusMods);
+            panel1.Controls.Add(lnkGithubRepo);
             panel1.Controls.Add(lblVersion);
             panel1.Controls.Add(lblSpecialThanks2);
             panel1.Controls.Add(lnkRadioExtDev);
@@ -99,13 +101,26 @@
             panel1.Dock = DockStyle.Fill;
             panel1.Location = new Point(3, 75);
             panel1.Name = "panel1";
-            panel1.Size = new Size(366, 73);
+            panel1.Size = new Size(366, 76);
             panel1.TabIndex = 3;
+            // 
+            // lnkNexusMods
+            // 
+            lnkNexusMods.AutoSize = true;
+            lnkNexusMods.Location = new Point(290, 10);
+            lnkNexusMods.Name = "lnkNexusMods";
+            lnkNexusMods.Size = new Size(73, 15);
+            lnkNexusMods.TabIndex = 8;
+            lnkNexusMods.TabStop = true;
+            lnkNexusMods.Text = "Nexus Mods";
+            lnkNexusMods.TextAlign = ContentAlignment.MiddleCenter;
+            lnkNexusMods.LinkClicked += lnkNexusMods_LinkClicked;
             // 
             // lnkLicense
             // 
+            lnkLicense.Anchor = AnchorStyles.Right;
             lnkLicense.AutoSize = true;
-            lnkLicense.Location = new Point(319, 27);
+            lnkLicense.Location = new Point(317, 3);
             lnkLicense.Name = "lnkLicense";
             lnkLicense.Size = new Size(46, 15);
             lnkLicense.TabIndex = 7;
@@ -117,7 +132,7 @@
             // 
             lblVersion.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             lblVersion.AutoSize = true;
-            lblVersion.Location = new Point(291, 48);
+            lblVersion.Location = new Point(291, 55);
             lblVersion.Name = "lblVersion";
             lblVersion.Size = new Size(72, 15);
             lblVersion.TabIndex = 6;
@@ -127,7 +142,7 @@
             // 
             lblSpecialThanks2.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             lblSpecialThanks2.AutoSize = true;
-            lblSpecialThanks2.Location = new Point(3, 48);
+            lblSpecialThanks2.Location = new Point(3, 55);
             lblSpecialThanks2.Name = "lblSpecialThanks2";
             lblSpecialThanks2.Size = new Size(172, 15);
             lblSpecialThanks2.TabIndex = 5;
@@ -137,7 +152,7 @@
             // lnkRadioExtDev
             // 
             lnkRadioExtDev.AutoSize = true;
-            lnkRadioExtDev.Location = new Point(3, 27);
+            lnkRadioExtDev.Location = new Point(3, 40);
             lnkRadioExtDev.Name = "lnkRadioExtDev";
             lnkRadioExtDev.Size = new Size(166, 15);
             lnkRadioExtDev.TabIndex = 4;
@@ -149,7 +164,7 @@
             // 
             lblSpecialThanks1.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             lblSpecialThanks1.AutoSize = true;
-            lblSpecialThanks1.Location = new Point(3, 12);
+            lblSpecialThanks1.Location = new Point(3, 25);
             lblSpecialThanks1.Name = "lblSpecialThanks1";
             lblSpecialThanks1.Size = new Size(96, 15);
             lblSpecialThanks1.TabIndex = 3;
@@ -173,33 +188,36 @@
             tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             tableLayoutPanel2.Controls.Add(lblCopyright, 0, 0);
-            tableLayoutPanel2.Controls.Add(lnkGithubRepo, 1, 0);
+            tableLayoutPanel2.Controls.Add(lnkLicense, 1, 0);
             tableLayoutPanel2.Dock = DockStyle.Fill;
-            tableLayoutPanel2.Location = new Point(3, 154);
+            tableLayoutPanel2.Location = new Point(3, 157);
             tableLayoutPanel2.Name = "tableLayoutPanel2";
             tableLayoutPanel2.RowCount = 1;
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel2.Size = new Size(366, 24);
+            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel2.Size = new Size(366, 21);
             tableLayoutPanel2.TabIndex = 4;
             // 
             // lblCopyright
             // 
-            lblCopyright.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            lblCopyright.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             lblCopyright.AutoSize = true;
-            lblCopyright.Location = new Point(3, 4);
+            lblCopyright.Image = Properties.Resources.copyright_16x16;
+            lblCopyright.ImageAlign = ContentAlignment.MiddleLeft;
+            lblCopyright.Location = new Point(3, 0);
             lblCopyright.Name = "lblCopyright";
-            lblCopyright.Size = new Size(177, 15);
+            lblCopyright.Size = new Size(177, 21);
             lblCopyright.TabIndex = 2;
-            lblCopyright.Text = "(c) 2024 Ethan Hann";
+            lblCopyright.Text = "2024 Ethan Hann";
             lblCopyright.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // lnkGithubRepo
             // 
-            lnkGithubRepo.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            lnkGithubRepo.Anchor = AnchorStyles.Right;
             lnkGithubRepo.AutoSize = true;
-            lnkGithubRepo.Location = new Point(186, 4);
+            lnkGithubRepo.Location = new Point(290, 40);
             lnkGithubRepo.Name = "lnkGithubRepo";
-            lnkGithubRepo.Size = new Size(177, 15);
+            lnkGithubRepo.Size = new Size(73, 15);
             lnkGithubRepo.TabIndex = 3;
             lnkGithubRepo.TabStop = true;
             lnkGithubRepo.Text = "Github Repo";
@@ -250,5 +268,6 @@
         private TableLayoutPanel tableLayoutPanel2;
         private LinkLabel lnkGithubRepo;
         private LinkLabel lnkLicense;
+        private LinkLabel lnkNexusMods;
     }
 }

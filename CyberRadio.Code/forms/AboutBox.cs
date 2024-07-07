@@ -47,4 +47,9 @@ public partial class AboutBox : Form
     {
         "https://github.com/ethan-hann/CyberRadio-Assistant/blob/main/LICENSE".OpenUrl();
     }
+
+    private void lnkNexusMods_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+    {
+        "https://www.nexusmods.com/cyberpunk2077/mods/15338".OpenUrl();
+    }
 }

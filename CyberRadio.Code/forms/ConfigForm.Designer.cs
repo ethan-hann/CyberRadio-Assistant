@@ -74,11 +74,11 @@
             tableLayoutPanel1.Location = new Point(3, 3);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 5;
-            tableLayoutPanel1.RowStyles.Add(new RowStyle());
-            tableLayoutPanel1.RowStyles.Add(new RowStyle());
-            tableLayoutPanel1.RowStyles.Add(new RowStyle());
-            tableLayoutPanel1.RowStyles.Add(new RowStyle());
-            tableLayoutPanel1.RowStyles.Add(new RowStyle());
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 25F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 25F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 28.125F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 21.875F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
             tableLayoutPanel1.Size = new Size(779, 150);
             tableLayoutPanel1.TabIndex = 0;
             // 
@@ -86,7 +86,7 @@
             // 
             lblEditPathsHelp.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             lblEditPathsHelp.AutoSize = true;
-            lblEditPathsHelp.Location = new Point(205, 57);
+            lblEditPathsHelp.Location = new Point(205, 74);
             lblEditPathsHelp.Name = "lblEditPathsHelp";
             lblEditPathsHelp.Size = new Size(571, 15);
             lblEditPathsHelp.TabIndex = 6;
@@ -96,7 +96,7 @@
             // 
             lblAutoExportHelp.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             lblAutoExportHelp.AutoSize = true;
-            lblAutoExportHelp.Location = new Point(205, 30);
+            lblAutoExportHelp.Location = new Point(205, 40);
             lblAutoExportHelp.Name = "lblAutoExportHelp";
             lblAutoExportHelp.Size = new Size(571, 15);
             lblAutoExportHelp.TabIndex = 4;
@@ -106,7 +106,7 @@
             // 
             chkCheckForUpdates.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             chkCheckForUpdates.AutoSize = true;
-            chkCheckForUpdates.Location = new Point(10, 3);
+            chkCheckForUpdates.Location = new Point(10, 6);
             chkCheckForUpdates.Margin = new Padding(10, 3, 3, 3);
             chkCheckForUpdates.Name = "chkCheckForUpdates";
             chkCheckForUpdates.Size = new Size(189, 19);
@@ -118,7 +118,7 @@
             // 
             chkAutoExportToGame.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             chkAutoExportToGame.AutoSize = true;
-            chkAutoExportToGame.Location = new Point(10, 28);
+            chkAutoExportToGame.Location = new Point(10, 38);
             chkAutoExportToGame.Margin = new Padding(10, 3, 3, 3);
             chkAutoExportToGame.Name = "chkAutoExportToGame";
             chkAutoExportToGame.Size = new Size(189, 19);
@@ -130,7 +130,7 @@
             // 
             lblUpdatesHelp.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             lblUpdatesHelp.AutoSize = true;
-            lblUpdatesHelp.Location = new Point(205, 5);
+            lblUpdatesHelp.Location = new Point(205, 8);
             lblUpdatesHelp.Name = "lblUpdatesHelp";
             lblUpdatesHelp.Size = new Size(571, 15);
             lblUpdatesHelp.TabIndex = 3;
@@ -143,11 +143,14 @@
             btnEditPaths.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
             btnEditPaths.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
             btnEditPaths.FlatStyle = FlatStyle.Flat;
-            btnEditPaths.Location = new Point(3, 53);
+            btnEditPaths.Image = Properties.Resources.folder__16x16;
+            btnEditPaths.Location = new Point(3, 67);
             btnEditPaths.Name = "btnEditPaths";
-            btnEditPaths.Size = new Size(196, 23);
+            btnEditPaths.Size = new Size(196, 30);
             btnEditPaths.TabIndex = 5;
             btnEditPaths.Text = "Edit Paths...";
+            btnEditPaths.TextAlign = ContentAlignment.MiddleRight;
+            btnEditPaths.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnEditPaths.UseVisualStyleBackColor = false;
             btnEditPaths.Click += btnEditPaths_Click;
             // 
@@ -241,11 +244,14 @@
             btnEditLogsPath.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
             btnEditLogsPath.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
             btnEditLogsPath.FlatStyle = FlatStyle.Flat;
+            btnEditLogsPath.Image = Properties.Resources.folder__16x16;
             btnEditLogsPath.Location = new Point(3, 28);
             btnEditLogsPath.Name = "btnEditLogsPath";
             btnEditLogsPath.Size = new Size(196, 31);
             btnEditLogsPath.TabIndex = 7;
             btnEditLogsPath.Text = "Edit Logs Path...";
+            btnEditLogsPath.TextAlign = ContentAlignment.MiddleRight;
+            btnEditLogsPath.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnEditLogsPath.UseVisualStyleBackColor = false;
             btnEditLogsPath.Click += btnEditLogsPath_Click;
             // 
@@ -274,11 +280,11 @@
             // 
             lblCurrentLogPath.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             lblCurrentLogPath.AutoSize = true;
-            lblCurrentLogPath.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
+            lblCurrentLogPath.Font = new Font("Segoe UI Variable Display", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblCurrentLogPath.ForeColor = Color.Green;
-            lblCurrentLogPath.Location = new Point(205, 64);
+            lblCurrentLogPath.Location = new Point(205, 63);
             lblCurrentLogPath.Name = "lblCurrentLogPath";
-            lblCurrentLogPath.Size = new Size(571, 15);
+            lblCurrentLogPath.Size = new Size(571, 17);
             lblCurrentLogPath.TabIndex = 10;
             lblCurrentLogPath.Text = "<no path>";
             // 
@@ -306,11 +312,14 @@
             btnCancel.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
             btnCancel.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
             btnCancel.FlatStyle = FlatStyle.Flat;
+            btnCancel.Image = Properties.Resources.cancel_16x16;
             btnCancel.Location = new Point(653, 3);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(137, 35);
             btnCancel.TabIndex = 8;
             btnCancel.Text = "Cancel";
+            btnCancel.TextAlign = ContentAlignment.MiddleRight;
+            btnCancel.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnCancel.UseVisualStyleBackColor = false;
             btnCancel.Click += btnCancel_Click;
             // 
@@ -321,11 +330,14 @@
             btnResetToDefault.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
             btnResetToDefault.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
             btnResetToDefault.FlatStyle = FlatStyle.Flat;
+            btnResetToDefault.Image = Properties.Resources.refresh__16x16;
             btnResetToDefault.Location = new Point(371, 3);
             btnResetToDefault.Name = "btnResetToDefault";
             btnResetToDefault.Size = new Size(276, 35);
             btnResetToDefault.TabIndex = 7;
             btnResetToDefault.Text = "Reset to Defaults";
+            btnResetToDefault.TextAlign = ContentAlignment.MiddleRight;
+            btnResetToDefault.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnResetToDefault.UseVisualStyleBackColor = false;
             btnResetToDefault.Click += btnResetToDefault_Click;
             // 
@@ -336,11 +348,14 @@
             btnSaveAndClose.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
             btnSaveAndClose.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
             btnSaveAndClose.FlatStyle = FlatStyle.Flat;
+            btnSaveAndClose.Image = Properties.Resources.disk__16x16;
             btnSaveAndClose.Location = new Point(3, 3);
             btnSaveAndClose.Name = "btnSaveAndClose";
             btnSaveAndClose.Size = new Size(362, 35);
             btnSaveAndClose.TabIndex = 6;
             btnSaveAndClose.Text = "Save and Close";
+            btnSaveAndClose.TextAlign = ContentAlignment.MiddleRight;
+            btnSaveAndClose.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnSaveAndClose.UseVisualStyleBackColor = false;
             btnSaveAndClose.Click += btnSaveAndClose_Click;
             // 

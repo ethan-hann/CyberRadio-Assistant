@@ -25,6 +25,8 @@ public partial class MainForm : Form
     private readonly BindingList<Station> _stations = [];
     private readonly System.Timers.Timer resizeTimer;
 
+    private readonly ImageList _stationImageList = new();
+
     private bool _ignoreSelectedIndexChanged;
     private int _newStationCount = 1;
 
@@ -37,6 +39,8 @@ public partial class MainForm : Form
     public MainForm()
     {
         InitializeComponent();
+
+        SetImageList();
 
         GlobalData.Initialize();
 
@@ -54,6 +58,16 @@ public partial class MainForm : Form
 
         // Save the configuration when resizing has stopped
         resizeTimer.Elapsed += (sender, args) => { SaveWindowSize(); };
+    }
+
+    private void SetImageList()
+    {
+        _stationImageList.Images.Add("disabled", Resources.disabled);
+        _stationImageList.Images.Add("enabled", Resources.enabled);
+        _stationImageList.Images.Add("edited_station", Resources.save_pending);
+        _stationImageList.Images.Add("saved_station", Resources.disk);
+        _stationImageList.ImageSize = new Size(16, 16);
+        lbStations.ImageList = _stationImageList;
     }
 
     private void SaveWindowSize()
@@ -253,7 +267,7 @@ public partial class MainForm : Form
     private void UpdateEnabledStationCount()
     {
         if (InvokeRequired)
-        {             
+        {
             Invoke(new Action(UpdateEnabledStationCount));
         }
         else
@@ -376,7 +390,13 @@ public partial class MainForm : Form
 
     private void StationUpdatedEvent(object? sender, EventArgs e)
     {
-        lbStations.Invalidate();
+        if (lbStations.SelectedItem is Station station)
+        {
+            station.PendingSave = true;
+            lbStations.BeginUpdate();
+            lbStations.Invalidate();
+            lbStations.EndUpdate();
+        }
     }
 
     private void btnDeleteStation_Click(object sender, EventArgs e)

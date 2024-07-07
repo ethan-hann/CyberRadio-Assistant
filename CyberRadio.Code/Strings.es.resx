@@ -617,4 +617,8 @@ No se pueden exportar estaciones de radio al juego.</value>
     <data name="NoLogPathSet" xml:space="preserve">
       <value>&lt;sin camino&gt;</value>
     </data>
+    <data name="ExportWindowTip" xml:space="preserve">
+      <value>     Sólo las estaciones habilitadas son
+exportado al juego.</value>
+    </data>
 </root>

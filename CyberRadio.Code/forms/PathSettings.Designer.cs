@@ -52,7 +52,7 @@
             // 
             label4.Anchor = AnchorStyles.Right;
             label4.AutoSize = true;
-            label4.Location = new Point(25, 108);
+            label4.Location = new Point(45, 108);
             label4.Name = "label4";
             label4.Size = new Size(84, 17);
             label4.TabIndex = 6;
@@ -64,9 +64,9 @@
             lblRadioPath.AutoSize = true;
             lblRadioPath.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold | FontStyle.Italic);
             lblRadioPath.ForeColor = Color.Green;
-            lblRadioPath.Location = new Point(115, 61);
+            lblRadioPath.Location = new Point(135, 61);
             lblRadioPath.Name = "lblRadioPath";
-            lblRadioPath.Size = new Size(444, 17);
+            lblRadioPath.Size = new Size(424, 17);
             lblRadioPath.TabIndex = 4;
             lblRadioPath.Text = "<no path set; radioExt is not installed>";
             // 
@@ -74,9 +74,9 @@
             // 
             label2.Anchor = AnchorStyles.Right;
             label2.AutoSize = true;
-            label2.Location = new Point(19, 52);
+            label2.Location = new Point(7, 61);
             label2.Name = "label2";
-            label2.Size = new Size(90, 34);
+            label2.Size = new Size(122, 17);
             label2.TabIndex = 3;
             label2.Text = "Radio Station Path: ";
             // 
@@ -86,9 +86,9 @@
             lblGameBasePath.AutoSize = true;
             lblGameBasePath.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold | FontStyle.Italic);
             lblGameBasePath.ForeColor = Color.Green;
-            lblGameBasePath.Location = new Point(115, 14);
+            lblGameBasePath.Location = new Point(135, 14);
             lblGameBasePath.Name = "lblGameBasePath";
-            lblGameBasePath.Size = new Size(444, 17);
+            lblGameBasePath.Size = new Size(424, 17);
             lblGameBasePath.TabIndex = 2;
             lblGameBasePath.Text = "<no path set; game executable missing>";
             // 
@@ -96,9 +96,9 @@
             // 
             label1.Anchor = AnchorStyles.Right;
             label1.AutoSize = true;
-            label1.Location = new Point(4, 14);
+            label1.Location = new Point(20, 14);
             label1.Name = "label1";
-            label1.Size = new Size(105, 17);
+            label1.Size = new Size(109, 17);
             label1.TabIndex = 0;
             label1.Text = "Game Base Path: ";
             // 
@@ -148,9 +148,9 @@
             lblBackupPath.AutoSize = true;
             lblBackupPath.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold | FontStyle.Italic);
             lblBackupPath.ForeColor = Color.Green;
-            lblBackupPath.Location = new Point(115, 108);
+            lblBackupPath.Location = new Point(135, 108);
             lblBackupPath.Name = "lblBackupPath";
-            lblBackupPath.Size = new Size(444, 17);
+            lblBackupPath.Size = new Size(424, 17);
             lblBackupPath.TabIndex = 8;
             lblBackupPath.Text = "<no path set; radio stations need to be staged first>";
             // 
@@ -175,8 +175,8 @@
             // 
             tableLayoutPanel2.BackColor = Color.Transparent;
             tableLayoutPanel2.ColumnCount = 2;
-            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
-            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 80F));
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 23.487545F));
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 76.51246F));
             tableLayoutPanel2.Controls.Add(lblBackupPath, 1, 2);
             tableLayoutPanel2.Controls.Add(lblRadioPath, 1, 1);
             tableLayoutPanel2.Controls.Add(label4, 0, 2);

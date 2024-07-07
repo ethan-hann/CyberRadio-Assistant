@@ -28,8 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(StationEditor));
             lblIcon = new Label();
             txtDisplayName = new TextBox();
             lblName = new Label();
@@ -76,7 +74,6 @@
             mpStreamPlayer = new MusicPlayer();
             btnGetFromRadioGarden = new Button();
             txtStreamURL = new TextBox();
-            tabImages = new ImageList(components);
             statusStrip1 = new StatusStrip();
             lblStatus = new ToolStripStatusLabel();
             grpDisplay.SuspendLayout();
@@ -124,6 +121,7 @@
             txtDisplayName.Size = new Size(849, 23);
             txtDisplayName.TabIndex = 1;
             txtDisplayName.TextChanged += txtDisplayName_TextChanged;
+            txtDisplayName.Leave += txtDisplayName_Leave;
             // 
             // lblName
             // 
@@ -184,7 +182,6 @@
             tabControl.Controls.Add(tabMusic);
             tabControl.Dock = DockStyle.Fill;
             tabControl.Font = new Font("Segoe UI", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            tabControl.ImageList = tabImages;
             tabControl.Location = new Point(0, 0);
             tabControl.Name = "tabControl";
             tabControl.SelectedIndex = 0;
@@ -687,11 +684,14 @@
             btnGetFromRadioGarden.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
             btnGetFromRadioGarden.FlatStyle = FlatStyle.Flat;
             btnGetFromRadioGarden.Font = new Font("Segoe UI Variable Display", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnGetFromRadioGarden.Image = Properties.Resources.parse_16x16;
             btnGetFromRadioGarden.Location = new Point(582, 7);
             btnGetFromRadioGarden.Name = "btnGetFromRadioGarden";
             btnGetFromRadioGarden.Size = new Size(226, 32);
             btnGetFromRadioGarden.TabIndex = 4;
             btnGetFromRadioGarden.Text = "Parse From Radio.Garden";
+            btnGetFromRadioGarden.TextAlign = ContentAlignment.MiddleRight;
+            btnGetFromRadioGarden.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnGetFromRadioGarden.UseVisualStyleBackColor = false;
             btnGetFromRadioGarden.Click += btnGetFromRadioGarden_Click;
             // 
@@ -704,14 +704,6 @@
             txtStreamURL.Size = new Size(573, 23);
             txtStreamURL.TabIndex = 0;
             txtStreamURL.TextChanged += txtStreamURL_TextChanged;
-            // 
-            // tabImages
-            // 
-            tabImages.ColorDepth = ColorDepth.Depth32Bit;
-            tabImages.ImageStream = (ImageListStreamer)resources.GetObject("tabImages.ImageStream");
-            tabImages.TransparentColor = Color.Transparent;
-            tabImages.Images.SetKeyName(0, "display-frame.png");
-            tabImages.Images.SetKeyName(1, "sound-waves.png");
             // 
             // statusStrip1
             // 
@@ -726,7 +718,7 @@
             // 
             // lblStatus
             // 
-            lblStatus.Image = Properties.Resources.info;
+            lblStatus.Image = Properties.Resources.status__16x16;
             lblStatus.Margin = new Padding(5, 3, 0, 2);
             lblStatus.Name = "lblStatus";
             lblStatus.Padding = new Padding(2);
@@ -789,7 +781,6 @@
         private TabControl tabControl;
         private TabPage tabDisplayAndIcon;
         private TabPage tabMusic;
-        private ImageList tabImages;
         private GroupBox grpCustomIcon;
         private TableLayoutPanel tableLayoutPanel2;
         private TextBox txtInkAtlasPart;
