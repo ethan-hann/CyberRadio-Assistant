@@ -8,9 +8,9 @@ namespace RadioExt_Helper.user_controls;
 public interface IUserControl
 {
     /// <summary>
-    ///     The station associated with this control.
+    ///     The tracked station associated with this control.
     /// </summary>
-    public Station Station { get; }
+    public TrackableObject<Station> Station { get; }
 
     /// <summary>
     ///     Specify how to translate the strings of this control.

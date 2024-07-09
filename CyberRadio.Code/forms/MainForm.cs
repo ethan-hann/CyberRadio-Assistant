@@ -21,9 +21,8 @@ public partial class MainForm : Form
     private readonly NoStationsCtl _noStationsCtrl = new();
     private readonly Json<SongList> _songListJson = new();
 
-    private readonly List<StationEditor> _stationEditors = new();
-    private Dictionary<string, StationEditor> _stationEditorsDictionary;
-    private StationEditor _currentEditor;
+    private Dictionary<Guid, StationEditor> _stationEditorsDict = [];
+    private StationEditor? _currentEditor;
 
     private readonly BindingList<TrackableObject<Station>> _stations = new();
     private readonly System.Timers.Timer resizeTimer;
@@ -64,14 +63,6 @@ public partial class MainForm : Form
 
         lbStations.DataSource = _stations;
         lbStations.DisplayMember = "TrackedObject.MetaData";
-    }
-
-    private void InitializeStationEditorsDictionary()
-    {
-        _stationEditorsDictionary = _stationEditors.ToDictionary(
-            editor => editor.Station.MetaData.DisplayName,
-            editor => editor
-        );
     }
 
     private void SetImageList()
@@ -196,11 +187,7 @@ public partial class MainForm : Form
 
     private void PopulateStations()
     {
-        if (InvokeRequired)
-        {
-            Invoke(new Action(PopulateStations));
-        }
-        else
+        this.SafeInvoke(() =>
         {
             lbStations.BeginUpdate();
 
@@ -213,13 +200,13 @@ public partial class MainForm : Form
             UpdateUIAfterPopulation();
 
             lbStations.EndUpdate();
-        }
+        });
     }
 
     private void InitializeData()
     {
         _stations.Clear();
-        _stationEditors.Clear();
+        _stationEditorsDict.Clear();
     }
 
     private void LoadStationsFromDirectories()
@@ -263,8 +250,28 @@ public partial class MainForm : Form
             }
 
             var station = CreateStation(metaData, songList);
-            _stations.Add(new TrackableObject<Station>(station));
-            PreloadStationEditor(station);
+            var trackedStation = new TrackableObject<Station>(station);
+            _stations.Add(trackedStation);
+            AddEditor(trackedStation);
+        }
+    }
+
+    private void AddEditor(TrackableObject<Station> station)
+    {
+        var editor = new StationEditor(station);
+        editor.StationUpdated += StationUpdatedEvent;
+        lock (_stationEditorsDict)
+        {
+            _stationEditorsDict[station.Id] = editor;
+        }
+    }
+
+    private void RemoveEditor(TrackableObject<Station> station) 
+    {
+        if (_stationEditorsDict.TryGetValue(station.Id, out var editor))
+        {
+            editor.StationUpdated -= StationUpdatedEvent;
+            _stationEditorsDict.Remove(station.Id);
         }
     }
 
@@ -277,42 +284,8 @@ public partial class MainForm : Form
         };
     }
 
-    private void PreloadStationEditor(Station station)
-    {
-        var bgThread = new Thread(new ParameterizedThreadStart(param => {
-            var editor = new StationEditor(station);
-            editor.StationUpdated += StationUpdatedEvent;
-
-            lock (_stationEditors)
-            {
-                _stationEditors.Add(editor);
-            }
-
-            lock (_stationEditorsDictionary)
-            {
-                _stationEditorsDictionary[station.MetaData.DisplayName] = editor;
-            }
-
-            // Now we need to ensure the UI is updated on the UI thread
-            Invoke(new Action(() =>
-            {
-                // Check if the current station is the one we just loaded
-                if (lbStations.SelectedItem is TrackableObject<Station> selectedStation &&
-                    selectedStation.TrackedObject.MetaData.DisplayName == station.MetaData.DisplayName)
-                {
-                    UpdateStationEditor(editor);
-                }
-            }));
-        }));
-
-        bgThread.SetApartmentState(ApartmentState.STA);
-        bgThread.Start();
-    }
-
     private void UpdateUIAfterPopulation()
     {
-        InitializeStationEditorsDictionary();
-
         if (lbStations.Items.Count > 0)
         {
             lbStations.SelectedIndex = 0;
@@ -353,20 +326,15 @@ public partial class MainForm : Form
         if (lbStations.SelectedItem is not TrackableObject<Station> station) return;
 
         // Stop music players
-        foreach (var sEditor in _stationEditors)
+        foreach (var sEditor in _stationEditorsDict.Values)
         {
             sEditor.GetMusicPlayer().StopStream();
         }
 
         // Get the editor from the dictionary
-        if (_stationEditorsDictionary.TryGetValue(station.TrackedObject.MetaData.DisplayName, out var editor))
+        if (_stationEditorsDict.TryGetValue(station.Id, out var editor))
         {
             UpdateStationEditor(editor);
-        }
-        else
-        {
-            // Pre-load the station editor if not already loaded
-            PreloadStationEditor(station.TrackedObject);
         }
     }
 
@@ -455,11 +423,11 @@ public partial class MainForm : Form
             },
         };
 
-        _stations.Add(new TrackableObject<Station>(blankStation));
+        var trackedStation = new TrackableObject<Station>(blankStation);
+        _stations.Add(trackedStation);
+        AddEditor(trackedStation);
 
-        PreloadStationEditor(blankStation);
-
-        lbStations.SelectedItem = blankStation;
+        lbStations.SelectedItem = trackedStation;
         _newStationCount++;
 
         if (_stations.Count <= 0) return;
@@ -475,8 +443,8 @@ public partial class MainForm : Form
     {
         if (lbStations.SelectedItem is TrackableObject<Station> station)
         {
-            lbStations.BeginUpdate();
             station.CheckPendingSaveStatus();
+            lbStations.BeginUpdate();
             lbStations.Invalidate();
             lbStations.EndUpdate();
         }
@@ -492,28 +460,17 @@ public partial class MainForm : Form
         string newStationPrefix = GlobalData.Strings.GetString("NewStationListBoxEntry") ?? "[New Station]";
 
         // If the station to be removed contains "[New Station]" in the name, decrement our new station count.
-        if (station.TrackedObject.MetaData.DisplayName.StartsWith(newStationPrefix))
+        if (station.TrackedObject.MetaData.DisplayName.Contains(newStationPrefix))
             _newStationCount--;
 
         // Reset new station count if there are no more "New stations" in the list box.
-        if (!_stations.Select(s => s.TrackedObject.MetaData.DisplayName.StartsWith(newStationPrefix)).Contains(true))
+        if (!_stations.Select(s => s.TrackedObject.MetaData.DisplayName.Contains(newStationPrefix)).Contains(true))
             _newStationCount = 1;
 
-        var stationToRemove = _stations.First(s => s.TrackedObject.MetaData.DisplayName.Equals(station.TrackedObject.MetaData.DisplayName));
+        var stationToRemove = _stations.First(s => s.Id == station.Id);
         _stations.Remove(stationToRemove);
 
-        lock (_stationEditors)
-        {
-            var editor = _stationEditors.First(s => s.Station.MetaData.DisplayName
-                .Equals(station.TrackedObject.MetaData.DisplayName));
-            editor.StationUpdated -= StationUpdatedEvent; // Remove the event handler
-            _stationEditors.Remove(editor); // Remove the editor
-        }
-
-        lock (_stationEditorsDictionary)
-        {
-            _stationEditorsDictionary.Remove(station.TrackedObject.MetaData.DisplayName);
-        }
+        RemoveEditor(stationToRemove);
 
         UpdateEnabledStationCount();
 
@@ -522,8 +479,6 @@ public partial class MainForm : Form
             _newStationCount = 1;
             HandleUserControlVisibility();
         }
-
-        lbStations.SelectedIndex = _stations.Count > 0 ? 0 : -1;
     }
 
     private void cmbLanguageSelect_SelectedIndexChanged(object? sender, EventArgs e)
@@ -535,7 +490,7 @@ public partial class MainForm : Form
 
         Translate();
 
-        foreach (var se in _stationEditors)
+        foreach (var se in _stationEditorsDict.Values)
             se.Translate();
 
         _noStationsCtrl.Translate();
@@ -575,7 +530,7 @@ public partial class MainForm : Form
 
     private void exportToGameToolStripMenuItem_Click(object sender, EventArgs e)
     {
-        var exportWindow = new ExportWindow(_stations.ToList());
+        var exportWindow = new ExportWindow([.. _stations]);
         exportWindow.OnExportToStagingComplete += (sender, args) => { PopulateStations(); };
         exportWindow.ShowDialog(this);
     }

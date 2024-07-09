@@ -12,7 +12,7 @@ public sealed partial class NoStationsCtl : UserControl, IUserControl
         Dock = DockStyle.Fill;
     }
 
-    public Station Station => new();
+    public TrackableObject<Station> Station => new(new Station());
 
     public void Translate()
     {

@@ -23,6 +23,11 @@ namespace RadioExt_Helper.models
         private T _trackedObject;
 
         /// <summary>
+        /// Get a unique identifier for the tracked object.
+        /// </summary>
+        public Guid Id { get; } = Guid.NewGuid();
+
+        /// <summary>
         /// Gets a value indicating whether the object has pending changes.
         /// </summary>
         public bool IsPendingSave

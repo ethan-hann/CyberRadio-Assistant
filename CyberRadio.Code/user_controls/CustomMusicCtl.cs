@@ -16,7 +16,7 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
 
     private BindingList<Song> _bindingSongList = [];
 
-    public CustomMusicCtl(Station station)
+    public CustomMusicCtl(TrackableObject<Station> station)
     {
         InitializeComponent();
         Dock = DockStyle.Fill;
@@ -24,10 +24,10 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
         SetTabImages();
 
         Station = station;
-        SetSongList(Station.SongsAsList);
+        SetSongList(Station.TrackedObject.SongsAsList);
     }
 
-    public Station Station { get; }
+    public TrackableObject<Station> Station { get; }
 
     public void Translate()
     {
@@ -65,7 +65,7 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
 
     private void SetSongList(List<Song> songList)
     {
-        Station.SongsAsList = songList;
+        Station.TrackedObject.SongsAsList = songList;
         _bindingSongList = [.. songList];
 
         PopulateListView();
@@ -76,7 +76,7 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
         lvSongs.SuspendLayout();
         lvSongs.Items.Clear();
 
-        foreach (var lvItem in Station.SongsAsList
+        foreach (var lvItem in Station.TrackedObject.SongsAsList
                      .Select(song => new ListViewItem([
                              song.Name,
                              song.Artist,
@@ -92,7 +92,7 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
 
     private bool CanSongBeAdded(Song song)
     {
-        return !Station.SongsAsList.Any(s => s.Name.Equals(song.Name) && s.Artist.Equals(song.Artist)
+        return !Station.TrackedObject.SongsAsList.Any(s => s.Name.Equals(song.Name) && s.Artist.Equals(song.Artist)
                                                                       && s.OriginalFilePath.Equals(
                                                                           song.OriginalFilePath));
     }
@@ -108,7 +108,7 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
 
             if (!CanSongBeAdded(song)) continue;
 
-            Station.SongsAsList.Add(song);
+            Station.TrackedObject.SongsAsList.Add(song);
             _bindingSongList.Add(song);
         }
 
@@ -129,10 +129,10 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
         for (var i = 0; i < lvSongs.SelectedItems.Count; i++)
             if (lvSongs.SelectedItems[i].Tag is Song song)
             {
-                Station.SongsAsList.Remove(song);
+                Station.TrackedObject.SongsAsList.Remove(song);
                 _bindingSongList.Remove(song);
                 var fileName = Path.GetFileName(song.OriginalFilePath);
-                Station.MetaData.SongOrder.Remove(fileName);
+                Station.TrackedObject.MetaData.SongOrder.Remove(fileName);
             }
 
         UpdateListsAndViews();
@@ -154,7 +154,7 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
             var item = lvSongOrder.Items[i];
             if (item.Tag is not Song song) continue;
 
-            if (!Station.SongsAsList.Contains(song))
+            if (!Station.TrackedObject.SongsAsList.Contains(song))
                 lvSongOrder.Items.Remove(item);
         }
 
@@ -306,7 +306,7 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
     {
         var tempSongs = lbSongs.Items.Cast<Song>().ToList();
 
-        foreach (var song in Station.MetaData.SongOrder
+        foreach (var song in Station.TrackedObject.MetaData.SongOrder
                      .Select(item => tempSongs.Find(x => x.OriginalFilePath.EndsWith(item)))
                      .OfType<Song>())
         {
@@ -319,10 +319,10 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
 
     private void UpdateOrderedList()
     {
-        Station.MetaData.SongOrder.Clear();
+        Station.TrackedObject.MetaData.SongOrder.Clear();
         foreach (ListViewItem item in lvSongOrder.Items)
             if (item.Tag is Song song)
-                Station.MetaData.SongOrder.Add(Path.GetFileName(song.OriginalFilePath));
+                Station.TrackedObject.MetaData.SongOrder.Add(Path.GetFileName(song.OriginalFilePath));
         StationUpdated?.Invoke(this, EventArgs.Empty);
     }
 

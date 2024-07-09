@@ -15,7 +15,7 @@ public sealed partial class StationEditor : UserControl, IUserControl
     private readonly ComboBox _cmbUiIcons;
     private readonly CustomMusicCtl _musicCtl;
 
-    public StationEditor(Station station)
+    public StationEditor(TrackableObject<Station> station)
     {
         InitializeComponent();
         Dock = DockStyle.Fill;
@@ -30,7 +30,7 @@ public sealed partial class StationEditor : UserControl, IUserControl
         _cmbUiIcons.SelectedIndexChanged += cmbUIIcons_SelectedIndexChanged;
     }
 
-    public Station Station { get; }
+    public TrackableObject<Station> Station { get; }
 
     public void Translate()
     {
@@ -94,10 +94,10 @@ public sealed partial class StationEditor : UserControl, IUserControl
 
     private void SetDisplayTabValues()
     {
-        txtDisplayName.Text = Station.MetaData.DisplayName;
-        _cmbUiIcons.SelectedIndex = _cmbUiIcons.Items.IndexOf(Station.MetaData.Icon);
+        txtDisplayName.Text = Station.TrackedObject.MetaData.DisplayName;
+        _cmbUiIcons.SelectedIndex = _cmbUiIcons.Items.IndexOf(Station.TrackedObject.MetaData.Icon);
 
-        if (Station.CustomIcon.UseCustom)
+        if (Station.TrackedObject.CustomIcon.UseCustom)
         {
             radUseCustomYes.Checked = true;
             radUseCustomNo.Checked = false;
@@ -112,16 +112,16 @@ public sealed partial class StationEditor : UserControl, IUserControl
             lblInkPath.Visible = !radUseCustomNo.Checked;
         }
 
-        txtInkAtlasPath.Text = Station.CustomIcon.InkAtlasPath;
-        txtInkAtlasPart.Text = Station.CustomIcon.InkAtlasPart;
-        nudFM.Value = (decimal)Station.MetaData.Fm;
-        volumeSlider.Value = (int)(Station.MetaData.Volume / 0.1f);
-        lblSelectedVolume.Text = $@"{Station.MetaData.Volume:F1}";
+        txtInkAtlasPath.Text = Station.TrackedObject.CustomIcon.InkAtlasPath;
+        txtInkAtlasPart.Text = Station.TrackedObject.CustomIcon.InkAtlasPart;
+        nudFM.Value = (decimal)Station.TrackedObject.MetaData.Fm;
+        volumeSlider.Value = (int)(Station.TrackedObject.MetaData.Volume / 0.1f);
+        lblSelectedVolume.Text = $@"{Station.TrackedObject.MetaData.Volume:F1}";
     }
 
     private void txtDisplayName_TextChanged(object sender, EventArgs e)
     {
-        Station.MetaData.DisplayName = txtDisplayName.Text;
+        Station.TrackedObject.MetaData.DisplayName = txtDisplayName.Text;
         StationUpdated?.Invoke(this, EventArgs.Empty);
     }
 
@@ -133,19 +133,19 @@ public sealed partial class StationEditor : UserControl, IUserControl
     private void cmbUIIcons_SelectedIndexChanged(object? sender, EventArgs e)
     {
         if (_cmbUiIcons.SelectedItem is string iconStr)
-            Station.MetaData.Icon = iconStr;
+            Station.TrackedObject.MetaData.Icon = iconStr;
         StationUpdated?.Invoke(this, EventArgs.Empty);
     }
 
     private void radUseCustomYes_CheckedChanged(object sender, EventArgs e)
     {
-        Station.CustomIcon.UseCustom = radUseCustomYes.Checked;
+        Station.TrackedObject.CustomIcon.UseCustom = radUseCustomYes.Checked;
         StationUpdated?.Invoke(this, EventArgs.Empty);
     }
 
     private void radUseCustomNo_CheckedChanged(object sender, EventArgs e)
     {
-        Station.CustomIcon.UseCustom = !radUseCustomNo.Checked;
+        Station.TrackedObject.CustomIcon.UseCustom = !radUseCustomNo.Checked;
         txtInkAtlasPart.Visible = !radUseCustomNo.Checked;
         txtInkAtlasPath.Visible = !radUseCustomNo.Checked;
         lblInkPart.Visible = !radUseCustomNo.Checked;
@@ -154,19 +154,19 @@ public sealed partial class StationEditor : UserControl, IUserControl
 
     private void txtInkAtlasPath_TextChanged(object sender, EventArgs e)
     {
-        Station.CustomIcon.InkAtlasPath = txtInkAtlasPath.Text;
+        Station.TrackedObject.CustomIcon.InkAtlasPath = txtInkAtlasPath.Text;
         StationUpdated?.Invoke(this, EventArgs.Empty);
     }
 
     private void txtInkAtlasPart_TextChanged(object sender, EventArgs e)
     {
-        Station.CustomIcon.InkAtlasPart = txtInkAtlasPart.Text;
+        Station.TrackedObject.CustomIcon.InkAtlasPart = txtInkAtlasPart.Text;
         StationUpdated?.Invoke(this, EventArgs.Empty);
     }
 
     private void nudFM_ValueChanged(object sender, EventArgs e)
     {
-        Station.MetaData.Fm = (float)nudFM.Value;
+        Station.TrackedObject.MetaData.Fm = (float)nudFM.Value;
         EnsureDisplayNameFormat();
         StationUpdated?.Invoke(this, EventArgs.Empty);
     }
@@ -192,8 +192,8 @@ public sealed partial class StationEditor : UserControl, IUserControl
 
     private void volumeSlider_Scroll(object sender, EventArgs e)
     {
-        Station.MetaData.Volume = volumeSlider.Value * 0.1f;
-        lblSelectedVolume.Text = $@"{Station.MetaData.Volume:F1}";
+        Station.TrackedObject.MetaData.Volume = volumeSlider.Value * 0.1f;
+        lblSelectedVolume.Text = $@"{Station.TrackedObject.MetaData.Volume:F1}";
         StationUpdated?.Invoke(this, EventArgs.Empty);
     }
 
@@ -254,32 +254,32 @@ public sealed partial class StationEditor : UserControl, IUserControl
 
     private void SetMusicTabValues()
     {
-        radUseStreamYes.Checked = Station.StreamInfo.IsStream;
+        radUseStreamYes.Checked = Station.TrackedObject.StreamInfo.IsStream;
         radUseStreamNo.Checked = !radUseStreamYes.Checked;
 
-        ToggleStreamControls(Station.StreamInfo.IsStream);
+        ToggleStreamControls(Station.TrackedObject.StreamInfo.IsStream);
 
-        txtStreamURL.Text = Station.StreamInfo.StreamUrl;
+        txtStreamURL.Text = Station.TrackedObject.StreamInfo.StreamUrl;
     }
 
     private void radUseStreamYes_CheckedChanged(object sender, EventArgs e)
     {
         ToggleStreamControls(true);
-        Station.StreamInfo.IsStream = radUseStreamYes.Checked;
+        Station.TrackedObject.StreamInfo.IsStream = radUseStreamYes.Checked;
         StationUpdated?.Invoke(this, EventArgs.Empty);
     }
 
     private void radUseStreamNo_CheckedChanged(object sender, EventArgs e)
     {
         ToggleStreamControls(false);
-        Station.StreamInfo.IsStream = !radUseStreamNo.Checked;
+        Station.TrackedObject.StreamInfo.IsStream = !radUseStreamNo.Checked;
         StationUpdated?.Invoke(this, EventArgs.Empty);
     }
 
     private void txtStreamURL_TextChanged(object sender, EventArgs e)
     {
-        Station.StreamInfo.StreamUrl = txtStreamURL.Text;
-        mpStreamPlayer.StreamUrl = Station.StreamInfo.StreamUrl;
+        Station.TrackedObject.StreamInfo.StreamUrl = txtStreamURL.Text;
+        mpStreamPlayer.StreamUrl = Station.TrackedObject.StreamInfo.StreamUrl;
         StationUpdated?.Invoke(this, EventArgs.Empty);
     }
 
