@@ -621,4 +621,7 @@ Can't export radio stations to game.</value>
       <value>     Only Enabled stations are 
 exported to the game.</value>
     </data>
+    <data name="AddSongs" xml:space="preserve">
+      <value>Select song files to add</value>
+    </data>
 </root>

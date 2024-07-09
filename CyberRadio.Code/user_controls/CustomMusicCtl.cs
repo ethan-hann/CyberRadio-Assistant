@@ -10,6 +10,8 @@ namespace RadioExt_Helper.user_controls;
 
 public sealed partial class CustomMusicCtl : UserControl, IUserControl
 {
+    public event EventHandler? StationUpdated;
+
     private readonly ImageList _tabImages = new();
 
     private BindingList<Song> _bindingSongList = [];
@@ -37,7 +39,7 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
         lvSongs.Columns[2].Text = GlobalData.Strings.GetString("SongLengthHeader");
         lvSongs.Columns[3].Text = GlobalData.Strings.GetString("SongFileSizeHeader");
 
-        fdlgOpenSongs.Title = GlobalData.Strings.GetString("Open");
+        fdlgOpenSongs.Title = GlobalData.Strings.GetString("AddSongs");
         tabSongs.Text = GlobalData.Strings.GetString("SongListing");
         tabSongOrder.Text = GlobalData.Strings.GetString("SongOrder");
 
@@ -111,6 +113,7 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
         }
 
         UpdateListsAndViews();
+        StationUpdated?.Invoke(this, EventArgs.Empty);
     }
 
     private void btnRemoveSongs_Click(object sender, EventArgs e)
@@ -133,6 +136,7 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
             }
 
         UpdateListsAndViews();
+        StationUpdated?.Invoke(this, EventArgs.Empty);
     }
 
     private void UpdateListsAndViews()
@@ -205,6 +209,7 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
 
             UpdateListsAndViews();
         }
+        StationUpdated?.Invoke(this, EventArgs.Empty);
     }
 
     private void btnRemoveFromOrder_Click(object sender, EventArgs e)
@@ -226,6 +231,8 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
 
         lvSongOrder.Items[0].Selected = true;
         lvSongOrder.EnsureVisible(0);
+
+        StationUpdated?.Invoke(this, EventArgs.Empty);
     }
 
     private void lvSongOrder_DragEnter(object sender, DragEventArgs e)
@@ -292,6 +299,7 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
     {
         for (var i = 0; i < lvSongOrder.Items.Count; i++)
             lvSongOrder.Items[i].SubItems[0].Text = (i + 1).ToString();
+        StationUpdated?.Invoke(this, EventArgs.Empty);
     }
 
     private void SetOrderedList()
@@ -315,7 +323,8 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
         foreach (ListViewItem item in lvSongOrder.Items)
             if (item.Tag is Song song)
                 Station.MetaData.SongOrder.Add(Path.GetFileName(song.OriginalFilePath));
+        StationUpdated?.Invoke(this, EventArgs.Empty);
     }
 
-    #endregion
+#endregion
 }

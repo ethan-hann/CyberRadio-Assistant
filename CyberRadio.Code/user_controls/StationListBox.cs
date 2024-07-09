@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using AetherUtils.Core.Logging;
 using RadioExt_Helper.models;
 
 namespace RadioExt_Helper.user_controls;
@@ -17,21 +18,6 @@ public sealed partial class StationListBox : ListBox
     /// </summary>
     public StationListBox()
     {
-        InitializeComponent();
-
-        SetValues();
-        _imageList ??= new ImageList();
-    }
-
-    /// <summary>
-    ///     Initializes a new instance of the <see cref="StationListBox" /> class.
-    /// </summary>
-    public StationListBox(IContainer container)
-    {
-        container.Add(this);
-
-        InitializeComponent();
-
         SetValues();
         _imageList ??= new ImageList();
     }
@@ -40,7 +26,7 @@ public sealed partial class StationListBox : ListBox
     ///     Gets or sets the ImageList containing the icons for the list box.
     /// </summary>
     [Browsable(true)]
-    [Category("Appearance")]
+    [Category("Icons")]
     [Description("Image list containing the icons for the list box.")]
     public ImageList ImageList
     {
@@ -56,7 +42,7 @@ public sealed partial class StationListBox : ListBox
     ///     Gets or sets the key for the enabled icon in the ImageList.
     /// </summary>
     [Browsable(true)]
-    [Category("Appearance")]
+    [Category("Icons")]
     [Description("The key for the enabled icon in the ImageList.")]
     public string EnabledIconKey
     {
@@ -72,7 +58,7 @@ public sealed partial class StationListBox : ListBox
     ///     Gets or sets the key for the disabled icon in the ImageList.
     /// </summary>
     [Browsable(true)]
-    [Category("Appearance")]
+    [Category("Icons")]
     [Description("The key for the disabled icon in the ImageList.")]
     public string DisabledIconKey
     {
@@ -88,7 +74,7 @@ public sealed partial class StationListBox : ListBox
     ///     Gets or sets the key for the edited station icon in the ImageList.
     /// </summary>
     [Browsable(true)]
-    [Category("Appearance")]
+    [Category("Icons")]
     [Description("The key for the edited station icon in the ImageList.")]
     public string EditedStationIconKey
     {
@@ -104,7 +90,7 @@ public sealed partial class StationListBox : ListBox
     ///     Gets or sets the key for the saved station icon in the ImageList.
     /// </summary>
     [Browsable(true)]
-    [Category("Appearance")]
+    [Category("Icons")]
     [Description("The key for the saved station icon in the ImageList.")]
     public string SavedStationIconKey
     {
@@ -125,47 +111,53 @@ public sealed partial class StationListBox : ListBox
 
     protected override void OnDrawItem(DrawItemEventArgs e)
     {
-        if (e.Index < 0) return;
-
-        e.DrawBackground();
-
-        if (Items[e.Index] is Station station)
+        try
         {
-            // Determine the primary icon (enabled/disabled)
-            var primaryIconKey = station.GetStatus() ? _enabledIconKey : _disabledIconKey;
+            if (e.Index < 0) return;
 
-            // Draw the primary icon
-            if (_imageList.Images.ContainsKey(primaryIconKey))
+            e.DrawBackground();
+
+            if (Items[e.Index] is TrackableObject<Station> station)
             {
-                var primaryIcon = _imageList.Images[primaryIconKey];
-                if (primaryIcon != null)
+                // Determine the primary icon (enabled/disabled)
+                var primaryIconKey = station.TrackedObject.GetStatus() ? _enabledIconKey : _disabledIconKey;
+
+                // Draw the primary icon
+                if (_imageList.Images.ContainsKey(primaryIconKey))
                 {
-                    e.Graphics.DrawImage(primaryIcon, e.Bounds.Left, e.Bounds.Top, 16, 16);
+                    var primaryIcon = _imageList.Images[primaryIconKey];
+                    if (primaryIcon != null)
+                    {
+                        e.Graphics.DrawImage(primaryIcon, e.Bounds.Left, e.Bounds.Top, 16, 16);
+                    }
                 }
+
+                // Determine the secondary icon (changes pending/saved)
+                var secondaryIconKey = station.IsPendingSave ? _editedStationIconKey : _savedStationIconKey;
+
+                // Calculate the position for the secondary icon at the right edge
+                var iconX = e.Bounds.Right - 16 - 4; // 16 is the icon width, 4 is some padding from the edge
+
+                // Draw the secondary icon
+                if (_imageList.Images.ContainsKey(secondaryIconKey))
+                {
+                    var secondaryIcon = _imageList.Images[secondaryIconKey];
+                    if (secondaryIcon != null)
+                    {
+                        e.Graphics.DrawImage(secondaryIcon, iconX, e.Bounds.Top, 16, 16);
+                    }
+                }
+
+                // Draw the text
+                var textRect = new Rectangle(e.Bounds.Left + 20, e.Bounds.Top, e.Bounds.Width - 40 - 4, e.Bounds.Height); // Adjust width to leave space for the secondary icon
+                TextRenderer.DrawText(e.Graphics, station.TrackedObject.MetaData.DisplayName, e.Font, textRect, e.ForeColor, TextFormatFlags.Left);
             }
 
-            // Determine the secondary icon (changes pending/saved)
-            var secondaryIconKey = station.PendingSave ? _editedStationIconKey : _savedStationIconKey;
-
-            // Calculate the position for the secondary icon at the right edge
-            var iconX = e.Bounds.Right - 16 - 4; // 16 is the icon width, 4 is some padding from the edge
-
-            // Draw the secondary icon
-            if (_imageList.Images.ContainsKey(secondaryIconKey))
-            {
-                var secondaryIcon = _imageList.Images[secondaryIconKey];
-                if (secondaryIcon != null)
-                {
-                    e.Graphics.DrawImage(secondaryIcon, iconX, e.Bounds.Top, 16, 16);
-                }
-            }
-
-            // Draw the text
-            var textRect = new Rectangle(e.Bounds.Left + 20, e.Bounds.Top, e.Bounds.Width - 40 - 4, e.Bounds.Height); // Adjust width to leave space for the secondary icon
-            TextRenderer.DrawText(e.Graphics, station.MetaData.DisplayName, e.Font, textRect, e.ForeColor, TextFormatFlags.Left);
+            e.DrawFocusRectangle();
+        } catch (Exception ex)
+        {
+            AuLogger.GetCurrentLogger<StationListBox>("OnDrawItem").Error(ex, "An error occurred while drawing the item.");
         }
-
-        e.DrawFocusRectangle();
     }
 
     protected override void OnMeasureItem(MeasureItemEventArgs e)

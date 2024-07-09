@@ -132,6 +132,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select song files to add.
+        /// </summary>
+        internal static string AddSongs {
+            get {
+                return ResourceManager.GetString("AddSongs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add Song(s).
         /// </summary>
         internal static string AddSongsToolStrip {

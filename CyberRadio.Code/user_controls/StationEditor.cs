@@ -8,6 +8,8 @@ namespace RadioExt_Helper.user_controls;
 
 public sealed partial class StationEditor : UserControl, IUserControl
 {
+    public event EventHandler? StationUpdated;
+
     private readonly ImageList _tabImages = new();
 
     private readonly ComboBox _cmbUiIcons;
@@ -22,8 +24,8 @@ public sealed partial class StationEditor : UserControl, IUserControl
 
         Station = station;
         _musicCtl = new CustomMusicCtl(Station);
+        _musicCtl.StationUpdated += (sender, args) => StationUpdated?.Invoke(this, EventArgs.Empty);
 
-        grpSongs.Controls.Add(_musicCtl);
         _cmbUiIcons = GlobalData.CloneTemplateComboBox();
         _cmbUiIcons.SelectedIndexChanged += cmbUIIcons_SelectedIndexChanged;
     }
@@ -61,8 +63,6 @@ public sealed partial class StationEditor : UserControl, IUserControl
         _musicCtl.Translate();
     }
 
-    public event EventHandler? StationUpdated;
-
     public MusicPlayer GetMusicPlayer()
     {
         return mpStreamPlayer;
@@ -72,6 +72,7 @@ public sealed partial class StationEditor : UserControl, IUserControl
     {
         SuspendLayout();
         tlpDisplayTable.Controls.Add(_cmbUiIcons, 1, 1);
+        grpSongs.Controls.Add(_musicCtl);
 
         SetDisplayTabValues();
         SetMusicTabValues();
@@ -231,6 +232,7 @@ public sealed partial class StationEditor : UserControl, IUserControl
             txtVolumeEdit.Visible = false;
             volumeSlider.Enabled = true;
             volumeSlider.Value = (int)(newVolume / 0.1f);
+            volumeSlider_Scroll(sender, e);
             e.Handled = true;
         }
     }

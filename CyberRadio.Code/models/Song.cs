@@ -7,7 +7,7 @@ namespace RadioExt_Helper.models;
 /// <summary>
 ///     Represents a single song entry. Song information is read from the file on disk.
 /// </summary>
-public class Song
+public class Song : IEquatable<Song>, ICloneable
 {
     /// <summary>
     ///     The name of the song.
@@ -66,8 +66,40 @@ public class Song
         return song;
     }
 
+    public object Clone()
+    {
+        return new Song
+        {
+            Name = Name,
+            Artist = Artist,
+            Duration = Duration,
+            Size = Size,
+            OriginalFilePath = OriginalFilePath
+        };
+    }
+
+    public bool Equals(Song? other)
+    {
+        if (other == null) return false;
+        return Name == other.Name && 
+               Artist == other.Artist && 
+               Duration == other.Duration && 
+               Size == other.Size &&
+               OriginalFilePath == other.OriginalFilePath;
+    }
+
+    public override bool Equals(object? obj)
+    {
+        return Equals(obj as Song);
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(Name, Artist, Duration, Size, OriginalFilePath);
+    }
+
     /// <summary>
-    ///     Get a display friendly value representing this metadata.
+    ///     Get a display friendly value representing this song.
     /// </summary>
     /// <returns>The <see cref="Name" /> of the song.</returns>
     public override string ToString()

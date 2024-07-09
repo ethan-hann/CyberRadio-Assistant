@@ -13,15 +13,21 @@ namespace RadioExt_Helper.forms;
 /// </summary>
 public partial class ExportWindow : Form
 {
+    private static string GameBasePath => GlobalData.ConfigManager.Get("gameBasePath") as string ?? string.Empty;
+    private static string StagingPath => GlobalData.ConfigManager.Get("stagingPath") as string ?? string.Empty;
+    private static bool ShouldAutoExportToGame => (bool)(GlobalData.ConfigManager.Get("autoExportToGame") ?? false);
+
     public event EventHandler? OnExportToStagingComplete;
     public event EventHandler? OnExportToGameComplete;
 
     private readonly Json<MetaData> _metaDataJson = new();
     private readonly Json<SongList> _songListJson = new();
-    private readonly List<Station> _stationsToExport;
+    private readonly List<TrackableObject<Station>> _stationsToExport;
 
     private readonly string _statusString =
         GlobalData.Strings.GetString("ExportingStationStatus") ?? "Exporting station: {0}";
+
+    private readonly ImageList _imageList = new();
 
     private DirectoryCopier? _dirCopier;
     private bool _exportToGameComplete;
@@ -32,15 +38,13 @@ public partial class ExportWindow : Form
     ///     Initializes a new instance of the <see cref="ExportWindow" /> class with the specified stations to export.
     /// </summary>
     /// <param name="stations">The list of stations to be exported.</param>
-    public ExportWindow(List<Station> stations)
+    public ExportWindow(List<TrackableObject<Station>> stations)
     {
         InitializeComponent();
         _stationsToExport = stations;
-    }
 
-    private static string GameBasePath => GlobalData.ConfigManager.Get("gameBasePath") as string ?? string.Empty;
-    private static string StagingPath => GlobalData.ConfigManager.Get("stagingPath") as string ?? string.Empty;
-    private static bool ShouldAutoExportToGame => (bool)(GlobalData.ConfigManager.Get("autoExportToGame") ?? false);
+        SetImageList();
+    }
 
     /// <summary>
     ///     Handles the Load event of the ExportWindow form.
@@ -60,6 +64,14 @@ public partial class ExportWindow : Form
         ConfigureButtons();
     }
 
+    private void SetImageList()
+    {
+        _imageList.Images.Add("enabled", Properties.Resources.enabled);
+        _imageList.Images.Add("disabled", Properties.Resources.disabled);
+        _imageList.ImageSize = new Size(16, 16);
+        lvStations.SmallImageList = _imageList;
+    }
+
     /// <summary>
     ///     Draws the sub-items of the stations ListView, including custom icons.
     /// </summary>
@@ -69,9 +81,9 @@ public partial class ExportWindow : Form
     {
         if (e.ColumnIndex == 0) // Assuming the icon is in the first column
         {
-            if (e.Item == null || lvStations.SmallImageList == null || e.Item.Tag is not Station station) return;
+            if (e.Item == null || lvStations.SmallImageList == null || e.Item.Tag is not TrackableObject<Station> station) return;
 
-            var image = lvStations.SmallImageList.Images[station.GetStatus() ? "enabled" : "disabled"];
+            var image = lvStations.SmallImageList.Images[station.TrackedObject.GetStatus() ? "enabled" : "disabled"];
             if (image == null) return;
 
             // Calculate the position to center the image in the cell
@@ -117,23 +129,23 @@ public partial class ExportWindow : Form
         var radioExtPath = PathHelper.GetRadiosPath(GameBasePath);
 
         foreach (var lvItem in from station in _stationsToExport
-                 let isActive = station.GetStatus()
-                 let customIconString = station.CustomIcon.UseCustom
+                 let isActive = station.TrackedObject.GetStatus()
+                 let customIconString = station.TrackedObject.CustomIcon.UseCustom
                      ? GlobalData.Strings.GetString("CustomIcon")
-                     : station.MetaData.Icon
-                 let songString = station.MetaData.StreamInfo.IsStream
+                     : station.TrackedObject.MetaData.Icon
+                 let songString = station.TrackedObject.MetaData.StreamInfo.IsStream
                      ? GlobalData.Strings.GetString("IsStream")
-                     : station.Songs.Count.ToString()
-                 let streamString = station.MetaData.StreamInfo.IsStream
-                     ? station.MetaData.StreamInfo.StreamUrl
+                     : station.TrackedObject.Songs.Count.ToString()
+                 let streamString = station.TrackedObject.MetaData.StreamInfo.IsStream
+                     ? station.TrackedObject.MetaData.StreamInfo.StreamUrl
                      : GlobalData.Strings.GetString("UsingSongs")
                  let proposedPath = isActive
-                     ? Path.Combine(radioExtPath, station.MetaData.DisplayName)
+                     ? Path.Combine(radioExtPath, station.TrackedObject.MetaData.DisplayName)
                      : GlobalData.Strings.GetString("DisabledStation")
                  select new ListViewItem(new[]
                  {
                      string.Empty, // Placeholder for the icon column
-                     station.MetaData.DisplayName,
+                     station.TrackedObject.MetaData.DisplayName,
                      customIconString ?? string.Empty,
                      songString ?? string.Empty,
                      streamString ?? string.Empty,
@@ -244,16 +256,16 @@ public partial class ExportWindow : Form
             }
 
             var station = _stationsToExport[i];
-            UpdateStatus(string.Format(_statusString, station.MetaData.DisplayName));
+            UpdateStatus(string.Format(_statusString, station.TrackedObject.MetaData.DisplayName));
             bgWorkerExport.ReportProgress((int)(i / (float)_stationsToExport.Count * 100));
 
-            var stationPath = CreateStationDirectory(station);
+            var stationPath = CreateStationDirectory(station.TrackedObject);
             if (string.IsNullOrEmpty(stationPath)) continue;
 
-            if (!CreateMetaDataJson(stationPath, station)) continue;
-            if (station.Songs.Count <= 0) continue;
+            if (!CreateMetaDataJson(stationPath, station.TrackedObject)) continue;
+            if (station.TrackedObject.Songs.Count <= 0) continue;
 
-            if (!CreateSongListJson(stationPath, station))
+            if (!CreateSongListJson(stationPath, station.TrackedObject))
                 AuLogger.GetCurrentLogger<ExportWindow>("BG_ExportStaging")
                     .Error("Couldn't save the songs.sgls file.");
         }
@@ -268,7 +280,7 @@ public partial class ExportWindow : Form
     /// </summary>
     private void RemoveDeletedStations()
     {
-        var stationNames = new HashSet<string>(_stationsToExport.Select(station => station.MetaData.DisplayName),
+        var stationNames = new HashSet<string>(_stationsToExport.Select(station => station.TrackedObject.MetaData.DisplayName),
             StringComparer.OrdinalIgnoreCase);
         var directoriesToDelete = Directory.EnumerateDirectories(StagingPath)
             .Where(dir => !stationNames.Contains(Path.GetFileName(dir)));
@@ -351,6 +363,7 @@ public partial class ExportWindow : Form
             pgExportProgress.Value = 100;
             ToggleButtons();
             UpdateStatus(GlobalData.Strings.GetString("ExportCompleteStatus") ?? "Exported to Staging!");
+            _stationsToExport.ForEach(s => s.AcceptChanges());
 
             OnExportToStagingComplete?.Invoke(this, EventArgs.Empty);
 
@@ -376,8 +389,8 @@ public partial class ExportWindow : Form
             return;
         }
 
-        var activeStations = _stationsToExport.Where(s => s.GetStatus()).ToList();
-        var activeStationNames = activeStations.Select(s => s.MetaData.DisplayName).ToList();
+        var activeStations = _stationsToExport.Where(s => s.TrackedObject.GetStatus()).ToList();
+        var activeStationNames = activeStations.Select(s => s.TrackedObject.MetaData.DisplayName).ToList();
 
         var stagingPaths = FileHelper.SafeEnumerateDirectories(StagingPath).ToList();
 

@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ExportWindow));
             lvStations = new ListView();
             colIsActive = new ColumnHeader();
@@ -37,7 +36,6 @@
             colSongCount = new ColumnHeader();
             colStreamURL = new ColumnHeader();
             colProposedPath = new ColumnHeader();
-            statusImageList = new ImageList(components);
             statusStrip1 = new StatusStrip();
             lblStatus = new ToolStripStatusLabel();
             toolStripStatusLabel2 = new ToolStripStatusLabel();
@@ -51,8 +49,8 @@
             splitContainer1 = new SplitContainer();
             tableLayoutPanel1 = new TableLayoutPanel();
             panel1 = new Panel();
-            btnCancel = new Button();
             lblTip = new Label();
+            btnCancel = new Button();
             statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
@@ -71,7 +69,6 @@
             lvStations.MultiSelect = false;
             lvStations.Name = "lvStations";
             lvStations.Size = new Size(927, 420);
-            lvStations.SmallImageList = statusImageList;
             lvStations.Sorting = SortOrder.Ascending;
             lvStations.TabIndex = 0;
             lvStations.UseCompatibleStateImageBehavior = false;
@@ -105,14 +102,6 @@
             // 
             colProposedPath.Text = "Proposed Path";
             colProposedPath.Width = 200;
-            // 
-            // statusImageList
-            // 
-            statusImageList.ColorDepth = ColorDepth.Depth32Bit;
-            statusImageList.ImageStream = (ImageListStreamer)resources.GetObject("statusImageList.ImageStream");
-            statusImageList.TransparentColor = Color.Transparent;
-            statusImageList.Images.SetKeyName(0, "disabled");
-            statusImageList.Images.SetKeyName(1, "enabled");
             // 
             // statusStrip1
             // 
@@ -286,6 +275,20 @@
             panel1.Size = new Size(267, 150);
             panel1.TabIndex = 11;
             // 
+            // lblTip
+            // 
+            lblTip.AutoSize = true;
+            lblTip.Font = new Font("Segoe UI", 9.75F, FontStyle.Italic, GraphicsUnit.Point, 0);
+            lblTip.Image = Properties.Resources.enabled__16x16;
+            lblTip.ImageAlign = ContentAlignment.BottomLeft;
+            lblTip.Location = new Point(3, 10);
+            lblTip.Name = "lblTip";
+            lblTip.RightToLeft = RightToLeft.No;
+            lblTip.Size = new Size(173, 34);
+            lblTip.TabIndex = 7;
+            lblTip.Text = "     Only Enabled stations are \r\nexported to the game.";
+            lblTip.TextAlign = ContentAlignment.BottomRight;
+            // 
             // btnCancel
             // 
             btnCancel.BackColor = Color.Yellow;
@@ -305,20 +308,6 @@
             btnCancel.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnCancel.UseVisualStyleBackColor = false;
             btnCancel.Visible = false;
-            // 
-            // lblTip
-            // 
-            lblTip.AutoSize = true;
-            lblTip.Font = new Font("Segoe UI", 9.75F, FontStyle.Italic, GraphicsUnit.Point, 0);
-            lblTip.Image = Properties.Resources.enabled__16x16;
-            lblTip.ImageAlign = ContentAlignment.BottomLeft;
-            lblTip.Location = new Point(3, 10);
-            lblTip.Name = "lblTip";
-            lblTip.RightToLeft = RightToLeft.No;
-            lblTip.Size = new Size(173, 34);
-            lblTip.TabIndex = 7;
-            lblTip.Text = "     Only Enabled stations are \r\nexported to the game.";
-            lblTip.TextAlign = ContentAlignment.BottomRight;
             // 
             // ExportWindow
             // 
@@ -373,7 +362,6 @@
         private SplitContainer splitContainer1;
         private TableLayoutPanel tableLayoutPanel1;
         private ColumnHeader colIsActive;
-        private ImageList statusImageList;
         private Panel panel1;
         private Button btnCancel;
         private Label lblTip;

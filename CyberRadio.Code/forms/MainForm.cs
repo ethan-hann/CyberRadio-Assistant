@@ -15,14 +15,17 @@ namespace RadioExt_Helper.forms;
 public partial class MainForm : Form
 {
     private readonly ImageComboBox<ImageComboBoxItem> _languageComboBox = new();
-    private readonly List<ImageComboBoxItem> _languages = [];
+    private readonly List<ImageComboBoxItem> _languages = new();
 
     private readonly Json<MetaData> _metaDataJson = new();
     private readonly NoStationsCtl _noStationsCtrl = new();
     private readonly Json<SongList> _songListJson = new();
 
-    private readonly List<StationEditor> _stationEditors = [];
-    private readonly BindingList<Station> _stations = [];
+    private readonly List<StationEditor> _stationEditors = new();
+    private Dictionary<string, StationEditor> _stationEditorsDictionary;
+    private StationEditor _currentEditor;
+
+    private readonly BindingList<TrackableObject<Station>> _stations = new();
     private readonly System.Timers.Timer resizeTimer;
 
     private readonly ImageList _stationImageList = new();
@@ -50,7 +53,7 @@ public partial class MainForm : Form
         if (GlobalData.ConfigManager.Get("autoCheckForUpdates") as bool? ?? true)
             _ = Updater.CheckForUpdates();
 
-        //Set up timer for resizing; this is needed to prevent the application from saving the window size too often.
+        // Set up timer for resizing; this is needed to prevent the application from saving the window size too often.
         resizeTimer = new(500) // 500 ms delay
         {
             AutoReset = false // Ensure it only ticks once after being reset
@@ -58,6 +61,17 @@ public partial class MainForm : Form
 
         // Save the configuration when resizing has stopped
         resizeTimer.Elapsed += (sender, args) => { SaveWindowSize(); };
+
+        lbStations.DataSource = _stations;
+        lbStations.DisplayMember = "TrackedObject.MetaData";
+    }
+
+    private void InitializeStationEditorsDictionary()
+    {
+        _stationEditorsDictionary = _stationEditors.ToDictionary(
+            editor => editor.Station.MetaData.DisplayName,
+            editor => editor
+        );
     }
 
     private void SetImageList()
@@ -108,7 +122,7 @@ public partial class MainForm : Form
 
     private void InitializeLanguageDropDown()
     {
-        //Populate the language combo box
+        // Populate the language combo box
         _languages.Add(new ImageComboBoxItem("English (en)", Resources.united_kingdom));
         _languages.Add(new ImageComboBoxItem("Español (es)", Resources.spain));
         _languages.Add(new ImageComboBoxItem("Français (fr)", Resources.france));
@@ -160,7 +174,7 @@ public partial class MainForm : Form
         _stationCountFormat = GlobalData.Strings.GetString("EnabledStationsCount") ?? "Enabled Stations: {0} / {1}";
         grpStations.Text = GlobalData.Strings.GetString("Stations");
 
-        //Buttons
+        // Buttons
         btnAddStation.Text = GlobalData.Strings.GetString("NewStation");
         btnDeleteStation.Text = GlobalData.Strings.GetString("DeleteStation");
         btnEnableSelected.Text = GlobalData.Strings.GetString("EnableSelectedStation");
@@ -189,79 +203,130 @@ public partial class MainForm : Form
         else
         {
             lbStations.BeginUpdate();
-            lbStations.DataSource = null;
 
             if (!string.IsNullOrEmpty(StagingPath))
             {
-                _stations.Clear();
-                _stationEditors.Clear();
-
-                var validExtensions = EnumHelper.GetEnumDescriptions<ValidAudioFiles>();
-
-                foreach (var directory in FileHelper.SafeEnumerateDirectories(StagingPath))
-                {
-                    var files = FileHelper.SafeEnumerateFiles(directory).ToList();
-
-                    var metaData = files
-                        .Where(file => file.EndsWith("metadata.json"))
-                        .Select(_metaDataJson.LoadJson)
-                        .FirstOrDefault();
-
-                    var songList = files
-                        .Where(file => file.EndsWith("songs.sgls"))
-                        .Select(_songListJson.LoadJson)
-                        .FirstOrDefault() ?? [];
-
-                    //Get the actual audio files in the directory if they exist.
-                    var songFiles = files
-                        .Where(file => validExtensions.Contains(Path.GetExtension(file).ToLower()))
-                        .ToList();
-
-                    if (metaData == null) continue;
-
-                    if (songList.Count == 0)
-                        songFiles.ForEach(path =>
-                        {
-                            var song = Song.ParseFromFile(path);
-                            if (song != null)
-                                songList.Add(song);
-                        });
-
-                    var station = new Station
-                    {
-                        MetaData = metaData,
-                        SongsAsList = [.. songList]
-                    };
-
-                    _stations.Add(station);
-                    StationEditor editor = new(station);
-                    editor.StationUpdated += StationUpdatedEvent;
-                    _stationEditors.Add(editor);
-                }
+                InitializeData();
+                LoadStationsFromDirectories();
             }
 
-            lbStations.DataSource = _stations;
-            lbStations.DisplayMember = "MetaData";
-            if (lbStations.Items.Count > 0)
-            {
-                lbStations.SelectedIndex = 0;
-                lbStations_SelectedIndexChanged(lbStations, EventArgs.Empty);
-            }
+            UpdateUIAfterPopulation();
 
-            HandleUserControlVisibility();
-
-            UpdateEnabledStationCount();
             lbStations.EndUpdate();
         }
+    }
+
+    private void InitializeData()
+    {
+        _stations.Clear();
+        _stationEditors.Clear();
+    }
+
+    private void LoadStationsFromDirectories()
+    {
+        var validExtensions = EnumHelper.GetEnumDescriptions<ValidAudioFiles>();
+
+        foreach (var directory in FileHelper.SafeEnumerateDirectories(StagingPath))
+        {
+            ProcessDirectory(directory, validExtensions);
+        }
+    }
+
+    private void ProcessDirectory(string directory, IEnumerable<string?> validExtensions)
+    {
+        var files = FileHelper.SafeEnumerateFiles(directory).ToList();
+
+        var metaData = files
+            .Where(file => file.EndsWith("metadata.json"))
+            .Select(_metaDataJson.LoadJson)
+            .FirstOrDefault();
+
+        var songList = files
+            .Where(file => file.EndsWith("songs.sgls"))
+            .Select(_songListJson.LoadJson)
+            .FirstOrDefault() ?? [];
+
+        var songFiles = files
+            .Where(file => validExtensions.Contains(Path.GetExtension(file).ToLower()))
+            .ToList();
+
+        if (metaData != null)
+        {
+            if (songList.Count == 0)
+            {
+                songFiles.ForEach(path =>
+                {
+                    var song = Song.ParseFromFile(path);
+                    if (song != null)
+                        songList.Add(song);
+                });
+            }
+
+            var station = CreateStation(metaData, songList);
+            _stations.Add(new TrackableObject<Station>(station));
+            PreloadStationEditor(station);
+        }
+    }
+
+    private Station CreateStation(MetaData metaData, SongList songList)
+    {
+        return new Station
+        {
+            MetaData = metaData,
+            Songs = songList
+        };
+    }
+
+    private void PreloadStationEditor(Station station)
+    {
+        var bgThread = new Thread(new ParameterizedThreadStart(param => {
+            var editor = new StationEditor(station);
+            editor.StationUpdated += StationUpdatedEvent;
+
+            lock (_stationEditors)
+            {
+                _stationEditors.Add(editor);
+            }
+
+            lock (_stationEditorsDictionary)
+            {
+                _stationEditorsDictionary[station.MetaData.DisplayName] = editor;
+            }
+
+            // Now we need to ensure the UI is updated on the UI thread
+            Invoke(new Action(() =>
+            {
+                // Check if the current station is the one we just loaded
+                if (lbStations.SelectedItem is TrackableObject<Station> selectedStation &&
+                    selectedStation.TrackedObject.MetaData.DisplayName == station.MetaData.DisplayName)
+                {
+                    UpdateStationEditor(editor);
+                }
+            }));
+        }));
+
+        bgThread.SetApartmentState(ApartmentState.STA);
+        bgThread.Start();
+    }
+
+    private void UpdateUIAfterPopulation()
+    {
+        InitializeStationEditorsDictionary();
+
+        if (lbStations.Items.Count > 0)
+        {
+            lbStations.SelectedIndex = 0;
+            lbStations_SelectedIndexChanged(lbStations, EventArgs.Empty);
+        }
+
+        HandleUserControlVisibility();
+        UpdateEnabledStationCount();
     }
 
     private void RefreshAfterPathsChanged(object? sender, EventArgs e)
     {
         PopulateStations();
         if (_stations.Count <= 0) return;
-
-        lbStations.SelectedIndex = 0;
-        lbStations_SelectedIndexChanged(this, EventArgs.Empty);
     }
 
     private void UpdateEnabledStationCount()
@@ -272,7 +337,7 @@ public partial class MainForm : Form
         }
         else
         {
-            var enabledCount = _stations.Count(s => s.GetStatus());
+            var enabledCount = _stations.Count(s => s.TrackedObject.MetaData.IsActive);
             lblStationCount.Text = string.Format(_stationCountFormat, enabledCount, _stations.Count);
         }
     }
@@ -285,23 +350,44 @@ public partial class MainForm : Form
             return;
         }
 
-        if (lbStations.SelectedItem is not Station station) return;
+        if (lbStations.SelectedItem is not TrackableObject<Station> station) return;
 
-        _stationEditors.ForEach(editor => { editor.GetMusicPlayer().StopStream(); });
+        // Stop music players
+        foreach (var sEditor in _stationEditors)
+        {
+            sEditor.GetMusicPlayer().StopStream();
+        }
+
+        // Get the editor from the dictionary
+        if (_stationEditorsDictionary.TryGetValue(station.TrackedObject.MetaData.DisplayName, out var editor))
+        {
+            UpdateStationEditor(editor);
+        }
+        else
+        {
+            // Pre-load the station editor if not already loaded
+            PreloadStationEditor(station.TrackedObject);
+        }
+    }
+
+    private void UpdateStationEditor(StationEditor editor)
+    {
+        if (_currentEditor == editor) return;
 
         splitContainer1.Panel2.SuspendLayout();
         splitContainer1.Panel2.Controls.Clear();
-        splitContainer1.Panel2.Controls.Add(_stationEditors.Find(
-            s => s.Station.MetaData.DisplayName.Equals(station.MetaData.DisplayName)));
+        splitContainer1.Panel2.Controls.Add(editor);
         splitContainer1.Panel2.ResumeLayout();
+
+        _currentEditor = editor;
     }
 
     private void btnEnableStation_Click(object sender, EventArgs e)
     {
-        if (lbStations.SelectedItem is not Station s) return;
+        if (lbStations.SelectedItem is not TrackableObject<Station> s) return;
 
-        s.MetaData.IsActive = true;
-        s.PendingSave = true;
+        s.TrackedObject.MetaData.IsActive = true;
+        s.CheckPendingSaveStatus();
 
         lbStations.BeginUpdate();
         lbStations.Invalidate();
@@ -314,10 +400,10 @@ public partial class MainForm : Form
         lbStations.BeginUpdate();
         foreach (var station in lbStations.Items)
         {
-            if (station is Station s)
+            if (station is TrackableObject<Station> s)
             {
-                s.MetaData.IsActive = true;
-                s.PendingSave = true;
+                s.TrackedObject.MetaData.IsActive = true;
+                s.CheckPendingSaveStatus();
             }
         }
 
@@ -328,10 +414,10 @@ public partial class MainForm : Form
 
     private void btnDisableStation_Click(object sender, EventArgs e)
     {
-        if (lbStations.SelectedItem is not Station s) return;
+        if (lbStations.SelectedItem is not TrackableObject<Station> s) return;
 
-        s.MetaData.IsActive = false;
-        s.PendingSave = true;
+        s.TrackedObject.MetaData.IsActive = false;
+        s.CheckPendingSaveStatus();
 
         lbStations.BeginUpdate();
         lbStations.Invalidate();
@@ -344,10 +430,10 @@ public partial class MainForm : Form
         lbStations.BeginUpdate();
         foreach (var station in lbStations.Items)
         {
-            if (station is Station s)
+            if (station is TrackableObject<Station> s)
             {
-                s.MetaData.IsActive = false;
-                s.PendingSave = true;
+                s.TrackedObject.MetaData.IsActive = false;
+                s.CheckPendingSaveStatus();
             }
         }
 
@@ -367,21 +453,18 @@ public partial class MainForm : Form
             {
                 DisplayName = $"{GlobalData.Strings.GetString("NewStationListBoxEntry")} {_newStationCount}"
             },
-            PendingSave = true
         };
 
-        _stations.Add(blankStation);
+        _stations.Add(new TrackableObject<Station>(blankStation));
 
-        StationEditor editor = new(blankStation);
-        editor.StationUpdated += StationUpdatedEvent;
-        _stationEditors.Add(editor);
+        PreloadStationEditor(blankStation);
 
         lbStations.SelectedItem = blankStation;
         _newStationCount++;
 
         if (_stations.Count <= 0) return;
 
-        //Re-show our station editor if the station count has increased again.
+        // Re-show our station editor if the station count has increased again.
         _noStationsCtrl.Visible = false;
         lbStations_SelectedIndexChanged(this, EventArgs.Empty);
 
@@ -390,10 +473,10 @@ public partial class MainForm : Form
 
     private void StationUpdatedEvent(object? sender, EventArgs e)
     {
-        if (lbStations.SelectedItem is Station station)
+        if (lbStations.SelectedItem is TrackableObject<Station> station)
         {
-            station.PendingSave = true;
             lbStations.BeginUpdate();
+            station.CheckPendingSaveStatus();
             lbStations.Invalidate();
             lbStations.EndUpdate();
         }
@@ -404,39 +487,43 @@ public partial class MainForm : Form
         if (GameBasePath.Equals(string.Empty) || StagingPath.Equals(string.Empty))
             return;
 
-        if (lbStations.SelectedItem is not Station station) return;
+        if (lbStations.SelectedItem is not TrackableObject<Station> station) return;
 
         string newStationPrefix = GlobalData.Strings.GetString("NewStationListBoxEntry") ?? "[New Station]";
 
-        //If the station to be removed contains "[New Station]" in the name, decrement our new station count.
-        if (station.MetaData.DisplayName.StartsWith(newStationPrefix))
+        // If the station to be removed contains "[New Station]" in the name, decrement our new station count.
+        if (station.TrackedObject.MetaData.DisplayName.StartsWith(newStationPrefix))
             _newStationCount--;
 
-        //Reset new station count if there are no more "New stations" in the list box.
-        if (!_stations.Select(s => s.MetaData.DisplayName.StartsWith(newStationPrefix)).Contains(true))
+        // Reset new station count if there are no more "New stations" in the list box.
+        if (!_stations.Select(s => s.TrackedObject.MetaData.DisplayName.StartsWith(newStationPrefix)).Contains(true))
             _newStationCount = 1;
 
-        _stations.Remove(station);
-        var editor = _stationEditors.First(s => s.Station.MetaData.DisplayName
-            .Equals(station.MetaData.DisplayName));
-        editor.StationUpdated -= StationUpdatedEvent; //Remove the event handler
-        _stationEditors.Remove(editor); //Remove the editor
+        var stationToRemove = _stations.First(s => s.TrackedObject.MetaData.DisplayName.Equals(station.TrackedObject.MetaData.DisplayName));
+        _stations.Remove(stationToRemove);
 
-        lbStations_SelectedIndexChanged(this, EventArgs.Empty);
+        lock (_stationEditors)
+        {
+            var editor = _stationEditors.First(s => s.Station.MetaData.DisplayName
+                .Equals(station.TrackedObject.MetaData.DisplayName));
+            editor.StationUpdated -= StationUpdatedEvent; // Remove the event handler
+            _stationEditors.Remove(editor); // Remove the editor
+        }
+
+        lock (_stationEditorsDictionary)
+        {
+            _stationEditorsDictionary.Remove(station.TrackedObject.MetaData.DisplayName);
+        }
 
         UpdateEnabledStationCount();
 
-        switch (_stations.Count)
+        if (_stations.Count <= 0)
         {
-            case > 0:
-                return;
-            case <= 0:
-                _newStationCount = 1;
-                break;
+            _newStationCount = 1;
+            HandleUserControlVisibility();
         }
 
-        //Hide the station editor (and reset it) if there are no stations to edit.
-        HandleUserControlVisibility();
+        lbStations.SelectedIndex = _stations.Count > 0 ? 0 : -1;
     }
 
     private void cmbLanguageSelect_SelectedIndexChanged(object? sender, EventArgs e)
@@ -453,7 +540,7 @@ public partial class MainForm : Form
 
         _noStationsCtrl.Translate();
 
-        Focus(); //re-focus the main form
+        Focus(); // re-focus the main form
 
         languageToolStripMenuItem.HideDropDown();
         ResumeLayout();
@@ -488,7 +575,7 @@ public partial class MainForm : Form
 
     private void exportToGameToolStripMenuItem_Click(object sender, EventArgs e)
     {
-        var exportWindow = new ExportWindow([.. _stations]);
+        var exportWindow = new ExportWindow(_stations.ToList());
         exportWindow.OnExportToStagingComplete += (sender, args) => { PopulateStations(); };
         exportWindow.ShowDialog(this);
     }

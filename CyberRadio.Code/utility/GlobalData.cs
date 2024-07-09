@@ -6,6 +6,7 @@ using AetherUtils.Core.Configuration;
 using AetherUtils.Core.Logging;
 using RadioExt_Helper.config;
 using RadioExt_Helper.forms;
+using RadioExt_Helper.models;
 
 namespace RadioExt_Helper.utility;
 
@@ -29,6 +30,8 @@ public static class GlobalData
     private static ComboBox UiIconsComboTemplate { get; set; } = new();
 
     private static Assembly ExecAssembly { get; } = Assembly.GetExecutingAssembly();
+
+    public static List<TrackableObject<Station>> TrackedStations = [];
 
     /// <summary>
     ///     <para>
@@ -109,9 +112,17 @@ public static class GlobalData
     ///     manually setting the data source.
     /// </summary>
     /// <returns>A ComboBox that is a clone of the template combo box. The data source is already set.</returns>
+    //public static ComboBox? CloneTemplateComboBox()
+    //{
+    //    if (UiIconsComboTemplate.IsHandleCreated)
+    //        return UiIconsComboTemplate.Invoke(new Func<ComboBox?>(CloneTemplateComboBox));
+    //    else
+    //        return null;
+    //}
+
     public static ComboBox CloneTemplateComboBox()
     {
-        var clone = new ComboBox
+        return new ComboBox
         {
             // Copy basic properties
             Location = UiIconsComboTemplate.Location,
@@ -147,8 +158,6 @@ public static class GlobalData
             AutoCompleteMode = UiIconsComboTemplate.AutoCompleteMode,
             AutoCompleteSource = UiIconsComboTemplate.AutoCompleteSource
         };
-
-        return clone;
     }
 
     /// <summary>

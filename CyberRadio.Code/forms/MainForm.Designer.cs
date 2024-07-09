@@ -54,8 +54,7 @@ namespace RadioExt_Helper.forms
             languageToolStripMenuItem = new ToolStripMenuItem();
             splitContainer1 = new SplitContainer();
             grpStations = new GroupBox();
-            lbStations = new StationListBox(components);
-            stationBindingSource = new BindingSource(components);
+            lbStations = new StationListBox();
             statusStrip1 = new StatusStrip();
             toolStripStatusLabel1 = new ToolStripStatusLabel();
             lblStationCount = new ToolStripStatusLabel();
@@ -70,17 +69,18 @@ namespace RadioExt_Helper.forms
             tableLayoutPanel1 = new TableLayoutPanel();
             btnDeleteStation = new Button();
             btnAddStation = new Button();
+            stationBindingSource = new BindingSource(components);
             menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.SuspendLayout();
             grpStations.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)stationBindingSource).BeginInit();
             statusStrip1.SuspendLayout();
             tableLayoutPanel2.SuspendLayout();
             cmsDisable.SuspendLayout();
             cmsEnable.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)stationBindingSource).BeginInit();
             SuspendLayout();
             // 
             // menuStrip1
@@ -275,9 +275,8 @@ namespace RadioExt_Helper.forms
             // 
             // lbStations
             // 
-            lbStations.DataSource = stationBindingSource;
+            lbStations.CausesValidation = false;
             lbStations.DisabledIconKey = "disabled";
-            lbStations.DisplayMember = "MetaData";
             lbStations.Dock = DockStyle.Fill;
             lbStations.DrawMode = DrawMode.OwnerDrawFixed;
             lbStations.EditedStationIconKey = "edited_station";
@@ -293,10 +292,6 @@ namespace RadioExt_Helper.forms
             lbStations.TabIndex = 0;
             lbStations.SelectedIndexChanged += lbStations_SelectedIndexChanged;
             lbStations.MouseDown += lbStations_MouseDown;
-            // 
-            // stationBindingSource
-            // 
-            stationBindingSource.DataSource = typeof(models.Station);
             // 
             // statusStrip1
             // 
@@ -462,6 +457,10 @@ namespace RadioExt_Helper.forms
             btnAddStation.UseVisualStyleBackColor = false;
             btnAddStation.Click += btnAddStation_Click;
             // 
+            // stationBindingSource
+            // 
+            stationBindingSource.DataSource = typeof(models.Station);
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(96F, 96F);
@@ -493,13 +492,13 @@ namespace RadioExt_Helper.forms
             splitContainer1.ResumeLayout(false);
             grpStations.ResumeLayout(false);
             grpStations.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)stationBindingSource).EndInit();
             statusStrip1.ResumeLayout(false);
             statusStrip1.PerformLayout();
             tableLayoutPanel2.ResumeLayout(false);
             cmsDisable.ResumeLayout(false);
             cmsEnable.ResumeLayout(false);
             tableLayoutPanel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)stationBindingSource).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }

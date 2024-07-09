@@ -6,7 +6,7 @@ namespace RadioExt_Helper.models;
 /// <summary>
 ///     Represents a list of songs associated with a radio station.
 /// </summary>
-public class SongList : ICollection<Song>
+public class SongList : ICollection<Song>, IEquatable<SongList>, ICloneable
 {
     /// <summary>
     ///     The songs for the radio station, as a serializable list.
@@ -55,5 +55,40 @@ public class SongList : ICollection<Song>
     IEnumerator IEnumerable.GetEnumerator()
     {
         return GetEnumerator();
+    }
+
+    public bool Equals(SongList? other)
+    {
+        if (other == null) return false;
+        return Songs.SequenceEqual(other.Songs);
+    }
+
+    public override bool Equals(object? obj)
+    {
+        return Equals(obj as SongList);
+    }
+
+    public override int GetHashCode()
+    {
+        //Create a hash code that depends on the contents of the list
+        unchecked
+        {
+            int hash = 19;
+            foreach (var song in this)
+            {
+                hash = hash * 31 + (song?.GetHashCode() ?? 0);
+            }
+            return hash;
+        }
+    }
+
+    public object Clone()
+    {
+        var clone = new SongList();
+        foreach (var song in Songs)
+        {
+            clone.Add((Song)song.Clone());
+        }
+        return clone;
     }
 }
