@@ -115,10 +115,10 @@ public sealed class TrackableObject<T> : INotifyPropertyChanged where T : class,
             case IEnumerable enumerable when obj.GetType().IsGenericType:
             {
                 var listType = typeof(List<>).MakeGenericType(obj.GetType().GetGenericArguments().First());
-                var list = (IList)Activator.CreateInstance(listType)!;
+                var list = Activator.CreateInstance(listType) as IList;
                 foreach (var item in enumerable)
                 {
-                    list.Add(DeepClone(item));
+                    list?.Add(DeepClone(item));
                 }
                 return list;
             }
