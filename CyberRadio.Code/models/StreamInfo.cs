@@ -72,7 +72,7 @@ public sealed class StreamInfo : INotifyPropertyChanged, ICloneable, IEquatable<
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
-    protected virtual void OnPropertyChanged(string propertyName)
+    private void OnPropertyChanged(string propertyName)
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
