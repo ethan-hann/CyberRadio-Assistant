@@ -388,7 +388,25 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
         if (e.Item != null)
             lvSongOrder.DoDragDrop(e.Item, DragDropEffects.Move);
     }
-    #endregion
 
-    
+    private void LvSongs_KeyDown(object sender, KeyEventArgs e)
+    {
+        if (!e.Control || e.KeyCode != Keys.A) return;
+
+        SelectAllItems(lvSongs);
+        e.SuppressKeyPress = true;
+    }
+
+    /// <summary>
+    /// Selects all the items in a <see cref="ListView"/>.
+    /// </summary>
+    /// <param name="listView">The <see cref="ListView"/> to select items of.</param>
+    private static void SelectAllItems(ListView listView)
+    {
+        listView.BeginUpdate();
+        foreach (ListViewItem item in listView.Items)
+            item.Selected = true;
+        listView.EndUpdate();
+    }
+    #endregion
 }
