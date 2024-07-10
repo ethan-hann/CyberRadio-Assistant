@@ -24,13 +24,15 @@ namespace RadioExt_Helper.config;
 /// </summary>
 public sealed class CyberConfigManager(string configFilePath) : ConfigManager<ApplicationConfig>(configFilePath)
 {
+    private readonly string _configFilePath = configFilePath;
+
     /// <summary>
     ///     Create a new, empty configuration.
     /// </summary>
     /// <returns>true if the configuration is initialized; false, otherwise.</returns>
     public override bool CreateDefaultConfig()
     {
-        if (configFilePath.Equals(string.Empty))
+        if (_configFilePath.Equals(string.Empty))
             return false;
 
         CurrentConfig = new ApplicationConfig();
