@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ConfigForm));
             tableLayoutPanel1 = new TableLayoutPanel();
             lblEditPathsHelp = new Label();
@@ -42,15 +43,11 @@
             tableLayoutPanel3 = new TableLayoutPanel();
             chkNewFileEveryLaunch = new CheckBox();
             lblNewFileEveryLaunchHelp = new Label();
-            btnEditLogsPath = new Button();
-            lblEditLogPathHelp = new Label();
-            lblLogPathLabel = new Label();
-            lblCurrentLogPath = new Label();
+            tabImages = new ImageList(components);
             tableLayoutPanel2 = new TableLayoutPanel();
             btnCancel = new Button();
             btnResetToDefault = new Button();
             btnSaveAndClose = new Button();
-            fldrOpenLogPath = new FolderBrowserDialog();
             tableLayoutPanel1.SuspendLayout();
             tabConfigs.SuspendLayout();
             tabGeneral.SuspendLayout();
@@ -74,19 +71,19 @@
             tableLayoutPanel1.Location = new Point(3, 3);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 5;
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 25F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 25F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 28.125F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 21.875F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel1.Size = new Size(779, 150);
+            tableLayoutPanel1.RowStyles.Add(new RowStyle());
+            tableLayoutPanel1.RowStyles.Add(new RowStyle());
+            tableLayoutPanel1.RowStyles.Add(new RowStyle());
+            tableLayoutPanel1.RowStyles.Add(new RowStyle());
+            tableLayoutPanel1.RowStyles.Add(new RowStyle());
+            tableLayoutPanel1.Size = new Size(779, 143);
             tableLayoutPanel1.TabIndex = 0;
             // 
             // lblEditPathsHelp
             // 
             lblEditPathsHelp.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             lblEditPathsHelp.AutoSize = true;
-            lblEditPathsHelp.Location = new Point(205, 74);
+            lblEditPathsHelp.Location = new Point(205, 57);
             lblEditPathsHelp.Name = "lblEditPathsHelp";
             lblEditPathsHelp.Size = new Size(571, 15);
             lblEditPathsHelp.TabIndex = 6;
@@ -96,7 +93,7 @@
             // 
             lblAutoExportHelp.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             lblAutoExportHelp.AutoSize = true;
-            lblAutoExportHelp.Location = new Point(205, 40);
+            lblAutoExportHelp.Location = new Point(205, 30);
             lblAutoExportHelp.Name = "lblAutoExportHelp";
             lblAutoExportHelp.Size = new Size(571, 15);
             lblAutoExportHelp.TabIndex = 4;
@@ -106,31 +103,33 @@
             // 
             chkCheckForUpdates.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             chkCheckForUpdates.AutoSize = true;
-            chkCheckForUpdates.Location = new Point(10, 6);
+            chkCheckForUpdates.Location = new Point(10, 3);
             chkCheckForUpdates.Margin = new Padding(10, 3, 3, 3);
             chkCheckForUpdates.Name = "chkCheckForUpdates";
             chkCheckForUpdates.Size = new Size(189, 19);
             chkCheckForUpdates.TabIndex = 1;
             chkCheckForUpdates.Text = "Check for Updates at Startup?";
             chkCheckForUpdates.UseVisualStyleBackColor = true;
+            chkCheckForUpdates.CheckedChanged += chkCheckForUpdates_CheckedChanged;
             // 
             // chkAutoExportToGame
             // 
             chkAutoExportToGame.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             chkAutoExportToGame.AutoSize = true;
-            chkAutoExportToGame.Location = new Point(10, 38);
+            chkAutoExportToGame.Location = new Point(10, 28);
             chkAutoExportToGame.Margin = new Padding(10, 3, 3, 3);
             chkAutoExportToGame.Name = "chkAutoExportToGame";
             chkAutoExportToGame.Size = new Size(189, 19);
             chkAutoExportToGame.TabIndex = 2;
             chkAutoExportToGame.Text = "Auto-Export to Game?";
             chkAutoExportToGame.UseVisualStyleBackColor = true;
+            chkAutoExportToGame.CheckedChanged += chkAutoExportToGame_CheckedChanged;
             // 
             // lblUpdatesHelp
             // 
             lblUpdatesHelp.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             lblUpdatesHelp.AutoSize = true;
-            lblUpdatesHelp.Location = new Point(205, 8);
+            lblUpdatesHelp.Location = new Point(205, 5);
             lblUpdatesHelp.Name = "lblUpdatesHelp";
             lblUpdatesHelp.Size = new Size(571, 15);
             lblUpdatesHelp.TabIndex = 3;
@@ -143,22 +142,20 @@
             btnEditPaths.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
             btnEditPaths.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
             btnEditPaths.FlatStyle = FlatStyle.Flat;
-            btnEditPaths.Image = Properties.Resources.folder__16x16;
-            btnEditPaths.Location = new Point(3, 67);
+            btnEditPaths.Location = new Point(3, 53);
             btnEditPaths.Name = "btnEditPaths";
-            btnEditPaths.Size = new Size(196, 30);
+            btnEditPaths.Size = new Size(196, 23);
             btnEditPaths.TabIndex = 5;
             btnEditPaths.Text = "Edit Paths...";
-            btnEditPaths.TextAlign = ContentAlignment.MiddleRight;
-            btnEditPaths.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnEditPaths.UseVisualStyleBackColor = false;
-            btnEditPaths.Click += BtnEditPaths_Click;
+            btnEditPaths.Click += btnEditPaths_Click;
             // 
             // tabConfigs
             // 
             tabConfigs.Controls.Add(tabGeneral);
             tabConfigs.Controls.Add(tabLogging);
             tabConfigs.Dock = DockStyle.Fill;
+            tabConfigs.ImageList = tabImages;
             tabConfigs.Location = new Point(0, 0);
             tabConfigs.Name = "tabConfigs";
             tabConfigs.SelectedIndex = 0;
@@ -170,10 +167,10 @@
             tabGeneral.BackColor = Color.White;
             tabGeneral.Controls.Add(tableLayoutPanel1);
             tabGeneral.ImageKey = "config";
-            tabGeneral.Location = new Point(4, 24);
+            tabGeneral.Location = new Point(4, 31);
             tabGeneral.Name = "tabGeneral";
             tabGeneral.Padding = new Padding(3);
-            tabGeneral.Size = new Size(785, 156);
+            tabGeneral.Size = new Size(785, 149);
             tabGeneral.TabIndex = 0;
             tabGeneral.Text = "General";
             // 
@@ -182,10 +179,10 @@
             tabLogging.BackColor = Color.White;
             tabLogging.Controls.Add(tableLayoutPanel3);
             tabLogging.ImageKey = "logging";
-            tabLogging.Location = new Point(4, 24);
+            tabLogging.Location = new Point(4, 31);
             tabLogging.Name = "tabLogging";
             tabLogging.Padding = new Padding(3);
-            tabLogging.Size = new Size(785, 156);
+            tabLogging.Size = new Size(785, 149);
             tabLogging.TabIndex = 1;
             tabLogging.Text = "Logging";
             // 
@@ -196,23 +193,17 @@
             tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 74.05858F));
             tableLayoutPanel3.Controls.Add(chkNewFileEveryLaunch, 0, 0);
             tableLayoutPanel3.Controls.Add(lblNewFileEveryLaunchHelp, 1, 0);
-            tableLayoutPanel3.Controls.Add(btnEditLogsPath, 0, 5);
-            tableLayoutPanel3.Controls.Add(lblEditLogPathHelp, 1, 5);
-            tableLayoutPanel3.Controls.Add(lblLogPathLabel, 0, 6);
-            tableLayoutPanel3.Controls.Add(lblCurrentLogPath, 1, 6);
             tableLayoutPanel3.Dock = DockStyle.Fill;
             tableLayoutPanel3.Location = new Point(3, 3);
             tableLayoutPanel3.Name = "tableLayoutPanel3";
-            tableLayoutPanel3.RowCount = 8;
+            tableLayoutPanel3.RowCount = 6;
             tableLayoutPanel3.RowStyles.Add(new RowStyle());
             tableLayoutPanel3.RowStyles.Add(new RowStyle());
             tableLayoutPanel3.RowStyles.Add(new RowStyle());
             tableLayoutPanel3.RowStyles.Add(new RowStyle());
             tableLayoutPanel3.RowStyles.Add(new RowStyle());
             tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 37F));
-            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel3.Size = new Size(779, 150);
+            tableLayoutPanel3.Size = new Size(779, 143);
             tableLayoutPanel3.TabIndex = 1;
             // 
             // chkNewFileEveryLaunch
@@ -226,6 +217,7 @@
             chkNewFileEveryLaunch.TabIndex = 1;
             chkNewFileEveryLaunch.Text = "New File Every Launch?";
             chkNewFileEveryLaunch.UseVisualStyleBackColor = true;
+            chkNewFileEveryLaunch.CheckedChanged += chkNewFileEveryLaunch_CheckedChanged;
             // 
             // lblNewFileEveryLaunchHelp
             // 
@@ -237,56 +229,13 @@
             lblNewFileEveryLaunchHelp.TabIndex = 3;
             lblNewFileEveryLaunchHelp.Text = "If checked, specifies that a new log file will be created on every run of the app.";
             // 
-            // btnEditLogsPath
+            // tabImages
             // 
-            btnEditLogsPath.BackColor = Color.Yellow;
-            btnEditLogsPath.Dock = DockStyle.Fill;
-            btnEditLogsPath.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
-            btnEditLogsPath.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
-            btnEditLogsPath.FlatStyle = FlatStyle.Flat;
-            btnEditLogsPath.Image = Properties.Resources.folder__16x16;
-            btnEditLogsPath.Location = new Point(3, 28);
-            btnEditLogsPath.Name = "btnEditLogsPath";
-            btnEditLogsPath.Size = new Size(196, 31);
-            btnEditLogsPath.TabIndex = 7;
-            btnEditLogsPath.Text = "Edit Logs Path...";
-            btnEditLogsPath.TextAlign = ContentAlignment.MiddleRight;
-            btnEditLogsPath.TextImageRelation = TextImageRelation.ImageBeforeText;
-            btnEditLogsPath.UseVisualStyleBackColor = false;
-            btnEditLogsPath.Click += BtnEditLogsPath_Click;
-            // 
-            // lblEditLogPathHelp
-            // 
-            lblEditLogPathHelp.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            lblEditLogPathHelp.AutoSize = true;
-            lblEditLogPathHelp.Location = new Point(205, 36);
-            lblEditLogPathHelp.Name = "lblEditLogPathHelp";
-            lblEditLogPathHelp.Size = new Size(571, 15);
-            lblEditLogPathHelp.TabIndex = 8;
-            lblEditLogPathHelp.Text = "Opens a folder dialog where you can choose a new path to save log files.";
-            // 
-            // lblLogPathLabel
-            // 
-            lblLogPathLabel.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            lblLogPathLabel.AutoSize = true;
-            lblLogPathLabel.Location = new Point(3, 64);
-            lblLogPathLabel.Name = "lblLogPathLabel";
-            lblLogPathLabel.Size = new Size(196, 15);
-            lblLogPathLabel.TabIndex = 9;
-            lblLogPathLabel.Text = "Log Path:";
-            lblLogPathLabel.TextAlign = ContentAlignment.MiddleRight;
-            // 
-            // lblCurrentLogPath
-            // 
-            lblCurrentLogPath.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            lblCurrentLogPath.AutoSize = true;
-            lblCurrentLogPath.Font = new Font("Segoe UI Variable Display", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblCurrentLogPath.ForeColor = Color.Green;
-            lblCurrentLogPath.Location = new Point(205, 63);
-            lblCurrentLogPath.Name = "lblCurrentLogPath";
-            lblCurrentLogPath.Size = new Size(571, 17);
-            lblCurrentLogPath.TabIndex = 10;
-            lblCurrentLogPath.Text = "<no path>";
+            tabImages.ColorDepth = ColorDepth.Depth32Bit;
+            tabImages.ImageStream = (ImageListStreamer)resources.GetObject("tabImages.ImageStream");
+            tabImages.TransparentColor = Color.Transparent;
+            tabImages.Images.SetKeyName(0, "config");
+            tabImages.Images.SetKeyName(1, "logging");
             // 
             // tableLayoutPanel2
             // 
@@ -312,16 +261,13 @@
             btnCancel.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
             btnCancel.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
             btnCancel.FlatStyle = FlatStyle.Flat;
-            btnCancel.Image = Properties.Resources.cancel_16x16;
             btnCancel.Location = new Point(653, 3);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(137, 35);
             btnCancel.TabIndex = 8;
             btnCancel.Text = "Cancel";
-            btnCancel.TextAlign = ContentAlignment.MiddleRight;
-            btnCancel.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnCancel.UseVisualStyleBackColor = false;
-            btnCancel.Click += BtnCancel_Click;
+            btnCancel.Click += btnCancel_Click;
             // 
             // btnResetToDefault
             // 
@@ -330,16 +276,13 @@
             btnResetToDefault.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
             btnResetToDefault.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
             btnResetToDefault.FlatStyle = FlatStyle.Flat;
-            btnResetToDefault.Image = Properties.Resources.refresh__16x16;
             btnResetToDefault.Location = new Point(371, 3);
             btnResetToDefault.Name = "btnResetToDefault";
             btnResetToDefault.Size = new Size(276, 35);
             btnResetToDefault.TabIndex = 7;
             btnResetToDefault.Text = "Reset to Defaults";
-            btnResetToDefault.TextAlign = ContentAlignment.MiddleRight;
-            btnResetToDefault.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnResetToDefault.UseVisualStyleBackColor = false;
-            btnResetToDefault.Click += BtnResetToDefault_Click;
+            btnResetToDefault.Click += btnResetToDefault_Click;
             // 
             // btnSaveAndClose
             // 
@@ -348,21 +291,13 @@
             btnSaveAndClose.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
             btnSaveAndClose.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
             btnSaveAndClose.FlatStyle = FlatStyle.Flat;
-            btnSaveAndClose.Image = Properties.Resources.disk__16x16;
             btnSaveAndClose.Location = new Point(3, 3);
             btnSaveAndClose.Name = "btnSaveAndClose";
             btnSaveAndClose.Size = new Size(362, 35);
             btnSaveAndClose.TabIndex = 6;
             btnSaveAndClose.Text = "Save and Close";
-            btnSaveAndClose.TextAlign = ContentAlignment.MiddleRight;
-            btnSaveAndClose.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnSaveAndClose.UseVisualStyleBackColor = false;
-            btnSaveAndClose.Click += BtnSaveAndClose_Click;
-            // 
-            // fldrOpenLogPath
-            // 
-            fldrOpenLogPath.Description = "Select the location to store log files";
-            fldrOpenLogPath.UseDescriptionForTitle = true;
+            btnSaveAndClose.Click += btnSaveAndClose_Click;
             // 
             // ConfigForm
             // 
@@ -407,16 +342,12 @@
         private TabPage tabGeneral;
         private TabPage tabLogging;
         private TableLayoutPanel tableLayoutPanel2;
+        private ImageList tabImages;
         private Button btnCancel;
         private Button btnResetToDefault;
         private Button btnSaveAndClose;
         private TableLayoutPanel tableLayoutPanel3;
         private CheckBox chkNewFileEveryLaunch;
         private Label lblNewFileEveryLaunchHelp;
-        private Button btnEditLogsPath;
-        private Label lblEditLogPathHelp;
-        private Label lblLogPathLabel;
-        private Label lblCurrentLogPath;
-        private FolderBrowserDialog fldrOpenLogPath;
     }
 }

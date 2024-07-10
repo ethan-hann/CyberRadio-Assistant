@@ -1,21 +1,4 @@
-﻿// Song.cs : RadioExt-Helper
-// Copyright (C) 2024  Ethan Hann
-// 
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-// 
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-// 
-// You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
-using System.Diagnostics.CodeAnalysis;
-using AetherUtils.Core.Logging;
+﻿using AetherUtils.Core.Logging;
 using Newtonsoft.Json;
 using File = TagLib.File;
 
@@ -24,13 +7,13 @@ namespace RadioExt_Helper.models;
 /// <summary>
 ///     Represents a single song entry. Song information is read from the file on disk.
 /// </summary>
-public sealed class Song : IEquatable<Song>, ICloneable
+public class Song
 {
     /// <summary>
     ///     The name of the song.
     /// </summary>
-    [JsonProperty("title")]
-    public string Title { get; set; } = string.Empty;
+    [JsonProperty("name")]
+    public string Name { get; set; } = string.Empty;
 
     /// <summary>
     ///     The artist of the song or audio file.
@@ -47,86 +30,48 @@ public sealed class Song : IEquatable<Song>, ICloneable
     /// <summary>
     ///     The file size (in bytes) of the song or audio file.
     /// </summary>
-    [JsonProperty("file_size")]
-    public ulong FileSize { get; set; }
+    [JsonProperty("size")]
+    public ulong Size { get; set; }
 
     /// <summary>
     ///     The original file path of the song or audio file on disk.
     /// </summary>
-    [JsonProperty("file_path")]
-    public string FilePath { get; set; } = string.Empty;
-
-    public object Clone()
-    {
-        return new Song
-        {
-            Title = Title,
-            Artist = Artist,
-            Duration = Duration,
-            FileSize = FileSize,
-            FilePath = FilePath
-        };
-    }
-
-    public bool Equals(Song? other)
-    {
-        if (other == null) return false;
-        return Title.Equals(other.Title) &&
-               Artist.Equals(other.Artist) &&
-               Duration.Equals(other.Duration) &&
-               FileSize.Equals(other.FileSize) &&
-               FilePath.Equals(other.FilePath);
-    }
+    [JsonProperty("original_path")]
+    public string OriginalFilePath { get; set; } = string.Empty;
 
     /// <summary>
     ///     Get metadata about an audio file and return a new <see cref="Song" /> object.
     /// </summary>
     /// <param name="filePath">The path to the audio file.</param>
     /// <returns>A new <see cref="Song" /> with the metadata or <c>null</c> if an exception occurred.</returns>
-    public static Song? FromFile(string filePath)
+    public static Song? ParseFromFile(string filePath)
     {
+        Song? song = new();
         try
         {
-            return CreateSongFromFile(filePath);
+            var file = File.Create(filePath);
+            song.OriginalFilePath = filePath;
+            song.Name = file.Tag.Title ?? Path.GetFileName(filePath);
+            song.Artist = file.Tag.FirstPerformer ?? string.Empty;
+            song.Size = (ulong)new FileInfo(filePath).Length;
+            song.Duration = file.Properties.Duration;
         }
         catch (Exception ex)
         {
-            AuLogger.GetCurrentLogger<Song>("FromFile")
+            AuLogger.GetCurrentLogger<Song>("ParseFromFile")
                 .Error(ex, $"Couldn't read song file: {filePath}");
-            return null;
+            song = null;
         }
-    }
 
-    private static Song CreateSongFromFile(string filePath)
-    {
-        var file = File.Create(filePath);
-        return new Song
-        {
-            FilePath = filePath,
-            Title = file.Tag.Title ?? Path.GetFileName(filePath),
-            Artist = file.Tag.FirstPerformer ?? string.Empty,
-            FileSize = (ulong)new FileInfo(filePath).Length,
-            Duration = file.Properties.Duration
-        };
-    }
-
-    public override bool Equals(object? obj)
-    {
-        return Equals(obj as Song);
-    }
-
-    [SuppressMessage("ReSharper", "NonReadonlyMemberInGetHashCode")]
-    public override int GetHashCode()
-    {
-        return HashCode.Combine(Title, Artist, Duration, FileSize, FilePath);
+        return song;
     }
 
     /// <summary>
-    ///     Get a display friendly value representing this song.
+    ///     Get a display friendly value representing this metadata.
     /// </summary>
-    /// <returns>The <see cref="Title" /> of the song.</returns>
+    /// <returns>The <see cref="Name" /> of the song.</returns>
     public override string ToString()
     {
-        return Title;
+        return Name;
     }
 }

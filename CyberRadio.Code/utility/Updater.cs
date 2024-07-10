@@ -1,20 +1,4 @@
-﻿// Updater.cs : RadioExt-Helper
-// Copyright (C) 2024  Ethan Hann
-// 
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-// 
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-// 
-// You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
-using System.Reflection;
+﻿using System.Reflection;
 using AetherUtils.Core.Logging;
 using Newtonsoft.Json.Linq;
 using RadioExt_Helper.forms;
@@ -88,10 +72,6 @@ public static class Updater
         }
     }
 
-    /// <summary>
-    /// Downloads the latest version information from the version.json file on the main branch of the GitHub repository.
-    /// </summary>
-    /// <returns>A task that, when complete, contains the version and the download URL to the application.</returns>
     private static async Task<(string version, string url)> GetLatestVersionInfoAsync()
     {
         using var client = new HttpClient();

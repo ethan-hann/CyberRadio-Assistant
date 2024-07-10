@@ -1,6 +1,4 @@
-﻿using RadioExt_Helper.custom_controls;
-
-namespace RadioExt_Helper.user_controls
+﻿namespace RadioExt_Helper.user_controls
 {
     sealed partial class StationEditor
     {
@@ -30,6 +28,8 @@ namespace RadioExt_Helper.user_controls
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(StationEditor));
             lblIcon = new Label();
             txtDisplayName = new TextBox();
             lblName = new Label();
@@ -72,10 +72,11 @@ namespace RadioExt_Helper.user_controls
             radUseStreamYes = new RadioButton();
             radUseStreamNo = new RadioButton();
             tableLayoutPanel6 = new TableLayoutPanel();
-            flpStreamUrlTesting = new FlowLayoutPanel();
+            flowLayoutPanel3 = new FlowLayoutPanel();
             mpStreamPlayer = new MusicPlayer();
             btnGetFromRadioGarden = new Button();
             txtStreamURL = new TextBox();
+            tabImages = new ImageList(components);
             statusStrip1 = new StatusStrip();
             lblStatus = new ToolStripStatusLabel();
             grpDisplay.SuspendLayout();
@@ -97,7 +98,7 @@ namespace RadioExt_Helper.user_controls
             tableLayoutPanel5.SuspendLayout();
             flowLayoutPanel2.SuspendLayout();
             tableLayoutPanel6.SuspendLayout();
-            flpStreamUrlTesting.SuspendLayout();
+            flowLayoutPanel3.SuspendLayout();
             statusStrip1.SuspendLayout();
             SuspendLayout();
             // 
@@ -111,8 +112,8 @@ namespace RadioExt_Helper.user_controls
             lblIcon.Size = new Size(36, 16);
             lblIcon.TabIndex = 2;
             lblIcon.Text = "Icon: ";
-            lblIcon.MouseEnter += LblIcon_MouseEnter;
-            lblIcon.MouseLeave += Lbl_MouseLeave;
+            lblIcon.MouseEnter += lblIcon_MouseEnter;
+            lblIcon.MouseLeave += lbl_MouseLeave;
             // 
             // txtDisplayName
             // 
@@ -122,8 +123,7 @@ namespace RadioExt_Helper.user_controls
             txtDisplayName.Name = "txtDisplayName";
             txtDisplayName.Size = new Size(849, 23);
             txtDisplayName.TabIndex = 1;
-            txtDisplayName.TextChanged += TxtDisplayName_TextChanged;
-            txtDisplayName.Leave += TxtDisplayName_Leave;
+            txtDisplayName.TextChanged += txtDisplayName_TextChanged;
             // 
             // lblName
             // 
@@ -135,8 +135,8 @@ namespace RadioExt_Helper.user_controls
             lblName.Size = new Size(44, 16);
             lblName.TabIndex = 0;
             lblName.Text = "Name: ";
-            lblName.MouseEnter += LblName_MouseEnter;
-            lblName.MouseLeave += Lbl_MouseLeave;
+            lblName.MouseEnter += lblName_MouseEnter;
+            lblName.MouseLeave += lbl_MouseLeave;
             // 
             // label3
             // 
@@ -184,6 +184,7 @@ namespace RadioExt_Helper.user_controls
             tabControl.Controls.Add(tabMusic);
             tabControl.Dock = DockStyle.Fill;
             tabControl.Font = new Font("Segoe UI", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            tabControl.ImageList = tabImages;
             tabControl.Location = new Point(0, 0);
             tabControl.Name = "tabControl";
             tabControl.SelectedIndex = 0;
@@ -268,8 +269,8 @@ namespace RadioExt_Helper.user_controls
             lblVolume.Size = new Size(52, 16);
             lblVolume.TabIndex = 3;
             lblVolume.Text = "Volume: ";
-            lblVolume.MouseEnter += LblVolume_MouseEnter;
-            lblVolume.MouseLeave += Lbl_MouseLeave;
+            lblVolume.MouseEnter += lblVolume_MouseEnter;
+            lblVolume.MouseLeave += lbl_MouseLeave;
             // 
             // nudFM
             // 
@@ -282,7 +283,7 @@ namespace RadioExt_Helper.user_controls
             nudFM.Name = "nudFM";
             nudFM.Size = new Size(91, 23);
             nudFM.TabIndex = 7;
-            nudFM.ValueChanged += NudFM_ValueChanged;
+            nudFM.ValueChanged += nudFM_ValueChanged;
             // 
             // lblFM
             // 
@@ -294,8 +295,8 @@ namespace RadioExt_Helper.user_controls
             lblFM.Size = new Size(30, 16);
             lblFM.TabIndex = 2;
             lblFM.Text = "FM: ";
-            lblFM.MouseEnter += LblFM_MouseEnter;
-            lblFM.MouseLeave += Lbl_MouseLeave;
+            lblFM.MouseEnter += lblFM_MouseEnter;
+            lblFM.MouseLeave += lbl_MouseLeave;
             // 
             // flowLayoutPanel4
             // 
@@ -321,7 +322,7 @@ namespace RadioExt_Helper.user_controls
             volumeSlider.SmallChange = 10;
             volumeSlider.TabIndex = 6;
             volumeSlider.TickStyle = TickStyle.None;
-            volumeSlider.Scroll += VolumeSlider_Scroll;
+            volumeSlider.Scroll += volumeSlider_Scroll;
             // 
             // lblVolumeVal
             // 
@@ -335,9 +336,9 @@ namespace RadioExt_Helper.user_controls
             lblVolumeVal.TabIndex = 6;
             lblVolumeVal.Text = "Value:";
             lblVolumeVal.TextAlign = ContentAlignment.MiddleCenter;
-            lblVolumeVal.DoubleClick += LblVolumeVal_DoubleClick;
-            lblVolumeVal.MouseEnter += LblVolumeVal_MouseEnter;
-            lblVolumeVal.MouseLeave += Lbl_MouseLeave;
+            lblVolumeVal.DoubleClick += lblVolumeVal_DoubleClick;
+            lblVolumeVal.MouseEnter += lblVolumeVal_MouseEnter;
+            lblVolumeVal.MouseLeave += lbl_MouseLeave;
             // 
             // panel2
             // 
@@ -359,8 +360,8 @@ namespace RadioExt_Helper.user_controls
             txtVolumeEdit.TabIndex = 5;
             txtVolumeEdit.TabStop = false;
             txtVolumeEdit.Visible = false;
-            txtVolumeEdit.KeyDown += TxtVolumeEdit_KeyDown;
-            txtVolumeEdit.KeyPress += TxtVolumeEdit_KeyPress;
+            txtVolumeEdit.KeyDown += txtVolumeEdit_KeyDown;
+            txtVolumeEdit.KeyPress += txtVolumeEdit_KeyPress;
             // 
             // lblSelectedVolume
             // 
@@ -373,7 +374,7 @@ namespace RadioExt_Helper.user_controls
             lblSelectedVolume.TabIndex = 5;
             lblSelectedVolume.Text = "1.0";
             lblSelectedVolume.TextAlign = ContentAlignment.MiddleCenter;
-            lblSelectedVolume.DoubleClick += LblSelectedVolume_DoubleClick;
+            lblSelectedVolume.DoubleClick += lblSelectedVolume_DoubleClick;
             // 
             // lblVolumeMinMax
             // 
@@ -429,7 +430,7 @@ namespace RadioExt_Helper.user_controls
             txtInkAtlasPart.Name = "txtInkAtlasPart";
             txtInkAtlasPart.Size = new Size(798, 23);
             txtInkAtlasPart.TabIndex = 2;
-            txtInkAtlasPart.TextChanged += TxtInkAtlasPart_TextChanged;
+            txtInkAtlasPart.TextChanged += txtInkAtlasPart_TextChanged;
             // 
             // txtInkAtlasPath
             // 
@@ -439,7 +440,7 @@ namespace RadioExt_Helper.user_controls
             txtInkAtlasPath.Name = "txtInkAtlasPath";
             txtInkAtlasPath.Size = new Size(798, 23);
             txtInkAtlasPath.TabIndex = 3;
-            txtInkAtlasPath.TextChanged += TxtInkAtlasPath_TextChanged;
+            txtInkAtlasPath.TextChanged += txtInkAtlasPath_TextChanged;
             // 
             // lblUsingCustomIcon
             // 
@@ -451,8 +452,8 @@ namespace RadioExt_Helper.user_controls
             lblUsingCustomIcon.Size = new Size(42, 16);
             lblUsingCustomIcon.TabIndex = 3;
             lblUsingCustomIcon.Text = "Using?";
-            lblUsingCustomIcon.MouseEnter += LblUsingCustomIcon_MouseEnter;
-            lblUsingCustomIcon.MouseLeave += Lbl_MouseLeave;
+            lblUsingCustomIcon.MouseEnter += lblUsingCustomIcon_MouseEnter;
+            lblUsingCustomIcon.MouseLeave += lbl_MouseLeave;
             // 
             // flowLayoutPanel1
             // 
@@ -477,7 +478,7 @@ namespace RadioExt_Helper.user_controls
             radUseCustomYes.TabStop = true;
             radUseCustomYes.Text = "Yes";
             radUseCustomYes.UseVisualStyleBackColor = true;
-            radUseCustomYes.CheckedChanged += RadUseCustomYes_CheckedChanged;
+            radUseCustomYes.CheckedChanged += radUseCustomYes_CheckedChanged;
             // 
             // radUseCustomNo
             // 
@@ -491,7 +492,7 @@ namespace RadioExt_Helper.user_controls
             radUseCustomNo.TabStop = true;
             radUseCustomNo.Text = "No";
             radUseCustomNo.UseVisualStyleBackColor = true;
-            radUseCustomNo.CheckedChanged += RadUseCustomNo_CheckedChanged;
+            radUseCustomNo.CheckedChanged += radUseCustomNo_CheckedChanged;
             // 
             // lblInkPart
             // 
@@ -503,8 +504,8 @@ namespace RadioExt_Helper.user_controls
             lblInkPart.Size = new Size(82, 16);
             lblInkPart.TabIndex = 1;
             lblInkPart.Text = "Ink Atlas Part: ";
-            lblInkPart.MouseEnter += LblInkPart_MouseEnter;
-            lblInkPart.MouseLeave += Lbl_MouseLeave;
+            lblInkPart.MouseEnter += lblInkPart_MouseEnter;
+            lblInkPart.MouseLeave += lbl_MouseLeave;
             // 
             // lblInkPath
             // 
@@ -516,8 +517,8 @@ namespace RadioExt_Helper.user_controls
             lblInkPath.Size = new Size(85, 16);
             lblInkPath.TabIndex = 0;
             lblInkPath.Text = "Ink Atlas Path: ";
-            lblInkPath.MouseEnter += LblInkPath_MouseEnter;
-            lblInkPath.MouseLeave += Lbl_MouseLeave;
+            lblInkPath.MouseEnter += lblInkPath_MouseEnter;
+            lblInkPath.MouseLeave += lbl_MouseLeave;
             // 
             // tabMusic
             // 
@@ -585,8 +586,8 @@ namespace RadioExt_Helper.user_controls
             lblStreamURL.Size = new Size(70, 16);
             lblStreamURL.TabIndex = 3;
             lblStreamURL.Text = "Stream URL:";
-            lblStreamURL.MouseEnter += LblStreamURL_MouseEnter;
-            lblStreamURL.MouseLeave += Lbl_MouseLeave;
+            lblStreamURL.MouseEnter += lblStreamURL_MouseEnter;
+            lblStreamURL.MouseLeave += lbl_MouseLeave;
             // 
             // lblUseStream
             // 
@@ -598,8 +599,8 @@ namespace RadioExt_Helper.user_controls
             lblUseStream.Size = new Size(70, 16);
             lblUseStream.TabIndex = 1;
             lblUseStream.Text = "Use Stream?";
-            lblUseStream.MouseEnter += LblUseStream_MouseEnter;
-            lblUseStream.MouseLeave += Lbl_MouseLeave;
+            lblUseStream.MouseEnter += lblUseStream_MouseEnter;
+            lblUseStream.MouseLeave += lbl_MouseLeave;
             // 
             // flowLayoutPanel2
             // 
@@ -624,7 +625,7 @@ namespace RadioExt_Helper.user_controls
             radUseStreamYes.TabStop = true;
             radUseStreamYes.Text = "Yes";
             radUseStreamYes.UseVisualStyleBackColor = true;
-            radUseStreamYes.CheckedChanged += RadUseStreamYes_CheckedChanged;
+            radUseStreamYes.CheckedChanged += radUseStreamYes_CheckedChanged;
             // 
             // radUseStreamNo
             // 
@@ -638,14 +639,14 @@ namespace RadioExt_Helper.user_controls
             radUseStreamNo.TabStop = true;
             radUseStreamNo.Text = "No";
             radUseStreamNo.UseVisualStyleBackColor = true;
-            radUseStreamNo.CheckedChanged += RadUseStreamNo_CheckedChanged;
+            radUseStreamNo.CheckedChanged += radUseStreamNo_CheckedChanged;
             // 
             // tableLayoutPanel6
             // 
             tableLayoutPanel6.ColumnCount = 2;
             tableLayoutPanel6.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 71.39334F));
             tableLayoutPanel6.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 28.6066589F));
-            tableLayoutPanel6.Controls.Add(flpStreamUrlTesting, 0, 1);
+            tableLayoutPanel6.Controls.Add(flowLayoutPanel3, 0, 1);
             tableLayoutPanel6.Controls.Add(btnGetFromRadioGarden, 1, 0);
             tableLayoutPanel6.Controls.Add(txtStreamURL, 0, 0);
             tableLayoutPanel6.Dock = DockStyle.Fill;
@@ -657,26 +658,25 @@ namespace RadioExt_Helper.user_controls
             tableLayoutPanel6.Size = new Size(811, 92);
             tableLayoutPanel6.TabIndex = 4;
             // 
-            // flpStreamUrlTesting
+            // flowLayoutPanel3
             // 
-            flpStreamUrlTesting.BackColor = Color.Transparent;
-            tableLayoutPanel6.SetColumnSpan(flpStreamUrlTesting, 2);
-            flpStreamUrlTesting.Controls.Add(mpStreamPlayer);
-            flpStreamUrlTesting.Dock = DockStyle.Fill;
-            flpStreamUrlTesting.Location = new Point(3, 49);
-            flpStreamUrlTesting.Name = "flpStreamUrlTesting";
-            flpStreamUrlTesting.Size = new Size(805, 40);
-            flpStreamUrlTesting.TabIndex = 1;
+            tableLayoutPanel6.SetColumnSpan(flowLayoutPanel3, 2);
+            flowLayoutPanel3.Controls.Add(mpStreamPlayer);
+            flowLayoutPanel3.Dock = DockStyle.Fill;
+            flowLayoutPanel3.Location = new Point(3, 49);
+            flowLayoutPanel3.Name = "flowLayoutPanel3";
+            flowLayoutPanel3.Size = new Size(805, 40);
+            flowLayoutPanel3.TabIndex = 1;
             // 
             // mpStreamPlayer
             // 
             mpStreamPlayer.BackColor = Color.Transparent;
-            mpStreamPlayer.ForeColor = Color.Transparent;
-            mpStreamPlayer.Location = new Point(3, 3);
+            mpStreamPlayer.Location = new Point(3, 2);
+            mpStreamPlayer.Margin = new Padding(3, 2, 3, 2);
             mpStreamPlayer.Name = "mpStreamPlayer";
-            mpStreamPlayer.Size = new Size(32, 32);
+            mpStreamPlayer.Size = new Size(37, 36);
             mpStreamPlayer.StreamUrl = "";
-            mpStreamPlayer.TabIndex = 4;
+            mpStreamPlayer.TabIndex = 3;
             // 
             // btnGetFromRadioGarden
             // 
@@ -686,16 +686,13 @@ namespace RadioExt_Helper.user_controls
             btnGetFromRadioGarden.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
             btnGetFromRadioGarden.FlatStyle = FlatStyle.Flat;
             btnGetFromRadioGarden.Font = new Font("Segoe UI Variable Display", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnGetFromRadioGarden.Image = Properties.Resources.parse_16x16;
             btnGetFromRadioGarden.Location = new Point(582, 7);
             btnGetFromRadioGarden.Name = "btnGetFromRadioGarden";
             btnGetFromRadioGarden.Size = new Size(226, 32);
             btnGetFromRadioGarden.TabIndex = 4;
             btnGetFromRadioGarden.Text = "Parse From Radio.Garden";
-            btnGetFromRadioGarden.TextAlign = ContentAlignment.MiddleRight;
-            btnGetFromRadioGarden.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnGetFromRadioGarden.UseVisualStyleBackColor = false;
-            btnGetFromRadioGarden.Click += BtnGetFromRadioGarden_Click;
+            btnGetFromRadioGarden.Click += btnGetFromRadioGarden_Click;
             // 
             // txtStreamURL
             // 
@@ -705,7 +702,15 @@ namespace RadioExt_Helper.user_controls
             txtStreamURL.Name = "txtStreamURL";
             txtStreamURL.Size = new Size(573, 23);
             txtStreamURL.TabIndex = 0;
-            txtStreamURL.TextChanged += TxtStreamURL_TextChanged;
+            txtStreamURL.TextChanged += txtStreamURL_TextChanged;
+            // 
+            // tabImages
+            // 
+            tabImages.ColorDepth = ColorDepth.Depth32Bit;
+            tabImages.ImageStream = (ImageListStreamer)resources.GetObject("tabImages.ImageStream");
+            tabImages.TransparentColor = Color.Transparent;
+            tabImages.Images.SetKeyName(0, "display-frame.png");
+            tabImages.Images.SetKeyName(1, "sound-waves.png");
             // 
             // statusStrip1
             // 
@@ -720,7 +725,7 @@ namespace RadioExt_Helper.user_controls
             // 
             // lblStatus
             // 
-            lblStatus.Image = Properties.Resources.status__16x16;
+            lblStatus.Image = Properties.Resources.info;
             lblStatus.Margin = new Padding(5, 3, 0, 2);
             lblStatus.Name = "lblStatus";
             lblStatus.Padding = new Padding(2);
@@ -766,7 +771,7 @@ namespace RadioExt_Helper.user_controls
             flowLayoutPanel2.PerformLayout();
             tableLayoutPanel6.ResumeLayout(false);
             tableLayoutPanel6.PerformLayout();
-            flpStreamUrlTesting.ResumeLayout(false);
+            flowLayoutPanel3.ResumeLayout(false);
             statusStrip1.ResumeLayout(false);
             statusStrip1.PerformLayout();
             ResumeLayout(false);
@@ -783,6 +788,7 @@ namespace RadioExt_Helper.user_controls
         private TabControl tabControl;
         private TabPage tabDisplayAndIcon;
         private TabPage tabMusic;
+        private ImageList tabImages;
         private GroupBox grpCustomIcon;
         private TableLayoutPanel tableLayoutPanel2;
         private TextBox txtInkAtlasPart;
@@ -813,14 +819,14 @@ namespace RadioExt_Helper.user_controls
         private Label lblStreamURL;
         private TableLayoutPanel tableLayoutPanel6;
         private TextBox txtStreamURL;
-        private FlowLayoutPanel flpStreamUrlTesting;
+        private FlowLayoutPanel flowLayoutPanel3;
         private TrackBar volumeSlider;
         private FlowLayoutPanel flowLayoutPanel4;
         private Panel panel2;
         private StatusStrip statusStrip1;
         private ToolStripStatusLabel lblStatus;
         private GroupBox grpSongs;
-        private Button btnGetFromRadioGarden;
         private MusicPlayer mpStreamPlayer;
+        private Button btnGetFromRadioGarden;
     }
 }
