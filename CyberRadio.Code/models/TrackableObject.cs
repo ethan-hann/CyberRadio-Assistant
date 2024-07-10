@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections;
 using System.ComponentModel;
 using System.Reflection;
 
@@ -19,9 +18,10 @@ namespace RadioExt_Helper.models;
 /// <typeparam name="T">The type of the object being tracked.</typeparam>
 public sealed class TrackableObject<T> : INotifyPropertyChanged where T : class, INotifyPropertyChanged, new()
 {
-    private readonly Dictionary<string, object?> _originalValues = new();
+    private readonly Dictionary<string, object?> _originalValues = [];
     private bool _isPendingSave;
     private T _trackedObject;
+    private bool _originalValuesInitialized;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="TrackableObject{T}" /> class.
@@ -85,17 +85,65 @@ public sealed class TrackableObject<T> : INotifyPropertyChanged where T : class,
     /// </summary>
     private void InitializeOriginalValues()
     {
+        if (_originalValuesInitialized) return; // Prevent multiple initializations
+
         foreach (var prop in typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance))
-            if (prop.CanRead)
-            {
-                var value = prop.GetValue(_trackedObject);
-                if (value is ICloneable cloneable)
-                    _originalValues[prop.Name] = cloneable.Clone();
-                else
-                    _originalValues[prop.Name] = value;
-            }
+        {
+            if (!prop.CanRead) continue;
+
+            var value = prop.GetValue(_trackedObject);
+            _originalValues[prop.Name] = DeepClone(value);
+        }
 
         IsPendingSave = false;
+        _originalValuesInitialized = true;
+    }
+
+    /// <summary>
+    /// Deep clones an object, handling collections and other types appropriately.
+    /// </summary>
+    /// <param name="obj">The object to clone.</param>
+    /// <returns>A deep clone of the object.</returns>
+    private static object? DeepClone(object? obj)
+    {
+        switch (obj)
+        {
+            case null:
+                return null;
+            case ICloneable cloneable:
+                return cloneable.Clone();
+            case IEnumerable enumerable when obj.GetType().IsGenericType:
+            {
+                var listType = typeof(List<>).MakeGenericType(obj.GetType().GetGenericArguments().First());
+                var list = Activator.CreateInstance(listType) as IList;
+                foreach (var item in enumerable)
+                {
+                    list?.Add(DeepClone(item));
+                }
+                return list;
+            }
+            default:
+                return obj;
+        }
+    }
+
+    /// <summary>
+    /// Deeply compares two objects, handling collections appropriately.
+    /// </summary>
+    /// <param name="obj1">First object.</param>
+    /// <param name="obj2">Second object.</param>
+    /// <returns>True if objects are equal, false otherwise.</returns>
+    private static bool DeepEquals(object? obj1, object? obj2)
+    {
+        if (ReferenceEquals(obj1, obj2)) return true;
+        if (obj1 == null || obj2 == null) return false;
+
+        if (obj1 is IEnumerable enumerable1 && obj2 is IEnumerable enumerable2)
+        {
+            return enumerable1.Cast<object>().SequenceEqual(enumerable2.Cast<object>());
+        }
+
+        return obj1.Equals(obj2);
     }
 
     /// <summary>
@@ -105,14 +153,12 @@ public sealed class TrackableObject<T> : INotifyPropertyChanged where T : class,
     public void AcceptChanges()
     {
         foreach (var prop in typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance))
-            if (prop.CanRead)
-            {
-                var value = prop.GetValue(TrackedObject);
-                if (value is ICloneable cloneable)
-                    _originalValues[prop.Name] = cloneable.Clone();
-                else
-                    _originalValues[prop.Name] = value;
-            }
+        {
+            if (!prop.CanRead) continue;
+
+            var value = prop.GetValue(TrackedObject);
+            _originalValues[prop.Name] = DeepClone(value);
+        }
 
         IsPendingSave = false;
     }
@@ -127,14 +173,10 @@ public sealed class TrackableObject<T> : INotifyPropertyChanged where T : class,
             var prop = typeof(T).GetProperty(kvp.Key);
             if (prop == null || !prop.CanWrite) continue;
 
-            if (kvp.Value is ICloneable cloneable)
-                prop.SetValue(TrackedObject, cloneable.Clone());
-            else
-                prop.SetValue(TrackedObject, kvp.Value);
+            prop.SetValue(TrackedObject, DeepClone(kvp.Value));
         }
 
         IsPendingSave = false;
-        // Check the pending save status again to ensure it's accurate
         CheckPendingSaveStatus();
     }
 
@@ -154,15 +196,7 @@ public sealed class TrackableObject<T> : INotifyPropertyChanged where T : class,
         foreach (var kvp in _originalValues)
         {
             var currentValue = typeof(T).GetProperty(kvp.Key)?.GetValue(TrackedObject);
-            if (kvp.Value is ICloneable originalCloneable && currentValue is ICloneable currentCloneable)
-            {
-                if (originalCloneable.Equals(currentCloneable)) continue;
-
-                isPendingSave = true;
-                break;
-            }
-
-            if (currentValue != null && !currentValue.Equals(kvp.Value))
+            if (!DeepEquals(currentValue, kvp.Value))
             {
                 isPendingSave = true;
                 break;

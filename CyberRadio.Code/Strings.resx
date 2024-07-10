@@ -628,4 +628,7 @@ exported to the game.</value>
     <data name="RevertChanges" xml:space="preserve">
       <value>Revert Changes</value>
     </data>
+    <data name="ClearAllSongs" xml:space="preserve">
+      <value>Clear All!</value>
+    </data>
 </root>

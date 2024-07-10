@@ -38,31 +38,36 @@
             tabControl = new TabControl();
             tabSongs = new TabPage();
             tableLayoutPanel2 = new TableLayoutPanel();
-            btnAddSongs = new Button();
+            tableLayoutPanel3 = new TableLayoutPanel();
+            btnRemoveAllSongs = new Button();
             btnRemoveSongs = new Button();
+            tableLayoutPanel5 = new TableLayoutPanel();
+            btnAddSongs = new Button();
             tabSongOrder = new TabPage();
             splitContainer1 = new SplitContainer();
             lbSongs = new ListBox();
-            songBindingSource = new BindingSource(components);
             tableLayoutPanel1 = new TableLayoutPanel();
             btnRemoveFromOrder = new Button();
             btnAddToOrder = new Button();
             lvSongOrder = new ListView();
             colOrderNum = new ColumnHeader();
             colSongName = new ColumnHeader();
+            songBindingSource = new BindingSource(components);
             tableLayoutPanel4 = new TableLayoutPanel();
             button1 = new Button();
             label2 = new Label();
             tabControl.SuspendLayout();
             tabSongs.SuspendLayout();
             tableLayoutPanel2.SuspendLayout();
+            tableLayoutPanel3.SuspendLayout();
+            tableLayoutPanel5.SuspendLayout();
             tabSongOrder.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
             splitContainer1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)songBindingSource).BeginInit();
             tableLayoutPanel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)songBindingSource).BeginInit();
             tableLayoutPanel4.SuspendLayout();
             SuspendLayout();
             // 
@@ -73,13 +78,14 @@
             lvSongs.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
             lvSongs.FullRowSelect = true;
             lvSongs.GridLines = true;
-            lvSongs.Location = new Point(3, 39);
+            lvSongs.Location = new Point(3, 45);
             lvSongs.Name = "lvSongs";
-            lvSongs.Size = new Size(905, 622);
+            lvSongs.Size = new Size(905, 616);
             lvSongs.TabIndex = 1;
             lvSongs.UseCompatibleStateImageBehavior = false;
             lvSongs.View = View.Details;
             lvSongs.ColumnClick += LvSongs_ColumnClick;
+            lvSongs.KeyDown += LvSongs_KeyDown;
             lvSongs.MouseDoubleClick += LvSongs_MouseDoubleClick;
             // 
             // colSongNames
@@ -135,17 +141,83 @@
             // tableLayoutPanel2
             // 
             tableLayoutPanel2.ColumnCount = 2;
-            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tableLayoutPanel2.Controls.Add(btnAddSongs, 0, 0);
-            tableLayoutPanel2.Controls.Add(btnRemoveSongs, 1, 0);
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 45.19337F));
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 54.80663F));
+            tableLayoutPanel2.Controls.Add(tableLayoutPanel3, 1, 0);
+            tableLayoutPanel2.Controls.Add(tableLayoutPanel5, 0, 0);
             tableLayoutPanel2.Dock = DockStyle.Top;
             tableLayoutPanel2.Location = new Point(3, 3);
             tableLayoutPanel2.Name = "tableLayoutPanel2";
             tableLayoutPanel2.RowCount = 1;
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel2.Size = new Size(905, 36);
+            tableLayoutPanel2.Size = new Size(905, 42);
             tableLayoutPanel2.TabIndex = 2;
+            // 
+            // tableLayoutPanel3
+            // 
+            tableLayoutPanel3.ColumnCount = 2;
+            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 65.5480957F));
+            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 34.4519F));
+            tableLayoutPanel3.Controls.Add(btnRemoveAllSongs, 1, 0);
+            tableLayoutPanel3.Controls.Add(btnRemoveSongs, 0, 0);
+            tableLayoutPanel3.Dock = DockStyle.Fill;
+            tableLayoutPanel3.Location = new Point(412, 3);
+            tableLayoutPanel3.Name = "tableLayoutPanel3";
+            tableLayoutPanel3.RowCount = 1;
+            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tableLayoutPanel3.Size = new Size(490, 36);
+            tableLayoutPanel3.TabIndex = 2;
+            // 
+            // btnRemoveAllSongs
+            // 
+            btnRemoveAllSongs.BackColor = Color.Yellow;
+            btnRemoveAllSongs.Dock = DockStyle.Fill;
+            btnRemoveAllSongs.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
+            btnRemoveAllSongs.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
+            btnRemoveAllSongs.FlatStyle = FlatStyle.Flat;
+            btnRemoveAllSongs.Image = Properties.Resources.delete__16x16;
+            btnRemoveAllSongs.Location = new Point(324, 2);
+            btnRemoveAllSongs.Margin = new Padding(3, 2, 3, 2);
+            btnRemoveAllSongs.Name = "btnRemoveAllSongs";
+            btnRemoveAllSongs.Size = new Size(163, 32);
+            btnRemoveAllSongs.TabIndex = 3;
+            btnRemoveAllSongs.Text = "Clear All!";
+            btnRemoveAllSongs.TextAlign = ContentAlignment.MiddleRight;
+            btnRemoveAllSongs.TextImageRelation = TextImageRelation.ImageBeforeText;
+            btnRemoveAllSongs.UseVisualStyleBackColor = false;
+            btnRemoveAllSongs.Click += BtnRemoveAllSongs_Click;
+            // 
+            // btnRemoveSongs
+            // 
+            btnRemoveSongs.BackColor = Color.Yellow;
+            btnRemoveSongs.Dock = DockStyle.Fill;
+            btnRemoveSongs.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
+            btnRemoveSongs.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
+            btnRemoveSongs.FlatStyle = FlatStyle.Flat;
+            btnRemoveSongs.Image = Properties.Resources.delete__16x16;
+            btnRemoveSongs.Location = new Point(3, 2);
+            btnRemoveSongs.Margin = new Padding(3, 2, 3, 2);
+            btnRemoveSongs.Name = "btnRemoveSongs";
+            btnRemoveSongs.Size = new Size(315, 32);
+            btnRemoveSongs.TabIndex = 2;
+            btnRemoveSongs.Text = "Remove Selected Song(s)";
+            btnRemoveSongs.TextAlign = ContentAlignment.MiddleRight;
+            btnRemoveSongs.TextImageRelation = TextImageRelation.ImageBeforeText;
+            btnRemoveSongs.UseVisualStyleBackColor = false;
+            btnRemoveSongs.Click += BtnRemoveSongs_Click;
+            // 
+            // tableLayoutPanel5
+            // 
+            tableLayoutPanel5.ColumnCount = 1;
+            tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tableLayoutPanel5.Controls.Add(btnAddSongs, 0, 0);
+            tableLayoutPanel5.Dock = DockStyle.Fill;
+            tableLayoutPanel5.Location = new Point(3, 3);
+            tableLayoutPanel5.Name = "tableLayoutPanel5";
+            tableLayoutPanel5.RowCount = 1;
+            tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tableLayoutPanel5.Size = new Size(403, 36);
+            tableLayoutPanel5.TabIndex = 3;
             // 
             // btnAddSongs
             // 
@@ -158,32 +230,13 @@
             btnAddSongs.Location = new Point(3, 2);
             btnAddSongs.Margin = new Padding(3, 2, 3, 2);
             btnAddSongs.Name = "btnAddSongs";
-            btnAddSongs.Size = new Size(446, 32);
+            btnAddSongs.Size = new Size(397, 32);
             btnAddSongs.TabIndex = 1;
             btnAddSongs.Text = "Add Song(s)";
             btnAddSongs.TextAlign = ContentAlignment.MiddleRight;
             btnAddSongs.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnAddSongs.UseVisualStyleBackColor = false;
             btnAddSongs.Click += BtnAddSongs_Click;
-            // 
-            // btnRemoveSongs
-            // 
-            btnRemoveSongs.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            btnRemoveSongs.BackColor = Color.Yellow;
-            btnRemoveSongs.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
-            btnRemoveSongs.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
-            btnRemoveSongs.FlatStyle = FlatStyle.Flat;
-            btnRemoveSongs.Image = Properties.Resources.delete__16x16;
-            btnRemoveSongs.Location = new Point(455, 2);
-            btnRemoveSongs.Margin = new Padding(3, 2, 3, 2);
-            btnRemoveSongs.Name = "btnRemoveSongs";
-            btnRemoveSongs.Size = new Size(447, 32);
-            btnRemoveSongs.TabIndex = 2;
-            btnRemoveSongs.Text = "Remove Selected Song(s)";
-            btnRemoveSongs.TextAlign = ContentAlignment.MiddleRight;
-            btnRemoveSongs.TextImageRelation = TextImageRelation.ImageBeforeText;
-            btnRemoveSongs.UseVisualStyleBackColor = false;
-            btnRemoveSongs.Click += BtnRemoveSongs_Click;
             // 
             // tabSongOrder
             // 
@@ -230,10 +283,6 @@
             lbSongs.SelectionMode = SelectionMode.MultiExtended;
             lbSongs.Size = new Size(901, 303);
             lbSongs.TabIndex = 0;
-            // 
-            // songBindingSource
-            // 
-            songBindingSource.DataSource = typeof(models.Song);
             // 
             // tableLayoutPanel1
             // 
@@ -319,6 +368,10 @@
             colSongName.Text = "Name";
             colSongName.Width = 200;
             // 
+            // songBindingSource
+            // 
+            songBindingSource.DataSource = typeof(models.Song);
+            // 
             // tableLayoutPanel4
             // 
             tableLayoutPanel4.ColumnCount = 2;
@@ -369,13 +422,15 @@
             tabControl.ResumeLayout(false);
             tabSongs.ResumeLayout(false);
             tableLayoutPanel2.ResumeLayout(false);
+            tableLayoutPanel3.ResumeLayout(false);
+            tableLayoutPanel5.ResumeLayout(false);
             tabSongOrder.ResumeLayout(false);
             splitContainer1.Panel1.ResumeLayout(false);
             splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
             splitContainer1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)songBindingSource).EndInit();
             tableLayoutPanel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)songBindingSource).EndInit();
             tableLayoutPanel4.ResumeLayout(false);
             ResumeLayout(false);
         }
@@ -405,5 +460,8 @@
         private TableLayoutPanel tableLayoutPanel2;
         private Button btnRemoveSongs;
         private Button btnAddSongs;
+        private TableLayoutPanel tableLayoutPanel3;
+        private Button btnRemoveAllSongs;
+        private TableLayoutPanel tableLayoutPanel5;
     }
 }

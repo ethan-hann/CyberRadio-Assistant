@@ -231,6 +231,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Clear All!.
+        /// </summary>
+        internal static string ClearAllSongs {
+            get {
+                return ResourceManager.GetString("ClearAllSongs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to reset the configuration to default values?.
         /// </summary>
         internal static string ConfigResetConfirm {

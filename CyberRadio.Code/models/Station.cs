@@ -22,7 +22,7 @@ namespace RadioExt_Helper.models;
 /// <summary>
 ///     Represents a single radio station. Contains all information related to the station.
 /// </summary>
-public class Station : INotifyPropertyChanged, ICloneable, IEquatable<Station>
+public sealed class Station : INotifyPropertyChanged, ICloneable, IEquatable<Station>
 {
     private MetaData _metaData = new();
 
