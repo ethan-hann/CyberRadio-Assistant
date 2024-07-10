@@ -71,11 +71,11 @@ public class Song : IEquatable<Song>, ICloneable
     public bool Equals(Song? other)
     {
         if (other == null) return false;
-        return Title == other.Title &&
-               Artist == other.Artist &&
-               Duration == other.Duration &&
-               FileSize == other.FileSize &&
-               FilePath == other.FilePath;
+        return Title.Equals(other.Title) &&
+               Artist.Equals(other.Artist) &&
+               Duration.Equals(other.Duration) &&
+               FileSize.Equals(other.FileSize) &&
+               FilePath.Equals(other.FilePath);
     }
 
     /// <summary>

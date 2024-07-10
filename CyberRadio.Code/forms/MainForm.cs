@@ -314,13 +314,14 @@ public partial class MainForm : Form
     /// <summary>
     ///     Adds a station editor to the dictionary.
     /// </summary>
-    private void AddEditor(TrackableObject<Station> station)
+    private StationEditor AddEditor(TrackableObject<Station> station)
     {
         lock (_stationEditorsDict)
         {
             var editor = new StationEditor(station);
             editor.StationUpdated += StationUpdatedEvent;
             _stationEditorsDict[station.Id] = editor;
+            return editor;
         }
     }
 
@@ -434,8 +435,13 @@ public partial class MainForm : Form
         //We only want to revert the changes if there is a pending save. Otherwise, the wrong icon is drawn in the list box.
         if (!station.IsPendingSave) return;
 
+        RemoveEditor(station); //Remove editor from dictionary
+        
         station.DeclineChanges(); // Revert the changes made to the station's properties since the last save.
+
+        var editor = AddEditor(station); //Re-add the editor to the dictionary after reverting changes.
         StationUpdatedEvent(sender, e); //Update the UI to reflect the changes.
+        UpdateStationEditor(editor); //Add the editor to the split panel.
     }
 
     /// <summary>
