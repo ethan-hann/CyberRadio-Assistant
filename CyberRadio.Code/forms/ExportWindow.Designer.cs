@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ExportWindow));
             lvStations = new ListView();
             colIsActive = new ColumnHeader();
@@ -44,19 +43,21 @@
             bgWorkerExport = new System.ComponentModel.BackgroundWorker();
             btnExportToStaging = new Button();
             btnExportToGame = new Button();
-            btnCancel = new Button();
             btnOpenStagingFolder = new Button();
             btnOpenGameFolder = new Button();
             bgWorkerExportGame = new System.ComponentModel.BackgroundWorker();
             splitContainer1 = new SplitContainer();
             tableLayoutPanel1 = new TableLayoutPanel();
-            statusImageList = new ImageList(components);
+            panel1 = new Panel();
+            lblTip = new Label();
+            btnCancel = new Button();
             statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
             splitContainer1.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
+            panel1.SuspendLayout();
             SuspendLayout();
             // 
             // lvStations
@@ -68,7 +69,6 @@
             lvStations.MultiSelect = false;
             lvStations.Name = "lvStations";
             lvStations.Size = new Size(927, 420);
-            lvStations.SmallImageList = statusImageList;
             lvStations.Sorting = SortOrder.Ascending;
             lvStations.TabIndex = 0;
             lvStations.UseCompatibleStateImageBehavior = false;
@@ -115,7 +115,7 @@
             // 
             // lblStatus
             // 
-            lblStatus.Image = Properties.Resources.status;
+            lblStatus.Image = Properties.Resources.status__16x16;
             lblStatus.Margin = new Padding(5, 3, 0, 2);
             lblStatus.Name = "lblStatus";
             lblStatus.Size = new Size(55, 17);
@@ -148,7 +148,7 @@
             btnExportToStaging.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
             btnExportToStaging.FlatStyle = FlatStyle.Flat;
             btnExportToStaging.Font = new Font("Segoe UI Variable Display Semib", 9.75F, FontStyle.Bold);
-            btnExportToStaging.Image = Properties.Resources.export_16x16;
+            btnExportToStaging.Image = Properties.Resources.export__16x16;
             btnExportToStaging.Location = new Point(3, 143);
             btnExportToStaging.Name = "btnExportToStaging";
             btnExportToStaging.Size = new Size(267, 43);
@@ -168,7 +168,7 @@
             btnExportToGame.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
             btnExportToGame.FlatStyle = FlatStyle.Flat;
             btnExportToGame.Font = new Font("Segoe UI Variable Display Semib", 9.75F, FontStyle.Bold);
-            btnExportToGame.Image = Properties.Resources.export_16x16;
+            btnExportToGame.Image = Properties.Resources.game_16x16;
             btnExportToGame.Location = new Point(3, 209);
             btnExportToGame.Name = "btnExportToGame";
             btnExportToGame.Size = new Size(267, 43);
@@ -179,24 +179,6 @@
             btnExportToGame.UseVisualStyleBackColor = false;
             btnExportToGame.Click += BtnExportToGame_Click;
             // 
-            // btnCancel
-            // 
-            btnCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            btnCancel.BackColor = Color.Yellow;
-            btnCancel.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
-            btnCancel.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
-            btnCancel.FlatStyle = FlatStyle.Flat;
-            btnCancel.Font = new Font("Segoe UI Variable Display Semib", 9.75F, FontStyle.Bold);
-            btnCancel.Location = new Point(3, 374);
-            btnCancel.Margin = new Padding(3, 3, 3, 10);
-            btnCancel.Name = "btnCancel";
-            btnCancel.Size = new Size(267, 36);
-            btnCancel.TabIndex = 6;
-            btnCancel.Text = "Cancel";
-            btnCancel.UseVisualStyleBackColor = false;
-            btnCancel.Visible = false;
-            btnCancel.Click += BtnCancel_Click;
-            // 
             // btnOpenStagingFolder
             // 
             btnOpenStagingFolder.Anchor = AnchorStyles.Left | AnchorStyles.Right;
@@ -205,7 +187,7 @@
             btnOpenStagingFolder.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
             btnOpenStagingFolder.FlatStyle = FlatStyle.Flat;
             btnOpenStagingFolder.Font = new Font("Segoe UI Variable Display Semib", 9.75F, FontStyle.Bold);
-            btnOpenStagingFolder.Image = Properties.Resources.folder_16x16;
+            btnOpenStagingFolder.Image = Properties.Resources.folder_no_fill__16x16;
             btnOpenStagingFolder.Location = new Point(3, 11);
             btnOpenStagingFolder.Name = "btnOpenStagingFolder";
             btnOpenStagingFolder.Size = new Size(267, 43);
@@ -224,7 +206,7 @@
             btnOpenGameFolder.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
             btnOpenGameFolder.FlatStyle = FlatStyle.Flat;
             btnOpenGameFolder.Font = new Font("Segoe UI Variable Display Semib", 9.75F, FontStyle.Bold);
-            btnOpenGameFolder.Image = Properties.Resources.folder_16x16;
+            btnOpenGameFolder.Image = Properties.Resources.folder_no_fill__16x16;
             btnOpenGameFolder.Location = new Point(3, 77);
             btnOpenGameFolder.Name = "btnOpenGameFolder";
             btnOpenGameFolder.Size = new Size(267, 43);
@@ -265,8 +247,8 @@
             // 
             tableLayoutPanel1.ColumnCount = 1;
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tableLayoutPanel1.Controls.Add(panel1, 0, 4);
             tableLayoutPanel1.Controls.Add(btnOpenStagingFolder, 0, 0);
-            tableLayoutPanel1.Controls.Add(btnCancel, 0, 4);
             tableLayoutPanel1.Controls.Add(btnOpenGameFolder, 0, 1);
             tableLayoutPanel1.Controls.Add(btnExportToGame, 0, 3);
             tableLayoutPanel1.Controls.Add(btnExportToStaging, 0, 2);
@@ -279,16 +261,54 @@
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 66F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 66F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle());
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
             tableLayoutPanel1.Size = new Size(273, 420);
             tableLayoutPanel1.TabIndex = 0;
             // 
-            // statusImageList
+            // panel1
             // 
-            statusImageList.ColorDepth = ColorDepth.Depth32Bit;
-            statusImageList.ImageStream = (ImageListStreamer)resources.GetObject("statusImageList.ImageStream");
-            statusImageList.TransparentColor = Color.Transparent;
-            statusImageList.Images.SetKeyName(0, "disabled");
-            statusImageList.Images.SetKeyName(1, "enabled");
+            panel1.Controls.Add(lblTip);
+            panel1.Controls.Add(btnCancel);
+            panel1.Dock = DockStyle.Fill;
+            panel1.Location = new Point(3, 267);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(267, 150);
+            panel1.TabIndex = 11;
+            // 
+            // lblTip
+            // 
+            lblTip.AutoSize = true;
+            lblTip.Font = new Font("Segoe UI", 9.75F, FontStyle.Italic, GraphicsUnit.Point, 0);
+            lblTip.Image = Properties.Resources.enabled__16x16;
+            lblTip.ImageAlign = ContentAlignment.BottomLeft;
+            lblTip.Location = new Point(3, 10);
+            lblTip.Name = "lblTip";
+            lblTip.RightToLeft = RightToLeft.No;
+            lblTip.Size = new Size(173, 34);
+            lblTip.TabIndex = 7;
+            lblTip.Text = "     Only Enabled stations are \r\nexported to the game.";
+            lblTip.TextAlign = ContentAlignment.BottomRight;
+            // 
+            // btnCancel
+            // 
+            btnCancel.BackColor = Color.Yellow;
+            btnCancel.Dock = DockStyle.Bottom;
+            btnCancel.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
+            btnCancel.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
+            btnCancel.FlatStyle = FlatStyle.Flat;
+            btnCancel.Font = new Font("Segoe UI Variable Display Semib", 9.75F, FontStyle.Bold);
+            btnCancel.Image = Properties.Resources.cancel_16x16;
+            btnCancel.Location = new Point(0, 114);
+            btnCancel.Margin = new Padding(3, 3, 3, 10);
+            btnCancel.Name = "btnCancel";
+            btnCancel.Size = new Size(267, 36);
+            btnCancel.TabIndex = 6;
+            btnCancel.Text = "Cancel";
+            btnCancel.TextAlign = ContentAlignment.MiddleRight;
+            btnCancel.TextImageRelation = TextImageRelation.ImageBeforeText;
+            btnCancel.UseVisualStyleBackColor = false;
+            btnCancel.Visible = false;
+            btnCancel.Click += BtnCancel_Click;
             // 
             // ExportWindow
             // 
@@ -298,7 +318,7 @@
             ClientSize = new Size(1204, 442);
             Controls.Add(splitContainer1);
             Controls.Add(statusStrip1);
-            Font = new Font("CF Notche Demo", 9.749999F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            Font = new Font("Segoe UI Variable Display Semib", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             HelpButton = true;
             Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
@@ -317,6 +337,8 @@
             ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
             splitContainer1.ResumeLayout(false);
             tableLayoutPanel1.ResumeLayout(false);
+            panel1.ResumeLayout(false);
+            panel1.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -335,13 +357,14 @@
         private System.ComponentModel.BackgroundWorker bgWorkerExport;
         private Button btnExportToStaging;
         private Button btnExportToGame;
-        private Button btnCancel;
         private Button btnOpenStagingFolder;
         private Button btnOpenGameFolder;
         private System.ComponentModel.BackgroundWorker bgWorkerExportGame;
         private SplitContainer splitContainer1;
         private TableLayoutPanel tableLayoutPanel1;
         private ColumnHeader colIsActive;
-        private ImageList statusImageList;
+        private Panel panel1;
+        private Button btnCancel;
+        private Label lblTip;
     }
 }

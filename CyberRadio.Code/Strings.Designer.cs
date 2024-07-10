@@ -132,6 +132,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select song files to add.
+        /// </summary>
+        internal static string AddSongs {
+            get {
+                return ResourceManager.GetString("AddSongs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add Song(s).
         /// </summary>
         internal static string AddSongsToolStrip {
@@ -222,6 +231,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Clear All!.
+        /// </summary>
+        internal static string ClearAllSongs {
+            get {
+                return ResourceManager.GetString("ClearAllSongs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to reset the configuration to default values?.
         /// </summary>
         internal static string ConfigResetConfirm {
@@ -263,6 +281,15 @@ namespace RadioExt_Helper {
         internal static string Confirm {
             get {
                 return ResourceManager.GetString("Confirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to refresh your stations from disk? You will lose any pending changes..
+        /// </summary>
+        internal static string ConfirmRefreshStations {
+            get {
+                return ResourceManager.GetString("ConfirmRefreshStations", resourceCulture);
             }
         }
         
@@ -362,6 +389,24 @@ namespace RadioExt_Helper {
         internal static string DotDotDot {
             get {
                 return ResourceManager.GetString("DotDotDot", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit Logs Path....
+        /// </summary>
+        internal static string EditLogsPathOption {
+            get {
+                return ResourceManager.GetString("EditLogsPathOption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Opens a folder dialog where you can choose a new path to save log files..
+        /// </summary>
+        internal static string EditLogsPathOptionHelp {
+            get {
+                return ResourceManager.GetString("EditLogsPathOptionHelp", resourceCulture);
             }
         }
         
@@ -531,6 +576,16 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to      Only Enabled stations are 
+        ///exported to the game..
+        /// </summary>
+        internal static string ExportWindowTip {
+            get {
+                return ResourceManager.GetString("ExportWindowTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to File.
         /// </summary>
         internal static string File {
@@ -689,6 +744,15 @@ namespace RadioExt_Helper {
         internal static string Language {
             get {
                 return ResourceManager.GetString("Language", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Log Path:.
+        /// </summary>
+        internal static string LogPathLabel {
+            get {
+                return ResourceManager.GetString("LogPathLabel", resourceCulture);
             }
         }
         
@@ -874,6 +938,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;no path&gt;.
+        /// </summary>
+        internal static string NoLogPathSet {
+            get {
+                return ResourceManager.GetString("NoLogPathSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No Mod Installed.
         /// </summary>
         internal static string NoModInstalled {
@@ -962,6 +1035,15 @@ namespace RadioExt_Helper {
         internal static string OpenGameFolder {
             get {
                 return ResourceManager.GetString("OpenGameFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open Log Folder.
+        /// </summary>
+        internal static string OpenLogFolder {
+            get {
+                return ResourceManager.GetString("OpenLogFolder", resourceCulture);
             }
         }
         
@@ -1110,11 +1192,29 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Revert Changes.
+        /// </summary>
+        internal static string RevertChanges {
+            get {
+                return ResourceManager.GetString("RevertChanges", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Save and Close.
         /// </summary>
         internal static string SaveAndClose {
             get {
                 return ResourceManager.GetString("SaveAndClose", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select the location to store log files.
+        /// </summary>
+        internal static string SelectLogPathDesc {
+            get {
+                return ResourceManager.GetString("SelectLogPathDesc", resourceCulture);
             }
         }
         

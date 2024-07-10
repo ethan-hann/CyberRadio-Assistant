@@ -1,7 +1,7 @@
-﻿using System.ComponentModel;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using AetherUtils.Core.Extensions;
 using RadioExt_Helper.models;
+using RadioExt_Helper.Properties;
 using RadioExt_Helper.utility;
 using ListView = System.Windows.Forms.ListView;
 
@@ -9,32 +9,53 @@ namespace RadioExt_Helper.user_controls;
 
 public sealed partial class CustomMusicCtl : UserControl, IUserControl
 {
-    private BindingList<Song> _bindingSongList = [];
+    /// <summary>
+    /// Event that is triggered when the station is updated.
+    /// </summary>
+    public event EventHandler? StationUpdated;
 
-    public CustomMusicCtl(Station station)
+    /// <summary>
+    /// Image list for the tab images.
+    /// </summary>
+    private readonly ImageList _tabImages = new();
+
+    /// <summary>
+    /// Gets the trackable station object associated with the control.
+    /// </summary>
+    public TrackableObject<Station> Station { get; }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="CustomMusicCtl"/> class.
+    /// </summary>
+    /// <param name="station">The trackable station object.</param>
+    public CustomMusicCtl(TrackableObject<Station> station)
     {
         InitializeComponent();
-
         Dock = DockStyle.Fill;
+        SetTabImages();
+
         Station = station;
-        SetSongList(Station.SongsAsList);
+
+        PopulateListView();
     }
 
-    public Station Station { get; }
-
+    /// <summary>
+    /// Translates the control's text to the appropriate language.
+    /// </summary>
     public void Translate()
     {
-        addSongsToolStripMenuItem.Text = GlobalData.Strings.GetString("AddSongsToolStrip");
-        removeSongsToolStripMenuItem.Text = GlobalData.Strings.GetString("RemoveSongsToolStrip");
+        btnAddSongs.Text = GlobalData.Strings.GetString("AddSongsToolStrip");
+        btnRemoveSongs.Text = GlobalData.Strings.GetString("RemoveSongsToolStrip");
+        btnRemoveAllSongs.Text = GlobalData.Strings.GetString("ClearAllSongs");
 
         lvSongs.Columns[0].Text = GlobalData.Strings.GetString("SongNameHeader");
         lvSongs.Columns[1].Text = GlobalData.Strings.GetString("SongArtistHeader");
         lvSongs.Columns[2].Text = GlobalData.Strings.GetString("SongLengthHeader");
         lvSongs.Columns[3].Text = GlobalData.Strings.GetString("SongFileSizeHeader");
 
-        fdlgOpenSongs.Title = GlobalData.Strings.GetString("Open");
-        pgSongs.Text = GlobalData.Strings.GetString("SongListing");
-        pgSongOrder.Text = GlobalData.Strings.GetString("SongOrder");
+        fdlgOpenSongs.Title = GlobalData.Strings.GetString("AddSongs");
+        tabSongs.Text = GlobalData.Strings.GetString("SongListing");
+        tabSongOrder.Text = GlobalData.Strings.GetString("SongOrder");
 
         lvSongOrder.Columns[0].Text = GlobalData.Strings.GetString("Order");
         lvSongOrder.Columns[1].Text = GlobalData.Strings.GetString("SongNameHeader");
@@ -47,86 +68,119 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
         SetOrderedList();
     }
 
-    private void SetSongList(List<Song> songList)
+    /// <summary>
+    /// Sets the images for the tabs.
+    /// </summary>
+    private void SetTabImages()
     {
-        Station.SongsAsList = songList;
-        _bindingSongList = [.. songList];
-
-        PopulateListView();
+        _tabImages.Images.Add("listing", Resources.music_list);
+        _tabImages.Images.Add("order", Resources.order);
+        tabControl.ImageList = _tabImages;
+        tabSongs.ImageKey = @"listing";
+        tabSongOrder.ImageKey = @"order";
     }
 
+    /// <summary>
+    /// Populates the song list view with the songs from the station.
+    /// </summary>
     private void PopulateListView()
     {
         lvSongs.SuspendLayout();
         lvSongs.Items.Clear();
 
-        foreach (var lvItem in Station.SongsAsList
+        foreach (var lvItem in Station.TrackedObject.Songs
                      .Select(song => new ListViewItem([
-                             song.Name,
+                             song.Title,
                              song.Artist,
                              $"{song.Duration:hh\\:mm\\:ss}",
-                             song.Size.FormatSize()
+                             song.FileSize.FormatSize()
                          ])
-                         { Tag = song }))
+                     { Tag = song }))
             lvSongs.Items.Add(lvItem);
 
         lvSongs.ResizeColumns();
         lvSongs.ResumeLayout();
     }
 
+    /// <summary>
+    /// Determines whether a song can be added to the station. Checks if the song is already in the station.
+    /// </summary>
+    /// <param name="song">The song to check.</param>
+    /// <returns>True if the song can be added; otherwise, false.</returns>
     private bool CanSongBeAdded(Song song)
     {
-        return !Station.SongsAsList.Any(s => s.Name.Equals(song.Name) && s.Artist.Equals(song.Artist)
-                                                                      && s.OriginalFilePath.Equals(
-                                                                          song.OriginalFilePath));
+        return !Station.TrackedObject.Songs.Any(s => s.Equals(song));
     }
 
-    private void addSongsToolStripMenuItem_Click(object sender, EventArgs e)
+    private void BtnAddSongs_Click(object sender, EventArgs e)
     {
         if (fdlgOpenSongs.ShowDialog() != DialogResult.OK) return;
 
         foreach (var path in fdlgOpenSongs.FileNames)
         {
-            var song = Song.ParseFromFile(path);
+            var song = Song.FromFile(path);
             if (song == null) continue;
 
             if (!CanSongBeAdded(song)) continue;
-
-            Station.SongsAsList.Add(song);
-            _bindingSongList.Add(song);
+            Station.TrackedObject.Songs.Add(song);
         }
 
         UpdateListsAndViews();
+        StationUpdated?.Invoke(this, EventArgs.Empty);
     }
 
-    private void removeSongsToolStripMenuItem_Click(object sender, EventArgs e)
+    private void BtnRemoveSongs_Click(object sender, EventArgs e)
     {
         if (lvSongs.SelectedItems.Count <= 0) return;
 
         if (lvSongs.SelectedItems.Count == lvSongs.Items.Count)
-            if (MessageBox.Show(this, GlobalData.Strings.GetString("DeleteAllSongsConfirm"),
-                    GlobalData.Strings.GetString("Confirm"), MessageBoxButtons.YesNo, MessageBoxIcon.Warning) ==
-                DialogResult.No)
+            if (ConfirmRemoveAllSongs() == DialogResult.No)
                 return;
 
         for (var i = 0; i < lvSongs.SelectedItems.Count; i++)
             if (lvSongs.SelectedItems[i].Tag is Song song)
             {
-                Station.SongsAsList.Remove(song);
-                _bindingSongList.Remove(song);
-                var fileName = Path.GetFileName(song.OriginalFilePath);
-                Station.MetaData.SongOrder.Remove(fileName);
+                Station.TrackedObject.Songs.Remove(song);
+
+                var fileName = Path.GetFileName(song.FilePath);
+                Station.TrackedObject.MetaData.SongOrder.Remove(fileName);
             }
 
         UpdateListsAndViews();
+        StationUpdated?.Invoke(this, EventArgs.Empty);
     }
 
+    private void BtnRemoveAllSongs_Click(object sender, EventArgs e)
+    {
+        if (ConfirmRemoveAllSongs() == DialogResult.No)
+            return;
+
+        lvSongs.Items.Clear();
+        Station.TrackedObject.Songs.Clear();
+        Station.TrackedObject.MetaData.SongOrder.Clear();
+        UpdateListsAndViews();
+        StationUpdated?.Invoke(this, EventArgs.Empty);
+    }
+
+    private DialogResult ConfirmRemoveAllSongs()
+    {
+        return MessageBox.Show(this, GlobalData.Strings.GetString("DeleteAllSongsConfirm"),
+            GlobalData.Strings.GetString("Confirm"), MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+    }
+
+    /// <summary>
+    /// Updates the song list view, the order list view, and synchronizes the song order.
+    /// </summary>
     private void UpdateListsAndViews()
     {
         PopulateListView();
         PopulateSongListBox();
         SynchronizeSongOrder();
     }
+
+    /// <summary>
+    /// Synchronizes the song order list view with the station's song list.
+    /// </summary>
 
     private void SynchronizeSongOrder()
     {
@@ -136,7 +190,7 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
             var item = lvSongOrder.Items[i];
             if (item.Tag is not Song song) continue;
 
-            if (!Station.SongsAsList.Contains(song))
+            if (!Station.TrackedObject.Songs.Contains(song))
                 lvSongOrder.Items.Remove(item);
         }
 
@@ -144,7 +198,7 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
         lvSongOrder.EndUpdate();
     }
 
-    private void lvSongs_ColumnClick(object sender, ColumnClickEventArgs e)
+    private void LvSongs_ColumnClick(object sender, ColumnClickEventArgs e)
     {
         // Determine if the clicked column is already the column that is being sorted.
         if (lvSongs.ListViewItemSorter is ListViewItemComparer sorter && sorter.Column == e.Column)
@@ -158,28 +212,36 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
         lvSongs.Sort();
     }
 
-    private void lvSongs_MouseDoubleClick(object sender, MouseEventArgs e)
+    private void LvSongs_MouseDoubleClick(object sender, MouseEventArgs e)
     {
         if (lvSongs.SelectedItems.Count != 1) return;
 
         if (lvSongs.SelectedItems[0].Tag is not Song song) return;
 
-        if (Directory.GetParent(song.OriginalFilePath) is { } parentDir)
+        if (Directory.GetParent(song.FilePath) is { } parentDir)
             Process.Start("explorer.exe", parentDir.FullName);
     }
 
     #region Song Order
 
+    /// <summary>
+    /// Populates the song order list box with the songs from the binding list.
+    /// </summary>
     private void PopulateSongListBox()
     {
         lbSongs.BeginUpdate();
-        lbSongs.DataSource = null;
-
-        lbSongs.DataSource = _bindingSongList;
+        lbSongs.Items.Clear();
+        foreach (var s in Station.TrackedObject.Songs
+                     .Where(s => !lvSongOrder.Items
+                         .Cast<ListViewItem>()
+                         .Any(item => item.Tag != null && item.Tag.Equals(s))))
+        {
+            lbSongs.Items.Add(s);
+        }
         lbSongs.EndUpdate();
     }
 
-    private void btnAddToOrder_Click(object sender, EventArgs e)
+    private void BtnAddToOrder_Click(object sender, EventArgs e)
     {
         if (lbSongs.SelectedItems.Count <= 0) return;
 
@@ -187,41 +249,111 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
         foreach (var item in selectedSongs.OfType<Song>())
         {
             AddSongToOrderListView(item);
-            _bindingSongList.Remove(item);
-
-            UpdateListsAndViews();
+            lbSongs.Items.Remove(item);
         }
+        UpdateListsAndViews();
+
+        StationUpdated?.Invoke(this, EventArgs.Empty);
     }
 
-    private void btnRemoveFromOrder_Click(object sender, EventArgs e)
+    private void BtnRemoveFromOrder_Click(object sender, EventArgs e)
     {
         if (lvSongOrder.SelectedItems.Count <= 0) return;
+        RemoveSongsFromOrderListView();
 
+        UpdateListsAndViews();
+        StationUpdated?.Invoke(this, EventArgs.Empty);
+    }
+
+    /// <summary>
+    /// Adds a song to the order list view.
+    /// </summary>
+    /// <param name="song">The song to add.</param>
+    /// <param name="updateOrderedList">Indicates whether to update the ordered list.</param>
+    private void AddSongToOrderListView(Song song, bool updateOrderedList = true)
+    {
+        ListViewItem item = new([(lvSongOrder.Items.Count + 1).ToString(), song.Title])
+        {
+            Name = song.Title,
+            Tag = song
+        };
+
+        lvSongOrder.Items.Add(item);
+        UpdateOrderColumn();
+
+        if (updateOrderedList)
+            UpdateOrderedList();
+
+        lvSongOrder.ResizeColumns();
+    }
+
+    private void RemoveSongsFromOrderListView()
+    {
         foreach (var item in lvSongOrder.SelectedItems)
         {
             if (item is not ListViewItem lvItem) continue;
             if (lvItem.Tag is not Song song) continue;
 
             lvSongOrder.Items.Remove(lvItem);
-            _bindingSongList.Add(song);
+            lbSongs.Items.Add(song);
+        }
+
+        if (lvSongOrder.Items.Count > 0)
+        {
+            lvSongOrder.Items[0].Selected = true;
+            lvSongOrder.EnsureVisible(0);
+        }
+
+        UpdateOrderColumn();
+        UpdateOrderedList();
+    }
+
+    /// <summary>
+    /// Updates the order column numbers in the song order list view.
+    /// </summary>
+    private void UpdateOrderColumn()
+    {
+        for (var i = 0; i < lvSongOrder.Items.Count; i++)
+            lvSongOrder.Items[i].SubItems[0].Text = (i + 1).ToString();
+    }
+
+    /// <summary>
+    /// Sets the ordered list of songs based on the station's metadata.
+    /// </summary>
+    private void SetOrderedList()
+    {
+        var tempSongs = lbSongs.Items.Cast<Song>().ToList();
+
+        foreach (var song in Station.TrackedObject.MetaData.SongOrder
+                     .Select(item => tempSongs.Find(x => x.FilePath.EndsWith(item)))
+                     .OfType<Song>())
+        {
+            AddSongToOrderListView(song, false);
         }
 
         UpdateListsAndViews();
-
-        if (lvSongOrder.Items.Count <= 0) return;
-
-        lvSongOrder.Items[0].Selected = true;
-        lvSongOrder.EnsureVisible(0);
     }
 
-    private void lvSongOrder_DragEnter(object sender, DragEventArgs e)
+    /// <summary>
+    /// Updates the ordered list of songs in the station with the items in the list view.
+    /// </summary>
+    private void UpdateOrderedList()
+    {
+        Station.TrackedObject.MetaData.SongOrder.Clear();
+        foreach (ListViewItem item in lvSongOrder.Items)
+            if (item.Tag is Song song)
+                Station.TrackedObject.MetaData.SongOrder.Add(Path.GetFileName(song.FilePath));
+        StationUpdated?.Invoke(this, EventArgs.Empty);
+    }
+
+    private void LvSongOrder_DragEnter(object sender, DragEventArgs e)
     {
         if (e.Data != null && !e.Data.GetDataPresent(typeof(Song))) return;
 
         e.Effect = DragDropEffects.Move;
     }
 
-    private void lvSongOrder_DragDrop(object sender, DragEventArgs e)
+    private void LvSongOrder_DragDrop(object sender, DragEventArgs e)
     {
         if (e.Data == null || !e.Data.GetDataPresent(typeof(ListViewItem))) return;
 
@@ -239,7 +371,7 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
         UpdateOrderedList();
     }
 
-    private void lvSongOrder_DragOver(object sender, DragEventArgs e)
+    private void LvSongOrder_DragOver(object sender, DragEventArgs e)
     {
         e.Effect = DragDropEffects.Move;
 
@@ -251,57 +383,30 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
         hoverItem?.EnsureVisible();
     }
 
-    private void lvSongOrder_ItemDrag(object sender, ItemDragEventArgs e)
+    private void LvSongOrder_ItemDrag(object sender, ItemDragEventArgs e)
     {
         if (e.Item != null)
             lvSongOrder.DoDragDrop(e.Item, DragDropEffects.Move);
     }
 
-    private void AddSongToOrderListView(Song song, bool updateOrderedList = true)
+    private void LvSongs_KeyDown(object sender, KeyEventArgs e)
     {
-        ListViewItem item = new([(lvSongOrder.Items.Count + 1).ToString(), song.Name])
-        {
-            Name = song.Name,
-            Tag = song
-        };
+        if (!e.Control || e.KeyCode != Keys.A) return;
 
-        lvSongOrder.Items.Add(item);
-        UpdateOrderColumn();
-
-        if (updateOrderedList)
-            UpdateOrderedList();
-
-        lvSongOrder.ResizeColumns();
+        SelectAllItems(lvSongs);
+        e.SuppressKeyPress = true;
     }
 
-    private void UpdateOrderColumn()
+    /// <summary>
+    /// Selects all the items in a <see cref="ListView"/>.
+    /// </summary>
+    /// <param name="listView">The <see cref="ListView"/> to select items of.</param>
+    private static void SelectAllItems(ListView listView)
     {
-        for (var i = 0; i < lvSongOrder.Items.Count; i++)
-            lvSongOrder.Items[i].SubItems[0].Text = (i + 1).ToString();
+        listView.BeginUpdate();
+        foreach (ListViewItem item in listView.Items)
+            item.Selected = true;
+        listView.EndUpdate();
     }
-
-    private void SetOrderedList()
-    {
-        var tempSongs = lbSongs.Items.Cast<Song>().ToList();
-
-        foreach (var song in Station.MetaData.SongOrder
-                     .Select(item => tempSongs.Find(x => x.OriginalFilePath.EndsWith(item)))
-                     .OfType<Song>())
-        {
-            AddSongToOrderListView(song, false);
-            _bindingSongList.Remove(song);
-        }
-
-        UpdateListsAndViews();
-    }
-
-    private void UpdateOrderedList()
-    {
-        Station.MetaData.SongOrder.Clear();
-        foreach (ListViewItem item in lvSongOrder.Items)
-            if (item.Tag is Song song)
-                Station.MetaData.SongOrder.Add(Path.GetFileName(song.OriginalFilePath));
-    }
-
     #endregion
 }

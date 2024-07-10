@@ -59,7 +59,8 @@
               : using a System.ComponentModel.TypeConverter
               : and then encoded with base64 encoding.
       -->
-    <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root"
+    <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"
+                id="root"
                 xmlns="">
         <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
         <xsd:element name="root" msdata:IsDataSet="true">
@@ -596,4 +597,38 @@ No se pueden exportar estaciones de radio al juego.</value>
     <data name="ConfigSaveSuccess" xml:space="preserve">
     <value>¡Configuración salvada!</value>
   </data>
+    <data name="OpenLogFolder" xml:space="preserve">
+      <value>Abrir carpeta de registro</value>
+    </data>
+    <data name="ConfirmRefreshStations" xml:space="preserve">
+      <value>¿Estás seguro de que quieres actualizar tus estaciones desde el disco? Perderá cualquier cambio pendiente.</value>
+    </data>
+    <data name="EditLogsPathOption" xml:space="preserve">
+      <value>Editar ruta de registros...</value>
+    </data>
+    <data name="EditLogsPathOptionHelp" xml:space="preserve">
+      <value>Abre un diálogo de carpeta donde puede elegir una nueva ruta para guardar archivos de registro.</value>
+    </data>
+    <data name="LogPathLabel" xml:space="preserve">
+      <value>Ruta del archivo de registro:</value>
+    </data>
+    <data name="SelectLogPathDesc" xml:space="preserve">
+      <value>Seleccione la ubicación para almacenar los archivos de registro</value>
+    </data>
+    <data name="NoLogPathSet" xml:space="preserve">
+      <value>&lt;sin camino&gt;</value>
+    </data>
+    <data name="ExportWindowTip" xml:space="preserve">
+      <value>     Sólo las estaciones habilitadas son
+exportado al juego.</value>
+    </data>
+    <data name="AddSongs" xml:space="preserve">
+      <value>Seleccione archivos de canciones para agregar</value>
+    </data>
+    <data name="RevertChanges" xml:space="preserve">
+      <value>Revertir cambios</value>
+    </data>
+    <data name="ClearAllSongs" xml:space="preserve">
+      <value>¡Limpiar todo!</value>
+    </data>
 </root>

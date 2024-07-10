@@ -59,7 +59,8 @@
               : using a System.ComponentModel.TypeConverter
               : and then encoded with base64 encoding.
       -->
-    <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root"
+    <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"
+                id="root"
                 xmlns="">
         <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
         <xsd:element name="root" msdata:IsDataSet="true">
@@ -596,4 +597,38 @@ Impossible d'exporter les stations de radio vers le jeu.</value>
     <data name="ConfigSaveSuccess" xml:space="preserve">
     <value>Configuration enregistrée !</value>
   </data>
+    <data name="OpenLogFolder" xml:space="preserve">
+      <value>Ouvrir le dossier Log</value>
+    </data>
+    <data name="ConfirmRefreshStations" xml:space="preserve">
+      <value>Êtes-vous sûr de vouloir actualiser vos stations à partir du disque? Vous perdrez les changements en attente.</value>
+    </data>
+    <data name="EditLogsPathOption" xml:space="preserve">
+      <value>Modifier le chemin des journaux...</value>
+    </data>
+    <data name="EditLogsPathOptionHelp" xml:space="preserve">
+      <value>Ouvre une boîte de dialogue de dossier où vous pouvez choisir un nouveau chemin pour enregistrer les fichiers journaux.</value>
+    </data>
+    <data name="LogPathLabel" xml:space="preserve">
+      <value>Chemin du journal :</value>
+    </data>
+    <data name="SelectLogPathDesc" xml:space="preserve">
+      <value>Sélectionnez l'emplacement pour stocker les fichiers journaux</value>
+    </data>
+    <data name="NoLogPathSet" xml:space="preserve">
+      <value>&lt;pas de chemin&gt;</value>
+    </data>
+    <data name="ExportWindowTip" xml:space="preserve">
+      <value>     Seules les stations activées sont
+exporté vers le jeu.</value>
+    </data>
+    <data name="AddSongs" xml:space="preserve">
+      <value>Sélectionnez les fichiers de chansons à ajouter</value>
+    </data>
+    <data name="RevertChanges" xml:space="preserve">
+      <value>Rétablir les changements</value>
+    </data>
+    <data name="ClearAllSongs" xml:space="preserve">
+      <value>Tout effacer!</value>
+    </data>
 </root>
