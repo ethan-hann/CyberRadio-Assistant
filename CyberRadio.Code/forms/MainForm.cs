@@ -39,7 +39,7 @@ public partial class MainForm : Form
     private readonly Json<MetaData> _metaDataJson = new();
     private readonly NoStationsCtl _noStationsCtrl = new();
     private readonly Timer _resizeTimer;
-    private readonly Json<SongList> _songListJson = new();
+    private readonly Json<List<Song>> _songListJson = new();
     private readonly Dictionary<Guid, StationEditor> _stationEditorsDict = [];
     private readonly ImageList _stationImageList = new();
     private readonly BindingList<TrackableObject<Station>> _stations = [];
@@ -343,7 +343,7 @@ public partial class MainForm : Form
     ///     <param name="metaData">The metadata for the station.</param>
     ///     <param name="songList">The song list for the station.</param>
     /// </summary>
-    private static Station CreateStation(MetaData metaData, SongList songList)
+    private static Station CreateStation(MetaData metaData, List<Song> songList)
     {
         return new Station
         {

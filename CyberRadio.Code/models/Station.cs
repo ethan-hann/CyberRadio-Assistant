@@ -14,6 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+using Newtonsoft.Json;
 using System.ComponentModel;
 
 namespace RadioExt_Helper.models;
@@ -25,11 +26,12 @@ public class Station : INotifyPropertyChanged, ICloneable, IEquatable<Station>
 {
     private MetaData _metaData = new();
 
-    private List<Song> _songsAsList = [];
+    private List<Song> _songs = [];
 
     /// <summary>
     ///     The metadata associated with this station.
     /// </summary>
+    [JsonIgnore]
     public MetaData MetaData
     {
         get => _metaData;
@@ -43,6 +45,7 @@ public class Station : INotifyPropertyChanged, ICloneable, IEquatable<Station>
     /// <summary>
     ///     The stream info associated with this station.
     /// </summary>
+    [JsonIgnore]
     public StreamInfo StreamInfo
     {
         get => MetaData.StreamInfo;
@@ -56,6 +59,7 @@ public class Station : INotifyPropertyChanged, ICloneable, IEquatable<Station>
     /// <summary>
     ///     The custom icon associated with this station.
     /// </summary>
+    [JsonIgnore]
     public CustomIcon CustomIcon
     {
         get => MetaData.CustomIcon;
@@ -67,28 +71,15 @@ public class Station : INotifyPropertyChanged, ICloneable, IEquatable<Station>
     }
 
     /// <summary>
-    ///     The song list for this station as a <see cref="List{T}" />. Empty if <see cref="StreamInfo.IsStream" /> is
-    ///     <c>true</c>.
+    ///     Represents a list of songs associated with a radio station.
     /// </summary>
-    public List<Song> SongsAsList
+    [JsonProperty("songs")]
+    public List<Song> Songs
     {
-        get => _songsAsList;
+        get => _songs;
         set
         {
-            _songsAsList = value;
-            OnPropertyChanged(nameof(SongsAsList));
-        }
-    }
-
-    /// <summary>
-    ///     Get a <see cref="SongList" /> representing the current songs in the <see cref="SongsAsList" /> list.
-    /// </summary>
-    public SongList Songs
-    {
-        get => [.. SongsAsList];
-        set
-        {
-            SongsAsList = [.. value];
+            _songs = value;
             OnPropertyChanged(nameof(Songs));
         }
     }
@@ -98,7 +89,7 @@ public class Station : INotifyPropertyChanged, ICloneable, IEquatable<Station>
         return new Station
         {
             MetaData = (MetaData)MetaData.Clone(),
-            SongsAsList = [..SongsAsList]
+            Songs = [..Songs]
         };
     }
 
@@ -106,7 +97,7 @@ public class Station : INotifyPropertyChanged, ICloneable, IEquatable<Station>
     {
         if (other == null) return false;
         return MetaData.Equals(other.MetaData) &&
-               SongsAsList.SequenceEqual(other.SongsAsList);
+               Songs.SequenceEqual(other.Songs);
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;
@@ -125,7 +116,6 @@ public class Station : INotifyPropertyChanged, ICloneable, IEquatable<Station>
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 
-    /// <inheritdoc />
     public override string ToString()
     {
         return MetaData.DisplayName;
@@ -138,6 +128,6 @@ public class Station : INotifyPropertyChanged, ICloneable, IEquatable<Station>
 
     public override int GetHashCode()
     {
-        return HashCode.Combine(MetaData, SongsAsList);
+        return HashCode.Combine(MetaData, Songs);
     }
 }

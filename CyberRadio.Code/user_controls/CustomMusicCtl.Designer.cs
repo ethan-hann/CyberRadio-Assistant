@@ -221,8 +221,6 @@
             // 
             // lbSongs
             // 
-            lbSongs.DataSource = songBindingSource;
-            lbSongs.DisplayMember = "Name";
             lbSongs.Dock = DockStyle.Fill;
             lbSongs.Font = new Font("Segoe UI Semibold", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lbSongs.FormattingEnabled = true;
