@@ -46,6 +46,7 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
     {
         btnAddSongs.Text = GlobalData.Strings.GetString("AddSongsToolStrip");
         btnRemoveSongs.Text = GlobalData.Strings.GetString("RemoveSongsToolStrip");
+        btnRemoveAllSongs.Text = GlobalData.Strings.GetString("ClearAllSongs");
 
         lvSongs.Columns[0].Text = GlobalData.Strings.GetString("SongNameHeader");
         lvSongs.Columns[1].Text = GlobalData.Strings.GetString("SongArtistHeader");
@@ -133,9 +134,7 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
         if (lvSongs.SelectedItems.Count <= 0) return;
 
         if (lvSongs.SelectedItems.Count == lvSongs.Items.Count)
-            if (MessageBox.Show(this, GlobalData.Strings.GetString("DeleteAllSongsConfirm"),
-                    GlobalData.Strings.GetString("Confirm"), MessageBoxButtons.YesNo, MessageBoxIcon.Warning) ==
-                DialogResult.No)
+            if (ConfirmRemoveAllSongs() == DialogResult.No)
                 return;
 
         for (var i = 0; i < lvSongs.SelectedItems.Count; i++)
@@ -149,6 +148,24 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
 
         UpdateListsAndViews();
         StationUpdated?.Invoke(this, EventArgs.Empty);
+    }
+
+    private void BtnRemoveAllSongs_Click(object sender, EventArgs e)
+    {
+        if (ConfirmRemoveAllSongs() == DialogResult.No)
+            return;
+
+        lvSongs.Items.Clear();
+        Station.TrackedObject.Songs.Clear();
+        Station.TrackedObject.MetaData.SongOrder.Clear();
+        UpdateListsAndViews();
+        StationUpdated?.Invoke(this, EventArgs.Empty);
+    }
+
+    private DialogResult ConfirmRemoveAllSongs()
+    {
+        return MessageBox.Show(this, GlobalData.Strings.GetString("DeleteAllSongsConfirm"),
+            GlobalData.Strings.GetString("Confirm"), MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
     }
 
     /// <summary>
@@ -242,23 +259,9 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
     private void BtnRemoveFromOrder_Click(object sender, EventArgs e)
     {
         if (lvSongOrder.SelectedItems.Count <= 0) return;
-
-        foreach (var item in lvSongOrder.SelectedItems)
-        {
-            if (item is not ListViewItem lvItem) continue;
-            if (lvItem.Tag is not Song song) continue;
-
-            lvSongOrder.Items.Remove(lvItem);
-            lbSongs.Items.Add(song);
-        }
+        RemoveSongsFromOrderListView();
 
         UpdateListsAndViews();
-
-        if (lvSongOrder.Items.Count <= 0) return;
-
-        lvSongOrder.Items[0].Selected = true;
-        lvSongOrder.EnsureVisible(0);
-
         StationUpdated?.Invoke(this, EventArgs.Empty);
     }
 
@@ -283,6 +286,28 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
 
         lvSongOrder.ResizeColumns();
     }
+
+    private void RemoveSongsFromOrderListView()
+    {
+        foreach (var item in lvSongOrder.SelectedItems)
+        {
+            if (item is not ListViewItem lvItem) continue;
+            if (lvItem.Tag is not Song song) continue;
+
+            lvSongOrder.Items.Remove(lvItem);
+            lbSongs.Items.Add(song);
+        }
+
+        if (lvSongOrder.Items.Count > 0)
+        {
+            lvSongOrder.Items[0].Selected = true;
+            lvSongOrder.EnsureVisible(0);
+        }
+
+        UpdateOrderColumn();
+        UpdateOrderedList();
+    }
+
     /// <summary>
     /// Updates the order column numbers in the song order list view.
     /// </summary>
@@ -318,6 +343,7 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
         foreach (ListViewItem item in lvSongOrder.Items)
             if (item.Tag is Song song)
                 Station.TrackedObject.MetaData.SongOrder.Add(Path.GetFileName(song.FilePath));
+        StationUpdated?.Invoke(this, EventArgs.Empty);
     }
 
     private void LvSongOrder_DragEnter(object sender, DragEventArgs e)
@@ -363,4 +389,6 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
             lvSongOrder.DoDragDrop(e.Item, DragDropEffects.Move);
     }
     #endregion
+
+    
 }
