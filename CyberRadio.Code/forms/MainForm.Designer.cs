@@ -86,7 +86,7 @@ namespace RadioExt_Helper.forms
             // menuStrip1
             // 
             menuStrip1.BackColor = Color.Transparent;
-            menuStrip1.Font = new Font("Segoe UI Variable Display", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            menuStrip1.Font = new Font("Segoe UI Variable Display Semib", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, helpToolStripMenuItem, languageToolStripMenuItem });
             menuStrip1.LayoutStyle = ToolStripLayoutStyle.HorizontalStackWithOverflow;
             menuStrip1.Location = new Point(0, 0);
@@ -100,7 +100,7 @@ namespace RadioExt_Helper.forms
             fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { exportToGameToolStripMenuItem, refreshStationsToolStripMenuItem, toolStripSeparator2, openStagingPathToolStripMenuItem, openGamePathToolStripMenuItem, openLogFolderToolStripMenuItem, toolStripSeparator3, configurationToolStripMenuItem, pathsToolStripMenuItem });
             fileToolStripMenuItem.Image = Properties.Resources.file;
             fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            fileToolStripMenuItem.Size = new Size(54, 20);
+            fileToolStripMenuItem.Size = new Size(53, 20);
             fileToolStripMenuItem.Text = "File";
             // 
             // exportToGameToolStripMenuItem
@@ -108,80 +108,80 @@ namespace RadioExt_Helper.forms
             exportToGameToolStripMenuItem.Image = Properties.Resources.export;
             exportToGameToolStripMenuItem.Name = "exportToGameToolStripMenuItem";
             exportToGameToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.E;
-            exportToGameToolStripMenuItem.Size = new Size(256, 22);
+            exportToGameToolStripMenuItem.Size = new Size(251, 22);
             exportToGameToolStripMenuItem.Text = "Export Stations";
-            exportToGameToolStripMenuItem.Click += exportToGameToolStripMenuItem_Click;
+            exportToGameToolStripMenuItem.Click += ExportToGameToolStripMenuItem_Click;
             // 
             // refreshStationsToolStripMenuItem
             // 
             refreshStationsToolStripMenuItem.Image = Properties.Resources.refresh;
             refreshStationsToolStripMenuItem.Name = "refreshStationsToolStripMenuItem";
             refreshStationsToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.R;
-            refreshStationsToolStripMenuItem.Size = new Size(256, 22);
+            refreshStationsToolStripMenuItem.Size = new Size(251, 22);
             refreshStationsToolStripMenuItem.Text = "Refresh Stations";
-            refreshStationsToolStripMenuItem.Click += refreshStationsToolStripMenuItem_Click;
+            refreshStationsToolStripMenuItem.Click += RefreshStationsToolStripMenuItem_Click;
             // 
             // toolStripSeparator2
             // 
             toolStripSeparator2.Name = "toolStripSeparator2";
-            toolStripSeparator2.Size = new Size(253, 6);
+            toolStripSeparator2.Size = new Size(248, 6);
             // 
             // openStagingPathToolStripMenuItem
             // 
             openStagingPathToolStripMenuItem.Image = Properties.Resources.link;
             openStagingPathToolStripMenuItem.Name = "openStagingPathToolStripMenuItem";
             openStagingPathToolStripMenuItem.ShortcutKeys = Keys.Alt | Keys.S;
-            openStagingPathToolStripMenuItem.Size = new Size(256, 22);
+            openStagingPathToolStripMenuItem.Size = new Size(251, 22);
             openStagingPathToolStripMenuItem.Text = "Open Staging Folder";
-            openStagingPathToolStripMenuItem.Click += openStagingPathToolStripMenuItem_Click;
+            openStagingPathToolStripMenuItem.Click += OpenStagingPathToolStripMenuItem_Click;
             // 
             // openGamePathToolStripMenuItem
             // 
             openGamePathToolStripMenuItem.Image = Properties.Resources.link;
             openGamePathToolStripMenuItem.Name = "openGamePathToolStripMenuItem";
             openGamePathToolStripMenuItem.ShortcutKeys = Keys.Alt | Keys.G;
-            openGamePathToolStripMenuItem.Size = new Size(256, 22);
+            openGamePathToolStripMenuItem.Size = new Size(251, 22);
             openGamePathToolStripMenuItem.Text = "Open Game Radios Folder";
-            openGamePathToolStripMenuItem.Click += openGamePathToolStripMenuItem_Click;
+            openGamePathToolStripMenuItem.Click += OpenGamePathToolStripMenuItem_Click;
             // 
             // openLogFolderToolStripMenuItem
             // 
             openLogFolderToolStripMenuItem.Image = Properties.Resources.link;
             openLogFolderToolStripMenuItem.Name = "openLogFolderToolStripMenuItem";
             openLogFolderToolStripMenuItem.ShortcutKeys = Keys.Alt | Keys.L;
-            openLogFolderToolStripMenuItem.Size = new Size(256, 22);
+            openLogFolderToolStripMenuItem.Size = new Size(251, 22);
             openLogFolderToolStripMenuItem.Text = "Open Log Folder";
-            openLogFolderToolStripMenuItem.Click += openLogFolderToolStripMenuItem_Click;
+            openLogFolderToolStripMenuItem.Click += OpenLogFolderToolStripMenuItem_Click;
             // 
             // toolStripSeparator3
             // 
             toolStripSeparator3.Name = "toolStripSeparator3";
-            toolStripSeparator3.Size = new Size(253, 6);
+            toolStripSeparator3.Size = new Size(248, 6);
             // 
             // configurationToolStripMenuItem
             // 
             configurationToolStripMenuItem.Image = Properties.Resources.settings;
             configurationToolStripMenuItem.Name = "configurationToolStripMenuItem";
             configurationToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.C;
-            configurationToolStripMenuItem.Size = new Size(256, 22);
+            configurationToolStripMenuItem.Size = new Size(251, 22);
             configurationToolStripMenuItem.Text = "Configuration";
-            configurationToolStripMenuItem.Click += configurationToolStripMenuItem_Click;
+            configurationToolStripMenuItem.Click += ConfigurationToolStripMenuItem_Click;
             // 
             // pathsToolStripMenuItem
             // 
             pathsToolStripMenuItem.Image = Properties.Resources.folder;
             pathsToolStripMenuItem.Name = "pathsToolStripMenuItem";
             pathsToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.P;
-            pathsToolStripMenuItem.Size = new Size(256, 22);
+            pathsToolStripMenuItem.Size = new Size(251, 22);
             pathsToolStripMenuItem.Text = "Game Paths";
-            pathsToolStripMenuItem.Click += pathsToolStripMenuItem_Click;
+            pathsToolStripMenuItem.Click += PathsToolStripMenuItem_Click;
             // 
             // helpToolStripMenuItem
             // 
             helpToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { howToUseToolStripMenuItem, radioExtOnNexusModsToolStripMenuItem, radioExtGitHubToolStripMenuItem, toolStripSeparator1, aboutToolStripMenuItem, checkForUpdatesToolStripMenuItem });
             helpToolStripMenuItem.Image = Properties.Resources.info;
             helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            helpToolStripMenuItem.Size = new Size(61, 20);
+            helpToolStripMenuItem.Size = new Size(60, 20);
             helpToolStripMenuItem.Text = "Help";
             // 
             // howToUseToolStripMenuItem
@@ -189,55 +189,55 @@ namespace RadioExt_Helper.forms
             howToUseToolStripMenuItem.Image = Properties.Resources.guide;
             howToUseToolStripMenuItem.Name = "howToUseToolStripMenuItem";
             howToUseToolStripMenuItem.ShortcutKeys = Keys.F1;
-            howToUseToolStripMenuItem.Size = new Size(205, 22);
+            howToUseToolStripMenuItem.Size = new Size(202, 22);
             howToUseToolStripMenuItem.Text = "How To Use";
-            howToUseToolStripMenuItem.Click += howToUseToolStripMenuItem_Click;
+            howToUseToolStripMenuItem.Click += HowToUseToolStripMenuItem_Click;
             // 
             // radioExtOnNexusModsToolStripMenuItem
             // 
             radioExtOnNexusModsToolStripMenuItem.Image = Properties.Resources.link;
             radioExtOnNexusModsToolStripMenuItem.Name = "radioExtOnNexusModsToolStripMenuItem";
-            radioExtOnNexusModsToolStripMenuItem.Size = new Size(205, 22);
+            radioExtOnNexusModsToolStripMenuItem.Size = new Size(202, 22);
             radioExtOnNexusModsToolStripMenuItem.Text = "radioExt on NexusMods";
-            radioExtOnNexusModsToolStripMenuItem.Click += radioExtOnNexusModsToolStripMenuItem_Click;
+            radioExtOnNexusModsToolStripMenuItem.Click += RadioExtOnNexusModsToolStripMenuItem_Click;
             // 
             // radioExtGitHubToolStripMenuItem
             // 
             radioExtGitHubToolStripMenuItem.Image = Properties.Resources.link;
             radioExtGitHubToolStripMenuItem.Name = "radioExtGitHubToolStripMenuItem";
-            radioExtGitHubToolStripMenuItem.Size = new Size(205, 22);
+            radioExtGitHubToolStripMenuItem.Size = new Size(202, 22);
             radioExtGitHubToolStripMenuItem.Text = "radioExt GitHub";
-            radioExtGitHubToolStripMenuItem.Click += radioExtHelpToolStripMenuItem_Click;
+            radioExtGitHubToolStripMenuItem.Click += RadioExtHelpToolStripMenuItem_Click;
             // 
             // toolStripSeparator1
             // 
             toolStripSeparator1.Name = "toolStripSeparator1";
-            toolStripSeparator1.Size = new Size(202, 6);
+            toolStripSeparator1.Size = new Size(199, 6);
             // 
             // aboutToolStripMenuItem
             // 
             aboutToolStripMenuItem.Image = Properties.Resources.info;
             aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
             aboutToolStripMenuItem.ShortcutKeys = Keys.F2;
-            aboutToolStripMenuItem.Size = new Size(205, 22);
+            aboutToolStripMenuItem.Size = new Size(202, 22);
             aboutToolStripMenuItem.Text = "About";
-            aboutToolStripMenuItem.Click += aboutToolStripMenuItem_Click;
+            aboutToolStripMenuItem.Click += AboutToolStripMenuItem_Click;
             // 
             // checkForUpdatesToolStripMenuItem
             // 
             checkForUpdatesToolStripMenuItem.Image = Properties.Resources.update;
             checkForUpdatesToolStripMenuItem.Name = "checkForUpdatesToolStripMenuItem";
             checkForUpdatesToolStripMenuItem.ShortcutKeys = Keys.F3;
-            checkForUpdatesToolStripMenuItem.Size = new Size(205, 22);
+            checkForUpdatesToolStripMenuItem.Size = new Size(202, 22);
             checkForUpdatesToolStripMenuItem.Text = "Check For Updates";
-            checkForUpdatesToolStripMenuItem.Click += checkForUpdatesToolStripMenuItem_Click;
+            checkForUpdatesToolStripMenuItem.Click += CheckForUpdatesToolStripMenuItem_Click;
             // 
             // languageToolStripMenuItem
             // 
             languageToolStripMenuItem.Image = Properties.Resources.language;
             languageToolStripMenuItem.Name = "languageToolStripMenuItem";
             languageToolStripMenuItem.RightToLeft = RightToLeft.No;
-            languageToolStripMenuItem.Size = new Size(88, 20);
+            languageToolStripMenuItem.Size = new Size(87, 20);
             languageToolStripMenuItem.Text = "Language";
             // 
             // splitContainer1
@@ -290,8 +290,8 @@ namespace RadioExt_Helper.forms
             lbStations.SavedStationIconKey = "saved_station";
             lbStations.Size = new Size(309, 422);
             lbStations.TabIndex = 0;
-            lbStations.SelectedIndexChanged += lbStations_SelectedIndexChanged;
-            lbStations.MouseDown += lbStations_MouseDown;
+            lbStations.SelectedIndexChanged += LbStations_SelectedIndexChanged;
+            lbStations.MouseDown += LbStations_MouseDown;
             // 
             // statusStrip1
             // 
@@ -354,7 +354,7 @@ namespace RadioExt_Helper.forms
             btnDisableSelected.TabIndex = 1;
             btnDisableSelected.Text = "Disable Selected";
             btnDisableSelected.UseVisualStyleBackColor = false;
-            btnDisableSelected.Click += btnDisableStation_Click;
+            btnDisableSelected.Click += BtnDisableStation_Click;
             // 
             // cmsDisable
             // 
@@ -369,7 +369,7 @@ namespace RadioExt_Helper.forms
             btnDisableAll.Name = "btnDisableAll";
             btnDisableAll.Size = new Size(129, 22);
             btnDisableAll.Text = "Disable All";
-            btnDisableAll.Click += btnDisableAll_Click;
+            btnDisableAll.Click += BtnDisableAll_Click;
             // 
             // btnEnableSelected
             // 
@@ -387,7 +387,7 @@ namespace RadioExt_Helper.forms
             btnEnableSelected.TabIndex = 0;
             btnEnableSelected.Text = "Enable Selected";
             btnEnableSelected.UseVisualStyleBackColor = false;
-            btnEnableSelected.Click += btnEnableStation_Click;
+            btnEnableSelected.Click += BtnEnableStation_Click;
             // 
             // cmsEnable
             // 
@@ -401,7 +401,7 @@ namespace RadioExt_Helper.forms
             btnEnableAll.Name = "btnEnableAll";
             btnEnableAll.Size = new Size(126, 22);
             btnEnableAll.Text = "Enable All";
-            btnEnableAll.Click += btnEnableAll_Click;
+            btnEnableAll.Click += BtnEnableAll_Click;
             // 
             // tableLayoutPanel1
             // 
@@ -436,7 +436,7 @@ namespace RadioExt_Helper.forms
             btnDeleteStation.TextAlign = ContentAlignment.MiddleRight;
             btnDeleteStation.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnDeleteStation.UseVisualStyleBackColor = false;
-            btnDeleteStation.Click += btnDeleteStation_Click;
+            btnDeleteStation.Click += BtnDeleteStation_Click;
             // 
             // btnAddStation
             // 
@@ -455,7 +455,7 @@ namespace RadioExt_Helper.forms
             btnAddStation.TextAlign = ContentAlignment.MiddleRight;
             btnAddStation.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnAddStation.UseVisualStyleBackColor = false;
-            btnAddStation.Click += btnAddStation_Click;
+            btnAddStation.Click += BtnAddStation_Click;
             // 
             // stationBindingSource
             // 

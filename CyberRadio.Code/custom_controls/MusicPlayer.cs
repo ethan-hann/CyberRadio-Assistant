@@ -1,13 +1,30 @@
-﻿using AetherUtils.Core.Logging;
+﻿// MusicPlayer.cs : RadioExt-Helper
+// Copyright (C) 2024  Ethan Hann
+// 
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+// 
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// 
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+using AetherUtils.Core.Logging;
 using NAudio.Wave;
+using RadioExt_Helper.Properties;
 using RadioExt_Helper.utility;
 
-namespace RadioExt_Helper.user_controls;
+namespace RadioExt_Helper.custom_controls;
 
 /// <summary>
-///     A simple music player control that allows you to stream audio from a URL in real time.
+///     A simple music player control that allows streaming audio from a URL in real time.
 /// </summary>
-public partial class MusicPlayer : UserControl
+public sealed partial class MusicPlayer : UserControl
 {
     private readonly ImageList _stateImages = new();
 
@@ -15,16 +32,19 @@ public partial class MusicPlayer : UserControl
     private string _streamUrl = string.Empty;
     private WaveOutEvent? _waveOut;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="MusicPlayer" /> class.
+    /// </summary>
     public MusicPlayer()
     {
         InitializeComponent();
 
-        _stateImages.Images.Add("play", Properties.Resources.play);
-        _stateImages.Images.Add("play_down", Properties.Resources.play_down);
-        _stateImages.Images.Add("play_over", Properties.Resources.play_over);
-        _stateImages.Images.Add("pause", Properties.Resources.pause);
-        _stateImages.Images.Add("pause_down", Properties.Resources.pause_down);
-        _stateImages.Images.Add("pause_over", Properties.Resources.pause_over);
+        _stateImages.Images.Add("play", Resources.play);
+        _stateImages.Images.Add("play_down", Resources.play_down);
+        _stateImages.Images.Add("play_over", Resources.play_over);
+        _stateImages.Images.Add("pause", Resources.pause);
+        _stateImages.Images.Add("pause_down", Resources.pause_down);
+        _stateImages.Images.Add("pause_over", Resources.pause_over);
         _stateImages.ImageSize = new Size(32, 32);
 
         btnPlayPause.ImageList = _stateImages;
@@ -35,6 +55,9 @@ public partial class MusicPlayer : UserControl
         BackColor = Color.Transparent;
     }
 
+    /// <summary>
+    ///     Gets or sets the stream URL. When setting, if the stream is currently playing, it will stop the stream.
+    /// </summary>
     public string StreamUrl
     {
         get => _streamUrl;
@@ -53,6 +76,9 @@ public partial class MusicPlayer : UserControl
         _mediaReader?.Dispose();
     }
 
+    /// <summary>
+    ///     Stops the audio stream.
+    /// </summary>
     public void StopStream()
     {
         _waveOut?.Stop();
@@ -60,7 +86,12 @@ public partial class MusicPlayer : UserControl
         btnPlayPause.ImageKey = "play";
     }
 
-    private void btnPlayPause_Click(object sender, EventArgs e)
+    /// <summary>
+    ///     Handles the click event of the play/pause button.
+    /// </summary>
+    /// <param name="sender">The sender object.</param>
+    /// <param name="e">The event arguments.</param>
+    private void BtnPlayPause_Click(object sender, EventArgs e)
     {
         if (string.IsNullOrEmpty(StreamUrl))
         {
@@ -85,10 +116,15 @@ public partial class MusicPlayer : UserControl
                 PlayStream();
                 break;
             default:
-                throw new Exception("Playback state was not valid for the audio player.");
+                AuLogger.GetCurrentLogger<MusicPlayer>("Btn_PlayPause")
+                    .Error("Playback state was not valid for the audio player.");
+                break;
         }
     }
 
+    /// <summary>
+    ///     Plays the audio stream.
+    /// </summary>
     private void PlayStream()
     {
         try
@@ -109,6 +145,9 @@ public partial class MusicPlayer : UserControl
         }
     }
 
+    /// <summary>
+    ///     Resumes the audio stream.
+    /// </summary>
     private void ResumeStream()
     {
         try
@@ -127,6 +166,9 @@ public partial class MusicPlayer : UserControl
         }
     }
 
+    /// <summary>
+    ///     Pauses the audio stream.
+    /// </summary>
     private void PauseStream()
     {
         try
@@ -145,7 +187,12 @@ public partial class MusicPlayer : UserControl
         }
     }
 
-    private void btnPlayPause_MouseDown(object sender, MouseEventArgs e)
+    /// <summary>
+    ///     Handles the mouse down event of the play/pause button.
+    /// </summary>
+    /// <param name="sender">The sender object.</param>
+    /// <param name="e">The mouse event arguments.</param>
+    private void BtnPlayPause_MouseDown(object sender, MouseEventArgs e)
     {
         if (_waveOut == null)
         {
@@ -153,18 +200,20 @@ public partial class MusicPlayer : UserControl
             return;
         }
 
-        if (_waveOut?.PlaybackState == PlaybackState.Playing)
+        btnPlayPause.ImageKey = _waveOut?.PlaybackState switch
         {
-            btnPlayPause.ImageKey = "pause_down";
-        }
-
-        if (_waveOut?.PlaybackState == PlaybackState.Paused || _waveOut?.PlaybackState == PlaybackState.Stopped)
-        {
-            btnPlayPause.ImageKey = "play_down";
-        }
+            PlaybackState.Playing => "pause_down",
+            PlaybackState.Paused or PlaybackState.Stopped => "play_down",
+            _ => btnPlayPause.ImageKey
+        };
     }
 
-    private void btnPlayPause_MouseHover(object sender, EventArgs e)
+    /// <summary>
+    ///     Handles the mouse hover event of the play/pause button.
+    /// </summary>
+    /// <param name="sender">The sender object.</param>
+    /// <param name="e">The event arguments.</param>
+    private void BtnPlayPause_MouseHover(object sender, EventArgs e)
     {
         if (_waveOut == null)
         {
@@ -172,18 +221,20 @@ public partial class MusicPlayer : UserControl
             return;
         }
 
-        if (_waveOut?.PlaybackState == PlaybackState.Playing)
+        btnPlayPause.ImageKey = _waveOut?.PlaybackState switch
         {
-            btnPlayPause.ImageKey = "pause_over";
-        }
-
-        if (_waveOut?.PlaybackState == PlaybackState.Paused || _waveOut?.PlaybackState == PlaybackState.Stopped)
-        {
-            btnPlayPause.ImageKey = "play_over";
-        }
+            PlaybackState.Playing => "pause_over",
+            PlaybackState.Paused or PlaybackState.Stopped => "play_over",
+            _ => btnPlayPause.ImageKey
+        };
     }
 
-    private void btnPlayPause_MouseLeave(object sender, EventArgs e)
+    /// <summary>
+    ///     Handles the mouse leave event of the play/pause button.
+    /// </summary>
+    /// <param name="sender">The sender object.</param>
+    /// <param name="e">The event arguments.</param>
+    private void BtnPlayPause_MouseLeave(object sender, EventArgs e)
     {
         if (_waveOut == null)
         {
@@ -191,22 +242,27 @@ public partial class MusicPlayer : UserControl
             return;
         }
 
-        if (_waveOut?.PlaybackState == PlaybackState.Playing)
+        btnPlayPause.ImageKey = _waveOut?.PlaybackState switch
         {
-            btnPlayPause.ImageKey = "pause";
-        }
-
-        if (_waveOut?.PlaybackState == PlaybackState.Paused || _waveOut?.PlaybackState == PlaybackState.Stopped)
-        {
-            btnPlayPause.ImageKey = "play";
-        }
+            PlaybackState.Playing => "pause",
+            PlaybackState.Paused or PlaybackState.Stopped => "play",
+            _ => btnPlayPause.ImageKey
+        };
     }
 
+    /// <summary>
+    ///     Overrides the OnPaintBackground method to prevent painting the background.
+    /// </summary>
+    /// <param name="e">The paint event arguments.</param>
     protected override void OnPaintBackground(PaintEventArgs e)
     {
         // Do not paint the background to keep it transparent
     }
 
+    /// <summary>
+    ///     Overrides the OnParentBackColorChanged method to update the parent background.
+    /// </summary>
+    /// <param name="e">The event arguments.</param>
     protected override void OnParentBackColorChanged(EventArgs e)
     {
         base.OnParentBackColorChanged(e);

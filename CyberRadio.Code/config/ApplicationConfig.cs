@@ -1,4 +1,4 @@
-// CyberConfig.cs : RadioExt-Helper
+// ApplicationConfig.cs : RadioExt-Helper
 // Copyright (C) 2024  Ethan Hann
 // 
 // This program is free software: you can redistribute it and/or modify
@@ -21,53 +21,61 @@ using RadioExt_Helper.utility;
 namespace RadioExt_Helper.config;
 
 /// <summary>
-///     A DTO representing the configuration for the application; replaces the need for a settings file. All present and
-///     future configuration options
-///     will be done via this class.
+///     Represents the configuration for the application; replaces the need for a settings file.
+///     All present and future configuration options will be managed via this class.
 /// </summary>
-public sealed class CyberConfig
+public sealed class ApplicationConfig
 {
+    // Constants for config keys
+    private const string AutoCheckForUpdatesKey = "autoCheckForUpdates";
+    private const string AutoExportToGameKey = "autoExportToGame";
+    private const string StagingPathKey = "stagingPath";
+    private const string GameBasePathKey = "gameBasePath";
+    private const string LanguageKey = "language";
+    private const string WindowSizeKey = "windowSize";
+    private const string LogOptionsKey = "logOptions";
+
     /// <summary>
     ///     Specifies whether the application should automatically check for updates on startup.
     /// </summary>
-    [Config("autoCheckForUpdates")]
+    [Config(AutoCheckForUpdatesKey)]
     public bool AutoCheckForUpdates { get; set; } = true;
 
     /// <summary>
-    ///     Specifies whether the application should automatically export the stations to the game directory after exporting to
-    ///     staging.
+    ///     Specifies whether the application should automatically export the stations to the game
+    ///     directory after exporting to staging.
     /// </summary>
-    [Config("autoExportToGame")]
+    [Config(AutoExportToGameKey)]
     public bool AutoExportToGame { get; set; } = false;
 
     /// <summary>
     ///     The path to the staging directory.
     /// </summary>
-    [Config("stagingPath")]
+    [Config(StagingPathKey)]
     public string StagingPath { get; set; } = string.Empty;
 
     /// <summary>
     ///     The path to the game directory.
     /// </summary>
-    [Config("gameBasePath")]
+    [Config(GameBasePathKey)]
     public string GameBasePath { get; set; } = string.Empty;
 
     /// <summary>
     ///     The selected language for the application.
     /// </summary>
-    [Config("language")]
+    [Config(LanguageKey)]
     public string Language { get; set; } = "English (en)";
 
     /// <summary>
     ///     The window size of the application.
     /// </summary>
-    [Config("windowSize")]
+    [Config(WindowSizeKey)]
     public WindowSize WindowSize { get; set; } = new();
 
     /// <summary>
     ///     The log options for the application.
     /// </summary>
-    [Config("logOptions")]
+    [Config(LogOptionsKey)]
     public LogOptions LogOptions { get; set; } = new()
     {
         AppName = "CyberRadioAssistant",

@@ -308,6 +308,7 @@
             btnCancel.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnCancel.UseVisualStyleBackColor = false;
             btnCancel.Visible = false;
+            btnCancel.Click += BtnCancel_Click;
             // 
             // ExportWindow
             // 

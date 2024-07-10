@@ -1,4 +1,20 @@
-﻿using System.ComponentModel;
+﻿// MetaData.cs : RadioExt-Helper
+// Copyright (C) 2024  Ethan Hann
+// 
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+// 
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// 
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+using System.ComponentModel;
 using Newtonsoft.Json;
 
 namespace RadioExt_Helper.models;
@@ -8,7 +24,20 @@ namespace RadioExt_Helper.models;
 /// </summary>
 public sealed class MetaData : INotifyPropertyChanged, ICloneable, IEquatable<MetaData>
 {
+    private CustomIcon _customIcon = new();
     private string _displayName = "69.9 Your Station Name";
+
+    private float _fm = 69.9f;
+
+    private string _icon = "UIIcon.alcohol_absynth";
+
+    private bool _isActive = true;
+
+    private List<string> _songOrder = [];
+
+    private StreamInfo _streamInfo = new();
+
+    private float _volume = 1.0f;
 
     /// <summary>
     ///     The name of the station that will be displayed in game. Also used for the station folder.
@@ -24,7 +53,6 @@ public sealed class MetaData : INotifyPropertyChanged, ICloneable, IEquatable<Me
         }
     }
 
-    private float _fm = 69.9f;
     /// <summary>
     ///     Used to place the station at the right place in the stations list. If <see cref="DisplayName" /> has a number,
     ///     it should be the same here.
@@ -40,7 +68,6 @@ public sealed class MetaData : INotifyPropertyChanged, ICloneable, IEquatable<Me
         }
     }
 
-    private float _volume = 1.0f;
     /// <summary>
     ///     The overall volume multiplier for the station.
     /// </summary>
@@ -55,7 +82,6 @@ public sealed class MetaData : INotifyPropertyChanged, ICloneable, IEquatable<Me
         }
     }
 
-    private string _icon = "UIIcon.alcohol_absynth";
     /// <summary>
     ///     The icon for the station, if not using a custom one defined in <see cref="CustomIcon" />.
     /// </summary>
@@ -70,7 +96,6 @@ public sealed class MetaData : INotifyPropertyChanged, ICloneable, IEquatable<Me
         }
     }
 
-    private CustomIcon _customIcon = new();
     /// <summary>
     ///     Defines the custom icon to use for the station, if applicable. If not using a custom icon,
     ///     this property is not used.
@@ -86,7 +111,6 @@ public sealed class MetaData : INotifyPropertyChanged, ICloneable, IEquatable<Me
         }
     }
 
-    private StreamInfo _streamInfo = new();
     /// <summary>
     ///     Defines the streaming properties for the station, if applicable. If using audio files instead of a web stream,
     ///     this property is not used.
@@ -102,7 +126,6 @@ public sealed class MetaData : INotifyPropertyChanged, ICloneable, IEquatable<Me
         }
     }
 
-    private List<string> _songOrder = [];
     /// <summary>
     ///     Specifies the order in which songs should be played. The order does not have to contain all the songs in the
     ///     station. Any songs not specified in the order will be played randomly before/after the ordered section.
@@ -118,7 +141,6 @@ public sealed class MetaData : INotifyPropertyChanged, ICloneable, IEquatable<Me
         }
     }
 
-    private bool _isActive = true;
     /// <summary>
     ///     Indicates whether this station is enabled in game or not.
     /// </summary>
@@ -131,6 +153,34 @@ public sealed class MetaData : INotifyPropertyChanged, ICloneable, IEquatable<Me
             _isActive = value;
             OnPropertyChanged(nameof(IsActive));
         }
+    }
+
+    public object Clone()
+    {
+        return new MetaData
+        {
+            DisplayName = DisplayName,
+            Fm = Fm,
+            Volume = Volume,
+            Icon = Icon,
+            CustomIcon = (CustomIcon)CustomIcon.Clone(),
+            StreamInfo = (StreamInfo)StreamInfo.Clone(),
+            SongOrder = [..SongOrder],
+            IsActive = IsActive
+        };
+    }
+
+    public bool Equals(MetaData? other)
+    {
+        if (other == null) return false;
+        return DisplayName == other.DisplayName &&
+               Math.Abs(Fm - other.Fm) < float.Epsilon &&
+               Math.Abs(Volume - other.Volume) < float.Epsilon &&
+               Icon == other.Icon &&
+               CustomIcon.Equals(other.CustomIcon) &&
+               StreamInfo.Equals(other.StreamInfo) &&
+               SongOrder.SequenceEqual(other.SongOrder) &&
+               IsActive == other.IsActive;
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;
@@ -147,34 +197,6 @@ public sealed class MetaData : INotifyPropertyChanged, ICloneable, IEquatable<Me
     public override string ToString()
     {
         return DisplayName;
-    }
-
-    public object Clone()
-    {
-        return new MetaData
-        {
-            DisplayName = DisplayName,
-            Fm = Fm,
-            Volume = Volume,
-            Icon = Icon,
-            CustomIcon = (CustomIcon)CustomIcon.Clone(),
-            StreamInfo = (StreamInfo)StreamInfo.Clone(),
-            SongOrder = new List<string>(SongOrder),
-            IsActive = IsActive
-        };
-    }
-
-    public bool Equals(MetaData? other)
-    {
-        if (other == null) return false;
-        return DisplayName == other.DisplayName &&
-               Fm == other.Fm &&
-               Volume == other.Volume &&
-               Icon == other.Icon &&
-               CustomIcon.Equals(other.CustomIcon) &&
-               StreamInfo.Equals(other.StreamInfo) &&
-               SongOrder.SequenceEqual(other.SongOrder) &&
-               IsActive == other.IsActive;
     }
 
     public override bool Equals(object? obj)

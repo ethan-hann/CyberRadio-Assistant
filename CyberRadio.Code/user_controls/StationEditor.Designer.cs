@@ -1,4 +1,6 @@
-﻿namespace RadioExt_Helper.user_controls
+﻿using RadioExt_Helper.custom_controls;
+
+namespace RadioExt_Helper.user_controls
 {
     sealed partial class StationEditor
     {
@@ -109,8 +111,8 @@
             lblIcon.Size = new Size(36, 16);
             lblIcon.TabIndex = 2;
             lblIcon.Text = "Icon: ";
-            lblIcon.MouseEnter += lblIcon_MouseEnter;
-            lblIcon.MouseLeave += lbl_MouseLeave;
+            lblIcon.MouseEnter += LblIcon_MouseEnter;
+            lblIcon.MouseLeave += Lbl_MouseLeave;
             // 
             // txtDisplayName
             // 
@@ -120,8 +122,8 @@
             txtDisplayName.Name = "txtDisplayName";
             txtDisplayName.Size = new Size(849, 23);
             txtDisplayName.TabIndex = 1;
-            txtDisplayName.TextChanged += txtDisplayName_TextChanged;
-            txtDisplayName.Leave += txtDisplayName_Leave;
+            txtDisplayName.TextChanged += TxtDisplayName_TextChanged;
+            txtDisplayName.Leave += TxtDisplayName_Leave;
             // 
             // lblName
             // 
@@ -133,8 +135,8 @@
             lblName.Size = new Size(44, 16);
             lblName.TabIndex = 0;
             lblName.Text = "Name: ";
-            lblName.MouseEnter += lblName_MouseEnter;
-            lblName.MouseLeave += lbl_MouseLeave;
+            lblName.MouseEnter += LblName_MouseEnter;
+            lblName.MouseLeave += Lbl_MouseLeave;
             // 
             // label3
             // 
@@ -266,8 +268,8 @@
             lblVolume.Size = new Size(52, 16);
             lblVolume.TabIndex = 3;
             lblVolume.Text = "Volume: ";
-            lblVolume.MouseEnter += lblVolume_MouseEnter;
-            lblVolume.MouseLeave += lbl_MouseLeave;
+            lblVolume.MouseEnter += LblVolume_MouseEnter;
+            lblVolume.MouseLeave += Lbl_MouseLeave;
             // 
             // nudFM
             // 
@@ -280,7 +282,7 @@
             nudFM.Name = "nudFM";
             nudFM.Size = new Size(91, 23);
             nudFM.TabIndex = 7;
-            nudFM.ValueChanged += nudFM_ValueChanged;
+            nudFM.ValueChanged += NudFM_ValueChanged;
             // 
             // lblFM
             // 
@@ -292,8 +294,8 @@
             lblFM.Size = new Size(30, 16);
             lblFM.TabIndex = 2;
             lblFM.Text = "FM: ";
-            lblFM.MouseEnter += lblFM_MouseEnter;
-            lblFM.MouseLeave += lbl_MouseLeave;
+            lblFM.MouseEnter += LblFM_MouseEnter;
+            lblFM.MouseLeave += Lbl_MouseLeave;
             // 
             // flowLayoutPanel4
             // 
@@ -319,7 +321,7 @@
             volumeSlider.SmallChange = 10;
             volumeSlider.TabIndex = 6;
             volumeSlider.TickStyle = TickStyle.None;
-            volumeSlider.Scroll += volumeSlider_Scroll;
+            volumeSlider.Scroll += VolumeSlider_Scroll;
             // 
             // lblVolumeVal
             // 
@@ -333,9 +335,9 @@
             lblVolumeVal.TabIndex = 6;
             lblVolumeVal.Text = "Value:";
             lblVolumeVal.TextAlign = ContentAlignment.MiddleCenter;
-            lblVolumeVal.DoubleClick += lblVolumeVal_DoubleClick;
-            lblVolumeVal.MouseEnter += lblVolumeVal_MouseEnter;
-            lblVolumeVal.MouseLeave += lbl_MouseLeave;
+            lblVolumeVal.DoubleClick += LblVolumeVal_DoubleClick;
+            lblVolumeVal.MouseEnter += LblVolumeVal_MouseEnter;
+            lblVolumeVal.MouseLeave += Lbl_MouseLeave;
             // 
             // panel2
             // 
@@ -357,8 +359,8 @@
             txtVolumeEdit.TabIndex = 5;
             txtVolumeEdit.TabStop = false;
             txtVolumeEdit.Visible = false;
-            txtVolumeEdit.KeyDown += txtVolumeEdit_KeyDown;
-            txtVolumeEdit.KeyPress += txtVolumeEdit_KeyPress;
+            txtVolumeEdit.KeyDown += TxtVolumeEdit_KeyDown;
+            txtVolumeEdit.KeyPress += TxtVolumeEdit_KeyPress;
             // 
             // lblSelectedVolume
             // 
@@ -371,7 +373,7 @@
             lblSelectedVolume.TabIndex = 5;
             lblSelectedVolume.Text = "1.0";
             lblSelectedVolume.TextAlign = ContentAlignment.MiddleCenter;
-            lblSelectedVolume.DoubleClick += lblSelectedVolume_DoubleClick;
+            lblSelectedVolume.DoubleClick += LblSelectedVolume_DoubleClick;
             // 
             // lblVolumeMinMax
             // 
@@ -427,7 +429,7 @@
             txtInkAtlasPart.Name = "txtInkAtlasPart";
             txtInkAtlasPart.Size = new Size(798, 23);
             txtInkAtlasPart.TabIndex = 2;
-            txtInkAtlasPart.TextChanged += txtInkAtlasPart_TextChanged;
+            txtInkAtlasPart.TextChanged += TxtInkAtlasPart_TextChanged;
             // 
             // txtInkAtlasPath
             // 
@@ -437,7 +439,7 @@
             txtInkAtlasPath.Name = "txtInkAtlasPath";
             txtInkAtlasPath.Size = new Size(798, 23);
             txtInkAtlasPath.TabIndex = 3;
-            txtInkAtlasPath.TextChanged += txtInkAtlasPath_TextChanged;
+            txtInkAtlasPath.TextChanged += TxtInkAtlasPath_TextChanged;
             // 
             // lblUsingCustomIcon
             // 
@@ -449,8 +451,8 @@
             lblUsingCustomIcon.Size = new Size(42, 16);
             lblUsingCustomIcon.TabIndex = 3;
             lblUsingCustomIcon.Text = "Using?";
-            lblUsingCustomIcon.MouseEnter += lblUsingCustomIcon_MouseEnter;
-            lblUsingCustomIcon.MouseLeave += lbl_MouseLeave;
+            lblUsingCustomIcon.MouseEnter += LblUsingCustomIcon_MouseEnter;
+            lblUsingCustomIcon.MouseLeave += Lbl_MouseLeave;
             // 
             // flowLayoutPanel1
             // 
@@ -475,7 +477,7 @@
             radUseCustomYes.TabStop = true;
             radUseCustomYes.Text = "Yes";
             radUseCustomYes.UseVisualStyleBackColor = true;
-            radUseCustomYes.CheckedChanged += radUseCustomYes_CheckedChanged;
+            radUseCustomYes.CheckedChanged += RadUseCustomYes_CheckedChanged;
             // 
             // radUseCustomNo
             // 
@@ -489,7 +491,7 @@
             radUseCustomNo.TabStop = true;
             radUseCustomNo.Text = "No";
             radUseCustomNo.UseVisualStyleBackColor = true;
-            radUseCustomNo.CheckedChanged += radUseCustomNo_CheckedChanged;
+            radUseCustomNo.CheckedChanged += RadUseCustomNo_CheckedChanged;
             // 
             // lblInkPart
             // 
@@ -501,8 +503,8 @@
             lblInkPart.Size = new Size(82, 16);
             lblInkPart.TabIndex = 1;
             lblInkPart.Text = "Ink Atlas Part: ";
-            lblInkPart.MouseEnter += lblInkPart_MouseEnter;
-            lblInkPart.MouseLeave += lbl_MouseLeave;
+            lblInkPart.MouseEnter += LblInkPart_MouseEnter;
+            lblInkPart.MouseLeave += Lbl_MouseLeave;
             // 
             // lblInkPath
             // 
@@ -514,8 +516,8 @@
             lblInkPath.Size = new Size(85, 16);
             lblInkPath.TabIndex = 0;
             lblInkPath.Text = "Ink Atlas Path: ";
-            lblInkPath.MouseEnter += lblInkPath_MouseEnter;
-            lblInkPath.MouseLeave += lbl_MouseLeave;
+            lblInkPath.MouseEnter += LblInkPath_MouseEnter;
+            lblInkPath.MouseLeave += Lbl_MouseLeave;
             // 
             // tabMusic
             // 
@@ -583,8 +585,8 @@
             lblStreamURL.Size = new Size(70, 16);
             lblStreamURL.TabIndex = 3;
             lblStreamURL.Text = "Stream URL:";
-            lblStreamURL.MouseEnter += lblStreamURL_MouseEnter;
-            lblStreamURL.MouseLeave += lbl_MouseLeave;
+            lblStreamURL.MouseEnter += LblStreamURL_MouseEnter;
+            lblStreamURL.MouseLeave += Lbl_MouseLeave;
             // 
             // lblUseStream
             // 
@@ -596,8 +598,8 @@
             lblUseStream.Size = new Size(70, 16);
             lblUseStream.TabIndex = 1;
             lblUseStream.Text = "Use Stream?";
-            lblUseStream.MouseEnter += lblUseStream_MouseEnter;
-            lblUseStream.MouseLeave += lbl_MouseLeave;
+            lblUseStream.MouseEnter += LblUseStream_MouseEnter;
+            lblUseStream.MouseLeave += Lbl_MouseLeave;
             // 
             // flowLayoutPanel2
             // 
@@ -622,7 +624,7 @@
             radUseStreamYes.TabStop = true;
             radUseStreamYes.Text = "Yes";
             radUseStreamYes.UseVisualStyleBackColor = true;
-            radUseStreamYes.CheckedChanged += radUseStreamYes_CheckedChanged;
+            radUseStreamYes.CheckedChanged += RadUseStreamYes_CheckedChanged;
             // 
             // radUseStreamNo
             // 
@@ -636,7 +638,7 @@
             radUseStreamNo.TabStop = true;
             radUseStreamNo.Text = "No";
             radUseStreamNo.UseVisualStyleBackColor = true;
-            radUseStreamNo.CheckedChanged += radUseStreamNo_CheckedChanged;
+            radUseStreamNo.CheckedChanged += RadUseStreamNo_CheckedChanged;
             // 
             // tableLayoutPanel6
             // 
@@ -693,7 +695,7 @@
             btnGetFromRadioGarden.TextAlign = ContentAlignment.MiddleRight;
             btnGetFromRadioGarden.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnGetFromRadioGarden.UseVisualStyleBackColor = false;
-            btnGetFromRadioGarden.Click += btnGetFromRadioGarden_Click;
+            btnGetFromRadioGarden.Click += BtnGetFromRadioGarden_Click;
             // 
             // txtStreamURL
             // 
@@ -703,7 +705,7 @@
             txtStreamURL.Name = "txtStreamURL";
             txtStreamURL.Size = new Size(573, 23);
             txtStreamURL.TabIndex = 0;
-            txtStreamURL.TextChanged += txtStreamURL_TextChanged;
+            txtStreamURL.TextChanged += TxtStreamURL_TextChanged;
             // 
             // statusStrip1
             // 

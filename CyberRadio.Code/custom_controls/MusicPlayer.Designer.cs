@@ -1,8 +1,6 @@
-﻿using RadioExt_Helper.custom_controls;
-
-namespace RadioExt_Helper.user_controls
+﻿namespace RadioExt_Helper.custom_controls
 {
-    partial class MusicPlayer
+    sealed partial class MusicPlayer
     {
         /// <summary> 
         /// Required designer variable.
@@ -52,10 +50,10 @@ namespace RadioExt_Helper.user_controls
             btnPlayPause.Size = new Size(32, 32);
             btnPlayPause.TabIndex = 5;
             btnPlayPause.TabStop = false;
-            btnPlayPause.Click += btnPlayPause_Click;
-            btnPlayPause.MouseDown += btnPlayPause_MouseDown;
-            btnPlayPause.MouseLeave += btnPlayPause_MouseLeave;
-            btnPlayPause.MouseHover += btnPlayPause_MouseHover;
+            btnPlayPause.Click += BtnPlayPause_Click;
+            btnPlayPause.MouseDown += BtnPlayPause_MouseDown;
+            btnPlayPause.MouseLeave += BtnPlayPause_MouseLeave;
+            btnPlayPause.MouseHover += BtnPlayPause_MouseHover;
             // 
             // MusicPlayer
             // 

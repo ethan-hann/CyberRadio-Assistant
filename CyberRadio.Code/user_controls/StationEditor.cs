@@ -1,20 +1,56 @@
-﻿using System.Globalization;
+﻿// StationEditor.cs : RadioExt-Helper
+// Copyright (C) 2024  Ethan Hann
+// 
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+// 
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// 
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+using System.Globalization;
+using System.Text.RegularExpressions;
 using AetherUtils.Core.WinForms.Controls;
 using AetherUtils.Core.WinForms.CustomArgs;
+using RadioExt_Helper.custom_controls;
 using RadioExt_Helper.models;
+using RadioExt_Helper.Properties;
 using RadioExt_Helper.utility;
 
 namespace RadioExt_Helper.user_controls;
 
+/// <summary>
+/// Represents a user control for editing a station.
+/// </summary>
 public sealed partial class StationEditor : UserControl, IUserControl
 {
+    /// <summary>
+    /// Event that is raised when the station is updated.
+    /// </summary>
     public event EventHandler? StationUpdated;
-
-    private readonly ImageList _tabImages = new();
 
     private readonly ComboBox _cmbUiIcons;
     private readonly CustomMusicCtl _musicCtl;
+    private readonly ImageList _tabImages = new();
 
+    [GeneratedRegex(@"^\d+(\.\d+)?\s*")]
+    private static partial Regex DisplayNameRegex();
+
+    /// <summary>
+    /// Gets the trackable station object.
+    /// </summary>
+    public TrackableObject<Station> Station { get; }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="StationEditor"/> class.
+    /// </summary>
+    /// <param name="station">The trackable station object.</param>
     public StationEditor(TrackableObject<Station> station)
     {
         InitializeComponent();
@@ -24,14 +60,15 @@ public sealed partial class StationEditor : UserControl, IUserControl
 
         Station = station;
         _musicCtl = new CustomMusicCtl(Station);
-        _musicCtl.StationUpdated += (sender, args) => StationUpdated?.Invoke(this, EventArgs.Empty);
+        _musicCtl.StationUpdated += (_, _) => StationUpdated?.Invoke(this, EventArgs.Empty);
 
         _cmbUiIcons = GlobalData.CloneTemplateComboBox();
-        _cmbUiIcons.SelectedIndexChanged += cmbUIIcons_SelectedIndexChanged;
+        _cmbUiIcons.SelectedIndexChanged += CmbUIIcons_SelectedIndexChanged;
     }
 
-    public TrackableObject<Station> Station { get; }
-
+    /// <summary>
+    /// Translates the user control to the current language.
+    /// </summary>
     public void Translate()
     {
         tabDisplayAndIcon.Text = GlobalData.Strings.GetString("DisplayAndIcon");
@@ -63,11 +100,20 @@ public sealed partial class StationEditor : UserControl, IUserControl
         _musicCtl.Translate();
     }
 
+    /// <summary>
+    /// Gets the music player associated with the station.
+    /// </summary>
+    /// <returns>The music player.</returns>
     public MusicPlayer GetMusicPlayer()
     {
         return mpStreamPlayer;
     }
 
+    /// <summary>
+    /// Occurs when the control is loaded.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void StationEditor_Load(object sender, EventArgs e)
     {
         SuspendLayout();
@@ -81,17 +127,23 @@ public sealed partial class StationEditor : UserControl, IUserControl
         ResumeLayout();
     }
 
+    /// <summary>
+    /// Sets the images for the tabs.
+    /// </summary>
     private void SetTabImages()
     {
-        _tabImages.Images.Add("display", Properties.Resources.display_frame);
-        _tabImages.Images.Add("music", Properties.Resources.sound_waves);
+        _tabImages.Images.Add("display", Resources.display_frame);
+        _tabImages.Images.Add("music", Resources.sound_waves);
         tabControl.ImageList = _tabImages;
-        tabDisplayAndIcon.ImageKey = "display";
-        tabMusic.ImageKey = "music";
+        tabDisplayAndIcon.ImageKey = @"display";
+        tabMusic.ImageKey = @"music";
     }
 
     #region Display and Icon Tab
 
+    /// <summary>
+    /// Set the values for the display tab based on the station's data.
+    /// </summary>
     private void SetDisplayTabValues()
     {
         txtDisplayName.Text = Station.TrackedObject.MetaData.DisplayName;
@@ -119,31 +171,56 @@ public sealed partial class StationEditor : UserControl, IUserControl
         lblSelectedVolume.Text = $@"{Station.TrackedObject.MetaData.Volume:F1}";
     }
 
-    private void txtDisplayName_TextChanged(object sender, EventArgs e)
+    /// <summary>
+    /// Occurs when the display name text box is changed.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void TxtDisplayName_TextChanged(object sender, EventArgs e)
     {
         Station.TrackedObject.MetaData.DisplayName = txtDisplayName.Text;
         StationUpdated?.Invoke(this, EventArgs.Empty);
     }
 
-    private void txtDisplayName_Leave(object sender, EventArgs e)
+    /// <summary>
+    /// Occurs when the display name text box loses focus.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void TxtDisplayName_Leave(object sender, EventArgs e)
     {
         EnsureDisplayNameFormat();
     }
 
-    private void cmbUIIcons_SelectedIndexChanged(object? sender, EventArgs e)
+    /// <summary>
+    /// Occurs when the UI icon combo box selection is changed.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void CmbUIIcons_SelectedIndexChanged(object? sender, EventArgs e)
     {
         if (_cmbUiIcons.SelectedItem is string iconStr)
             Station.TrackedObject.MetaData.Icon = iconStr;
         StationUpdated?.Invoke(this, EventArgs.Empty);
     }
 
-    private void radUseCustomYes_CheckedChanged(object sender, EventArgs e)
+    /// <summary>
+    /// Occurs when the custom icon radio button "Yes" is checked.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void RadUseCustomYes_CheckedChanged(object sender, EventArgs e)
     {
         Station.TrackedObject.CustomIcon.UseCustom = radUseCustomYes.Checked;
         StationUpdated?.Invoke(this, EventArgs.Empty);
     }
 
-    private void radUseCustomNo_CheckedChanged(object sender, EventArgs e)
+    /// <summary>
+    /// Occurs when the custom icon radio button "No" is checked.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void RadUseCustomNo_CheckedChanged(object sender, EventArgs e)
     {
         Station.TrackedObject.CustomIcon.UseCustom = !radUseCustomNo.Checked;
         txtInkAtlasPart.Visible = !radUseCustomNo.Checked;
@@ -152,57 +229,88 @@ public sealed partial class StationEditor : UserControl, IUserControl
         lblInkPath.Visible = !radUseCustomNo.Checked;
     }
 
-    private void txtInkAtlasPath_TextChanged(object sender, EventArgs e)
+    /// <summary>
+    /// Occurs when the ink atlas path text is changed.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void TxtInkAtlasPath_TextChanged(object sender, EventArgs e)
     {
         Station.TrackedObject.CustomIcon.InkAtlasPath = txtInkAtlasPath.Text;
         StationUpdated?.Invoke(this, EventArgs.Empty);
     }
 
-    private void txtInkAtlasPart_TextChanged(object sender, EventArgs e)
+    /// <summary>
+    /// Occurs when the ink atlas part text is changed.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void TxtInkAtlasPart_TextChanged(object sender, EventArgs e)
     {
         Station.TrackedObject.CustomIcon.InkAtlasPart = txtInkAtlasPart.Text;
         StationUpdated?.Invoke(this, EventArgs.Empty);
     }
 
-    private void nudFM_ValueChanged(object sender, EventArgs e)
+    /// <summary>
+    /// Occurs when the FM number is changed.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void NudFM_ValueChanged(object sender, EventArgs e)
     {
         Station.TrackedObject.MetaData.Fm = (float)nudFM.Value;
         EnsureDisplayNameFormat();
         StationUpdated?.Invoke(this, EventArgs.Empty);
     }
 
+    /// <summary>
+    /// Ensures the display name contains the station's FM number at the beginning of its name.
+    /// </summary>
     private void EnsureDisplayNameFormat()
     {
-        string fmValue = nudFM.Value.ToString("00.00", CultureInfo.InvariantCulture); // Format to two decimal places
-        string currentText = txtDisplayName.Text;
+        var fmValue = nudFM.Value.ToString("00.00", CultureInfo.InvariantCulture); // Format to two decimal places
+        var currentText = txtDisplayName.Text;
 
         // Use a regular expression to detect and remove any existing FM value at the start
-        var regex = new System.Text.RegularExpressions.Regex(@"^\d+(\.\d+)?\s*");
+        var regex = DisplayNameRegex();
         var match = regex.Match(currentText);
 
         if (match.Success)
-        {
             // Remove the existing FM value from the start
-            currentText = currentText.Substring(match.Length).TrimStart();
-        }
+            currentText = currentText[match.Length..].TrimStart();
 
         // Combine FM value and station name with the correct format
-        txtDisplayName.Text = $"{fmValue} {currentText}";
+        txtDisplayName.Text = @$"{fmValue} {currentText}";
     }
 
-    private void volumeSlider_Scroll(object sender, EventArgs e)
+    /// <summary>
+    /// Occurs when the volume slider is scrolled.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void VolumeSlider_Scroll(object sender, EventArgs e)
     {
         Station.TrackedObject.MetaData.Volume = volumeSlider.Value * 0.1f;
         lblSelectedVolume.Text = $@"{Station.TrackedObject.MetaData.Volume:F1}";
         StationUpdated?.Invoke(this, EventArgs.Empty);
     }
 
-    private void lblVolumeVal_DoubleClick(object sender, EventArgs e)
+    /// <summary>
+    /// Occurs when the volume value label is double-clicked.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void LblVolumeVal_DoubleClick(object sender, EventArgs e)
     {
-        lblSelectedVolume_DoubleClick(sender, e);
+        LblSelectedVolume_DoubleClick(sender, e);
     }
 
-    private void lblSelectedVolume_DoubleClick(object sender, EventArgs e)
+    /// <summary>
+    /// Occurs when the volume label is double-clicked.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void LblSelectedVolume_DoubleClick(object sender, EventArgs e)
     {
         txtVolumeEdit.Text = lblSelectedVolume.Text;
         txtVolumeEdit.Size = lblSelectedVolume.Size;
@@ -212,7 +320,12 @@ public sealed partial class StationEditor : UserControl, IUserControl
         txtVolumeEdit.SelectAll();
     }
 
-    private void txtVolumeEdit_KeyDown(object sender, KeyEventArgs e)
+    /// <summary>
+    /// Occurs when a key is held down in the volume text box.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void TxtVolumeEdit_KeyDown(object sender, KeyEventArgs e)
     {
         if (e.KeyCode != Keys.Enter) return;
 
@@ -232,12 +345,17 @@ public sealed partial class StationEditor : UserControl, IUserControl
             txtVolumeEdit.Visible = false;
             volumeSlider.Enabled = true;
             volumeSlider.Value = (int)(newVolume / 0.1f);
-            volumeSlider_Scroll(sender, e);
+            VolumeSlider_Scroll(sender, e);
             e.Handled = true;
         }
     }
 
-    private void txtVolumeEdit_KeyPress(object sender, KeyPressEventArgs e)
+    /// <summary>
+    /// Occurs when a key is pressed in the volume text box.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void TxtVolumeEdit_KeyPress(object sender, KeyPressEventArgs e)
     {
         // Allow control characters, digits, decimal point, and minus sign
         if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && e.KeyChar != '.')
@@ -252,6 +370,9 @@ public sealed partial class StationEditor : UserControl, IUserControl
 
     #region Music Tab
 
+    /// <summary>
+    /// Sets the values for the music tab based on the station's data.
+    /// </summary>
     private void SetMusicTabValues()
     {
         radUseStreamYes.Checked = Station.TrackedObject.StreamInfo.IsStream;
@@ -262,28 +383,48 @@ public sealed partial class StationEditor : UserControl, IUserControl
         txtStreamURL.Text = Station.TrackedObject.StreamInfo.StreamUrl;
     }
 
-    private void radUseStreamYes_CheckedChanged(object sender, EventArgs e)
+    /// <summary>
+    /// Occurs when the use stream radio button "Yes" is checked.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void RadUseStreamYes_CheckedChanged(object sender, EventArgs e)
     {
         ToggleStreamControls(true);
         Station.TrackedObject.StreamInfo.IsStream = radUseStreamYes.Checked;
         StationUpdated?.Invoke(this, EventArgs.Empty);
     }
 
-    private void radUseStreamNo_CheckedChanged(object sender, EventArgs e)
+    /// <summary>
+    /// Occurs when the use stream radio button "No" is checked.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void RadUseStreamNo_CheckedChanged(object sender, EventArgs e)
     {
         ToggleStreamControls(false);
         Station.TrackedObject.StreamInfo.IsStream = !radUseStreamNo.Checked;
         StationUpdated?.Invoke(this, EventArgs.Empty);
     }
 
-    private void txtStreamURL_TextChanged(object sender, EventArgs e)
+    /// <summary>
+    /// Occurs when the stream URL text box is changed.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void TxtStreamURL_TextChanged(object sender, EventArgs e)
     {
         Station.TrackedObject.StreamInfo.StreamUrl = txtStreamURL.Text;
         mpStreamPlayer.StreamUrl = Station.TrackedObject.StreamInfo.StreamUrl;
         StationUpdated?.Invoke(this, EventArgs.Empty);
     }
 
-    private void btnGetFromRadioGarden_Click(object sender, EventArgs e)
+    /// <summary>
+    /// Occurs when the "Get from Radio Garden" button is clicked.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void BtnGetFromRadioGarden_Click(object sender, EventArgs e)
     {
         var text = GlobalData.Strings.GetString("RadioGardenInput") ??
                    "Enter the radio.garden URL from the web: ";
@@ -293,12 +434,17 @@ public sealed partial class StationEditor : UserControl, IUserControl
         input.ShowDialog();
     }
 
+    /// <summary>
+    /// Retrieve the stream URL from the input box and validate it.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private async void RetrieveUrlFromInputBox(object? sender, EventArgs e)
     {
         var streamChecker = new AudioStreamChecker(TimeSpan.FromSeconds(5));
         if (e is not InputBoxEventArgs args) return;
 
-        var streamUrl = AudioStreamChecker.ConvertRadioGardenURL(args.InputText);
+        var streamUrl = AudioStreamChecker.ConvertRadioGardenUrl(args.InputText);
         var isValid = await streamChecker.IsAudioStreamValidAsync(streamUrl);
         if (isValid)
             txtStreamURL.Text = streamUrl;
@@ -308,6 +454,10 @@ public sealed partial class StationEditor : UserControl, IUserControl
         StationUpdated?.Invoke(this, EventArgs.Empty);
     }
 
+    /// <summary>
+    /// Toggle the stream controls on or off.
+    /// </summary>
+    /// <param name="onOff"></param>
     private void ToggleStreamControls(bool onOff)
     {
         lblStreamURL.Visible = onOff;
@@ -325,62 +475,115 @@ public sealed partial class StationEditor : UserControl, IUserControl
 
     #region Hover Help
 
-    private void lblName_MouseEnter(object sender, EventArgs e)
+    /// <summary>
+    /// Occurs when the mouse enters the display name label.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void LblName_MouseEnter(object sender, EventArgs e)
     {
         lblStatus.Text = GlobalData.Strings.GetString("StationNameHelp");
     }
 
-    private void lblIcon_MouseEnter(object sender, EventArgs e)
+    /// <summary>
+    /// Occurs when the mouse enters the icon label.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void LblIcon_MouseEnter(object sender, EventArgs e)
     {
         lblStatus.Text = GlobalData.Strings.GetString("IconHelp");
     }
 
-    private void lblUsingCustomIcon_MouseEnter(object sender, EventArgs e)
+    /// <summary>
+    /// Occurs when the mouse enters the using custom icon label.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void LblUsingCustomIcon_MouseEnter(object sender, EventArgs e)
     {
         lblStatus.Text = GlobalData.Strings.GetString("CustomIconHelp");
     }
 
-    private void lblInkPath_MouseEnter(object sender, EventArgs e)
+    /// <summary>
+    /// Occurs when the mouse enters the ink path label.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void LblInkPath_MouseEnter(object sender, EventArgs e)
     {
         lblStatus.Text = GlobalData.Strings.GetString("InkPathHelp");
     }
 
-    private void lblInkPart_MouseEnter(object sender, EventArgs e)
+    /// <summary>
+    /// Occurs when the mouse enters the ink part label.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void LblInkPart_MouseEnter(object sender, EventArgs e)
     {
         lblStatus.Text = GlobalData.Strings.GetString("InkPartHelp");
     }
 
-    private void lblFM_MouseEnter(object sender, EventArgs e)
+    /// <summary>
+    /// Occurs when the mouse enters the FM label.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void LblFM_MouseEnter(object sender, EventArgs e)
     {
         lblStatus.Text = GlobalData.Strings.GetString("FMHelp");
     }
 
-    private void lblVolume_MouseEnter(object sender, EventArgs e)
+    /// <summary>
+    /// Occurs when the mouse enters the volume label.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void LblVolume_MouseEnter(object sender, EventArgs e)
     {
         lblStatus.Text = GlobalData.Strings.GetString("VolumeHelp");
     }
 
-    private void lblVolumeVal_MouseEnter(object sender, EventArgs e)
+    /// <summary>
+    /// Occurs when the mouse enters the volume value label.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void LblVolumeVal_MouseEnter(object sender, EventArgs e)
     {
         lblStatus.Text = GlobalData.Strings.GetString("VolumeValHelp");
     }
 
-    private void lblUseStream_MouseEnter(object sender, EventArgs e)
+    /// <summary>
+    /// Occurs when the mouse enters the use stream label.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void LblUseStream_MouseEnter(object sender, EventArgs e)
     {
         lblStatus.Text = GlobalData.Strings.GetString("UseStreamHelp");
     }
 
-    private void lblStreamURL_MouseEnter(object sender, EventArgs e)
+    /// <summary>
+    /// Occurs when the mouse enters the stream URL label.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void LblStreamURL_MouseEnter(object sender, EventArgs e)
     {
         lblStatus.Text = GlobalData.Strings.GetString("StreamURLHelp");
     }
 
-    private void lbl_MouseLeave(object sender, EventArgs e)
+    /// <summary>
+    /// Occurs when the mouse leaves a label.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void Lbl_MouseLeave(object sender, EventArgs e)
     {
         lblStatus.Text = GlobalData.Strings.GetString("Ready");
     }
 
     #endregion
-
-    
 }

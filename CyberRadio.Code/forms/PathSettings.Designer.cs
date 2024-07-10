@@ -120,7 +120,7 @@
             btnChangeGameBasePath.TextAlign = ContentAlignment.MiddleRight;
             btnChangeGameBasePath.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnChangeGameBasePath.UseVisualStyleBackColor = false;
-            btnChangeGameBasePath.Click += btnChangeGameBasePath_Click;
+            btnChangeGameBasePath.Click += BtnChangeGameBasePath_Click;
             // 
             // btnChangeBackUpPath
             // 
@@ -140,7 +140,7 @@
             btnChangeBackUpPath.TextAlign = ContentAlignment.MiddleRight;
             btnChangeBackUpPath.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnChangeBackUpPath.UseVisualStyleBackColor = false;
-            btnChangeBackUpPath.Click += btnChangeBackUpPath_Click;
+            btnChangeBackUpPath.Click += BtnChangeBackUpPath_Click;
             // 
             // lblBackupPath
             // 

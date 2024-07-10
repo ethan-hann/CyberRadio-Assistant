@@ -1,29 +1,41 @@
-﻿using System.ComponentModel;
+﻿// StationListBox.cs : RadioExt-Helper
+// Copyright (C) 2024  Ethan Hann
+// 
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+// 
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// 
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+using System.ComponentModel;
 using AetherUtils.Core.Logging;
 using RadioExt_Helper.models;
 
 namespace RadioExt_Helper.user_controls;
 
+/// <summary>
+/// Represents a custom ListBox control for displaying stations.
+/// This listbox has support for displaying icons; one for the station's active status (enabled/disabled)
+/// and one for the station's save status (saved/edited).
+/// </summary>
 public sealed partial class StationListBox : ListBox
 {
     private string _disabledIconKey = "disabled";
-    private string _enabledIconKey = "enabled";
     private string _editedStationIconKey = "edited_station";
-    private string _savedStationIconKey = "saved_station";
+    private string _enabledIconKey = "enabled";
 
     private ImageList _imageList;
+    private string _savedStationIconKey = "saved_station";
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="StationListBox" /> class.
-    /// </summary>
-    public StationListBox()
-    {
-        SetValues();
-        _imageList ??= new ImageList();
-    }
-
-    /// <summary>
-    ///     Gets or sets the ImageList containing the icons for the list box.
+    /// Gets or sets the ImageList containing the icons for the list box.
     /// </summary>
     [Browsable(true)]
     [Category("Icons")]
@@ -102,6 +114,18 @@ public sealed partial class StationListBox : ListBox
         }
     }
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="StationListBox"/> class.
+    /// </summary>
+    public StationListBox()
+    {
+        SetValues();
+        _imageList ??= new ImageList();
+    }
+
+    /// <summary>
+    /// Sets the default values for the control.
+    /// </summary>
     private void SetValues()
     {
         DrawMode = DrawMode.OwnerDrawFixed;
@@ -109,6 +133,11 @@ public sealed partial class StationListBox : ListBox
         ItemHeight = 16;
     }
 
+    /// <summary>
+    /// Handles the drawing of an item in the ListBox.
+    /// <para>An item is drawn like so: <c>(left-aligned){active status icon} {Station Name} {save status icon}(right-aligned)</c></para>
+    /// </summary>
+    /// <param name="e">The event data.</param>
     protected override void OnDrawItem(DrawItemEventArgs e)
     {
         try
@@ -126,10 +155,7 @@ public sealed partial class StationListBox : ListBox
                 if (_imageList.Images.ContainsKey(primaryIconKey))
                 {
                     var primaryIcon = _imageList.Images[primaryIconKey];
-                    if (primaryIcon != null)
-                    {
-                        e.Graphics.DrawImage(primaryIcon, e.Bounds.Left, e.Bounds.Top, 16, 16);
-                    }
+                    if (primaryIcon != null) e.Graphics.DrawImage(primaryIcon, e.Bounds.Left, e.Bounds.Top, 16, 16);
                 }
 
                 // Determine the secondary icon (changes pending/saved)
@@ -142,24 +168,29 @@ public sealed partial class StationListBox : ListBox
                 if (_imageList.Images.ContainsKey(secondaryIconKey))
                 {
                     var secondaryIcon = _imageList.Images[secondaryIconKey];
-                    if (secondaryIcon != null)
-                    {
-                        e.Graphics.DrawImage(secondaryIcon, iconX, e.Bounds.Top, 16, 16);
-                    }
+                    if (secondaryIcon != null) e.Graphics.DrawImage(secondaryIcon, iconX, e.Bounds.Top, 16, 16);
                 }
 
                 // Draw the text
-                var textRect = new Rectangle(e.Bounds.Left + 20, e.Bounds.Top, e.Bounds.Width - 40 - 4, e.Bounds.Height); // Adjust width to leave space for the secondary icon
-                TextRenderer.DrawText(e.Graphics, station.TrackedObject.MetaData.DisplayName, e.Font, textRect, e.ForeColor, TextFormatFlags.Left);
+                var textRect = new Rectangle(e.Bounds.Left + 20, e.Bounds.Top, e.Bounds.Width - 40 - 4,
+                    e.Bounds.Height); // Adjust width to leave space for the secondary icon
+                TextRenderer.DrawText(e.Graphics, station.TrackedObject.MetaData.DisplayName, e.Font, textRect,
+                    e.ForeColor, TextFormatFlags.Left);
             }
 
             e.DrawFocusRectangle();
-        } catch (Exception ex)
+        }
+        catch (Exception ex)
         {
-            AuLogger.GetCurrentLogger<StationListBox>("OnDrawItem").Error(ex, "An error occurred while drawing the item.");
+            AuLogger.GetCurrentLogger<StationListBox>("OnDrawItem")
+                .Error(ex, "An error occurred while drawing the item.");
         }
     }
 
+    /// <summary>
+    /// Handles the measurement of an item in the ListBox.
+    /// </summary>
+    /// <param name="e">The event data.</param>
     protected override void OnMeasureItem(MeasureItemEventArgs e)
     {
         e.ItemHeight = 16; // Adjust height based on icon size

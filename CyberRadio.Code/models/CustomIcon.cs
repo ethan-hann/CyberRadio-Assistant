@@ -1,16 +1,35 @@
-﻿using Newtonsoft.Json;
+﻿// CustomIcon.cs : RadioExt-Helper
+// Copyright (C) 2024  Ethan Hann
+// 
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+// 
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// 
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
 using System.ComponentModel;
+using Newtonsoft.Json;
 
 namespace RadioExt_Helper.models;
 
 /// <summary>
 ///     Represents a custom icon definition for a radio station.
 /// </summary>
-public class CustomIcon : INotifyPropertyChanged, ICloneable, IEquatable<CustomIcon>
+public sealed class CustomIcon : INotifyPropertyChanged, ICloneable, IEquatable<CustomIcon>
 {
-    public event PropertyChangedEventHandler? PropertyChanged;
+    private string _inkAtlasPart = "custom_texture_part";
 
     private string _inkAtlasPath = "path\\to\\custom\\atlas.inkatlas";
+
+    private bool _useCustom;
+
     /// <summary>
     ///     Points to the <c>.inkatlas</c> that holds the icon texture.
     /// </summary>
@@ -25,7 +44,6 @@ public class CustomIcon : INotifyPropertyChanged, ICloneable, IEquatable<CustomI
         }
     }
 
-    private string _inkAtlasPart = "custom_texture_part";
     /// <summary>
     ///     Specifies which part of the <c>.inkatlas</c> should be used for the icon.
     /// </summary>
@@ -40,7 +58,6 @@ public class CustomIcon : INotifyPropertyChanged, ICloneable, IEquatable<CustomI
         }
     }
 
-    private bool _useCustom;
     /// <summary>
     ///     If <c>false</c>, the icon specified inside <see cref="MetaData.Icon" /> will be used. If <c>true</c>, the
     ///     custom icon defined here will be used.
@@ -54,11 +71,6 @@ public class CustomIcon : INotifyPropertyChanged, ICloneable, IEquatable<CustomI
             _useCustom = value;
             OnPropertyChanged(nameof(UseCustom));
         }
-    }
-
-    protected virtual void OnPropertyChanged(string propertyName)
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 
     public object Clone()
@@ -77,6 +89,13 @@ public class CustomIcon : INotifyPropertyChanged, ICloneable, IEquatable<CustomI
         return InkAtlasPath == other.InkAtlasPath &&
                InkAtlasPart == other.InkAtlasPart &&
                UseCustom == other.UseCustom;
+    }
+
+    public event PropertyChangedEventHandler? PropertyChanged;
+
+    private void OnPropertyChanged(string propertyName)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 
     public override bool Equals(object? obj)

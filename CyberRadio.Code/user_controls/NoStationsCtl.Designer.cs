@@ -152,7 +152,7 @@
             btnPaths.TextAlign = ContentAlignment.MiddleRight;
             btnPaths.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnPaths.UseVisualStyleBackColor = false;
-            btnPaths.Click += btnPaths_Click;
+            btnPaths.Click += BtnPaths_Click;
             // 
             // flowLayoutPanel1
             // 

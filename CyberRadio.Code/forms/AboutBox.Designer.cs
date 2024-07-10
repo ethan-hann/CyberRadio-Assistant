@@ -114,7 +114,7 @@
             lnkNexusMods.TabStop = true;
             lnkNexusMods.Text = "Nexus Mods";
             lnkNexusMods.TextAlign = ContentAlignment.MiddleCenter;
-            lnkNexusMods.LinkClicked += lnkNexusMods_LinkClicked;
+            lnkNexusMods.LinkClicked += LnkNexusMods_LinkClicked;
             // 
             // lnkLicense
             // 
@@ -126,7 +126,7 @@
             lnkLicense.TabIndex = 7;
             lnkLicense.TabStop = true;
             lnkLicense.Text = "License";
-            lnkLicense.LinkClicked += lnkLicense_LinkClicked;
+            lnkLicense.LinkClicked += LnkLicense_LinkClicked;
             // 
             // lblVersion
             // 
@@ -158,7 +158,7 @@
             lnkRadioExtDev.TabIndex = 4;
             lnkRadioExtDev.TabStop = true;
             lnkRadioExtDev.Text = "justarandomguyontheinternet";
-            lnkRadioExtDev.LinkClicked += lnkRadioExtDev_LinkClicked;
+            lnkRadioExtDev.LinkClicked += LnkRadioExtDev_LinkClicked;
             // 
             // lblSpecialThanks1
             // 
@@ -222,7 +222,7 @@
             lnkGithubRepo.TabStop = true;
             lnkGithubRepo.Text = "Github Repo";
             lnkGithubRepo.TextAlign = ContentAlignment.MiddleCenter;
-            lnkGithubRepo.LinkClicked += lnkGithubRepo_LinkClicked;
+            lnkGithubRepo.LinkClicked += LnkGithubRepo_LinkClicked;
             // 
             // AboutBox
             // 

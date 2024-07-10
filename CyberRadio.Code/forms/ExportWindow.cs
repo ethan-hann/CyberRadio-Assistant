@@ -1,9 +1,26 @@
-﻿using System.ComponentModel;
+﻿// ExportWindow.cs : RadioExt-Helper
+// Copyright (C) 2024  Ethan Hann
+// 
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+// 
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// 
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+using System.ComponentModel;
 using System.Diagnostics;
 using AetherUtils.Core.Extensions;
 using AetherUtils.Core.Files;
 using AetherUtils.Core.Logging;
 using RadioExt_Helper.models;
+using RadioExt_Helper.Properties;
 using RadioExt_Helper.utility;
 
 namespace RadioExt_Helper.forms;
@@ -13,12 +30,7 @@ namespace RadioExt_Helper.forms;
 /// </summary>
 public partial class ExportWindow : Form
 {
-    private static string GameBasePath => GlobalData.ConfigManager.Get("gameBasePath") as string ?? string.Empty;
-    private static string StagingPath => GlobalData.ConfigManager.Get("stagingPath") as string ?? string.Empty;
-    private static bool ShouldAutoExportToGame => (bool)(GlobalData.ConfigManager.Get("autoExportToGame") ?? false);
-
-    public event EventHandler? OnExportToStagingComplete;
-    public event EventHandler? OnExportToGameComplete;
+    private readonly ImageList _imageList = new();
 
     private readonly Json<MetaData> _metaDataJson = new();
     private readonly Json<SongList> _songListJson = new();
@@ -26,8 +38,6 @@ public partial class ExportWindow : Form
 
     private readonly string _statusString =
         GlobalData.Strings.GetString("ExportingStationStatus") ?? "Exporting station: {0}";
-
-    private readonly ImageList _imageList = new();
 
     private DirectoryCopier? _dirCopier;
     private bool _exportToGameComplete;
@@ -45,6 +55,15 @@ public partial class ExportWindow : Form
 
         SetImageList();
     }
+
+    private static string GameBasePath => GlobalData.ConfigManager.Get("gameBasePath") as string ?? string.Empty;
+
+    private static string StagingPath => GlobalData.ConfigManager.Get("stagingPath") as string ?? string.Empty;
+
+    private static bool ShouldAutoExportToGame => (bool)(GlobalData.ConfigManager.Get("autoExportToGame") ?? false);
+
+    public event EventHandler? OnExportToStagingComplete;
+    public event EventHandler? OnExportToGameComplete;
 
     /// <summary>
     ///     Handles the Load event of the ExportWindow form.
@@ -66,8 +85,8 @@ public partial class ExportWindow : Form
 
     private void SetImageList()
     {
-        _imageList.Images.Add("enabled", Properties.Resources.enabled);
-        _imageList.Images.Add("disabled", Properties.Resources.disabled);
+        _imageList.Images.Add("enabled", Resources.enabled);
+        _imageList.Images.Add("disabled", Resources.disabled);
         _imageList.ImageSize = new Size(16, 16);
         lvStations.SmallImageList = _imageList;
     }
@@ -81,7 +100,8 @@ public partial class ExportWindow : Form
     {
         if (e.ColumnIndex == 0) // Assuming the icon is in the first column
         {
-            if (e.Item == null || lvStations.SmallImageList == null || e.Item.Tag is not TrackableObject<Station> station) return;
+            if (e.Item == null || lvStations.SmallImageList == null ||
+                e.Item.Tag is not TrackableObject<Station> station) return;
 
             var image = lvStations.SmallImageList.Images[station.TrackedObject.GetStatus() ? "enabled" : "disabled"];
             if (image == null) return;
@@ -102,8 +122,6 @@ public partial class ExportWindow : Form
     /// </summary>
     private void Translate()
     {
-        GlobalData.SetCulture(GlobalData.ConfigManager.Get("language") as string ?? "English (en)");
-
         Text = GlobalData.Strings.GetString("Export");
         btnCancel.Text = GlobalData.Strings.GetString("Cancel");
         btnExportToGame.Text = GlobalData.Strings.GetString("ExportToGame");
@@ -142,15 +160,17 @@ public partial class ExportWindow : Form
                  let proposedPath = isActive
                      ? Path.Combine(radioExtPath, station.TrackedObject.MetaData.DisplayName)
                      : GlobalData.Strings.GetString("DisabledStation")
-                 select new ListViewItem(new[]
-                 {
+                 select new ListViewItem([
                      string.Empty, // Placeholder for the icon column
                      station.TrackedObject.MetaData.DisplayName,
                      customIconString ?? string.Empty,
                      songString ?? string.Empty,
                      streamString ?? string.Empty,
                      proposedPath ?? string.Empty
-                 }) { Tag = station })
+                 ])
+                 {
+                     Tag = station
+                 })
             lvStations.Items.Add(lvItem);
 
         lvStations.ResizeColumns();
@@ -280,7 +300,8 @@ public partial class ExportWindow : Form
     /// </summary>
     private void RemoveDeletedStations()
     {
-        var stationNames = new HashSet<string>(_stationsToExport.Select(station => station.TrackedObject.MetaData.DisplayName),
+        var stationNames = new HashSet<string>(
+            _stationsToExport.Select(station => station.TrackedObject.MetaData.DisplayName),
             StringComparer.OrdinalIgnoreCase);
         var directoriesToDelete = Directory.EnumerateDirectories(StagingPath)
             .Where(dir => !stationNames.Contains(Path.GetFileName(dir)));
@@ -423,7 +444,7 @@ public partial class ExportWindow : Form
         {
             var targetPath = Path.Combine(radiosPath, Path.GetFileName(path));
             _dirCopier?.CopyDirectory(path, targetPath, true);
-            CopySongsToGame(path, targetPath); //copy songs to game based on .sgls file (if present)
+            _ = CopySongsToGame(path, targetPath); //copy songs to game based on .sgls file (if present)
 
             Invoke(() => pgExportProgress.Value = 0); //reset progress bar after copy operation
 
@@ -452,7 +473,7 @@ public partial class ExportWindow : Form
             return false;
 
         var songPathsInSgls =
-            songs.Select(s => Path.Combine(targetPath, Path.GetFileName(s.OriginalFilePath))).ToList();
+            songs.Select(s => Path.Combine(targetPath, Path.GetFileName(s.FilePath))).ToList();
 
         // Delete songs not present in the .sgls file
         var existingFiles = Directory.GetFiles(targetPath)
@@ -477,7 +498,7 @@ public partial class ExportWindow : Form
         // Copy songs from the .sgls file
         foreach (var song in songs)
         {
-            var sourcePath = song.OriginalFilePath;
+            var sourcePath = song.FilePath;
             var targetFilePath = Path.Combine(targetPath, Path.GetFileName(sourcePath));
             try
             {
@@ -559,17 +580,12 @@ public partial class ExportWindow : Form
     /// </summary>
     private void ToggleButtons()
     {
-        if (InvokeRequired)
-            Invoke(ToggleButtonsImplementation);
-        else
-            ToggleButtonsImplementation();
-    }
-
-    private void ToggleButtonsImplementation()
-    {
-        btnExportToGame.Enabled = !bgWorkerExport.IsBusy && _exportToStagingComplete && !_exportToGameComplete;
-        btnExportToStaging.Enabled = !bgWorkerExport.IsBusy && !_exportToStagingComplete;
-        btnCancel.Visible = bgWorkerExport.IsBusy || bgWorkerExportGame.IsBusy;
+        this.SafeInvoke(() =>
+        {
+            btnExportToGame.Enabled = !bgWorkerExport.IsBusy && _exportToStagingComplete && !_exportToGameComplete;
+            btnExportToStaging.Enabled = !bgWorkerExport.IsBusy && !_exportToStagingComplete;
+            btnCancel.Visible = bgWorkerExport.IsBusy || bgWorkerExportGame.IsBusy;
+        });
     }
 
     /// <summary>
@@ -578,10 +594,7 @@ public partial class ExportWindow : Form
     /// <param name="status">The status message to display.</param>
     private void UpdateStatus(string status)
     {
-        if (InvokeRequired)
-            Invoke(() => lblStatus.Text = status);
-        else
-            lblStatus.Text = status;
+        this.SafeInvoke(() => { lblStatus.Text = status; });
     }
 
     /// <summary>

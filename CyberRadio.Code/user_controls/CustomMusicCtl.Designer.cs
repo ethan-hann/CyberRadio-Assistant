@@ -79,8 +79,8 @@
             lvSongs.TabIndex = 1;
             lvSongs.UseCompatibleStateImageBehavior = false;
             lvSongs.View = View.Details;
-            lvSongs.ColumnClick += lvSongs_ColumnClick;
-            lvSongs.MouseDoubleClick += lvSongs_MouseDoubleClick;
+            lvSongs.ColumnClick += LvSongs_ColumnClick;
+            lvSongs.MouseDoubleClick += LvSongs_MouseDoubleClick;
             // 
             // colSongNames
             // 
@@ -164,7 +164,7 @@
             btnAddSongs.TextAlign = ContentAlignment.MiddleRight;
             btnAddSongs.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnAddSongs.UseVisualStyleBackColor = false;
-            btnAddSongs.Click += btnAddSongs_Click;
+            btnAddSongs.Click += BtnAddSongs_Click;
             // 
             // btnRemoveSongs
             // 
@@ -183,7 +183,7 @@
             btnRemoveSongs.TextAlign = ContentAlignment.MiddleRight;
             btnRemoveSongs.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnRemoveSongs.UseVisualStyleBackColor = false;
-            btnRemoveSongs.Click += btnRemoveSongs_Click;
+            btnRemoveSongs.Click += BtnRemoveSongs_Click;
             // 
             // tabSongOrder
             // 
@@ -271,7 +271,7 @@
             btnRemoveFromOrder.Size = new Size(445, 28);
             btnRemoveFromOrder.TabIndex = 0;
             btnRemoveFromOrder.UseVisualStyleBackColor = false;
-            btnRemoveFromOrder.Click += btnRemoveFromOrder_Click;
+            btnRemoveFromOrder.Click += BtnRemoveFromOrder_Click;
             // 
             // btnAddToOrder
             // 
@@ -289,7 +289,7 @@
             btnAddToOrder.Size = new Size(444, 28);
             btnAddToOrder.TabIndex = 1;
             btnAddToOrder.UseVisualStyleBackColor = false;
-            btnAddToOrder.Click += btnAddToOrder_Click;
+            btnAddToOrder.Click += BtnAddToOrder_Click;
             // 
             // lvSongOrder
             // 
@@ -307,10 +307,10 @@
             lvSongOrder.TabIndex = 0;
             lvSongOrder.UseCompatibleStateImageBehavior = false;
             lvSongOrder.View = View.Details;
-            lvSongOrder.ItemDrag += lvSongOrder_ItemDrag;
-            lvSongOrder.DragDrop += lvSongOrder_DragDrop;
-            lvSongOrder.DragEnter += lvSongOrder_DragEnter;
-            lvSongOrder.DragOver += lvSongOrder_DragOver;
+            lvSongOrder.ItemDrag += LvSongOrder_ItemDrag;
+            lvSongOrder.DragDrop += LvSongOrder_DragDrop;
+            lvSongOrder.DragEnter += LvSongOrder_DragEnter;
+            lvSongOrder.DragOver += LvSongOrder_DragOver;
             // 
             // colOrderNum
             // 

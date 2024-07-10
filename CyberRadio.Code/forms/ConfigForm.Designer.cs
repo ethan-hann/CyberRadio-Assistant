@@ -152,7 +152,7 @@
             btnEditPaths.TextAlign = ContentAlignment.MiddleRight;
             btnEditPaths.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnEditPaths.UseVisualStyleBackColor = false;
-            btnEditPaths.Click += btnEditPaths_Click;
+            btnEditPaths.Click += BtnEditPaths_Click;
             // 
             // tabConfigs
             // 
@@ -253,7 +253,7 @@
             btnEditLogsPath.TextAlign = ContentAlignment.MiddleRight;
             btnEditLogsPath.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnEditLogsPath.UseVisualStyleBackColor = false;
-            btnEditLogsPath.Click += btnEditLogsPath_Click;
+            btnEditLogsPath.Click += BtnEditLogsPath_Click;
             // 
             // lblEditLogPathHelp
             // 
@@ -321,7 +321,7 @@
             btnCancel.TextAlign = ContentAlignment.MiddleRight;
             btnCancel.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnCancel.UseVisualStyleBackColor = false;
-            btnCancel.Click += btnCancel_Click;
+            btnCancel.Click += BtnCancel_Click;
             // 
             // btnResetToDefault
             // 
@@ -339,7 +339,7 @@
             btnResetToDefault.TextAlign = ContentAlignment.MiddleRight;
             btnResetToDefault.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnResetToDefault.UseVisualStyleBackColor = false;
-            btnResetToDefault.Click += btnResetToDefault_Click;
+            btnResetToDefault.Click += BtnResetToDefault_Click;
             // 
             // btnSaveAndClose
             // 
@@ -357,7 +357,7 @@
             btnSaveAndClose.TextAlign = ContentAlignment.MiddleRight;
             btnSaveAndClose.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnSaveAndClose.UseVisualStyleBackColor = false;
-            btnSaveAndClose.Click += btnSaveAndClose_Click;
+            btnSaveAndClose.Click += BtnSaveAndClose_Click;
             // 
             // fldrOpenLogPath
             // 
