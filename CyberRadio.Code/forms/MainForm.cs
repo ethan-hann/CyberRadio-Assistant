@@ -39,7 +39,7 @@ public partial class MainForm : Form
     private readonly Json<MetaData> _metaDataJson = new();
     private readonly NoStationsCtl _noStationsCtrl = new();
     private readonly Timer _resizeTimer;
-    private readonly Json<SongList> _songListJson = new();
+    private readonly Json<List<Song>> _songListJson = new();
     private readonly Dictionary<Guid, StationEditor> _stationEditorsDict = [];
     private readonly ImageList _stationImageList = new();
     private readonly BindingList<TrackableObject<Station>> _stations = [];
@@ -204,6 +204,7 @@ public partial class MainForm : Form
         radioExtOnNexusModsToolStripMenuItem.Text = GlobalData.Strings.GetString("RadioExtNexusMods");
         aboutToolStripMenuItem.Text = GlobalData.Strings.GetString("About");
         checkForUpdatesToolStripMenuItem.Text = GlobalData.Strings.GetString("CheckForUpdates");
+        revertChangesToolStripMenuItem.Text = GlobalData.Strings.GetString("RevertChanges");
 
         _stationCountFormat = GlobalData.Strings.GetString("EnabledStationsCount") ?? "Enabled Stations: {0} / {1}";
         grpStations.Text = GlobalData.Strings.GetString("Stations");
@@ -313,13 +314,14 @@ public partial class MainForm : Form
     /// <summary>
     ///     Adds a station editor to the dictionary.
     /// </summary>
-    private void AddEditor(TrackableObject<Station> station)
+    private StationEditor AddEditor(TrackableObject<Station> station)
     {
         lock (_stationEditorsDict)
         {
             var editor = new StationEditor(station);
             editor.StationUpdated += StationUpdatedEvent;
             _stationEditorsDict[station.Id] = editor;
+            return editor;
         }
     }
 
@@ -341,7 +343,7 @@ public partial class MainForm : Form
     ///     <param name="metaData">The metadata for the station.</param>
     ///     <param name="songList">The song list for the station.</param>
     /// </summary>
-    private static Station CreateStation(MetaData metaData, SongList songList)
+    private static Station CreateStation(MetaData metaData, List<Song> songList)
     {
         return new Station
         {
@@ -424,6 +426,22 @@ public partial class MainForm : Form
         splitContainer1.Panel2.ResumeLayout();
 
         _currentEditor = editor;
+    }
+
+    private void RevertChangesToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        if (lbStations.SelectedItem is not TrackableObject<Station> station) return;
+
+        //We only want to revert the changes if there is a pending save. Otherwise, the wrong icon is drawn in the list box.
+        if (!station.IsPendingSave) return;
+
+        RemoveEditor(station); //Remove editor from dictionary
+        
+        station.DeclineChanges(); // Revert the changes made to the station's properties since the last save.
+
+        var editor = AddEditor(station); //Re-add the editor to the dictionary after reverting changes.
+        StationUpdatedEvent(sender, e); //Update the UI to reflect the changes.
+        UpdateStationEditor(editor); //Add the editor to the split panel.
     }
 
     /// <summary>
@@ -610,6 +628,12 @@ public partial class MainForm : Form
         var index = lbStations.IndexFromPoint(e.Location);
         if (index == ListBox.NoMatches)
             _ignoreSelectedIndexChanged = true;
+
+        if (e.Button != MouseButtons.Right) return;
+
+        //Show the "Revert Changes" context menu if the station is selected and was right-clicked.
+        if (lbStations.SelectedIndex == index)
+            cmsRevertStationChanges.Show(Cursor.Position);
     }
 
     private void OpenStagingPathToolStripMenuItem_Click(object sender, EventArgs e)

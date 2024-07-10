@@ -70,6 +70,8 @@ namespace RadioExt_Helper.forms
             btnDeleteStation = new Button();
             btnAddStation = new Button();
             stationBindingSource = new BindingSource(components);
+            cmsRevertStationChanges = new ContextMenuStrip(components);
+            revertChangesToolStripMenuItem = new ToolStripMenuItem();
             menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
@@ -81,6 +83,7 @@ namespace RadioExt_Helper.forms
             cmsEnable.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)stationBindingSource).BeginInit();
+            cmsRevertStationChanges.SuspendLayout();
             SuspendLayout();
             // 
             // menuStrip1
@@ -461,6 +464,20 @@ namespace RadioExt_Helper.forms
             // 
             stationBindingSource.DataSource = typeof(models.Station);
             // 
+            // cmsRevertStationChanges
+            // 
+            cmsRevertStationChanges.Items.AddRange(new ToolStripItem[] { revertChangesToolStripMenuItem });
+            cmsRevertStationChanges.Name = "cmsRevertStationChanges";
+            cmsRevertStationChanges.Size = new Size(181, 48);
+            // 
+            // revertChangesToolStripMenuItem
+            // 
+            revertChangesToolStripMenuItem.Image = Properties.Resources.refresh__16x16;
+            revertChangesToolStripMenuItem.Name = "revertChangesToolStripMenuItem";
+            revertChangesToolStripMenuItem.Size = new Size(180, 22);
+            revertChangesToolStripMenuItem.Text = "Revert Changes";
+            revertChangesToolStripMenuItem.Click += RevertChangesToolStripMenuItem_Click;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(96F, 96F);
@@ -499,6 +516,7 @@ namespace RadioExt_Helper.forms
             cmsEnable.ResumeLayout(false);
             tableLayoutPanel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)stationBindingSource).EndInit();
+            cmsRevertStationChanges.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -542,5 +560,7 @@ namespace RadioExt_Helper.forms
         private ToolStripStatusLabel toolStripStatusLabel3;
         private ToolStripMenuItem configurationToolStripMenuItem;
         private ToolStripMenuItem openLogFolderToolStripMenuItem;
+        private ContextMenuStrip cmsRevertStationChanges;
+        private ToolStripMenuItem revertChangesToolStripMenuItem;
     }
 }

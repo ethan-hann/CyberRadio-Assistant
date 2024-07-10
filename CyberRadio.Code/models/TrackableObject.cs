@@ -1,19 +1,5 @@
-﻿// TrackableObject.cs : RadioExt-Helper
-// Copyright (C) 2024  Ethan Hann
-// 
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-// 
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-// 
-// You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reflection;
 
@@ -33,7 +19,7 @@ namespace RadioExt_Helper.models;
 /// <typeparam name="T">The type of the object being tracked.</typeparam>
 public sealed class TrackableObject<T> : INotifyPropertyChanged where T : class, INotifyPropertyChanged, new()
 {
-    private readonly Dictionary<string, object?> _originalValues = [];
+    private readonly Dictionary<string, object?> _originalValues = new();
     private bool _isPendingSave;
     private T _trackedObject;
 
@@ -148,6 +134,8 @@ public sealed class TrackableObject<T> : INotifyPropertyChanged where T : class,
         }
 
         IsPendingSave = false;
+        // Check the pending save status again to ensure it's accurate
+        CheckPendingSaveStatus();
     }
 
     private void OnTrackedObjectPropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -166,18 +154,19 @@ public sealed class TrackableObject<T> : INotifyPropertyChanged where T : class,
         foreach (var kvp in _originalValues)
         {
             var currentValue = typeof(T).GetProperty(kvp.Key)?.GetValue(TrackedObject);
-            if (kvp.Value is SongList originalSongList && currentValue is SongList currentSongList)
+            if (kvp.Value is ICloneable originalCloneable && currentValue is ICloneable currentCloneable)
             {
-                if (originalSongList.Equals(currentSongList)) continue;
+                if (originalCloneable.Equals(currentCloneable)) continue;
 
                 isPendingSave = true;
                 break;
             }
 
-            if (Equals(currentValue, kvp.Value)) continue;
-
-            isPendingSave = true;
-            break;
+            if (currentValue != null && !currentValue.Equals(kvp.Value))
+            {
+                isPendingSave = true;
+                break;
+            }
         }
 
         IsPendingSave = isPendingSave;

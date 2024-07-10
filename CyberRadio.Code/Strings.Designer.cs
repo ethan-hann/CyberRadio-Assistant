@@ -1183,6 +1183,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Revert Changes.
+        /// </summary>
+        internal static string RevertChanges {
+            get {
+                return ResourceManager.GetString("RevertChanges", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Save and Close.
         /// </summary>
         internal static string SaveAndClose {
