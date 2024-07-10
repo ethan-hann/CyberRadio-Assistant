@@ -22,7 +22,7 @@ namespace RadioExt_Helper.models;
 /// <summary>
 ///     Represents the stream that a station uses to play audio from a web source.
 /// </summary>
-public class StreamInfo : INotifyPropertyChanged, ICloneable, IEquatable<StreamInfo>
+public sealed class StreamInfo : INotifyPropertyChanged, ICloneable, IEquatable<StreamInfo>
 {
     private bool _isStream;
     private string _streamUrl = "https://radio.garden/api/ara/content/listen/TP8NDBv7/channel.mp3";

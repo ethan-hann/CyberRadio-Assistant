@@ -24,7 +24,7 @@ namespace RadioExt_Helper.models;
 /// <summary>
 ///     Represents a single song entry. Song information is read from the file on disk.
 /// </summary>
-public class Song : IEquatable<Song>, ICloneable
+public sealed class Song : IEquatable<Song>, ICloneable
 {
     /// <summary>
     ///     The name of the song.
