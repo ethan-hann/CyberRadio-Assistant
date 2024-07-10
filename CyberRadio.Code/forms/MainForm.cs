@@ -204,6 +204,7 @@ public partial class MainForm : Form
         radioExtOnNexusModsToolStripMenuItem.Text = GlobalData.Strings.GetString("RadioExtNexusMods");
         aboutToolStripMenuItem.Text = GlobalData.Strings.GetString("About");
         checkForUpdatesToolStripMenuItem.Text = GlobalData.Strings.GetString("CheckForUpdates");
+        revertChangesToolStripMenuItem.Text = GlobalData.Strings.GetString("RevertChanges");
 
         _stationCountFormat = GlobalData.Strings.GetString("EnabledStationsCount") ?? "Enabled Stations: {0} / {1}";
         grpStations.Text = GlobalData.Strings.GetString("Stations");
@@ -426,6 +427,17 @@ public partial class MainForm : Form
         _currentEditor = editor;
     }
 
+    private void RevertChangesToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        if (lbStations.SelectedItem is not TrackableObject<Station> station) return;
+
+        //We only want to revert the changes if there is a pending save. Otherwise, the wrong icon is drawn in the list box.
+        if (!station.IsPendingSave) return;
+
+        station.DeclineChanges(); // Revert the changes made to the station's properties since the last save.
+        StationUpdatedEvent(sender, e); //Update the UI to reflect the changes.
+    }
+
     /// <summary>
     ///     Handles the Click event of the btnEnableStation button.
     ///     <param name="sender">The event sender.</param>
@@ -610,6 +622,12 @@ public partial class MainForm : Form
         var index = lbStations.IndexFromPoint(e.Location);
         if (index == ListBox.NoMatches)
             _ignoreSelectedIndexChanged = true;
+
+        if (e.Button != MouseButtons.Right) return;
+
+        //Show the "Revert Changes" context menu if the station is selected and was right-clicked.
+        if (lbStations.SelectedIndex == index)
+            cmsRevertStationChanges.Show(Cursor.Position);
     }
 
     private void OpenStagingPathToolStripMenuItem_Click(object sender, EventArgs e)

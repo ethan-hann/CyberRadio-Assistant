@@ -625,4 +625,7 @@ exporté vers le jeu.</value>
     <data name="AddSongs" xml:space="preserve">
       <value>Sélectionnez les fichiers de chansons à ajouter</value>
     </data>
+    <data name="RevertChanges" xml:space="preserve">
+      <value>Rétablir les changements</value>
+    </data>
 </root>
