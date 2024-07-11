@@ -30,22 +30,9 @@ namespace RadioExt_Helper.user_controls;
 /// </summary>
 public sealed partial class StationEditor : UserControl, IUserControl
 {
-    /// <summary>
-    /// Event that is raised when the station is updated.
-    /// </summary>
-    public event EventHandler? StationUpdated;
-
     private readonly ComboBox _cmbUiIcons;
     private readonly CustomMusicCtl _musicCtl;
     private readonly ImageList _tabImages = new();
-
-    [GeneratedRegex(@"^\d+(\.\d+)?\s*")]
-    private static partial Regex DisplayNameRegex();
-
-    /// <summary>
-    /// Gets the trackable station object.
-    /// </summary>
-    public TrackableObject<Station> Station { get; }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="StationEditor"/> class.
@@ -65,6 +52,11 @@ public sealed partial class StationEditor : UserControl, IUserControl
         _cmbUiIcons = GlobalData.CloneTemplateComboBox();
         _cmbUiIcons.SelectedIndexChanged += CmbUIIcons_SelectedIndexChanged;
     }
+
+    /// <summary>
+    /// Gets the trackable station object.
+    /// </summary>
+    public TrackableObject<Station> Station { get; }
 
     /// <summary>
     /// Translates the user control to the current language.
@@ -99,6 +91,14 @@ public sealed partial class StationEditor : UserControl, IUserControl
 
         _musicCtl.Translate();
     }
+
+    /// <summary>
+    /// Event that is raised when the station is updated.
+    /// </summary>
+    public event EventHandler? StationUpdated;
+
+    [GeneratedRegex(@"^\d+(\.\d+)?\s*")]
+    private static partial Regex DisplayNameRegex();
 
     /// <summary>
     /// Gets the music player associated with the station.

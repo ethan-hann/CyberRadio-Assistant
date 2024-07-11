@@ -35,6 +35,15 @@ public sealed partial class StationListBox : ListBox
     private string _savedStationIconKey = "saved_station";
 
     /// <summary>
+    /// Initializes a new instance of the <see cref="StationListBox"/> class.
+    /// </summary>
+    public StationListBox()
+    {
+        SetValues();
+        _imageList ??= new ImageList();
+    }
+
+    /// <summary>
     /// Gets or sets the ImageList containing the icons for the list box.
     /// </summary>
     [Browsable(true)]
@@ -112,15 +121,6 @@ public sealed partial class StationListBox : ListBox
             _savedStationIconKey = value;
             Invalidate();
         }
-    }
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="StationListBox"/> class.
-    /// </summary>
-    public StationListBox()
-    {
-        SetValues();
-        _imageList ??= new ImageList();
     }
 
     /// <summary>

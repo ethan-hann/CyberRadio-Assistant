@@ -1,4 +1,20 @@
-﻿using System.Diagnostics;
+﻿// CustomMusicCtl.cs : RadioExt-Helper
+// Copyright (C) 2024  Ethan Hann
+// 
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+// 
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// 
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+using System.Diagnostics;
 using AetherUtils.Core.Extensions;
 using RadioExt_Helper.models;
 using RadioExt_Helper.Properties;
@@ -10,19 +26,9 @@ namespace RadioExt_Helper.user_controls;
 public sealed partial class CustomMusicCtl : UserControl, IUserControl
 {
     /// <summary>
-    /// Event that is triggered when the station is updated.
-    /// </summary>
-    public event EventHandler? StationUpdated;
-
-    /// <summary>
     /// Image list for the tab images.
     /// </summary>
     private readonly ImageList _tabImages = new();
-
-    /// <summary>
-    /// Gets the trackable station object associated with the control.
-    /// </summary>
-    public TrackableObject<Station> Station { get; }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="CustomMusicCtl"/> class.
@@ -38,6 +44,11 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
 
         PopulateListView();
     }
+
+    /// <summary>
+    /// Gets the trackable station object associated with the control.
+    /// </summary>
+    public TrackableObject<Station> Station { get; }
 
     /// <summary>
     /// Translates the control's text to the appropriate language.
@@ -60,6 +71,11 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
         lvSongOrder.Columns[0].Text = GlobalData.Strings.GetString("Order");
         lvSongOrder.Columns[1].Text = GlobalData.Strings.GetString("SongNameHeader");
     }
+
+    /// <summary>
+    /// Event that is triggered when the station is updated.
+    /// </summary>
+    public event EventHandler? StationUpdated;
 
     private void CustomMusicCtl_Load(object sender, EventArgs e)
     {
@@ -95,7 +111,7 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
                              $"{song.Duration:hh\\:mm\\:ss}",
                              song.FileSize.FormatSize()
                          ])
-                     { Tag = song }))
+                         { Tag = song }))
             lvSongs.Items.Add(lvItem);
 
         lvSongs.ResizeColumns();
@@ -181,7 +197,6 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
     /// <summary>
     /// Synchronizes the song order list view with the station's song list.
     /// </summary>
-
     private void SynchronizeSongOrder()
     {
         lvSongOrder.BeginUpdate();
@@ -235,9 +250,7 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
                      .Where(s => !lvSongOrder.Items
                          .Cast<ListViewItem>()
                          .Any(item => item.Tag != null && item.Tag.Equals(s))))
-        {
             lbSongs.Items.Add(s);
-        }
         lbSongs.EndUpdate();
     }
 
@@ -251,6 +264,7 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
             AddSongToOrderListView(item);
             lbSongs.Items.Remove(item);
         }
+
         UpdateListsAndViews();
 
         StationUpdated?.Invoke(this, EventArgs.Empty);
@@ -327,9 +341,7 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
         foreach (var song in Station.TrackedObject.MetaData.SongOrder
                      .Select(item => tempSongs.Find(x => x.FilePath.EndsWith(item)))
                      .OfType<Song>())
-        {
             AddSongToOrderListView(song, false);
-        }
 
         UpdateListsAndViews();
     }
@@ -408,5 +420,6 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
             item.Selected = true;
         listView.EndUpdate();
     }
+
     #endregion
 }

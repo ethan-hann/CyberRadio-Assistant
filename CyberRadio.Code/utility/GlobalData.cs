@@ -22,6 +22,7 @@ using AetherUtils.Core.Configuration;
 using AetherUtils.Core.Logging;
 using RadioExt_Helper.config;
 using RadioExt_Helper.forms;
+using RadioExt_Helper.migration;
 
 namespace RadioExt_Helper.utility;
 
@@ -32,15 +33,14 @@ namespace RadioExt_Helper.utility;
 /// </summary>
 public static class GlobalData
 {
-    /// <summary>
-    /// Get the configuration manager responsible for managing the application configuration.
-    /// </summary>
-    public static CyberConfigManager ConfigManager { get; private set; } = null!;
-
     private const string ConfigFileName = "config.yml";
     private const string DefaultLanguage = "English (en)";
 
+    /// <summary>
+    /// Get the resource manager for accessing string resources.
+    /// </summary>
     public static readonly ResourceManager Strings = new("RadioExt_Helper.Strings", typeof(MainForm).Assembly);
+
     private static readonly string ConfigFilePath = Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
         "RadioExt-Helper", ConfigFileName);
@@ -50,9 +50,15 @@ public static class GlobalData
     /// </summary>
     private static bool _globalDataInitialized;
 
+    private static bool _uiIconsInitialized;
+
+    /// <summary>
+    /// Get the configuration manager responsible for managing the application configuration.
+    /// </summary>
+    public static CyberConfigManager ConfigManager { get; private set; } = null!;
+
     private static BindingList<string> UiIcons { get; set; } = [];
     private static ComboBox? UiIconsComboTemplate { get; set; }
-    private static bool _uiIconsInitialized;
     private static Assembly ExecutingAssembly => Assembly.GetExecutingAssembly();
 
     /// <summary>
@@ -76,6 +82,14 @@ public static class GlobalData
 
         InitializeConfig();
         InitializeLogging();
+
+        var config = MigrationHelper.MigrateSettings();
+        if (config != null)
+        {
+            ConfigManager.SetConfig(config);
+            ConfigManager.Save();
+        }
+
         SetCulture(ConfigManager.Get("language") as string ?? DefaultLanguage);
 
         _globalDataInitialized = true;

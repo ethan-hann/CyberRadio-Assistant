@@ -405,3 +405,5 @@ FodyWeavers.xsd
 # JetBrains Rider
 *.sln.iml
 /Resources
+/CyberRadio.Code/testing-versionMigration
+/migration settings testing

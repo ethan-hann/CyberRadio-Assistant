@@ -436,7 +436,7 @@ public partial class MainForm : Form
         if (!station.IsPendingSave) return;
 
         RemoveEditor(station); //Remove editor from dictionary
-        
+
         station.DeclineChanges(); // Revert the changes made to the station's properties since the last save.
 
         var editor = AddEditor(station); //Re-add the editor to the dictionary after reverting changes.

@@ -45,15 +45,16 @@ public class ListViewItemComparer(int column, SortOrder order) : IComparer
             if (item1.Tag != null && item1.Tag.GetType() == typeof(Song))
             {
                 if (Column == 3) //compare file size
-                {
-                    returnVal = item2.Tag != null ? ((Song)item1.Tag).FileSize.CompareTo(((Song)item2.Tag).FileSize) 
+                    returnVal = item2.Tag != null
+                        ? ((Song)item1.Tag).FileSize.CompareTo(((Song)item2.Tag).FileSize)
                         : DefaultStringCompare(item1, item2);
-                }
                 else
                     returnVal = DefaultStringCompare(item1, item2);
             }
             else
+            {
                 returnVal = DefaultStringCompare(item1, item2);
+            }
         }
 
         if (Order == SortOrder.Descending)
@@ -63,6 +64,7 @@ public class ListViewItemComparer(int column, SortOrder order) : IComparer
 
     private int DefaultStringCompare(ListViewItem item1, ListViewItem item2)
     {
-        return string.Compare(item1.SubItems[Column].Text, item2.SubItems[Column].Text, StringComparison.OrdinalIgnoreCase);
+        return string.Compare(item1.SubItems[Column].Text, item2.SubItems[Column].Text,
+            StringComparison.OrdinalIgnoreCase);
     }
 }
