@@ -270,7 +270,7 @@ public partial class ExportWindow : Form
         ToggleButtons();
 
         // Get the list of existing directories before exporting
-        var existingDirectories = Directory.GetDirectories(StagingPath).ToList();
+        var existingDirectories = FileHelper.SafeEnumerateDirectories(StagingPath).ToList();
         var songDirectoryMap = MapSongsToDirectories(existingDirectories, _stationsToExport);
 
         for (var i = 0; i < _stationsToExport.Count; i++)
