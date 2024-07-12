@@ -15,8 +15,11 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 using System.Xml;
+using AetherUtils.Core.Files;
 using AetherUtils.Core.Logging;
+using Newtonsoft.Json.Linq;
 using RadioExt_Helper.config;
+using RadioExt_Helper.models;
 
 namespace RadioExt_Helper.migration;
 
@@ -82,7 +85,7 @@ public static class MigrationHelper
     {
         List<string> userConfigPaths = [];
 
-        foreach (var directory in Directory.GetDirectories(baseDirectory))
+        foreach (var directory in FileHelper.SafeEnumerateDirectories(baseDirectory))
         {
             var userConfigPath = Path.Combine(directory, "user.config");
             if (File.Exists(userConfigPath))
@@ -165,7 +168,7 @@ public static class MigrationHelper
         var directoriesToKeep = new[] { configFilePath, logsFolderPath };
 
         // Get all directories under the base directory
-        var allDirectories = Directory.GetDirectories(baseDirectory);
+        var allDirectories = FileHelper.SafeEnumerateDirectories(baseDirectory);
 
         foreach (var directory in allDirectories)
         {
@@ -185,5 +188,114 @@ public static class MigrationHelper
 
     #region Song JSON Migration
 
+    /// <summary>
+    /// Migrate the songs.sgls files from the old JSON format to the new <see cref="Song"/> object format.
+    /// </summary>
+    /// <param name="stagingPath">The path to the staging folder.</param>
+    /// <returns>A list of status messages.</returns>
+    public static List<string> MigrateSongs(string stagingPath)
+    {
+        var statusMessages = new List<string>();
+
+        if (stagingPath.Equals(string.Empty))
+        {
+            const string warningMessage = "Staging path was empty! No songs can be migrated.";
+            statusMessages.Add(warningMessage);
+            return statusMessages;
+        }
+
+        Json<List<Song>> jsonSerializer = new();
+        Json<List<dynamic>> oldSongDeserializer = new();
+
+        var songsFiles = FindAllSongsFiles(stagingPath);
+
+        foreach (var songsFile in songsFiles)
+        {
+            try
+            {
+                if (IsSongNewFormat(songsFile))
+                {
+                    var infoMessage = $"File {songsFile} is already in the new format. Skipping migration...";
+                    statusMessages.Add(infoMessage);
+                    continue;
+                }
+
+                // Read old JSON file
+                var oldSongs = oldSongDeserializer.LoadJson(songsFile);
+
+                // Transform to new format
+                var newSongs = oldSongs?.Select(oldSong => new Song
+                {
+                    Title = oldSong.name,
+                    Artist = oldSong.artist,
+                    Duration = TimeSpan.Parse(oldSong.duration.ToString()),
+                    FileSize = (ulong)oldSong.size,
+                    FilePath = oldSong.original_path
+                }).ToList();
+
+                if (newSongs != null)
+                {
+                    if (jsonSerializer.SaveJson(songsFile, newSongs))
+                    {
+                        var successMessage = $"Songs in {songsFile} have been migrated to the new format.";
+                        statusMessages.Add(successMessage);
+                    }
+                    else
+                    {
+                        var errorMessage = $"Error while migrating songs in {songsFile}. Could not save new song object to disk.";
+                        statusMessages.Add(errorMessage);
+                    }
+                }
+                else
+                {
+                    var errorMessage = $"Error while migrating songs in {songsFile}. Could not parse old song's format.";
+                    statusMessages.Add(errorMessage);
+                }
+            }
+            catch (Exception ex)
+            {
+                var exceptionMessage = $"Error while migrating songs in {songsFile}: {ex.Message}";
+                statusMessages.Add(exceptionMessage);
+            }
+        }
+
+        return statusMessages;
+    }
+
+    /// <summary>
+    /// Find all <c>songs.sgls</c> files in the specified directory and its subdirectories.
+    /// </summary>
+    /// <param name="baseDirectory">The base directory to search.</param>
+    /// <returns>A list of paths to <c>songs.sgls</c> files.</returns>
+    private static List<string> FindAllSongsFiles(string baseDirectory)
+    {
+        return FileHelper.SafeEnumerateFiles(baseDirectory, "songs.sgls", SearchOption.AllDirectories).ToList();
+    }
+
+    /// <summary>
+    /// Check if the song file is already in the new format.
+    /// </summary>
+    /// <param name="jsonPath">The path to the songs.sgls JSON file to check.</param>
+    /// <returns><c>true</c> if the file is already in new format; <c>false</c> otherwise.</returns>
+    private static bool IsSongNewFormat(string jsonPath)
+    {
+        try
+        {
+            var jsonArray = JArray.Parse(FileHelper.OpenFile(jsonPath, false));
+
+            // Check if the first object contains the key "title"
+            if (jsonArray.Count > 0 && jsonArray[0]["title"] != null)
+            {
+                return true;
+            }
+        }
+        catch
+        {
+            // If there's an exception, it means the content is not a valid JSON array in the new format
+            return false;
+        }
+
+        return false;
+    }
     #endregion
 }

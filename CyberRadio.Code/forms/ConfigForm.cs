@@ -135,6 +135,11 @@ public partial class ConfigForm : Form
         saved &= GlobalData.ConfigManager.Set("autoExportToGame", chkAutoExportToGame.Checked);
         saved &= GlobalData.ConfigManager.Set("newFileEveryLaunch", chkNewFileEveryLaunch.Checked);
 
+        if (!chkNewFileEveryLaunch.Checked)
+            saved &= GlobalData.ConfigManager.Set("includeDateTime", false);
+        else
+            saved &= GlobalData.ConfigManager.Set("includeDateTime", true);
+
         if (!lblCurrentLogPath.Text.Equals(GlobalData.Strings.GetString("NoLogPathSet")))
             saved &= GlobalData.ConfigManager.Set("logFileDirectory", lblCurrentLogPath.Text);
 

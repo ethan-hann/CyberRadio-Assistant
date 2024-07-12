@@ -78,21 +78,18 @@ public static class GlobalData
         ConfigManager = CreateConfigManager();
 
         LoadUiIcons();
-        UiIconsComboTemplate = CreateComboBoxTemplate();
 
         InitializeConfig();
         InitializeLogging();
 
-        var config = MigrationHelper.MigrateSettings();
-        if (config != null)
-        {
-            ConfigManager.SetConfig(config);
-            ConfigManager.Save();
-        }
-
         SetCulture(ConfigManager.Get("language") as string ?? DefaultLanguage);
 
         _globalDataInitialized = true;
+    }
+
+    public static void InitializeComboBoxTemplate()
+    {
+        UiIconsComboTemplate = CreateComboBoxTemplate();
     }
 
     /// <summary>

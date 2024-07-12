@@ -285,6 +285,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There are {0} stations pending export. Are you sure you want to quit?.
+        /// </summary>
+        internal static string ConfirmExit {
+            get {
+                return ResourceManager.GetString("ConfirmExit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to refresh your stations from disk? You will lose any pending changes..
         /// </summary>
         internal static string ConfirmRefreshStations {
@@ -1287,6 +1296,78 @@ namespace RadioExt_Helper {
         internal static string Songs {
             get {
                 return ResourceManager.GetString("Songs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Checking settings....
+        /// </summary>
+        internal static string SplashScreen_CheckingSettings {
+            get {
+                return ResourceManager.GetString("SplashScreen_CheckingSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Checking song formats....
+        /// </summary>
+        internal static string SplashScreen_CheckingSongs {
+            get {
+                return ResourceManager.GetString("SplashScreen_CheckingSongs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Finalizing....
+        /// </summary>
+        internal static string SplashScreen_Finalizing {
+            get {
+                return ResourceManager.GetString("SplashScreen_Finalizing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Settings migrated successfully..
+        /// </summary>
+        internal static string SplashScreen_MigratedSettings {
+            get {
+                return ResourceManager.GetString("SplashScreen_MigratedSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Settings migration not needed..
+        /// </summary>
+        internal static string SplashScreen_MigratedSettingsNo {
+            get {
+                return ResourceManager.GetString("SplashScreen_MigratedSettingsNo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Starting....
+        /// </summary>
+        internal static string SplashScreen_Starting {
+            get {
+                return ResourceManager.GetString("SplashScreen_Starting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Checking for updates....
+        /// </summary>
+        internal static string SplashScreen_UpdateCheck {
+            get {
+                return ResourceManager.GetString("SplashScreen_UpdateCheck", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Skipping check for updates....
+        /// </summary>
+        internal static string SplashScreen_UpdateCheckNo {
+            get {
+                return ResourceManager.GetString("SplashScreen_UpdateCheckNo", resourceCulture);
             }
         }
         

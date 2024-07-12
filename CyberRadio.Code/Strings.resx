@@ -631,4 +631,31 @@ exported to the game.</value>
     <data name="ClearAllSongs" xml:space="preserve">
       <value>Clear All!</value>
     </data>
+    <data name="SplashScreen_Starting" xml:space="preserve">
+      <value>Starting...</value>
+    </data>
+    <data name="SplashScreen_CheckingSettings" xml:space="preserve">
+      <value>Checking settings...</value>
+    </data>
+    <data name="SplashScreen_MigratedSettings" xml:space="preserve">
+      <value>Settings migrated successfully.</value>
+    </data>
+    <data name="SplashScreen_MigratedSettingsNo" xml:space="preserve">
+      <value>Settings migration not needed.</value>
+    </data>
+    <data name="SplashScreen_CheckingSongs" xml:space="preserve">
+      <value>Checking song formats...</value>
+    </data>
+    <data name="SplashScreen_UpdateCheck" xml:space="preserve">
+      <value>Checking for updates...</value>
+    </data>
+    <data name="SplashScreen_UpdateCheckNo" xml:space="preserve">
+      <value>Skipping check for updates...</value>
+    </data>
+    <data name="SplashScreen_Finalizing" xml:space="preserve">
+      <value>Finalizing...</value>
+    </data>
+    <data name="ConfirmExit" xml:space="preserve">
+      <value>There are {0} stations pending export. Are you sure you want to quit?</value>
+    </data>
 </root>

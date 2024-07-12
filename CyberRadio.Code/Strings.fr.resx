@@ -631,4 +631,31 @@ exporté vers le jeu.</value>
     <data name="ClearAllSongs" xml:space="preserve">
       <value>Tout effacer!</value>
     </data>
+    <data name="SplashScreen_Starting" xml:space="preserve">
+      <value>Commencer...</value>
+    </data>
+    <data name="SplashScreen_CheckingSettings" xml:space="preserve">
+      <value>Vérification des paramètres...</value>
+    </data>
+    <data name="SplashScreen_MigratedSettings" xml:space="preserve">
+      <value>Les paramètres ont été migrés avec succès.</value>
+    </data>
+    <data name="SplashScreen_MigratedSettingsNo" xml:space="preserve">
+      <value>La migration des paramètres n'est pas nécessaire.</value>
+    </data>
+    <data name="SplashScreen_CheckingSongs" xml:space="preserve">
+      <value>Vérification des formats de chansons...</value>
+    </data>
+    <data name="SplashScreen_UpdateCheck" xml:space="preserve">
+      <value>Vérification des mises à jour...</value>
+    </data>
+    <data name="SplashScreen_UpdateCheckNo" xml:space="preserve">
+      <value>Ignorer la vérification des mises à jour...</value>
+    </data>
+    <data name="SplashScreen_Finalizing" xml:space="preserve">
+      <value>Finalisation...</value>
+    </data>
+    <data name="ConfirmExit" xml:space="preserve">
+      <value>Il y a {0} stations en attente d'exportation. Êtes-vous sûr de vouloir quitter l'application ?</value>
+    </data>
 </root>
