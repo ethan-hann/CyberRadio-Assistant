@@ -39,6 +39,8 @@ public partial class ExportWindow : Form
     private readonly string _statusString =
         GlobalData.Strings.GetString("ExportingStationStatus") ?? "Exporting station: {0}";
 
+    private readonly HashSet<string?> _validAudioExtensions = EnumHelper<ValidAudioFiles>.GetEnumDescriptions().ToHashSet();
+
     private DirectoryCopier? _dirCopier;
     private bool _exportToGameComplete;
     private bool _exportToStagingComplete;
@@ -267,6 +269,10 @@ public partial class ExportWindow : Form
     {
         ToggleButtons();
 
+        // Get the list of existing directories before exporting
+        var existingDirectories = Directory.GetDirectories(StagingPath).ToList();
+        var songDirectoryMap = MapSongsToDirectories(existingDirectories, _stationsToExport);
+
         for (var i = 0; i < _stationsToExport.Count; i++)
         {
             if (bgWorkerExport.CancellationPending)
@@ -279,37 +285,132 @@ public partial class ExportWindow : Form
             UpdateStatus(string.Format(_statusString, station.TrackedObject.MetaData.DisplayName));
             bgWorkerExport.ReportProgress((int)(i / (float)_stationsToExport.Count * 100));
 
-            var stationPath = CreateStationDirectory(station.TrackedObject);
-            if (string.IsNullOrEmpty(stationPath)) continue;
+            var newStationPath = CreateStationDirectory(station);
+            if (string.IsNullOrEmpty(newStationPath)) continue;
 
-            if (!CreateMetaDataJson(stationPath, station.TrackedObject)) continue;
+            if (!CreateMetaDataJson(newStationPath, station)) continue;
             if (station.TrackedObject.Songs.Count <= 0) continue;
 
-            if (!CreateSongListJson(stationPath, station.TrackedObject))
+            // Copy song files from old directory to new directory
+            CopySongFiles(songDirectoryMap, newStationPath, station);
+
+            if (!CreateSongListJson(newStationPath, station))
                 AuLogger.GetCurrentLogger<ExportWindow>("BG_ExportStaging")
-                    .Error("Couldn't save the songs.sgls file.");
+                    .Error("Couldn't save the songs.sgls file. This means that CRA doesn't know where your station's songs are located.");
         }
 
-        RemoveDeletedStations();
+        RemoveDeletedStations(existingDirectories);
         AuLogger.GetCurrentLogger<ExportWindow>("BG_ExportToStaging")
             .Info($"Exported {_stationsToExport.Count} stations to staging directory: {StagingPath}");
     }
 
     /// <summary>
+    /// Maps song directories to the station directories. Used to keep track of where the songs are located, in case the station name is updated.
+    /// </summary>
+    /// <param name="existingDirectories">The existing station directories in the staging folder.</param>
+    /// <param name="stations">The list of <see cref="TrackableObject{Station}"/> stations to use for mapping.</param>
+    /// <returns>A dictionary containing the directory-song mappings.</returns>
+    private static Dictionary<string, string> MapSongsToDirectories(List<string> existingDirectories, List<TrackableObject<Station>> stations)
+    {
+        var songDirectoryMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+
+        foreach (var station in stations)
+        {
+            foreach (var song in station.TrackedObject.Songs)
+            {
+                var songDirectory = existingDirectories
+                    .FirstOrDefault(dir => song.FilePath.StartsWith(dir, StringComparison.OrdinalIgnoreCase));
+
+                if (!string.IsNullOrEmpty(songDirectory))
+                {
+                    songDirectoryMap[song.FilePath] = songDirectory;
+                }
+            }
+        }
+
+        return songDirectoryMap;
+    }
+
+    /// <summary>
+    /// Copy song files from the old station directory to the new station directory.
+    /// </summary>
+    /// <param name="songDirectoryMap">A dictionary containing the mapping between the old station name and the song.</param>
+    /// <param name="newStationPath">The path to the new station's directory.</param>
+    /// <param name="station">The station to copy songs for.</param>
+    private void CopySongFiles(Dictionary<string, string> songDirectoryMap, string newStationPath, TrackableObject<Station> station)
+    {
+        foreach (var song in station.TrackedObject.Songs)
+        {
+            // Check if the song file is within the station's directory
+            if (!songDirectoryMap.TryGetValue(song.FilePath, out var oldStationPath) ||
+                !IsFileInDirectory(song.FilePath, oldStationPath) ||
+                !IsValidAudioFile(song.FilePath)) continue;
+
+            var oldFilePath = Path.Combine(oldStationPath, Path.GetFileName(song.FilePath));
+            var newFilePath = Path.Combine(newStationPath, Path.GetFileName(song.FilePath));
+
+            try
+            {
+                if (!File.Exists(oldFilePath)) continue;
+
+                File.Copy(oldFilePath, newFilePath, true);
+                song.FilePath = newFilePath; //Update file path of the song to the new station's directory
+
+                AuLogger.GetCurrentLogger<ExportWindow>("CopySongFiles")
+                    .Info($"Copied song from old station folder: {oldFilePath} to new station folder: {newFilePath}.");
+            }
+            catch (Exception ex)
+            {
+                AuLogger.GetCurrentLogger<ExportWindow>("CopySongFiles")
+                    .Error(ex, $"Failed to copy {oldFilePath} to {newFilePath}.");
+            }
+        }
+    }
+
+    /// <summary>
+    /// Get a value indicating whether the specified file is in the specified directory.
+    /// </summary>
+    /// <param name="filePath">The file path to check.</param>
+    /// <param name="directoryPath">The directory path to check against.</param>
+    /// <returns><c>true</c> if the file is in the directory; <c>false</c> otherwise.</returns>
+    private static bool IsFileInDirectory(string filePath, string directoryPath)
+    {
+        var fileUri = new Uri(filePath);
+        var directoryUri = new Uri(directoryPath);
+
+        return fileUri.AbsolutePath.StartsWith(directoryUri.AbsolutePath, StringComparison.OrdinalIgnoreCase);
+    }
+
+    /// <summary>
+    /// Get a value indicating whether the specified file is a valid audio file based on the extension and <see cref="ValidAudioFiles"/>.
+    /// </summary>
+    /// <param name="filePath">The path to the file to check.</param>
+    /// <returns><c>true</c> if the file is a valid audio file; <c>false</c> otherwise.</returns>
+    private bool IsValidAudioFile(string filePath)
+    {
+        var extension = Path.GetExtension(filePath);
+        return _validAudioExtensions.Contains(extension);
+    }
+
+    /// <summary>
     ///     Removes deleted station directories from the staging path.
     /// </summary>
-    private void RemoveDeletedStations()
+    private void RemoveDeletedStations(List<string> existingDirectories)
     {
         var stationNames = new HashSet<string>(
             _stationsToExport.Select(station => station.TrackedObject.MetaData.DisplayName),
             StringComparer.OrdinalIgnoreCase);
-        var directoriesToDelete = Directory.EnumerateDirectories(StagingPath)
-            .Where(dir => !stationNames.Contains(Path.GetFileName(dir)));
+
+        var directoriesToDelete = existingDirectories
+            .Where(dir => !stationNames.Contains(Path.GetFileName(dir)))
+            .ToList();
 
         foreach (var directory in directoriesToDelete)
             try
             {
                 Directory.Delete(directory, true);
+                AuLogger.GetCurrentLogger<ExportWindow>("RemoveDeletedStations")
+                    .Info($"Deleted station directory: {directory}");
             }
             catch (Exception ex)
             {
@@ -323,11 +424,11 @@ public partial class ExportWindow : Form
     /// </summary>
     /// <param name="station">The station to create the directory for.</param>
     /// <returns>The path to the station's directory.</returns>
-    private static string CreateStationDirectory(Station station)
+    private static string CreateStationDirectory(TrackableObject<Station> station)
     {
         if (string.IsNullOrEmpty(StagingPath)) return string.Empty;
 
-        var stationPath = Path.Combine(StagingPath, station.MetaData.DisplayName);
+        var stationPath = Path.Combine(StagingPath, station.TrackedObject.MetaData.DisplayName);
         FileHelper.CreateDirectories(stationPath);
         return stationPath;
     }
@@ -338,10 +439,10 @@ public partial class ExportWindow : Form
     /// <param name="stationPath">The path where the metadata JSON file will be created.</param>
     /// <param name="station">The station object containing the metadata to be saved.</param>
     /// <returns>True if the file was successfully saved; otherwise, false.</returns>
-    private bool CreateMetaDataJson(string stationPath, Station station)
+    private bool CreateMetaDataJson(string stationPath, TrackableObject<Station> station)
     {
         var mdPath = Path.Combine(stationPath, "metadata.json");
-        return _metaDataJson.SaveJson(mdPath, station.MetaData);
+        return _metaDataJson.SaveJson(mdPath, station.TrackedObject.MetaData);
     }
 
     /// <summary>
@@ -350,10 +451,10 @@ public partial class ExportWindow : Form
     /// <param name="stationPath">The path where the song list JSON file will be created.</param>
     /// <param name="station">The station object containing the songs to be saved.</param>
     /// <returns>True if the file was successfully saved; otherwise, false.</returns>
-    private bool CreateSongListJson(string stationPath, Station station)
+    private bool CreateSongListJson(string stationPath, TrackableObject<Station> station)
     {
         var songPath = Path.Combine(stationPath, "songs.sgls");
-        return _songListJson.SaveJson(songPath, station.Songs);
+        return _songListJson.SaveJson(songPath, station.TrackedObject.Songs);
     }
 
     /// <summary>
