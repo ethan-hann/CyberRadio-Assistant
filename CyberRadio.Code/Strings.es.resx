@@ -631,4 +631,31 @@ exportado al juego.</value>
     <data name="ClearAllSongs" xml:space="preserve">
       <value>¡Limpiar todo!</value>
     </data>
+    <data name="SplashScreen_Starting" xml:space="preserve">
+      <value>Empezando...</value>
+    </data>
+    <data name="SplashScreen_CheckingSettings" xml:space="preserve">
+      <value>Comprobando configuración...</value>
+    </data>
+    <data name="SplashScreen_MigratedSettings" xml:space="preserve">
+      <value>La configuración se migró correctamente.</value>
+    </data>
+    <data name="SplashScreen_MigratedSettingsNo" xml:space="preserve">
+      <value>No se necesita migración de configuración.</value>
+    </data>
+    <data name="SplashScreen_CheckingSongs" xml:space="preserve">
+      <value>Comprobando formatos de canciones...</value>
+    </data>
+    <data name="SplashScreen_UpdateCheck" xml:space="preserve">
+      <value>Comprobando actualizaciones...</value>
+    </data>
+    <data name="SplashScreen_UpdateCheckNo" xml:space="preserve">
+      <value>Saltando la comprobación de actualizaciones...</value>
+    </data>
+    <data name="SplashScreen_Finalizing" xml:space="preserve">
+      <value>Finalizando...</value>
+    </data>
+    <data name="ConfirmExit" xml:space="preserve">
+      <value>Hay {0} emisoras pendientes de exportar. ¿Estás seguro de que quieres salir de la aplicación?</value>
+    </data>
 </root>

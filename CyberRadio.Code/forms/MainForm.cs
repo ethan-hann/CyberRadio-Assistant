@@ -58,15 +58,12 @@ public partial class MainForm : Form
     {
         InitializeComponent();
 
+        GlobalData.InitializeComboBoxTemplate();
+
         SetImageList();
-
-        GlobalData.Initialize();
-
         InitializeLanguageDropDown();
-        SelectLanguage();
 
-        if (GlobalData.ConfigManager.Get("autoCheckForUpdates") as bool? ?? true)
-            _ = Updater.CheckForUpdates();
+        SelectLanguage();
 
         // Set up timer for resizing; this is needed to prevent the application from saving the window size too often.
         _resizeTimer = new Timer(500) // 500 ms delay
@@ -436,7 +433,7 @@ public partial class MainForm : Form
         if (!station.IsPendingSave) return;
 
         RemoveEditor(station); //Remove editor from dictionary
-        
+
         station.DeclineChanges(); // Revert the changes made to the station's properties since the last save.
 
         var editor = AddEditor(station); //Re-add the editor to the dictionary after reverting changes.
@@ -715,5 +712,19 @@ public partial class MainForm : Form
         // Restart the Timer each time the Resize event is triggered
         _resizeTimer.Stop();
         _resizeTimer.Start();
+    }
+
+    private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+    {
+        if (e.CloseReason is CloseReason.TaskManagerClosing or CloseReason.WindowsShutDown) return;
+
+        if (!_stations.Any(s => s.IsPendingSave)) return;
+
+        var text = string.Format(GlobalData.Strings.GetString("ConfirmExit")
+                                 ?? "There are {0} stations pending export. Are you sure you want to quit?",
+            _stations.Count(s => s.IsPendingSave));
+        var caption = GlobalData.Strings.GetString("Confirm");
+        if (MessageBox.Show(this, text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
+            e.Cancel = true;
     }
 }

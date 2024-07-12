@@ -15,6 +15,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 using RadioExt_Helper.forms;
+using RadioExt_Helper.utility;
 
 namespace RadioExt_Helper;
 
@@ -26,7 +27,19 @@ internal static class Program
     [STAThread]
     private static void Main()
     {
-        ApplicationConfiguration.Initialize();
+        Application.EnableVisualStyles();
+        Application.SetCompatibleTextRenderingDefault(false);
+
+        // Initialize essential global data like the logger and string resources
+        GlobalData.Initialize();
+
+        // Show the splash screen as a modal dialog
+        using (var splashScreen = new SplashScreen())
+        {
+            splashScreen.ShowDialog();
+        }
+
+        // After the splash screen is closed, show the main form
         Application.Run(new MainForm());
     }
 }

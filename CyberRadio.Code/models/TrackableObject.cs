@@ -1,4 +1,20 @@
-﻿using System.Collections;
+﻿// TrackableObject.cs : RadioExt-Helper
+// Copyright (C) 2024  Ethan Hann
+// 
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+// 
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// 
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+using System.Collections;
 using System.ComponentModel;
 using System.Reflection;
 
@@ -20,8 +36,8 @@ public sealed class TrackableObject<T> : INotifyPropertyChanged where T : class,
 {
     private readonly Dictionary<string, object?> _originalValues = [];
     private bool _isPendingSave;
-    private T _trackedObject;
     private bool _originalValuesInitialized;
+    private T _trackedObject;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="TrackableObject{T}" /> class.
@@ -116,10 +132,7 @@ public sealed class TrackableObject<T> : INotifyPropertyChanged where T : class,
             {
                 var listType = typeof(List<>).MakeGenericType(obj.GetType().GetGenericArguments().First());
                 var list = Activator.CreateInstance(listType) as IList;
-                foreach (var item in enumerable)
-                {
-                    list?.Add(DeepClone(item));
-                }
+                foreach (var item in enumerable) list?.Add(DeepClone(item));
                 return list;
             }
             default:
@@ -139,9 +152,7 @@ public sealed class TrackableObject<T> : INotifyPropertyChanged where T : class,
         if (obj1 == null || obj2 == null) return false;
 
         if (obj1 is IEnumerable enumerable1 && obj2 is IEnumerable enumerable2)
-        {
             return enumerable1.Cast<object>().SequenceEqual(enumerable2.Cast<object>());
-        }
 
         return obj1.Equals(obj2);
     }

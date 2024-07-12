@@ -11,36 +11,66 @@
         <ApplicationIcon>resources\cyber-radio-assistant.ico</ApplicationIcon>
         <StartupObject>RadioExt_Helper.Program</StartupObject>
         <GenerateDocumentationFile>False</GenerateDocumentationFile>
-        <AssemblyVersion>1.0.0</AssemblyVersion>
-        <FileVersion>1.0.0</FileVersion>
+        <AssemblyVersion>2.0.51.0</AssemblyVersion>
+        <FileVersion>2.0.51.0</FileVersion>
+        <Version>2.0.51</Version>
+        <Company>Ethan Hann</Company>
+        <Product>Cyber Radio Assistant</Product>
+        <NeutralLanguage>en</NeutralLanguage>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+      <ShouldCreateLogs>True</ShouldCreateLogs>
+      <AdvancedSettingsExpanded>True</AdvancedSettingsExpanded>
+      <UpdateAssemblyVersion>False</UpdateAssemblyVersion>
+      <UpdateAssemblyFileVersion>False</UpdateAssemblyFileVersion>
+      <UpdateAssemblyInfoVersion>False</UpdateAssemblyInfoVersion>
+      <UpdatePackageVersion>True</UpdatePackageVersion>
+      <AssemblyInfoVersionType>SettingsVersion</AssemblyInfoVersionType>
+      <InheritWinAppVersionFrom>AssemblyVersion</InheritWinAppVersionFrom>
+      <PrimaryVersionType>AssemblyVersionAttribute</PrimaryVersionType>
+      <PackageVersionSettings>AssemblyVersion.IncrementWithAutoReset.None</PackageVersionSettings>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+      <ShouldCreateLogs>True</ShouldCreateLogs>
+      <AdvancedSettingsExpanded>True</AdvancedSettingsExpanded>
+      <UpdateAssemblyVersion>False</UpdateAssemblyVersion>
+      <UpdateAssemblyFileVersion>False</UpdateAssemblyFileVersion>
+      <UpdateAssemblyInfoVersion>False</UpdateAssemblyInfoVersion>
+      <UpdatePackageVersion>True</UpdatePackageVersion>
+      <AssemblyInfoVersionType>SettingsVersion</AssemblyInfoVersionType>
+      <InheritWinAppVersionFrom>AssemblyVersion</InheritWinAppVersionFrom>
+      <PackageVersionSettings>AssemblyVersion.IncrementWithAutoReset.None</PackageVersionSettings>
+      <PrimaryVersionType>AssemblyVersionAttribute</PrimaryVersionType>
     </PropertyGroup>
 
     <ItemGroup>
-        <Compile Remove="images\**"/>
-        <Compile Remove="resources\images\**"/>
-        <EmbeddedResource Remove="images\**"/>
-        <EmbeddedResource Remove="resources\images\**"/>
-        <None Remove="images\**"/>
-        <None Remove="resources\images\**"/>
+        <Compile Remove="images\**" />
+        <Compile Remove="resources\images\**" />
+        <EmbeddedResource Remove="images\**" />
+        <EmbeddedResource Remove="resources\images\**" />
+        <None Remove="images\**" />
+        <None Remove="resources\images\**" />
     </ItemGroup>
 
     <ItemGroup>
-        <None Remove="resources\final_ui_icon_strings.txt"/>
+        <None Remove="resources\final_ui_icon_strings.txt" />
     </ItemGroup>
 
     <ItemGroup>
-        <EmbeddedResource Include="resources\cyber-radio-assistant.ico"/>
+        <EmbeddedResource Include="resources\cyber-radio-assistant.ico" />
     </ItemGroup>
 
     <ItemGroup>
-        <EmbeddedResource Include="resources\final_ui_icon_strings.txt"/>
+        <EmbeddedResource Include="resources\final_ui_icon_strings.txt" />
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="AetherUtils.Core" Version="1.0.7"/>
-        <PackageReference Include="NAudio" Version="2.2.1"/>
-        <PackageReference Include="System.Management" Version="8.0.0"/>
-        <PackageReference Include="TagLibSharp" Version="2.3.0"/>
+        <PackageReference Include="AetherUtils.Core" Version="1.0.8" />
+        <PackageReference Include="NAudio" Version="2.2.1" />
+        <PackageReference Include="System.Management" Version="8.0.0" />
+        <PackageReference Include="TagLibSharp" Version="2.3.0" />
     </ItemGroup>
 
     <ItemGroup>
