@@ -16,13 +16,11 @@
 
 using System.ComponentModel;
 using System.Diagnostics;
-using AetherUtils.Core.Configuration;
 using AetherUtils.Core.Extensions;
 using AetherUtils.Core.Files;
 using AetherUtils.Core.WinForms.Controls;
 using AetherUtils.Core.WinForms.Models;
 using RadioExt_Helper.config;
-using RadioExt_Helper.migration;
 using RadioExt_Helper.models;
 using RadioExt_Helper.Properties;
 using RadioExt_Helper.user_controls;
@@ -722,9 +720,9 @@ public partial class MainForm : Form
 
         if (!_stations.Any(s => s.IsPendingSave)) return;
 
-        var text = string.Format(GlobalData.Strings.GetString("ConfirmExit") 
-                                 ?? "There are {0} stations pending export. Are you sure you want to quit?", 
-                                    _stations.Count(s=> s.IsPendingSave));
+        var text = string.Format(GlobalData.Strings.GetString("ConfirmExit")
+                                 ?? "There are {0} stations pending export. Are you sure you want to quit?",
+            _stations.Count(s => s.IsPendingSave));
         var caption = GlobalData.Strings.GetString("Confirm");
         if (MessageBox.Show(this, text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
             e.Cancel = true;

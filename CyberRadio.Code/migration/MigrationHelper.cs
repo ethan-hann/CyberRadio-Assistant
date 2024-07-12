@@ -131,8 +131,10 @@ public static class MigrationHelper
 
             var config = new ApplicationConfig
             {
-                Language = xmlDoc.SelectSingleNode("//setting[@name='SelectedLanguage']/value")?.InnerText ?? "English (en)",
-                GameBasePath = xmlDoc.SelectSingleNode("//setting[@name='GameBasePath']/value")?.InnerText ?? string.Empty,
+                Language = xmlDoc.SelectSingleNode("//setting[@name='SelectedLanguage']/value")?.InnerText ??
+                           "English (en)",
+                GameBasePath = xmlDoc.SelectSingleNode("//setting[@name='GameBasePath']/value")?.InnerText ??
+                               string.Empty,
                 StagingPath = xmlDoc.SelectSingleNode("//setting[@name='StagingPath']/value")?.InnerText ?? string.Empty
             };
 
@@ -210,7 +212,6 @@ public static class MigrationHelper
         var songsFiles = FindAllSongsFiles(stagingPath);
 
         foreach (var songsFile in songsFiles)
-        {
             try
             {
                 if (IsSongNewFormat(songsFile))
@@ -242,13 +243,15 @@ public static class MigrationHelper
                     }
                     else
                     {
-                        var errorMessage = $"Error while migrating songs in {songsFile}. Could not save new song object to disk.";
+                        var errorMessage =
+                            $"Error while migrating songs in {songsFile}. Could not save new song object to disk.";
                         statusMessages.Add(errorMessage);
                     }
                 }
                 else
                 {
-                    var errorMessage = $"Error while migrating songs in {songsFile}. Could not parse old song's format.";
+                    var errorMessage =
+                        $"Error while migrating songs in {songsFile}. Could not parse old song's format.";
                     statusMessages.Add(errorMessage);
                 }
             }
@@ -257,7 +260,6 @@ public static class MigrationHelper
                 var exceptionMessage = $"Error while migrating songs in {songsFile}: {ex.Message}";
                 statusMessages.Add(exceptionMessage);
             }
-        }
 
         return statusMessages;
     }
@@ -284,10 +286,7 @@ public static class MigrationHelper
             var jsonArray = JArray.Parse(FileHelper.OpenFile(jsonPath, false));
 
             // Check if the first object contains the key "title"
-            if (jsonArray.Count > 0 && jsonArray[0]["title"] != null)
-            {
-                return true;
-            }
+            if (jsonArray.Count > 0 && jsonArray[0]["title"] != null) return true;
         }
         catch
         {
@@ -297,5 +296,6 @@ public static class MigrationHelper
 
         return false;
     }
+
     #endregion
 }
