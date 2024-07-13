@@ -44,6 +44,7 @@ namespace RadioExt_Helper.forms
             toolStripSeparator3 = new ToolStripSeparator();
             configurationToolStripMenuItem = new ToolStripMenuItem();
             pathsToolStripMenuItem = new ToolStripMenuItem();
+            modsToolStripMenuItem = new ToolStripMenuItem();
             helpToolStripMenuItem = new ToolStripMenuItem();
             howToUseToolStripMenuItem = new ToolStripMenuItem();
             radioExtOnNexusModsToolStripMenuItem = new ToolStripMenuItem();
@@ -52,6 +53,7 @@ namespace RadioExt_Helper.forms
             aboutToolStripMenuItem = new ToolStripMenuItem();
             checkForUpdatesToolStripMenuItem = new ToolStripMenuItem();
             languageToolStripMenuItem = new ToolStripMenuItem();
+            apiStatusToolStripMenuItem = new ToolStripMenuItem();
             splitContainer1 = new SplitContainer();
             grpStations = new GroupBox();
             lbStations = new StationListBox();
@@ -90,7 +92,7 @@ namespace RadioExt_Helper.forms
             // 
             menuStrip1.BackColor = Color.Transparent;
             menuStrip1.Font = new Font("Segoe UI Variable Display Semib", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, helpToolStripMenuItem, languageToolStripMenuItem });
+            menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, modsToolStripMenuItem, helpToolStripMenuItem, languageToolStripMenuItem, apiStatusToolStripMenuItem });
             menuStrip1.LayoutStyle = ToolStripLayoutStyle.HorizontalStackWithOverflow;
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
@@ -179,6 +181,13 @@ namespace RadioExt_Helper.forms
             pathsToolStripMenuItem.Text = "Game Paths";
             pathsToolStripMenuItem.Click += PathsToolStripMenuItem_Click;
             // 
+            // modsToolStripMenuItem
+            // 
+            modsToolStripMenuItem.Image = Properties.Resources.game_16x16;
+            modsToolStripMenuItem.Name = "modsToolStripMenuItem";
+            modsToolStripMenuItem.Size = new Size(65, 20);
+            modsToolStripMenuItem.Text = "Mods";
+            // 
             // helpToolStripMenuItem
             // 
             helpToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { howToUseToolStripMenuItem, radioExtOnNexusModsToolStripMenuItem, radioExtGitHubToolStripMenuItem, toolStripSeparator1, aboutToolStripMenuItem, checkForUpdatesToolStripMenuItem });
@@ -242,6 +251,15 @@ namespace RadioExt_Helper.forms
             languageToolStripMenuItem.RightToLeft = RightToLeft.No;
             languageToolStripMenuItem.Size = new Size(87, 20);
             languageToolStripMenuItem.Text = "Language";
+            // 
+            // apiStatusToolStripMenuItem
+            // 
+            apiStatusToolStripMenuItem.Alignment = ToolStripItemAlignment.Right;
+            apiStatusToolStripMenuItem.ImageAlign = ContentAlignment.MiddleLeft;
+            apiStatusToolStripMenuItem.Name = "apiStatusToolStripMenuItem";
+            apiStatusToolStripMenuItem.Size = new Size(124, 20);
+            apiStatusToolStripMenuItem.Text = "API Not Connected";
+            apiStatusToolStripMenuItem.Click += ApiStatusToolStripMenuItem_Click;
             // 
             // splitContainer1
             // 
@@ -563,5 +581,7 @@ namespace RadioExt_Helper.forms
         private ToolStripMenuItem openLogFolderToolStripMenuItem;
         private ContextMenuStrip cmsRevertStationChanges;
         private ToolStripMenuItem revertChangesToolStripMenuItem;
+        private ToolStripMenuItem modsToolStripMenuItem;
+        private ToolStripMenuItem apiStatusToolStripMenuItem;
     }
 }

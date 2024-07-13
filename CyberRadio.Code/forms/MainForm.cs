@@ -18,10 +18,13 @@ using System.ComponentModel;
 using System.Diagnostics;
 using AetherUtils.Core.Extensions;
 using AetherUtils.Core.Files;
+using AetherUtils.Core.Logging;
 using AetherUtils.Core.WinForms.Controls;
+using AetherUtils.Core.WinForms.CustomArgs;
 using AetherUtils.Core.WinForms.Models;
 using RadioExt_Helper.config;
 using RadioExt_Helper.models;
+using RadioExt_Helper.nexus_api;
 using RadioExt_Helper.Properties;
 using RadioExt_Helper.user_controls;
 using RadioExt_Helper.utility;
@@ -128,6 +131,8 @@ public partial class MainForm : Form
             Size = new Size(windowSize.Width, windowSize.Height);
 
         Translate();
+
+        SetApiStatus(this, EventArgs.Empty);
     }
 
     /// <summary>
@@ -659,7 +664,49 @@ public partial class MainForm : Form
 
     private void ConfigurationToolStripMenuItem_Click(object sender, EventArgs e)
     {
-        new ConfigForm().ShowDialog(this);
+        OpenConfigForm("tabGeneral");
+    }
+
+    private void OpenConfigForm(string tabName)
+    {
+        var configForm = new ConfigForm(tabName);
+        configForm.ConfigSaved += SetApiStatus;
+
+        configForm.ShowDialog(this);
+    }
+
+    private async void SetApiStatus(object? sender, EventArgs e)
+    {
+        if (!NexusApi.IsAuthenticated)
+        {
+            this.SafeInvoke(() =>
+            {
+                //TODO: Add translations
+                apiStatusToolStripMenuItem.Text = GlobalData.Strings.GetString("ApiStatus") ?? "API Not Authenticated";
+                apiStatusToolStripMenuItem.Image = null;
+                modsToolStripMenuItem.Visible = false;
+            });
+            return;
+        }
+
+        var image = await NexusApi.GetUserImage();
+        if (NexusApi.CurrentApiUser != null)
+        {
+            this.SafeInvoke(() =>
+            {
+                modsToolStripMenuItem.Visible = true;
+                apiStatusToolStripMenuItem.Text = NexusApi.CurrentApiUser.Name;
+                apiStatusToolStripMenuItem.Image = image;
+            });
+        }
+    }
+
+    private void ApiStatusToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        if (NexusApi.CurrentApiUser == null)
+            OpenConfigForm("tabNexus");
+        else
+            $"https://next.nexusmods.com/profile/{NexusApi.CurrentApiUser.Name}/about-me".OpenUrl();
     }
 
     private void PathsToolStripMenuItem_Click(object sender, EventArgs e)

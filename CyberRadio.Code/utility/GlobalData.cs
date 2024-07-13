@@ -37,7 +37,10 @@ public static class GlobalData
     private const string ConfigFileName = "config.yml";
     private const string DefaultLanguage = "English (en)";
 
-    internal static Secrets Secrets { get; set; } = new();
+    public static readonly Version AppVersion = 
+        Assembly.GetExecutingAssembly().GetName().Version is { } v 
+        ? new Version(v.Major, v.Minor, v.Build) 
+        : new Version(0, 0, 0); //This should never happen, but just in case!
 
     /// <summary>
     /// Get the resource manager for accessing string resources.
@@ -47,8 +50,6 @@ public static class GlobalData
     private static readonly string ConfigFilePath = Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
         "RadioExt-Helper", ConfigFileName);
-
-    public static NexusClient? NexusClient { get; private set; }
 
     /// <summary>
     ///     Indicates whether the global data has been initialized.
@@ -89,8 +90,8 @@ public static class GlobalData
 
         SetCulture(ConfigManager.Get("language") as string ?? DefaultLanguage);
 
-        NexusClient = new NexusClient(Secrets.NexusApiKeyDev, "CyberRadioAssistant",
-            ExecutingAssembly.GetName().Version?.ToString() ?? "1.0.0");
+        //NexusClient = new NexusClient(Secrets.NexusApiKeyDev, "CyberRadioAssistant",
+        //    ExecutingAssembly.GetName().Version?.ToString() ?? "1.0.0");
 
         _globalDataInitialized = true;
     }

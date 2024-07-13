@@ -33,6 +33,7 @@ public sealed class ApplicationConfig
     private const string GameBasePathKey = "gameBasePath";
     private const string LanguageKey = "language";
     private const string WindowSizeKey = "windowSize";
+    private const string NexusApiKeyKey = "nexusApiKey";
     private const string LogOptionsKey = "logOptions";
 
     /// <summary>
@@ -71,6 +72,12 @@ public sealed class ApplicationConfig
     /// </summary>
     [Config(WindowSizeKey)]
     public WindowSize WindowSize { get; set; } = new();
+
+    /// <summary>
+    /// The API key the user has entered for accessing the Nexus API.
+    /// </summary>
+    [Config(NexusApiKeyKey)]
+    public string NexusApiKey { get; set; } = string.Empty;
 
     /// <summary>
     ///     The log options for the application.

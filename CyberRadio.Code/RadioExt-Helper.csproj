@@ -11,13 +11,12 @@
         <ApplicationIcon>resources\cyber-radio-assistant.ico</ApplicationIcon>
         <StartupObject>RadioExt_Helper.Program</StartupObject>
         <GenerateDocumentationFile>False</GenerateDocumentationFile>
-        <AssemblyVersion>2.0.64.0</AssemblyVersion>
-        <FileVersion>2.0.64.0</FileVersion>
-        <Version>2.0.64</Version>
+        <AssemblyVersion>2.0.85.0</AssemblyVersion>
+        <FileVersion>2.0.85.0</FileVersion>
+        <Version>2.0.85</Version>
         <Company>Ethan Hann</Company>
         <Product>Cyber Radio Assistant</Product>
         <NeutralLanguage>en</NeutralLanguage>
-        <UserSecretsId>5a8d5178-3ecc-4616-84bf-939931dabce2</UserSecretsId>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -69,9 +68,9 @@
 
     <ItemGroup>
         <PackageReference Include="AetherUtils.Core" Version="1.0.8" />
-        <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="8.0.0" />
         <PackageReference Include="NAudio" Version="2.2.1" />
         <PackageReference Include="Pathoschild.FluentNexus" Version="1.0.5" />
+        <PackageReference Include="SixLabors.ImageSharp" Version="3.1.4" />
         <PackageReference Include="System.Management" Version="8.0.0" />
         <PackageReference Include="System.Net.Http" Version="4.3.4" />
         <PackageReference Include="System.Text.Json" Version="8.0.4" />

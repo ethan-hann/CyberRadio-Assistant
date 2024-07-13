@@ -17,6 +17,7 @@
 using System.Reflection;
 using AetherUtils.Core.Logging;
 using RadioExt_Helper.migration;
+using RadioExt_Helper.nexus_api;
 using RadioExt_Helper.utility;
 
 namespace RadioExt_Helper.forms;
@@ -105,6 +106,18 @@ public partial class SplashScreen : Form
         else
         {
             UpdateStatus(GlobalData.Strings.GetString("SplashScreen_UpdateCheckNo") ?? "Skipping check for updates...");
+            await Task.Delay(500); // Simulate delay
+        }
+
+        var nexusApiKey = GlobalData.ConfigManager.Get("nexusApiKey") as string ?? string.Empty;
+        if (!nexusApiKey.Equals(string.Empty))
+        {
+            //TODO: Add translation
+            UpdateStatus(GlobalData.Strings.GetString("SplashScreen_CheckApiAccess") ?? "Checking Nexus API Key...");
+            await NexusApi.AuthenticateApiKey(nexusApiKey);
+            statusMessages.Add(NexusApi.IsAuthenticated
+                ? "Nexus API key authenticated successfully."
+                : "Nexus API key authentication failed.");
             await Task.Delay(500); // Simulate delay
         }
 

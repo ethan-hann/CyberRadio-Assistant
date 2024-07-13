@@ -14,7 +14,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+using AetherUtils.Core.Extensions;
 using AetherUtils.Core.Logging;
+using RadioExt_Helper.nexus_api;
 using RadioExt_Helper.Properties;
 using RadioExt_Helper.utility;
 
@@ -25,14 +27,22 @@ namespace RadioExt_Helper.forms;
 /// </summary>
 public partial class ConfigForm : Form
 {
+    public event EventHandler? ConfigSaved;
+
     private readonly ImageList _tabImages = new();
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="ConfigForm" /> class.
+    /// <param name="tabName">The initial tab to open. If empty, or invalid, defaults to first tab.</param>
     /// </summary>
-    public ConfigForm()
+    public ConfigForm(string tabName)
     {
         InitializeComponent();
+
+        if (string.IsNullOrEmpty(tabName) || !tabConfigs.TabPages.ContainsKey(tabName))
+            tabConfigs.SelectedIndex = 0;
+        else
+            tabConfigs.SelectedTab = tabConfigs.TabPages[tabName];
     }
 
     /// <summary>
@@ -44,9 +54,12 @@ public partial class ConfigForm : Form
     {
         _tabImages.Images.Add("general", Resources.settings__16x16);
         _tabImages.Images.Add("logging", Resources.log__16x16);
+        _tabImages.Images.Add("nexus_api", Resources.api_16x16);
         tabConfigs.ImageList = _tabImages;
+
         tabGeneral.ImageKey = @"general";
         tabLogging.ImageKey = @"logging";
+        tabNexus.ImageKey = @"nexus_api";
 
         Translate();
         SetValues();
@@ -83,6 +96,8 @@ public partial class ConfigForm : Form
         btnSaveAndClose.Text = GlobalData.Strings.GetString("SaveAndClose");
         btnResetToDefault.Text = GlobalData.Strings.GetString("ResetToDefaults");
         btnCancel.Text = GlobalData.Strings.GetString("Cancel");
+
+        //TODO: Add translations for new "Nexus API" tab
     }
 
     /// <summary>
@@ -100,6 +115,25 @@ public partial class ConfigForm : Form
         lblCurrentLogPath.Text = config.LogOptions.LogFileDirectory == string.Empty
             ? lblCurrentLogPath.Text
             : config.LogOptions.LogFileDirectory;
+
+        txtApiKey.Text = config.NexusApiKey;
+
+        SetApiAuthStatus();
+    }
+
+    /// <summary>
+    /// Set the status of the API authentication on the UI.
+    /// </summary>
+    private void SetApiAuthStatus()
+    { //TODO: Add translations for the status text
+        btnClearApiKey.Enabled = txtApiKey.Text.Length > 0;
+
+        var isSameKey = txtApiKey.Text.Equals(GlobalData.ConfigManager.Get("nexusApiKey") as string);
+
+        lblAuthenticatedStatus.Text = isSameKey && !txtApiKey.Text.Equals(string.Empty) ? "Authenticated" : "Not Authenticated";
+        picApiStatus.Image = isSameKey && !txtApiKey.Text.Equals(string.Empty) ? Resources.enabled__16x16 : Resources.disabled__16x16;
+        lblAuthenticatedStatus.ForeColor = isSameKey && !txtApiKey.Text.Equals(string.Empty) ? Color.DarkGreen : Color.Red;
+        btnAuthenticate.Enabled = !isSameKey && !txtApiKey.Text.Equals(string.Empty);
     }
 
     /// <summary>
@@ -116,12 +150,17 @@ public partial class ConfigForm : Form
         var defaultConfig = GlobalData.ConfigManager.GetConfig();
         if (defaultConfig == null) return;
 
+        //Clear the API key from the current config
+        NexusApi.ClearAuthentication();
+
         //Set the values from the current config for the paths to the default config
         defaultConfig.StagingPath = currentConfig.StagingPath;
         defaultConfig.GameBasePath = currentConfig.GameBasePath;
 
         //Finally, save the configuration changes and set the values on the form to use the new, default config
-        GlobalData.ConfigManager.Save();
+        if (GlobalData.ConfigManager.Save())
+            ConfigSaved?.Invoke(this, EventArgs.Empty);
+
         SetValues();
     }
 
@@ -134,6 +173,11 @@ public partial class ConfigForm : Form
         var saved = GlobalData.ConfigManager.Set("autoCheckForUpdates", chkCheckForUpdates.Checked);
         saved &= GlobalData.ConfigManager.Set("autoExportToGame", chkAutoExportToGame.Checked);
         saved &= GlobalData.ConfigManager.Set("newFileEveryLaunch", chkNewFileEveryLaunch.Checked);
+
+        if (NexusApi.IsAuthenticated)
+            saved &= GlobalData.ConfigManager.Set("nexusApiKey", txtApiKey.Text);
+        else
+            saved &= GlobalData.ConfigManager.Set("nexusApiKey", string.Empty);
 
         if (!chkNewFileEveryLaunch.Checked)
             saved &= GlobalData.ConfigManager.Set("includeDateTime", false);
@@ -171,6 +215,41 @@ public partial class ConfigForm : Form
             lblCurrentLogPath.Text = fldrOpenLogPath.SelectedPath;
     }
 
+    private void TxtApiKey_TextChanged(object sender, EventArgs e)
+    { //TODO: Add translations for the status text
+        SetApiAuthStatus();
+    }
+
+    private async void BtnAuthenticate_Click(object sender, EventArgs e)
+    {
+        _ = await NexusApi.AuthenticateApiKey(txtApiKey.Text);
+
+        if (NexusApi.IsAuthenticated)
+        {
+            picApiStatus.Image = Resources.enabled__16x16;
+            lblAuthenticatedStatus.Text = "Authenticated";
+            lblAuthenticatedStatus.ForeColor = Color.DarkGreen;
+            AuLogger.GetCurrentLogger<ConfigForm>("AuthenticateApi").Info("Successfully authenticated with NexusMods!");
+        }
+        else
+        {
+            picApiStatus.Image = Resources.disabled__16x16;
+            lblAuthenticatedStatus.Text = "Not Authenticated";
+            lblAuthenticatedStatus.ForeColor = Color.Red;
+            AuLogger.GetCurrentLogger<ConfigForm>("AuthenticateApi").Error("Could not authenticate API key.");
+        }
+
+        btnAuthenticate.Enabled = !NexusApi.IsAuthenticated;
+        //SetApiAuthStatus();
+    }
+
+    private void BtnClearApiKey_Click(object sender, EventArgs e)
+    {
+        NexusApi.ClearAuthentication();
+        txtApiKey.Text = string.Empty;
+        SetApiAuthStatus();
+    }
+
     /// <summary>
     ///     Handles the Click event of the btnSaveAndClose control.
     /// </summary>
@@ -180,6 +259,7 @@ public partial class ConfigForm : Form
     {
         if (SetConfig())
         {
+            ConfigSaved?.Invoke(this, EventArgs.Empty);
             var text = GlobalData.Strings.GetString("ConfigSaveSuccess");
             var caption = GlobalData.Strings.GetString("Success");
             MessageBox.Show(this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -210,6 +290,18 @@ public partial class ConfigForm : Form
         ResetConfig();
     }
 
+    private bool CheckForUnsavedApiChanges()
+    {
+        var isSameKey = txtApiKey.Text.Equals(GlobalData.ConfigManager.Get("nexusApiKey") as string);
+        if (isSameKey || !NexusApi.IsAuthenticated) return true;
+
+        //TODO: Add translations for the message box
+        MessageBox.Show(this,
+            "You have unsaved changes to your API key. Please save or clear the key before closing.",
+            "Unsaved Changes", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        return false;
+    }
+
     /// <summary>
     ///     Handles the Click event of the btnCancel control.
     /// </summary>
@@ -217,6 +309,27 @@ public partial class ConfigForm : Form
     /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
     private void BtnCancel_Click(object sender, EventArgs e)
     {
-        Close();
+        if (CheckForUnsavedApiChanges())
+            Close();
+    }
+
+    private void LnkNexusApiKeyPage_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+    {
+        @"https://next.nexusmods.com/settings/api-keys#:~:text=Request%20Api%20Key-,Personal%20API%20Key,-If%20you%20are".OpenUrl();
+    }
+
+    private void LnkApiAcceptableUse_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+    {
+        @"https://help.nexusmods.com/article/114-api-acceptable-use-policy".OpenUrl();
+    }
+
+    private void ConfigForm_FormClosing(object sender, FormClosingEventArgs e)
+    {
+        if (e.CloseReason is CloseReason.WindowsShutDown or CloseReason.TaskManagerClosing) return;
+
+        if (!CheckForUnsavedApiChanges())
+        {
+            e.Cancel = true;
+        }
     }
 }
