@@ -20,8 +20,10 @@ using System.Reflection;
 using System.Resources;
 using AetherUtils.Core.Configuration;
 using AetherUtils.Core.Logging;
+using Pathoschild.FluentNexus;
 using RadioExt_Helper.config;
 using RadioExt_Helper.forms;
+using RadioExt_Helper.nexus_api;
 
 namespace RadioExt_Helper.utility;
 
@@ -35,6 +37,8 @@ public static class GlobalData
     private const string ConfigFileName = "config.yml";
     private const string DefaultLanguage = "English (en)";
 
+    internal static Secrets Secrets { get; set; } = new();
+
     /// <summary>
     /// Get the resource manager for accessing string resources.
     /// </summary>
@@ -43,6 +47,8 @@ public static class GlobalData
     private static readonly string ConfigFilePath = Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
         "RadioExt-Helper", ConfigFileName);
+
+    public static NexusClient? NexusClient { get; private set; }
 
     /// <summary>
     ///     Indicates whether the global data has been initialized.
@@ -82,6 +88,9 @@ public static class GlobalData
         InitializeLogging();
 
         SetCulture(ConfigManager.Get("language") as string ?? DefaultLanguage);
+
+        NexusClient = new NexusClient(Secrets.NexusApiKeyDev, "CyberRadioAssistant",
+            ExecutingAssembly.GetName().Version?.ToString() ?? "1.0.0");
 
         _globalDataInitialized = true;
     }

@@ -14,7 +14,11 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+using System.Configuration;
+using System.Reflection;
+using Microsoft.Extensions.Configuration;
 using RadioExt_Helper.forms;
+using RadioExt_Helper.nexus_api;
 using RadioExt_Helper.utility;
 
 namespace RadioExt_Helper;
@@ -29,6 +33,15 @@ internal static class Program
     {
         Application.EnableVisualStyles();
         Application.SetCompatibleTextRenderingDefault(false);
+
+#if DEBUG
+        // Build configuration to load secrets (only in DEBUG mode)
+        var builder = new ConfigurationBuilder()
+            .AddUserSecrets<Secrets>();
+
+        var configuration = builder.Build();
+        GlobalData.Secrets.NexusApiKeyDev = configuration["Secrets:NexusApiKeyDev"] ?? string.Empty;
+#endif
 
         // Initialize essential global data like the logger and string resources
         GlobalData.Initialize();
