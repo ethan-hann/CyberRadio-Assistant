@@ -15,6 +15,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 using System.ComponentModel;
+using AetherUtils.Core.Utility;
 using Newtonsoft.Json;
 
 namespace RadioExt_Helper.models;
@@ -38,6 +39,8 @@ public sealed class MetaData : INotifyPropertyChanged, ICloneable, IEquatable<Me
     private StreamInfo _streamInfo = new();
 
     private float _volume = 1.0f;
+
+    private SerializableDictionary<string, string> _customKeyValuePairs = [];
 
     /// <summary>
     ///     The name of the station that will be displayed in game. Also used for the station folder.
@@ -155,9 +158,20 @@ public sealed class MetaData : INotifyPropertyChanged, ICloneable, IEquatable<Me
         }
     }
 
+    [JsonProperty("custom_data")]
+    public SerializableDictionary<string, string> CustomKeyValuePairs
+    {
+        get => _customKeyValuePairs;
+        set
+        {
+            _customKeyValuePairs = value;
+            OnPropertyChanged(nameof(CustomKeyValuePairs));
+        }
+    }
+
     public object Clone()
     {
-        return new MetaData
+        var m = new MetaData
         {
             DisplayName = DisplayName,
             Fm = Fm,
@@ -168,6 +182,10 @@ public sealed class MetaData : INotifyPropertyChanged, ICloneable, IEquatable<Me
             SongOrder = [..SongOrder],
             IsActive = IsActive
         };
+        foreach (var kvp in CustomKeyValuePairs)
+            m.CustomKeyValuePairs.Add(kvp.Key, kvp.Value);
+
+        return m;
     }
 
     public bool Equals(MetaData? other)
@@ -180,7 +198,8 @@ public sealed class MetaData : INotifyPropertyChanged, ICloneable, IEquatable<Me
                CustomIcon.Equals(other.CustomIcon) &&
                StreamInfo.Equals(other.StreamInfo) &&
                SongOrder.SequenceEqual(other.SongOrder) &&
-               IsActive == other.IsActive;
+               IsActive == other.IsActive &&
+               CustomKeyValuePairs.SequenceEqual(other.CustomKeyValuePairs);
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;
@@ -206,6 +225,7 @@ public sealed class MetaData : INotifyPropertyChanged, ICloneable, IEquatable<Me
 
     public override int GetHashCode()
     {
-        return HashCode.Combine(DisplayName, Fm, Volume, Icon, CustomIcon, StreamInfo, SongOrder, IsActive);
+        var hashCode = HashCode.Combine(DisplayName, Fm, Volume, Icon, CustomIcon, StreamInfo, SongOrder, IsActive);
+        return CustomKeyValuePairs.Aggregate(hashCode, (current, kvp) => HashCode.Combine(current, kvp.Key, kvp.Value));
     }
 }

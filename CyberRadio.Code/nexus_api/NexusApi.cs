@@ -80,6 +80,24 @@ namespace RadioExt_Helper.nexus_api
             return IsAuthenticated;
         }
 
+        public static async Task<Bitmap> GetModImage(Mod mod)
+        {
+            if (NexusClient == null) return Resources.missing_16x16;
+
+            try
+            {
+                var imageUrl = mod.PictureUrl;
+                var image = await DownloadImageAsync(imageUrl.AbsoluteUri);
+                return image;
+            }
+            catch (Exception ex)
+            {
+                AuLogger.GetCurrentLogger("NexusApi.GetModImage")
+                    .Error(ex, "Couldn't retrieve mod image. Using fall back image.");
+                return Resources.missing_16x16;
+            }
+        }
+
         public static async Task<Bitmap> GetUserImage()
         {
             if (!IsAuthenticated) return ConvertToBitmap(null);
@@ -88,15 +106,6 @@ namespace RadioExt_Helper.nexus_api
 
             try
             {
-                
-                //var response = await NexusClient.HttpClient.GetAsync("v1/users/validate.json").AsString();
-                //var nexusUser = DynamicSerializer.FromJson(response);
-                //var imageUrl = (string)(nexusUser?.profile_url ?? string.Empty);
-
-                //var responseImage = await NexusClient.HttpClient.GetAsync(imageUrl);
-                //if (!responseImage.IsSuccessStatusCode)
-                //    return Resources.missing_16x16;
-
                 var image = await DownloadImageAsync(CurrentApiUser?.ProfileUrl ?? string.Empty);
                 return image;
             }
@@ -133,22 +142,6 @@ namespace RadioExt_Helper.nexus_api
             memoryStream.Seek(0, SeekOrigin.Begin);
             return new Bitmap(memoryStream);
         }
-
-        //public static async Task<Image?> DownloadImageAsync(string imageUrl)
-        //{
-        //    if (string.IsNullOrWhiteSpace(imageUrl))
-        //        return null;
-
-        //    using var client = new HttpClient();
-        //    using var response = await client.GetAsync(imageUrl, HttpCompletionOption.ResponseHeadersRead);
-        //    if (!response.IsSuccessStatusCode)
-        //        return Resources.missing_16x16;
-
-        //    //response.EnsureSuccessStatusCode();
-
-        //    await using var contentStream = await response.Content.ReadAsStreamAsync();
-        //    return new Bitmap(contentStream);
-        //}
 
         public static async Task DownloadFileAsync(string fileUrl, string destinationFilePath)
         {

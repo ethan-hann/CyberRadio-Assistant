@@ -709,6 +709,11 @@ public partial class MainForm : Form
             $"https://next.nexusmods.com/profile/{NexusApi.CurrentApiUser.Name}/about-me".OpenUrl();
     }
 
+    private void DownloadRadioModsToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        new ModDownloader().ShowDialog(this);
+    }
+
     private void PathsToolStripMenuItem_Click(object sender, EventArgs e)
     {
         var result = new PathSettings().ShowDialog(this);
@@ -774,4 +779,6 @@ public partial class MainForm : Form
         if (MessageBox.Show(this, text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
             e.Cancel = true;
     }
+
+    
 }

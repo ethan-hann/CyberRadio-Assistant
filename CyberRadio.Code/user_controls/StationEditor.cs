@@ -30,6 +30,19 @@ namespace RadioExt_Helper.user_controls;
 /// </summary>
 public sealed partial class StationEditor : UserControl, IUserControl
 {
+    /// <summary>
+    /// Event that is raised when the station is updated.
+    /// </summary>
+    public event EventHandler? StationUpdated;
+
+    /// <summary>
+    /// Gets the trackable station object.
+    /// </summary>
+    public TrackableObject<Station> Station { get; }
+
+    [GeneratedRegex(@"^\d+(\.\d+)?\s*")]
+    private static partial Regex DisplayNameRegex();
+
     private readonly ComboBox _cmbUiIcons;
     private readonly CustomMusicCtl _musicCtl;
     private readonly ImageList _tabImages = new();
@@ -51,12 +64,10 @@ public sealed partial class StationEditor : UserControl, IUserControl
 
         _cmbUiIcons = GlobalData.CloneTemplateComboBox();
         _cmbUiIcons.SelectedIndexChanged += CmbUIIcons_SelectedIndexChanged;
-    }
 
-    /// <summary>
-    /// Gets the trackable station object.
-    /// </summary>
-    public TrackableObject<Station> Station { get; }
+        // Initialize DataGridView columns
+        InitializeDataGridViewColumns();
+    }
 
     /// <summary>
     /// Translates the user control to the current language.
@@ -92,13 +103,13 @@ public sealed partial class StationEditor : UserControl, IUserControl
         _musicCtl.Translate();
     }
 
-    /// <summary>
-    /// Event that is raised when the station is updated.
-    /// </summary>
-    public event EventHandler? StationUpdated;
-
-    [GeneratedRegex(@"^\d+(\.\d+)?\s*")]
-    private static partial Regex DisplayNameRegex();
+    private void InitializeDataGridViewColumns()
+    {
+        dgvMetadata.Columns.Add("colKey", GlobalData.Strings.GetString("MetaDataKey") ?? "Key");
+        dgvMetadata.Columns.Add("colValue", GlobalData.Strings.GetString("MetaDataValue") ?? "Value");
+        dgvMetadata.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+        dgvMetadata.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+    }
 
     /// <summary>
     /// Gets the music player associated with the station.
@@ -169,6 +180,10 @@ public sealed partial class StationEditor : UserControl, IUserControl
         nudFM.Value = (decimal)Station.TrackedObject.MetaData.Fm;
         volumeSlider.Value = (int)(Station.TrackedObject.MetaData.Volume / 0.1f);
         lblSelectedVolume.Text = $@"{Station.TrackedObject.MetaData.Volume:F1}";
+
+        dgvMetadata.Rows.Clear();
+        foreach (var (key, value) in Station.TrackedObject.MetaData.CustomKeyValuePairs)
+            dgvMetadata.Rows.Add(key, value);
     }
 
     /// <summary>
@@ -364,6 +379,44 @@ public sealed partial class StationEditor : UserControl, IUserControl
         // Allow only one decimal point
         if (e.KeyChar == '.' && ((TextBox)sender).Text.IndexOf('.') > -1)
             e.Handled = true;
+    }
+
+    private void DgvMetadata_UserAddedRow(object sender, DataGridViewRowEventArgs e)
+    {
+        // New row added by the user
+        var row = dgvMetadata.Rows[e.Row.Index - 1];
+        var key = row.Cells[0].Value?.ToString();
+        var value = row.Cells[1].Value?.ToString();
+        if (key != null && value != null && Station.TrackedObject.MetaData.CustomKeyValuePairs.TryAdd(key, value))
+            StationUpdated?.Invoke(this, EventArgs.Empty);
+
+    }
+
+    private void DgvMetadata_UserDeletedRow(object sender, DataGridViewRowEventArgs e)
+    {
+        // Row deleted by the user
+        foreach (DataGridViewCell cell in e.Row.Cells)
+        {
+            var key = cell.Value?.ToString();
+            if (key == null || !Station.TrackedObject.MetaData.CustomKeyValuePairs.ContainsKey(key)) continue;
+
+            Station.TrackedObject.MetaData.CustomKeyValuePairs.Remove(key);
+            StationUpdated?.Invoke(this, EventArgs.Empty);
+        }
+    }
+
+    private void DgvMetadata_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+    {
+        // Cell value changed by the user
+        if (e is not { RowIndex: >= 0, ColumnIndex: >= 0 }) return;
+
+        var row = dgvMetadata.Rows[e.RowIndex];
+        var key = row.Cells[0].Value?.ToString();
+        var value = row.Cells[1].Value?.ToString();
+        if (key == null || value == null) return;
+
+        Station.TrackedObject.MetaData.CustomKeyValuePairs[key] = value;
+        StationUpdated?.Invoke(this, EventArgs.Empty);
     }
 
     #endregion

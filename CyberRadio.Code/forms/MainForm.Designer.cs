@@ -74,6 +74,7 @@ namespace RadioExt_Helper.forms
             stationBindingSource = new BindingSource(components);
             cmsRevertStationChanges = new ContextMenuStrip(components);
             revertChangesToolStripMenuItem = new ToolStripMenuItem();
+            downloadRadioModsToolStripMenuItem = new ToolStripMenuItem();
             menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
@@ -183,6 +184,7 @@ namespace RadioExt_Helper.forms
             // 
             // modsToolStripMenuItem
             // 
+            modsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { downloadRadioModsToolStripMenuItem });
             modsToolStripMenuItem.Image = Properties.Resources.game_16x16;
             modsToolStripMenuItem.Name = "modsToolStripMenuItem";
             modsToolStripMenuItem.Size = new Size(65, 20);
@@ -496,6 +498,14 @@ namespace RadioExt_Helper.forms
             revertChangesToolStripMenuItem.Text = "Revert Changes";
             revertChangesToolStripMenuItem.Click += RevertChangesToolStripMenuItem_Click;
             // 
+            // downloadRadioModsToolStripMenuItem
+            // 
+            downloadRadioModsToolStripMenuItem.Image = Properties.Resources.download_16x16;
+            downloadRadioModsToolStripMenuItem.Name = "downloadRadioModsToolStripMenuItem";
+            downloadRadioModsToolStripMenuItem.Size = new Size(193, 22);
+            downloadRadioModsToolStripMenuItem.Text = "Download Radio Mods";
+            downloadRadioModsToolStripMenuItem.Click += DownloadRadioModsToolStripMenuItem_Click;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(96F, 96F);
@@ -583,5 +593,6 @@ namespace RadioExt_Helper.forms
         private ToolStripMenuItem revertChangesToolStripMenuItem;
         private ToolStripMenuItem modsToolStripMenuItem;
         private ToolStripMenuItem apiStatusToolStripMenuItem;
+        private ToolStripMenuItem downloadRadioModsToolStripMenuItem;
     }
 }

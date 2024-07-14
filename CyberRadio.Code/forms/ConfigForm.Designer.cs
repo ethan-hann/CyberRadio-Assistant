@@ -441,7 +441,7 @@
             lblApiKeyUnlocks.Name = "lblApiKeyUnlocks";
             lblApiKeyUnlocks.Size = new Size(176, 48);
             lblApiKeyUnlocks.TabIndex = 15;
-            lblApiKeyUnlocks.Text = "A valid API key will unlock the ability to download radio mods directly from CRA.";
+            lblApiKeyUnlocks.Text = "A valid API key will unlock the ability to download radio mods from within CRA.";
             lblApiKeyUnlocks.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // lnkApiAcceptableUse

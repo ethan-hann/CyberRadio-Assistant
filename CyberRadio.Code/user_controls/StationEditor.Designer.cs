@@ -39,7 +39,8 @@ namespace RadioExt_Helper.user_controls
             tabControl = new TabControl();
             tabDisplayAndIcon = new TabPage();
             panel1 = new Panel();
-            panel3 = new Panel();
+            grpNotes = new GroupBox();
+            dgvMetadata = new DataGridView();
             grpSettings = new GroupBox();
             tableLayoutPanel1 = new TableLayoutPanel();
             lblVolume = new Label();
@@ -83,6 +84,8 @@ namespace RadioExt_Helper.user_controls
             tabControl.SuspendLayout();
             tabDisplayAndIcon.SuspendLayout();
             panel1.SuspendLayout();
+            grpNotes.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvMetadata).BeginInit();
             grpSettings.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)nudFM).BeginInit();
@@ -208,7 +211,7 @@ namespace RadioExt_Helper.user_controls
             // panel1
             // 
             panel1.BackColor = Color.White;
-            panel1.Controls.Add(panel3);
+            panel1.Controls.Add(grpNotes);
             panel1.Controls.Add(grpSettings);
             panel1.Controls.Add(grpCustomIcon);
             panel1.Controls.Add(grpDisplay);
@@ -218,14 +221,31 @@ namespace RadioExt_Helper.user_controls
             panel1.Size = new Size(968, 650);
             panel1.TabIndex = 3;
             // 
-            // panel3
+            // grpNotes
             // 
-            panel3.BackColor = Color.White;
-            panel3.Dock = DockStyle.Fill;
-            panel3.Location = new Point(0, 377);
-            panel3.Name = "panel3";
-            panel3.Size = new Size(968, 273);
-            panel3.TabIndex = 5;
+            grpNotes.BackColor = Color.White;
+            grpNotes.Controls.Add(dgvMetadata);
+            grpNotes.Dock = DockStyle.Fill;
+            grpNotes.Font = new Font("Segoe UI Variable Display", 9.75F, FontStyle.Bold);
+            grpNotes.Location = new Point(0, 377);
+            grpNotes.Name = "grpNotes";
+            grpNotes.Size = new Size(968, 273);
+            grpNotes.TabIndex = 6;
+            grpNotes.TabStop = false;
+            grpNotes.Text = "MetaData";
+            // 
+            // dgvMetadata
+            // 
+            dgvMetadata.BackgroundColor = Color.Gainsboro;
+            dgvMetadata.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvMetadata.Dock = DockStyle.Fill;
+            dgvMetadata.Location = new Point(3, 21);
+            dgvMetadata.Name = "dgvMetadata";
+            dgvMetadata.Size = new Size(962, 249);
+            dgvMetadata.TabIndex = 0;
+            dgvMetadata.CellValueChanged += DgvMetadata_CellValueChanged;
+            dgvMetadata.UserAddedRow += DgvMetadata_UserAddedRow;
+            dgvMetadata.UserDeletedRow += DgvMetadata_UserDeletedRow;
             // 
             // grpSettings
             // 
@@ -744,6 +764,8 @@ namespace RadioExt_Helper.user_controls
             tabControl.ResumeLayout(false);
             tabDisplayAndIcon.ResumeLayout(false);
             panel1.ResumeLayout(false);
+            grpNotes.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)dgvMetadata).EndInit();
             grpSettings.ResumeLayout(false);
             tableLayoutPanel1.ResumeLayout(false);
             tableLayoutPanel1.PerformLayout();
@@ -803,7 +825,6 @@ namespace RadioExt_Helper.user_controls
         private Label lblVolumeVal;
         private TextBox txtVolumeEdit;
         private Label lblVolumeMinMax;
-        private Panel panel3;
         private GroupBox grpStreamSettings;
         private TableLayoutPanel tableLayoutPanel5;
         private Label lblUseStream;
@@ -822,5 +843,7 @@ namespace RadioExt_Helper.user_controls
         private GroupBox grpSongs;
         private Button btnGetFromRadioGarden;
         private MusicPlayer mpStreamPlayer;
+        private GroupBox grpNotes;
+        private DataGridView dgvMetadata;
     }
 }
