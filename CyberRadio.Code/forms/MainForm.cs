@@ -20,7 +20,6 @@ using AetherUtils.Core.Extensions;
 using AetherUtils.Core.Files;
 using AetherUtils.Core.Logging;
 using AetherUtils.Core.WinForms.Controls;
-using AetherUtils.Core.WinForms.CustomArgs;
 using AetherUtils.Core.WinForms.Models;
 using RadioExt_Helper.config;
 using RadioExt_Helper.models;
@@ -37,6 +36,16 @@ namespace RadioExt_Helper.forms;
 /// </summary>
 public partial class MainForm : Form
 {
+    /// <summary>
+    ///     Gets the base path of the game from the configuration.
+    /// </summary>
+    private static string GameBasePath => GlobalData.ConfigManager.Get("gameBasePath") as string ?? string.Empty;
+
+    /// <summary>
+    ///     Gets the staging path from the configuration.
+    /// </summary>
+    private static string StagingPath => GlobalData.ConfigManager.Get("stagingPath") as string ?? string.Empty;
+
     private readonly ImageComboBox<ImageComboBoxItem> _languageComboBox = new();
     private readonly List<ImageComboBoxItem> _languages = [];
     private readonly Json<MetaData> _metaDataJson = new();
@@ -46,6 +55,7 @@ public partial class MainForm : Form
     private readonly Dictionary<Guid, StationEditor> _stationEditorsDict = [];
     private readonly ImageList _stationImageList = new();
     private readonly BindingList<TrackableObject<Station>> _stations = [];
+    private readonly BackupManager _backupManager = new();
 
     private StationEditor? _currentEditor;
     private bool _ignoreSelectedIndexChanged;
@@ -65,6 +75,7 @@ public partial class MainForm : Form
 
         SetImageList();
         InitializeLanguageDropDown();
+        InitializeBackupManager();
 
         SelectLanguage();
 
@@ -81,15 +92,12 @@ public partial class MainForm : Form
         lbStations.DisplayMember = "TrackedObject.MetaData";
     }
 
-    /// <summary>
-    ///     Gets the base path of the game from the configuration.
-    /// </summary>
-    private static string GameBasePath => GlobalData.ConfigManager.Get("gameBasePath") as string ?? string.Empty;
-
-    /// <summary>
-    ///     Gets the staging path from the configuration.
-    /// </summary>
-    private static string StagingPath => GlobalData.ConfigManager.Get("stagingPath") as string ?? string.Empty;
+    private void InitializeBackupManager()
+    {
+        _backupManager.ProgressChanged += BackupManager_ProgressChanged;
+        _backupManager.StatusChanged += BackupManager_StatusChanged;
+        _backupManager.BackupCompleted += BackupManager_BackupCompleted;
+    }
 
     /// <summary>
     ///     Sets up the image list for the station list.
@@ -757,6 +765,85 @@ public partial class MainForm : Form
             PopulateStations();
     }
 
+    private void BackupStagingFolderToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        if (string.IsNullOrEmpty(StagingPath)) return;
+
+        var backupPath = GetBackupPath();
+        if (string.IsNullOrEmpty(backupPath)) return;
+
+        if (backupPath.Equals(StagingPath))
+        {//TODO: Translations
+            MessageBox.Show(this, "Backup path cannot be the same as the staging path.", "Backup", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            return;
+        }
+
+        // Initialize ProgressBar
+        pgBackupProgress.Value = 0;
+        statusStripBackup.Visible = true;
+
+        // Start backup
+        _ = StartBackupAsync(StagingPath, backupPath);
+    }
+
+    private string GetBackupPath()
+    {
+        FolderBrowserDialog folderBrowserDialog = new()
+        {
+            Description = "Select a folder to save the backup to.", //TODO: Translations
+            ShowNewFolderButton = true
+        };
+
+        return folderBrowserDialog.ShowDialog() == DialogResult.OK ? folderBrowserDialog.SelectedPath : string.Empty;
+    }
+
+    private async Task StartBackupAsync(string stagingPath, string backupPath)
+    {
+        try
+        {
+            await _backupManager.BackupStagingFolderAsync(stagingPath, backupPath);
+        }
+        catch (Exception ex)
+        {//TODO: Translations
+            MessageBox.Show(this, $"An error occurred during backup: {ex.Message}", "Backup", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            AuLogger.GetCurrentLogger<MainForm>("StartBackupAsync").Error(ex, "An error occurred during staging folder backup.");
+        }
+    }
+
+    private void BackupManager_ProgressChanged(int progress)
+    {
+        this.SafeInvoke(() => pgBackupProgress.Value = progress);
+    }
+
+    private void BackupManager_StatusChanged(string status)
+    {
+        this.SafeInvoke(() => lblBackupStatus.Text = status);
+    }
+
+    private void BackupManager_BackupCompleted(bool success, string backupPath, string backupFileName)
+    {
+        this.SafeInvoke(() =>
+        {
+            statusStripBackup.Visible = false;
+            if (success)
+            {//TODO: Translations
+                MessageBox.Show(this, "Backup completed successfully.", "Backup", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                AuLogger.GetCurrentLogger<MainForm>("BackupManager_BackupCompleted").Info($"Backup completed successfully: {backupFileName}");
+                Process.Start("explorer.exe", backupPath);
+            }
+            else
+            {
+                MessageBox.Show(this, "Backup failed.", "Backup", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            // Clear the status message after a short delay
+            Task.Delay(2000).ContinueWith(_ =>
+            {
+                this.SafeInvoke(() => lblBackupStatus.Text = string.Empty);
+            });
+        });
+    }
+
     private void RadioExtHelpToolStripMenuItem_Click(object sender, EventArgs e)
     {
         "https://github.com/justarandomguyintheinternet/CP77_radioExt".OpenUrl();
@@ -785,6 +872,17 @@ public partial class MainForm : Form
     private void CheckForUpdatesToolStripMenuItem_Click(object sender, EventArgs e)
     {
         _ = Updater.CheckForUpdates();
+    }
+
+    private void ExitToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            Close();
+        } catch (Exception ex)
+        {
+            AuLogger.GetCurrentLogger<MainForm>("ExitToolStripMenuItem_Click").Error(ex, "An error occurred while closing the application.");
+        }
     }
 
     private void MainForm_Resize(object sender, EventArgs e)
