@@ -236,7 +236,7 @@ namespace RadioExt_Helper.user_controls
             // 
             // dgvMetadata
             // 
-            dgvMetadata.BackgroundColor = Color.Gainsboro;
+            dgvMetadata.BackgroundColor = Color.WhiteSmoke;
             dgvMetadata.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvMetadata.Dock = DockStyle.Fill;
             dgvMetadata.Location = new Point(3, 21);

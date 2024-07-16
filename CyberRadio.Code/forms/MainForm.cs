@@ -657,9 +657,37 @@ public partial class MainForm : Form
 
     private void ExportToGameToolStripMenuItem_Click(object sender, EventArgs e)
     {
+        var (stationsMissingSongs, haveMissing) = CheckForMissingSongs();
+        if (haveMissing)
+        {//TODO: Translations
+            DialogResult result = MessageBox.Show(this,
+                $"There are {stationsMissingSongs.Count} stations with a total of {stationsMissingSongs.Values.Aggregate((i, j) => i += j)} invalid song paths.\nDo you want to continue exporting?",
+                "Songs Missing", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            if (result == DialogResult.No)
+                return;
+        }
+
         var exportWindow = new ExportWindow([.. _stations]);
         exportWindow.OnExportToStagingComplete += (_, _) => { PopulateStations(); };
         exportWindow.ShowDialog(this);
+    }
+
+    /// <summary>
+    /// Checks for missing songs in the stations.
+    /// </summary>
+    /// <returns>Returns a tuple containing a dictionary of stations with missing songs and a boolean indicating if there are any missing songs.</returns>
+    private (Dictionary<string, int> missingSongs, bool haveMissing) CheckForMissingSongs()
+    {
+        Dictionary<string, int> stationsMissingSongs = [];
+
+        foreach (var station in _stations)
+        {
+            var count = station.TrackedObject.Songs.Count(song => !FileHelper.DoesFileExist(song.FilePath, false));
+            if (count != 0)
+                stationsMissingSongs[station.TrackedObject.MetaData.DisplayName] = count;
+        }
+
+        return stationsMissingSongs.Count != 0 ? (stationsMissingSongs, true) : (stationsMissingSongs, false);
     }
 
     private void ConfigurationToolStripMenuItem_Click(object sender, EventArgs e)
@@ -779,6 +807,4 @@ public partial class MainForm : Form
         if (MessageBox.Show(this, text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
             e.Cancel = true;
     }
-
-    
 }

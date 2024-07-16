@@ -30,6 +30,7 @@
         {
             components = new System.ComponentModel.Container();
             lvSongs = new ListView();
+            colFileExists = new ColumnHeader();
             colSongNames = new ColumnHeader();
             colArtist = new ColumnHeader();
             colSongLength = new ColumnHeader();
@@ -56,6 +57,8 @@
             tableLayoutPanel4 = new TableLayoutPanel();
             button1 = new Button();
             label2 = new Label();
+            cmsSongRightClick = new ContextMenuStrip(components);
+            locateToolStripMenuItem = new ToolStripMenuItem();
             tabControl.SuspendLayout();
             tabSongs.SuspendLayout();
             tableLayoutPanel2.SuspendLayout();
@@ -69,11 +72,12 @@
             tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)songBindingSource).BeginInit();
             tableLayoutPanel4.SuspendLayout();
+            cmsSongRightClick.SuspendLayout();
             SuspendLayout();
             // 
             // lvSongs
             // 
-            lvSongs.Columns.AddRange(new ColumnHeader[] { colSongNames, colArtist, colSongLength, colSongFileSize });
+            lvSongs.Columns.AddRange(new ColumnHeader[] { colFileExists, colSongNames, colArtist, colSongLength, colSongFileSize });
             lvSongs.Dock = DockStyle.Fill;
             lvSongs.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
             lvSongs.FullRowSelect = true;
@@ -87,6 +91,11 @@
             lvSongs.ColumnClick += LvSongs_ColumnClick;
             lvSongs.KeyDown += LvSongs_KeyDown;
             lvSongs.MouseDoubleClick += LvSongs_MouseDoubleClick;
+            lvSongs.MouseDown += LvSongs_MouseDown;
+            // 
+            // colFileExists
+            // 
+            colFileExists.Text = "File Exists?";
             // 
             // colSongNames
             // 
@@ -410,6 +419,20 @@
             label2.Text = "Add to Order";
             label2.TextAlign = ContentAlignment.MiddleCenter;
             // 
+            // cmsSongRightClick
+            // 
+            cmsSongRightClick.Items.AddRange(new ToolStripItem[] { locateToolStripMenuItem });
+            cmsSongRightClick.Name = "cmsSongRightClick";
+            cmsSongRightClick.Size = new Size(193, 26);
+            // 
+            // locateToolStripMenuItem
+            // 
+            locateToolStripMenuItem.Image = Properties.Resources.search_16x16;
+            locateToolStripMenuItem.Name = "locateToolStripMenuItem";
+            locateToolStripMenuItem.Size = new Size(192, 22);
+            locateToolStripMenuItem.Text = "Locate Missing Song...";
+            locateToolStripMenuItem.Click += LocateToolStripMenuItem_Click;
+            // 
             // CustomMusicCtl
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -432,6 +455,7 @@
             tableLayoutPanel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)songBindingSource).EndInit();
             tableLayoutPanel4.ResumeLayout(false);
+            cmsSongRightClick.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -463,5 +487,8 @@
         private TableLayoutPanel tableLayoutPanel3;
         private Button btnRemoveAllSongs;
         private TableLayoutPanel tableLayoutPanel5;
+        private ColumnHeader colFileExists;
+        private ContextMenuStrip cmsSongRightClick;
+        private ToolStripMenuItem locateToolStripMenuItem;
     }
 }

@@ -16,6 +16,7 @@
 
 using System.Diagnostics;
 using AetherUtils.Core.Extensions;
+using AetherUtils.Core.Files;
 using RadioExt_Helper.models;
 using RadioExt_Helper.Properties;
 using RadioExt_Helper.utility;
@@ -31,24 +32,27 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
     private readonly ImageList _tabImages = new();
 
     /// <summary>
+    /// Gets the trackable station object associated with the control.
+    /// </summary>
+    public TrackableObject<Station> Station { get; }
+
+    private readonly ImageList _songListViewImages = new();
+
+    /// <summary>
     /// Initializes a new instance of the <see cref="CustomMusicCtl"/> class.
     /// </summary>
     /// <param name="station">The trackable station object.</param>
     public CustomMusicCtl(TrackableObject<Station> station)
     {
-        InitializeComponent();
-        Dock = DockStyle.Fill;
-        SetTabImages();
-
         Station = station;
 
+        InitializeComponent();
+        Dock = DockStyle.Fill;
+
+        SetTabImages();
+        SetSongListImages();
         PopulateListView();
     }
-
-    /// <summary>
-    /// Gets the trackable station object associated with the control.
-    /// </summary>
-    public TrackableObject<Station> Station { get; }
 
     /// <summary>
     /// Translates the control's text to the appropriate language.
@@ -59,10 +63,13 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
         btnRemoveSongs.Text = GlobalData.Strings.GetString("RemoveSongsToolStrip");
         btnRemoveAllSongs.Text = GlobalData.Strings.GetString("ClearAllSongs");
 
-        lvSongs.Columns[0].Text = GlobalData.Strings.GetString("SongNameHeader");
-        lvSongs.Columns[1].Text = GlobalData.Strings.GetString("SongArtistHeader");
-        lvSongs.Columns[2].Text = GlobalData.Strings.GetString("SongLengthHeader");
-        lvSongs.Columns[3].Text = GlobalData.Strings.GetString("SongFileSizeHeader");
+        //TODO: Translations
+        lvSongs.Columns[0].Text = GlobalData.Strings.GetString("SongExistsHeader") ?? "File Exists?";
+
+        lvSongs.Columns[1].Text = GlobalData.Strings.GetString("SongNameHeader");
+        lvSongs.Columns[2].Text = GlobalData.Strings.GetString("SongArtistHeader");
+        lvSongs.Columns[3].Text = GlobalData.Strings.GetString("SongLengthHeader");
+        lvSongs.Columns[4].Text = GlobalData.Strings.GetString("SongFileSizeHeader");
 
         fdlgOpenSongs.Title = GlobalData.Strings.GetString("AddSongs");
         tabSongs.Text = GlobalData.Strings.GetString("SongListing");
@@ -80,8 +87,36 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
     private void CustomMusicCtl_Load(object sender, EventArgs e)
     {
         Translate();
+
+        //Enable owner drawing
+        lvSongs.OwnerDraw = true;
+        lvSongs.DrawColumnHeader += (_, args) => args.DrawDefault = true;
+        lvSongs.DrawSubItem += LvSongs_DrawSubItem;
+
         UpdateListsAndViews();
         SetOrderedList();
+    }
+
+    private void LvSongs_DrawSubItem(object? sender, DrawListViewSubItemEventArgs e)
+    {
+        if (e.ColumnIndex == 0) // Assuming the icon is in the first column
+        {
+            if (e.Item == null || lvSongs.SmallImageList == null ||
+                e.Item.Tag is not Song song) return;
+
+            var imageKey = FileHelper.DoesFileExist(song.FilePath, false) ? "enabled" : "disabled";
+            var image = lvSongs.SmallImageList.Images[imageKey];
+            if (image == null) return;
+
+            // Calculate the position to center the image in the cell
+            var iconX = e.Bounds.Left + (e.Bounds.Width - image.Width) / 2;
+            var iconY = e.Bounds.Top + (e.Bounds.Height - image.Height) / 2;
+            e.Graphics.DrawImage(image, iconX, iconY);
+        }
+        else
+        {
+            e.DrawDefault = true;
+        }
     }
 
     /// <summary>
@@ -96,6 +131,13 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
         tabSongOrder.ImageKey = @"order";
     }
 
+    private void SetSongListImages()
+    {
+        _songListViewImages.Images.Add("enabled", Resources.enabled__16x16);
+        _songListViewImages.Images.Add("disabled", Resources.disabled__16x16);
+        lvSongs.SmallImageList = _songListViewImages;
+    }
+
     /// <summary>
     /// Populates the song list view with the songs from the station.
     /// </summary>
@@ -106,13 +148,16 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
 
         foreach (var lvItem in Station.TrackedObject.Songs
                      .Select(song => new ListViewItem([
+                             string.Empty, // This is required for the icon to show up in the first column
                              song.Title,
                              song.Artist,
                              $"{song.Duration:hh\\:mm\\:ss}",
                              song.FileSize.FormatSize()
                          ])
-                         { Tag = song }))
+                     { Tag = song }))
+        {
             lvSongs.Items.Add(lvItem);
+        }
 
         lvSongs.ResizeColumns();
         lvSongs.ResumeLayout();
@@ -182,6 +227,49 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
     {
         return MessageBox.Show(this, GlobalData.Strings.GetString("DeleteAllSongsConfirm"),
             GlobalData.Strings.GetString("Confirm"), MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+    }
+
+    private void LocateToolStripMenuItem_Click(object sender, EventArgs e)
+    { //TODO: Translations
+        if (lvSongs.SelectedItems[0].Tag is not Song song) return;
+
+        var fileName = Path.GetFileName(song.FilePath);
+        if (string.IsNullOrEmpty(fileName)) return;
+
+        fdlgOpenSongs.Multiselect = false;
+        fdlgOpenSongs.FileName = Directory.GetParent(song.FilePath)?.FullName;
+        fdlgOpenSongs.Title = GlobalData.Strings.GetString("LocateSong") ?? "Locate Missing Song";
+        fdlgOpenSongs.Filter = @$"{fileName}|{fileName}"; // Show only the specific file name
+
+        if (fdlgOpenSongs.ShowDialog(this) == DialogResult.OK)
+        {
+            // Ensure the selected file has the same name as song.FilePath
+            if (Path.GetFileName(fdlgOpenSongs.FileName).Equals(fileName, StringComparison.OrdinalIgnoreCase))
+            {
+                song.FilePath = fdlgOpenSongs.FileName;
+                lvSongs.Invalidate();
+            }
+            else
+            {
+                MessageBox.Show("Please select the correct file.", "Invalid File", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        fdlgOpenSongs.Multiselect = true;
+    }
+
+    private void LvSongs_MouseDown(object sender, MouseEventArgs e)
+    {
+        if (e.Button != MouseButtons.Right) return;
+
+        var hitTestInfo = lvSongs.HitTest(e.Location);
+        var item = hitTestInfo.Item;
+
+        if (item?.Tag is not Song song) return;
+
+        // We only want to locate the song if its missing
+        if (!FileHelper.DoesFileExist(song.FilePath))
+            cmsSongRightClick.Show(Cursor.Position);
     }
 
     /// <summary>

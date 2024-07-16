@@ -148,6 +148,7 @@ public partial class ExportWindow : Form
     {
         var radioExtPath = PathHelper.GetRadiosPath(GameBasePath);
 
+        lvStations.SuspendLayout();
         foreach (var lvItem in from station in _stationsToExport
                  let isActive = station.TrackedObject.GetStatus()
                  let customIconString = station.TrackedObject.CustomIcon.UseCustom
@@ -176,6 +177,7 @@ public partial class ExportWindow : Form
             lvStations.Items.Add(lvItem);
 
         lvStations.ResizeColumns();
+        lvStations.ResumeLayout();
     }
 
     /// <summary>
