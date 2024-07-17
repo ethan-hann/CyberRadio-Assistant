@@ -110,9 +110,9 @@ public sealed partial class NoStationsCtl : UserControl, IUserControl
     /// <param name="e"></param>
     private void BtnPaths_Click(object sender, EventArgs e)
     {
-        var result = new PathSettings().ShowDialog();
-
-        if (result == DialogResult.OK)
-            CheckPaths();
+        var pathDialog = new PathSettings();
+        pathDialog.GameBasePathChanged += (s, e) => CheckPaths();
+        pathDialog.StagingPathChanged += (s, e) => CheckPaths();
+        pathDialog.ShowDialog(this);
     }
 }

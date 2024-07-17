@@ -24,6 +24,16 @@ namespace RadioExt_Helper.forms;
 /// </summary>
 public partial class PathSettings : Form
 {
+    /// <summary>
+    /// Occurs whenever the game base path is changed.
+    /// </summary>
+    public event EventHandler? GameBasePathChanged;
+
+    /// <summary>
+    /// Occurs whenever the staging path is changed.
+    /// </summary>
+    public event EventHandler? StagingPathChanged;
+
     private bool _gameFolderChanged;
     private bool _stageFolderChanged;
 
@@ -110,8 +120,14 @@ public partial class PathSettings : Form
         if (GlobalData.ConfigManager.Set("gameBasePath", basePath))
         {
             if (GlobalData.ConfigManager.Save())
-                AuLogger.GetCurrentLogger<PathSettings>("ChangeGameBasePath")
+            {
+                if (_gameFolderChanged)
+                {
+                    AuLogger.GetCurrentLogger<PathSettings>("ChangeGameBasePath")
                     .Info($"Updated game base path: {basePath}");
+                    GameBasePathChanged?.Invoke(this, EventArgs.Empty);
+                }
+            }
             else
                 AuLogger.GetCurrentLogger<PathSettings>("ChangeGameBasePath")
                     .Warn("Couldn't save updated configuration after changing base path.");
@@ -136,24 +152,19 @@ public partial class PathSettings : Form
         if (GlobalData.ConfigManager.Set("stagingPath", stagingPath))
         {
             if (GlobalData.ConfigManager.Save())
-                AuLogger.GetCurrentLogger<PathSettings>("ChangeStagingPath")
+            {
+                if (_stageFolderChanged)
+                {
+                    AuLogger.GetCurrentLogger<PathSettings>("ChangeStagingPath")
                     .Info($"Updated staging path: {stagingPath}");
+                    StagingPathChanged?.Invoke(this, EventArgs.Empty);
+                }
+            }
             else
                 AuLogger.GetCurrentLogger<PathSettings>("ChangeStagingPath")
                     .Warn("Couldn't save updated configuration after changing staging path.");
         }
 
         SetLabels();
-    }
-
-    /// <summary>
-    ///     Handles the FormClosed event of the PathSettings form.
-    ///     Sets the dialog result based on whether any folder changes occurred.
-    /// </summary>
-    /// <param name="sender">The source of the event.</param>
-    /// <param name="e">The <see cref="FormClosedEventArgs" /> instance containing the event data.</param>
-    private void PathSettings_FormClosed(object sender, FormClosedEventArgs e)
-    {
-        DialogResult = _stageFolderChanged || _gameFolderChanged ? DialogResult.OK : DialogResult.Cancel;
     }
 }

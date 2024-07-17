@@ -27,7 +27,20 @@ namespace RadioExt_Helper.forms;
 /// </summary>
 public partial class ConfigForm : Form
 {
+    /// <summary>
+    /// Occurs when the configuration is saved to disk.
+    /// </summary>
     public event EventHandler? ConfigSaved;
+
+    /// <summary>
+    /// Occurs whenever the game path is changed.
+    /// </summary>
+    public event EventHandler? GamePathChanged;
+
+    /// <summary>
+    /// Occurs whenever the staging path is changed.
+    /// </summary>
+    public event EventHandler? StagingPathChanged;
 
     private readonly ImageList _tabImages = new();
 
@@ -197,7 +210,10 @@ public partial class ConfigForm : Form
     /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
     private void BtnEditPaths_Click(object sender, EventArgs e)
     {
-        new PathSettings().ShowDialog();
+        var pathDialog = new PathSettings();
+        pathDialog.GameBasePathChanged += (o, args) => GamePathChanged?.Invoke(this, EventArgs.Empty);
+        pathDialog.StagingPathChanged += (o, args) => StagingPathChanged?.Invoke(this, EventArgs.Empty);
+        pathDialog.ShowDialog(this);
     }
 
     /// <summary>
@@ -240,7 +256,6 @@ public partial class ConfigForm : Form
         }
 
         btnAuthenticate.Enabled = !NexusApi.IsAuthenticated;
-        //SetApiAuthStatus();
     }
 
     private void BtnClearApiKey_Click(object sender, EventArgs e)

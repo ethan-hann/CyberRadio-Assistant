@@ -707,6 +707,7 @@ public partial class MainForm : Form
     {
         var configForm = new ConfigForm(tabName);
         configForm.ConfigSaved += SetApiStatus;
+        configForm.StagingPathChanged += RefreshAfterPathsChanged;
 
         configForm.ShowDialog(this);
     }
@@ -752,9 +753,14 @@ public partial class MainForm : Form
 
     private void PathsToolStripMenuItem_Click(object sender, EventArgs e)
     {
-        var result = new PathSettings().ShowDialog(this);
-        if (result == DialogResult.OK)
-            PopulateStations();
+        var pathDialog = new PathSettings();
+        pathDialog.StagingPathChanged += PathDialog_StagingPathChanged;
+        pathDialog.ShowDialog(this);
+    }
+
+    private void PathDialog_StagingPathChanged(object? sender, EventArgs e)
+    {
+        RefreshAfterPathsChanged(sender, e);
     }
 
     private void RefreshStationsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -772,9 +778,9 @@ public partial class MainForm : Form
         var backupPath = GetBackupPath();
         if (string.IsNullOrEmpty(backupPath)) return;
 
-        if (backupPath.Equals(StagingPath))
+        if (IsSubPath(StagingPath, backupPath))
         {//TODO: Translations
-            MessageBox.Show(this, "Backup path cannot be the same as the staging path.", "Backup", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show(this, "Backup path cannot be within the staging path.", "Backup", MessageBoxButtons.OK, MessageBoxIcon.Error);
             return;
         }
 
@@ -786,15 +792,48 @@ public partial class MainForm : Form
         _ = StartBackupAsync(StagingPath, backupPath);
     }
 
-    private string GetBackupPath()
+    private static string GetBackupPath()
     {
         FolderBrowserDialog folderBrowserDialog = new()
         {
             Description = "Select a folder to save the backup to.", //TODO: Translations
-            ShowNewFolderButton = true
+            ShowNewFolderButton = true,
+            UseDescriptionForTitle = true
         };
 
         return folderBrowserDialog.ShowDialog() == DialogResult.OK ? folderBrowserDialog.SelectedPath : string.Empty;
+    }
+
+    /// <summary>
+    /// Determines if a path is a subpath (i.e., starts with) of another path.
+    /// </summary>
+    /// <param name="basePath">The base path to check against.</param>
+    /// <param name="subPath">The path to check against the base path.</param>
+    /// <returns><c>true</c> if the sub path is part of the base path; <c>false</c> otherwise or if an error occured.</returns>
+    private static bool IsSubPath(string basePath, string subPath)
+    {
+        try
+        {
+            // Check if the paths are valid
+            if (string.IsNullOrEmpty(basePath) || string.IsNullOrEmpty(subPath) || !Directory.Exists(basePath) || !Directory.Exists(subPath))
+                return false;
+
+            // Get the full paths
+            string fullBasePath = Path.GetFullPath(basePath);
+            string fullSubPath = Path.GetFullPath(subPath);
+
+            // Normalize directory separators
+            fullBasePath = fullBasePath.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar) + Path.DirectorySeparatorChar;
+            fullSubPath = fullSubPath.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar) + Path.DirectorySeparatorChar;
+
+            // Check if the fullSubPath starts with fullBasePath
+            return fullSubPath.StartsWith(fullBasePath, StringComparison.OrdinalIgnoreCase);
+        }
+        catch (Exception ex)
+        {
+            AuLogger.GetCurrentLogger<MainForm>("IsSubPath").Error(ex, "An error occurred while checking if the path is a subpath.");
+            return false;
+        }
     }
 
     private async Task StartBackupAsync(string stagingPath, string backupPath)
