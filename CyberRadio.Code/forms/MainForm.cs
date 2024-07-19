@@ -48,21 +48,13 @@ public partial class MainForm : Form
 
     private readonly ImageComboBox<ImageComboBoxItem> _languageComboBox = new();
     private readonly List<ImageComboBoxItem> _languages = [];
-    private readonly Json<MetaData> _metaDataJson = new();
     private readonly NoStationsCtl _noStationsCtrl = new();
     private readonly Timer _resizeTimer;
-    private readonly Json<List<Song>> _songListJson = new();
-    private readonly Dictionary<Guid, StationEditor> _stationEditorsDict = [];
     private readonly ImageList _stationImageList = new();
-    private readonly BindingList<TrackableObject<Station>> _stations = [];
     private readonly BackupManager _backupManager = new();
 
     private StationEditor? _currentEditor;
     private bool _ignoreSelectedIndexChanged;
-    private int _newStationCount = 1;
-
-    private string _stationCountFormat =
-        GlobalData.Strings.GetString("EnabledStationsCount") ?? "Enabled Stations: {0} / {1}";
 
     private bool _isAppClosing;
 
@@ -90,7 +82,7 @@ public partial class MainForm : Form
         // Save the configuration when resizing has stopped
         _resizeTimer.Elapsed += (_, _) => { SaveWindowSize(); };
 
-        lbStations.DataSource = _stations;
+        lbStations.DataSource = StationManager.Instance.Stations;
         lbStations.DisplayMember = "TrackedObject.MetaData";
     }
 
@@ -219,7 +211,6 @@ public partial class MainForm : Form
         checkForUpdatesToolStripMenuItem.Text = GlobalData.Strings.GetString("CheckForUpdates");
         revertChangesToolStripMenuItem.Text = GlobalData.Strings.GetString("RevertChanges");
 
-        _stationCountFormat = GlobalData.Strings.GetString("EnabledStationsCount") ?? "Enabled Stations: {0} / {1}";
         grpStations.Text = GlobalData.Strings.GetString("Stations");
 
         // Buttons
@@ -240,7 +231,7 @@ public partial class MainForm : Form
     /// </summary>
     private void HandleUserControlVisibility()
     {
-        if (_stations.Count > 0) return;
+        if (StationManager.Instance.IsEmpty) return;
 
         splitContainer1.Panel2.Controls.Clear();
         splitContainer1.Panel2.Controls.Add(_noStationsCtrl);
@@ -271,87 +262,84 @@ public partial class MainForm : Form
     /// <summary>
     ///     Initializes the data lists by clearing them.
     /// </summary>
-    private void InitializeData()
-    {
-        _stations.Clear();
-        _stationEditorsDict.Clear();
-    }
+    private void InitializeData() => StationManager.Instance.ClearStations();
 
     /// <summary>
     ///     Loads the stations from the staging directory.
     /// </summary>
-    private void LoadStationsFromDirectories()
-    {
-        var validExtensions = EnumHelper<ValidAudioFiles>.GetEnumDescriptions();
-        var extensions = validExtensions as string[] ?? validExtensions.ToArray();
+    private void LoadStationsFromDirectories() => StationManager.Instance.LoadStations(StagingPath);
+    //{
 
-        foreach (var directory in FileHelper.SafeEnumerateDirectories(StagingPath))
-            ProcessDirectory(directory, extensions);
-    }
+    //    //var validExtensions = EnumHelper<ValidAudioFiles>.GetEnumDescriptions();
+    //    //var extensions = validExtensions as string[] ?? validExtensions.ToArray();
 
-    /// <summary>
-    ///     Processes a directory and loads the station data.
-    /// </summary>
-    private void ProcessDirectory(string directory, IEnumerable<string?> validExtensions)
-    {
-        var files = FileHelper.SafeEnumerateFiles(directory).ToList();
+    //    //foreach (var directory in FileHelper.SafeEnumerateDirectories(StagingPath))
+    //    //    ProcessDirectory(directory, extensions);
+    //}
 
-        var metaData = files
-            .Where(file => file.EndsWith("metadata.json"))
-            .Select(_metaDataJson.LoadJson)
-            .FirstOrDefault();
+    ///// <summary>
+    /////     Processes a directory and loads the station data.
+    ///// </summary>
+    //private void ProcessDirectory(string directory, IEnumerable<string?> validExtensions)
+    //{
+    //    var files = FileHelper.SafeEnumerateFiles(directory).ToList();
 
-        var songList = files
-            .Where(file => file.EndsWith("songs.sgls"))
-            .Select(_songListJson.LoadJson)
-            .FirstOrDefault() ?? [];
+    //    var metaData = files
+    //        .Where(file => file.EndsWith("metadata.json"))
+    //        .Select(_metaDataJson.LoadJson)
+    //        .FirstOrDefault();
 
-        var songFiles = files
-            .Where(file => validExtensions.Contains(Path.GetExtension(file).ToLower()))
-            .ToList();
+    //    var songList = files
+    //        .Where(file => file.EndsWith("songs.sgls"))
+    //        .Select(_songListJson.LoadJson)
+    //        .FirstOrDefault() ?? [];
 
-        if (metaData == null) return;
+    //    var songFiles = files
+    //        .Where(file => validExtensions.Contains(Path.GetExtension(file).ToLower()))
+    //        .ToList();
 
-        if (songList.Count == 0)
-            songFiles.ForEach(path =>
-            {
-                var song = Song.FromFile(path);
-                if (song != null)
-                    songList.Add(song);
-            });
+    //    if (metaData == null) return;
 
-        var station = CreateStation(metaData, songList);
-        var trackedStation = new TrackableObject<Station>(station);
-        _stations.Add(trackedStation);
-        AddEditor(trackedStation);
-    }
+    //    if (songList.Count == 0)
+    //        songFiles.ForEach(path =>
+    //        {
+    //            var song = Song.FromFile(path);
+    //            if (song != null)
+    //                songList.Add(song);
+    //        });
 
-    /// <summary>
-    ///     Adds a station editor to the dictionary.
-    /// </summary>
-    private StationEditor AddEditor(TrackableObject<Station> station)
-    {
-        lock (_stationEditorsDict)
-        {
-            var editor = new StationEditor(station);
-            editor.StationUpdated += StationUpdatedEvent;
-            _stationEditorsDict[station.Id] = editor;
-            return editor;
-        }
-    }
+    //    var station = CreateStation(metaData, songList);
+    //    var trackedStation = new TrackableObject<Station>(station);
+    //    _stations.Add(trackedStation);
+    //    AddEditor(trackedStation);
+    //}
 
-    /// <summary>
-    ///     Removes a station editor from the dictionary.
-    /// </summary>
-    private void RemoveEditor(TrackableObject<Station> station)
-    {
-        lock (_stationEditorsDict)
-        {
-            if (!_stationEditorsDict.TryGetValue(station.Id, out var editor)) return;
-            editor.StationUpdated -= StationUpdatedEvent;
-            _stationEditorsDict.Remove(station.Id);
-        }
-    }
+    ///// <summary>
+    /////     Adds a station editor to the dictionary.
+    ///// </summary>
+    //private StationEditor AddEditor(TrackableObject<Station> station)
+    //{
+    //    lock (_stationEditorsDict)
+    //    {
+    //        var editor = new StationEditor(station);
+    //        editor.StationUpdated += StationUpdatedEvent;
+    //        _stationEditorsDict[station.Id] = editor;
+    //        return editor;
+    //    }
+    //}
+
+    ///// <summary>
+    /////     Removes a station editor from the dictionary.
+    ///// </summary>
+    //private void RemoveEditor(TrackableObject<Station> station)
+    //{
+    //    lock (_stationEditorsDict)
+    //    {
+    //        if (!_stationEditorsDict.TryGetValue(station.Id, out var editor)) return;
+    //        editor.StationUpdated -= StationUpdatedEvent;
+    //        _stationEditorsDict.Remove(station.Id);
+    //    }
+    //}
 
     /// <summary>
     ///     Creates a station object from the metadata and song list.
@@ -396,14 +384,7 @@ public partial class MainForm : Form
     /// <summary>
     ///     Updates the enabled station count label.
     /// </summary>
-    private void UpdateEnabledStationCount()
-    {
-        this.SafeInvoke(() =>
-        {
-            var enabledCount = _stations.Count(s => s.TrackedObject.MetaData.IsActive);
-            lblStationCount.Text = string.Format(_stationCountFormat, enabledCount, _stations.Count);
-        });
-    }
+    private void UpdateEnabledStationCount() => this.SafeInvoke(() => { lblStationCount.Text = StationManager.Instance.GetStationCount(); });
 
     /// <summary>
     ///     Handles the SelectedIndexChanged event of the lbStations list box.
