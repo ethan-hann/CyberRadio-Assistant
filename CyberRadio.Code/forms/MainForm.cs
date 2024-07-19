@@ -140,7 +140,7 @@ public partial class MainForm : Form
 
         Translate();
 
-        SetApiStatus(this, EventArgs.Empty);
+        //SetApiStatus(this, EventArgs.Empty); //TODO: Re-enable this when the API feature is fully implemented
     }
 
     /// <summary>
@@ -706,7 +706,7 @@ public partial class MainForm : Form
     private void OpenConfigForm(string tabName)
     {
         var configForm = new ConfigForm(tabName);
-        configForm.ConfigSaved += SetApiStatus;
+        //configForm.ConfigSaved += SetApiStatus; //TODO: Re-enable this when the API feature is fully implemented
         configForm.StagingPathChanged += RefreshAfterPathsChanged;
 
         configForm.ShowDialog(this);
@@ -738,6 +738,7 @@ public partial class MainForm : Form
         }
     }
 
+    //TODO: Hidden until the API feature is fully implemented
     private void ApiStatusToolStripMenuItem_Click(object sender, EventArgs e)
     {
         if (NexusApi.CurrentApiUser == null)

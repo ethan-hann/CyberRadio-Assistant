@@ -31,22 +31,22 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ModDownloader));
             statusStrip1 = new StatusStrip();
             lblStatus = new ToolStripStatusLabel();
+            splitContainer1 = new SplitContainer();
+            dataGridView1 = new DataGridView();
+            colModId = new DataGridViewTextBoxColumn();
+            panel1 = new Panel();
+            btnPasteModIds = new Button();
+            lblModIdHelp = new custom_controls.WrapLabel();
             tableLayoutPanel1 = new TableLayoutPanel();
-            btnAddToQueue = new Button();
-            lblModId = new Label();
-            txtModId = new TextBox();
-            tabsDownload = new TabControl();
-            tabBrowser = new TabPage();
-            wvNexusWebBrowser = new Microsoft.Web.WebView2.WinForms.WebView2();
-            tabQueue = new TabPage();
-            lbModQueue = new ListBox();
-            modDetails = new user_controls.ModDetails();
+            btnCancel = new Button();
+            btnGetMods = new Button();
             statusStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
+            splitContainer1.Panel1.SuspendLayout();
+            splitContainer1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
+            panel1.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
-            tabsDownload.SuspendLayout();
-            tabBrowser.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)wvNexusWebBrowser).BeginInit();
-            tabQueue.SuspendLayout();
             SuspendLayout();
             // 
             // statusStrip1
@@ -67,140 +67,139 @@
             lblStatus.Size = new Size(55, 17);
             lblStatus.Text = "Ready";
             // 
+            // splitContainer1
+            // 
+            splitContainer1.Dock = DockStyle.Fill;
+            splitContainer1.Location = new Point(0, 0);
+            splitContainer1.Name = "splitContainer1";
+            // 
+            // splitContainer1.Panel1
+            // 
+            splitContainer1.Panel1.Controls.Add(dataGridView1);
+            splitContainer1.Panel1.Controls.Add(panel1);
+            splitContainer1.Size = new Size(1053, 557);
+            splitContainer1.SplitterDistance = 298;
+            splitContainer1.TabIndex = 7;
+            // 
+            // dataGridView1
+            // 
+            dataGridView1.BackgroundColor = Color.White;
+            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridView1.Columns.AddRange(new DataGridViewColumn[] { colModId });
+            dataGridView1.Dock = DockStyle.Fill;
+            dataGridView1.Location = new Point(0, 100);
+            dataGridView1.Name = "dataGridView1";
+            dataGridView1.Size = new Size(298, 457);
+            dataGridView1.TabIndex = 1;
+            // 
+            // colModId
+            // 
+            colModId.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            colModId.HeaderText = "Mod ID";
+            colModId.MaxInputLength = 15;
+            colModId.Name = "colModId";
+            colModId.Resizable = DataGridViewTriState.False;
+            colModId.SortMode = DataGridViewColumnSortMode.NotSortable;
+            // 
+            // panel1
+            // 
+            panel1.Controls.Add(btnPasteModIds);
+            panel1.Controls.Add(lblModIdHelp);
+            panel1.Dock = DockStyle.Top;
+            panel1.Location = new Point(0, 0);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(298, 100);
+            panel1.TabIndex = 0;
+            // 
+            // btnPasteModIds
+            // 
+            btnPasteModIds.BackColor = Color.Yellow;
+            btnPasteModIds.Dock = DockStyle.Bottom;
+            btnPasteModIds.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
+            btnPasteModIds.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
+            btnPasteModIds.FlatStyle = FlatStyle.Flat;
+            btnPasteModIds.Image = Properties.Resources.paste_16x16;
+            btnPasteModIds.Location = new Point(0, 67);
+            btnPasteModIds.Margin = new Padding(3, 2, 3, 2);
+            btnPasteModIds.Name = "btnPasteModIds";
+            btnPasteModIds.Size = new Size(298, 33);
+            btnPasteModIds.TabIndex = 4;
+            btnPasteModIds.Text = "Paste from Clipboard";
+            btnPasteModIds.TextAlign = ContentAlignment.MiddleRight;
+            btnPasteModIds.TextImageRelation = TextImageRelation.ImageBeforeText;
+            btnPasteModIds.UseVisualStyleBackColor = false;
+            // 
+            // lblModIdHelp
+            // 
+            lblModIdHelp.Font = new Font("Segoe UI Variable Display Semib", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblModIdHelp.InnerTextAlignment = custom_controls.WrapLabel.InnerTextAlign.Center;
+            lblModIdHelp.Location = new Point(3, 9);
+            lblModIdHelp.Name = "lblModIdHelp";
+            lblModIdHelp.Size = new Size(292, 34);
+            lblModIdHelp.TabIndex = 2;
+            lblModIdHelp.Text = "Enter the Mod Ids for the mods you want to download. Press <Enter> after each entry.";
+            lblModIdHelp.TextAlign = ContentAlignment.MiddleCenter;
+            // 
             // tableLayoutPanel1
             // 
-            tableLayoutPanel1.ColumnCount = 3;
-            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 4.971751F));
-            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 95.02825F));
-            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 167F));
-            tableLayoutPanel1.Controls.Add(btnAddToQueue, 2, 0);
-            tableLayoutPanel1.Controls.Add(lblModId, 0, 0);
-            tableLayoutPanel1.Controls.Add(txtModId, 1, 0);
-            tableLayoutPanel1.Dock = DockStyle.Top;
-            tableLayoutPanel1.Location = new Point(0, 0);
+            tableLayoutPanel1.ColumnCount = 2;
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 82.86814F));
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 17.1318569F));
+            tableLayoutPanel1.Controls.Add(btnCancel, 1, 0);
+            tableLayoutPanel1.Controls.Add(btnGetMods, 0, 0);
+            tableLayoutPanel1.Dock = DockStyle.Bottom;
+            tableLayoutPanel1.Location = new Point(0, 557);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 1;
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel1.Size = new Size(1053, 41);
-            tableLayoutPanel1.TabIndex = 1;
+            tableLayoutPanel1.Size = new Size(1053, 43);
+            tableLayoutPanel1.TabIndex = 6;
             // 
-            // btnAddToQueue
+            // btnCancel
             // 
-            btnAddToQueue.Anchor = AnchorStyles.Left;
-            btnAddToQueue.BackColor = Color.Yellow;
-            btnAddToQueue.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
-            btnAddToQueue.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
-            btnAddToQueue.FlatStyle = FlatStyle.Flat;
-            btnAddToQueue.Image = Properties.Resources.add__16x16;
-            btnAddToQueue.Location = new Point(888, 4);
-            btnAddToQueue.Margin = new Padding(3, 2, 3, 2);
-            btnAddToQueue.Name = "btnAddToQueue";
-            btnAddToQueue.Size = new Size(151, 33);
-            btnAddToQueue.TabIndex = 3;
-            btnAddToQueue.Text = "Add To Queue";
-            btnAddToQueue.TextAlign = ContentAlignment.MiddleRight;
-            btnAddToQueue.TextImageRelation = TextImageRelation.ImageBeforeText;
-            btnAddToQueue.UseVisualStyleBackColor = false;
-            btnAddToQueue.Click += BtnAddToQueue_Click;
+            btnCancel.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            btnCancel.BackColor = Color.Yellow;
+            btnCancel.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
+            btnCancel.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
+            btnCancel.FlatStyle = FlatStyle.Flat;
+            btnCancel.Image = Properties.Resources.cancel_16x16;
+            btnCancel.Location = new Point(875, 5);
+            btnCancel.Margin = new Padding(3, 2, 3, 2);
+            btnCancel.Name = "btnCancel";
+            btnCancel.Size = new Size(175, 33);
+            btnCancel.TabIndex = 4;
+            btnCancel.Text = "Cancel";
+            btnCancel.TextAlign = ContentAlignment.MiddleRight;
+            btnCancel.TextImageRelation = TextImageRelation.ImageBeforeText;
+            btnCancel.UseVisualStyleBackColor = false;
             // 
-            // lblModId
+            // btnGetMods
             // 
-            lblModId.Anchor = AnchorStyles.Right;
-            lblModId.AutoSize = true;
-            lblModId.Location = new Point(10, 13);
-            lblModId.Name = "lblModId";
-            lblModId.Size = new Size(31, 15);
-            lblModId.TabIndex = 0;
-            lblModId.Text = "URL:";
-            // 
-            // txtModId
-            // 
-            txtModId.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            txtModId.Location = new Point(47, 9);
-            txtModId.Name = "txtModId";
-            txtModId.ReadOnly = true;
-            txtModId.Size = new Size(835, 23);
-            txtModId.TabIndex = 4;
-            // 
-            // tabsDownload
-            // 
-            tabsDownload.Controls.Add(tabBrowser);
-            tabsDownload.Controls.Add(tabQueue);
-            tabsDownload.Dock = DockStyle.Fill;
-            tabsDownload.Location = new Point(0, 41);
-            tabsDownload.Name = "tabsDownload";
-            tabsDownload.SelectedIndex = 0;
-            tabsDownload.Size = new Size(1053, 559);
-            tabsDownload.TabIndex = 2;
-            // 
-            // tabBrowser
-            // 
-            tabBrowser.BackColor = Color.White;
-            tabBrowser.Controls.Add(wvNexusWebBrowser);
-            tabBrowser.Location = new Point(4, 24);
-            tabBrowser.Name = "tabBrowser";
-            tabBrowser.Padding = new Padding(3);
-            tabBrowser.Size = new Size(1045, 531);
-            tabBrowser.TabIndex = 0;
-            tabBrowser.Text = "Browser";
-            // 
-            // wvNexusWebBrowser
-            // 
-            wvNexusWebBrowser.AllowExternalDrop = true;
-            wvNexusWebBrowser.CreationProperties = null;
-            wvNexusWebBrowser.DefaultBackgroundColor = Color.White;
-            wvNexusWebBrowser.Dock = DockStyle.Fill;
-            wvNexusWebBrowser.Location = new Point(3, 3);
-            wvNexusWebBrowser.Name = "wvNexusWebBrowser";
-            wvNexusWebBrowser.Size = new Size(1039, 525);
-            wvNexusWebBrowser.TabIndex = 0;
-            wvNexusWebBrowser.ZoomFactor = 1D;
-            wvNexusWebBrowser.CoreWebView2InitializationCompleted += WvNexusWebBrowser_CoreWebView2InitializationCompleted;
-            wvNexusWebBrowser.NavigationStarting += WvNexusWebBrowser_NavigationStarting;
-            wvNexusWebBrowser.NavigationCompleted += WvNexusWebBrowser_NavigationCompleted;
-            wvNexusWebBrowser.SourceChanged += WvNexusWebBrowser_SourceChanged;
-            // 
-            // tabQueue
-            // 
-            tabQueue.BackColor = Color.White;
-            tabQueue.Controls.Add(lbModQueue);
-            tabQueue.Controls.Add(modDetails);
-            tabQueue.Location = new Point(4, 24);
-            tabQueue.Name = "tabQueue";
-            tabQueue.Padding = new Padding(3);
-            tabQueue.Size = new Size(1045, 531);
-            tabQueue.TabIndex = 1;
-            tabQueue.Text = "Download Queue";
-            // 
-            // lbModQueue
-            // 
-            lbModQueue.Dock = DockStyle.Fill;
-            lbModQueue.FormattingEnabled = true;
-            lbModQueue.ItemHeight = 15;
-            lbModQueue.Location = new Point(3, 120);
-            lbModQueue.Name = "lbModQueue";
-            lbModQueue.Size = new Size(1039, 408);
-            lbModQueue.TabIndex = 2;
-            lbModQueue.SelectedIndexChanged += LbModQueue_SelectedIndexChanged;
-            // 
-            // modDetails
-            // 
-            modDetails.BackColor = Color.White;
-            modDetails.Dock = DockStyle.Top;
-            modDetails.Location = new Point(3, 3);
-            modDetails.Name = "modDetails";
-            modDetails.Size = new Size(1039, 117);
-            modDetails.TabIndex = 1;
+            btnGetMods.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            btnGetMods.BackColor = Color.Yellow;
+            btnGetMods.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
+            btnGetMods.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
+            btnGetMods.FlatStyle = FlatStyle.Flat;
+            btnGetMods.Image = Properties.Resources.download_16x16;
+            btnGetMods.Location = new Point(3, 5);
+            btnGetMods.Margin = new Padding(3, 2, 3, 2);
+            btnGetMods.Name = "btnGetMods";
+            btnGetMods.Size = new Size(866, 33);
+            btnGetMods.TabIndex = 3;
+            btnGetMods.Text = "Get Mods";
+            btnGetMods.TextAlign = ContentAlignment.MiddleRight;
+            btnGetMods.TextImageRelation = TextImageRelation.ImageBeforeText;
+            btnGetMods.UseVisualStyleBackColor = false;
             // 
             // ModDownloader
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
-            AutoScaleMode = AutoScaleMode.Font;
+            AutoScaleDimensions = new SizeF(96F, 96F);
+            AutoScaleMode = AutoScaleMode.Dpi;
             BackColor = Color.White;
             ClientSize = new Size(1053, 622);
-            Controls.Add(tabsDownload);
-            Controls.Add(statusStrip1);
+            Controls.Add(splitContainer1);
             Controls.Add(tableLayoutPanel1);
+            Controls.Add(statusStrip1);
             HelpButton = true;
             Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
@@ -210,15 +209,14 @@
             StartPosition = FormStartPosition.CenterParent;
             Text = "Download Mods";
             TopMost = true;
-            Load += ModDownloader_Load;
             statusStrip1.ResumeLayout(false);
             statusStrip1.PerformLayout();
+            splitContainer1.Panel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
+            splitContainer1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
+            panel1.ResumeLayout(false);
             tableLayoutPanel1.ResumeLayout(false);
-            tableLayoutPanel1.PerformLayout();
-            tabsDownload.ResumeLayout(false);
-            tabBrowser.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)wvNexusWebBrowser).EndInit();
-            tabQueue.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -227,15 +225,15 @@
 
         private StatusStrip statusStrip1;
         private ToolStripStatusLabel lblStatus;
-        private TableLayoutPanel tableLayoutPanel1;
-        private Label lblModId;
-        private TextBox txtModId;
-        private TabControl tabsDownload;
-        private TabPage tabBrowser;
-        private TabPage tabQueue;
-        private Button btnAddToQueue;
-        private Microsoft.Web.WebView2.WinForms.WebView2 wvNexusWebBrowser;
         private user_controls.ModDetails modDetails;
-        private ListBox lbModQueue;
+        private SplitContainer splitContainer1;
+        private Panel panel1;
+        private TableLayoutPanel tableLayoutPanel1;
+        private Button btnCancel;
+        private Button btnGetMods;
+        private Button btnPasteModIds;
+        private custom_controls.WrapLabel lblModIdHelp;
+        private DataGridView dataGridView1;
+        private DataGridViewTextBoxColumn colModId;
     }
 }

@@ -109,17 +109,19 @@ public partial class SplashScreen : Form
             await Task.Delay(500); // Simulate delay
         }
 
-        var nexusApiKey = GlobalData.ConfigManager.Get("nexusApiKey") as string ?? string.Empty;
-        if (!nexusApiKey.Equals(string.Empty))
-        {
-            //TODO: Add translation
-            UpdateStatus(GlobalData.Strings.GetString("SplashScreen_CheckApiAccess") ?? "Checking Nexus API Key...");
-            await NexusApi.AuthenticateApiKey(nexusApiKey);
-            statusMessages.Add(NexusApi.IsAuthenticated
-                ? "Nexus API key authenticated successfully."
-                : "Nexus API key authentication failed.");
-            await Task.Delay(500); // Simulate delay
-        }
+        //TODO: Add Nexus API key authentication when feature is implemented
+        //var nexusApiKey = GlobalData.ConfigManager.Get("nexusApiKey") as string ?? string.Empty;
+        //if (!nexusApiKey.Equals(string.Empty))
+        //{
+        //    //TODO: Add translation
+        //    UpdateStatus(GlobalData.Strings.GetString("SplashScreen_CheckApiAccess") ?? "Checking Nexus API Key...");
+        //    await NexusApi.AuthenticateApiKey(nexusApiKey);
+        //    statusMessages.Add(NexusApi.IsAuthenticated
+        //        ? "Nexus API key authenticated successfully."
+        //        : "Nexus API key authentication failed.");
+        //    await Task.Delay(500); // Simulate delay
+        //}
+        //------------------------------------------------------------------------------------------------------------
 
         // Simulate delay before finalizing
         UpdateStatus(GlobalData.Strings.GetString("SplashScreen_Finalizing") ?? "Finalizing...");

@@ -1,19 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using AetherUtils.Core.Extensions;
-using CodeKicker.BBCode.Core;
-using Pathoschild.FluentNexus.Models;
+﻿using Pathoschild.FluentNexus.Models;
 using RadioExt_Helper.nexus_api;
 
 namespace RadioExt_Helper.user_controls
 {
+    //Eventual goal is to have this user control display the details of a mod
     public sealed partial class ModDetails : UserControl
     {
         private Mod? _mod;

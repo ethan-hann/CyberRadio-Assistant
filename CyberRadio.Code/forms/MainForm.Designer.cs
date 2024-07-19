@@ -220,6 +220,7 @@ namespace RadioExt_Helper.forms
             modsToolStripMenuItem.Name = "modsToolStripMenuItem";
             modsToolStripMenuItem.Size = new Size(65, 20);
             modsToolStripMenuItem.Text = "Mods";
+            modsToolStripMenuItem.Visible = false;
             // 
             // downloadRadioModsToolStripMenuItem
             // 
@@ -300,6 +301,7 @@ namespace RadioExt_Helper.forms
             apiStatusToolStripMenuItem.Name = "apiStatusToolStripMenuItem";
             apiStatusToolStripMenuItem.Size = new Size(124, 20);
             apiStatusToolStripMenuItem.Text = "API Not Connected";
+            apiStatusToolStripMenuItem.Visible = false;
             apiStatusToolStripMenuItem.Click += ApiStatusToolStripMenuItem_Click;
             // 
             // splitContainer1

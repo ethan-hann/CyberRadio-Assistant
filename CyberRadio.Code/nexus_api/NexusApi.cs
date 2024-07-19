@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AetherUtils.Core.Files;
-using AetherUtils.Core.Logging;
+﻿using AetherUtils.Core.Logging;
 using Pathoschild.FluentNexus;
 using Pathoschild.FluentNexus.Models;
-using Pathoschild.Http.Client;
 using RadioExt_Helper.Properties;
 using RadioExt_Helper.utility;
 using SixLabors.ImageSharp.PixelFormats;
@@ -18,6 +11,7 @@ namespace RadioExt_Helper.nexus_api
 {
     /// <summary>
     /// Provides a static class for interacting with the Nexus API; a high-level wrapper around <see cref="Pathoschild.FluentNexus.NexusClient"/>.
+    /// <para>This class maintains a single API user, <see cref="CurrentApiUser"/> and a reference to the underlying <see cref="Pathoschild.FluentNexus.NexusClient"/>.</para>
     /// </summary>
     public static class NexusApi
     {
@@ -26,6 +20,9 @@ namespace RadioExt_Helper.nexus_api
         /// </summary>
         public static bool IsAuthenticated { get; private set; }
 
+        /// <summary>
+        /// The current user from the Nexus API. This is <c>null</c> if the API key is not authenticated.
+        /// </summary>
         public static User? CurrentApiUser { get; private set; }
 
         /// <summary>
@@ -34,7 +31,7 @@ namespace RadioExt_Helper.nexus_api
         public static NexusClient? NexusClient { get; private set; }
 
         /// <summary>
-        /// Clears the current authentication state.
+        /// Clear the current authentication state.
         /// </summary>
         public static void ClearAuthentication()
         {
@@ -65,9 +62,6 @@ namespace RadioExt_Helper.nexus_api
                 var user = await NexusClient.Users.ValidateAsync();
                 IsAuthenticated = user != null;
                 CurrentApiUser = user;
-                //var response = await NexusClient.HttpClient.GetAsync("v1/users/validate.json").AsString();
-                //var nexusUser = DynamicSerializer.FromJson(response);
-                //IsAuthenticated = (bool)(nexusUser?.is_premium ?? false);
             }
             catch (Exception ex)
             {
@@ -80,6 +74,11 @@ namespace RadioExt_Helper.nexus_api
             return IsAuthenticated;
         }
 
+        /// <summary>
+        /// Get the main image for the specified mod from the Nexus API.
+        /// </summary>
+        /// <param name="mod">The <see cref="Mod"/> to get the main image of.</param>
+        /// <returns>A task, that when completed, contains the mod's main image or the default missing image if the mod did not have an image.</returns>
         public static async Task<Bitmap> GetModImage(Mod mod)
         {
             if (NexusClient == null) return Resources.missing_16x16;
@@ -98,6 +97,10 @@ namespace RadioExt_Helper.nexus_api
             }
         }
 
+        /// <summary>
+        /// Get the user's profile image from the Nexus API.
+        /// </summary>
+        /// <returns>A task, that when completed, contains the user's profile image or the default profile image if the user did not have an image.</returns>
         public static async Task<Bitmap> GetUserImage()
         {
             if (!IsAuthenticated) return ConvertToBitmap(null);
@@ -117,6 +120,30 @@ namespace RadioExt_Helper.nexus_api
             }
         }
 
+        /// <summary>
+        /// Download a file from the specified URL to the specified destination file path.
+        /// </summary>
+        /// <param name="fileUrl">The URL of the file to download.</param>
+        /// <param name="destinationFilePath">The path to save the file on disk, including file name.</param>
+        /// <returns>A task that represents the current async operation.</returns>
+        public static async Task DownloadFileAsync(string fileUrl, string destinationFilePath)
+        {
+            using var client = new HttpClient();
+            using var response = await client.GetAsync(fileUrl, HttpCompletionOption.ResponseHeadersRead);
+            response.EnsureSuccessStatusCode();
+
+            await using var contentStream = await response.Content.ReadAsStreamAsync();
+            var fileStream = new FileStream(destinationFilePath, FileMode.Create, FileAccess.Write, FileShare.None, 8192, true);
+            await using var stream = fileStream.ConfigureAwait(false);
+
+            await contentStream.CopyToAsync(fileStream);
+        }
+
+        /// <summary>
+        /// Download an image from the specified URL and convert it to a <see cref="Bitmap"/>.
+        /// </summary>
+        /// <param name="imageUrl">The URL of the image to download.</param>
+        /// <returns>A task, that when completed, contains the downloaded image as a bitmap or the default missing image if the image could not be downloaded.</returns>
         private static async Task<Bitmap> DownloadImageAsync(string imageUrl)
         {
             if (string.IsNullOrWhiteSpace(imageUrl))
@@ -131,6 +158,12 @@ namespace RadioExt_Helper.nexus_api
             return ConvertToBitmap(image);
         }
 
+        /// <summary>
+        /// Convert a <see cref="Image"/> to a <see cref="Bitmap"/>.
+        /// </summary>
+        /// <param name="image">The <see cref="Image"/> to convert.</param>
+        /// <returns>If <paramref name="image"/> is <c>null</c>, returns the default missing image;
+        /// otherwise, returns a <see cref="Bitmap"/> representing the <see cref="Image"/>.</returns>
         private static Bitmap ConvertToBitmap(Image<Rgba32>? image)
         {
             if (image == null)
@@ -141,19 +174,6 @@ namespace RadioExt_Helper.nexus_api
             image.SaveAsBmp(memoryStream);
             memoryStream.Seek(0, SeekOrigin.Begin);
             return new Bitmap(memoryStream);
-        }
-
-        public static async Task DownloadFileAsync(string fileUrl, string destinationFilePath)
-        {
-            using var client = new HttpClient();
-            using var response = await client.GetAsync(fileUrl, HttpCompletionOption.ResponseHeadersRead);
-            response.EnsureSuccessStatusCode();
-
-            await using var contentStream = await response.Content.ReadAsStreamAsync();
-            var fileStream = new FileStream(destinationFilePath, FileMode.Create, FileAccess.Write, FileShare.None, 8192, true);
-            await using var stream = fileStream.ConfigureAwait(false);
-
-            await contentStream.CopyToAsync(fileStream);
         }
     }
 }

@@ -73,6 +73,7 @@ public partial class ConfigForm : Form
         tabGeneral.ImageKey = @"general";
         tabLogging.ImageKey = @"logging";
         tabNexus.ImageKey = @"nexus_api";
+        tabNexus.Visible = false; //TODO: Disable the Nexus API tab for now. Enable when feature is implemented to download mods.
 
         Translate();
         SetValues();
@@ -307,6 +308,7 @@ public partial class ConfigForm : Form
 
     private bool CheckForUnsavedApiChanges()
     {
+        return true; //TODO: Remove this line when the feature is fully implemented
         var isSameKey = txtApiKey.Text.Equals(GlobalData.ConfigManager.Get("nexusApiKey") as string);
         if (isSameKey || !NexusApi.IsAuthenticated) return true;
 
