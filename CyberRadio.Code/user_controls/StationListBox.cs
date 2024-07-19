@@ -15,6 +15,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 using System.ComponentModel;
+using AetherUtils.Core.Files;
 using AetherUtils.Core.Logging;
 using RadioExt_Helper.models;
 
@@ -33,6 +34,12 @@ public sealed partial class StationListBox : ListBox
 
     private ImageList _imageList;
     private string _savedStationIconKey = "saved_station";
+
+    private Color _songsMissingColor = Color.Red;
+    private Color _duplicateStationsColor = Color.Orange;
+
+    private Font _songsMissingFont = new(DefaultFont, FontStyle.Bold);
+    private Font _duplicateStationsFont = new(DefaultFont, FontStyle.Italic);
 
     /// <summary>
     /// Initializes a new instance of the <see cref="StationListBox"/> class.
@@ -124,6 +131,64 @@ public sealed partial class StationListBox : ListBox
     }
 
     /// <summary>
+    /// Gets or sets the color used to highlight stations with missing songs.
+    /// </summary>
+    [Browsable(true)]
+    [Category("Colors")]
+    [Description("The color used to highlight stations with missing songs.")]
+    public Color SongsMissingColor
+    {
+        get => _songsMissingColor;
+        set
+        {
+            _songsMissingColor = value;
+            Invalidate();
+        }
+    }
+
+    /// <summary>
+    /// Gets or sets the color used to highlight duplicate station names.
+    /// </summary>
+    [Browsable(true)]
+    [Category("Colors")]
+    [Description("The color used to highlight duplicate station names")]
+    public Color DuplicateColor
+    {
+        get => _duplicateStationsColor;
+        set
+        {
+            _duplicateStationsColor = value;
+            Invalidate();
+        }
+    }
+
+    [Browsable(true)]
+    [Category("Fonts")]
+    [Description("The font used to highlight stations with missing songs.")]
+    public Font SongsMissingFont
+    {
+        get => _songsMissingFont;
+        set
+        {
+            _songsMissingFont = value;
+            Invalidate();
+        }
+    }
+
+    [Browsable(true)]
+    [Category("Fonts")]
+    [Description("The font used to highlight duplicate station names.")]
+    public Font DuplicateFont
+    {
+        get => _duplicateStationsFont;
+        set
+        {
+            _duplicateStationsFont = value;
+            Invalidate();
+        }
+    }
+
+    /// <summary>
     /// Sets the default values for the control.
     /// </summary>
     private void SetValues()
@@ -136,6 +201,7 @@ public sealed partial class StationListBox : ListBox
     /// <summary>
     /// Handles the drawing of an item in the ListBox.
     /// <para>An item is drawn like so: <c>(left-aligned){active status icon} {Station Name} {save status icon}(right-aligned)</c></para>
+    /// <para>It's font and color are styled appropriately depending on whether it's a duplicate station or has missing songs.</para>
     /// </summary>
     /// <param name="e">The event data.</param>
     protected override void OnDrawItem(DrawItemEventArgs e)
@@ -174,8 +240,9 @@ public sealed partial class StationListBox : ListBox
                 // Draw the text
                 var textRect = new Rectangle(e.Bounds.Left + 20, e.Bounds.Top, e.Bounds.Width - 40 - 4,
                     e.Bounds.Height); // Adjust width to leave space for the secondary icon
-                TextRenderer.DrawText(e.Graphics, station.TrackedObject.MetaData.DisplayName, e.Font, textRect,
-                    e.ForeColor, TextFormatFlags.Left);
+
+                TextRenderer.DrawText(e.Graphics, station.TrackedObject.MetaData.DisplayName, GetItemFont(station), textRect,
+                    GetItemColor(station), TextFormatFlags.Left);
             }
 
             e.DrawFocusRectangle();
@@ -185,6 +252,48 @@ public sealed partial class StationListBox : ListBox
             AuLogger.GetCurrentLogger<StationListBox>("OnDrawItem")
                 .Error(ex, "An error occurred while drawing the item.");
         }
+    }
+
+    /// <summary>
+    /// Retrieves the appropriate color for the item based on its properties.
+    /// </summary>
+    /// <param name="station">A station to get the color of.</param>
+    /// <returns>If the station has no missing songs and is not a duplicate name, returns the original forecolor. Otherwise, returns a
+    /// blend of colors depending on whether the station is missing songs or is a duplicate or both.</returns>
+    private Color GetItemColor(TrackableObject<Station> station)
+    {
+        var returnColor = ForeColor;
+        
+        if (station.TrackedObject.Songs.Any(s => !FileHelper.DoesFileExist(s.FilePath)))
+            returnColor = CombineColors(returnColor, _songsMissingColor);
+
+        if (Items.OfType<TrackableObject<Station>>().Count(s =>
+                s.TrackedObject.MetaData.DisplayName.Equals(station.TrackedObject.MetaData.DisplayName)) > 1)
+            returnColor = CombineColors(returnColor, _duplicateStationsColor);
+
+        return returnColor;
+    }
+
+    private Font GetItemFont(TrackableObject<Station> station)
+    {
+        var font = Font;
+
+        if (station.TrackedObject.Songs.Any(s => !FileHelper.DoesFileExist(s.FilePath)))
+            font = _songsMissingFont;
+
+        if (Items.OfType<TrackableObject<Station>>().Count(s =>
+                s.TrackedObject.MetaData.DisplayName.Equals(station.TrackedObject.MetaData.DisplayName)) > 1)
+            font = _duplicateStationsFont;
+
+        return font;
+    }
+
+    private Color CombineColors(Color color1, Color color2)
+    {
+        var r = (color1.R + color2.R) / 2;
+        var g = (color1.G + color2.G) / 2;
+        var b = (color1.B + color2.B) / 2;
+        return Color.FromArgb(r, g, b);
     }
 
     /// <summary>

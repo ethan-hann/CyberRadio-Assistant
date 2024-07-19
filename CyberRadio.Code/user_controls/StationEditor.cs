@@ -187,6 +187,16 @@ public sealed partial class StationEditor : UserControl, IUserControl
     }
 
     /// <summary>
+    /// Updates the station's display name. Mainly used when the main form detects a duplication.
+    /// </summary>
+    /// <param name="newName">The new station name.</param>
+    public void UpdateStationName(string newName)
+    {
+        txtDisplayName.Text = newName;
+        Station.TrackedObject.MetaData.DisplayName = newName;
+    }
+
+    /// <summary>
     /// Occurs when the display name text box is changed.
     /// </summary>
     /// <param name="sender"></param>

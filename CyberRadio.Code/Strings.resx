@@ -658,4 +658,67 @@ exported to the game.</value>
     <data name="ConfirmExit" xml:space="preserve">
       <value>There are {0} stations pending export. Are you sure you want to quit?</value>
     </data>
+    <data name="BackupProgressChanged" xml:space="preserve">
+      <value>Backing up... {0}%</value>
+    </data>
+    <data name="BackupCompleted" xml:space="preserve">
+      <value>Backup completed successfully.</value>
+    </data>
+    <data name="BackupFailed" xml:space="preserve">
+      <value>Backup failed.</value>
+    </data>
+    <data name="BackupFailedException" xml:space="preserve">
+      <value>Backup failed due to an error: {0}</value>
+    </data>
+    <data name="LocateSong" xml:space="preserve">
+      <value>Locate Missing Song</value>
+    </data>
+    <data name="InvalidFile" xml:space="preserve">
+      <value>Please select the correct file.</value>
+    </data>
+    <data name="InvalidFileCaption" xml:space="preserve">
+      <value>Invalid File</value>
+    </data>
+    <data name="SongExistsHeader" xml:space="preserve">
+      <value>File Exists?</value>
+    </data>
+    <data name="SplashScreen_CheckApiAccess" xml:space="preserve">
+      <value>Checking Nexus API Key...</value>
+    </data>
+    <data name="Backup" xml:space="preserve">
+      <value>Backup</value>
+    </data>
+    <data name="BackupFolderDesc" xml:space="preserve">
+      <value>Select a folder to save the backup to</value>
+    </data>
+    <data name="BackupPathIsSubpath" xml:space="preserve">
+      <value>Backup path cannot be within the staging path.</value>
+    </data>
+    <data name="ApiStatus" xml:space="preserve">
+      <value>API Not Authenticated</value>
+    </data>
+    <data name="ExportToGameMissingSongs" xml:space="preserve">
+      <value>There are {0} station(s) with a total of {1} invalid song path(s). Do you want to continue exporting?</value>
+    </data>
+    <data name="SongsMissingPaths" xml:space="preserve">
+      <value>Songs Missing Paths</value>
+    </data>
+    <data name="ApiUnsavedChanges" xml:space="preserve">
+      <value>You have unsaved changes to your API key. Please save or clear the key before closing.</value>
+    </data>
+    <data name="UnsavedChanges" xml:space="preserve">
+      <value>Unsaved Changes</value>
+    </data>
+    <data name="ApiAuthenticated" xml:space="preserve">
+      <value>Authenticated</value>
+    </data>
+    <data name="ApiNotAuthenticated" xml:space="preserve">
+      <value>Not Authenticated</value>
+    </data>
+    <data name="BackupStagingFolder" xml:space="preserve">
+      <value>Backup Staging Folder</value>
+    </data>
+    <data name="BackupReady" xml:space="preserve">
+      <value>Backup Ready</value>
+    </data>
 </root>

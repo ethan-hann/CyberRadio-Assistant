@@ -658,4 +658,67 @@ exportado al juego.</value>
     <data name="ConfirmExit" xml:space="preserve">
       <value>Hay {0} emisoras pendientes de exportar. ¿Estás seguro de que quieres salir de la aplicación?</value>
     </data>
+    <data name="BackupProgressChanged" xml:space="preserve">
+      <value>Realizando copia de seguridad... {0}%</value>
+    </data>
+    <data name="BackupCompleted" xml:space="preserve">
+      <value>Copia de seguridad completada exitosamente.</value>
+    </data>
+    <data name="BackupFailed" xml:space="preserve">
+      <value>La copia de seguridad falló.</value>
+    </data>
+    <data name="BackupFailedException" xml:space="preserve">
+      <value>La copia de seguridad falló debido a un error: {0}</value>
+    </data>
+    <data name="LocateSong" xml:space="preserve">
+      <value>Localizar canción faltante</value>
+    </data>
+    <data name="InvalidFile" xml:space="preserve">
+      <value>Por favor selecciona el archivo correcto.</value>
+    </data>
+    <data name="InvalidFileCaption" xml:space="preserve">
+      <value>Archivo inválido</value>
+    </data>
+    <data name="SongExistsHeader" xml:space="preserve">
+      <value>¿El archivo existe?</value>
+    </data>
+    <data name="SplashScreen_CheckApiAccess" xml:space="preserve">
+      <value>Comprobando la clave API de Nexus...</value>
+    </data>
+    <data name="Backup" xml:space="preserve">
+      <value>Copia de seguridad</value>
+    </data>
+    <data name="BackupFolderDesc" xml:space="preserve">
+      <value>Seleccione una carpeta para guardar la copia de seguridad</value>
+    </data>
+    <data name="BackupPathIsSubpath" xml:space="preserve">
+      <value>La ruta de respaldo no puede estar dentro de la ruta de almacenamiento provisional.</value>
+    </data>
+    <data name="ApiStatus" xml:space="preserve">
+      <value>API no autenticado</value>
+    </data>
+    <data name="ExportToGameMissingSongs" xml:space="preserve">
+      <value>Hay {0} emisoras con un total de {1} rutas de canciones no válidas. ¿Quieres continuar exportando?</value>
+    </data>
+    <data name="SongsMissingPaths" xml:space="preserve">
+      <value>Canciones que faltan</value>
+    </data>
+    <data name="ApiUnsavedChanges" xml:space="preserve">
+      <value>Tiene cambios no guardados en su clave API. Guarde o borre la clave antes de cerrar.</value>
+    </data>
+    <data name="UnsavedChanges" xml:space="preserve">
+      <value>Cambios no guardados</value>
+    </data>
+    <data name="ApiAuthenticated" xml:space="preserve">
+      <value>Autenticado</value>
+    </data>
+    <data name="ApiNotAuthenticated" xml:space="preserve">
+      <value>No autenticado</value>
+    </data>
+    <data name="BackupStagingFolder" xml:space="preserve">
+      <value>Carpeta de almacenamiento provisional de copia de seguridad</value>
+    </data>
+    <data name="BackupReady" xml:space="preserve">
+      <value>Copia de seguridad lista</value>
+    </data>
 </root>

@@ -658,4 +658,67 @@ exporté vers le jeu.</value>
     <data name="ConfirmExit" xml:space="preserve">
       <value>Il y a {0} stations en attente d'exportation. Êtes-vous sûr de vouloir quitter l'application ?</value>
     </data>
+    <data name="BackupProgressChanged" xml:space="preserve">
+      <value>Sauvegarde... {0} %</value>
+    </data>
+    <data name="BackupCompleted" xml:space="preserve">
+      <value>Sauvegarde terminée avec succès.</value>
+    </data>
+    <data name="BackupFailed" xml:space="preserve">
+      <value>La sauvegarde a échoué.</value>
+    </data>
+    <data name="BackupFailedException" xml:space="preserve">
+      <value>La sauvegarde a échoué en raison d'une erreur : {0}</value>
+    </data>
+    <data name="LocateSong" xml:space="preserve">
+      <value>Localiser la chanson disparue</value>
+    </data>
+    <data name="InvalidFile" xml:space="preserve">
+      <value>Veuillez sélectionner le bon fichier.</value>
+    </data>
+    <data name="InvalidFileCaption" xml:space="preserve">
+      <value>Fichier non valide</value>
+    </data>
+    <data name="SongExistsHeader" xml:space="preserve">
+      <value>Le fichier existe?</value>
+    </data>
+    <data name="SplashScreen_CheckApiAccess" xml:space="preserve">
+      <value>Vérification de la clé API Nexus...</value>
+    </data>
+    <data name="Backup" xml:space="preserve">
+      <value>Sauvegarde</value>
+    </data>
+    <data name="BackupFolderDesc" xml:space="preserve">
+      <value>Sélectionnez un dossier dans lequel enregistrer la sauvegarde</value>
+    </data>
+    <data name="BackupPathIsSubpath" xml:space="preserve">
+      <value>Le chemin de sauvegarde ne peut pas se trouver dans le chemin de préparation.</value>
+    </data>
+    <data name="ApiStatus" xml:space="preserve">
+      <value>API non authentifiée</value>
+    </data>
+    <data name="ExportToGameMissingSongs" xml:space="preserve">
+      <value>Il y a {0} station(s) avec un total de {1} chemin(s) de chanson non valide(s). Voulez-vous continuer l'exportation ?</value>
+    </data>
+    <data name="SongsMissingPaths" xml:space="preserve">
+      <value>Chansons Chemins manquants</value>
+    </data>
+    <data name="ApiUnsavedChanges" xml:space="preserve">
+      <value>Vous avez des modifications non enregistrées dans votre clé API. Veuillez enregistrer ou effacer la clé avant de fermer.</value>
+    </data>
+    <data name="UnsavedChanges" xml:space="preserve">
+      <value>Modifications non enregistrées</value>
+    </data>
+    <data name="ApiAuthenticated" xml:space="preserve">
+      <value>Authentifié</value>
+    </data>
+    <data name="ApiNotAuthenticated" xml:space="preserve">
+      <value>Pas authentifié</value>
+    </data>
+    <data name="BackupStagingFolder" xml:space="preserve">
+      <value>Sauvegarde du dossier intermédiaire</value>
+    </data>
+    <data name="BackupReady" xml:space="preserve">
+      <value>Sauvegarde prête</value>
+    </data>
 </root>

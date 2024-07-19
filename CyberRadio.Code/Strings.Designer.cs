@@ -150,6 +150,42 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Authenticated.
+        /// </summary>
+        internal static string ApiAuthenticated {
+            get {
+                return ResourceManager.GetString("ApiAuthenticated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not Authenticated.
+        /// </summary>
+        internal static string ApiNotAuthenticated {
+            get {
+                return ResourceManager.GetString("ApiNotAuthenticated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to API Not Authenticated.
+        /// </summary>
+        internal static string ApiStatus {
+            get {
+                return ResourceManager.GetString("ApiStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have unsaved changes to your API key. Please save or clear the key before closing..
+        /// </summary>
+        internal static string ApiUnsavedChanges {
+            get {
+                return ResourceManager.GetString("ApiUnsavedChanges", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure?.
         /// </summary>
         internal static string AreYouSure {
@@ -173,6 +209,87 @@ namespace RadioExt_Helper {
         internal static string AutoExportOptionHelp {
             get {
                 return ResourceManager.GetString("AutoExportOptionHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Backup.
+        /// </summary>
+        internal static string Backup {
+            get {
+                return ResourceManager.GetString("Backup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Backup completed successfully..
+        /// </summary>
+        internal static string BackupCompleted {
+            get {
+                return ResourceManager.GetString("BackupCompleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Backup failed..
+        /// </summary>
+        internal static string BackupFailed {
+            get {
+                return ResourceManager.GetString("BackupFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Backup failed due to an error: {0}.
+        /// </summary>
+        internal static string BackupFailedException {
+            get {
+                return ResourceManager.GetString("BackupFailedException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select a folder to save the backup to.
+        /// </summary>
+        internal static string BackupFolderDesc {
+            get {
+                return ResourceManager.GetString("BackupFolderDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Backup path cannot be within the staging path..
+        /// </summary>
+        internal static string BackupPathIsSubpath {
+            get {
+                return ResourceManager.GetString("BackupPathIsSubpath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Backing up... {0}%.
+        /// </summary>
+        internal static string BackupProgressChanged {
+            get {
+                return ResourceManager.GetString("BackupProgressChanged", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Backup Ready.
+        /// </summary>
+        internal static string BackupReady {
+            get {
+                return ResourceManager.GetString("BackupReady", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Backup Staging Folder.
+        /// </summary>
+        internal static string BackupStagingFolder {
+            get {
+                return ResourceManager.GetString("BackupStagingFolder", resourceCulture);
             }
         }
         
@@ -576,6 +693,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There are {0} station(s) with a total of {1} invalid song path(s). Do you want to continue exporting?.
+        /// </summary>
+        internal static string ExportToGameMissingSongs {
+            get {
+                return ResourceManager.GetString("ExportToGameMissingSongs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Export to Staging.
         /// </summary>
         internal static string ExportToStaging {
@@ -730,6 +856,24 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please select the correct file..
+        /// </summary>
+        internal static string InvalidFile {
+            get {
+                return ResourceManager.GetString("InvalidFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid File.
+        /// </summary>
+        internal static string InvalidFileCaption {
+            get {
+                return ResourceManager.GetString("InvalidFileCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid stream - Will not work in game.
         /// </summary>
         internal static string InvalidStream {
@@ -753,6 +897,15 @@ namespace RadioExt_Helper {
         internal static string Language {
             get {
                 return ResourceManager.GetString("Language", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Locate Missing Song.
+        /// </summary>
+        internal static string LocateSong {
+            get {
+                return ResourceManager.GetString("LocateSong", resourceCulture);
             }
         }
         
@@ -1246,6 +1399,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to File Exists?.
+        /// </summary>
+        internal static string SongExistsHeader {
+            get {
+                return ResourceManager.GetString("SongExistsHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to File Size.
         /// </summary>
         internal static string SongFileSizeHeader {
@@ -1296,6 +1458,24 @@ namespace RadioExt_Helper {
         internal static string Songs {
             get {
                 return ResourceManager.GetString("Songs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Songs Missing Paths.
+        /// </summary>
+        internal static string SongsMissingPaths {
+            get {
+                return ResourceManager.GetString("SongsMissingPaths", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Checking Nexus API Key....
+        /// </summary>
+        internal static string SplashScreen_CheckApiAccess {
+            get {
+                return ResourceManager.GetString("SplashScreen_CheckApiAccess", resourceCulture);
             }
         }
         
@@ -1458,6 +1638,15 @@ namespace RadioExt_Helper {
         internal static string Success {
             get {
                 return ResourceManager.GetString("Success", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unsaved Changes.
+        /// </summary>
+        internal static string UnsavedChanges {
+            get {
+                return ResourceManager.GetString("UnsavedChanges", resourceCulture);
             }
         }
         

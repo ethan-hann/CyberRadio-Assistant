@@ -35,7 +35,7 @@ namespace RadioExt_Helper.utility
         /// <exception cref="ArgumentNullException">If either <paramref name="stagingPath"/> or <paramref name="backupPath"/> are <c>null</c> or empty.</exception>
         /// <exception cref="ArgumentException">If the backup path is the same as the staging path.</exception>
         public async Task BackupStagingFolderAsync(string stagingPath, string backupPath)
-        { //TODO: Translations
+        {
             if (string.IsNullOrEmpty(stagingPath)) throw new ArgumentNullException(nameof(stagingPath));
             if (string.IsNullOrEmpty(backupPath)) throw new ArgumentNullException(nameof(backupPath));
             if (stagingPath.Equals(backupPath)) throw new ArgumentException("Backup path cannot be the same as the staging path.");
@@ -74,7 +74,8 @@ namespace RadioExt_Helper.utility
                         // Report progress
                         var progress = (int)((float)fileCount / files.Length * 100);
                         ProgressChanged?.Invoke(progress);
-                        StatusChanged?.Invoke($"Backing up... {progress}%");
+                        var status = string.Format(GlobalData.Strings.GetString("BackupProgressChanged") ?? "Backing up... {0}%", progress);
+                        StatusChanged?.Invoke(status);
                     }
 
                     zipOutputStream.Finish();
@@ -83,18 +84,24 @@ namespace RadioExt_Helper.utility
 
                 if (File.Exists(backupFileName))
                 {
-                    StatusChanged?.Invoke("Backup completed successfully.");
+                    var status = GlobalData.Strings.GetString("BackupCompleted") ?? "Backup completed successfully.";
+                    StatusChanged?.Invoke(status);
                     BackupCompleted?.Invoke(true, backupPath, backupFileName);
                 }
                 else
                 {
-                    StatusChanged?.Invoke("Backup failed.");
+                    var status = GlobalData.Strings.GetString("BackupFailed") ?? "Backup failed.";
+                    StatusChanged?.Invoke(status);
                     BackupCompleted?.Invoke(false, backupPath, backupFileName);
                 }
             }
             catch (Exception ex)
             {
-                StatusChanged?.Invoke($"Backup failed due to an error: {ex.Message}");
+                var status =
+                    string.Format(
+                        GlobalData.Strings.GetString("BackupFailedException") ?? "Backup failed due to an error: {0}",
+                        ex.Message);
+                StatusChanged?.Invoke(status);
                 BackupCompleted?.Invoke(false, backupPath, backupFileName);
                 throw;
             }

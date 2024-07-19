@@ -343,6 +343,8 @@ namespace RadioExt_Helper.forms
             lbStations.DisabledIconKey = "disabled";
             lbStations.Dock = DockStyle.Fill;
             lbStations.DrawMode = DrawMode.OwnerDrawFixed;
+            lbStations.DuplicateColor = Color.FromArgb(255, 128, 0);
+            lbStations.DuplicateFont = new Font("Segoe UI Semibold", 9F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
             lbStations.EditedStationIconKey = "edited_station";
             lbStations.EnabledIconKey = "enabled";
             lbStations.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
@@ -353,6 +355,8 @@ namespace RadioExt_Helper.forms
             lbStations.Name = "lbStations";
             lbStations.SavedStationIconKey = "saved_station";
             lbStations.Size = new Size(309, 419);
+            lbStations.SongsMissingColor = Color.FromArgb(192, 0, 0);
+            lbStations.SongsMissingFont = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lbStations.TabIndex = 0;
             lbStations.SelectedIndexChanged += LbStations_SelectedIndexChanged;
             lbStations.MouseDown += LbStations_MouseDown;

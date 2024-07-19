@@ -64,6 +64,8 @@ public partial class MainForm : Form
     private string _stationCountFormat =
         GlobalData.Strings.GetString("EnabledStationsCount") ?? "Enabled Stations: {0} / {1}";
 
+    private bool _isAppClosing;
+
     /// <summary>
     ///     Initializes a new instance of the <see cref="MainForm" /> class.
     /// </summary>
@@ -200,6 +202,7 @@ public partial class MainForm : Form
     {
         Text = GlobalData.Strings.GetString("MainTitle");
         fileToolStripMenuItem.Text = GlobalData.Strings.GetString("File");
+        backupStagingFolderToolStripMenuItem.Text = GlobalData.Strings.GetString("BackupStagingFolder");
         openStagingPathToolStripMenuItem.Text = GlobalData.Strings.GetString("OpenStagingFolder");
         openGamePathToolStripMenuItem.Text = GlobalData.Strings.GetString("OpenGameFolder");
         openLogFolderToolStripMenuItem.Text = GlobalData.Strings.GetString("OpenLogFolder");
@@ -226,6 +229,8 @@ public partial class MainForm : Form
         btnEnableAll.Text = GlobalData.Strings.GetString("EnableAllStations");
         btnDisableSelected.Text = GlobalData.Strings.GetString("DisableSelectedStation");
         btnDisableAll.Text = GlobalData.Strings.GetString("DisableAllStations");
+
+        lblBackupStatus.Text = GlobalData.Strings.GetString("BackupReady") ?? "Backup Ready";
 
         UpdateEnabledStationCount();
     }
@@ -565,7 +570,7 @@ public partial class MainForm : Form
     }
 
     /// <summary>
-    ///     Handles the station updated event. Checks for pending save status on a station and updates the list box.
+    ///     Handles the station updated event. Checks for pending save status on a station, duplication in station names, and updates the list box.
     /// </summary>
     /// <param name="sender">The event sender.</param>
     /// <param name="e">The event arguments.</param>
@@ -573,12 +578,38 @@ public partial class MainForm : Form
     {
         if (lbStations.SelectedItem is not TrackableObject<Station> station) return;
 
+        var duplicateStationCount = _stations.Count(s =>
+            s.TrackedObject.MetaData.DisplayName.Equals(station.TrackedObject.MetaData.DisplayName));
+
+        if (duplicateStationCount > 1)
+        {
+            this.SafeInvoke(() =>
+            {
+                var text = GlobalData.Strings.GetString("StationNameExists") ?? "A station with that name already exists.";
+                var caption = GlobalData.Strings.GetString("StationExists") ?? "Station Exists";
+                MessageBox.Show(this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                var newStationName = station.TrackedObject.MetaData.DisplayName;
+                var parenIndex = newStationName.LastIndexOf("(", StringComparison.Ordinal);
+                newStationName = parenIndex != -1 ? newStationName[..parenIndex] : newStationName.Trim();
+                newStationName += $" ({duplicateStationCount})";
+
+                _stationEditorsDict[station.Id].UpdateStationName(newStationName);
+            });
+        }
+
         station.CheckPendingSaveStatus();
         lbStations.BeginUpdate();
         lbStations.Invalidate();
         lbStations.EndUpdate();
     }
 
+    private int FindDuplicateStations(TrackableObject<Station> station)
+    {
+        var duplicateStationCount = _stations.Count(s =>
+            s.TrackedObject.MetaData.DisplayName.Equals(station.TrackedObject.MetaData.DisplayName));
+
+    }
 
     private void BtnDeleteStation_Click(object sender, EventArgs e)
     {
@@ -667,10 +698,13 @@ public partial class MainForm : Form
     {
         var (stationsMissingSongs, haveMissing) = CheckForMissingSongs();
         if (haveMissing)
-        {//TODO: Translations
-            DialogResult result = MessageBox.Show(this,
-                $"There are {stationsMissingSongs.Count} stations with a total of {stationsMissingSongs.Values.Aggregate((i, j) => i += j)} invalid song paths.\nDo you want to continue exporting?",
-                "Songs Missing", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+        {
+            var text = GlobalData.Strings.GetString("ExportToGameMissingSongs") ?? "There are {0} station(s) with a total of {1} invalid song path(s). Do you want to continue exporting?";
+            text = string.Format(text, stationsMissingSongs.Count,
+                stationsMissingSongs.Values.Aggregate((i, j) => i += j));
+            var caption = GlobalData.Strings.GetString("SongsMissingPaths") ?? "Songs Missing Paths";
+
+            var result = MessageBox.Show(this, text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
             if (result == DialogResult.No)
                 return;
         }
@@ -683,7 +717,7 @@ public partial class MainForm : Form
     /// <summary>
     /// Checks for missing songs in the stations.
     /// </summary>
-    /// <returns>Returns a tuple containing a dictionary of stations with missing songs and a boolean indicating if there are any missing songs.</returns>
+    /// <returns>Returns a tuple containing a dictionary of station names with missing songs and a boolean indicating if there are any missing songs.</returns>
     private (Dictionary<string, int> missingSongs, bool haveMissing) CheckForMissingSongs()
     {
         Dictionary<string, int> stationsMissingSongs = [];
@@ -718,7 +752,6 @@ public partial class MainForm : Form
         {
             this.SafeInvoke(() =>
             {
-                //TODO: Add translations
                 apiStatusToolStripMenuItem.Text = GlobalData.Strings.GetString("ApiStatus") ?? "API Not Authenticated";
                 apiStatusToolStripMenuItem.Image = null;
                 modsToolStripMenuItem.Visible = false;
@@ -780,8 +813,10 @@ public partial class MainForm : Form
         if (string.IsNullOrEmpty(backupPath)) return;
 
         if (IsSubPath(StagingPath, backupPath))
-        {//TODO: Translations
-            MessageBox.Show(this, "Backup path cannot be within the staging path.", "Backup", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        {
+            var text = GlobalData.Strings.GetString("BackupPathIsSubpath") ?? "Backup path cannot be within the staging path.";
+            var caption = GlobalData.Strings.GetString("Backup") ?? "Backup";
+            MessageBox.Show(this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
             return;
         }
 
@@ -797,7 +832,7 @@ public partial class MainForm : Form
     {
         FolderBrowserDialog folderBrowserDialog = new()
         {
-            Description = "Select a folder to save the backup to.", //TODO: Translations
+            Description = GlobalData.Strings.GetString("BackupFolderDesc") ?? "Select a folder to save the backup to",
             ShowNewFolderButton = true,
             UseDescriptionForTitle = true
         };
@@ -806,7 +841,7 @@ public partial class MainForm : Form
     }
 
     /// <summary>
-    /// Determines if a path is a subpath (i.e., starts with) of another path.
+    /// Determines if a path is a sub-path (i.e., starts with) of another path.
     /// </summary>
     /// <param name="basePath">The base path to check against.</param>
     /// <param name="subPath">The path to check against the base path.</param>
@@ -820,8 +855,8 @@ public partial class MainForm : Form
                 return false;
 
             // Get the full paths
-            string fullBasePath = Path.GetFullPath(basePath);
-            string fullSubPath = Path.GetFullPath(subPath);
+            var fullBasePath = Path.GetFullPath(basePath);
+            var fullSubPath = Path.GetFullPath(subPath);
 
             // Normalize directory separators
             fullBasePath = fullBasePath.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar) + Path.DirectorySeparatorChar;
@@ -839,41 +874,59 @@ public partial class MainForm : Form
 
     private async Task StartBackupAsync(string stagingPath, string backupPath)
     {
+        if (_isAppClosing) return;
+
         try
         {
             await _backupManager.BackupStagingFolderAsync(stagingPath, backupPath);
         }
         catch (Exception ex)
-        {//TODO: Translations
-            MessageBox.Show(this, $"An error occurred during backup: {ex.Message}", "Backup", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        {
+            var text = string.Format(
+                GlobalData.Strings.GetString("BackupFailedException") ?? "Backup failed due to an error: {0}",
+                ex.Message);
+            var caption = GlobalData.Strings.GetString("Backup") ?? "Backup";
+            MessageBox.Show(this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+
             AuLogger.GetCurrentLogger<MainForm>("StartBackupAsync").Error(ex, "An error occurred during staging folder backup.");
         }
     }
 
     private void BackupManager_ProgressChanged(int progress)
     {
-        this.SafeInvoke(() => pgBackupProgress.Value = progress);
+        if (!_isAppClosing)
+            this.SafeInvoke(() => pgBackupProgress.Value = progress);
     }
 
     private void BackupManager_StatusChanged(string status)
     {
-        this.SafeInvoke(() => lblBackupStatus.Text = status);
+        if (!_isAppClosing)
+            this.SafeInvoke(() => lblBackupStatus.Text = status);
     }
 
     private void BackupManager_BackupCompleted(bool success, string backupPath, string backupFileName)
     {
+        if (_isAppClosing) return;
+
         this.SafeInvoke(() =>
         {
             statusStripBackup.Visible = false;
             if (success)
-            {//TODO: Translations
-                MessageBox.Show(this, "Backup completed successfully.", "Backup", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            {
+                var text = GlobalData.Strings.GetString("BackupCompleted") ?? "Backup completed successfully.";
+                var caption = GlobalData.Strings.GetString("Backup") ?? "Backup";
+                MessageBox.Show(this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
+
                 AuLogger.GetCurrentLogger<MainForm>("BackupManager_BackupCompleted").Info($"Backup completed successfully: {backupFileName}");
                 Process.Start("explorer.exe", backupPath);
             }
             else
             {
-                MessageBox.Show(this, "Backup failed.", "Backup", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                var text = GlobalData.Strings.GetString("BackupFailed") ?? "Backup failed.";
+                var caption = GlobalData.Strings.GetString("Backup") ?? "Backup";
+                MessageBox.Show(this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                AuLogger.GetCurrentLogger<MainForm>("BackupManager_BackupCompleted").Error($"Backup failed: {backupFileName}");
             }
 
             // Clear the status message after a short delay
@@ -934,6 +987,8 @@ public partial class MainForm : Form
 
     private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
     {
+        _isAppClosing = true;
+
         if (e.CloseReason is CloseReason.TaskManagerClosing or CloseReason.WindowsShutDown) return;
 
         if (!_stations.Any(s => s.IsPendingSave)) return;

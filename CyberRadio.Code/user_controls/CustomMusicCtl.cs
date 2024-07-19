@@ -63,9 +63,7 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
         btnRemoveSongs.Text = GlobalData.Strings.GetString("RemoveSongsToolStrip");
         btnRemoveAllSongs.Text = GlobalData.Strings.GetString("ClearAllSongs");
 
-        //TODO: Translations
-        lvSongs.Columns[0].Text = GlobalData.Strings.GetString("SongExistsHeader") ?? "File Exists?";
-
+        lvSongs.Columns[0].Text = GlobalData.Strings.GetString("SongExistsHeader");
         lvSongs.Columns[1].Text = GlobalData.Strings.GetString("SongNameHeader");
         lvSongs.Columns[2].Text = GlobalData.Strings.GetString("SongArtistHeader");
         lvSongs.Columns[3].Text = GlobalData.Strings.GetString("SongLengthHeader");
@@ -77,6 +75,8 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
 
         lvSongOrder.Columns[0].Text = GlobalData.Strings.GetString("Order");
         lvSongOrder.Columns[1].Text = GlobalData.Strings.GetString("SongNameHeader");
+
+        locateToolStripMenuItem.Text = GlobalData.Strings.GetString("LocateSong");
     }
 
     /// <summary>
@@ -230,7 +230,7 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
     }
 
     private void LocateToolStripMenuItem_Click(object sender, EventArgs e)
-    { //TODO: Translations
+    {
         if (lvSongs.SelectedItems[0].Tag is not Song song) return;
 
         var fileName = Path.GetFileName(song.FilePath);
@@ -251,7 +251,9 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
             }
             else
             {
-                MessageBox.Show("Please select the correct file.", "Invalid File", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                var text = GlobalData.Strings.GetString("InvalidFile") ?? "Please select the correct file.";
+                var caption = GlobalData.Strings.GetString("InvalidFileCaption") ?? "Invalid File";
+                MessageBox.Show(text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

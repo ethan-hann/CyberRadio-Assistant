@@ -113,7 +113,6 @@ public partial class SplashScreen : Form
         //var nexusApiKey = GlobalData.ConfigManager.Get("nexusApiKey") as string ?? string.Empty;
         //if (!nexusApiKey.Equals(string.Empty))
         //{
-        //    //TODO: Add translation
         //    UpdateStatus(GlobalData.Strings.GetString("SplashScreen_CheckApiAccess") ?? "Checking Nexus API Key...");
         //    await NexusApi.AuthenticateApiKey(nexusApiKey);
         //    statusMessages.Add(NexusApi.IsAuthenticated

@@ -73,7 +73,8 @@ public partial class ConfigForm : Form
         tabGeneral.ImageKey = @"general";
         tabLogging.ImageKey = @"logging";
         tabNexus.ImageKey = @"nexus_api";
-        tabNexus.Visible = false; //TODO: Disable the Nexus API tab for now. Enable when feature is implemented to download mods.
+
+        tabConfigs.TabPages.Remove(tabNexus); //TODO: Disable the Nexus API tab for now. Enable when feature is implemented to download mods.
 
         Translate();
         SetValues();
@@ -111,7 +112,7 @@ public partial class ConfigForm : Form
         btnResetToDefault.Text = GlobalData.Strings.GetString("ResetToDefaults");
         btnCancel.Text = GlobalData.Strings.GetString("Cancel");
 
-        //TODO: Add translations for new "Nexus API" tab
+        //TODO: Add translations for new "Nexus API" tab when feature is fully implemented.
     }
 
     /// <summary>
@@ -132,19 +133,22 @@ public partial class ConfigForm : Form
 
         txtApiKey.Text = config.NexusApiKey;
 
-        SetApiAuthStatus();
+        //SetApiAuthStatus(); //TODO: Re-enable this line when the feature is fully implemented.
     }
 
     /// <summary>
     /// Set the status of the API authentication on the UI.
     /// </summary>
     private void SetApiAuthStatus()
-    { //TODO: Add translations for the status text
+    {
         btnClearApiKey.Enabled = txtApiKey.Text.Length > 0;
 
         var isSameKey = txtApiKey.Text.Equals(GlobalData.ConfigManager.Get("nexusApiKey") as string);
 
-        lblAuthenticatedStatus.Text = isSameKey && !txtApiKey.Text.Equals(string.Empty) ? "Authenticated" : "Not Authenticated";
+        var authText = GlobalData.Strings.GetString("ApiAuthenticated") ?? "Authenticated";
+        var notAuthText = GlobalData.Strings.GetString("ApiNotAuthenticated") ?? "Not Authenticated";
+
+        lblAuthenticatedStatus.Text = isSameKey && !txtApiKey.Text.Equals(string.Empty) ? authText: notAuthText;
         picApiStatus.Image = isSameKey && !txtApiKey.Text.Equals(string.Empty) ? Resources.enabled__16x16 : Resources.disabled__16x16;
         lblAuthenticatedStatus.ForeColor = isSameKey && !txtApiKey.Text.Equals(string.Empty) ? Color.DarkGreen : Color.Red;
         btnAuthenticate.Enabled = !isSameKey && !txtApiKey.Text.Equals(string.Empty);
@@ -212,8 +216,8 @@ public partial class ConfigForm : Form
     private void BtnEditPaths_Click(object sender, EventArgs e)
     {
         var pathDialog = new PathSettings();
-        pathDialog.GameBasePathChanged += (o, args) => GamePathChanged?.Invoke(this, EventArgs.Empty);
-        pathDialog.StagingPathChanged += (o, args) => StagingPathChanged?.Invoke(this, EventArgs.Empty);
+        pathDialog.GameBasePathChanged += (_, _) => GamePathChanged?.Invoke(this, EventArgs.Empty);
+        pathDialog.StagingPathChanged += (_, _) => StagingPathChanged?.Invoke(this, EventArgs.Empty);
         pathDialog.ShowDialog(this);
     }
 
@@ -233,8 +237,8 @@ public partial class ConfigForm : Form
     }
 
     private void TxtApiKey_TextChanged(object sender, EventArgs e)
-    { //TODO: Add translations for the status text
-        SetApiAuthStatus();
+    {
+        //SetApiAuthStatus(); //TODO: Re-enable this line when the feature is fully implemented.
     }
 
     private async void BtnAuthenticate_Click(object sender, EventArgs e)
@@ -244,14 +248,14 @@ public partial class ConfigForm : Form
         if (NexusApi.IsAuthenticated)
         {
             picApiStatus.Image = Resources.enabled__16x16;
-            lblAuthenticatedStatus.Text = "Authenticated";
+            lblAuthenticatedStatus.Text = GlobalData.Strings.GetString("ApiAuthenticated") ?? "Authenticated";
             lblAuthenticatedStatus.ForeColor = Color.DarkGreen;
             AuLogger.GetCurrentLogger<ConfigForm>("AuthenticateApi").Info("Successfully authenticated with NexusMods!");
         }
         else
         {
             picApiStatus.Image = Resources.disabled__16x16;
-            lblAuthenticatedStatus.Text = "Not Authenticated";
+            lblAuthenticatedStatus.Text = GlobalData.Strings.GetString("ApiNotAuthenticated") ?? "Not Authenticated";
             lblAuthenticatedStatus.ForeColor = Color.Red;
             AuLogger.GetCurrentLogger<ConfigForm>("AuthenticateApi").Error("Could not authenticate API key.");
         }
@@ -263,7 +267,7 @@ public partial class ConfigForm : Form
     {
         NexusApi.ClearAuthentication();
         txtApiKey.Text = string.Empty;
-        SetApiAuthStatus();
+        //SetApiAuthStatus(); //TODO: Re-enable this line when the feature is fully implemented.
     }
 
     /// <summary>
@@ -306,17 +310,22 @@ public partial class ConfigForm : Form
         ResetConfig();
     }
 
-    private bool CheckForUnsavedApiChanges()
+    /// <summary>
+    /// Checks if there are unsaved changes to the API key.
+    /// </summary>
+    /// <returns><c>true</c> if there are no unsaved changes; <c>false</c> otherwise.</returns>
+    private bool NoUnsavedApiChanges()
     {
-        return true; //TODO: Remove this line when the feature is fully implemented
-        var isSameKey = txtApiKey.Text.Equals(GlobalData.ConfigManager.Get("nexusApiKey") as string);
-        if (isSameKey || !NexusApi.IsAuthenticated) return true;
+        return true; //TODO: Remove this line when the feature is fully implemented and uncomment the code below.
+        //var isSameKey = txtApiKey.Text.Equals(GlobalData.ConfigManager.Get("nexusApiKey") as string);
+        //if (isSameKey || !NexusApi.IsAuthenticated) return true;
 
-        //TODO: Add translations for the message box
-        MessageBox.Show(this,
-            "You have unsaved changes to your API key. Please save or clear the key before closing.",
-            "Unsaved Changes", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-        return false;
+        //var text = GlobalData.Strings.GetString("ApiUnsavedChanges") 
+        //           ?? "You have unsaved changes to your API key. Please save or clear the key before closing.";
+        //var caption = GlobalData.Strings.GetString("UnsavedChanges") ?? "Unsaved Changes";
+        //MessageBox.Show(this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+        //return false;
     }
 
     /// <summary>
@@ -326,7 +335,7 @@ public partial class ConfigForm : Form
     /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
     private void BtnCancel_Click(object sender, EventArgs e)
     {
-        if (CheckForUnsavedApiChanges())
+        if (NoUnsavedApiChanges())
             Close();
     }
 
@@ -344,7 +353,7 @@ public partial class ConfigForm : Form
     {
         if (e.CloseReason is CloseReason.WindowsShutDown or CloseReason.TaskManagerClosing) return;
 
-        if (!CheckForUnsavedApiChanges())
+        if (!NoUnsavedApiChanges())
         {
             e.Cancel = true;
         }
