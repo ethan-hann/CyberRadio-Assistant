@@ -19,6 +19,7 @@ using System.Diagnostics;
 using AetherUtils.Core.Extensions;
 using AetherUtils.Core.Files;
 using AetherUtils.Core.Logging;
+using AetherUtils.Core.Structs;
 using AetherUtils.Core.WinForms.Controls;
 using AetherUtils.Core.WinForms.Models;
 using RadioExt_Helper.config;
@@ -82,8 +83,21 @@ public partial class MainForm : Form
         // Save the configuration when resizing has stopped
         _resizeTimer.Elapsed += (_, _) => { SaveWindowSize(); };
 
-        lbStations.DataSource = StationManager.Instance.Stations;
+        lbStations.DataSource = StationManager.Instance.StationsAsBindingList;
         lbStations.DisplayMember = "TrackedObject.MetaData";
+
+        StationManager.Instance.StationNameDuplicate += StationNameDuplicateEvent;
+        StationManager.Instance.StationUpdated += UpdateListBox;
+    }
+
+    private void StationNameDuplicateEvent(object? sender, (Guid stationId, string updatedName) e)
+    {
+        this.SafeInvoke(() =>
+        {
+            var text = GlobalData.Strings.GetString("StationNameExists") ?? "A station with that name already exists.";
+            var caption = GlobalData.Strings.GetString("StationExists") ?? "Station Exists";
+            MessageBox.Show(this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        });
     }
 
     private void InitializeBackupManager()
@@ -156,8 +170,8 @@ public partial class MainForm : Form
     {
         // Populate the language combo box
         _languages.Add(new ImageComboBoxItem("English (en)", Resources.united_kingdom));
-        _languages.Add(new ImageComboBoxItem("Español (es)", Resources.spain));
-        _languages.Add(new ImageComboBoxItem("Français (fr)", Resources.france));
+        _languages.Add(new ImageComboBoxItem("Espaï¿½ol (es)", Resources.spain));
+        _languages.Add(new ImageComboBoxItem("Franï¿½ais (fr)", Resources.france));
 
         foreach (var language in _languages)
             _languageComboBox.Items.Add(language);
@@ -231,7 +245,11 @@ public partial class MainForm : Form
     /// </summary>
     private void HandleUserControlVisibility()
     {
-        if (StationManager.Instance.IsEmpty) return;
+        if (!StationManager.Instance.IsEmpty)
+        {
+            _noStationsCtrl.Visible = false;
+            return;
+        }
 
         splitContainer1.Panel2.Controls.Clear();
         splitContainer1.Panel2.Controls.Add(_noStationsCtrl);
@@ -363,7 +381,8 @@ public partial class MainForm : Form
         if (lbStations.Items.Count > 0)
         {
             lbStations.SelectedIndex = 0;
-            LbStations_SelectedIndexChanged(lbStations, EventArgs.Empty);
+            var station = lbStations.SelectedItem as TrackableObject<Station>;
+            SelectStationEditor(station?.Id);
         }
 
         HandleUserControlVisibility();
@@ -400,21 +419,22 @@ public partial class MainForm : Form
         }
 
         if (lbStations.SelectedItem is not TrackableObject<Station> station) return;
+        SelectStationEditor(station.Id);
+        // // Stop music players
+        // StationManager.Instance.StopAllMusicPlayers();
 
-        // Stop music players
-        foreach (var sEditor in _stationEditorsDict.Values) sEditor.GetMusicPlayer().StopStream();
-
-        // Get the editor from the dictionary
-        if (_stationEditorsDict.TryGetValue(station.Id, out var editor)) UpdateStationEditor(editor);
+        // // Get the editor from the dictionary and update the UI.
+        // UpdateStationEditor(StationManager.Instance.GetStation(station.Id)?.Value);
     }
 
     /// <summary>
     ///     Updates the currently displayed station editor.
     ///     <param name="editor">The editor to display in the split panel.</param>
     /// </summary>
-    private void UpdateStationEditor(StationEditor editor)
+    private void UpdateStationEditor(StationEditor? editor)
     {
         if (_currentEditor == editor) return;
+        if (editor == null) return;
 
         splitContainer1.Panel2.SuspendLayout();
         splitContainer1.Panel2.Controls.Clear();
@@ -431,13 +451,12 @@ public partial class MainForm : Form
         //We only want to revert the changes if there is a pending save. Otherwise, the wrong icon is drawn in the list box.
         if (!station.IsPendingSave) return;
 
-        RemoveEditor(station); //Remove editor from dictionary
-
+        StationManager.Instance.RemoveStation(station.Id); //Remove station from manager
         station.DeclineChanges(); // Revert the changes made to the station's properties since the last save.
+        StationManager.Instance.AddStation(station); //Re-add the station to the manager after reverting changes.
 
-        var editor = AddEditor(station); //Re-add the editor to the dictionary after reverting changes.
-        StationUpdatedEvent(sender, e); //Update the UI to reflect the changes.
-        UpdateStationEditor(editor); //Add the editor to the split panel.
+        UpdateListBox(sender, station.Id); //Update the UI to reflect the changes.
+        SelectStationEditor(station.Id); //Update the editor to reflect the changes.
     }
 
     /// <summary>
@@ -449,10 +468,11 @@ public partial class MainForm : Form
     {
         if (lbStations.SelectedItem is not TrackableObject<Station> s) return;
 
-        s.TrackedObject.MetaData.IsActive = true;
-        s.CheckPendingSaveStatus();
-
         lbStations.BeginUpdate();
+
+        StationManager.Instance.UpdateActiveStatus(s.Id, true);
+        StationManager.Instance.CheckStatus(s.Id);
+
         lbStations.Invalidate();
         lbStations.EndUpdate();
         UpdateEnabledStationCount();
@@ -466,12 +486,15 @@ public partial class MainForm : Form
     private void BtnEnableAll_Click(object sender, EventArgs e)
     {
         lbStations.BeginUpdate();
+
         foreach (var station in lbStations.Items)
+        {
             if (station is TrackableObject<Station> s)
             {
-                s.TrackedObject.MetaData.IsActive = true;
-                s.CheckPendingSaveStatus();
+                StationManager.Instance.UpdateActiveStatus(s.Id, true);
+                StationManager.Instance.CheckStatus(s.Id);
             }
+        }
 
         lbStations.Invalidate();
         lbStations.EndUpdate();
@@ -487,10 +510,11 @@ public partial class MainForm : Form
     {
         if (lbStations.SelectedItem is not TrackableObject<Station> s) return;
 
-        s.TrackedObject.MetaData.IsActive = false;
-        s.CheckPendingSaveStatus();
-
         lbStations.BeginUpdate();
+
+        StationManager.Instance.UpdateActiveStatus(s.Id, false);
+        StationManager.Instance.CheckStatus(s.Id);
+
         lbStations.Invalidate();
         lbStations.EndUpdate();
         UpdateEnabledStationCount();
@@ -504,12 +528,15 @@ public partial class MainForm : Form
     private void BtnDisableAll_Click(object sender, EventArgs e)
     {
         lbStations.BeginUpdate();
+
         foreach (var station in lbStations.Items)
+        {
             if (station is TrackableObject<Station> s)
             {
-                s.TrackedObject.MetaData.IsActive = false;
-                s.CheckPendingSaveStatus();
+                StationManager.Instance.UpdateActiveStatus(s.Id, false);
+                StationManager.Instance.CheckStatus(s.Id);
             }
+        }
 
         lbStations.Invalidate();
         lbStations.EndUpdate();
@@ -526,28 +553,24 @@ public partial class MainForm : Form
         if (GameBasePath.Equals(string.Empty) || StagingPath.Equals(string.Empty))
             return;
 
-        Station blankStation = new()
-        {
-            MetaData =
-            {
-                DisplayName = $"{GlobalData.Strings.GetString("NewStationListBoxEntry")} {_newStationCount}"
-            }
-        };
-
-        var trackedStation = new TrackableObject<Station>(blankStation);
-        _stations.Add(trackedStation);
-        AddEditor(trackedStation);
-
-        lbStations.SelectedItem = trackedStation;
-        _newStationCount++;
-
-        if (_stations.Count <= 0) return;
-
-        // Re-show our station editor if the station count has increased again.
-        _noStationsCtrl.Visible = false;
-        LbStations_SelectedIndexChanged(this, EventArgs.Empty);
-
+        var id = StationManager.Instance.AddBlankStation();
+    
+        lbStations.SelectedItem = StationManager.Instance.GetStation(id)?.Key;
+        SelectStationEditor(id);
         UpdateEnabledStationCount();
+        HandleUserControlVisibility();
+    }
+
+    /// <summary>
+    /// Stops all music players and updates the UI with the correct station editor based on the station's ID.
+    /// </summary>
+    /// <param name="stationId">The ID of the station to get the editor of.</param>
+    private void SelectStationEditor(Guid? stationId)
+    {
+        if (stationId == null) return;
+
+        StationManager.Instance.StopAllMusicPlayers();
+        UpdateStationEditor(StationManager.Instance.GetStation(stationId)?.Value);
     }
 
     /// <summary>
@@ -555,41 +578,14 @@ public partial class MainForm : Form
     /// </summary>
     /// <param name="sender">The event sender.</param>
     /// <param name="e">The event arguments.</param>
-    private void StationUpdatedEvent(object? sender, EventArgs e)
+    private void UpdateListBox(object? sender, Guid stationId)
     {
         if (lbStations.SelectedItem is not TrackableObject<Station> station) return;
 
-        var duplicateStationCount = _stations.Count(s =>
-            s.TrackedObject.MetaData.DisplayName.Equals(station.TrackedObject.MetaData.DisplayName));
-
-        if (duplicateStationCount > 1)
-        {
-            this.SafeInvoke(() =>
-            {
-                var text = GlobalData.Strings.GetString("StationNameExists") ?? "A station with that name already exists.";
-                var caption = GlobalData.Strings.GetString("StationExists") ?? "Station Exists";
-                MessageBox.Show(this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
-                var newStationName = station.TrackedObject.MetaData.DisplayName;
-                var parenIndex = newStationName.LastIndexOf("(", StringComparison.Ordinal);
-                newStationName = parenIndex != -1 ? newStationName[..parenIndex] : newStationName.Trim();
-                newStationName += $" ({duplicateStationCount})";
-
-                _stationEditorsDict[station.Id].UpdateStationName(newStationName);
-            });
-        }
-
-        station.CheckPendingSaveStatus();
+        StationManager.Instance.OnStationUpdated(this, station.Id);
         lbStations.BeginUpdate();
         lbStations.Invalidate();
         lbStations.EndUpdate();
-    }
-
-    private int FindDuplicateStations(TrackableObject<Station> station)
-    {
-        var duplicateStationCount = _stations.Count(s =>
-            s.TrackedObject.MetaData.DisplayName.Equals(station.TrackedObject.MetaData.DisplayName));
-
     }
 
     private void BtnDeleteStation_Click(object sender, EventArgs e)
@@ -598,28 +594,30 @@ public partial class MainForm : Form
             return;
 
         if (lbStations.SelectedItem is not TrackableObject<Station> station) return;
-
-        var newStationPrefix = GlobalData.Strings.GetString("NewStationListBoxEntry") ?? "[New Station]";
-
-        // If the station to be removed contains "[New Station]" in the name, decrement our new station count.
-        if (station.TrackedObject.MetaData.DisplayName.Contains(newStationPrefix))
-            _newStationCount--;
-
-        // Reset new station count if there are no more "New stations" in the list box.
-        if (!_stations.Select(s => s.TrackedObject.MetaData.DisplayName.Contains(newStationPrefix)).Contains(true))
-            _newStationCount = 1;
-
-        var stationToRemove = _stations.First(s => s.Id == station.Id);
-        _stations.Remove(stationToRemove);
-
-        RemoveEditor(stationToRemove);
-
+        StationManager.Instance.RemoveStation(station.Id);
         UpdateEnabledStationCount();
-
-        if (_stations.Count > 0) return;
-
-        _newStationCount = 1;
         HandleUserControlVisibility();
+        //var newStationPrefix = GlobalData.Strings.GetString("NewStationListBoxEntry") ?? "[New Station]";
+
+        //// If the station to be removed contains "[New Station]" in the name, decrement our new station count.
+        //if (station.TrackedObject.MetaData.DisplayName.Contains(newStationPrefix))
+        //    _newStationCount--;
+
+        //// Reset new station count if there are no more "New stations" in the list box.
+        //if (!_stations.Select(s => s.TrackedObject.MetaData.DisplayName.Contains(newStationPrefix)).Contains(true))
+        //    _newStationCount = 1;
+
+        //var stationToRemove = _stations.First(s => s.Id == station.Id);
+        //_stations.Remove(stationToRemove);
+
+        //RemoveEditor(stationToRemove);
+
+        //UpdateEnabledStationCount();
+
+        //if (_stations.Count > 0) return;
+
+        //_newStationCount = 1;
+        //HandleUserControlVisibility();
     }
 
     private void CmbLanguageSelect_SelectedIndexChanged(object? sender, EventArgs e)
@@ -631,9 +629,7 @@ public partial class MainForm : Form
 
         Translate();
 
-        foreach (var se in _stationEditorsDict.Values)
-            se.Translate();
-
+        StationManager.Instance.TranslateEditors();
         _noStationsCtrl.Translate();
 
         Focus(); // re-focus the main form
@@ -677,12 +673,14 @@ public partial class MainForm : Form
 
     private void ExportToGameToolStripMenuItem_Click(object sender, EventArgs e)
     {
-        var (stationsMissingSongs, haveMissing) = CheckForMissingSongs();
-        if (haveMissing)
+        var missingSongs = StationManager.Instance.CheckForMissingSongs();
+        if (missingSongs.Values.Any(p => p.Key == true))
         {
-            var text = GlobalData.Strings.GetString("ExportToGameMissingSongs") ?? "There are {0} station(s) with a total of {1} invalid song path(s). Do you want to continue exporting?";
-            text = string.Format(text, stationsMissingSongs.Count,
-                stationsMissingSongs.Values.Aggregate((i, j) => i += j));
+            var count = missingSongs.Count(p => p.Value.Key);
+            var totalSongCount = missingSongs.Values.Where(p => p.Key).Sum(p => p.Value);
+
+            var text = string.Format(GlobalData.Strings.GetString("ExportToGameMissingSongs") ??
+                "There are {0} station(s) with a total of {1} invalid song path(s). Do you want to continue exporting?", count, totalSongCount);
             var caption = GlobalData.Strings.GetString("SongsMissingPaths") ?? "Songs Missing Paths";
 
             var result = MessageBox.Show(this, text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
@@ -690,27 +688,9 @@ public partial class MainForm : Form
                 return;
         }
 
-        var exportWindow = new ExportWindow([.. _stations]);
+        var exportWindow = new ExportWindow();
         exportWindow.OnExportToStagingComplete += (_, _) => { PopulateStations(); };
         exportWindow.ShowDialog(this);
-    }
-
-    /// <summary>
-    /// Checks for missing songs in the stations.
-    /// </summary>
-    /// <returns>Returns a tuple containing a dictionary of station names with missing songs and a boolean indicating if there are any missing songs.</returns>
-    private (Dictionary<string, int> missingSongs, bool haveMissing) CheckForMissingSongs()
-    {
-        Dictionary<string, int> stationsMissingSongs = [];
-
-        foreach (var station in _stations)
-        {
-            var count = station.TrackedObject.Songs.Count(song => !FileHelper.DoesFileExist(song.FilePath, false));
-            if (count != 0)
-                stationsMissingSongs[station.TrackedObject.MetaData.DisplayName] = count;
-        }
-
-        return stationsMissingSongs.Count != 0 ? (stationsMissingSongs, true) : (stationsMissingSongs, false);
     }
 
     private void ConfigurationToolStripMenuItem_Click(object sender, EventArgs e)
@@ -972,12 +952,14 @@ public partial class MainForm : Form
 
         if (e.CloseReason is CloseReason.TaskManagerClosing or CloseReason.WindowsShutDown) return;
 
-        if (!_stations.Any(s => s.IsPendingSave)) return;
+        var pendingSave = StationManager.Instance.CheckPendingSave();
+        if (!pendingSave.Values.Any(p => p == true)) return;
 
+        var count = pendingSave.Count(p => p.Value);
         var text = string.Format(GlobalData.Strings.GetString("ConfirmExit")
-                                 ?? "There are {0} stations pending export. Are you sure you want to quit?",
-            _stations.Count(s => s.IsPendingSave));
+                                 ?? "There are {0} stations pending export. Are you sure you want to quit?", count);
         var caption = GlobalData.Strings.GetString("Confirm");
+
         if (MessageBox.Show(this, text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
             e.Cancel = true;
     }

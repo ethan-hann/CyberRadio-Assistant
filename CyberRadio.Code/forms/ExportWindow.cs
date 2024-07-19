@@ -50,10 +50,10 @@ public partial class ExportWindow : Form
     ///     Initializes a new instance of the <see cref="ExportWindow" /> class with the specified stations to export.
     /// </summary>
     /// <param name="stations">The list of stations to be exported.</param>
-    public ExportWindow(List<TrackableObject<Station>> stations)
+    public ExportWindow()
     {
         InitializeComponent();
-        _stationsToExport = stations;
+        _stationsToExport = StationManager.Instance.StationsAsList;
 
         SetImageList();
     }
