@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
+﻿using System.ComponentModel;
 using AetherUtils.Core.Files;
+using AetherUtils.Core.Logging;
 using AetherUtils.Core.Structs;
 using RadioExt_Helper.models;
 using RadioExt_Helper.user_controls;
@@ -71,7 +69,7 @@ namespace RadioExt_Helper.utility
         ///         <item>Value: <c>Station's editor control</c></item>
         ///     </list>
         /// </summary>
-        private readonly Dictionary<Guid, Pair<TrackableObject<Station>, StationEditor>> _stations = new();
+        private readonly Dictionary<Guid, Pair<TrackableObject<Station>, StationEditor>> _stations = [];
 
         /// <summary>
         /// The JSON object used to serialize and deserialize the metadata of a station.
@@ -88,7 +86,7 @@ namespace RadioExt_Helper.utility
         /// <para><c>Key:</c> Station ID</para>
         /// <para><c>Value:</c> Count of new stations added.</para>
         /// </summary>
-        private readonly Dictionary<Guid, int> _newStations = new();
+        private readonly Dictionary<Guid, int> _newStations = [];
 
         /// <summary>
         /// A list of valid audio file extensions for song files.
@@ -116,9 +114,9 @@ namespace RadioExt_Helper.utility
         }
 
         /// <summary>
-        /// The current list of stations managed by the manager as a binding list.
+        /// The current list of stations managed by the manager as a binding list. Auto-updates when stations are added or removed.
         /// </summary>
-        public BindingList<TrackableObject<Station>> StationsAsBindingList => _stations.Values.Select(pair => pair.Key).ToBindingList();
+        public BindingList<TrackableObject<Station>> StationsAsBindingList { get; } = []; //_stations.Values.Select(pair => pair.Key).ToBindingList();
 
         /// <summary>
         /// The current list of stations managed by the manager as a list.
@@ -143,9 +141,16 @@ namespace RadioExt_Helper.utility
         /// <param name="directory">The directory to load stations from.</param>
         public void LoadStations(string directory)
         {
-            ClearStations();
-            foreach (var d in FileHelper.SafeEnumerateDirectories(directory))
-                ProcessDirectory(d);
+            try
+            {
+                ClearStations();
+                foreach (var d in FileHelper.SafeEnumerateDirectories(directory))
+                    ProcessDirectory(d);
+            }
+            catch (Exception ex)
+            {
+                AuLogger.GetCurrentLogger<StationManager>().Error(ex, "Error loading stations from directory.");
+            }
         }
 
         /// <summary>
@@ -153,24 +158,33 @@ namespace RadioExt_Helper.utility
         /// </summary>
         /// <param name="station">The station to add.</param>
         /// <returns>The <see cref="Guid"/> of the newly added station.</returns>
-        public Guid AddStation(TrackableObject<Station> station, bool isNewStation = false)
+        public Guid AddStation(TrackableObject<Station> station)
         {
-            lock (_stations)
+            try
             {
-                if (_stations.ContainsKey(station.Id))
+                lock (_stations)
                 {
-                    _newStations[station.Id]++;
+                    CheckForDuplicateStation(station.Id);
+
+                    if (_stations.ContainsKey(station.Id))
+                    {
+                        _newStations[station.Id]++;
+                        return station.Id;
+                    }
+
+                    var editor = new StationEditor(station);
+                    _stations[station.Id] = new Pair<TrackableObject<Station>, StationEditor>(station, editor);
+                    editor.StationUpdated += Editor_StationUpdated;
+
+                    StationsAsBindingList.Add(station);
+
+                    StationAdded?.Invoke(this, station.Id);
                     return station.Id;
                 }
-
-                var editor = new StationEditor(station);
-                _stations[station.Id] = new Pair<TrackableObject<Station>, StationEditor>(station, editor);
-                editor.StationUpdated += Editor_StationUpdated;
-
-                CheckForDuplicateStations(station.Id, isNewStation);
-
-                StationAdded?.Invoke(this, station.Id);
-                return station.Id;
+            } catch (Exception ex)
+            {
+                AuLogger.GetCurrentLogger<StationManager>().Error(ex, "Error adding station to manager.");
+                return Guid.Empty;
             }
         }
 
@@ -181,19 +195,27 @@ namespace RadioExt_Helper.utility
         }
 
         /// <summary>
-        /// Removes a station and it's editor from the manager.
+        /// Removes a station, and it's editor from the manager.
         /// </summary>
-        /// <param name="station">The station to remove.</param>
+        /// <param name="stationId">The station to remove, by ID.</param>
         public void RemoveStation(Guid stationId)
         {
-            lock (_stations)
+            try
             {
-                if (!_stations.TryGetValue(stationId, out var pair)) return;
-                pair.Value.Dispose();
-                _stations.Remove(stationId);
-                StationRemoved?.Invoke(this, stationId);
+                lock (_stations)
+                {
+                    if (!_stations.TryGetValue(stationId, out var pair)) return;
+                    pair.Value.Dispose();
+                    _stations.Remove(stationId);
+                    StationsAsBindingList.Remove(StationsAsBindingList.First(s => s.Id == stationId));
+
+                    StationRemoved?.Invoke(this, stationId);
+                }
+            } catch (Exception ex)
+            {
+                AuLogger.GetCurrentLogger<StationManager>().Error(ex, "Error removing station from manager.");
             }
-        }
+        } 
 
         /// <summary>
         /// Gets the station count string, formatted with the enabled station count and localized.
@@ -210,12 +232,20 @@ namespace RadioExt_Helper.utility
         /// </summary>
         public void ClearStations()
         {
-            lock (_stations)
+            try
             {
-                foreach (var pair in _stations.Values)
-                    pair.Value.Dispose();
-                _stations.Clear();
-                StationsCleared?.Invoke(this, EventArgs.Empty);
+                lock (_stations)
+                {
+                    foreach (var pair in _stations.Values)
+                        pair.Value.Dispose();
+                    _stations.Clear();
+                    StationsAsBindingList.Clear();
+
+                    StationsCleared?.Invoke(this, EventArgs.Empty);
+                }
+            } catch (Exception ex)
+            {
+                AuLogger.GetCurrentLogger<StationManager>().Error(ex, "Error clearing stations from manager.");
             }
         }
 
@@ -227,11 +257,18 @@ namespace RadioExt_Helper.utility
         /// or <c>null</c> if the <paramref name="stationId"/> did not exist in the manager.</returns>
         public Pair<TrackableObject<Station>, StationEditor>? GetStation(Guid? stationId)
         {
-            if (stationId == null) return null;
-            var id = (Guid)stationId;
-            lock (_stations)
+            try
             {
-                return _stations.TryGetValue(id, out var pair) ? pair : null;
+                if (stationId == null) return null;
+                var id = (Guid)stationId;
+                lock (_stations)
+                {
+                    return _stations.TryGetValue(id, out var pair) ? pair : null;
+                }
+            } catch (Exception ex)
+            {
+                AuLogger.GetCurrentLogger<StationManager>().Error(ex, "Error getting station from manager.");
+                return null;
             }
         }
 
@@ -250,9 +287,9 @@ namespace RadioExt_Helper.utility
                 }
             };
             var trackedStation = new TrackableObject<Station>(station);
-            AddStation(trackedStation, true);
+            AddStation(trackedStation);
 
-            return trackedStation.Id; //TODO: Check if this is correct. Add logic to create a new blank station and update new stations dictionary.
+            return trackedStation.Id; //TODO: Check if this is correct. Add logic to create a new blank station and update new stations' dictionary.
         }
 
         /// <summary>
@@ -260,52 +297,100 @@ namespace RadioExt_Helper.utility
         /// </summary>
         public void StopAllMusicPlayers()
         {
-            foreach (var editor in _stations.Values.Select(pair => pair.Value))
-                editor.GetMusicPlayer().StopStream();
+            try
+            {
+                foreach (var editor in _stations.Values.Select(pair => pair.Value))
+                    editor.GetMusicPlayer().StopStream();
+            } catch (Exception ex)
+            {
+                AuLogger.GetCurrentLogger<StationManager>().Error(ex, "Error stopping all music players.");
+            }
         }
 
-        public void UpdateActiveStatus(Guid stationId, bool newStatus)
+        /// <summary>
+        /// Set the station's active status to the new status and raise the <see cref="StationUpdated"/> event.
+        /// </summary>
+        /// <param name="stationId">The ID of the station to change the status of.</param>
+        /// <param name="newStatus">The new status of the station: <c>true</c> = enabled; <c>false</c> = disabled.</param>
+        public void ChangeStationStatus(Guid stationId, bool newStatus)
         {
-            _stations[stationId].Key.TrackedObject.MetaData.IsActive = newStatus;
-            StationUpdated?.Invoke(this, stationId);
+            try
+            {
+                if (!_stations.TryGetValue(stationId, out var pair)) return;
+
+                pair.Key.TrackedObject.MetaData.IsActive = newStatus;
+                StationsAsBindingList.First(s => s.Id == stationId).TrackedObject.MetaData.IsActive = newStatus;
+
+                StationUpdated?.Invoke(this, stationId);
+            } catch (Exception ex)
+            {
+                AuLogger.GetCurrentLogger<StationManager>().Error(ex, "Error changing station status.");
+            }
         }
 
-        public void CheckStatus(Guid stationId)
+        /// <summary>
+        /// Check the pending save status of the station with the specified ID.
+        /// </summary>
+        /// <param name="stationId">The ID of the station to check.</param>
+        /// <returns><c>true</c> if there are pending changes; <c>false</c> otherwise.</returns>
+        public bool CheckStatus(Guid stationId)
         {
-            _stations[stationId].Key.CheckPendingSaveStatus();
+            try
+            {
+                return _stations[stationId].Key.CheckPendingSaveStatus() & StationsAsBindingList.First(s => s.Id == stationId).CheckPendingSaveStatus();
+            } catch (Exception ex)
+            {
+                AuLogger.GetCurrentLogger<StationManager>().Error(ex, "Error checking station status.");
+                return false;
+            }
         }
 
         /// <summary>
         /// Occurs when a station is updated.
         /// </summary>
-        /// <param name="sender">The sender of the event.</param>
         /// <param name="stationId">The <see cref="Guid"/> of the station that was updated.</param>
-        public void OnStationUpdated(object sender, Guid stationId)
+        public void OnStationUpdated(Guid stationId)
         {
-            CheckForDuplicateStations(stationId, false);
+            var newName = CheckForDuplicateStation(stationId);
             CheckStatus(stationId);
+
+            _stations[stationId].Value.UpdateStationName(newName);
         }
 
         /// <summary>
         /// Checks for duplicate station names and gets an updated name if a duplicate is found.
         /// </summary>
-        /// <param name="stationId">The <see cref="Guid"/> of the station to check against.</param>
-        /// <param name="isNewStation">A value indicating whether the station is new and should not send events if a duplicate is found.</param>
-        /// <returns>The updated station name or the original name if no duplicates are found.</returns>
-        public string CheckForDuplicateStations(Guid stationId, bool isNewStation)
+        /// <param name="stationId">The ID of the station to check.</param>
+        /// <returns>The updated station name.</returns>
+        public string CheckForDuplicateStation(Guid stationId)
         {
-            if (IsDuplicate(_stations[stationId].Key.TrackedObject.MetaData.DisplayName, out string updatedName))
+            if (!_stations.TryGetValue(stationId, out var pair)) return string.Empty;
+
+            var station = pair.Key.TrackedObject;
+            var originalName = station.MetaData.DisplayName;
+            var updatedName = originalName;
+            var duplicateCount = 0;
+
+            foreach (var existingStation in _stations.Values.Select(p => p.Key))
             {
-                lock (_stations)
-                {
-                    _stations[stationId].Key.TrackedObject.MetaData.DisplayName = updatedName;
-                    if (!isNewStation)
-                        StationNameDuplicate?.Invoke(this, (stationId, updatedName));
-                }
-                return updatedName;
+                if (existingStation.Id == stationId) continue;
+
+                if (!existingStation.TrackedObject.MetaData.DisplayName.Equals(updatedName,
+                        StringComparison.OrdinalIgnoreCase)) continue;
+
+                duplicateCount++;
+                updatedName = $"{originalName} ({duplicateCount})";
             }
 
-            return _stations[stationId].Key.TrackedObject.MetaData.DisplayName;
+            if (duplicateCount <= 0) return updatedName;
+
+            station.MetaData.DisplayName = updatedName;
+            StationsAsBindingList.First(s => s.Id == stationId).TrackedObject.MetaData.DisplayName = updatedName;
+
+            StationUpdated?.Invoke(this, stationId);
+            StationNameDuplicate?.Invoke(this, (stationId, updatedName));
+
+            return updatedName;
         }
 
         /// <summary>
@@ -313,8 +398,14 @@ namespace RadioExt_Helper.utility
         /// </summary>
         public void TranslateEditors()
         {
-            foreach (var editor in _stations.Values.Select(pair => pair.Value))
-                editor.Translate();
+            try
+            {
+                foreach (var editor in _stations.Values.Select(pair => pair.Value))
+                    editor.Translate();
+            } catch (Exception ex)
+            {
+                AuLogger.GetCurrentLogger<StationManager>().Error(ex, "Error translating station editors.");
+            }
         }
 
         /// <summary>
@@ -323,14 +414,21 @@ namespace RadioExt_Helper.utility
         /// <returns>A dictionary where the key is the station's ID and the value is a pair containing whether the station is missing songs and the count of missing songs.</returns>
         public Dictionary<Guid, Pair<bool, int>> CheckForMissingSongs()
         {
-            var missingSongs = new Dictionary<Guid, Pair<bool, int>>();
-            foreach (var pair in _stations)
+            try
             {
-                var station = pair.Value.Key.TrackedObject;
-                var missingCount = station.Songs.Count(song => !FileHelper.DoesFileExist(song.FilePath, false));
-                missingSongs[pair.Key] = new Pair<bool, int>(missingCount > 0, missingCount);
+                var missingSongs = new Dictionary<Guid, Pair<bool, int>>();
+                foreach (var pair in _stations)
+                {
+                    var station = pair.Value.Key.TrackedObject;
+                    var missingCount = station.Songs.Count(song => !FileHelper.DoesFileExist(song.FilePath, false));
+                    missingSongs[pair.Key] = new Pair<bool, int>(missingCount > 0, missingCount);
+                }
+                return missingSongs;
+            } catch (Exception ex)
+            {
+                AuLogger.GetCurrentLogger<StationManager>().Error(ex, "Error checking for missing songs.");
+                return new Dictionary<Guid, Pair<bool, int>>();
             }
-            return missingSongs;
         }
 
         /// <summary>
@@ -339,38 +437,20 @@ namespace RadioExt_Helper.utility
         /// <returns>A dictionary where the key is the station's ID and the value indicates if the station is pending save.</returns>
         public Dictionary<Guid, bool> CheckPendingSave()
         {
-            var pendingSave = new Dictionary<Guid, bool>();
-            foreach (var pair in _stations)
+            try
             {
-                pendingSave[pair.Key] = pair.Value.Key.IsPendingSave;
-            }
-            return pendingSave;
-        }
-
-        /// <summary>
-        /// Checks for duplicate station names and updates the name if a duplicate is found.
-        /// </summary>
-        /// <param name="stationName">The name of the station to check.</param>
-        /// <param name="updatedName">The updated name of the station; equal to the original name if no duplicates are found.</param>
-        /// <returns><c>true</c> if duplicate stations are found; <c>false</c> otherwise.</returns>
-        private bool IsDuplicate(string stationName, out string updatedName)
-        {
-            updatedName = stationName;
-            if (!_stations.Values.Any(p => p.Key.TrackedObject.MetaData.DisplayName
-                                        .Equals(stationName, StringComparison.OrdinalIgnoreCase)))
+                var pendingSave = new Dictionary<Guid, bool>();
+                foreach (var pair in _stations)
+                {
+                    pendingSave[pair.Key] = pair.Value.Key.IsPendingSave 
+                                            & StationsAsBindingList.First(s => s.Id == pair.Key).IsPendingSave;
+                }
+                return pendingSave;
+            } catch (Exception ex)
             {
-                return false;
+                AuLogger.GetCurrentLogger<StationManager>().Error(ex, "Error checking for pending saves.");
+                return new Dictionary<Guid, bool>();
             }
-
-            int count = 1;
-            while (_stations.Values.Any(p => p.Key.TrackedObject.MetaData.DisplayName
-                                        .Equals($"{stationName} ({count})", StringComparison.OrdinalIgnoreCase)))
-            {
-                count++;
-            }
-
-            updatedName = $"{stationName} ({count})";
-            return true;
         }
 
         /// <summary>
@@ -379,26 +459,36 @@ namespace RadioExt_Helper.utility
         /// <param name="directory">The directory to process.</param>
         private void ProcessDirectory(string directory)
         {
-            var files = FileHelper.SafeEnumerateFiles(directory).ToList();
-            var metadata = files.Where(file => file.EndsWith("metadata.json")).Select(_metaDataJson.LoadJson).FirstOrDefault();
-            var songList = files.Where(file => file.EndsWith("songs.sgls")).Select(_songListJson.LoadJson).FirstOrDefault() ?? [];
-            var songFiles = files.Where(file => _validAudioExtensions.Contains(Path.GetExtension(file).ToLower())).ToList();
-
-            if (metadata == null) return;
-
-            if (songList.Count == 0)
+            try
             {
-                songFiles.ForEach(path =>
-                {
-                    var song = Song.FromFile(path);
-                    if (song != null)
-                        songList.Add(song);
-                });
-            }
+                var files = FileHelper.SafeEnumerateFiles(directory).ToList();
+                var metadata = files.Where(file => file.EndsWith("metadata.json")).Select(_metaDataJson.LoadJson)
+                    .FirstOrDefault();
+                var songList = files.Where(file => file.EndsWith("songs.sgls")).Select(_songListJson.LoadJson)
+                    .FirstOrDefault() ?? [];
+                var songFiles = files.Where(file => _validAudioExtensions.Contains(Path.GetExtension(file).ToLower()))
+                    .ToList();
 
-            var station = new Station { MetaData = metadata, Songs = songList };
-            var trackedStation = new TrackableObject<Station>(station);
-            AddStation(trackedStation, true);
+                if (metadata == null) return;
+
+                if (songList.Count == 0)
+                {
+                    songFiles.ForEach(path =>
+                    {
+                        var song = Song.FromFile(path);
+                        if (song != null)
+                            songList.Add(song);
+                    });
+                }
+
+                var station = new Station { MetaData = metadata, Songs = songList };
+                var trackedStation = new TrackableObject<Station>(station);
+                AddStation(trackedStation);
+            }
+            catch (Exception ex)
+            {
+                AuLogger.GetCurrentLogger<StationManager>().Error(ex, "Error processing directory.");
+            }
         }
     }
 }

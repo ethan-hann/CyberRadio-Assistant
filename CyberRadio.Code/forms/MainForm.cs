@@ -17,9 +17,7 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using AetherUtils.Core.Extensions;
-using AetherUtils.Core.Files;
 using AetherUtils.Core.Logging;
-using AetherUtils.Core.Structs;
 using AetherUtils.Core.WinForms.Controls;
 using AetherUtils.Core.WinForms.Models;
 using RadioExt_Helper.config;
@@ -68,43 +66,35 @@ public partial class MainForm : Form
 
         GlobalData.InitializeComboBoxTemplate();
 
-        SetImageList();
-        InitializeLanguageDropDown();
-        InitializeBackupManager();
-
-        SelectLanguage();
-
         // Set up timer for resizing; this is needed to prevent the application from saving the window size too often.
         _resizeTimer = new Timer(500) // 500 ms delay
         {
             AutoReset = false // Ensure it only ticks once after being reset
         };
 
-        // Save the configuration when resizing has stopped
-        _resizeTimer.Elapsed += (_, _) => { SaveWindowSize(); };
+        SetImageList();
+        InitializeLanguageDropDown();
+        InitializeEvents();
+
+        SelectLanguage();
 
         lbStations.DataSource = StationManager.Instance.StationsAsBindingList;
         lbStations.DisplayMember = "TrackedObject.MetaData";
-
-        StationManager.Instance.StationNameDuplicate += StationNameDuplicateEvent;
-        StationManager.Instance.StationUpdated += UpdateListBox;
     }
 
-    private void StationNameDuplicateEvent(object? sender, (Guid stationId, string updatedName) e)
+    private void InitializeEvents()
     {
-        this.SafeInvoke(() =>
-        {
-            var text = GlobalData.Strings.GetString("StationNameExists") ?? "A station with that name already exists.";
-            var caption = GlobalData.Strings.GetString("StationExists") ?? "Station Exists";
-            MessageBox.Show(this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-        });
-    }
+        _languageComboBox.SelectedIndexChanged += CmbLanguageSelect_SelectedIndexChanged;
 
-    private void InitializeBackupManager()
-    {
-        _backupManager.ProgressChanged += BackupManager_ProgressChanged;
-        _backupManager.StatusChanged += BackupManager_StatusChanged;
-        _backupManager.BackupCompleted += BackupManager_BackupCompleted;
+        _backupManager.ProgressChanged += OnBackupManagerProgressChanged;
+        _backupManager.StatusChanged += OnBackupManagerStatusChanged;
+        _backupManager.BackupCompleted += OnBackupManagerBackupCompleted;
+
+        StationManager.Instance.StationNameDuplicate += OnStationNameDuplicateEvent;
+        StationManager.Instance.StationUpdated += OnStationUpdated;
+
+        // Save the configuration when resizing has stopped
+        _resizeTimer.Elapsed += (_, _) => { SaveWindowSize(); };
     }
 
     /// <summary>
@@ -137,7 +127,7 @@ public partial class MainForm : Form
     /// </summary>
     private void MainForm_Load(object sender, EventArgs e)
     {
-        _noStationsCtrl.PathsSet += RefreshAfterPathsChanged;
+        _noStationsCtrl.PathsSet += OnPathsChanged;
         splitContainer1.Panel2.Controls.Add(_noStationsCtrl);
 
         var windowSize = GlobalData.ConfigManager.Get("windowSize") as WindowSize
@@ -177,13 +167,22 @@ public partial class MainForm : Form
             _languageComboBox.Items.Add(language);
 
         _languageComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
-        _languageComboBox.SelectedIndexChanged += CmbLanguageSelect_SelectedIndexChanged;
 
         // Create a ToolStripControlHost to host the ImageComboBox
         ToolStripControlHost toolStripControlHost = new(_languageComboBox);
 
         // Add the ToolStripControlHost to the "Language" tool strip menu
         languageToolStripMenuItem.DropDownItems.Add(toolStripControlHost);
+    }
+
+    private void OnStationNameDuplicateEvent(object? sender, (Guid stationId, string updatedName) e)
+    {
+        //this.SafeInvoke(() =>
+        //{
+        //    var text = GlobalData.Strings.GetString("StationNameExists") ?? "A station with that name already exists.";
+        //    var caption = GlobalData.Strings.GetString("StationExists") ?? "Station Exists";
+        //    MessageBox.Show(this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        //});
     }
 
     /// <summary>
@@ -266,111 +265,12 @@ public partial class MainForm : Form
             lbStations.BeginUpdate();
 
             if (!string.IsNullOrEmpty(StagingPath))
-            {
-                InitializeData();
-                LoadStationsFromDirectories();
-            }
+                StationManager.Instance.LoadStations(StagingPath);
 
             UpdateUiAfterPopulation();
 
             lbStations.EndUpdate();
         });
-    }
-
-    /// <summary>
-    ///     Initializes the data lists by clearing them.
-    /// </summary>
-    private void InitializeData() => StationManager.Instance.ClearStations();
-
-    /// <summary>
-    ///     Loads the stations from the staging directory.
-    /// </summary>
-    private void LoadStationsFromDirectories() => StationManager.Instance.LoadStations(StagingPath);
-    //{
-
-    //    //var validExtensions = EnumHelper<ValidAudioFiles>.GetEnumDescriptions();
-    //    //var extensions = validExtensions as string[] ?? validExtensions.ToArray();
-
-    //    //foreach (var directory in FileHelper.SafeEnumerateDirectories(StagingPath))
-    //    //    ProcessDirectory(directory, extensions);
-    //}
-
-    ///// <summary>
-    /////     Processes a directory and loads the station data.
-    ///// </summary>
-    //private void ProcessDirectory(string directory, IEnumerable<string?> validExtensions)
-    //{
-    //    var files = FileHelper.SafeEnumerateFiles(directory).ToList();
-
-    //    var metaData = files
-    //        .Where(file => file.EndsWith("metadata.json"))
-    //        .Select(_metaDataJson.LoadJson)
-    //        .FirstOrDefault();
-
-    //    var songList = files
-    //        .Where(file => file.EndsWith("songs.sgls"))
-    //        .Select(_songListJson.LoadJson)
-    //        .FirstOrDefault() ?? [];
-
-    //    var songFiles = files
-    //        .Where(file => validExtensions.Contains(Path.GetExtension(file).ToLower()))
-    //        .ToList();
-
-    //    if (metaData == null) return;
-
-    //    if (songList.Count == 0)
-    //        songFiles.ForEach(path =>
-    //        {
-    //            var song = Song.FromFile(path);
-    //            if (song != null)
-    //                songList.Add(song);
-    //        });
-
-    //    var station = CreateStation(metaData, songList);
-    //    var trackedStation = new TrackableObject<Station>(station);
-    //    _stations.Add(trackedStation);
-    //    AddEditor(trackedStation);
-    //}
-
-    ///// <summary>
-    /////     Adds a station editor to the dictionary.
-    ///// </summary>
-    //private StationEditor AddEditor(TrackableObject<Station> station)
-    //{
-    //    lock (_stationEditorsDict)
-    //    {
-    //        var editor = new StationEditor(station);
-    //        editor.StationUpdated += StationUpdatedEvent;
-    //        _stationEditorsDict[station.Id] = editor;
-    //        return editor;
-    //    }
-    //}
-
-    ///// <summary>
-    /////     Removes a station editor from the dictionary.
-    ///// </summary>
-    //private void RemoveEditor(TrackableObject<Station> station)
-    //{
-    //    lock (_stationEditorsDict)
-    //    {
-    //        if (!_stationEditorsDict.TryGetValue(station.Id, out var editor)) return;
-    //        editor.StationUpdated -= StationUpdatedEvent;
-    //        _stationEditorsDict.Remove(station.Id);
-    //    }
-    //}
-
-    /// <summary>
-    ///     Creates a station object from the metadata and song list.
-    ///     <param name="metaData">The metadata for the station.</param>
-    ///     <param name="songList">The song list for the station.</param>
-    /// </summary>
-    private static Station CreateStation(MetaData metaData, List<Song> songList)
-    {
-        return new Station
-        {
-            MetaData = metaData,
-            Songs = songList
-        };
     }
 
     /// <summary>
@@ -390,15 +290,11 @@ public partial class MainForm : Form
     }
 
     /// <summary>
-    ///     Refreshes the UI after the paths have changed from the <see cref="PathSettings" /> or the <see cref="ConfigForm" />
-    ///     .
+    ///     Refreshes the UI after the paths have changed from the <see cref="PathSettings" /> or the <see cref="ConfigForm"/>.
     ///     <param name="sender">The event sender.</param>
     ///     <param name="e">The event arguments.</param>
     /// </summary>
-    private void RefreshAfterPathsChanged(object? sender, EventArgs e)
-    {
-        PopulateStations();
-    }
+    private void OnPathsChanged(object? sender, EventArgs e) => PopulateStations();
 
     /// <summary>
     ///     Updates the enabled station count label.
@@ -420,11 +316,6 @@ public partial class MainForm : Form
 
         if (lbStations.SelectedItem is not TrackableObject<Station> station) return;
         SelectStationEditor(station.Id);
-        // // Stop music players
-        // StationManager.Instance.StopAllMusicPlayers();
-
-        // // Get the editor from the dictionary and update the UI.
-        // UpdateStationEditor(StationManager.Instance.GetStation(station.Id)?.Value);
     }
 
     /// <summary>
@@ -433,15 +324,21 @@ public partial class MainForm : Form
     /// </summary>
     private void UpdateStationEditor(StationEditor? editor)
     {
-        if (_currentEditor == editor) return;
-        if (editor == null) return;
+        try
+        {
+            if (_currentEditor == editor) return;
+            if (editor == null) return;
 
-        splitContainer1.Panel2.SuspendLayout();
-        splitContainer1.Panel2.Controls.Clear();
-        splitContainer1.Panel2.Controls.Add(editor);
-        splitContainer1.Panel2.ResumeLayout();
+            splitContainer1.Panel2.SuspendLayout();
+            splitContainer1.Panel2.Controls.Clear();
+            splitContainer1.Panel2.Controls.Add(editor);
+            splitContainer1.Panel2.ResumeLayout();
 
-        _currentEditor = editor;
+            _currentEditor = editor;
+        } catch (Exception ex)
+        {
+            AuLogger.GetCurrentLogger<MainForm>("UpdateStationEditor").Error(ex, "An error occurred while updating the station editor.");
+        }
     }
 
     private void RevertChangesToolStripMenuItem_Click(object sender, EventArgs e)
@@ -455,7 +352,7 @@ public partial class MainForm : Form
         station.DeclineChanges(); // Revert the changes made to the station's properties since the last save.
         StationManager.Instance.AddStation(station); //Re-add the station to the manager after reverting changes.
 
-        UpdateListBox(sender, station.Id); //Update the UI to reflect the changes.
+        OnStationUpdated(sender, station.Id); //Update the UI to reflect the changes.
         SelectStationEditor(station.Id); //Update the editor to reflect the changes.
     }
 
@@ -468,37 +365,7 @@ public partial class MainForm : Form
     {
         if (lbStations.SelectedItem is not TrackableObject<Station> s) return;
 
-        lbStations.BeginUpdate();
-
-        StationManager.Instance.UpdateActiveStatus(s.Id, true);
-        StationManager.Instance.CheckStatus(s.Id);
-
-        lbStations.Invalidate();
-        lbStations.EndUpdate();
-        UpdateEnabledStationCount();
-    }
-
-    /// <summary>
-    ///     Handles the Click event of the btnEnableAll button.
-    ///     <param name="sender">The event sender.</param>
-    ///     <param name="e">The event arguments.</param>
-    /// </summary>
-    private void BtnEnableAll_Click(object sender, EventArgs e)
-    {
-        lbStations.BeginUpdate();
-
-        foreach (var station in lbStations.Items)
-        {
-            if (station is TrackableObject<Station> s)
-            {
-                StationManager.Instance.UpdateActiveStatus(s.Id, true);
-                StationManager.Instance.CheckStatus(s.Id);
-            }
-        }
-
-        lbStations.Invalidate();
-        lbStations.EndUpdate();
-        UpdateEnabledStationCount();
+        SetStationStatus(true, false, s.Id);
     }
 
     /// <summary>
@@ -510,34 +377,47 @@ public partial class MainForm : Form
     {
         if (lbStations.SelectedItem is not TrackableObject<Station> s) return;
 
-        lbStations.BeginUpdate();
-
-        StationManager.Instance.UpdateActiveStatus(s.Id, false);
-        StationManager.Instance.CheckStatus(s.Id);
-
-        lbStations.Invalidate();
-        lbStations.EndUpdate();
-        UpdateEnabledStationCount();
+        SetStationStatus(false, false, s.Id);
     }
+
+    /// <summary>
+    ///     Handles the Click event of the btnEnableAll button.
+    ///     <param name="sender">The event sender.</param>
+    ///     <param name="e">The event arguments.</param>
+    /// </summary>
+    private void BtnEnableAll_Click(object sender, EventArgs e)
+        => SetStationStatus(true, true, lbStations.Items.Cast<TrackableObject<Station>>().Select(s => s.Id).ToArray());
 
     /// <summary>
     ///     Handles the Click event of the btnDisableAll button.
     /// </summary>
     /// <param name="sender">The event sender.</param>
     /// <param name="e">The event arguments.</param>
-    private void BtnDisableAll_Click(object sender, EventArgs e)
+    private void BtnDisableAll_Click(object sender, EventArgs e) 
+        => SetStationStatus(false, true, lbStations.Items.Cast<TrackableObject<Station>>().Select(s => s.Id).ToArray());
+
+    /// <summary>
+    /// Sets the status of the station(s) to the new status.
+    /// </summary>
+    /// <param name="newStatus">The new status to change the station to: <c>true</c> = enabled; <c>false</c> = disabled</param>
+    /// <param name="setAllStations">Indicate whether to set all stations to the same status.</param>
+    /// <param name="stationIds">The station ID(s) to change the status of.</param>
+    private void SetStationStatus(bool newStatus, bool setAllStations, params Guid[] stationIds)
     {
         lbStations.BeginUpdate();
-
-        foreach (var station in lbStations.Items)
+        if (!setAllStations)
         {
-            if (station is TrackableObject<Station> s)
+            StationManager.Instance.ChangeStationStatus(stationIds[0], newStatus);
+            StationManager.Instance.CheckStatus(stationIds[0]);
+        }
+        else
+        {
+            foreach (var stationId in stationIds)
             {
-                StationManager.Instance.UpdateActiveStatus(s.Id, false);
-                StationManager.Instance.CheckStatus(s.Id);
+                StationManager.Instance.ChangeStationStatus(stationId, newStatus);
+                StationManager.Instance.CheckStatus(stationId);
             }
         }
-
         lbStations.Invalidate();
         lbStations.EndUpdate();
         UpdateEnabledStationCount();
@@ -577,12 +457,12 @@ public partial class MainForm : Form
     ///     Handles the station updated event. Checks for pending save status on a station, duplication in station names, and updates the list box.
     /// </summary>
     /// <param name="sender">The event sender.</param>
-    /// <param name="e">The event arguments.</param>
-    private void UpdateListBox(object? sender, Guid stationId)
+    /// <param name="stationId">The event arguments.</param>
+    private void OnStationUpdated(object? sender, Guid stationId)
     {
         if (lbStations.SelectedItem is not TrackableObject<Station> station) return;
 
-        StationManager.Instance.OnStationUpdated(this, station.Id);
+        StationManager.Instance.OnStationUpdated(station.Id);
         lbStations.BeginUpdate();
         lbStations.Invalidate();
         lbStations.EndUpdate();
@@ -597,27 +477,6 @@ public partial class MainForm : Form
         StationManager.Instance.RemoveStation(station.Id);
         UpdateEnabledStationCount();
         HandleUserControlVisibility();
-        //var newStationPrefix = GlobalData.Strings.GetString("NewStationListBoxEntry") ?? "[New Station]";
-
-        //// If the station to be removed contains "[New Station]" in the name, decrement our new station count.
-        //if (station.TrackedObject.MetaData.DisplayName.Contains(newStationPrefix))
-        //    _newStationCount--;
-
-        //// Reset new station count if there are no more "New stations" in the list box.
-        //if (!_stations.Select(s => s.TrackedObject.MetaData.DisplayName.Contains(newStationPrefix)).Contains(true))
-        //    _newStationCount = 1;
-
-        //var stationToRemove = _stations.First(s => s.Id == station.Id);
-        //_stations.Remove(stationToRemove);
-
-        //RemoveEditor(stationToRemove);
-
-        //UpdateEnabledStationCount();
-
-        //if (_stations.Count > 0) return;
-
-        //_newStationCount = 1;
-        //HandleUserControlVisibility();
     }
 
     private void CmbLanguageSelect_SelectedIndexChanged(object? sender, EventArgs e)
@@ -674,7 +533,7 @@ public partial class MainForm : Form
     private void ExportToGameToolStripMenuItem_Click(object sender, EventArgs e)
     {
         var missingSongs = StationManager.Instance.CheckForMissingSongs();
-        if (missingSongs.Values.Any(p => p.Key == true))
+        if (missingSongs.Values.Any(p => p.Key))
         {
             var count = missingSongs.Count(p => p.Value.Key);
             var totalSongCount = missingSongs.Values.Where(p => p.Key).Sum(p => p.Value);
@@ -702,35 +561,36 @@ public partial class MainForm : Form
     {
         var configForm = new ConfigForm(tabName);
         //configForm.ConfigSaved += SetApiStatus; //TODO: Re-enable this when the API feature is fully implemented
-        configForm.StagingPathChanged += RefreshAfterPathsChanged;
+        configForm.StagingPathChanged += OnPathsChanged;
 
         configForm.ShowDialog(this);
     }
 
-    private async void SetApiStatus(object? sender, EventArgs e)
-    {
-        if (!NexusApi.IsAuthenticated)
-        {
-            this.SafeInvoke(() =>
-            {
-                apiStatusToolStripMenuItem.Text = GlobalData.Strings.GetString("ApiStatus") ?? "API Not Authenticated";
-                apiStatusToolStripMenuItem.Image = null;
-                modsToolStripMenuItem.Visible = false;
-            });
-            return;
-        }
+    //TODO: Hidden until the API feature is fully implemented
+    //private async void SetApiStatus(object? sender, EventArgs e)
+    //{
+    //    if (!NexusApi.IsAuthenticated)
+    //    {
+    //        this.SafeInvoke(() =>
+    //        {
+    //            apiStatusToolStripMenuItem.Text = GlobalData.Strings.GetString("ApiStatus") ?? "API Not Authenticated";
+    //            apiStatusToolStripMenuItem.Image = null;
+    //            modsToolStripMenuItem.Visible = false;
+    //        });
+    //        return;
+    //    }
 
-        var image = await NexusApi.GetUserImage();
-        if (NexusApi.CurrentApiUser != null)
-        {
-            this.SafeInvoke(() =>
-            {
-                modsToolStripMenuItem.Visible = true;
-                apiStatusToolStripMenuItem.Text = NexusApi.CurrentApiUser.Name;
-                apiStatusToolStripMenuItem.Image = image;
-            });
-        }
-    }
+    //    var image = await NexusApi.GetUserImage();
+    //    if (NexusApi.CurrentApiUser != null)
+    //    {
+    //        this.SafeInvoke(() =>
+    //        {
+    //            modsToolStripMenuItem.Visible = true;
+    //            apiStatusToolStripMenuItem.Text = NexusApi.CurrentApiUser.Name;
+    //            apiStatusToolStripMenuItem.Image = image;
+    //        });
+    //    }
+    //}
 
     //TODO: Hidden until the API feature is fully implemented
     private void ApiStatusToolStripMenuItem_Click(object sender, EventArgs e)
@@ -755,7 +615,7 @@ public partial class MainForm : Form
 
     private void PathDialog_StagingPathChanged(object? sender, EventArgs e)
     {
-        RefreshAfterPathsChanged(sender, e);
+        OnPathsChanged(sender, e);
     }
 
     private void RefreshStationsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -773,6 +633,7 @@ public partial class MainForm : Form
         var backupPath = GetBackupPath();
         if (string.IsNullOrEmpty(backupPath)) return;
 
+        // Check if the backup path is a sub-path of the staging path (i.e., the backup path is within the staging path)
         if (IsSubPath(StagingPath, backupPath))
         {
             var text = GlobalData.Strings.GetString("BackupPathIsSubpath") ?? "Backup path cannot be within the staging path.";
@@ -789,6 +650,10 @@ public partial class MainForm : Form
         _ = StartBackupAsync(StagingPath, backupPath);
     }
 
+    /// <summary>
+    /// Shows a folder browser dialog to select a folder to save the backup to.
+    /// </summary>
+    /// <returns>The full path to the backup folder.</returns>
     private static string GetBackupPath()
     {
         FolderBrowserDialog folderBrowserDialog = new()
@@ -833,6 +698,12 @@ public partial class MainForm : Form
         }
     }
 
+    /// <summary>
+    /// Starts the backup process asynchronously.
+    /// </summary>
+    /// <param name="stagingPath">The staging path.</param>
+    /// <param name="backupPath">The backup path.</param>
+    /// <returns>A task that represents the asynchronous backup operation.</returns>
     private async Task StartBackupAsync(string stagingPath, string backupPath)
     {
         if (_isAppClosing) return;
@@ -853,19 +724,19 @@ public partial class MainForm : Form
         }
     }
 
-    private void BackupManager_ProgressChanged(int progress)
+    private void OnBackupManagerProgressChanged(int progress)
     {
         if (!_isAppClosing)
             this.SafeInvoke(() => pgBackupProgress.Value = progress);
     }
 
-    private void BackupManager_StatusChanged(string status)
+    private void OnBackupManagerStatusChanged(string status)
     {
         if (!_isAppClosing)
             this.SafeInvoke(() => lblBackupStatus.Text = status);
     }
 
-    private void BackupManager_BackupCompleted(bool success, string backupPath, string backupFileName)
+    private void OnBackupManagerBackupCompleted(bool success, string backupPath, string backupFileName)
     {
         if (_isAppClosing) return;
 
@@ -953,7 +824,7 @@ public partial class MainForm : Form
         if (e.CloseReason is CloseReason.TaskManagerClosing or CloseReason.WindowsShutDown) return;
 
         var pendingSave = StationManager.Instance.CheckPendingSave();
-        if (!pendingSave.Values.Any(p => p == true)) return;
+        if (pendingSave.Values.All(p => p != true)) return;
 
         var count = pendingSave.Count(p => p.Value);
         var text = string.Format(GlobalData.Strings.GetString("ConfirmExit")

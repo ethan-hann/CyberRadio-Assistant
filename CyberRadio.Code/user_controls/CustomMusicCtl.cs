@@ -213,6 +213,8 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
 
     private void BtnRemoveAllSongs_Click(object sender, EventArgs e)
     {
+        if (lvSongs.Items.Count == 0) return;
+
         if (ConfirmRemoveAllSongs() == DialogResult.No)
             return;
 
