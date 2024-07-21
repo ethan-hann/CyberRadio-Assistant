@@ -157,11 +157,11 @@ public partial class MainForm : Form
     ///     Initializes the language drop-down with supported languages and images.
     /// </summary>
     private void InitializeLanguageDropDown()
-    {
+    { //TODO: Add [New Station] translations in the list box when the language is changed.
         // Populate the language combo box
         _languages.Add(new ImageComboBoxItem("English (en)", Resources.united_kingdom));
-        _languages.Add(new ImageComboBoxItem("Espa�ol (es)", Resources.spain));
-        _languages.Add(new ImageComboBoxItem("Fran�ais (fr)", Resources.france));
+        _languages.Add(new ImageComboBoxItem("Español (es)", Resources.spain));
+        _languages.Add(new ImageComboBoxItem("Français (fr)", Resources.france));
 
         foreach (var language in _languages)
             _languageComboBox.Items.Add(language);
@@ -342,15 +342,17 @@ public partial class MainForm : Form
     }
 
     private void RevertChangesToolStripMenuItem_Click(object sender, EventArgs e)
-    {
+    { 
         if (lbStations.SelectedItem is not TrackableObject<Station> station) return;
 
         //We only want to revert the changes if there is a pending save. Otherwise, the wrong icon is drawn in the list box.
         if (!station.IsPendingSave) return;
 
+        if (StationManager.Instance.IsNewStation(station.Id)) return; //Don't allow reverting changes on new stations.
+
         StationManager.Instance.RemoveStation(station.Id); //Remove station from manager
         station.DeclineChanges(); // Revert the changes made to the station's properties since the last save.
-        StationManager.Instance.AddStation(station); //Re-add the station to the manager after reverting changes.
+        StationManager.Instance.AddStation(station, true); //Re-add the station to the manager after reverting changes.
 
         OnStationUpdated(sender, station.Id); //Update the UI to reflect the changes.
         SelectStationEditor(station.Id); //Update the editor to reflect the changes.
@@ -433,7 +435,7 @@ public partial class MainForm : Form
         if (GameBasePath.Equals(string.Empty) || StagingPath.Equals(string.Empty))
             return;
 
-        var id = StationManager.Instance.AddBlankStation();
+        var id = StationManager.Instance.AddStation();
     
         lbStations.SelectedItem = StationManager.Instance.GetStation(id)?.Key;
         SelectStationEditor(id);

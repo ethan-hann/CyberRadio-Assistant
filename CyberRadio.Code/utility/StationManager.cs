@@ -82,11 +82,10 @@ namespace RadioExt_Helper.utility
         private readonly Json<List<Song>> _songListJson = new();
 
         /// <summary>
-        /// Dictionary of new station IDs and counts added to the manager during the current session.
-        /// <para><c>Key:</c> Station ID</para>
-        /// <para><c>Value:</c> Count of new stations added.</para>
+        /// List of new station IDs added to the manager during the current session. These stations should not be allowed to revert changes unless saved to disk.
+        /// Upon exporting, the station IDs in this list should be removed by <see cref="ResetNewStations"/>
         /// </summary>
-        private readonly Dictionary<Guid, int> _newStations = [];
+        private readonly List<Guid> _newStations = [];
 
         /// <summary>
         /// A list of valid audio file extensions for song files.
@@ -157,8 +156,9 @@ namespace RadioExt_Helper.utility
         /// Adds a new station and editor to the manager.
         /// </summary>
         /// <param name="station">The station to add.</param>
+        /// <param name="isOnDisk">Indicates whether the station is an in-memory addition or was added from .json files on disk.</param>
         /// <returns>The <see cref="Guid"/> of the newly added station.</returns>
-        public Guid AddStation(TrackableObject<Station> station)
+        public Guid AddStation(TrackableObject<Station> station, bool isOnDisk)
         {
             try
             {
@@ -166,11 +166,8 @@ namespace RadioExt_Helper.utility
                 {
                     CheckForDuplicateStation(station.Id);
 
-                    if (_stations.ContainsKey(station.Id))
-                    {
-                        _newStations[station.Id]++;
-                        return station.Id;
-                    }
+                    if (!isOnDisk)
+                        _newStations.Add(station.Id);
 
                     var editor = new StationEditor(station);
                     _stations[station.Id] = new Pair<TrackableObject<Station>, StationEditor>(station, editor);
@@ -188,11 +185,12 @@ namespace RadioExt_Helper.utility
             }
         }
 
-        private void Editor_StationUpdated(object? sender, EventArgs e)
-        {
-            if (sender is StationEditor editor)
-                StationUpdated?.Invoke(this, editor.Station.Id);
-        }
+        /// <summary>
+        /// Add a new, blank station to the manager. The station will have the default metadata and no songs.
+        /// The station will be added to the manager and the ID will be returned.
+        /// </summary>
+        /// <returns>The <see cref="Guid"/> of the newly added station.</returns>
+        public Guid AddStation() => AddBlankStation();
 
         /// <summary>
         /// Removes a station, and it's editor from the manager.
@@ -207,6 +205,8 @@ namespace RadioExt_Helper.utility
                     if (!_stations.TryGetValue(stationId, out var pair)) return;
                     pair.Value.Dispose();
                     _stations.Remove(stationId);
+                    _newStations.Remove(stationId);
+
                     StationsAsBindingList.Remove(StationsAsBindingList.First(s => s.Id == stationId));
 
                     StationRemoved?.Invoke(this, stationId);
@@ -240,6 +240,7 @@ namespace RadioExt_Helper.utility
                         pair.Value.Dispose();
                     _stations.Clear();
                     StationsAsBindingList.Clear();
+                    _newStations.Clear();
 
                     StationsCleared?.Invoke(this, EventArgs.Empty);
                 }
@@ -273,26 +274,6 @@ namespace RadioExt_Helper.utility
         }
 
         /// <summary>
-        /// Add a new, blank station to the manager. The station will have the default metadata and no songs.
-        /// The station will be added to the manager and the ID will be returned.
-        /// </summary>
-        /// <returns>The <see cref="Guid"/> of the newly added station.</returns>
-        public Guid AddBlankStation()
-        {
-            var station = new Station()
-            {
-                MetaData =
-                {
-                    DisplayName = $"{GlobalData.Strings.GetString("NewStationListBoxEntry")}"
-                }
-            };
-            var trackedStation = new TrackableObject<Station>(station);
-            AddStation(trackedStation);
-
-            return trackedStation.Id; //TODO: Check if this is correct. Add logic to create a new blank station and update new stations' dictionary.
-        }
-
-        /// <summary>
         /// Stops all music players for all stations in the manager.
         /// </summary>
         public void StopAllMusicPlayers()
@@ -301,7 +282,8 @@ namespace RadioExt_Helper.utility
             {
                 foreach (var editor in _stations.Values.Select(pair => pair.Value))
                     editor.GetMusicPlayer().StopStream();
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 AuLogger.GetCurrentLogger<StationManager>().Error(ex, "Error stopping all music players.");
             }
@@ -322,7 +304,8 @@ namespace RadioExt_Helper.utility
                 StationsAsBindingList.First(s => s.Id == stationId).TrackedObject.MetaData.IsActive = newStatus;
 
                 StationUpdated?.Invoke(this, stationId);
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 AuLogger.GetCurrentLogger<StationManager>().Error(ex, "Error changing station status.");
             }
@@ -338,7 +321,8 @@ namespace RadioExt_Helper.utility
             try
             {
                 return _stations[stationId].Key.CheckPendingSaveStatus() & StationsAsBindingList.First(s => s.Id == stationId).CheckPendingSaveStatus();
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 AuLogger.GetCurrentLogger<StationManager>().Error(ex, "Error checking station status.");
                 return false;
@@ -402,7 +386,8 @@ namespace RadioExt_Helper.utility
             {
                 foreach (var editor in _stations.Values.Select(pair => pair.Value))
                     editor.Translate();
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 AuLogger.GetCurrentLogger<StationManager>().Error(ex, "Error translating station editors.");
             }
@@ -424,10 +409,11 @@ namespace RadioExt_Helper.utility
                     missingSongs[pair.Key] = new Pair<bool, int>(missingCount > 0, missingCount);
                 }
                 return missingSongs;
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 AuLogger.GetCurrentLogger<StationManager>().Error(ex, "Error checking for missing songs.");
-                return new Dictionary<Guid, Pair<bool, int>>();
+                return [];
             }
         }
 
@@ -442,15 +428,54 @@ namespace RadioExt_Helper.utility
                 var pendingSave = new Dictionary<Guid, bool>();
                 foreach (var pair in _stations)
                 {
-                    pendingSave[pair.Key] = pair.Value.Key.IsPendingSave 
+                    pendingSave[pair.Key] = pair.Value.Key.IsPendingSave
                                             & StationsAsBindingList.First(s => s.Id == pair.Key).IsPendingSave;
                 }
                 return pendingSave;
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 AuLogger.GetCurrentLogger<StationManager>().Error(ex, "Error checking for pending saves.");
-                return new Dictionary<Guid, bool>();
+                return [];
             }
+        }
+
+        /// <summary>
+        /// Clear the list of new stations added during the current session.
+        /// </summary>
+        public void ResetNewStations() => _newStations.Clear();
+
+        /// <summary>
+        /// Get a value indicating if the station with the specified ID is a new station added during the current session.
+        /// </summary>
+        /// <param name="stationId">The ID of the station to check.</param>
+        /// <returns><c>true</c> if the station is new; <c>false</c> otherwise.</returns>
+        public bool IsNewStation(Guid stationId) => _newStations.Contains(stationId);
+
+        private void Editor_StationUpdated(object? sender, EventArgs e)
+        {
+            if (sender is StationEditor editor)
+                StationUpdated?.Invoke(this, editor.Station.Id);
+        }
+
+        /// <summary>
+        /// Add a new, blank station to the manager. The station will have the default metadata and no songs.
+        /// The station will be added to the manager and the ID will be returned.
+        /// </summary>
+        /// <returns>The <see cref="Guid"/> of the newly added station.</returns>
+        private Guid AddBlankStation()
+        {
+            var station = new Station()
+            {
+                MetaData =
+                {
+                    DisplayName = $"{GlobalData.Strings.GetString("NewStationListBoxEntry")}"
+                }
+            };
+            var trackedStation = new TrackableObject<Station>(station);
+            AddStation(trackedStation, false);
+
+            return trackedStation.Id;
         }
 
         /// <summary>
@@ -483,7 +508,7 @@ namespace RadioExt_Helper.utility
 
                 var station = new Station { MetaData = metadata, Songs = songList };
                 var trackedStation = new TrackableObject<Station>(station);
-                AddStation(trackedStation);
+                AddStation(trackedStation, true);
             }
             catch (Exception ex)
             {

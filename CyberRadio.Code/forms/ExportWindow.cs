@@ -488,6 +488,7 @@ public partial class ExportWindow : Form
             ToggleButtons();
             UpdateStatus(GlobalData.Strings.GetString("ExportCompleteStatus") ?? "Exported to Staging!");
             _stationsToExport.ForEach(s => s.AcceptChanges());
+            StationManager.Instance.ResetNewStations();
 
             OnExportToStagingComplete?.Invoke(this, EventArgs.Empty);
 
