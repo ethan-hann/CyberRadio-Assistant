@@ -24,16 +24,6 @@ namespace RadioExt_Helper.forms;
 /// </summary>
 public partial class PathSettings : Form
 {
-    /// <summary>
-    /// Occurs whenever the game base path is changed.
-    /// </summary>
-    public event EventHandler? GameBasePathChanged;
-
-    /// <summary>
-    /// Occurs whenever the staging path is changed.
-    /// </summary>
-    public event EventHandler? StagingPathChanged;
-
     private bool _gameFolderChanged;
     private bool _stageFolderChanged;
 
@@ -54,6 +44,16 @@ public partial class PathSettings : Form
     ///     Gets the staging path from the configuration.
     /// </summary>
     private static string StagingPath => GlobalData.ConfigManager.Get("stagingPath") as string ?? string.Empty;
+
+    /// <summary>
+    /// Occurs whenever the game base path is changed.
+    /// </summary>
+    public event EventHandler? GameBasePathChanged;
+
+    /// <summary>
+    /// Occurs whenever the staging path is changed.
+    /// </summary>
+    public event EventHandler? StagingPathChanged;
 
     /// <summary>
     ///     Handles the Load event of the form. Sets up initial label values and translations.
@@ -124,13 +124,15 @@ public partial class PathSettings : Form
                 if (_gameFolderChanged)
                 {
                     AuLogger.GetCurrentLogger<PathSettings>("ChangeGameBasePath")
-                    .Info($"Updated game base path: {basePath}");
+                        .Info($"Updated game base path: {basePath}");
                     GameBasePathChanged?.Invoke(this, EventArgs.Empty);
                 }
             }
             else
+            {
                 AuLogger.GetCurrentLogger<PathSettings>("ChangeGameBasePath")
                     .Warn("Couldn't save updated configuration after changing base path.");
+            }
         }
 
         SetLabels();
@@ -156,13 +158,15 @@ public partial class PathSettings : Form
                 if (_stageFolderChanged)
                 {
                     AuLogger.GetCurrentLogger<PathSettings>("ChangeStagingPath")
-                    .Info($"Updated staging path: {stagingPath}");
+                        .Info($"Updated staging path: {stagingPath}");
                     StagingPathChanged?.Invoke(this, EventArgs.Empty);
                 }
             }
             else
+            {
                 AuLogger.GetCurrentLogger<PathSettings>("ChangeStagingPath")
                     .Warn("Couldn't save updated configuration after changing staging path.");
+            }
         }
 
         SetLabels();

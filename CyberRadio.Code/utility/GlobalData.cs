@@ -20,10 +20,8 @@ using System.Reflection;
 using System.Resources;
 using AetherUtils.Core.Configuration;
 using AetherUtils.Core.Logging;
-using Pathoschild.FluentNexus;
 using RadioExt_Helper.config;
 using RadioExt_Helper.forms;
-using RadioExt_Helper.nexus_api;
 
 namespace RadioExt_Helper.utility;
 
@@ -37,10 +35,10 @@ public static class GlobalData
     private const string ConfigFileName = "config.yml";
     private const string DefaultLanguage = "English (en)";
 
-    public static readonly Version AppVersion = 
-        Assembly.GetExecutingAssembly().GetName().Version is { } v 
-        ? new Version(v.Major, v.Minor, v.Build) 
-        : new Version(0, 0, 0); //This should never happen, but just in case!
+    public static readonly Version AppVersion =
+        Assembly.GetExecutingAssembly().GetName().Version is { } v
+            ? new Version(v.Major, v.Minor, v.Build)
+            : new Version(0, 0, 0); //This should never happen, but just in case!
 
     /// <summary>
     /// Get the resource manager for accessing string resources.

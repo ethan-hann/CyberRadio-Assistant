@@ -26,6 +26,8 @@ namespace RadioExt_Helper.models;
 public sealed class MetaData : INotifyPropertyChanged, ICloneable, IEquatable<MetaData>
 {
     private CustomIcon _customIcon = new();
+
+    private SerializableDictionary<string, string> _customKeyValuePairs = [];
     private string _displayName = "69.9 Your Station Name";
 
     private float _fm = 69.9f;
@@ -39,8 +41,6 @@ public sealed class MetaData : INotifyPropertyChanged, ICloneable, IEquatable<Me
     private StreamInfo _streamInfo = new();
 
     private float _volume = 1.0f;
-
-    private SerializableDictionary<string, string> _customKeyValuePairs = [];
 
     /// <summary>
     ///     The name of the station that will be displayed in game. Also used for the station folder.

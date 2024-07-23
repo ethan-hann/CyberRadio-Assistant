@@ -29,6 +29,8 @@ namespace RadioExt_Helper.user_controls;
 public sealed partial class StationListBox : ListBox
 {
     private string _disabledIconKey = "disabled";
+    private Color _duplicateStationsColor = Color.Orange;
+    private Font _duplicateStationsFont = new(DefaultFont, FontStyle.Italic);
     private string _editedStationIconKey = "edited_station";
     private string _enabledIconKey = "enabled";
 
@@ -36,10 +38,8 @@ public sealed partial class StationListBox : ListBox
     private string _savedStationIconKey = "saved_station";
 
     private Color _songsMissingColor = Color.Red;
-    private Color _duplicateStationsColor = Color.Orange;
 
     private Font _songsMissingFont = new(DefaultFont, FontStyle.Bold);
-    private Font _duplicateStationsFont = new(DefaultFont, FontStyle.Italic);
 
     /// <summary>
     /// Initializes a new instance of the <see cref="StationListBox"/> class.
@@ -241,7 +241,8 @@ public sealed partial class StationListBox : ListBox
                 var textRect = new Rectangle(e.Bounds.Left + 20, e.Bounds.Top, e.Bounds.Width - 40 - 4,
                     e.Bounds.Height); // Adjust width to leave space for the secondary icon
 
-                TextRenderer.DrawText(e.Graphics, station.TrackedObject.MetaData.DisplayName, GetItemFont(station), textRect,
+                TextRenderer.DrawText(e.Graphics, station.TrackedObject.MetaData.DisplayName, GetItemFont(station),
+                    textRect,
                     GetItemColor(station), TextFormatFlags.Left);
             }
 
@@ -263,7 +264,7 @@ public sealed partial class StationListBox : ListBox
     private Color GetItemColor(TrackableObject<Station> station)
     {
         var returnColor = ForeColor;
-        
+
         if (station.TrackedObject.Songs.Any(s => !FileHelper.DoesFileExist(s.FilePath)))
             returnColor = CombineColors(returnColor, _songsMissingColor);
 

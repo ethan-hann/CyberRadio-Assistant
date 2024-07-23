@@ -27,21 +27,6 @@ namespace RadioExt_Helper.forms;
 /// </summary>
 public partial class ConfigForm : Form
 {
-    /// <summary>
-    /// Occurs when the configuration is saved to disk.
-    /// </summary>
-    public event EventHandler? ConfigSaved;
-
-    /// <summary>
-    /// Occurs whenever the game path is changed.
-    /// </summary>
-    public event EventHandler? GamePathChanged;
-
-    /// <summary>
-    /// Occurs whenever the staging path is changed.
-    /// </summary>
-    public event EventHandler? StagingPathChanged;
-
     private readonly ImageList _tabImages = new();
 
     /// <summary>
@@ -59,6 +44,21 @@ public partial class ConfigForm : Form
     }
 
     /// <summary>
+    /// Occurs when the configuration is saved to disk.
+    /// </summary>
+    public event EventHandler? ConfigSaved;
+
+    /// <summary>
+    /// Occurs whenever the game path is changed.
+    /// </summary>
+    public event EventHandler? GamePathChanged;
+
+    /// <summary>
+    /// Occurs whenever the staging path is changed.
+    /// </summary>
+    public event EventHandler? StagingPathChanged;
+
+    /// <summary>
     ///     Handles the Load event of the ConfigForm control.
     /// </summary>
     /// <param name="sender">The source of the event.</param>
@@ -74,7 +74,8 @@ public partial class ConfigForm : Form
         tabLogging.ImageKey = @"logging";
         tabNexus.ImageKey = @"nexus_api";
 
-        tabConfigs.TabPages.Remove(tabNexus); //TODO: Disable the Nexus API tab for now. Enable when feature is implemented to download mods.
+        tabConfigs.TabPages
+            .Remove(tabNexus); //TODO: Disable the Nexus API tab for now. Enable when feature is implemented to download mods.
 
         Translate();
         SetValues();
@@ -148,9 +149,12 @@ public partial class ConfigForm : Form
         var authText = GlobalData.Strings.GetString("ApiAuthenticated") ?? "Authenticated";
         var notAuthText = GlobalData.Strings.GetString("ApiNotAuthenticated") ?? "Not Authenticated";
 
-        lblAuthenticatedStatus.Text = isSameKey && !txtApiKey.Text.Equals(string.Empty) ? authText: notAuthText;
-        picApiStatus.Image = isSameKey && !txtApiKey.Text.Equals(string.Empty) ? Resources.enabled__16x16 : Resources.disabled__16x16;
-        lblAuthenticatedStatus.ForeColor = isSameKey && !txtApiKey.Text.Equals(string.Empty) ? Color.DarkGreen : Color.Red;
+        lblAuthenticatedStatus.Text = isSameKey && !txtApiKey.Text.Equals(string.Empty) ? authText : notAuthText;
+        picApiStatus.Image = isSameKey && !txtApiKey.Text.Equals(string.Empty)
+            ? Resources.enabled__16x16
+            : Resources.disabled__16x16;
+        lblAuthenticatedStatus.ForeColor =
+            isSameKey && !txtApiKey.Text.Equals(string.Empty) ? Color.DarkGreen : Color.Red;
         btnAuthenticate.Enabled = !isSameKey && !txtApiKey.Text.Equals(string.Empty);
     }
 
@@ -341,7 +345,8 @@ public partial class ConfigForm : Form
 
     private void LnkNexusApiKeyPage_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
     {
-        @"https://next.nexusmods.com/settings/api-keys#:~:text=Request%20Api%20Key-,Personal%20API%20Key,-If%20you%20are".OpenUrl();
+        @"https://next.nexusmods.com/settings/api-keys#:~:text=Request%20Api%20Key-,Personal%20API%20Key,-If%20you%20are"
+            .OpenUrl();
     }
 
     private void LnkApiAcceptableUse_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -353,9 +358,6 @@ public partial class ConfigForm : Form
     {
         if (e.CloseReason is CloseReason.WindowsShutDown or CloseReason.TaskManagerClosing) return;
 
-        if (!NoUnsavedApiChanges())
-        {
-            e.Cancel = true;
-        }
+        if (!NoUnsavedApiChanges()) e.Cancel = true;
     }
 }

@@ -14,11 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-using System.Configuration;
-using System.Reflection;
-using Microsoft.Extensions.Configuration;
 using RadioExt_Helper.forms;
-using RadioExt_Helper.nexus_api;
 using RadioExt_Helper.utility;
 
 namespace RadioExt_Helper;

@@ -14,7 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-using System.Reflection;
 using AetherUtils.Core.Extensions;
 using RadioExt_Helper.utility;
 
@@ -48,7 +47,7 @@ public partial class AboutBox : Form
     /// </summary>
     private void Translate()
     {
-        Text = string.Concat(GlobalData.Strings.GetString("About") ?? "About", " - ", 
+        Text = string.Concat(GlobalData.Strings.GetString("About") ?? "About", " - ",
             string.Format(GlobalData.Strings.GetString("AboutVersion") ?? "Version {0}", GlobalData.AppVersion));
 
         lblAppName.Text = GlobalData.Strings.GetString("MainTitle") ?? "Cyber Radio Assistant";

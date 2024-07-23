@@ -35,22 +35,13 @@ namespace RadioExt_Helper.forms;
 /// </summary>
 public partial class MainForm : Form
 {
-    /// <summary>
-    ///     Gets the base path of the game from the configuration.
-    /// </summary>
-    private static string GameBasePath => GlobalData.ConfigManager.Get("gameBasePath") as string ?? string.Empty;
-
-    /// <summary>
-    ///     Gets the staging path from the configuration.
-    /// </summary>
-    private static string StagingPath => GlobalData.ConfigManager.Get("stagingPath") as string ?? string.Empty;
+    private readonly BackupManager _backupManager = new();
 
     private readonly ImageComboBox<ImageComboBoxItem> _languageComboBox = new();
     private readonly List<ImageComboBoxItem> _languages = [];
     private readonly NoStationsCtl _noStationsCtrl = new();
     private readonly Timer _resizeTimer;
     private readonly ImageList _stationImageList = new();
-    private readonly BackupManager _backupManager = new();
 
     private StationEditor? _currentEditor;
     private bool _ignoreSelectedIndexChanged;
@@ -81,6 +72,16 @@ public partial class MainForm : Form
         lbStations.DataSource = StationManager.Instance.StationsAsBindingList;
         lbStations.DisplayMember = "TrackedObject.MetaData";
     }
+
+    /// <summary>
+    ///     Gets the base path of the game from the configuration.
+    /// </summary>
+    private static string GameBasePath => GlobalData.ConfigManager.Get("gameBasePath") as string ?? string.Empty;
+
+    /// <summary>
+    ///     Gets the staging path from the configuration.
+    /// </summary>
+    private static string StagingPath => GlobalData.ConfigManager.Get("stagingPath") as string ?? string.Empty;
 
     private void InitializeEvents()
     {
@@ -157,7 +158,8 @@ public partial class MainForm : Form
     ///     Initializes the language drop-down with supported languages and images.
     /// </summary>
     private void InitializeLanguageDropDown()
-    { //TODO: Add [New Station] translations in the list box when the language is changed.
+    {
+        //TODO: Add [New Station] translations in the list box when the language is changed.
         // Populate the language combo box
         _languages.Add(new ImageComboBoxItem("English (en)", Resources.united_kingdom));
         _languages.Add(new ImageComboBoxItem("Español (es)", Resources.spain));
@@ -294,12 +296,18 @@ public partial class MainForm : Form
     ///     <param name="sender">The event sender.</param>
     ///     <param name="e">The event arguments.</param>
     /// </summary>
-    private void OnPathsChanged(object? sender, EventArgs e) => PopulateStations();
+    private void OnPathsChanged(object? sender, EventArgs e)
+    {
+        PopulateStations();
+    }
 
     /// <summary>
     ///     Updates the enabled station count label.
     /// </summary>
-    private void UpdateEnabledStationCount() => this.SafeInvoke(() => { lblStationCount.Text = StationManager.Instance.GetStationCount(); });
+    private void UpdateEnabledStationCount()
+    {
+        this.SafeInvoke(() => { lblStationCount.Text = StationManager.Instance.GetStationCount(); });
+    }
 
     /// <summary>
     ///     Handles the SelectedIndexChanged event of the lbStations list box.
@@ -335,14 +343,16 @@ public partial class MainForm : Form
             splitContainer1.Panel2.ResumeLayout();
 
             _currentEditor = editor;
-        } catch (Exception ex)
+        }
+        catch (Exception ex)
         {
-            AuLogger.GetCurrentLogger<MainForm>("UpdateStationEditor").Error(ex, "An error occurred while updating the station editor.");
+            AuLogger.GetCurrentLogger<MainForm>("UpdateStationEditor")
+                .Error(ex, "An error occurred while updating the station editor.");
         }
     }
 
     private void RevertChangesToolStripMenuItem_Click(object sender, EventArgs e)
-    { 
+    {
         if (lbStations.SelectedItem is not TrackableObject<Station> station) return;
 
         //We only want to revert the changes if there is a pending save. Otherwise, the wrong icon is drawn in the list box.
@@ -388,15 +398,19 @@ public partial class MainForm : Form
     ///     <param name="e">The event arguments.</param>
     /// </summary>
     private void BtnEnableAll_Click(object sender, EventArgs e)
-        => SetStationStatus(true, true, lbStations.Items.Cast<TrackableObject<Station>>().Select(s => s.Id).ToArray());
+    {
+        SetStationStatus(true, true, lbStations.Items.Cast<TrackableObject<Station>>().Select(s => s.Id).ToArray());
+    }
 
     /// <summary>
     ///     Handles the Click event of the btnDisableAll button.
     /// </summary>
     /// <param name="sender">The event sender.</param>
     /// <param name="e">The event arguments.</param>
-    private void BtnDisableAll_Click(object sender, EventArgs e) 
-        => SetStationStatus(false, true, lbStations.Items.Cast<TrackableObject<Station>>().Select(s => s.Id).ToArray());
+    private void BtnDisableAll_Click(object sender, EventArgs e)
+    {
+        SetStationStatus(false, true, lbStations.Items.Cast<TrackableObject<Station>>().Select(s => s.Id).ToArray());
+    }
 
     /// <summary>
     /// Sets the status of the station(s) to the new status.
@@ -420,6 +434,7 @@ public partial class MainForm : Form
                 StationManager.Instance.CheckStatus(stationId);
             }
         }
+
         lbStations.Invalidate();
         lbStations.EndUpdate();
         UpdateEnabledStationCount();
@@ -436,7 +451,7 @@ public partial class MainForm : Form
             return;
 
         var id = StationManager.Instance.AddStation();
-    
+
         lbStations.SelectedItem = StationManager.Instance.GetStation(id)?.Key;
         SelectStationEditor(id);
         UpdateEnabledStationCount();
@@ -541,7 +556,8 @@ public partial class MainForm : Form
             var totalSongCount = missingSongs.Values.Where(p => p.Key).Sum(p => p.Value);
 
             var text = string.Format(GlobalData.Strings.GetString("ExportToGameMissingSongs") ??
-                "There are {0} station(s) with a total of {1} invalid song path(s). Do you want to continue exporting?", count, totalSongCount);
+                                     "There are {0} station(s) with a total of {1} invalid song path(s). Do you want to continue exporting?",
+                count, totalSongCount);
             var caption = GlobalData.Strings.GetString("SongsMissingPaths") ?? "Songs Missing Paths";
 
             var result = MessageBox.Show(this, text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
@@ -638,7 +654,8 @@ public partial class MainForm : Form
         // Check if the backup path is a sub-path of the staging path (i.e., the backup path is within the staging path)
         if (IsSubPath(StagingPath, backupPath))
         {
-            var text = GlobalData.Strings.GetString("BackupPathIsSubpath") ?? "Backup path cannot be within the staging path.";
+            var text = GlobalData.Strings.GetString("BackupPathIsSubpath") ??
+                       "Backup path cannot be within the staging path.";
             var caption = GlobalData.Strings.GetString("Backup") ?? "Backup";
             MessageBox.Show(this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
             return;
@@ -679,7 +696,8 @@ public partial class MainForm : Form
         try
         {
             // Check if the paths are valid
-            if (string.IsNullOrEmpty(basePath) || string.IsNullOrEmpty(subPath) || !Directory.Exists(basePath) || !Directory.Exists(subPath))
+            if (string.IsNullOrEmpty(basePath) || string.IsNullOrEmpty(subPath) || !Directory.Exists(basePath) ||
+                !Directory.Exists(subPath))
                 return false;
 
             // Get the full paths
@@ -687,15 +705,18 @@ public partial class MainForm : Form
             var fullSubPath = Path.GetFullPath(subPath);
 
             // Normalize directory separators
-            fullBasePath = fullBasePath.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar) + Path.DirectorySeparatorChar;
-            fullSubPath = fullSubPath.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar) + Path.DirectorySeparatorChar;
+            fullBasePath = fullBasePath.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar) +
+                           Path.DirectorySeparatorChar;
+            fullSubPath = fullSubPath.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar) +
+                          Path.DirectorySeparatorChar;
 
             // Check if the fullSubPath starts with fullBasePath
             return fullSubPath.StartsWith(fullBasePath, StringComparison.OrdinalIgnoreCase);
         }
         catch (Exception ex)
         {
-            AuLogger.GetCurrentLogger<MainForm>("IsSubPath").Error(ex, "An error occurred while checking if the path is a subpath.");
+            AuLogger.GetCurrentLogger<MainForm>("IsSubPath")
+                .Error(ex, "An error occurred while checking if the path is a subpath.");
             return false;
         }
     }
@@ -722,7 +743,8 @@ public partial class MainForm : Form
             var caption = GlobalData.Strings.GetString("Backup") ?? "Backup";
             MessageBox.Show(this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
 
-            AuLogger.GetCurrentLogger<MainForm>("StartBackupAsync").Error(ex, "An error occurred during staging folder backup.");
+            AuLogger.GetCurrentLogger<MainForm>("StartBackupAsync")
+                .Error(ex, "An error occurred during staging folder backup.");
         }
     }
 
@@ -751,7 +773,8 @@ public partial class MainForm : Form
                 var caption = GlobalData.Strings.GetString("Backup") ?? "Backup";
                 MessageBox.Show(this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                AuLogger.GetCurrentLogger<MainForm>("BackupManager_BackupCompleted").Info($"Backup completed successfully: {backupFileName}");
+                AuLogger.GetCurrentLogger<MainForm>("BackupManager_BackupCompleted")
+                    .Info($"Backup completed successfully: {backupFileName}");
                 Process.Start("explorer.exe", backupPath);
             }
             else
@@ -760,14 +783,12 @@ public partial class MainForm : Form
                 var caption = GlobalData.Strings.GetString("Backup") ?? "Backup";
                 MessageBox.Show(this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
 
-                AuLogger.GetCurrentLogger<MainForm>("BackupManager_BackupCompleted").Error($"Backup failed: {backupFileName}");
+                AuLogger.GetCurrentLogger<MainForm>("BackupManager_BackupCompleted")
+                    .Error($"Backup failed: {backupFileName}");
             }
 
             // Clear the status message after a short delay
-            Task.Delay(2000).ContinueWith(_ =>
-            {
-                this.SafeInvoke(() => lblBackupStatus.Text = string.Empty);
-            });
+            Task.Delay(2000).ContinueWith(_ => { this.SafeInvoke(() => lblBackupStatus.Text = string.Empty); });
         });
     }
 
@@ -806,9 +827,11 @@ public partial class MainForm : Form
         try
         {
             Close();
-        } catch (Exception ex)
+        }
+        catch (Exception ex)
         {
-            AuLogger.GetCurrentLogger<MainForm>("ExitToolStripMenuItem_Click").Error(ex, "An error occurred while closing the application.");
+            AuLogger.GetCurrentLogger<MainForm>("ExitToolStripMenuItem_Click")
+                .Error(ex, "An error occurred while closing the application.");
         }
     }
 

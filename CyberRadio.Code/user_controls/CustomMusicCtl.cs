@@ -26,17 +26,12 @@ namespace RadioExt_Helper.user_controls;
 
 public sealed partial class CustomMusicCtl : UserControl, IUserControl
 {
+    private readonly ImageList _songListViewImages = new();
+
     /// <summary>
     /// Image list for the tab images.
     /// </summary>
     private readonly ImageList _tabImages = new();
-
-    /// <summary>
-    /// Gets the trackable station object associated with the control.
-    /// </summary>
-    public TrackableObject<Station> Station { get; }
-
-    private readonly ImageList _songListViewImages = new();
 
     /// <summary>
     /// Initializes a new instance of the <see cref="CustomMusicCtl"/> class.
@@ -53,6 +48,11 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
         SetSongListImages();
         PopulateListView();
     }
+
+    /// <summary>
+    /// Gets the trackable station object associated with the control.
+    /// </summary>
+    public TrackableObject<Station> Station { get; }
 
     /// <summary>
     /// Translates the control's text to the appropriate language.
@@ -154,10 +154,8 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
                              $"{song.Duration:hh\\:mm\\:ss}",
                              song.FileSize.FormatSize()
                          ])
-                     { Tag = song }))
-        {
+                         { Tag = song }))
             lvSongs.Items.Add(lvItem);
-        }
 
         lvSongs.ResizeColumns();
         lvSongs.ResumeLayout();

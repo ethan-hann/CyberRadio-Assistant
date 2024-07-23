@@ -39,7 +39,8 @@ public partial class ExportWindow : Form
     private readonly string _statusString =
         GlobalData.Strings.GetString("ExportingStationStatus") ?? "Exporting station: {0}";
 
-    private readonly HashSet<string?> _validAudioExtensions = EnumHelper<ValidAudioFiles>.GetEnumDescriptions().ToHashSet();
+    private readonly HashSet<string?> _validAudioExtensions =
+        EnumHelper<ValidAudioFiles>.GetEnumDescriptions().ToHashSet();
 
     private DirectoryCopier? _dirCopier;
     private bool _exportToGameComplete;
@@ -298,7 +299,8 @@ public partial class ExportWindow : Form
 
             if (!CreateSongListJson(newStationPath, station))
                 AuLogger.GetCurrentLogger<ExportWindow>("BG_ExportStaging")
-                    .Error("Couldn't save the songs.sgls file. This means that CRA doesn't know where your station's songs are located.");
+                    .Error(
+                        "Couldn't save the songs.sgls file. This means that CRA doesn't know where your station's songs are located.");
         }
 
         RemoveDeletedStations(existingDirectories);
@@ -312,22 +314,18 @@ public partial class ExportWindow : Form
     /// <param name="existingDirectories">The existing station directories in the staging folder.</param>
     /// <param name="stations">The list of <see cref="TrackableObject{Station}"/> stations to use for mapping.</param>
     /// <returns>A dictionary containing the directory-song mappings.</returns>
-    private static Dictionary<string, string> MapSongsToDirectories(List<string> existingDirectories, List<TrackableObject<Station>> stations)
+    private static Dictionary<string, string> MapSongsToDirectories(List<string> existingDirectories,
+        List<TrackableObject<Station>> stations)
     {
         var songDirectoryMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
         foreach (var station in stations)
+        foreach (var song in station.TrackedObject.Songs)
         {
-            foreach (var song in station.TrackedObject.Songs)
-            {
-                var songDirectory = existingDirectories
-                    .FirstOrDefault(dir => song.FilePath.StartsWith(dir, StringComparison.OrdinalIgnoreCase));
+            var songDirectory = existingDirectories
+                .FirstOrDefault(dir => song.FilePath.StartsWith(dir, StringComparison.OrdinalIgnoreCase));
 
-                if (!string.IsNullOrEmpty(songDirectory))
-                {
-                    songDirectoryMap[song.FilePath] = songDirectory;
-                }
-            }
+            if (!string.IsNullOrEmpty(songDirectory)) songDirectoryMap[song.FilePath] = songDirectory;
         }
 
         return songDirectoryMap;
@@ -339,7 +337,8 @@ public partial class ExportWindow : Form
     /// <param name="songDirectoryMap">A dictionary containing the mapping between the old station name and the song.</param>
     /// <param name="newStationPath">The path to the new station's directory.</param>
     /// <param name="station">The station to copy songs for.</param>
-    private void CopySongFiles(Dictionary<string, string> songDirectoryMap, string newStationPath, TrackableObject<Station> station)
+    private void CopySongFiles(Dictionary<string, string> songDirectoryMap, string newStationPath,
+        TrackableObject<Station> station)
     {
         foreach (var song in station.TrackedObject.Songs)
         {

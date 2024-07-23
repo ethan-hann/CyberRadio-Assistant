@@ -30,19 +30,6 @@ namespace RadioExt_Helper.user_controls;
 /// </summary>
 public sealed partial class StationEditor : UserControl, IUserControl
 {
-    /// <summary>
-    /// Event that is raised when the station is updated.
-    /// </summary>
-    public event EventHandler? StationUpdated;
-
-    /// <summary>
-    /// Gets the trackable station object.
-    /// </summary>
-    public TrackableObject<Station> Station { get; }
-
-    [GeneratedRegex(@"^\d+(\.\d+)?\s*")]
-    private static partial Regex DisplayNameRegex();
-
     private readonly ComboBox _cmbUiIcons;
     private readonly CustomMusicCtl _musicCtl;
     private readonly ImageList _tabImages = new();
@@ -68,6 +55,11 @@ public sealed partial class StationEditor : UserControl, IUserControl
         // Initialize DataGridView columns
         InitializeDataGridViewColumns();
     }
+
+    /// <summary>
+    /// Gets the trackable station object.
+    /// </summary>
+    public TrackableObject<Station> Station { get; }
 
     /// <summary>
     /// Translates the user control to the current language.
@@ -102,6 +94,14 @@ public sealed partial class StationEditor : UserControl, IUserControl
 
         _musicCtl.Translate();
     }
+
+    /// <summary>
+    /// Event that is raised when the station is updated.
+    /// </summary>
+    public event EventHandler? StationUpdated;
+
+    [GeneratedRegex(@"^\d+(\.\d+)?\s*")]
+    private static partial Regex DisplayNameRegex();
 
     private void InitializeDataGridViewColumns()
     {
@@ -399,7 +399,6 @@ public sealed partial class StationEditor : UserControl, IUserControl
         var value = row.Cells[1].Value?.ToString();
         if (key != null && value != null && Station.TrackedObject.MetaData.CustomKeyValuePairs.TryAdd(key, value))
             StationUpdated?.Invoke(this, EventArgs.Empty);
-
     }
 
     private void DgvMetadata_UserDeletedRow(object sender, DataGridViewRowEventArgs e)

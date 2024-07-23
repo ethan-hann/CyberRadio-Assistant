@@ -17,7 +17,6 @@
 using System.Reflection;
 using AetherUtils.Core.Logging;
 using RadioExt_Helper.migration;
-using RadioExt_Helper.nexus_api;
 using RadioExt_Helper.utility;
 
 namespace RadioExt_Helper.forms;
