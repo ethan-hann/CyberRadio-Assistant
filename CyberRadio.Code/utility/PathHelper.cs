@@ -15,6 +15,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 using AetherUtils.Core.Logging;
+using RadioExt_Helper.forms;
 
 namespace RadioExt_Helper.utility;
 
@@ -131,5 +132,41 @@ public static class PathHelper
     public static string GetRadiosPath(string gameBasePath)
     {
         return Path.Combine(GetRadioExtPath(gameBasePath), "radios");
+    }
+
+    /// <summary>
+    /// Determines if a path is a sub-path (i.e., starts with) of another path.
+    /// </summary>
+    /// <param name="basePath">The base path to check against.</param>
+    /// <param name="subPath">The path to check against the base path.</param>
+    /// <returns><c>true</c> if the sub path is part of the base path; <c>false</c> otherwise or if an error occured.</returns>
+    public static bool IsSubPath(string basePath, string subPath)
+    {
+        try
+        {
+            // Check if the paths are valid
+            if (string.IsNullOrEmpty(basePath) || string.IsNullOrEmpty(subPath) || !Directory.Exists(basePath) ||
+                !Directory.Exists(subPath))
+                return false;
+
+            // Get the full paths
+            var fullBasePath = Path.GetFullPath(basePath);
+            var fullSubPath = Path.GetFullPath(subPath);
+
+            // Normalize directory separators
+            fullBasePath = fullBasePath.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar) +
+                           Path.DirectorySeparatorChar;
+            fullSubPath = fullSubPath.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar) +
+                          Path.DirectorySeparatorChar;
+
+            // Check if the fullSubPath starts with fullBasePath
+            return fullSubPath.StartsWith(fullBasePath, StringComparison.OrdinalIgnoreCase);
+        }
+        catch (Exception ex)
+        {
+            AuLogger.GetCurrentLogger("PathHelper.IsSubPath")
+                .Error(ex, "An error occurred while checking if the path is a subpath.");
+            return false;
+        }
     }
 }

@@ -721,4 +721,10 @@ exporté vers le jeu.</value>
     <data name="BackupReady" xml:space="preserve">
       <value>Sauvegarde prête</value>
     </data>
+    <data name="StagingPathWithinGamePath" xml:space="preserve">
+      <value>Le chemin de préparation ne peut pas être dans le chemin du jeu !</value>
+    </data>
+    <data name="GamePathWithinStagingPath" xml:space="preserve">
+      <value>Le chemin du jeu ne peut pas être dans le chemin de préparation !</value>
+    </data>
 </root>

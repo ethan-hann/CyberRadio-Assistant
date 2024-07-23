@@ -775,6 +775,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Game path cannot be within staging path!.
+        /// </summary>
+        internal static string GamePathWithinStagingPath {
+            get {
+                return ResourceManager.GetString("GamePathWithinStagingPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to General.
         /// </summary>
         internal static string GeneralSettings {
@@ -1575,6 +1584,15 @@ namespace RadioExt_Helper {
         internal static string StagingPathPlaceholder {
             get {
                 return ResourceManager.GetString("StagingPathPlaceholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Staging path cannot be within game path!.
+        /// </summary>
+        internal static string StagingPathWithinGamePath {
+            get {
+                return ResourceManager.GetString("StagingPathWithinGamePath", resourceCulture);
             }
         }
         

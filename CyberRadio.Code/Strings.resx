@@ -721,4 +721,10 @@ exported to the game.</value>
     <data name="BackupReady" xml:space="preserve">
       <value>Backup Ready</value>
     </data>
+    <data name="StagingPathWithinGamePath" xml:space="preserve">
+      <value>Staging path cannot be within game path!</value>
+    </data>
+    <data name="GamePathWithinStagingPath" xml:space="preserve">
+      <value>Game path cannot be within staging path!</value>
+    </data>
 </root>

@@ -652,7 +652,7 @@ public partial class MainForm : Form
         if (string.IsNullOrEmpty(backupPath)) return;
 
         // Check if the backup path is a sub-path of the staging path (i.e., the backup path is within the staging path)
-        if (IsSubPath(StagingPath, backupPath))
+        if (PathHelper.IsSubPath(StagingPath, backupPath))
         {
             var text = GlobalData.Strings.GetString("BackupPathIsSubpath") ??
                        "Backup path cannot be within the staging path.";
@@ -683,42 +683,6 @@ public partial class MainForm : Form
         };
 
         return folderBrowserDialog.ShowDialog() == DialogResult.OK ? folderBrowserDialog.SelectedPath : string.Empty;
-    }
-
-    /// <summary>
-    /// Determines if a path is a sub-path (i.e., starts with) of another path.
-    /// </summary>
-    /// <param name="basePath">The base path to check against.</param>
-    /// <param name="subPath">The path to check against the base path.</param>
-    /// <returns><c>true</c> if the sub path is part of the base path; <c>false</c> otherwise or if an error occured.</returns>
-    private static bool IsSubPath(string basePath, string subPath)
-    {
-        try
-        {
-            // Check if the paths are valid
-            if (string.IsNullOrEmpty(basePath) || string.IsNullOrEmpty(subPath) || !Directory.Exists(basePath) ||
-                !Directory.Exists(subPath))
-                return false;
-
-            // Get the full paths
-            var fullBasePath = Path.GetFullPath(basePath);
-            var fullSubPath = Path.GetFullPath(subPath);
-
-            // Normalize directory separators
-            fullBasePath = fullBasePath.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar) +
-                           Path.DirectorySeparatorChar;
-            fullSubPath = fullSubPath.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar) +
-                          Path.DirectorySeparatorChar;
-
-            // Check if the fullSubPath starts with fullBasePath
-            return fullSubPath.StartsWith(fullBasePath, StringComparison.OrdinalIgnoreCase);
-        }
-        catch (Exception ex)
-        {
-            AuLogger.GetCurrentLogger<MainForm>("IsSubPath")
-                .Error(ex, "An error occurred while checking if the path is a subpath.");
-            return false;
-        }
     }
 
     /// <summary>

@@ -721,4 +721,10 @@ exportado al juego.</value>
     <data name="BackupReady" xml:space="preserve">
       <value>Copia de seguridad lista</value>
     </data>
+    <data name="StagingPathWithinGamePath" xml:space="preserve">
+      <value>¡El camino de puesta en escena no puede estar dentro del camino del juego!</value>
+    </data>
+    <data name="GamePathWithinStagingPath" xml:space="preserve">
+      <value>¡El camino del juego no puede estar dentro del camino de puesta en escena!</value>
+    </data>
 </root>

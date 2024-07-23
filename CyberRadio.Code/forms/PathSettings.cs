@@ -113,6 +113,18 @@ public partial class PathSettings : Form
     {
         var basePath = PathHelper.GetGamePath();
         if (basePath == null || basePath.Equals(string.Empty)) return;
+        var stagingPath = GlobalData.ConfigManager.Get("stagingPath") as string ?? string.Empty;
+
+        if (PathHelper.IsSubPath(stagingPath, basePath))
+        {
+            var text = GlobalData.Strings.GetString("GamePathWithinStagingPath");
+            var caption = GlobalData.Strings.GetString("Error");
+            MessageBox.Show(this, text, caption, MessageBoxButtons.OK,
+                MessageBoxIcon.Error);
+            AuLogger.GetCurrentLogger<PathSettings>("ChangeGameBasePath")
+                .Warn("Game path is within the staging path.");
+            return;
+        }
 
         if (!GameBasePath.Equals(basePath))
             _gameFolderChanged = true;
@@ -147,6 +159,18 @@ public partial class PathSettings : Form
     {
         var stagingPath = PathHelper.GetStagingPath();
         if (stagingPath.Equals(string.Empty) || stagingPath.Equals(StagingPath)) return;
+        var gamePath = GlobalData.ConfigManager.Get("gameBasePath") as string ?? string.Empty;
+
+        if (PathHelper.IsSubPath(gamePath, stagingPath))
+        {
+            var text = GlobalData.Strings.GetString("StagingPathWithinGamePath");
+            var caption = GlobalData.Strings.GetString("Error");
+            MessageBox.Show(this, text, caption, MessageBoxButtons.OK,
+                MessageBoxIcon.Error);
+            AuLogger.GetCurrentLogger<PathSettings>("ChangeStagingPath")
+                .Warn("Staging path is within the game path.");
+            return;
+        }
 
         if (!StagingPath.Equals(stagingPath))
             _stageFolderChanged = true;
