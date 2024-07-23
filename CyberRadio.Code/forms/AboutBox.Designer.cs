@@ -33,15 +33,14 @@
             tableLayoutPanel1 = new TableLayoutPanel();
             panel1 = new Panel();
             lnkNexusMods = new LinkLabel();
-            lnkLicense = new LinkLabel();
-            lblVersion = new Label();
+            lnkGithubRepo = new LinkLabel();
             lblSpecialThanks2 = new Label();
             lnkRadioExtDev = new LinkLabel();
             lblSpecialThanks1 = new Label();
             lblAboutInfo = new Label();
             tableLayoutPanel2 = new TableLayoutPanel();
             lblCopyright = new Label();
-            lnkGithubRepo = new LinkLabel();
+            lnkLicense = new LinkLabel();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             tableLayoutPanel1.SuspendLayout();
             panel1.SuspendLayout();
@@ -94,7 +93,6 @@
             // 
             panel1.Controls.Add(lnkNexusMods);
             panel1.Controls.Add(lnkGithubRepo);
-            panel1.Controls.Add(lblVersion);
             panel1.Controls.Add(lblSpecialThanks2);
             panel1.Controls.Add(lnkRadioExtDev);
             panel1.Controls.Add(lblSpecialThanks1);
@@ -116,27 +114,18 @@
             lnkNexusMods.TextAlign = ContentAlignment.MiddleCenter;
             lnkNexusMods.LinkClicked += LnkNexusMods_LinkClicked;
             // 
-            // lnkLicense
+            // lnkGithubRepo
             // 
-            lnkLicense.Anchor = AnchorStyles.Right;
-            lnkLicense.AutoSize = true;
-            lnkLicense.Location = new Point(317, 3);
-            lnkLicense.Name = "lnkLicense";
-            lnkLicense.Size = new Size(46, 15);
-            lnkLicense.TabIndex = 7;
-            lnkLicense.TabStop = true;
-            lnkLicense.Text = "License";
-            lnkLicense.LinkClicked += LnkLicense_LinkClicked;
-            // 
-            // lblVersion
-            // 
-            lblVersion.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            lblVersion.AutoSize = true;
-            lblVersion.Location = new Point(291, 55);
-            lblVersion.Name = "lblVersion";
-            lblVersion.Size = new Size(72, 15);
-            lblVersion.TabIndex = 6;
-            lblVersion.Text = "Version 1.0.0";
+            lnkGithubRepo.Anchor = AnchorStyles.Right;
+            lnkGithubRepo.AutoSize = true;
+            lnkGithubRepo.Location = new Point(290, 40);
+            lnkGithubRepo.Name = "lnkGithubRepo";
+            lnkGithubRepo.Size = new Size(73, 15);
+            lnkGithubRepo.TabIndex = 3;
+            lnkGithubRepo.TabStop = true;
+            lnkGithubRepo.Text = "Github Repo";
+            lnkGithubRepo.TextAlign = ContentAlignment.MiddleCenter;
+            lnkGithubRepo.LinkClicked += LnkGithubRepo_LinkClicked;
             // 
             // lblSpecialThanks2
             // 
@@ -211,18 +200,17 @@
             lblCopyright.Text = "2024 Ethan Hann";
             lblCopyright.TextAlign = ContentAlignment.MiddleCenter;
             // 
-            // lnkGithubRepo
+            // lnkLicense
             // 
-            lnkGithubRepo.Anchor = AnchorStyles.Right;
-            lnkGithubRepo.AutoSize = true;
-            lnkGithubRepo.Location = new Point(290, 40);
-            lnkGithubRepo.Name = "lnkGithubRepo";
-            lnkGithubRepo.Size = new Size(73, 15);
-            lnkGithubRepo.TabIndex = 3;
-            lnkGithubRepo.TabStop = true;
-            lnkGithubRepo.Text = "Github Repo";
-            lnkGithubRepo.TextAlign = ContentAlignment.MiddleCenter;
-            lnkGithubRepo.LinkClicked += LnkGithubRepo_LinkClicked;
+            lnkLicense.Anchor = AnchorStyles.Right;
+            lnkLicense.AutoSize = true;
+            lnkLicense.Location = new Point(317, 3);
+            lnkLicense.Name = "lnkLicense";
+            lnkLicense.Size = new Size(46, 15);
+            lnkLicense.TabIndex = 7;
+            lnkLicense.TabStop = true;
+            lnkLicense.Text = "License";
+            lnkLicense.LinkClicked += LnkLicense_LinkClicked;
             // 
             // AboutBox
             // 
@@ -261,7 +249,6 @@
         private Label lblAboutInfo;
         private Label lblCopyright;
         private Panel panel1;
-        private Label lblVersion;
         private Label lblSpecialThanks2;
         private LinkLabel lnkRadioExtDev;
         private Label lblSpecialThanks1;

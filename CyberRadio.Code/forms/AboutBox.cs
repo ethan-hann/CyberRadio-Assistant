@@ -48,13 +48,15 @@ public partial class AboutBox : Form
     /// </summary>
     private void Translate()
     {
+        Text = string.Concat(GlobalData.Strings.GetString("About") ?? "About", " - ", 
+            string.Format(GlobalData.Strings.GetString("AboutVersion") ?? "Version {0}", GlobalData.AppVersion));
+
         lblAppName.Text = GlobalData.Strings.GetString("MainTitle") ?? "Cyber Radio Assistant";
         lblAboutInfo.Text = GlobalData.Strings.GetString("AboutInfo") ??
                             "A tool to help create and manage custom radio stations " +
                             "in Cyberpunk 2077 when using the radioExt Mod.";
         lblSpecialThanks1.Text = GlobalData.Strings.GetString("AboutSpecialThanks1") ?? "Special thanks to";
         lblSpecialThanks2.Text = GlobalData.Strings.GetString("AboutSpecialThanks2") ?? "for the awesome radioExt mod!";
-        lblVersion.Text = string.Format(GlobalData.Strings.GetString("AboutVersion") ?? "Version {0}", GlobalData.AppVersion);
         lnkGithubRepo.Text = GlobalData.Strings.GetString("AboutGithubRepo") ?? "Github Repo";
     }
 
