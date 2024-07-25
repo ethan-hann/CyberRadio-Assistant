@@ -233,6 +233,7 @@ public partial class MainForm : Form
         openGamePathToolStripMenuItem.Text = GlobalData.Strings.GetString("OpenGameFolder");
         openLogFolderToolStripMenuItem.Text = GlobalData.Strings.GetString("OpenLogFolder");
         exportToGameToolStripMenuItem.Text = GlobalData.Strings.GetString("ExportStations");
+        synchronizeStationsToolStripMenuItem.Text = GlobalData.Strings.GetString("SynchronizeStations");
         languageToolStripMenuItem.Text = GlobalData.Strings.GetString("Language");
         helpToolStripMenuItem.Text = GlobalData.Strings.GetString("Help");
         configurationToolStripMenuItem.Text = GlobalData.Strings.GetString("Configuration");
@@ -670,7 +671,6 @@ public partial class MainForm : Form
 
         if (_isBackupInProgress)
         {
-            //TODO: Translations
             var backupText = GlobalData.Strings.GetString("BackupInProgress") ?? "Backup is in progress. Please wait...";
             var backupCaption = GlobalData.Strings.GetString("Backup") ?? "Backup";
             MessageBox.Show(this, backupText, backupCaption, MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -700,7 +700,7 @@ public partial class MainForm : Form
             await StationManager.Instance.SynchronizeStationsAsync(StagingPath, GameBasePath);
         }
         catch (Exception ex)
-        { //TODO: Translations
+        {
             var text = string.Format(
                 GlobalData.Strings.GetString("SyncFailedException") ?? "Synchronization failed due to an error: {0}",
                 ex.Message);
@@ -717,7 +717,7 @@ public partial class MainForm : Form
         if (_isAppClosing) return;
 
         this.SafeInvoke(() =>
-        { //TODO: Translations
+        {
             statusStripBackup.Visible = false;
             _isSyncInProgress = false;
             if (success)
@@ -730,7 +730,7 @@ public partial class MainForm : Form
             else
             {
                 var text = string.Format(
-                GlobalData.Strings.GetString("SyncFailed") ?? "Synchronization failed.");
+                GlobalData.Strings.GetString("SyncFailed") ?? "Synchronization Failed!");
                 var caption = GlobalData.Strings.GetString("SyncAbbrev") ?? "Sync";
                 MessageBox.Show(this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
 
@@ -759,11 +759,10 @@ public partial class MainForm : Form
     {
         if (string.IsNullOrEmpty(StagingPath)) return;
 
-        //TODO: translations
         //Check for sync in progress to prevent backup during sync
         if (_isSyncInProgress)
         {
-            var text = GlobalData.Strings.GetString("SyncInProgress") ?? "Synchronization is in progress. Please wait.";
+            var text = GlobalData.Strings.GetString("SyncInProgress") ?? "Synchronization is in progress. Please wait...";
             var caption = GlobalData.Strings.GetString("SyncAbbrev") ?? "Sync";
             MessageBox.Show(this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Warning);
             return;

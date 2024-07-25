@@ -80,6 +80,9 @@ public sealed partial class StationEditor : UserControl, IUserControl
         grpDisplay.Text = GlobalData.Strings.GetString("Display");
         grpCustomIcon.Text = GlobalData.Strings.GetString("CustomIcon");
         grpSettings.Text = GlobalData.Strings.GetString("Settings");
+        grpNotes.Text = GlobalData.Strings.GetString("CustomDataGroup");
+        dgvMetadata.Columns[0].HeaderText = GlobalData.Strings.GetString("CustomDataKey");
+        dgvMetadata.Columns[1].HeaderText = GlobalData.Strings.GetString("CustomDataValue");
 
         tabMusic.Text = GlobalData.Strings.GetString("Music");
         lblUseStream.Text = GlobalData.Strings.GetString("UseStream");
@@ -285,26 +288,6 @@ public sealed partial class StationEditor : UserControl, IUserControl
         Station.TrackedObject.MetaData.Fm = StationManager.Instance.EnsureDisplayNameFormat(Station, (float)nudFM.Value);
         StationUpdated?.Invoke(this, EventArgs.Empty);
     }
-
-    /// <summary>
-    /// Ensures the display name contains the station's FM number at the beginning of its name.
-    /// </summary>
-    //private void EnsureDisplayNameFormat()
-    //{
-    //    var fmValue = nudFM.Value.ToString("00.00", CultureInfo.InvariantCulture); // Format to two decimal places
-    //    var currentText = txtDisplayName.Text;
-
-    //    // Use a regular expression to detect and remove any existing FM value at the start
-    //    var regex = DisplayNameRegex();
-    //    var match = regex.Match(currentText);
-
-    //    if (match.Success)
-    //        // Remove the existing FM value from the start
-    //        currentText = currentText[match.Length..].TrimStart();
-
-    //    // Combine FM value and station name with the correct format
-    //    txtDisplayName.Text = @$"{fmValue} {currentText}";
-    //}
 
     /// <summary>
     /// Occurs when the volume slider is scrolled.

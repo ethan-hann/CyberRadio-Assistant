@@ -20,6 +20,7 @@ using System.Reflection;
 using System.Resources;
 using AetherUtils.Core.Configuration;
 using AetherUtils.Core.Logging;
+using AetherUtils.Core.Structs;
 using RadioExt_Helper.config;
 using RadioExt_Helper.forms;
 
@@ -88,9 +89,6 @@ public static class GlobalData
 
         SetCulture(ConfigManager.Get("language") as string ?? DefaultLanguage);
 
-        //NexusClient = new NexusClient(Secrets.NexusApiKeyDev, "CyberRadioAssistant",
-        //    ExecutingAssembly.GetName().Version?.ToString() ?? "1.0.0");
-
         _globalDataInitialized = true;
     }
 
@@ -119,7 +117,13 @@ public static class GlobalData
     {
         if (ConfigManager.ConfigExists)
         {
-            ConfigManager.Load();
+            if (ConfigManager.Load())
+            {
+                //Set the log header everytime the application is launched to ensure the version is correct in the header
+                ConfigOption logOption = new("logHeader", SystemInfo.GetLogFileHeader());
+                ConfigManager.Set(logOption);
+                ConfigManager.Save();
+            }
         }
         else
         {

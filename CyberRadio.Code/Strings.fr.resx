@@ -736,4 +736,31 @@ exporté vers le jeu.</value>
     <data name="MissingStations" xml:space="preserve">
       <value>Il y a des stations {0} dans le dossier du jeu manquant dans le dossier de mise en scène. Souhaitez-vous synchroniser les stations?</value>
     </data>
+    <data name="CustomDataGroup" xml:space="preserve">
+      <value>Données personnalisées</value>
+    </data>
+    <data name="BackupInProgress" xml:space="preserve">
+      <value>La sauvegarde est en cours. S'il vous plaît, attendez...</value>
+    </data>
+    <data name="SyncFailedException" xml:space="preserve">
+      <value>La synchronisation a échoué en raison d'une erreur: {0}</value>
+    </data>
+    <data name="SyncAbbrev" xml:space="preserve">
+      <value>Synchronisation</value>
+    </data>
+    <data name="SyncFailed" xml:space="preserve">
+      <value>La synchronisation a échoué!</value>
+    </data>
+    <data name="SyncInProgress" xml:space="preserve">
+      <value>La synchronisation est en cours. S'il vous plaît, attendez...</value>
+    </data>
+    <data name="CustomDataKey" xml:space="preserve">
+      <value>Clé</value>
+    </data>
+    <data name="CustomDataValue" xml:space="preserve">
+      <value>Valeur</value>
+    </data>
+    <data name="Exit" xml:space="preserve">
+      <value>Sortie</value>
+    </data>
 </root>

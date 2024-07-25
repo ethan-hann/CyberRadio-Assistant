@@ -258,6 +258,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Backup is in progress. Please wait....
+        /// </summary>
+        internal static string BackupInProgress {
+            get {
+                return ResourceManager.GetString("BackupInProgress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Backup path cannot be within the staging path..
         /// </summary>
         internal static string BackupPathIsSubpath {
@@ -425,6 +434,33 @@ namespace RadioExt_Helper {
         internal static string ConfirmSyncStations {
             get {
                 return ResourceManager.GetString("ConfirmSyncStations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Custom Data.
+        /// </summary>
+        internal static string CustomDataGroup {
+            get {
+                return ResourceManager.GetString("CustomDataGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Key.
+        /// </summary>
+        internal static string CustomDataKey {
+            get {
+                return ResourceManager.GetString("CustomDataKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Value.
+        /// </summary>
+        internal static string CustomDataValue {
+            get {
+                return ResourceManager.GetString("CustomDataValue", resourceCulture);
             }
         }
         
@@ -623,6 +659,15 @@ namespace RadioExt_Helper {
         internal static string ErrorStreamingAudio {
             get {
                 return ResourceManager.GetString("ErrorStreamingAudio", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exit.
+        /// </summary>
+        internal static string Exit {
+            get {
+                return ResourceManager.GetString("Exit", resourceCulture);
             }
         }
         
@@ -1678,11 +1723,47 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Sync.
+        /// </summary>
+        internal static string SyncAbbrev {
+            get {
+                return ResourceManager.GetString("SyncAbbrev", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Synchronization Failed!.
+        /// </summary>
+        internal static string SyncFailed {
+            get {
+                return ResourceManager.GetString("SyncFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Synchronization failed due to an error: {0}.
+        /// </summary>
+        internal static string SyncFailedException {
+            get {
+                return ResourceManager.GetString("SyncFailedException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Synchronize Stations.
         /// </summary>
         internal static string SynchronizeStations {
             get {
                 return ResourceManager.GetString("SynchronizeStations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Synchronization is in progress. Please wait....
+        /// </summary>
+        internal static string SyncInProgress {
+            get {
+                return ResourceManager.GetString("SyncInProgress", resourceCulture);
             }
         }
         

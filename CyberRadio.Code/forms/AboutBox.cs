@@ -57,6 +57,7 @@ public partial class AboutBox : Form
         lblSpecialThanks1.Text = GlobalData.Strings.GetString("AboutSpecialThanks1") ?? "Special thanks to";
         lblSpecialThanks2.Text = GlobalData.Strings.GetString("AboutSpecialThanks2") ?? "for the awesome radioExt mod!";
         lnkGithubRepo.Text = GlobalData.Strings.GetString("AboutGithubRepo") ?? "Github Repo";
+        lnkLicense.Text = GlobalData.Strings.GetString("AboutLicense") ?? "License";
     }
 
     private void LnkRadioExtDev_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
