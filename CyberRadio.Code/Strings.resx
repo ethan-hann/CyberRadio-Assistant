@@ -727,4 +727,13 @@ exported to the game.</value>
     <data name="GamePathWithinStagingPath" xml:space="preserve">
       <value>Game path cannot be within staging path!</value>
     </data>
+    <data name="SynchronizeStations" xml:space="preserve">
+      <value>Synchronize Stations</value>
+    </data>
+    <data name="ConfirmSyncStations" xml:space="preserve">
+      <value>Are you sure you want to synchronize the stations? This will overwrite any modifications to existing stations in staging.</value>
+    </data>
+    <data name="MissingStations" xml:space="preserve">
+      <value>There are {0} station(s) in the game's folder missing from the staging folder. Would you like to synchronize the stations?</value>
+    </data>
 </root>

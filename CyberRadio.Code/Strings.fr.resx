@@ -727,4 +727,13 @@ exporté vers le jeu.</value>
     <data name="GamePathWithinStagingPath" xml:space="preserve">
       <value>Le chemin du jeu ne peut pas être dans le chemin de préparation !</value>
     </data>
+    <data name="ConfirmSyncStations" xml:space="preserve">
+      <value>Êtes-vous sûr de vouloir synchroniser les stations? Cela écrasera toute modification des stations existantes en stadification.</value>
+    </data>
+    <data name="SynchronizeStations" xml:space="preserve">
+      <value>Synchroniser les stations</value>
+    </data>
+    <data name="MissingStations" xml:space="preserve">
+      <value>Il y a des stations {0} dans le dossier du jeu manquant dans le dossier de mise en scène. Souhaitez-vous synchroniser les stations?</value>
+    </data>
 </root>

@@ -47,6 +47,8 @@ public partial class MainForm : Form
     private bool _ignoreSelectedIndexChanged;
 
     private bool _isAppClosing;
+    private bool _isBackupInProgress;
+    private bool _isSyncInProgress;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="MainForm" /> class.
@@ -93,6 +95,9 @@ public partial class MainForm : Form
 
         StationManager.Instance.StationNameDuplicate += OnStationNameDuplicateEvent;
         StationManager.Instance.StationUpdated += OnStationUpdated;
+        StationManager.Instance.SyncProgressChanged += OnStationSyncProgressChanged;
+        StationManager.Instance.SyncStatusChanged += OnStationSyncStatusChanged;
+        StationManager.Instance.StationsSynchronized += OnStationsSynchronized;
 
         // Save the configuration when resizing has stopped
         _resizeTimer.Elapsed += (_, _) => { SaveWindowSize(); };
@@ -150,7 +155,21 @@ public partial class MainForm : Form
         SelectLanguage();
         Translate();
 
-        PopulateStations();
+        var missingStationsCount = StationManager.Instance.CheckGameForExistingStations(StagingPath, GameBasePath);
+        if (missingStationsCount > 0)
+        {
+            var text = string.Format(GlobalData.Strings.GetString("MissingStations") ?? "There are {0} station(s) in the game's folder missing from the staging folder. " +
+                "Would you like to synchronize the stations?",
+                missingStationsCount);
+            var caption = GlobalData.Strings.GetString("MissingStationsCaption") ?? "Missing Stations";
+            if (MessageBox.Show(this, text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+                _ = SyncStationsAsync();
+        }
+        else
+        {
+            PopulateStations();
+        }
+
         HandleUserControlVisibility();
     }
 
@@ -644,9 +663,111 @@ public partial class MainForm : Form
             PopulateStations();
     }
 
+    private void SynchronizeStationsToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        if (string.IsNullOrEmpty(StagingPath)) return;
+        if (string.IsNullOrEmpty(GameBasePath)) return;
+
+        if (_isBackupInProgress)
+        {
+            //TODO: Translations
+            var backupText = GlobalData.Strings.GetString("BackupInProgress") ?? "Backup is in progress. Please wait...";
+            var backupCaption = GlobalData.Strings.GetString("Backup") ?? "Backup";
+            MessageBox.Show(this, backupText, backupCaption, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            return;
+        }
+
+        var text = GlobalData.Strings.GetString("ConfirmSyncStations") ?? "Are you sure you want to synchronize the stations?" +
+            " This will overwrite any modifications to existing stations in staging.";
+        var caption = GlobalData.Strings.GetString("Confirm");
+        var result = MessageBox.Show(this, text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+        if (result == DialogResult.No) return;
+
+        // Initialize ProgressBar
+        pgBackupProgress.Value = 0;
+        statusStripBackup.Visible = true;
+
+        _ = SyncStationsAsync();
+    }
+
+    private async Task SyncStationsAsync()
+    {
+        if (_isAppClosing) return;
+
+        try
+        {
+            _isSyncInProgress = true;
+            await StationManager.Instance.SynchronizeStationsAsync(StagingPath, GameBasePath);
+        }
+        catch (Exception ex)
+        { //TODO: Translations
+            var text = string.Format(
+                GlobalData.Strings.GetString("SyncFailedException") ?? "Synchronization failed due to an error: {0}",
+                ex.Message);
+            var caption = GlobalData.Strings.GetString("SyncAbbrev") ?? "Sync";
+            MessageBox.Show(this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+            AuLogger.GetCurrentLogger<MainForm>("SyncStationsAsync")
+                .Error(ex, "An error occurred while synchronizing stations from game to staging.");
+        }
+    }
+
+    private void OnStationsSynchronized(bool success)
+    {
+        if (_isAppClosing) return;
+
+        this.SafeInvoke(() =>
+        { //TODO: Translations
+            statusStripBackup.Visible = false;
+            _isSyncInProgress = false;
+            if (success)
+            {
+                PopulateStations();
+
+                AuLogger.GetCurrentLogger<MainForm>("OnStationsSynchronized")
+                    .Info($"Stations synchronized from game to staging successfully.");
+            }
+            else
+            {
+                var text = string.Format(
+                GlobalData.Strings.GetString("SyncFailed") ?? "Synchronization failed.");
+                var caption = GlobalData.Strings.GetString("SyncAbbrev") ?? "Sync";
+                MessageBox.Show(this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                AuLogger.GetCurrentLogger<MainForm>("OnStationsSynchronized")
+                    .Error("An unknown error occurred while synchronizing stations from game to staging.");
+            }
+
+            // Clear the status message after a short delay
+            Task.Delay(2000).ContinueWith(_ => { this.SafeInvoke(() => lblBackupStatus.Text = string.Empty); });
+        });
+    }
+
+    private void OnStationSyncStatusChanged(string status)
+    {
+        if (!_isAppClosing && !_isBackupInProgress)
+            this.SafeInvoke(() => lblBackupStatus.Text = status);
+    }
+
+    private void OnStationSyncProgressChanged(int progress)
+    {
+        if (!_isAppClosing && !_isBackupInProgress)
+            this.SafeInvoke(() => pgBackupProgress.Value = progress);
+    }
+
     private void BackupStagingFolderToolStripMenuItem_Click(object sender, EventArgs e)
     {
         if (string.IsNullOrEmpty(StagingPath)) return;
+
+        //TODO: translations
+        //Check for sync in progress to prevent backup during sync
+        if (_isSyncInProgress)
+        {
+            var text = GlobalData.Strings.GetString("SyncInProgress") ?? "Synchronization is in progress. Please wait.";
+            var caption = GlobalData.Strings.GetString("SyncAbbrev") ?? "Sync";
+            MessageBox.Show(this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            return;
+        }
 
         var backupPath = GetBackupPath();
         if (string.IsNullOrEmpty(backupPath)) return;
@@ -693,10 +814,11 @@ public partial class MainForm : Form
     /// <returns>A task that represents the asynchronous backup operation.</returns>
     private async Task StartBackupAsync(string stagingPath, string backupPath)
     {
-        if (_isAppClosing) return;
+        if (_isAppClosing || _isSyncInProgress) return;
 
         try
         {
+            _isBackupInProgress = true;
             await _backupManager.BackupStagingFolderAsync(stagingPath, backupPath);
         }
         catch (Exception ex)
@@ -714,13 +836,13 @@ public partial class MainForm : Form
 
     private void OnBackupManagerProgressChanged(int progress)
     {
-        if (!_isAppClosing)
+        if (!_isAppClosing && !_isSyncInProgress)
             this.SafeInvoke(() => pgBackupProgress.Value = progress);
     }
 
     private void OnBackupManagerStatusChanged(string status)
     {
-        if (!_isAppClosing)
+        if (!_isAppClosing && !_isSyncInProgress)
             this.SafeInvoke(() => lblBackupStatus.Text = status);
     }
 
@@ -731,6 +853,7 @@ public partial class MainForm : Form
         this.SafeInvoke(() =>
         {
             statusStripBackup.Visible = false;
+            _isBackupInProgress = false;
             if (success)
             {
                 var text = GlobalData.Strings.GetString("BackupCompleted") ?? "Backup completed successfully.";

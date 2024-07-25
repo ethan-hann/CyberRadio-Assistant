@@ -100,9 +100,6 @@ public sealed partial class StationEditor : UserControl, IUserControl
     /// </summary>
     public event EventHandler? StationUpdated;
 
-    [GeneratedRegex(@"^\d+(\.\d+)?\s*")]
-    private static partial Regex DisplayNameRegex();
-
     private void InitializeDataGridViewColumns()
     {
         dgvMetadata.Columns.Add("colKey", GlobalData.Strings.GetString("MetaDataKey") ?? "Key");
@@ -214,7 +211,9 @@ public sealed partial class StationEditor : UserControl, IUserControl
     /// <param name="e"></param>
     private void TxtDisplayName_Leave(object sender, EventArgs e)
     {
-        EnsureDisplayNameFormat();
+        StationManager.Instance.EnsureDisplayNameFormat(Station);
+        nudFM.Value = (decimal)Station.TrackedObject.MetaData.Fm;
+        StationUpdated?.Invoke(this, EventArgs.Empty);
     }
 
     /// <summary>
@@ -283,30 +282,29 @@ public sealed partial class StationEditor : UserControl, IUserControl
     /// <param name="e"></param>
     private void NudFM_ValueChanged(object sender, EventArgs e)
     {
-        Station.TrackedObject.MetaData.Fm = (float)nudFM.Value;
-        EnsureDisplayNameFormat();
+        Station.TrackedObject.MetaData.Fm = StationManager.Instance.EnsureDisplayNameFormat(Station, (float)nudFM.Value);
         StationUpdated?.Invoke(this, EventArgs.Empty);
     }
 
     /// <summary>
     /// Ensures the display name contains the station's FM number at the beginning of its name.
     /// </summary>
-    private void EnsureDisplayNameFormat()
-    {
-        var fmValue = nudFM.Value.ToString("00.00", CultureInfo.InvariantCulture); // Format to two decimal places
-        var currentText = txtDisplayName.Text;
+    //private void EnsureDisplayNameFormat()
+    //{
+    //    var fmValue = nudFM.Value.ToString("00.00", CultureInfo.InvariantCulture); // Format to two decimal places
+    //    var currentText = txtDisplayName.Text;
 
-        // Use a regular expression to detect and remove any existing FM value at the start
-        var regex = DisplayNameRegex();
-        var match = regex.Match(currentText);
+    //    // Use a regular expression to detect and remove any existing FM value at the start
+    //    var regex = DisplayNameRegex();
+    //    var match = regex.Match(currentText);
 
-        if (match.Success)
-            // Remove the existing FM value from the start
-            currentText = currentText[match.Length..].TrimStart();
+    //    if (match.Success)
+    //        // Remove the existing FM value from the start
+    //        currentText = currentText[match.Length..].TrimStart();
 
-        // Combine FM value and station name with the correct format
-        txtDisplayName.Text = @$"{fmValue} {currentText}";
-    }
+    //    // Combine FM value and station name with the correct format
+    //    txtDisplayName.Text = @$"{fmValue} {currentText}";
+    //}
 
     /// <summary>
     /// Occurs when the volume slider is scrolled.

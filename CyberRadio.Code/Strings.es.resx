@@ -727,4 +727,13 @@ exportado al juego.</value>
     <data name="GamePathWithinStagingPath" xml:space="preserve">
       <value>¡El camino del juego no puede estar dentro del camino de puesta en escena!</value>
     </data>
+    <data name="ConfirmSyncStations" xml:space="preserve">
+      <value>¿Estás seguro de que quieres sincronizar las estaciones? Esto sobrescribirá cualquier modificación a las estaciones existentes en la puesta en escena.</value>
+    </data>
+    <data name="SynchronizeStations" xml:space="preserve">
+      <value>Sincronizar estaciones</value>
+    </data>
+    <data name="MissingStations" xml:space="preserve">
+      <value>Hay {0} estación (s) en la carpeta del juego que faltan en la carpeta de puesta en escena. ¿Le gustaría sincronizar las estaciones?</value>
+    </data>
 </root>

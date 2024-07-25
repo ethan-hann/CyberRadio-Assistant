@@ -407,6 +407,7 @@ public partial class ExportWindow : Form
             .ToList();
 
         foreach (var directory in directoriesToDelete)
+        {
             try
             {
                 Directory.Delete(directory, true);
@@ -418,6 +419,7 @@ public partial class ExportWindow : Form
                 AuLogger.GetCurrentLogger<ExportWindow>("RemoveDeletedStations")
                     .Error(ex, $"Failed to delete {directory}.");
             }
+        }
     }
 
     /// <summary>
@@ -627,6 +629,7 @@ public partial class ExportWindow : Form
     private void DeleteInactiveDirectories(List<string> inactiveStationPaths)
     {
         foreach (var path in inactiveStationPaths)
+        {
             try
             {
                 Directory.Delete(path, true);
@@ -641,6 +644,7 @@ public partial class ExportWindow : Form
                 AuLogger.GetCurrentLogger<ExportWindow>("DeleteInactiveDirectories")
                     .Error(ex, $"Failed to delete directory {path}");
             }
+        }
     }
 
     /// <summary>

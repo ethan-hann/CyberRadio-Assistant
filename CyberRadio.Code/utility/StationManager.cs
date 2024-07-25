@@ -15,6 +15,8 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 using System.ComponentModel;
+using System.Globalization;
+using System.Text.RegularExpressions;
 using AetherUtils.Core.Files;
 using AetherUtils.Core.Logging;
 using AetherUtils.Core.Structs;
@@ -28,8 +30,15 @@ namespace RadioExt_Helper.utility;
 /// Everything to do with stations is managed here.
 /// <para>This class cannot be instantiated. It is a singleton.</para>
 /// </summary>
-public class StationManager
+public partial class StationManager : IDisposable
 {
+    /// <summary>
+    /// Regular expression that matches a display name with an optional FM number at the start.
+    /// </summary>
+    /// <returns></returns>
+    [GeneratedRegex(@"^\d+(\.\d+)?\s*")]
+    private static partial Regex DisplayNameRegex();
+
     /// <summary>
     /// Initializes a new instance of the <see cref="StationManager"/> class.
     /// </summary>
@@ -369,6 +378,190 @@ public class StationManager
         return _newStations.Contains(stationId);
     }
 
+    /// <summary>
+    /// Get the count of stations that exist in the game's radios folder but do not exist in the staging folder.
+    /// </summary>
+    /// <param name="stagingPath">The path to the staging directory.</param>
+    /// <param name="gameBasePath">The path to the game's base path where the <c>radios</c> directory is derived from.</param>
+    /// <returns>A non-zero integer if there are station's in the game's radios folder that are not in the staging folder; <c>0</c> otherwise.</returns>
+    public int CheckGameForExistingStations(string stagingPath, string gameBasePath)
+    {
+        if (string.IsNullOrEmpty(stagingPath) || string.IsNullOrEmpty(gameBasePath)) return 0;
+
+        try
+        {
+            var radiosDir = PathHelper.GetRadiosPath(gameBasePath);
+            if (!Directory.Exists(radiosDir)) return 0;
+
+            var gameDirectories = FileHelper.SafeEnumerateDirectories(radiosDir);
+            var stagingDirectories = FileHelper.SafeEnumerateDirectories(stagingPath).Select(Path.GetFileName).ToHashSet();
+
+            int count = 0;
+
+            foreach (var gameDir in gameDirectories)
+            {
+                var dirName = Path.GetFileName(gameDir);
+                if (!stagingDirectories.Contains(dirName))
+                    count++;
+            }
+
+            return count;
+        }
+        catch (Exception ex)
+        {
+            AuLogger.GetCurrentLogger<StationManager>().Error(ex, "Error checking for existing stations.");
+            return 0;
+        }
+    }
+
+    /// <summary>
+    /// Sync stations from the game's radios folder to the staging folder.
+    /// This will copy all stations and songs from the game's radios folder to the staging folder 
+    /// if they do not exist and update them if they are newer.
+    /// </summary>
+    /// <param name="stagingPath">The path to the staging directory.</param>
+    /// <param name="gameBasePath">The path to the game's base path where the <c>radios</c> directory is derived from.</param>
+    /// <returns>A task representing the asynchronous operation.</returns>
+    public async Task SynchronizeStationsAsync(string stagingPath, string gameBasePath)
+    {
+        if (string.IsNullOrEmpty(stagingPath) || string.IsNullOrEmpty(gameBasePath)) return;
+
+        try
+        {
+            var radiosDir = PathHelper.GetRadiosPath(gameBasePath);
+            if (!Directory.Exists(radiosDir)) return;
+
+            var stagingDirectories = FileHelper.SafeEnumerateDirectories(stagingPath, "*", SearchOption.AllDirectories).ToList();
+            var gameDirectories = FileHelper.SafeEnumerateDirectories(radiosDir, "*", SearchOption.AllDirectories).ToList();
+
+            var tasks = new List<Task>();
+
+            // Synchronize directories
+            foreach (var gameDir in gameDirectories)
+            {
+                var dirName = Path.GetFileName(gameDir);
+                var stagingDir = Path.Combine(stagingPath, dirName);
+
+                if (!stagingDirectories.Contains(stagingDir))
+                {
+                    // Directory does not exist in the staging path, so copy it entirely
+                    tasks.Add(Task.Run(() => CopyDirectoryAsync(gameDir, stagingDir)));
+                }
+                else
+                {
+                    // Directory exists, synchronize files
+                    tasks.Add(Task.Run(() => SynchronizeFilesAsync(gameDir, stagingDir)));
+                }
+            }
+
+            await Task.WhenAll(tasks);
+            SyncStatusChanged?.Invoke(GlobalData.Strings.GetString("SyncStatusComplete") ?? "Synchronization complete.");
+            StationsSynchronized?.Invoke(true);
+        }
+        catch (Exception ex)
+        {
+            AuLogger.GetCurrentLogger<StationManager>().Error(ex, "Error synchronizing stations.");
+            SyncStatusChanged?.Invoke(GlobalData.Strings.GetString("SyncStatusError") ?? "Error synchronizing stations.");
+            StationsSynchronized?.Invoke(false);
+        }
+    }
+
+    /// <summary>
+    /// Disposes of the station manager and clears all stations.
+    /// </summary>
+    public virtual void Dispose()
+    {
+        GC.SuppressFinalize(this);
+        ClearStations();
+    }
+
+    private async Task SynchronizeFilesAsync(string sourceDir, string targetDir)
+    {
+        var sourceFiles = FileHelper.SafeEnumerateFiles(sourceDir);
+        var targetFiles = FileHelper.SafeEnumerateFiles(targetDir).ToDictionary(Path.GetFileName, f => f);
+
+        var fileTasks = new List<Task>();
+        var fileCount = 0;
+
+        foreach (var sourceFile in sourceFiles)
+        {
+            var fileName = Path.GetFileName(sourceFile);
+            var targetFilePath = Path.Combine(targetDir, fileName);
+
+            if (!targetFiles.ContainsKey(fileName) ||
+                File.GetLastWriteTime(sourceFile) > File.GetLastWriteTime(targetFilePath))
+            {
+                fileTasks.Add(Task.Run(() => File.Copy(sourceFile, targetFilePath, true)));
+                fileCount++;
+            }
+
+            var progress = (int)((float)fileCount / sourceFiles.Count() * 100);
+            SyncProgressChanged?.Invoke(progress);
+            SyncStatusChanged?.Invoke(string.Format(GlobalData.Strings.GetString("SyncProgressChanged") ?? "Synchronizing Files... {0}%", progress));
+        }
+
+        await Task.WhenAll(fileTasks);
+
+        var sourceDirectories = FileHelper.SafeEnumerateDirectories(sourceDir);
+        var targetDirectories = FileHelper.SafeEnumerateDirectories(targetDir).ToDictionary(Path.GetFileName, d => d);
+
+        var dirTasks = new List<Task>();
+        var dirCount = 0;
+
+        foreach (var sourceSubDir in sourceDirectories)
+        {
+            var dirName = Path.GetFileName(sourceSubDir);
+            var targetSubDir = Path.Combine(targetDir, dirName);
+
+            if (!targetDirectories.ContainsKey(dirName))
+            {
+                // Directory does not exist in the target path, so copy it entirely
+                FileHelper.CreateDirectories(targetSubDir);
+                dirTasks.Add(Task.Run(() => CopyDirectoryAsync(sourceSubDir, targetSubDir)));
+            }
+            else
+            {
+                // Directory exists, synchronize files recursively
+                dirTasks.Add(Task.Run(() => SynchronizeFilesAsync(sourceSubDir, targetSubDir)));
+            }
+            dirCount++;
+
+            var progress = (int)((float)dirCount / sourceDirectories.Count() * 100);
+            SyncProgressChanged?.Invoke(progress);
+            SyncStatusChanged?.Invoke(string.Format(GlobalData.Strings.GetString("SyncProgressChanged") ?? "Synchronizing Directories... {0}%", progress));
+        }
+
+        await Task.WhenAll(dirTasks);
+    }
+
+    private async Task CopyDirectoryAsync(string sourceDir, string targetDir)
+    {
+        var files = FileHelper.SafeEnumerateFiles(sourceDir);
+        var directories = FileHelper.SafeEnumerateDirectories(sourceDir);
+
+        FileHelper.CreateDirectories(targetDir);
+
+        var copyTasks = new List<Task>();
+
+        foreach (var file in files)
+        {
+            var targetFilePath = Path.Combine(targetDir, Path.GetFileName(file));
+            copyTasks.Add(Task.Run(() =>
+            {
+                FileHelper.CreateDirectories(targetFilePath);
+                File.Copy(file, targetFilePath, true);
+            }));
+        }
+
+        foreach (var directory in directories)
+        {
+            var targetDirectoryPath = Path.Combine(targetDir, Path.GetFileName(directory));
+            copyTasks.Add(Task.Run(() => CopyDirectoryAsync(directory, targetDirectoryPath)));
+        }
+
+        await Task.WhenAll(copyTasks);
+    }
+
     private void Editor_StationUpdated(object? sender, EventArgs e)
     {
         if (sender is StationEditor editor)
@@ -423,6 +616,8 @@ public class StationManager
 
             var station = new Station { MetaData = metadata, Songs = songList };
             var trackedStation = new TrackableObject<Station>(station);
+            EnsureDisplayNameFormat(trackedStation);
+
             AddStation(trackedStation, true);
         }
         catch (Exception ex)
@@ -430,6 +625,55 @@ public class StationManager
             AuLogger.GetCurrentLogger<StationManager>().Error(ex, "Error processing directory.");
         }
     }
+
+    /// <summary>
+    /// Ensure's the display name contains the station's FM number at the beginning of its name like so:
+    /// <c>00.00 Station Name</c>
+    /// </summary>
+    /// <param name="station">The station to ensure the display name of.</param>
+    /// <param name="optionalFMVal">The FM number to ensure is in front of the station name. If null, the default FM value will be used instead.</param>
+    /// <returns>The parsed FM number from the original display name string; or, the original FM number if the same.</returns>
+    public float EnsureDisplayNameFormat(TrackableObject<Station> station, float? optionalFMVal = null)
+    {
+        var currentName = station.TrackedObject.MetaData.DisplayName;
+
+        var regex = DisplayNameRegex();
+        var match = regex.Match(currentName);
+        var fmNumber = optionalFMVal ?? station.TrackedObject.MetaData.Fm;
+
+        if (match.Success)
+        {
+            currentName = currentName[match.Length..].TrimStart();
+            if (float.TryParse(match.Value, CultureInfo.InvariantCulture, out float fmNumberParsed) & optionalFMVal == null)
+                fmNumber = fmNumberParsed;
+        }
+
+        station.TrackedObject.MetaData.DisplayName = @$"{fmNumber} {currentName}";
+        station.TrackedObject.MetaData.Fm = fmNumber;
+        return fmNumber;
+    }
+
+    /*
+     * /// <summary>
+    /// Ensures the display name contains the station's FM number at the beginning of its name.
+    /// </summary>
+    private void EnsureDisplayNameFormat()
+    {
+        var fmValue = nudFM.Value.ToString("00.00", CultureInfo.InvariantCulture); // Format to two decimal places
+        var currentText = txtDisplayName.Text;
+
+        // Use a regular expression to detect and remove any existing FM value at the start
+        var regex = DisplayNameRegex();
+        var match = regex.Match(currentText);
+
+        if (match.Success)
+            // Remove the existing FM value from the start
+            currentText = currentText[match.Length..].TrimStart();
+
+        // Combine FM value and station name with the correct format
+        txtDisplayName.Text = @$"{fmValue} {currentText}";
+    }
+     */
 
     #region Events
 
@@ -457,6 +701,22 @@ public class StationManager
     /// Event that is raised when a station name is found to be a duplicate. Event data is a tuple with the station ID and the updated name.
     /// </summary>
     public event EventHandler<(Guid stationId, string updatedName)>? StationNameDuplicate;
+
+    /// <summary>
+    /// Event that is raised when the synchronization progress changes. Event data is the current progress percentage.
+    /// </summary>
+    public event Action<int>? SyncProgressChanged;
+
+    /// <summary>
+    /// Event that is raised when the synchronization status changes. Event data is a message describing the status.
+    /// </summary>
+    public event Action<string>? SyncStatusChanged;
+
+    /// <summary>
+    /// Event that is raised when stations have finished synchronizing from the game's radios folder to staging.
+    /// Event data is a flag indicating success.
+    /// </summary>
+    public event Action<bool>? StationsSynchronized;
 
     #endregion
 

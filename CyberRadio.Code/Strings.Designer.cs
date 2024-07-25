@@ -420,6 +420,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to synchronize the stations? This will overwrite any modifications to existing stations in staging..
+        /// </summary>
+        internal static string ConfirmSyncStations {
+            get {
+                return ResourceManager.GetString("ConfirmSyncStations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Custom Icon.
         /// </summary>
         internal static string CustomIcon {
@@ -1014,6 +1023,15 @@ namespace RadioExt_Helper {
         internal static string Min {
             get {
                 return ResourceManager.GetString("Min", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There are {0} station(s) in the game&apos;s folder missing from the staging folder. Would you like to synchronize the stations?.
+        /// </summary>
+        internal static string MissingStations {
+            get {
+                return ResourceManager.GetString("MissingStations", resourceCulture);
             }
         }
         
@@ -1656,6 +1674,15 @@ namespace RadioExt_Helper {
         internal static string Success {
             get {
                 return ResourceManager.GetString("Success", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Synchronize Stations.
+        /// </summary>
+        internal static string SynchronizeStations {
+            get {
+                return ResourceManager.GetString("SynchronizeStations", resourceCulture);
             }
         }
         

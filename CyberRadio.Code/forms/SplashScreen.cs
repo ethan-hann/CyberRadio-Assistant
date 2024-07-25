@@ -147,7 +147,7 @@ public partial class SplashScreen : Form
     private void SetVersionLabel(Version? version)
     {
         if (InvokeRequired)
-            Invoke(new Action<Version>(SetVersionLabel), [version]);
+            Invoke(new Action<Version?>(SetVersionLabel), [version]);
         else
             lblVersion.Text =
                 version != null ? @$"{version.Major}.{version.Minor}.{version.Build}" : @"Version Unknown";
