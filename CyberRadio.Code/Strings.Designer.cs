@@ -1480,6 +1480,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to File Path.
+        /// </summary>
+        internal static string SongFilePathHeader {
+            get {
+                return ResourceManager.GetString("SongFilePathHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to File Size.
         /// </summary>
         internal static string SongFileSizeHeader {
@@ -1764,6 +1773,24 @@ namespace RadioExt_Helper {
         internal static string SyncInProgress {
             get {
                 return ResourceManager.GetString("SyncInProgress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total Songs: .
+        /// </summary>
+        internal static string TotalSongsLabel {
+            get {
+                return ResourceManager.GetString("TotalSongsLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Station Size: .
+        /// </summary>
+        internal static string TotalStationSizeLabel {
+            get {
+                return ResourceManager.GetString("TotalStationSizeLabel", resourceCulture);
             }
         }
         

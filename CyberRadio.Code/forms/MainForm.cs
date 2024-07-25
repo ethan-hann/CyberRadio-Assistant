@@ -569,6 +569,24 @@ public partial class MainForm : Form
 
     private void ExportToGameToolStripMenuItem_Click(object sender, EventArgs e)
     {
+        //Don't allow exporting if we are currently backing up.
+        if (_isBackupInProgress)
+        {
+            var backupText = GlobalData.Strings.GetString("BackupInProgress") ?? "Backup is in progress. Please wait...";
+            var backupCaption = GlobalData.Strings.GetString("Backup") ?? "Backup";
+            MessageBox.Show(this, backupText, backupCaption, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            return;
+        }
+
+        //Don't allow exporting if we are currently synchronizing stations.
+        if (_isSyncInProgress)
+        {
+            var text = GlobalData.Strings.GetString("SyncInProgress") ?? "Synchronization is in progress. Please wait...";
+            var caption = GlobalData.Strings.GetString("SyncAbbrev") ?? "Sync";
+            MessageBox.Show(this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            return;
+        }
+
         var missingSongs = StationManager.Instance.CheckForMissingSongs();
         if (missingSongs.Values.Any(p => p.Key))
         {

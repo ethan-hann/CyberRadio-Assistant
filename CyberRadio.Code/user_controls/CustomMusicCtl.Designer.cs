@@ -35,6 +35,7 @@
             colArtist = new ColumnHeader();
             colSongLength = new ColumnHeader();
             colSongFileSize = new ColumnHeader();
+            colFilePath = new ColumnHeader();
             fdlgOpenSongs = new OpenFileDialog();
             tabControl = new TabControl();
             tabSongs = new TabPage();
@@ -59,6 +60,14 @@
             label2 = new Label();
             cmsSongRightClick = new ContextMenuStrip(components);
             locateToolStripMenuItem = new ToolStripMenuItem();
+            statusStrip1 = new StatusStrip();
+            lblTotalSongsLabel = new ToolStripStatusLabel();
+            lblTotalSongsVal = new ToolStripStatusLabel();
+            lblStationSizeLabel = new ToolStripStatusLabel();
+            lblStationSizeVal = new ToolStripStatusLabel();
+            toolStripStatusLabel5 = new ToolStripStatusLabel();
+            toolStripStatusLabel6 = new ToolStripStatusLabel();
+            lblStatSeperator = new ToolStripStatusLabel();
             tabControl.SuspendLayout();
             tabSongs.SuspendLayout();
             tableLayoutPanel2.SuspendLayout();
@@ -73,18 +82,19 @@
             ((System.ComponentModel.ISupportInitialize)songBindingSource).BeginInit();
             tableLayoutPanel4.SuspendLayout();
             cmsSongRightClick.SuspendLayout();
+            statusStrip1.SuspendLayout();
             SuspendLayout();
             // 
             // lvSongs
             // 
-            lvSongs.Columns.AddRange(new ColumnHeader[] { colFileExists, colSongNames, colArtist, colSongLength, colSongFileSize });
+            lvSongs.Columns.AddRange(new ColumnHeader[] { colFileExists, colSongNames, colArtist, colSongLength, colSongFileSize, colFilePath });
             lvSongs.Dock = DockStyle.Fill;
             lvSongs.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
             lvSongs.FullRowSelect = true;
             lvSongs.GridLines = true;
-            lvSongs.Location = new Point(3, 45);
+            lvSongs.Location = new Point(3, 48);
             lvSongs.Name = "lvSongs";
-            lvSongs.Size = new Size(905, 616);
+            lvSongs.Size = new Size(905, 638);
             lvSongs.TabIndex = 1;
             lvSongs.UseCompatibleStateImageBehavior = false;
             lvSongs.View = View.Details;
@@ -117,6 +127,11 @@
             colSongFileSize.Text = "File Size";
             colSongFileSize.Width = 150;
             // 
+            // colFilePath
+            // 
+            colFilePath.Text = "Original File Path";
+            colFilePath.Width = 150;
+            // 
             // fdlgOpenSongs
             // 
             fdlgOpenSongs.Filter = "Music Files|*.mp3;*.wav;*.ogg;*.flac;*.mp2;*.wax;*.wma";
@@ -131,19 +146,20 @@
             tabControl.Location = new Point(0, 0);
             tabControl.Name = "tabControl";
             tabControl.SelectedIndex = 0;
-            tabControl.Size = new Size(919, 698);
+            tabControl.Size = new Size(919, 745);
             tabControl.TabIndex = 3;
             // 
             // tabSongs
             // 
             tabSongs.BackColor = Color.White;
             tabSongs.Controls.Add(lvSongs);
+            tabSongs.Controls.Add(statusStrip1);
             tabSongs.Controls.Add(tableLayoutPanel2);
             tabSongs.ImageIndex = 0;
             tabSongs.Location = new Point(4, 30);
             tabSongs.Name = "tabSongs";
             tabSongs.Padding = new Padding(3);
-            tabSongs.Size = new Size(911, 664);
+            tabSongs.Size = new Size(911, 711);
             tabSongs.TabIndex = 0;
             tabSongs.Text = "Song Listing";
             // 
@@ -159,7 +175,7 @@
             tableLayoutPanel2.Name = "tableLayoutPanel2";
             tableLayoutPanel2.RowCount = 1;
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel2.Size = new Size(905, 42);
+            tableLayoutPanel2.Size = new Size(905, 45);
             tableLayoutPanel2.TabIndex = 2;
             // 
             // tableLayoutPanel3
@@ -174,7 +190,7 @@
             tableLayoutPanel3.Name = "tableLayoutPanel3";
             tableLayoutPanel3.RowCount = 1;
             tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel3.Size = new Size(490, 36);
+            tableLayoutPanel3.Size = new Size(490, 39);
             tableLayoutPanel3.TabIndex = 2;
             // 
             // btnRemoveAllSongs
@@ -188,7 +204,7 @@
             btnRemoveAllSongs.Location = new Point(324, 2);
             btnRemoveAllSongs.Margin = new Padding(3, 2, 3, 2);
             btnRemoveAllSongs.Name = "btnRemoveAllSongs";
-            btnRemoveAllSongs.Size = new Size(163, 32);
+            btnRemoveAllSongs.Size = new Size(163, 35);
             btnRemoveAllSongs.TabIndex = 3;
             btnRemoveAllSongs.Text = "Clear All!";
             btnRemoveAllSongs.TextAlign = ContentAlignment.MiddleRight;
@@ -207,7 +223,7 @@
             btnRemoveSongs.Location = new Point(3, 2);
             btnRemoveSongs.Margin = new Padding(3, 2, 3, 2);
             btnRemoveSongs.Name = "btnRemoveSongs";
-            btnRemoveSongs.Size = new Size(315, 32);
+            btnRemoveSongs.Size = new Size(315, 35);
             btnRemoveSongs.TabIndex = 2;
             btnRemoveSongs.Text = "Remove Selected Song(s)";
             btnRemoveSongs.TextAlign = ContentAlignment.MiddleRight;
@@ -225,7 +241,7 @@
             tableLayoutPanel5.Name = "tableLayoutPanel5";
             tableLayoutPanel5.RowCount = 1;
             tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel5.Size = new Size(403, 36);
+            tableLayoutPanel5.Size = new Size(403, 39);
             tableLayoutPanel5.TabIndex = 3;
             // 
             // btnAddSongs
@@ -239,7 +255,7 @@
             btnAddSongs.Location = new Point(3, 2);
             btnAddSongs.Margin = new Padding(3, 2, 3, 2);
             btnAddSongs.Name = "btnAddSongs";
-            btnAddSongs.Size = new Size(397, 32);
+            btnAddSongs.Size = new Size(397, 35);
             btnAddSongs.TabIndex = 1;
             btnAddSongs.Text = "Add Song(s)";
             btnAddSongs.TextAlign = ContentAlignment.MiddleRight;
@@ -255,7 +271,7 @@
             tabSongOrder.Location = new Point(4, 30);
             tabSongOrder.Name = "tabSongOrder";
             tabSongOrder.Padding = new Padding(3);
-            tabSongOrder.Size = new Size(911, 664);
+            tabSongOrder.Size = new Size(911, 711);
             tabSongOrder.TabIndex = 1;
             tabSongOrder.Text = "Song Order";
             // 
@@ -276,9 +292,9 @@
             // splitContainer1.Panel2
             // 
             splitContainer1.Panel2.Controls.Add(lvSongOrder);
-            splitContainer1.Size = new Size(905, 658);
-            splitContainer1.SplitterDistance = 341;
-            splitContainer1.SplitterWidth = 8;
+            splitContainer1.Size = new Size(905, 705);
+            splitContainer1.SplitterDistance = 365;
+            splitContainer1.SplitterWidth = 9;
             splitContainer1.TabIndex = 0;
             // 
             // lbSongs
@@ -290,7 +306,7 @@
             lbSongs.Location = new Point(0, 0);
             lbSongs.Name = "lbSongs";
             lbSongs.SelectionMode = SelectionMode.MultiExtended;
-            lbSongs.Size = new Size(901, 303);
+            lbSongs.Size = new Size(901, 325);
             lbSongs.TabIndex = 0;
             // 
             // tableLayoutPanel1
@@ -302,13 +318,13 @@
             tableLayoutPanel1.Controls.Add(btnRemoveFromOrder, 1, 0);
             tableLayoutPanel1.Controls.Add(btnAddToOrder, 0, 0);
             tableLayoutPanel1.Dock = DockStyle.Bottom;
-            tableLayoutPanel1.Location = new Point(0, 303);
-            tableLayoutPanel1.MaximumSize = new Size(0, 34);
-            tableLayoutPanel1.MinimumSize = new Size(0, 34);
+            tableLayoutPanel1.Location = new Point(0, 325);
+            tableLayoutPanel1.MaximumSize = new Size(0, 36);
+            tableLayoutPanel1.MinimumSize = new Size(0, 36);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 1;
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel1.Size = new Size(901, 34);
+            tableLayoutPanel1.Size = new Size(901, 36);
             tableLayoutPanel1.TabIndex = 1;
             // 
             // btnRemoveFromOrder
@@ -324,7 +340,7 @@
             btnRemoveFromOrder.ForeColor = Color.Black;
             btnRemoveFromOrder.Location = new Point(453, 3);
             btnRemoveFromOrder.Name = "btnRemoveFromOrder";
-            btnRemoveFromOrder.Size = new Size(445, 28);
+            btnRemoveFromOrder.Size = new Size(445, 30);
             btnRemoveFromOrder.TabIndex = 0;
             btnRemoveFromOrder.UseVisualStyleBackColor = false;
             btnRemoveFromOrder.Click += BtnRemoveFromOrder_Click;
@@ -342,7 +358,7 @@
             btnAddToOrder.ForeColor = Color.Black;
             btnAddToOrder.Location = new Point(3, 3);
             btnAddToOrder.Name = "btnAddToOrder";
-            btnAddToOrder.Size = new Size(444, 28);
+            btnAddToOrder.Size = new Size(444, 30);
             btnAddToOrder.TabIndex = 1;
             btnAddToOrder.UseVisualStyleBackColor = false;
             btnAddToOrder.Click += BtnAddToOrder_Click;
@@ -359,7 +375,7 @@
             lvSongOrder.Location = new Point(0, 0);
             lvSongOrder.MultiSelect = false;
             lvSongOrder.Name = "lvSongOrder";
-            lvSongOrder.Size = new Size(901, 305);
+            lvSongOrder.Size = new Size(901, 327);
             lvSongOrder.TabIndex = 0;
             lvSongOrder.UseCompatibleStateImageBehavior = false;
             lvSongOrder.View = View.Details;
@@ -433,17 +449,79 @@
             locateToolStripMenuItem.Text = "Locate Missing Song...";
             locateToolStripMenuItem.Click += LocateToolStripMenuItem_Click;
             // 
+            // statusStrip1
+            // 
+            statusStrip1.BackColor = Color.FromArgb(192, 255, 192);
+            statusStrip1.Items.AddRange(new ToolStripItem[] { toolStripStatusLabel5, lblTotalSongsLabel, lblTotalSongsVal, lblStatSeperator, lblStationSizeLabel, lblStationSizeVal, toolStripStatusLabel6 });
+            statusStrip1.Location = new Point(3, 686);
+            statusStrip1.Name = "statusStrip1";
+            statusStrip1.Size = new Size(905, 22);
+            statusStrip1.SizingGrip = false;
+            statusStrip1.TabIndex = 3;
+            statusStrip1.Text = "statusStrip1";
+            // 
+            // lblTotalSongsLabel
+            // 
+            lblTotalSongsLabel.Font = new Font("Segoe UI Variable Display", 9.75F, FontStyle.Bold);
+            lblTotalSongsLabel.Image = Properties.Resources.music;
+            lblTotalSongsLabel.Name = "lblTotalSongsLabel";
+            lblTotalSongsLabel.Size = new Size(101, 17);
+            lblTotalSongsLabel.Text = "Total Songs: ";
+            // 
+            // lblTotalSongsVal
+            // 
+            lblTotalSongsVal.Font = new Font("Segoe UI Variable Display", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblTotalSongsVal.Name = "lblTotalSongsVal";
+            lblTotalSongsVal.Size = new Size(92, 17);
+            lblTotalSongsVal.Text = "<song count>";
+            // 
+            // lblStationSizeLabel
+            // 
+            lblStationSizeLabel.Font = new Font("Segoe UI Variable Display", 9.75F, FontStyle.Bold);
+            lblStationSizeLabel.Image = Properties.Resources.station_size;
+            lblStationSizeLabel.Name = "lblStationSizeLabel";
+            lblStationSizeLabel.Size = new Size(103, 17);
+            lblStationSizeLabel.Text = "Station Size: ";
+            // 
+            // lblStationSizeVal
+            // 
+            lblStationSizeVal.Font = new Font("Segoe UI Variable Display", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblStationSizeVal.Name = "lblStationSizeVal";
+            lblStationSizeVal.Size = new Size(90, 17);
+            lblStationSizeVal.Text = "<station size>";
+            // 
+            // toolStripStatusLabel5
+            // 
+            toolStripStatusLabel5.Name = "toolStripStatusLabel5";
+            toolStripStatusLabel5.Size = new Size(246, 17);
+            toolStripStatusLabel5.Spring = true;
+            // 
+            // toolStripStatusLabel6
+            // 
+            toolStripStatusLabel6.Name = "toolStripStatusLabel6";
+            toolStripStatusLabel6.Size = new Size(246, 17);
+            toolStripStatusLabel6.Spring = true;
+            // 
+            // lblStatSeperator
+            // 
+            lblStatSeperator.Font = new Font("Segoe UI Variable Display", 9.75F, FontStyle.Bold);
+            lblStatSeperator.Image = Properties.Resources.vertical_line;
+            lblStatSeperator.Margin = new Padding(0, 3, 5, 2);
+            lblStatSeperator.Name = "lblStatSeperator";
+            lblStatSeperator.Size = new Size(16, 17);
+            // 
             // CustomMusicCtl
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(7F, 16F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;
             Controls.Add(tabControl);
             Name = "CustomMusicCtl";
-            Size = new Size(919, 698);
+            Size = new Size(919, 745);
             Load += CustomMusicCtl_Load;
             tabControl.ResumeLayout(false);
             tabSongs.ResumeLayout(false);
+            tabSongs.PerformLayout();
             tableLayoutPanel2.ResumeLayout(false);
             tableLayoutPanel3.ResumeLayout(false);
             tableLayoutPanel5.ResumeLayout(false);
@@ -456,6 +534,8 @@
             ((System.ComponentModel.ISupportInitialize)songBindingSource).EndInit();
             tableLayoutPanel4.ResumeLayout(false);
             cmsSongRightClick.ResumeLayout(false);
+            statusStrip1.ResumeLayout(false);
+            statusStrip1.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -490,5 +570,14 @@
         private ColumnHeader colFileExists;
         private ContextMenuStrip cmsSongRightClick;
         private ToolStripMenuItem locateToolStripMenuItem;
+        private ColumnHeader colFilePath;
+        private StatusStrip statusStrip1;
+        private ToolStripStatusLabel toolStripStatusLabel5;
+        private ToolStripStatusLabel lblTotalSongsLabel;
+        private ToolStripStatusLabel lblTotalSongsVal;
+        private ToolStripStatusLabel lblStatSeperator;
+        private ToolStripStatusLabel lblStationSizeLabel;
+        private ToolStripStatusLabel lblStationSizeVal;
+        private ToolStripStatusLabel toolStripStatusLabel6;
     }
 }

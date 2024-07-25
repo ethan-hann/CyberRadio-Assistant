@@ -763,4 +763,13 @@ exporté vers le jeu.</value>
     <data name="Exit" xml:space="preserve">
       <value>Sortie</value>
     </data>
+    <data name="SongFilePathHeader" xml:space="preserve">
+      <value>Chemin du fichier</value>
+    </data>
+    <data name="TotalSongsLabel" xml:space="preserve">
+      <value>Total des chansons:</value>
+    </data>
+    <data name="TotalStationSizeLabel" xml:space="preserve">
+      <value>Taille de la station:</value>
+    </data>
 </root>
