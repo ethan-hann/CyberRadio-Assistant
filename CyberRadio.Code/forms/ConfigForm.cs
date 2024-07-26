@@ -96,17 +96,13 @@ public partial class ConfigForm : Form
         chkCheckForUpdates.Text = GlobalData.Strings.GetString("CheckForUpdatesOption");
         chkAutoExportToGame.Text = GlobalData.Strings.GetString("AutoExportOption");
         btnEditPaths.Text = GlobalData.Strings.GetString("EditPathsOption");
-        lblUpdatesHelp.Text = GlobalData.Strings.GetString("CheckForUpdatesOptionHelp");
-        lblAutoExportHelp.Text = GlobalData.Strings.GetString("AutoExportOptionHelp");
-        lblEditPathsHelp.Text = GlobalData.Strings.GetString("EditPathsOptionHelp");
+        chkWatchForChanges.Text = GlobalData.Strings.GetString("WatchForChangesOption");
         lblLogPathLabel.Text = GlobalData.Strings.GetString("LogPathLabel");
         lblCurrentLogPath.Text = GlobalData.Strings.GetString("NoLogPathSet");
 
         //Logging Tab
         chkNewFileEveryLaunch.Text = GlobalData.Strings.GetString("NewLogFileOption");
-        lblNewFileEveryLaunchHelp.Text = GlobalData.Strings.GetString("NewLogFileOptionHelp");
         btnEditLogsPath.Text = GlobalData.Strings.GetString("EditLogsPathOption");
-        lblEditLogPathHelp.Text = GlobalData.Strings.GetString("EditLogsPathOptionHelp");
 
         //Buttons
         btnSaveAndClose.Text = GlobalData.Strings.GetString("SaveAndClose");
@@ -127,6 +123,7 @@ public partial class ConfigForm : Form
         chkCheckForUpdates.Checked = config.AutoCheckForUpdates;
         chkAutoExportToGame.Checked = config.AutoExportToGame;
         chkNewFileEveryLaunch.Checked = config.LogOptions.NewFileEveryLaunch;
+        chkWatchForChanges.Checked = config.WatchForGameChanges;
 
         lblCurrentLogPath.Text = config.LogOptions.LogFileDirectory == string.Empty
             ? lblCurrentLogPath.Text
@@ -195,6 +192,7 @@ public partial class ConfigForm : Form
         var saved = GlobalData.ConfigManager.Set("autoCheckForUpdates", chkCheckForUpdates.Checked);
         saved &= GlobalData.ConfigManager.Set("autoExportToGame", chkAutoExportToGame.Checked);
         saved &= GlobalData.ConfigManager.Set("newFileEveryLaunch", chkNewFileEveryLaunch.Checked);
+        saved &= GlobalData.ConfigManager.Set("watchForGameChanges", chkWatchForChanges.Checked);
 
         if (NexusApi.IsAuthenticated)
             saved &= GlobalData.ConfigManager.Set("nexusApiKey", txtApiKey.Text);
@@ -359,5 +357,23 @@ public partial class ConfigForm : Form
         if (e.CloseReason is CloseReason.WindowsShutDown or CloseReason.TaskManagerClosing) return;
 
         if (!NoUnsavedApiChanges()) e.Cancel = true;
+    }
+
+    private void ControlMouseEnter(object sender, EventArgs e)
+    {
+        this.SafeInvoke(() =>
+        {
+            if (sender is Control hoveredControl)
+            {
+                string helpKey = hoveredControl.Tag as string ?? string.Empty;
+                if (!string.IsNullOrEmpty(helpKey))
+                    lblHelpText.Text = GlobalData.Strings.GetString(helpKey);
+            }
+        });
+    }
+
+    private void ControlMouseLeave(object sender, EventArgs e)
+    {
+        this.SafeInvoke(() => lblHelpText.Text = GlobalData.Strings.GetString("Ready"));
     }
 }

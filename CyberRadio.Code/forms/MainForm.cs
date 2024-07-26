@@ -36,6 +36,7 @@ namespace RadioExt_Helper.forms;
 public partial class MainForm : Form
 {
     private readonly BackupManager _backupManager = new();
+    private DirectoryWatcher? _directoryWatcher = null;
 
     private readonly ImageComboBox<ImageComboBoxItem> _languageComboBox = new();
     private readonly List<ImageComboBoxItem> _languages = [];
@@ -73,6 +74,8 @@ public partial class MainForm : Form
 
         lbStations.DataSource = StationManager.Instance.StationsAsBindingList;
         lbStations.DisplayMember = "TrackedObject.MetaData";
+
+        SetupDirectoryWatcher();
     }
 
     /// <summary>
@@ -93,7 +96,7 @@ public partial class MainForm : Form
         _backupManager.StatusChanged += OnBackupManagerStatusChanged;
         _backupManager.BackupCompleted += OnBackupManagerBackupCompleted;
 
-        StationManager.Instance.StationNameDuplicate += OnStationNameDuplicateEvent;
+        //StationManager.Instance.StationNameDuplicate += OnStationNameDuplicateEvent;
         StationManager.Instance.StationUpdated += OnStationUpdated;
         StationManager.Instance.SyncProgressChanged += OnStationSyncProgressChanged;
         StationManager.Instance.SyncStatusChanged += OnStationSyncStatusChanged;
@@ -101,6 +104,55 @@ public partial class MainForm : Form
 
         // Save the configuration when resizing has stopped
         _resizeTimer.Elapsed += (_, _) => { SaveWindowSize(); };
+    }
+
+    private void OnDirectoryWatcherFileDeleted(object? sender, string e)
+    {
+        this.SafeInvoke(() =>
+        {
+            MessageBox.Show(this, e, "File Deleted", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        });
+    }
+
+    private void OnDirectoryWatcherFileRenamed(object? sender, (string OldPath, string NewPath) e)
+    {
+        this.SafeInvoke(() =>
+        {
+            MessageBox.Show(this, "File renamed: " + e.OldPath + " to " + e.NewPath, "File Renamed", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        });
+    }
+
+    private void OnDirectoryWatcherFileChanged(object? sender, string e)
+    {
+        /*this.SafeInvoke(() =>
+        {
+            MessageBox.Show(this, e, "File Changed", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        });*/
+    }
+
+    private void OnDirectoryWatcherFileCreated(object? sender, string e)
+    {
+        this.SafeInvoke(() =>
+        {
+            MessageBox.Show(this, "File created: " + e, "File Created", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        });
+    }
+
+    private void CleanupEvents()
+    {
+        _languageComboBox.SelectedIndexChanged -= CmbLanguageSelect_SelectedIndexChanged;
+
+        _backupManager.ProgressChanged -= OnBackupManagerProgressChanged;
+        _backupManager.StatusChanged -= OnBackupManagerStatusChanged;
+        _backupManager.BackupCompleted -= OnBackupManagerBackupCompleted;
+
+        //StationManager.Instance.StationNameDuplicate -= OnStationNameDuplicateEvent;
+        StationManager.Instance.StationUpdated -= OnStationUpdated;
+        StationManager.Instance.SyncProgressChanged -= OnStationSyncProgressChanged;
+        StationManager.Instance.SyncStatusChanged -= OnStationSyncStatusChanged;
+        StationManager.Instance.StationsSynchronized -= OnStationsSynchronized;
+
+        _resizeTimer.Elapsed -= (_, _) => { SaveWindowSize(); };
     }
 
     /// <summary>
@@ -126,6 +178,45 @@ public partial class MainForm : Form
             GlobalData.ConfigManager.Set("windowSize", new WindowSize(Size.Width, Size.Height));
             GlobalData.ConfigManager.SaveAsync();
         });
+    }
+
+    /// <summary>
+    /// Set's up and starts (or stops) the directory watcher based on the configuration.
+    /// The directory watcher is used to watch for changes in the game's radios directory.
+    /// </summary>
+    private void SetupDirectoryWatcher()
+    {
+        if (_directoryWatcher != null)
+        {
+            _directoryWatcher.FileCreated -= OnDirectoryWatcherFileCreated;
+            _directoryWatcher.FileChanged -= OnDirectoryWatcherFileChanged;
+            _directoryWatcher.FileRenamed -= OnDirectoryWatcherFileRenamed;
+            _directoryWatcher.FileDeleted -= OnDirectoryWatcherFileDeleted;
+            _directoryWatcher.Error -= (_, error) =>
+            {
+                AuLogger.GetCurrentLogger<MainForm>("DirectoryWatcher")
+                .Error(error, $"An error occured while watching for changes in {GameBasePath}");
+            };
+        }
+
+        _directoryWatcher?.Stop();
+        _directoryWatcher = null;
+
+        if (GlobalData.ConfigManager.Get("watchForGameChanges") as bool? == true)
+        {
+            _directoryWatcher = new DirectoryWatcher(PathHelper.GetRadiosPath(GameBasePath));
+            _directoryWatcher.FileCreated += OnDirectoryWatcherFileCreated;
+            _directoryWatcher.FileChanged += OnDirectoryWatcherFileChanged;
+            _directoryWatcher.FileRenamed += OnDirectoryWatcherFileRenamed;
+            _directoryWatcher.FileDeleted += OnDirectoryWatcherFileDeleted;
+            _directoryWatcher.Error += (_, error) =>
+            { 
+                AuLogger.GetCurrentLogger<MainForm>("DirectoryWatcher")
+                .Error(error, $"An error occured while watching for changes in {GameBasePath}"); 
+            };
+
+            _directoryWatcher.Start();
+        }
     }
 
     /// <summary>
@@ -194,16 +285,6 @@ public partial class MainForm : Form
 
         // Add the ToolStripControlHost to the "Language" tool strip menu
         languageToolStripMenuItem.DropDownItems.Add(toolStripControlHost);
-    }
-
-    private void OnStationNameDuplicateEvent(object? sender, (Guid stationId, string updatedName) e)
-    {
-        //this.SafeInvoke(() =>
-        //{
-        //    var text = GlobalData.Strings.GetString("StationNameExists") ?? "A station with that name already exists.";
-        //    var caption = GlobalData.Strings.GetString("StationExists") ?? "Station Exists";
-        //    MessageBox.Show(this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-        //});
     }
 
     /// <summary>
@@ -301,14 +382,35 @@ public partial class MainForm : Form
     private void UpdateUiAfterPopulation()
     {
         if (lbStations.Items.Count > 0)
-        {
-            lbStations.SelectedIndex = 0;
-            var station = lbStations.SelectedItem as TrackableObject<Station>;
-            SelectStationEditor(station?.Id);
-        }
+            SelectListBoxItem(0, false);
 
         HandleUserControlVisibility();
         UpdateEnabledStationCount();
+    }
+
+    /// <summary>
+    /// Selects a listbox item from the station listbox based on the index. Also, updates the station editor and title bar.
+    /// </summary>
+    /// <param name="index">The index to select in the listbox.</param>
+    /// <param name="userDriven">Indicate whether the selection was driven by the user.</param>
+    private void SelectListBoxItem(int index, bool userDriven)
+    {
+        if (index < 0 || index >= lbStations.Items.Count) return;
+
+        if (userDriven)
+        {
+            if (_ignoreSelectedIndexChanged)
+            {
+                _ignoreSelectedIndexChanged = false;
+                return;
+            }
+        }
+        else
+            lbStations.SelectedIndex = index;
+
+        if (lbStations.SelectedItem is not TrackableObject<Station> station) return;
+        SelectStationEditor(station.Id);
+        UpdateTitleBar(station.Id);
     }
 
     /// <summary>
@@ -318,6 +420,7 @@ public partial class MainForm : Form
     /// </summary>
     private void OnPathsChanged(object? sender, EventArgs e)
     {
+        SetupDirectoryWatcher();
         PopulateStations();
     }
 
@@ -336,14 +439,7 @@ public partial class MainForm : Form
     /// </summary>
     private void LbStations_SelectedIndexChanged(object? sender, EventArgs e)
     {
-        if (_ignoreSelectedIndexChanged)
-        {
-            _ignoreSelectedIndexChanged = false;
-            return;
-        }
-
-        if (lbStations.SelectedItem is not TrackableObject<Station> station) return;
-        SelectStationEditor(station.Id);
+        this.SafeInvoke(() => SelectListBoxItem(lbStations.SelectedIndex, true));
     }
 
     /// <summary>
@@ -488,6 +584,25 @@ public partial class MainForm : Form
 
         StationManager.Instance.StopAllMusicPlayers();
         UpdateStationEditor(StationManager.Instance.GetStation(stationId)?.Value);
+    }
+
+    /// <summary>
+    /// Updates the title bar with the app name followed by the relative path to the station.
+    /// </summary>
+    /// <param name="stationId"></param>
+    private void UpdateTitleBar(Guid? stationId)
+    {
+        this.SafeInvoke(() =>
+        {
+            if (stationId == null)
+            {
+                Text = GlobalData.Strings.GetString("MainTitle");
+                return;
+            }
+
+            var path = StationManager.Instance.GetStationPath(stationId);
+            Text = $"{GlobalData.Strings.GetString("MainTitle")} - {path}";
+        });
     }
 
     /// <summary>
@@ -682,7 +797,13 @@ public partial class MainForm : Form
             PopulateStations();
     }
 
-    private void SynchronizeStationsToolStripMenuItem_Click(object sender, EventArgs e)
+    private void SynchronizeStationsToolStripMenuItem_Click(object sender, EventArgs e) => StartStationSync(true);
+
+    /// <summary>
+    /// Start the station synchronization operation. Displays a message to the user to confirm the operation depending on the context.
+    /// </summary>
+    /// <param name="userInitiated">Indicate whether the sync operation was initiated from user interaction or the file system watcher.</param>
+    private void StartStationSync(bool userInitiated)
     {
         if (string.IsNullOrEmpty(StagingPath)) return;
         if (string.IsNullOrEmpty(GameBasePath)) return;
@@ -695,11 +816,22 @@ public partial class MainForm : Form
             return;
         }
 
-        var text = GlobalData.Strings.GetString("ConfirmSyncStations") ?? "Are you sure you want to synchronize the stations?" +
-            " This will overwrite any modifications to existing stations in staging.";
-        var caption = GlobalData.Strings.GetString("Confirm");
-        var result = MessageBox.Show(this, text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-        if (result == DialogResult.No) return;
+        if (userInitiated)
+        {
+            var text = GlobalData.Strings.GetString("ConfirmSyncStations") ?? "Are you sure you want to synchronize the stations?" +
+            " This will overwrite any modifications to stations that haven't been exported.";
+            var caption = GlobalData.Strings.GetString("Confirm");
+            var result = MessageBox.Show(this, text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            if (result == DialogResult.No) return;
+        }
+        else if (GlobalData.ConfigManager.Get("watchForChanges") as bool? == true)
+        {
+            var text = GlobalData.Strings.GetString("ConfirmSyncStations") ?? "Changes were made to the game's radios directory." +
+            " Do you want to synchronize your staging and game directories?";
+            var caption = GlobalData.Strings.GetString("Confirm");
+            var result = MessageBox.Show(this, text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (result == DialogResult.No) return;
+        }
 
         // Initialize ProgressBar
         pgBackupProgress.Value = 0;
@@ -939,6 +1071,27 @@ public partial class MainForm : Form
         }
     }
 
+    /// <summary>
+    /// Get a value indicating if there are stations pending save and the user confirmed to quit the application.
+    /// </summary>
+    /// <returns><c>true</c> if there are no pending saves or the user confirmed exit;
+    /// <c>false</c> if there are pending changes and the user denied exit.</returns>
+    private bool CheckForPendingSaveStations()
+    {
+        var pendingSave = StationManager.Instance.CheckPendingSave();
+        if (pendingSave.Values.All(p => p != true)) return false;
+
+        var count = pendingSave.Count(p => p.Value);
+        var text = string.Format(GlobalData.Strings.GetString("ConfirmExit")
+                                 ?? "There are {0} stations pending export. Are you sure you want to quit?", count);
+        var caption = GlobalData.Strings.GetString("Confirm");
+
+        if (MessageBox.Show(this, text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
+            return false;
+
+        return true;
+    }
+
     private void MainForm_Resize(object sender, EventArgs e)
     {
         // Restart the Timer each time the Resize event is triggered
@@ -952,15 +1105,9 @@ public partial class MainForm : Form
 
         if (e.CloseReason is CloseReason.TaskManagerClosing or CloseReason.WindowsShutDown) return;
 
-        var pendingSave = StationManager.Instance.CheckPendingSave();
-        if (pendingSave.Values.All(p => p != true)) return;
-
-        var count = pendingSave.Count(p => p.Value);
-        var text = string.Format(GlobalData.Strings.GetString("ConfirmExit")
-                                 ?? "There are {0} stations pending export. Are you sure you want to quit?", count);
-        var caption = GlobalData.Strings.GetString("Confirm");
-
-        if (MessageBox.Show(this, text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
+        if (CheckForPendingSaveStations())
             e.Cancel = true;
+        else
+            CleanupEvents(); // Clean up events (unsubscribe) before closing the application
     }
 }

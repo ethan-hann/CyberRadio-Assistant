@@ -772,4 +772,10 @@ exporté vers le jeu.</value>
     <data name="TotalStationSizeLabel" xml:space="preserve">
       <value>Taille de la station:</value>
     </data>
+    <data name="WatchForChangesOption" xml:space="preserve">
+      <value>Surveillez les changements de station?</value>
+    </data>
+    <data name="WatchForChangesHelp" xml:space="preserve">
+      <value>S'il est vérifié, le chemin des radios du jeu sera surveillé pour les modifications et vous informera lorsqu'une synchronisation sera disponible.</value>
+    </data>
 </root>

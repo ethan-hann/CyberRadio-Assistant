@@ -69,8 +69,9 @@ public partial class StationManager : IDisposable
     /// </summary>
     /// <param name="station">The station to add.</param>
     /// <param name="isOnDisk">Indicates whether the station is an in-memory addition or was added from .json files on disk.</param>
+    /// <param name="pathOnDisk">Specifies the path to the station folder relative to the staging folder.</param>
     /// <returns>The <see cref="Guid"/> of the newly added station.</returns>
-    public Guid AddStation(TrackableObject<Station> station, bool isOnDisk)
+    public Guid AddStation(TrackableObject<Station> station, bool isOnDisk, string pathOnDisk = "\\")
     {
         try
         {
@@ -86,6 +87,19 @@ public partial class StationManager : IDisposable
                 editor.StationUpdated += Editor_StationUpdated;
 
                 StationsAsBindingList.Add(station);
+
+                if (pathOnDisk.Equals("\\"))
+                    StationPaths.Add(station.Id, Path.Combine(pathOnDisk, station.TrackedObject.MetaData.DisplayName));
+                else
+                {
+                    string stagingPath = GlobalData.ConfigManager.Get("stagingPath") as string ?? string.Empty;
+                    string relativePath = PathHelper.GetRelativePath(pathOnDisk, stagingPath);
+                    
+                    if (relativePath.Equals(pathOnDisk))
+                        StationPaths.Add(station.Id, Path.Combine("\\", station.TrackedObject.MetaData.DisplayName));
+                    else
+                        StationPaths.Add(station.Id, relativePath);
+                }
 
                 StationAdded?.Invoke(this, station.Id);
                 return station.Id;
@@ -122,6 +136,7 @@ public partial class StationManager : IDisposable
                 pair.Value.Dispose();
                 _stations.Remove(stationId);
                 _newStations.Remove(stationId);
+                StationPaths.Remove(stationId);
 
                 StationsAsBindingList.Remove(StationsAsBindingList.First(s => s.Id == stationId));
 
@@ -158,6 +173,7 @@ public partial class StationManager : IDisposable
                     pair.Value.Dispose();
                 _stations.Clear();
                 StationsAsBindingList.Clear();
+                StationPaths.Clear();
                 _newStations.Clear();
 
                 StationsCleared?.Invoke(this, EventArgs.Empty);
@@ -467,6 +483,17 @@ public partial class StationManager : IDisposable
     }
 
     /// <summary>
+    /// Get the relative path in the staging folder to the station with the specified ID.
+    /// </summary>
+    /// <param name="stationId">The ID of the station to get the relative path of.</param>
+    /// <returns>The relative path to the station's folder; or <see cref="string.Empty"/> if the station ID was invalid.</returns>
+    public string GetStationPath(Guid? stationId)
+    {
+        if (stationId == null) return string.Empty;
+        return StationPaths.TryGetValue((Guid)stationId, out var path) ? path : string.Empty;
+    }
+
+    /// <summary>
     /// Disposes of the station manager and clears all stations.
     /// </summary>
     public virtual void Dispose()
@@ -618,7 +645,7 @@ public partial class StationManager : IDisposable
             var trackedStation = new TrackableObject<Station>(station);
             EnsureDisplayNameFormat(trackedStation);
 
-            AddStation(trackedStation, true);
+            AddStation(trackedStation, true, directory);
         }
         catch (Exception ex)
         {
@@ -652,28 +679,6 @@ public partial class StationManager : IDisposable
         station.TrackedObject.MetaData.Fm = fmNumber;
         return fmNumber;
     }
-
-    /*
-     * /// <summary>
-    /// Ensures the display name contains the station's FM number at the beginning of its name.
-    /// </summary>
-    private void EnsureDisplayNameFormat()
-    {
-        var fmValue = nudFM.Value.ToString("00.00", CultureInfo.InvariantCulture); // Format to two decimal places
-        var currentText = txtDisplayName.Text;
-
-        // Use a regular expression to detect and remove any existing FM value at the start
-        var regex = DisplayNameRegex();
-        var match = regex.Match(currentText);
-
-        if (match.Success)
-            // Remove the existing FM value from the start
-            currentText = currentText[match.Length..].TrimStart();
-
-        // Combine FM value and station name with the correct format
-        txtDisplayName.Text = @$"{fmValue} {currentText}";
-    }
-     */
 
     #region Events
 
@@ -798,12 +803,17 @@ public partial class StationManager : IDisposable
     /// The current list of stations managed by the manager as a binding list. Auto-updates when stations are added or removed.
     /// </summary>
     public BindingList<TrackableObject<Station>> StationsAsBindingList { get; } =
-        []; //_stations.Values.Select(pair => pair.Key).ToBindingList();
+        [];
 
     /// <summary>
     /// The current list of stations managed by the manager as a list.
     /// </summary>
     public List<TrackableObject<Station>> StationsAsList => _stations.Values.Select(pair => pair.Key).ToList();
+
+    /// <summary>
+    /// A dictionary of station IDs and their relative paths in the staging directory.
+    /// </summary>
+    private Dictionary<Guid, string> StationPaths { get; } = [];
 
     /// <summary>
     /// Get a value indicating whether the station manager is empty (i.e., has no stations).

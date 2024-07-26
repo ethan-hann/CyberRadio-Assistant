@@ -1984,6 +1984,24 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to If checked, the game&apos;s radios path will be watched for changes and notify you when a sync is available..
+        /// </summary>
+        internal static string WatchForChangesHelp {
+            get {
+                return ResourceManager.GetString("WatchForChangesHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Watch for Station Changes?.
+        /// </summary>
+        internal static string WatchForChangesOption {
+            get {
+                return ResourceManager.GetString("WatchForChangesOption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Yes.
         /// </summary>
         internal static string Yes {

@@ -30,20 +30,16 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ConfigForm));
             tableLayoutPanel1 = new TableLayoutPanel();
-            lblEditPathsHelp = new Label();
-            lblAutoExportHelp = new Label();
             chkCheckForUpdates = new CheckBox();
             chkAutoExportToGame = new CheckBox();
-            lblUpdatesHelp = new Label();
             btnEditPaths = new Button();
+            chkWatchForChanges = new CheckBox();
             tabConfigs = new TabControl();
             tabGeneral = new TabPage();
             tabLogging = new TabPage();
             tableLayoutPanel3 = new TableLayoutPanel();
             chkNewFileEveryLaunch = new CheckBox();
-            lblNewFileEveryLaunchHelp = new Label();
             btnEditLogsPath = new Button();
-            lblEditLogPathHelp = new Label();
             lblLogPathLabel = new Label();
             lblCurrentLogPath = new Label();
             tabNexus = new TabPage();
@@ -65,6 +61,8 @@
             btnResetToDefault = new Button();
             btnSaveAndClose = new Button();
             fldrOpenLogPath = new FolderBrowserDialog();
+            statusStrip1 = new StatusStrip();
+            lblHelpText = new ToolStripStatusLabel();
             tableLayoutPanel1.SuspendLayout();
             tabConfigs.SuspendLayout();
             tabGeneral.SuspendLayout();
@@ -76,84 +74,58 @@
             ((System.ComponentModel.ISupportInitialize)picApiStatus).BeginInit();
             panel1.SuspendLayout();
             tableLayoutPanel2.SuspendLayout();
+            statusStrip1.SuspendLayout();
             SuspendLayout();
             // 
             // tableLayoutPanel1
             // 
-            tableLayoutPanel1.ColumnCount = 2;
-            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25.94142F));
-            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 74.05858F));
-            tableLayoutPanel1.Controls.Add(lblEditPathsHelp, 1, 2);
-            tableLayoutPanel1.Controls.Add(lblAutoExportHelp, 1, 1);
+            tableLayoutPanel1.ColumnCount = 1;
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 40F));
             tableLayoutPanel1.Controls.Add(chkCheckForUpdates, 0, 0);
             tableLayoutPanel1.Controls.Add(chkAutoExportToGame, 0, 1);
-            tableLayoutPanel1.Controls.Add(lblUpdatesHelp, 1, 0);
-            tableLayoutPanel1.Controls.Add(btnEditPaths, 0, 2);
+            tableLayoutPanel1.Controls.Add(btnEditPaths, 0, 3);
+            tableLayoutPanel1.Controls.Add(chkWatchForChanges, 0, 2);
             tableLayoutPanel1.Dock = DockStyle.Fill;
             tableLayoutPanel1.Location = new Point(3, 3);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 5;
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 25F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 25F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 28.125F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 21.875F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel1.Size = new Size(779, 150);
+            tableLayoutPanel1.RowStyles.Add(new RowStyle());
+            tableLayoutPanel1.RowStyles.Add(new RowStyle());
+            tableLayoutPanel1.RowStyles.Add(new RowStyle());
+            tableLayoutPanel1.RowStyles.Add(new RowStyle());
+            tableLayoutPanel1.RowStyles.Add(new RowStyle());
+            tableLayoutPanel1.Size = new Size(779, 157);
             tableLayoutPanel1.TabIndex = 0;
-            // 
-            // lblEditPathsHelp
-            // 
-            lblEditPathsHelp.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            lblEditPathsHelp.AutoSize = true;
-            lblEditPathsHelp.Location = new Point(205, 74);
-            lblEditPathsHelp.Name = "lblEditPathsHelp";
-            lblEditPathsHelp.Size = new Size(571, 15);
-            lblEditPathsHelp.TabIndex = 6;
-            lblEditPathsHelp.Text = "Opens the path's dialog to edit the staging and game base path.";
-            // 
-            // lblAutoExportHelp
-            // 
-            lblAutoExportHelp.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            lblAutoExportHelp.AutoSize = true;
-            lblAutoExportHelp.Location = new Point(205, 40);
-            lblAutoExportHelp.Name = "lblAutoExportHelp";
-            lblAutoExportHelp.Size = new Size(571, 15);
-            lblAutoExportHelp.TabIndex = 4;
-            lblAutoExportHelp.Text = "If checked, your stations will immediately export to the game after successfully exporting to staging.";
             // 
             // chkCheckForUpdates
             // 
             chkCheckForUpdates.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             chkCheckForUpdates.AutoSize = true;
-            chkCheckForUpdates.Location = new Point(10, 6);
+            chkCheckForUpdates.Location = new Point(10, 3);
             chkCheckForUpdates.Margin = new Padding(10, 3, 3, 3);
             chkCheckForUpdates.Name = "chkCheckForUpdates";
-            chkCheckForUpdates.Size = new Size(189, 19);
+            chkCheckForUpdates.Size = new Size(766, 20);
             chkCheckForUpdates.TabIndex = 1;
+            chkCheckForUpdates.Tag = "CheckForUpdatesOptionHelp";
             chkCheckForUpdates.Text = "Check for Updates at Startup?";
             chkCheckForUpdates.UseVisualStyleBackColor = true;
+            chkCheckForUpdates.MouseEnter += ControlMouseEnter;
+            chkCheckForUpdates.MouseLeave += ControlMouseLeave;
             // 
             // chkAutoExportToGame
             // 
             chkAutoExportToGame.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             chkAutoExportToGame.AutoSize = true;
-            chkAutoExportToGame.Location = new Point(10, 38);
+            chkAutoExportToGame.Location = new Point(10, 29);
             chkAutoExportToGame.Margin = new Padding(10, 3, 3, 3);
             chkAutoExportToGame.Name = "chkAutoExportToGame";
-            chkAutoExportToGame.Size = new Size(189, 19);
+            chkAutoExportToGame.Size = new Size(766, 20);
             chkAutoExportToGame.TabIndex = 2;
+            chkAutoExportToGame.Tag = "AutoExportOptionHelp";
             chkAutoExportToGame.Text = "Auto-Export to Game?";
             chkAutoExportToGame.UseVisualStyleBackColor = true;
-            // 
-            // lblUpdatesHelp
-            // 
-            lblUpdatesHelp.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            lblUpdatesHelp.AutoSize = true;
-            lblUpdatesHelp.Location = new Point(205, 8);
-            lblUpdatesHelp.Name = "lblUpdatesHelp";
-            lblUpdatesHelp.Size = new Size(571, 15);
-            lblUpdatesHelp.TabIndex = 3;
-            lblUpdatesHelp.Text = "If checked, enables the application to check for updates immediately after started.";
+            chkAutoExportToGame.MouseEnter += ControlMouseEnter;
+            chkAutoExportToGame.MouseLeave += ControlMouseLeave;
             // 
             // btnEditPaths
             // 
@@ -163,15 +135,33 @@
             btnEditPaths.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
             btnEditPaths.FlatStyle = FlatStyle.Flat;
             btnEditPaths.Image = Properties.Resources.folder__16x16;
-            btnEditPaths.Location = new Point(3, 67);
+            btnEditPaths.Location = new Point(3, 81);
             btnEditPaths.Name = "btnEditPaths";
-            btnEditPaths.Size = new Size(196, 30);
+            btnEditPaths.Size = new Size(773, 30);
             btnEditPaths.TabIndex = 5;
+            btnEditPaths.Tag = "EditPathsOptionHelp";
             btnEditPaths.Text = "Edit Paths...";
             btnEditPaths.TextAlign = ContentAlignment.MiddleRight;
             btnEditPaths.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnEditPaths.UseVisualStyleBackColor = false;
             btnEditPaths.Click += BtnEditPaths_Click;
+            btnEditPaths.MouseEnter += ControlMouseEnter;
+            btnEditPaths.MouseLeave += ControlMouseLeave;
+            // 
+            // chkWatchForChanges
+            // 
+            chkWatchForChanges.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            chkWatchForChanges.AutoSize = true;
+            chkWatchForChanges.Location = new Point(10, 55);
+            chkWatchForChanges.Margin = new Padding(10, 3, 3, 3);
+            chkWatchForChanges.Name = "chkWatchForChanges";
+            chkWatchForChanges.Size = new Size(766, 20);
+            chkWatchForChanges.TabIndex = 7;
+            chkWatchForChanges.Tag = "WatchForChangesHelp";
+            chkWatchForChanges.Text = "Watch For Station Changes?";
+            chkWatchForChanges.UseVisualStyleBackColor = true;
+            chkWatchForChanges.MouseEnter += ControlMouseEnter;
+            chkWatchForChanges.MouseLeave += ControlMouseLeave;
             // 
             // tabConfigs
             // 
@@ -182,7 +172,7 @@
             tabConfigs.Location = new Point(0, 0);
             tabConfigs.Name = "tabConfigs";
             tabConfigs.SelectedIndex = 0;
-            tabConfigs.Size = new Size(793, 184);
+            tabConfigs.Size = new Size(793, 192);
             tabConfigs.TabIndex = 1;
             // 
             // tabGeneral
@@ -190,10 +180,10 @@
             tabGeneral.BackColor = Color.White;
             tabGeneral.Controls.Add(tableLayoutPanel1);
             tabGeneral.ImageKey = "config";
-            tabGeneral.Location = new Point(4, 24);
+            tabGeneral.Location = new Point(4, 25);
             tabGeneral.Name = "tabGeneral";
             tabGeneral.Padding = new Padding(3);
-            tabGeneral.Size = new Size(785, 156);
+            tabGeneral.Size = new Size(785, 163);
             tabGeneral.TabIndex = 0;
             tabGeneral.Text = "General";
             // 
@@ -202,22 +192,20 @@
             tabLogging.BackColor = Color.White;
             tabLogging.Controls.Add(tableLayoutPanel3);
             tabLogging.ImageKey = "logging";
-            tabLogging.Location = new Point(4, 24);
+            tabLogging.Location = new Point(4, 25);
             tabLogging.Name = "tabLogging";
             tabLogging.Padding = new Padding(3);
-            tabLogging.Size = new Size(785, 156);
+            tabLogging.Size = new Size(785, 163);
             tabLogging.TabIndex = 1;
             tabLogging.Text = "Logging";
             // 
             // tableLayoutPanel3
             // 
             tableLayoutPanel3.ColumnCount = 2;
-            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25.94142F));
-            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 74.05858F));
+            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30.42362F));
+            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 69.57638F));
             tableLayoutPanel3.Controls.Add(chkNewFileEveryLaunch, 0, 0);
-            tableLayoutPanel3.Controls.Add(lblNewFileEveryLaunchHelp, 1, 0);
             tableLayoutPanel3.Controls.Add(btnEditLogsPath, 0, 5);
-            tableLayoutPanel3.Controls.Add(lblEditLogPathHelp, 1, 5);
             tableLayoutPanel3.Controls.Add(lblLogPathLabel, 0, 6);
             tableLayoutPanel3.Controls.Add(lblCurrentLogPath, 1, 6);
             tableLayoutPanel3.Dock = DockStyle.Fill;
@@ -232,66 +220,54 @@
             tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 37F));
             tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
             tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel3.Size = new Size(779, 150);
+            tableLayoutPanel3.Size = new Size(779, 157);
             tableLayoutPanel3.TabIndex = 1;
             // 
             // chkNewFileEveryLaunch
             // 
             chkNewFileEveryLaunch.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             chkNewFileEveryLaunch.AutoSize = true;
+            tableLayoutPanel3.SetColumnSpan(chkNewFileEveryLaunch, 2);
             chkNewFileEveryLaunch.Location = new Point(10, 3);
             chkNewFileEveryLaunch.Margin = new Padding(10, 3, 3, 3);
             chkNewFileEveryLaunch.Name = "chkNewFileEveryLaunch";
-            chkNewFileEveryLaunch.Size = new Size(189, 19);
+            chkNewFileEveryLaunch.Size = new Size(766, 20);
             chkNewFileEveryLaunch.TabIndex = 1;
+            chkNewFileEveryLaunch.Tag = "NewLogFileOptionHelp";
             chkNewFileEveryLaunch.Text = "New File Every Launch?";
             chkNewFileEveryLaunch.UseVisualStyleBackColor = true;
-            // 
-            // lblNewFileEveryLaunchHelp
-            // 
-            lblNewFileEveryLaunchHelp.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            lblNewFileEveryLaunchHelp.AutoSize = true;
-            lblNewFileEveryLaunchHelp.Location = new Point(205, 5);
-            lblNewFileEveryLaunchHelp.Name = "lblNewFileEveryLaunchHelp";
-            lblNewFileEveryLaunchHelp.Size = new Size(571, 15);
-            lblNewFileEveryLaunchHelp.TabIndex = 3;
-            lblNewFileEveryLaunchHelp.Text = "If checked, specifies that a new log file will be created on every run of the app.";
+            chkNewFileEveryLaunch.MouseEnter += ControlMouseEnter;
+            chkNewFileEveryLaunch.MouseLeave += ControlMouseLeave;
             // 
             // btnEditLogsPath
             // 
             btnEditLogsPath.BackColor = Color.Yellow;
+            tableLayoutPanel3.SetColumnSpan(btnEditLogsPath, 2);
             btnEditLogsPath.Dock = DockStyle.Fill;
             btnEditLogsPath.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
             btnEditLogsPath.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
             btnEditLogsPath.FlatStyle = FlatStyle.Flat;
             btnEditLogsPath.Image = Properties.Resources.folder__16x16;
-            btnEditLogsPath.Location = new Point(3, 28);
+            btnEditLogsPath.Location = new Point(3, 29);
             btnEditLogsPath.Name = "btnEditLogsPath";
-            btnEditLogsPath.Size = new Size(196, 31);
+            btnEditLogsPath.Size = new Size(773, 31);
             btnEditLogsPath.TabIndex = 7;
+            btnEditLogsPath.Tag = "EditLogsPathOptionHelp";
             btnEditLogsPath.Text = "Edit Logs Path...";
             btnEditLogsPath.TextAlign = ContentAlignment.MiddleRight;
             btnEditLogsPath.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnEditLogsPath.UseVisualStyleBackColor = false;
             btnEditLogsPath.Click += BtnEditLogsPath_Click;
-            // 
-            // lblEditLogPathHelp
-            // 
-            lblEditLogPathHelp.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            lblEditLogPathHelp.AutoSize = true;
-            lblEditLogPathHelp.Location = new Point(205, 36);
-            lblEditLogPathHelp.Name = "lblEditLogPathHelp";
-            lblEditLogPathHelp.Size = new Size(571, 15);
-            lblEditLogPathHelp.TabIndex = 8;
-            lblEditLogPathHelp.Text = "Opens a folder dialog where you can choose a new path to save log files.";
+            btnEditLogsPath.MouseEnter += ControlMouseEnter;
+            btnEditLogsPath.MouseLeave += ControlMouseLeave;
             // 
             // lblLogPathLabel
             // 
             lblLogPathLabel.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             lblLogPathLabel.AutoSize = true;
-            lblLogPathLabel.Location = new Point(3, 64);
+            lblLogPathLabel.Location = new Point(3, 65);
             lblLogPathLabel.Name = "lblLogPathLabel";
-            lblLogPathLabel.Size = new Size(196, 15);
+            lblLogPathLabel.Size = new Size(231, 16);
             lblLogPathLabel.TabIndex = 9;
             lblLogPathLabel.Text = "Log Path:";
             lblLogPathLabel.TextAlign = ContentAlignment.MiddleRight;
@@ -302,19 +278,19 @@
             lblCurrentLogPath.AutoSize = true;
             lblCurrentLogPath.Font = new Font("Segoe UI Variable Display", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblCurrentLogPath.ForeColor = Color.Green;
-            lblCurrentLogPath.Location = new Point(205, 63);
+            lblCurrentLogPath.Location = new Point(240, 64);
             lblCurrentLogPath.Name = "lblCurrentLogPath";
-            lblCurrentLogPath.Size = new Size(571, 17);
+            lblCurrentLogPath.Size = new Size(536, 17);
             lblCurrentLogPath.TabIndex = 10;
             lblCurrentLogPath.Text = "<no path>";
             // 
             // tabNexus
             // 
             tabNexus.Controls.Add(tableLayoutPanel4);
-            tabNexus.Location = new Point(4, 24);
+            tabNexus.Location = new Point(4, 25);
             tabNexus.Name = "tabNexus";
             tabNexus.Padding = new Padding(3);
-            tabNexus.Size = new Size(785, 156);
+            tabNexus.Size = new Size(785, 163);
             tabNexus.TabIndex = 2;
             tabNexus.Text = "Nexus API";
             tabNexus.UseVisualStyleBackColor = true;
@@ -338,7 +314,7 @@
             tableLayoutPanel4.RowStyles.Add(new RowStyle());
             tableLayoutPanel4.RowStyles.Add(new RowStyle());
             tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Absolute, 37F));
-            tableLayoutPanel4.Size = new Size(779, 150);
+            tableLayoutPanel4.Size = new Size(779, 157);
             tableLayoutPanel4.TabIndex = 2;
             // 
             // panel2
@@ -351,7 +327,7 @@
             panel2.Dock = DockStyle.Fill;
             panel2.Location = new Point(3, 32);
             panel2.Name = "panel2";
-            panel2.Size = new Size(470, 115);
+            panel2.Size = new Size(470, 122);
             panel2.TabIndex = 3;
             // 
             // btnClearApiKey
@@ -414,9 +390,9 @@
             // 
             lblApiHelp.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             lblApiHelp.AutoSize = true;
-            lblApiHelp.Location = new Point(25, 54);
+            lblApiHelp.Location = new Point(25, 61);
             lblApiHelp.Name = "lblApiHelp";
-            lblApiHelp.Size = new Size(416, 45);
+            lblApiHelp.Size = new Size(415, 48);
             lblApiHelp.TabIndex = 12;
             lblApiHelp.Text = resources.GetString("lblApiHelp.Text");
             // 
@@ -428,7 +404,7 @@
             panel1.Dock = DockStyle.Fill;
             panel1.Location = new Point(479, 32);
             panel1.Name = "panel1";
-            panel1.Size = new Size(297, 115);
+            panel1.Size = new Size(297, 122);
             panel1.TabIndex = 3;
             // 
             // lblApiKeyUnlocks
@@ -436,7 +412,7 @@
             lblApiKeyUnlocks.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             lblApiKeyUnlocks.AutoSize = true;
             lblApiKeyUnlocks.Font = new Font("Segoe UI Variable Text", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblApiKeyUnlocks.Location = new Point(3, 51);
+            lblApiKeyUnlocks.Location = new Point(3, 55);
             lblApiKeyUnlocks.MaximumSize = new Size(200, 0);
             lblApiKeyUnlocks.Name = "lblApiKeyUnlocks";
             lblApiKeyUnlocks.Size = new Size(176, 48);
@@ -449,7 +425,7 @@
             lnkApiAcceptableUse.AutoSize = true;
             lnkApiAcceptableUse.Location = new Point(3, 25);
             lnkApiAcceptableUse.Name = "lnkApiAcceptableUse";
-            lnkApiAcceptableUse.Size = new Size(188, 15);
+            lnkApiAcceptableUse.Size = new Size(188, 16);
             lnkApiAcceptableUse.TabIndex = 14;
             lnkApiAcceptableUse.TabStop = true;
             lnkApiAcceptableUse.Text = "API Acceptable Use Policy (Nexus)";
@@ -459,9 +435,9 @@
             // 
             lnkNexusApiKeyPage.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             lnkNexusApiKeyPage.AutoSize = true;
-            lnkNexusApiKeyPage.Location = new Point(3, 10);
+            lnkNexusApiKeyPage.Location = new Point(3, 14);
             lnkNexusApiKeyPage.Name = "lnkNexusApiKeyPage";
-            lnkNexusApiKeyPage.Size = new Size(98, 15);
+            lnkNexusApiKeyPage.Size = new Size(98, 16);
             lnkNexusApiKeyPage.TabIndex = 13;
             lnkNexusApiKeyPage.TabStop = true;
             lnkNexusApiKeyPage.Text = "Get Your API Key!";
@@ -471,9 +447,9 @@
             // 
             lblApiInputHelp.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             lblApiInputHelp.AutoSize = true;
-            lblApiInputHelp.Location = new Point(479, 7);
+            lblApiInputHelp.Location = new Point(479, 6);
             lblApiInputHelp.Name = "lblApiInputHelp";
-            lblApiInputHelp.Size = new Size(297, 15);
+            lblApiInputHelp.Size = new Size(297, 16);
             lblApiInputHelp.TabIndex = 3;
             lblApiInputHelp.Text = "Specify your Nexus Mods API key.";
             // 
@@ -497,7 +473,7 @@
             tableLayoutPanel2.Controls.Add(btnResetToDefault, 0, 0);
             tableLayoutPanel2.Controls.Add(btnSaveAndClose, 0, 0);
             tableLayoutPanel2.Dock = DockStyle.Bottom;
-            tableLayoutPanel2.Location = new Point(0, 184);
+            tableLayoutPanel2.Location = new Point(0, 192);
             tableLayoutPanel2.Name = "tableLayoutPanel2";
             tableLayoutPanel2.RowCount = 1;
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
@@ -563,14 +539,33 @@
             fldrOpenLogPath.Description = "Select the location to store log files";
             fldrOpenLogPath.UseDescriptionForTitle = true;
             // 
+            // statusStrip1
+            // 
+            statusStrip1.BackColor = Color.Transparent;
+            statusStrip1.Items.AddRange(new ToolStripItem[] { lblHelpText });
+            statusStrip1.Location = new Point(0, 233);
+            statusStrip1.Name = "statusStrip1";
+            statusStrip1.Size = new Size(793, 22);
+            statusStrip1.SizingGrip = false;
+            statusStrip1.TabIndex = 3;
+            statusStrip1.Text = "statusStrip1";
+            // 
+            // lblHelpText
+            // 
+            lblHelpText.Image = Properties.Resources.info__16x16;
+            lblHelpText.Name = "lblHelpText";
+            lblHelpText.Size = new Size(55, 17);
+            lblHelpText.Text = "Ready";
+            // 
             // ConfigForm
             // 
             AutoScaleDimensions = new SizeF(96F, 96F);
             AutoScaleMode = AutoScaleMode.Dpi;
             BackColor = Color.White;
-            ClientSize = new Size(793, 225);
+            ClientSize = new Size(793, 255);
             Controls.Add(tabConfigs);
             Controls.Add(tableLayoutPanel2);
+            Controls.Add(statusStrip1);
             FormBorderStyle = FormBorderStyle.FixedDialog;
             HelpButton = true;
             Icon = (Icon)resources.GetObject("$this.Icon");
@@ -599,7 +594,10 @@
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             tableLayoutPanel2.ResumeLayout(false);
+            statusStrip1.ResumeLayout(false);
+            statusStrip1.PerformLayout();
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
@@ -607,9 +605,6 @@
         private TableLayoutPanel tableLayoutPanel1;
         private CheckBox chkCheckForUpdates;
         private CheckBox chkAutoExportToGame;
-        private Label lblUpdatesHelp;
-        private Label lblEditPathsHelp;
-        private Label lblAutoExportHelp;
         private Button btnEditPaths;
         private TabControl tabConfigs;
         private TabPage tabGeneral;
@@ -620,9 +615,7 @@
         private Button btnSaveAndClose;
         private TableLayoutPanel tableLayoutPanel3;
         private CheckBox chkNewFileEveryLaunch;
-        private Label lblNewFileEveryLaunchHelp;
         private Button btnEditLogsPath;
-        private Label lblEditLogPathHelp;
         private Label lblLogPathLabel;
         private Label lblCurrentLogPath;
         private FolderBrowserDialog fldrOpenLogPath;
@@ -640,5 +633,8 @@
         private PictureBox picApiStatus;
         private Label lblAuthenticatedStatus;
         private Button btnClearApiKey;
+        private CheckBox chkWatchForChanges;
+        private StatusStrip statusStrip1;
+        private ToolStripStatusLabel lblHelpText;
     }
 }

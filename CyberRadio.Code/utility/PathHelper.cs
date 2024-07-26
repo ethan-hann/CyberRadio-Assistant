@@ -169,4 +169,36 @@ public static class PathHelper
             return false;
         }
     }
+
+    /// <summary>
+    /// Get a relative path to the <paramref name="fullPath"/> from the <paramref name="stagingPath"/>.
+    /// </summary>
+    /// <param name="fullPath">The full path.</param>
+    /// <param name="stagingPath">The path to the staging folder.</param>
+    /// <returns></returns>
+    public static string GetRelativePath(string fullPath, string stagingPath)
+    {
+        try
+        {
+            Uri fullUri = new(fullPath);
+            Uri stagingUri = new(stagingPath);
+
+            if (fullUri.Scheme != stagingUri.Scheme)
+                return fullPath;
+
+            Uri relativeUri = stagingUri.MakeRelativeUri(fullUri);
+            string relativePath = Uri.UnescapeDataString(relativeUri.ToString());
+
+            if (string.IsNullOrEmpty(relativePath))
+                return fullPath;
+
+            // Replace forward slashes with backslashes for Windows paths
+            return relativePath.Replace('/', '\\');
+        } catch (Exception ex)
+        {
+            AuLogger.GetCurrentLogger("PathHelper.GetRelativePath")
+                .Error(ex, "An error occurred while getting the relative path.");
+            return fullPath;
+        }
+    }
 }

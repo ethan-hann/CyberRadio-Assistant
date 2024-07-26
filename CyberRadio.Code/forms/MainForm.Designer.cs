@@ -37,6 +37,7 @@ namespace RadioExt_Helper.forms
             fileToolStripMenuItem = new ToolStripMenuItem();
             exportToGameToolStripMenuItem = new ToolStripMenuItem();
             refreshStationsToolStripMenuItem = new ToolStripMenuItem();
+            synchronizeStationsToolStripMenuItem = new ToolStripMenuItem();
             toolStripSeparator2 = new ToolStripSeparator();
             backupStagingFolderToolStripMenuItem = new ToolStripMenuItem();
             openStagingPathToolStripMenuItem = new ToolStripMenuItem();
@@ -82,7 +83,6 @@ namespace RadioExt_Helper.forms
             lblBackupStatus = new ToolStripStatusLabel();
             pgBackupProgress = new ToolStripProgressBar();
             lblSpring2 = new ToolStripStatusLabel();
-            synchronizeStationsToolStripMenuItem = new ToolStripMenuItem();
             menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
@@ -135,6 +135,15 @@ namespace RadioExt_Helper.forms
             refreshStationsToolStripMenuItem.Size = new Size(273, 22);
             refreshStationsToolStripMenuItem.Text = "Refresh Stations";
             refreshStationsToolStripMenuItem.Click += RefreshStationsToolStripMenuItem_Click;
+            // 
+            // synchronizeStationsToolStripMenuItem
+            // 
+            synchronizeStationsToolStripMenuItem.Image = Properties.Resources.sync;
+            synchronizeStationsToolStripMenuItem.Name = "synchronizeStationsToolStripMenuItem";
+            synchronizeStationsToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.S;
+            synchronizeStationsToolStripMenuItem.Size = new Size(273, 22);
+            synchronizeStationsToolStripMenuItem.Text = "Synchronize Stations";
+            synchronizeStationsToolStripMenuItem.Click += SynchronizeStationsToolStripMenuItem_Click;
             // 
             // toolStripSeparator2
             // 
@@ -575,15 +584,6 @@ namespace RadioExt_Helper.forms
             lblSpring2.Size = new Size(806, 17);
             lblSpring2.Spring = true;
             // 
-            // synchronizeStationsToolStripMenuItem
-            // 
-            synchronizeStationsToolStripMenuItem.Image = Properties.Resources.sync;
-            synchronizeStationsToolStripMenuItem.Name = "synchronizeStationsToolStripMenuItem";
-            synchronizeStationsToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.S;
-            synchronizeStationsToolStripMenuItem.Size = new Size(273, 22);
-            synchronizeStationsToolStripMenuItem.Text = "Synchronize Stations";
-            synchronizeStationsToolStripMenuItem.Click += SynchronizeStationsToolStripMenuItem_Click;
-            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(96F, 96F);
@@ -600,8 +600,6 @@ namespace RadioExt_Helper.forms
             KeyPreview = true;
             MainMenuStrip = menuStrip1;
             Margin = new Padding(3, 2, 3, 2);
-            MaximizeBox = false;
-            MinimizeBox = false;
             Name = "MainForm";
             StartPosition = FormStartPosition.CenterParent;
             Text = "Cyber Radio Assistant";
