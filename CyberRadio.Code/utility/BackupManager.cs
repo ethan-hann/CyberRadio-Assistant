@@ -17,7 +17,6 @@
 using AetherUtils.Core.Files;
 using ICSharpCode.SharpZipLib.Core;
 using ICSharpCode.SharpZipLib.Zip;
-
 using CompressionLevel=RadioExt_Helper.utility.CompressionLevel;
 
 namespace RadioExt_Helper.utility;
@@ -46,6 +45,24 @@ public class BackupManager
     public event Action<bool, string, string>? BackupCompleted;
 
     /// <summary>
+    /// Occurs whenever the progress of the backup preview operation changes.
+    /// <para>Event data includes the current progress percentage.</para>
+    /// </summary>
+    public event Action<int>? PreviewProgressChanged;
+
+    /// <summary>
+    /// Occurs whenever the status of the backup preview operation changes.
+    /// <para>Event data is a tuple containing the current <see cref="FilePreview"/> object and the current estimated backup size, in bytes.</para>
+    /// </summary>
+    public event Action<(FilePreview, long)>? PreviewStatusChanged;
+
+    /// <summary>
+    /// Occurs whenever the backup preview operation is completed.
+    /// <para>Event data is a tuple with the list of previews, the total size of the files, and the estimated compressed size.</para>
+    /// </summary>
+    public event Action<(List<FilePreview> Previews, long TotalSize, long EstimatedCompressedSize)>? BackupPreviewCompleted;
+
+    /// <summary>
     /// Get or set the compression level used for the backup operation.
     /// </summary>
     public CompressionLevel BackupCompressionLevel { get; set; } = CompressionLevel.Fast;
@@ -72,22 +89,24 @@ public class BackupManager
     /// <para>The preview includes a list of <see cref="FilePreview"/> objects, the total size of the files, and the estimated compressed size.</para>
     /// </summary>
     /// <param name="stagingPath">The path to preview the backup of.</param>
-    /// <returns>A task, that when complete, contains a tuple with the list of previews, the total size of the files, and the estimated compressed size.</returns>
+    /// <returns>A task representing the asynchronous operation.</returns>
     /// <exception cref="ArgumentNullException">Occurs if the <paramref name="stagingPath"/> is <c>null</c> or empty.</exception>
-    public async Task<(List<FilePreview> Previews, long TotalSize, long EstimatedCompressedSize)> GetBackupPreviewAsync(string stagingPath)
+    public async Task GetBackupPreviewAsync(string stagingPath)
     {
         if (string.IsNullOrEmpty(stagingPath))
             throw new ArgumentNullException(nameof(stagingPath));
 
-        var files = FileHelper.SafeEnumerateFiles(stagingPath, "*.*", SearchOption.AllDirectories);
+        // Default to ratio of 0.7 if compression level is not found in the dictionary
+        var compressionRatio = CompressionRatios.TryGetValue(BackupCompressionLevel, out var ratio) ? ratio : 0.7;
+
+        var files = FileHelper.SafeEnumerateFiles(stagingPath, "*.*", SearchOption.AllDirectories).ToArray();
+
         var previews = new List<FilePreview>();
         var totalSize = 0L;
 
-        var tasks = new List<Task>();
-
-        foreach (var file in files)
+        await Task.Run(() =>
         {
-            tasks.Add(Task.Run(() =>
+            foreach (var file in files)
             {
                 var fileInfo = new FileInfo(file);
                 previews.Add(new FilePreview
@@ -95,17 +114,15 @@ public class BackupManager
                     FileName = file[(stagingPath.Length + 1)..],
                     Size = fileInfo.Length
                 });
+
+                PreviewProgressChanged?.Invoke((int)((float)previews.Count / files.Length * 100));
                 totalSize += fileInfo.Length;
-            }));
-        }
 
-        await Task.WhenAll(tasks);
+                PreviewStatusChanged?.Invoke((previews.Last(), (long)(totalSize * compressionRatio)));
+            }
+        });
 
-        // Default to ratio of 0.7 if compression level is not found in the dictionary
-        var compressionRatio = CompressionRatios.TryGetValue(BackupCompressionLevel, out var ratio) ? ratio : 0.7;
-
-        var estimatedCompressedSize = (long)(totalSize * compressionRatio);
-        return (previews, totalSize, estimatedCompressedSize);
+        BackupPreviewCompleted?.Invoke((previews, totalSize, (long)(totalSize * compressionRatio)));
     }
 
     /// <summary>

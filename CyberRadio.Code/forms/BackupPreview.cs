@@ -1,4 +1,5 @@
 ﻿using AetherUtils.Core.Extensions;
+using AetherUtils.Core.Logging;
 using Org.BouncyCastle.Utilities;
 using RadioExt_Helper.models;
 using RadioExt_Helper.utility;
@@ -17,6 +18,8 @@ namespace RadioExt_Helper.forms
 {
     public partial class BackupPreview : Form
     {
+        private BackupManager _backupManager = new();
+
         private List<FilePreview> Previews = [];
         private long TotalSize;
         private long EstimatedCompressedSize;
@@ -24,6 +27,10 @@ namespace RadioExt_Helper.forms
         public BackupPreview()
         {
             InitializeComponent();
+
+            _backupManager.PreviewProgressChanged += _backupManager_PreviewProgressChanged;
+            _backupManager.PreviewStatusChanged += _backupManager_PreviewStatusChanged;
+            _backupManager.BackupPreviewCompleted += _backupManager_BackupPreviewCompleted;
         }
 
         public BackupPreview(List<FilePreview> Previews, long TotalSize, long EstimatedCompressedSize) : this()
@@ -31,8 +38,6 @@ namespace RadioExt_Helper.forms
             this.Previews = Previews;
             this.TotalSize = TotalSize;
             this.EstimatedCompressedSize = EstimatedCompressedSize;
-
-            
         }
 
         private void lvFilePreviews_ColumnClick(object sender, ColumnClickEventArgs e)
@@ -52,42 +57,98 @@ namespace RadioExt_Helper.forms
         private void BackupPreview_Load(object sender, EventArgs e)
         {
             var backupManager = new BackupManager();
-            var bgTask = Task.Run(async () => 
-            {
-                var data = await backupManager.GetBackupPreviewAsync(GlobalData.ConfigManager.Get("stagingPath") as string ?? string.Empty);
-                Previews = data.Previews;
-                TotalSize = data.TotalSize;
-                EstimatedCompressedSize = data.EstimatedCompressedSize;
-            });
 
-            Debug.WriteLine("Loading preview...");
-            bgTask.Wait();
+            pgPreviewProgress.Visible = true;
+            lblPreviewStatusLabel.Text = 
+                $"Loading preview. Using {GlobalData.ConfigManager.Get("backupCompressionLevel") ?? CompressionLevel.Normal} compression...";
 
-            if (bgTask.Status == TaskStatus.RanToCompletion)
+            _ = StartPreviewLoading();
+            //var bgTask = Task.Run(async () => 
+            //{
+            //    var data = await backupManager.GetBackupPreviewAsync(GlobalData.ConfigManager.Get("stagingPath") as string ?? string.Empty);
+            //    Previews = data.Previews;
+            //    TotalSize = data.TotalSize;
+            //    EstimatedCompressedSize = data.EstimatedCompressedSize;
+            //});
+
+            //Debug.WriteLine("Loading preview...");
+            //bgTask.Wait();
+
+            //if (bgTask.Status == TaskStatus.RanToCompletion)
+            //{
+            //    PopulateTreeView();
+            //    SetSizeLabels();
+            //}
+        }
+
+        private async Task StartPreviewLoading()
+        {
+            try
             {
-                PopulateListView();
-                PopulateTreeView();
-                SetSizeLabels();
+                await _backupManager.GetBackupPreviewAsync(GlobalData.ConfigManager.Get("stagingPath") as string ?? string.Empty);
+            }
+            catch (Exception ex)
+            {
+                AuLogger.GetCurrentLogger<BackupPreview>("StartPreviewLoading").Error(ex, "Error loading backup preview.");
+                this.SafeInvoke(() =>
+                {
+                    var result = MessageBox.Show(this, "An error occurred while loading the backup preview.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    Close();
+                });
             }
         }
 
-        private void PopulateListView()
+        private void _backupManager_PreviewProgressChanged(int obj)
+        {
+            this.SafeInvoke(() => pgPreviewProgress.Value = obj);
+        }
+
+        private void _backupManager_PreviewStatusChanged((FilePreview, long) obj)
+        {
+            Previews.Add(obj.Item1);
+            TotalSize += obj.Item1.Size;
+            EstimatedCompressedSize = obj.Item2;
+
+            AddItemToListView(obj.Item1);
+            SetSizeLabels();
+        }
+
+        private void _backupManager_BackupPreviewCompleted((List<FilePreview> Previews, long TotalSize, long EstimatedCompressedSize) obj)
+        {
+            if (Previews.Count != obj.Previews.Count)
+                throw new Exception("Preview data mismatch!");
+
+            if (TotalSize != obj.TotalSize)
+                throw new Exception("Total size mismatch!");
+
+            if (EstimatedCompressedSize != obj.EstimatedCompressedSize)
+                throw new Exception("Estimated compressed size mismatch!");
+
+            Previews = obj.Previews;
+            TotalSize = obj.TotalSize;
+            EstimatedCompressedSize = obj.EstimatedCompressedSize;
+            SetSizeLabels();
+
+            this.SafeInvoke(() =>
+            {
+                pgPreviewProgress.Visible = false;
+                lblPreviewStatusLabel.Text = "Preview completed.";
+            });
+        }
+
+        private void AddItemToListView(FilePreview preview)
         {
             this.SafeInvoke(() =>
             {
-                lvFilePreviews.SuspendLayout();
-                lvFilePreviews.Items.Clear();
-
-                foreach (var lvItem in Previews
-                             .Select(preview => new ListViewItem([
-                                 preview.FileName ?? string.Empty,
-                             ((ulong)preview.Size).FormatSize()
-                                 ])
-                             { Tag = preview }))
-                    lvFilePreviews.Items.Add(lvItem);
+                lvFilePreviews.BeginUpdate();
+                lvFilePreviews.Items.Add(new ListViewItem(
+                [
+                    preview.FileName ?? string.Empty,
+                    ((ulong)preview.Size).FormatSize()
+                ]) { Tag = preview });
 
                 lvFilePreviews.ResizeColumns();
-                lvFilePreviews.ResumeLayout();
+                lvFilePreviews.EndUpdate();
             });
         }
 
