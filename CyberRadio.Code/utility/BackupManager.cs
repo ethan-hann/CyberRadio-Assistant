@@ -14,8 +14,11 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+using AetherUtils.Core.Files;
 using ICSharpCode.SharpZipLib.Core;
 using ICSharpCode.SharpZipLib.Zip;
+
+using CompressionLevel=RadioExt_Helper.utility.CompressionLevel;
 
 namespace RadioExt_Helper.utility;
 
@@ -43,6 +46,69 @@ public class BackupManager
     public event Action<bool, string, string>? BackupCompleted;
 
     /// <summary>
+    /// Get or set the compression level used for the backup operation.
+    /// </summary>
+    public CompressionLevel BackupCompressionLevel { get; set; } = CompressionLevel.Fast;
+
+    /// <summary>
+    /// Dictionary containing the mapping between compression levels and their corresponding compression ratios.
+    /// </summary>
+    private readonly Dictionary<CompressionLevel, double> CompressionRatios = new()
+    {
+        {CompressionLevel.None, 1.0},
+        {CompressionLevel.SuperFast, 0.9},
+        {CompressionLevel.Fastest, 0.8},
+        {CompressionLevel.Fast, 0.7},
+        {CompressionLevel.Normal, 0.6},
+        {CompressionLevel.High, 0.5},
+        {CompressionLevel.Maximum, 0.4},
+        {CompressionLevel.Ultra, 0.3},
+        {CompressionLevel.Extreme, 0.25},
+        {CompressionLevel.Ultimate, 0.2 } 
+    };
+
+    /// <summary>
+    /// Asynchronously get a preview of the files that will be backed up from the staging folder.
+    /// <para>The preview includes a list of <see cref="FilePreview"/> objects, the total size of the files, and the estimated compressed size.</para>
+    /// </summary>
+    /// <param name="stagingPath">The path to preview the backup of.</param>
+    /// <returns>A task, that when complete, contains a tuple with the list of previews, the total size of the files, and the estimated compressed size.</returns>
+    /// <exception cref="ArgumentNullException">Occurs if the <paramref name="stagingPath"/> is <c>null</c> or empty.</exception>
+    public async Task<(List<FilePreview> Previews, long TotalSize, long EstimatedCompressedSize)> GetBackupPreviewAsync(string stagingPath)
+    {
+        if (string.IsNullOrEmpty(stagingPath))
+            throw new ArgumentNullException(nameof(stagingPath));
+
+        var files = FileHelper.SafeEnumerateFiles(stagingPath, "*.*", SearchOption.AllDirectories);
+        var previews = new List<FilePreview>();
+        var totalSize = 0L;
+
+        var tasks = new List<Task>();
+
+        foreach (var file in files)
+        {
+            tasks.Add(Task.Run(() =>
+            {
+                var fileInfo = new FileInfo(file);
+                previews.Add(new FilePreview
+                {
+                    FileName = file[(stagingPath.Length + 1)..],
+                    Size = fileInfo.Length
+                });
+                totalSize += fileInfo.Length;
+            }));
+        }
+
+        await Task.WhenAll(tasks);
+
+        // Default to ratio of 0.7 if compression level is not found in the dictionary
+        var compressionRatio = CompressionRatios.TryGetValue(BackupCompressionLevel, out var ratio) ? ratio : 0.7;
+
+        var estimatedCompressedSize = (long)(totalSize * compressionRatio);
+        return (previews, totalSize, estimatedCompressedSize);
+    }
+
+    /// <summary>
     /// Asynchronously backs up the contents of the staging folder to a zip file in the backup folder.
     /// </summary>
     /// <param name="stagingPath">The path to the staging folder.</param>
@@ -50,6 +116,7 @@ public class BackupManager
     /// <returns>A <see cref="Task"/> representing the backup operation.</returns>
     /// <exception cref="ArgumentNullException">If either <paramref name="stagingPath"/> or <paramref name="backupPath"/> are <c>null</c> or empty.</exception>
     /// <exception cref="ArgumentException">If the backup path is the same as the staging path.</exception>
+    /// <exception cref="ArgumentException">If the compression level is not between 0 and 9.</exception>
     public async Task BackupStagingFolderAsync(string stagingPath, string backupPath)
     {
         if (string.IsNullOrEmpty(stagingPath)) throw new ArgumentNullException(nameof(stagingPath));
@@ -65,11 +132,11 @@ public class BackupManager
             {
                 using var zipOutputStream = new ZipOutputStream(File.Create(backupFileName));
 
-                zipOutputStream.SetLevel(3); // Compression level 0-9
+                zipOutputStream.SetLevel((int)BackupCompressionLevel);
 
                 var buffer = new byte[4096];
                 var fileCount = 0;
-                var files = Directory.GetFiles(stagingPath, "*.*", SearchOption.AllDirectories);
+                var files = FileHelper.SafeEnumerateFiles(stagingPath, "*.*", SearchOption.AllDirectories).ToArray();
 
                 foreach (var file in files)
                 {

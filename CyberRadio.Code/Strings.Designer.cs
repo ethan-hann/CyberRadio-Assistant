@@ -231,6 +231,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Indicates the level of compression used when backing up the staging directory..
+        /// </summary>
+        internal static string BackupCompressionLevelHelp {
+            get {
+                return ResourceManager.GetString("BackupCompressionLevelHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Backup failed..
         /// </summary>
         internal static string BackupFailed {
@@ -272,6 +281,15 @@ namespace RadioExt_Helper {
         internal static string BackupPathIsSubpath {
             get {
                 return ResourceManager.GetString("BackupPathIsSubpath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Backup path cannot be within the game path..
+        /// </summary>
+        internal static string BackupPathIsSubpathGame {
+            get {
+                return ResourceManager.GetString("BackupPathIsSubpathGame", resourceCulture);
             }
         }
         

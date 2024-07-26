@@ -37,6 +37,7 @@ public sealed class ApplicationConfig
     private const string AutoCheckForUpdatesKey = "autoCheckForUpdates";
     private const string AutoExportToGameKey = "autoExportToGame";
     private const string WatchForGameChangesKey = "watchForGameChanges";
+    private const string BackupCompressionLevelKey = "backupCompressionLevel";
     private const string StagingPathKey = "stagingPath";
     private const string GameBasePathKey = "gameBasePath";
     private const string LanguageKey = "language";
@@ -65,6 +66,10 @@ public sealed class ApplicationConfig
     [Config(WatchForGameChangesKey)]
     [Description("WatchForChangesHelp")]
     public bool WatchForGameChanges { get; set; } = true;
+
+    [Config(BackupCompressionLevelKey)]
+    [Description("BackupCompressionLevelHelp")]
+    public CompressionLevel BackupCompressionLevel { get; set; } = CompressionLevel.Fast;
 
     /// <summary>
     ///     The path to the staging directory.

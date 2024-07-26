@@ -778,4 +778,10 @@ exporté vers le jeu.</value>
     <data name="WatchForChangesHelp" xml:space="preserve">
       <value>S'il est vérifié, le chemin des radios du jeu sera surveillé pour les modifications et vous informera lorsqu'une synchronisation sera disponible.</value>
     </data>
+    <data name="BackupCompressionLevelHelp" xml:space="preserve">
+      <value>Indique le niveau de compression utilisé lors de la sauvegarde du répertoire de mise en scène.</value>
+    </data>
+    <data name="BackupPathIsSubpathGame" xml:space="preserve">
+      <value>Le chemin de sauvegarde ne peut pas être dans le chemin du jeu.</value>
+    </data>
 </root>

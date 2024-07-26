@@ -778,4 +778,10 @@ exported to the game.</value>
     <data name="WatchForChangesHelp" xml:space="preserve">
       <value>If checked, the game's radios path will be watched for changes and notify you when a sync is available.</value>
     </data>
+    <data name="BackupCompressionLevelHelp" xml:space="preserve">
+      <value>Indicates the level of compression used when backing up the staging directory.</value>
+    </data>
+    <data name="BackupPathIsSubpathGame" xml:space="preserve">
+      <value>Backup path cannot be within the game path.</value>
+    </data>
 </root>

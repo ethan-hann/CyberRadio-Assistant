@@ -778,4 +778,10 @@ exportado al juego.</value>
     <data name="WatchForChangesHelp" xml:space="preserve">
       <value>Si se verifica, la ruta de radios del juego será vigilada para los cambios y le notificará cuándo hay una sincronización disponible.</value>
     </data>
+    <data name="BackupCompressionLevelHelp" xml:space="preserve">
+      <value>Indica el nivel de compresión utilizado al hacer una copia de seguridad del directorio de estadificación.</value>
+    </data>
+    <data name="BackupPathIsSubpathGame" xml:space="preserve">
+      <value>La ruta de respaldo no puede estar dentro del camino del juego.</value>
+    </data>
 </root>

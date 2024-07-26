@@ -75,6 +75,8 @@ public partial class MainForm : Form
         lbStations.DataSource = StationManager.Instance.StationsAsBindingList;
         lbStations.DisplayMember = "TrackedObject.MetaData";
 
+        _backupManager.BackupCompressionLevel = GlobalData.ConfigManager.Get("backupCompressionLevel") as CompressionLevel? ?? CompressionLevel.Fast;
+
         SetupDirectoryWatcher();
     }
 
@@ -918,6 +920,12 @@ public partial class MainForm : Form
             return;
         }
 
+        //TODO: Add a check for the game path to prevent backing up the game folder.
+        //TODO: Show a preview of the backup before starting the operation.
+
+        var showPreview = new BackupPreview().ShowDialog();
+        if (showPreview == DialogResult.Cancel) return;
+
         var backupPath = GetBackupPath();
         if (string.IsNullOrEmpty(backupPath)) return;
 
@@ -931,6 +939,16 @@ public partial class MainForm : Form
             return;
         }
 
+        //Check if the backup path is a sub-path of the game path (i.e., the backup path is within the game path)
+        if (PathHelper.IsSubPath(GameBasePath, backupPath))
+        {
+            var text = GlobalData.Strings.GetString("BackupPathIsSubpathGame") ??
+                       "Backup path cannot be within the game path.";
+            var caption = GlobalData.Strings.GetString("Backup") ?? "Backup";
+            MessageBox.Show(this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            return;
+        }
+
         // Initialize ProgressBar
         pgBackupProgress.Value = 0;
         statusStripBackup.Visible = true;
@@ -938,6 +956,15 @@ public partial class MainForm : Form
         // Start backup
         _ = StartBackupAsync(StagingPath, backupPath);
     }
+
+    //private async Task<bool> ShowBackupPreview()
+    //{
+    //    var (Previews, TotalSize, EstimatedCompressedSize) = await _backupManager.GetBackupPreviewAsync(StagingPath);
+    //    var previewForm = new BackupPreview(Previews, TotalSize, EstimatedCompressedSize);
+
+    //    previewForm.ShowDialog();
+    //    return false;
+    //}
 
     /// <summary>
     /// Shows a folder browser dialog to select a folder to save the backup to.
