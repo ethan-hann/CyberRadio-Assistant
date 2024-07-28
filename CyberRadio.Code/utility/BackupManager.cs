@@ -66,6 +66,8 @@ public class BackupManager(CompressionLevel level)
     /// </summary>
     public CompressionLevel BackupCompressionLevel { get; } = level;
 
+    private bool _isCancelling;
+
     /// <summary>
     /// Dictionary containing the mapping between compression levels and their corresponding compression ratios.
     /// </summary>
@@ -108,6 +110,8 @@ public class BackupManager(CompressionLevel level)
         if (string.IsNullOrEmpty(stagingPath))
             throw new ArgumentNullException(nameof(stagingPath));
 
+        if (_isCancelling) return;
+
         // Default to ratio of 0.6 if compression level is not found in the dictionary
         var compressionRatio = _compressionRatios.GetValueOrDefault(BackupCompressionLevel, 0.6);
 
@@ -120,6 +124,8 @@ public class BackupManager(CompressionLevel level)
         {
             foreach (var file in files)
             {
+                if (_isCancelling) return;
+
                 var fileInfo = new FileInfo(file);
                 previews.Add(new FilePreview
                 {
@@ -127,12 +133,16 @@ public class BackupManager(CompressionLevel level)
                     Size = fileInfo.Length
                 });
 
+                if (_isCancelling) return;
                 PreviewProgressChanged?.Invoke((int)((float)previews.Count / files.Length * 100));
                 totalSize += fileInfo.Length;
 
+                if (_isCancelling) return;
                 PreviewStatusChanged?.Invoke((previews.Last(), (long)(totalSize * compressionRatio)));
             }
         });
+
+        if (_isCancelling) return;
 
         BackupPreviewCompleted?.Invoke((previews, totalSize, (long)(totalSize * compressionRatio)));
     }
@@ -155,13 +165,18 @@ public class BackupManager(CompressionLevel level)
 
         var backupFileName = Path.Combine(backupPath, $"radio_stations-{DateTime.Now:yy-MM-dd-hh-mm-ss}.zip");
 
+        if (_isCancelling) return;
+
         try
         {
             await Task.Run(() =>
             {
+                if (_isCancelling) return;
+
                 using var zipOutputStream = new ZipOutputStream(File.Create(backupFileName));
 
-                zipOutputStream.SetLevel((int)BackupCompressionLevel);
+                var level = (int)BackupCompressionLevel;
+                zipOutputStream.SetLevel(level);
 
                 var buffer = new byte[4096];
                 var fileCount = 0;
@@ -169,6 +184,8 @@ public class BackupManager(CompressionLevel level)
 
                 foreach (var file in files)
                 {
+                    if (_isCancelling) return;
+
                     var entryName = file[(stagingPath.Length + 1)..];
                     var entry = new ZipEntry(entryName)
                     {
@@ -186,10 +203,14 @@ public class BackupManager(CompressionLevel level)
 
                     // Report progress
                     var progress = (int)((float)fileCount / files.Length * 100);
+                    if (_isCancelling) break;
+
                     ProgressChanged?.Invoke(progress);
                     var status =
                         string.Format(GlobalData.Strings.GetString("BackupProgressChanged") ?? "Backing up... {0}%",
                             progress);
+
+                    if (_isCancelling) break;
                     StatusChanged?.Invoke(status);
                 }
 
@@ -200,13 +221,19 @@ public class BackupManager(CompressionLevel level)
             if (File.Exists(backupFileName))
             {
                 var status = GlobalData.Strings.GetString("BackupCompleted") ?? "Backup completed successfully.";
+                if (_isCancelling) return;
                 StatusChanged?.Invoke(status);
+
+                if (_isCancelling) return;
                 BackupCompleted?.Invoke(true, backupPath, backupFileName);
             }
             else
             {
                 var status = GlobalData.Strings.GetString("BackupFailed") ?? "Backup failed.";
+                if (_isCancelling) return;
                 StatusChanged?.Invoke(status);
+
+                if (_isCancelling) return;
                 BackupCompleted?.Invoke(false, backupPath, backupFileName);
             }
         }
@@ -216,9 +243,15 @@ public class BackupManager(CompressionLevel level)
                 string.Format(
                     GlobalData.Strings.GetString("BackupFailedException") ?? "Backup failed due to an error: {0}",
                     ex.Message);
+
+            if (_isCancelling) return;
             StatusChanged?.Invoke(status);
+
+            if (_isCancelling) return;
             BackupCompleted?.Invoke(false, backupPath, backupFileName);
             throw;
         }
     }
+
+    public void CancelBackup() => _isCancelling = true;
 }

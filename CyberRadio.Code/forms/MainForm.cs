@@ -35,7 +35,7 @@ namespace RadioExt_Helper.forms;
 /// </summary>
 public partial class MainForm : Form
 {
-    private DirectoryWatcher? _directoryWatcher = null;
+    private DirectoryWatcher? _directoryWatcher;
 
     private readonly ImageComboBox<ImageComboBoxItem> _languageComboBox = new();
     private readonly List<ImageComboBoxItem> _languages = [];
@@ -47,7 +47,6 @@ public partial class MainForm : Form
     private bool _ignoreSelectedIndexChanged;
 
     private bool _isAppClosing;
-    private bool _isBackupInProgress;
     private bool _isSyncInProgress;
 
     /// <summary>
@@ -90,10 +89,6 @@ public partial class MainForm : Form
     private void InitializeEvents()
     {
         _languageComboBox.SelectedIndexChanged += CmbLanguageSelect_SelectedIndexChanged;
-
-        //_backupManager.ProgressChanged += OnBackupManagerProgressChanged;
-        //_backupManager.StatusChanged += OnBackupManagerStatusChanged;
-        //_backupManager.BackupCompleted += OnBackupManagerBackupCompleted;
 
         //StationManager.Instance.StationNameDuplicate += OnStationNameDuplicateEvent;
         StationManager.Instance.StationUpdated += OnStationUpdated;
@@ -683,15 +678,6 @@ public partial class MainForm : Form
 
     private void ExportToGameToolStripMenuItem_Click(object sender, EventArgs e)
     {
-        //Don't allow exporting if we are currently backing up.
-        if (_isBackupInProgress)
-        {
-            var backupText = GlobalData.Strings.GetString("BackupInProgress") ?? "Backup is in progress. Please wait...";
-            var backupCaption = GlobalData.Strings.GetString("Backup") ?? "Backup";
-            MessageBox.Show(this, backupText, backupCaption, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            return;
-        }
-
         //Don't allow exporting if we are currently synchronizing stations.
         if (_isSyncInProgress)
         {
@@ -807,14 +793,6 @@ public partial class MainForm : Form
         if (string.IsNullOrEmpty(StagingPath)) return;
         if (string.IsNullOrEmpty(GameBasePath)) return;
 
-        if (_isBackupInProgress)
-        {
-            var backupText = GlobalData.Strings.GetString("BackupInProgress") ?? "Backup is in progress. Please wait...";
-            var backupCaption = GlobalData.Strings.GetString("Backup") ?? "Backup";
-            MessageBox.Show(this, backupText, backupCaption, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            return;
-        }
-
         if (userInitiated)
         {
             var text = GlobalData.Strings.GetString("ConfirmSyncStations") ?? "Are you sure you want to synchronize the stations?" +
@@ -894,13 +872,13 @@ public partial class MainForm : Form
 
     private void OnStationSyncStatusChanged(string status)
     {
-        if (!_isAppClosing && !_isBackupInProgress)
+        if (!_isAppClosing)
             this.SafeInvoke(() => lblBackupStatus.Text = status);
     }
 
     private void OnStationSyncProgressChanged(int progress)
     {
-        if (!_isAppClosing && !_isBackupInProgress)
+        if (!_isAppClosing)
             this.SafeInvoke(() => pgBackupProgress.Value = progress);
     }
 
@@ -917,131 +895,8 @@ public partial class MainForm : Form
             return;
         }
 
-        //TODO: Add a check for the game path to prevent backing up the game folder.
-        //TODO: Show a preview of the backup before starting the operation.
-
         var compressionLevel = GlobalData.ConfigManager.GetConfig()?.BackupCompressionLevel ?? CompressionLevel.Normal;
-        var showPreview = new BackupPreview(compressionLevel).ShowDialog();
-        if (showPreview == DialogResult.Cancel) return;
-
-        var backupPath = GetBackupPath();
-        if (string.IsNullOrEmpty(backupPath)) return;
-
-        // Check if the backup path is a sub-path of the staging path (i.e., the backup path is within the staging path)
-        if (PathHelper.IsSubPath(StagingPath, backupPath))
-        {
-            var text = GlobalData.Strings.GetString("BackupPathIsSubpath") ??
-                       "Backup path cannot be within the staging path.";
-            var caption = GlobalData.Strings.GetString("Backup") ?? "Backup";
-            MessageBox.Show(this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
-            return;
-        }
-
-        //Check if the backup path is a sub-path of the game path (i.e., the backup path is within the game path)
-        if (PathHelper.IsSubPath(GameBasePath, backupPath))
-        {
-            var text = GlobalData.Strings.GetString("BackupPathIsSubpathGame") ??
-                       "Backup path cannot be within the game path.";
-            var caption = GlobalData.Strings.GetString("Backup") ?? "Backup";
-            MessageBox.Show(this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
-            return;
-        }
-
-        // Initialize ProgressBar
-        pgBackupProgress.Value = 0;
-        statusStripBackup.Visible = true;
-
-        // Start backup
-        _ = StartBackupAsync(StagingPath, backupPath);
-    }
-
-    /// <summary>
-    /// Shows a folder browser dialog to select a folder to save the backup to.
-    /// </summary>
-    /// <returns>The full path to the backup folder.</returns>
-    private static string GetBackupPath()
-    {
-        FolderBrowserDialog folderBrowserDialog = new()
-        {
-            Description = GlobalData.Strings.GetString("BackupFolderDesc") ?? "Select a folder to save the backup to",
-            ShowNewFolderButton = true,
-            UseDescriptionForTitle = true
-        };
-
-        return folderBrowserDialog.ShowDialog() == DialogResult.OK ? folderBrowserDialog.SelectedPath : string.Empty;
-    }
-
-    /// <summary>
-    /// Starts the backup process asynchronously.
-    /// </summary>
-    /// <param name="stagingPath">The staging path.</param>
-    /// <param name="backupPath">The backup path.</param>
-    /// <returns>A task that represents the asynchronous backup operation.</returns>
-    private async Task StartBackupAsync(string stagingPath, string backupPath)
-    {
-        if (_isAppClosing || _isSyncInProgress) return;
-
-        try
-        {
-            _isBackupInProgress = true;
-            //await _backupManager.BackupStagingFolderAsync(stagingPath, backupPath);
-        }
-        catch (Exception ex)
-        {
-            var text = string.Format(
-                GlobalData.Strings.GetString("BackupFailedException") ?? "Backup failed due to an error: {0}",
-                ex.Message);
-            var caption = GlobalData.Strings.GetString("Backup") ?? "Backup";
-            MessageBox.Show(this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-            AuLogger.GetCurrentLogger<MainForm>("StartBackupAsync")
-                .Error(ex, "An error occurred during staging folder backup.");
-        }
-    }
-
-    private void OnBackupManagerProgressChanged(int progress)
-    {
-        if (!_isAppClosing && !_isSyncInProgress)
-            this.SafeInvoke(() => pgBackupProgress.Value = progress);
-    }
-
-    private void OnBackupManagerStatusChanged(string status)
-    {
-        if (!_isAppClosing && !_isSyncInProgress)
-            this.SafeInvoke(() => lblBackupStatus.Text = status);
-    }
-
-    private void OnBackupManagerBackupCompleted(bool success, string backupPath, string backupFileName)
-    {
-        if (_isAppClosing) return;
-
-        this.SafeInvoke(() =>
-        {
-            statusStripBackup.Visible = false;
-            _isBackupInProgress = false;
-            if (success)
-            {
-                var text = GlobalData.Strings.GetString("BackupCompleted") ?? "Backup completed successfully.";
-                var caption = GlobalData.Strings.GetString("Backup") ?? "Backup";
-                MessageBox.Show(this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                AuLogger.GetCurrentLogger<MainForm>("BackupManager_BackupCompleted")
-                    .Info($"Backup completed successfully: {backupFileName}");
-                Process.Start("explorer.exe", backupPath);
-            }
-            else
-            {
-                var text = GlobalData.Strings.GetString("BackupFailed") ?? "Backup failed.";
-                var caption = GlobalData.Strings.GetString("Backup") ?? "Backup";
-                MessageBox.Show(this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-                AuLogger.GetCurrentLogger<MainForm>("BackupManager_BackupCompleted")
-                    .Error($"Backup failed: {backupFileName}");
-            }
-
-            // Clear the status message after a short delay
-            Task.Delay(2000).ContinueWith(_ => { this.SafeInvoke(() => lblBackupStatus.Text = string.Empty); });
-        });
+        new BackupPreview(compressionLevel).ShowDialog();
     }
 
     private void RadioExtHelpToolStripMenuItem_Click(object sender, EventArgs e)

@@ -303,6 +303,24 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Backup preview completed..
+        /// </summary>
+        internal static string BackupPreviewCompleted {
+            get {
+                return ResourceManager.GetString("BackupPreviewCompleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An error occurred while loading the backup preview..
+        /// </summary>
+        internal static string BackupPreviewError {
+            get {
+                return ResourceManager.GetString("BackupPreviewError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Backing up... {0}%.
         /// </summary>
         internal static string BackupProgressChanged {
@@ -461,6 +479,15 @@ namespace RadioExt_Helper {
         internal static string ConfirmSyncStations {
             get {
                 return ResourceManager.GetString("ConfirmSyncStations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Creating preview....
+        /// </summary>
+        internal static string CreatingPreview {
+            get {
+                return ResourceManager.GetString("CreatingPreview", resourceCulture);
             }
         }
         
@@ -690,6 +717,25 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Estimated Backup Size:.
+        /// </summary>
+        internal static string EstimatedBackupSize {
+            get {
+                return ResourceManager.GetString("EstimatedBackupSize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to * This is an estimate based on the selected compression level in the configuration.
+        ///Actual size may be different..
+        /// </summary>
+        internal static string EstimatedBackupSizeDisclaimer {
+            get {
+                return ResourceManager.GetString("EstimatedBackupSizeDisclaimer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Exit.
         /// </summary>
         internal static string Exit {
@@ -834,6 +880,15 @@ namespace RadioExt_Helper {
         internal static string File {
             get {
                 return ResourceManager.GetString("File", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File Name.
+        /// </summary>
+        internal static string FileName {
+            get {
+                return ResourceManager.GetString("FileName", resourceCulture);
             }
         }
         
@@ -1759,6 +1814,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Start Backup.
+        /// </summary>
+        internal static string StartBackup {
+            get {
+                return ResourceManager.GetString("StartBackup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Controls the name of your station that will be displayed in the game. Special characters are escaped properly..
         /// </summary>
         internal static string StationNameHelp {
@@ -1872,6 +1936,15 @@ namespace RadioExt_Helper {
         internal static string SyncInProgress {
             get {
                 return ResourceManager.GetString("SyncInProgress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total File Size:.
+        /// </summary>
+        internal static string TotalFileSize {
+            get {
+                return ResourceManager.GetString("TotalFileSize", resourceCulture);
             }
         }
         
@@ -2052,6 +2125,15 @@ namespace RadioExt_Helper {
         internal static string Using_ {
             get {
                 return ResourceManager.GetString("Using?", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Using compression level: {0}.
+        /// </summary>
+        internal static string UsingCompressionLevel {
+            get {
+                return ResourceManager.GetString("UsingCompressionLevel", resourceCulture);
             }
         }
         

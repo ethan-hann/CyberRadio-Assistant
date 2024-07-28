@@ -817,4 +817,32 @@ exported to the game.</value>
     <data name="BackupCompressionLevel" xml:space="preserve">
       <value>Backup Compression Level: </value>
     </data>
+    <data name="BackupPreviewCompleted" xml:space="preserve">
+      <value>Backup preview completed.</value>
+    </data>
+    <data name="EstimatedBackupSizeDisclaimer" xml:space="preserve">
+      <value>* This is an estimate based on the selected compression level in the configuration.
+Actual size may be different.</value>
+    </data>
+    <data name="TotalFileSize" xml:space="preserve">
+      <value>Total File Size:</value>
+    </data>
+    <data name="EstimatedBackupSize" xml:space="preserve">
+      <value>Estimated Backup Size:</value>
+    </data>
+    <data name="CreatingPreview" xml:space="preserve">
+      <value>Creating preview...</value>
+    </data>
+    <data name="StartBackup" xml:space="preserve">
+      <value>Start Backup</value>
+    </data>
+    <data name="BackupPreviewError" xml:space="preserve">
+      <value>An error occurred while loading the backup preview.</value>
+    </data>
+    <data name="UsingCompressionLevel" xml:space="preserve">
+      <value>Using compression level: {0}</value>
+    </data>
+    <data name="FileName" xml:space="preserve">
+      <value>File Name</value>
+    </data>
 </root>
