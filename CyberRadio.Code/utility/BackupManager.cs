@@ -75,28 +75,15 @@ public class BackupManager(CompressionLevel level)
     {
         {CompressionLevel.None, 1.0},
         {CompressionLevel.Fastest, 0.9},
-        {CompressionLevel.Fast, 0.8},
-        {CompressionLevel.SuperFast, 0.7},
-        {CompressionLevel.Normal, 0.6},
-        {CompressionLevel.High, 0.5},
-        {CompressionLevel.Maximum, 0.4},
-        {CompressionLevel.Ultra, 0.3},
-        {CompressionLevel.Extreme, 0.25},
-        {CompressionLevel.Ultimate, 0.2} 
+        {CompressionLevel.Fast, 0.85},
+        {CompressionLevel.SuperFast, 0.8},
+        {CompressionLevel.Normal, 0.75},
+        {CompressionLevel.High, 0.7},
+        {CompressionLevel.Maximum, 0.65},
+        {CompressionLevel.Ultra, 0.6},
+        {CompressionLevel.Extreme, 0.55},
+        {CompressionLevel.Ultimate, 0.5}
     };
-
-    /*
-     *None = 0,          // No compression (ratio: 1.0)
-       Fastest = 1,     // Very low compression (ratio: 0.9)
-       Fast = 2,       // Low compression (ratio: 0.8)
-       SuperFast = 3,          // Medium-low compression (ratio: 0.7)
-       Normal = 4,        // Medium compression (ratio: 0.6)
-       High = 5,          // Medium-high compression (ratio: 0.5)
-       Maximum = 6,       // High compression (ratio: 0.4)
-       Ultra = 7,         // Very high compression (ratio: 0.3)
-       Extreme = 8,       // Maximum compression (ratio: 0.25)
-       Ultimate = 9       // Ultra compression (ratio: 0.2)
-     */
 
     /// <summary>
     /// Asynchronously get a preview of the files that will be backed up from the staging folder.
@@ -112,8 +99,8 @@ public class BackupManager(CompressionLevel level)
 
         if (_isCancelling) return;
 
-        // Default to ratio of 0.6 if compression level is not found in the dictionary
-        var compressionRatio = _compressionRatios.GetValueOrDefault(BackupCompressionLevel, 0.6);
+        // Default to ratio of 0.75 (Normal) if compression level is not found in the dictionary
+        var compressionRatio = _compressionRatios.GetValueOrDefault(BackupCompressionLevel, 0.75);
 
         var files = FileHelper.SafeEnumerateFiles(stagingPath, "*.*", SearchOption.AllDirectories).ToArray();
 
