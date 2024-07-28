@@ -39,9 +39,6 @@ public partial class ExportWindow : Form
     private readonly string _statusString =
         GlobalData.Strings.GetString("ExportingStationStatus") ?? "Exporting station: {0}";
 
-    private readonly HashSet<string?> _validAudioExtensions =
-        EnumHelper<ValidAudioFiles>.GetEnumDescriptions().ToHashSet();
-
     private DirectoryCopier? _dirCopier;
     private bool _exportToGameComplete;
     private bool _exportToStagingComplete;
@@ -50,7 +47,6 @@ public partial class ExportWindow : Form
     /// <summary>
     ///     Initializes a new instance of the <see cref="ExportWindow" /> class with the specified stations to export.
     /// </summary>
-    /// <param name="stations">The list of stations to be exported.</param>
     public ExportWindow()
     {
         InitializeComponent();
@@ -345,7 +341,7 @@ public partial class ExportWindow : Form
             // Check if the song file is within the station's directory
             if (!songDirectoryMap.TryGetValue(song.FilePath, out var oldStationPath) ||
                 !IsFileInDirectory(song.FilePath, oldStationPath) ||
-                !IsValidAudioFile(song.FilePath)) continue;
+                !PathHelper.IsValidAudioFile(song.FilePath)) continue;
 
             var oldFilePath = Path.Combine(oldStationPath, Path.GetFileName(song.FilePath));
             var newFilePath = Path.Combine(newStationPath, Path.GetFileName(song.FilePath));
@@ -380,17 +376,6 @@ public partial class ExportWindow : Form
         var directoryUri = new Uri(directoryPath);
 
         return fileUri.AbsolutePath.StartsWith(directoryUri.AbsolutePath, StringComparison.OrdinalIgnoreCase);
-    }
-
-    /// <summary>
-    /// Get a value indicating whether the specified file is a valid audio file based on the extension and <see cref="ValidAudioFiles"/>.
-    /// </summary>
-    /// <param name="filePath">The path to the file to check.</param>
-    /// <returns><c>true</c> if the file is a valid audio file; <c>false</c> otherwise.</returns>
-    private bool IsValidAudioFile(string filePath)
-    {
-        var extension = Path.GetExtension(filePath);
-        return _validAudioExtensions.Contains(extension);
     }
 
     /// <summary>

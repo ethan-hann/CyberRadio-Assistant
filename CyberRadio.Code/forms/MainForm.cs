@@ -1095,7 +1095,7 @@ public partial class MainForm : Form
     private bool CheckForPendingSaveStations()
     {
         var pendingSave = StationManager.Instance.CheckPendingSave();
-        if (pendingSave.Values.All(p => p != true)) return false;
+        if (pendingSave.Values.All(p => p != true)) return true;
 
         var count = pendingSave.Count(p => p.Value);
         var text = string.Format(GlobalData.Strings.GetString("ConfirmExit")

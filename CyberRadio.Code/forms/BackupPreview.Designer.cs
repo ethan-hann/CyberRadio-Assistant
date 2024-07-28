@@ -37,15 +37,15 @@
             lblEstimatedSize = new Label();
             tvFiles = new TreeView();
             panel1 = new Panel();
-            panel2 = new Panel();
             statusStrip1 = new StatusStrip();
-            splitContainer1 = new SplitContainer();
             lblPreviewStatusLabel = new ToolStripStatusLabel();
-            pgPreviewProgress = new ToolStripProgressBar();
             toolStripStatusLabel2 = new ToolStripStatusLabel();
+            pgPreviewProgress = new ToolStripProgressBar();
+            panel2 = new Panel();
+            splitContainer1 = new SplitContainer();
             panel1.SuspendLayout();
-            panel2.SuspendLayout();
             statusStrip1.SuspendLayout();
+            panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
@@ -77,7 +77,7 @@
             label1.AutoSize = true;
             label1.Location = new Point(3, 9);
             label1.Name = "label1";
-            label1.Size = new Size(82, 16);
+            label1.Size = new Size(82, 15);
             label1.TabIndex = 1;
             label1.Text = "Total File Size: ";
             // 
@@ -86,7 +86,7 @@
             label2.AutoSize = true;
             label2.Location = new Point(3, 25);
             label2.Name = "label2";
-            label2.Size = new Size(129, 16);
+            label2.Size = new Size(130, 15);
             label2.TabIndex = 2;
             label2.Text = "Estimated Backup Size: ";
             // 
@@ -95,7 +95,7 @@
             lblTotalSize.AutoSize = true;
             lblTotalSize.Location = new Point(138, 9);
             lblTotalSize.Name = "lblTotalSize";
-            lblTotalSize.Size = new Size(38, 16);
+            lblTotalSize.Size = new Size(38, 15);
             lblTotalSize.TabIndex = 3;
             lblTotalSize.Text = "label3";
             // 
@@ -104,7 +104,7 @@
             lblEstimatedSize.AutoSize = true;
             lblEstimatedSize.Location = new Point(138, 25);
             lblEstimatedSize.Name = "lblEstimatedSize";
-            lblEstimatedSize.Size = new Size(38, 16);
+            lblEstimatedSize.Size = new Size(38, 15);
             lblEstimatedSize.TabIndex = 4;
             lblEstimatedSize.Text = "label4";
             // 
@@ -115,6 +115,7 @@
             tvFiles.Name = "tvFiles";
             tvFiles.Size = new Size(266, 371);
             tvFiles.TabIndex = 5;
+            tvFiles.AfterSelect += TvFiles_AfterSelect;
             // 
             // panel1
             // 
@@ -129,15 +130,6 @@
             panel1.Size = new Size(800, 79);
             panel1.TabIndex = 6;
             // 
-            // panel2
-            // 
-            panel2.Controls.Add(splitContainer1);
-            panel2.Dock = DockStyle.Fill;
-            panel2.Location = new Point(0, 0);
-            panel2.Name = "panel2";
-            panel2.Size = new Size(800, 371);
-            panel2.TabIndex = 7;
-            // 
             // statusStrip1
             // 
             statusStrip1.BackColor = Color.Transparent;
@@ -148,6 +140,32 @@
             statusStrip1.SizingGrip = false;
             statusStrip1.TabIndex = 5;
             statusStrip1.Text = "statusStrip1";
+            // 
+            // lblPreviewStatusLabel
+            // 
+            lblPreviewStatusLabel.Name = "lblPreviewStatusLabel";
+            lblPreviewStatusLabel.Size = new Size(105, 17);
+            lblPreviewStatusLabel.Text = "Creating preview...";
+            // 
+            // toolStripStatusLabel2
+            // 
+            toolStripStatusLabel2.Name = "toolStripStatusLabel2";
+            toolStripStatusLabel2.Size = new Size(378, 17);
+            toolStripStatusLabel2.Spring = true;
+            // 
+            // pgPreviewProgress
+            // 
+            pgPreviewProgress.Name = "pgPreviewProgress";
+            pgPreviewProgress.Size = new Size(300, 16);
+            // 
+            // panel2
+            // 
+            panel2.Controls.Add(splitContainer1);
+            panel2.Dock = DockStyle.Fill;
+            panel2.Location = new Point(0, 0);
+            panel2.Name = "panel2";
+            panel2.Size = new Size(800, 371);
+            panel2.TabIndex = 7;
             // 
             // splitContainer1
             // 
@@ -166,23 +184,6 @@
             splitContainer1.SplitterDistance = 266;
             splitContainer1.TabIndex = 6;
             // 
-            // lblPreviewStatusLabel
-            // 
-            lblPreviewStatusLabel.Name = "lblPreviewStatusLabel";
-            lblPreviewStatusLabel.Size = new Size(104, 17);
-            lblPreviewStatusLabel.Text = "Creating preview...";
-            // 
-            // pgPreviewProgress
-            // 
-            pgPreviewProgress.Name = "pgPreviewProgress";
-            pgPreviewProgress.Size = new Size(300, 16);
-            // 
-            // toolStripStatusLabel2
-            // 
-            toolStripStatusLabel2.Name = "toolStripStatusLabel2";
-            toolStripStatusLabel2.Size = new Size(348, 17);
-            toolStripStatusLabel2.Spring = true;
-            // 
             // BackupPreview
             // 
             AutoScaleDimensions = new SizeF(96F, 96F);
@@ -196,9 +197,9 @@
             Load += BackupPreview_Load;
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
-            panel2.ResumeLayout(false);
             statusStrip1.ResumeLayout(false);
             statusStrip1.PerformLayout();
+            panel2.ResumeLayout(false);
             splitContainer1.Panel1.ResumeLayout(false);
             splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();

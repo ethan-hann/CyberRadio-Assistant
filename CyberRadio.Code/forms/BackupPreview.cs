@@ -1,24 +1,15 @@
 ﻿using AetherUtils.Core.Extensions;
+using AetherUtils.Core.Files;
 using AetherUtils.Core.Logging;
-using Org.BouncyCastle.Utilities;
-using RadioExt_Helper.models;
+using RadioExt_Helper.Properties;
 using RadioExt_Helper.utility;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Diagnostics;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace RadioExt_Helper.forms
 {
     public partial class BackupPreview : Form
     {
         private readonly BackupManager _backupManager;
+        private readonly ImageList _treeImages;
 
         private List<FilePreview> _previews = [];
         private long _totalSize;
@@ -27,11 +18,18 @@ namespace RadioExt_Helper.forms
         public BackupPreview(CompressionLevel compressionLevel)
         {
             InitializeComponent();
+
             _backupManager = new BackupManager(compressionLevel);
 
             _backupManager.PreviewProgressChanged += _backupManager_PreviewProgressChanged;
             _backupManager.PreviewStatusChanged += _backupManager_PreviewStatusChanged;
             _backupManager.BackupPreviewCompleted += _backupManager_BackupPreviewCompleted;
+
+            _treeImages = new ImageList();
+            _treeImages.Images.Add("folder", Resources.folder__16x16);
+            _treeImages.Images.Add("music_file", Resources.music_file_16x16);
+            _treeImages.Images.Add("file", Resources.file__16x16);
+            tvFiles.ImageList = _treeImages;
         }
 
         private void lvFilePreviews_ColumnClick(object sender, ColumnClickEventArgs e)
@@ -54,22 +52,6 @@ namespace RadioExt_Helper.forms
             lblPreviewStatusLabel.Text = $"Loading preview. Using {_backupManager.BackupCompressionLevel} compression...";
 
             _ = StartPreviewLoading();
-            //var bgTask = Task.Run(async () => 
-            //{
-            //    var data = await backupManager.GetBackupPreviewAsync(GlobalData.ConfigManager.Get("stagingPath") as string ?? string.Empty);
-            //    Previews = data.Previews;
-            //    TotalSize = data.TotalSize;
-            //    EstimatedCompressedSize = data.EstimatedCompressedSize;
-            //});
-
-            //Debug.WriteLine("Loading preview...");
-            //bgTask.Wait();
-
-            //if (bgTask.Status == TaskStatus.RanToCompletion)
-            //{
-            //    PopulateTreeView();
-            //    SetSizeLabels();
-            //}
         }
 
         private async Task StartPreviewLoading()
@@ -100,7 +82,7 @@ namespace RadioExt_Helper.forms
             _totalSize += obj.Item1.Size;
             _estimatedCompressedSize = obj.Item2;
 
-            AddItemToListView(obj.Item1);
+            AddItemToTreeView(obj.Item1);
             SetSizeLabels();
         }
 
@@ -127,25 +109,80 @@ namespace RadioExt_Helper.forms
             });
         }
 
-        private void AddItemToListView(FilePreview preview)
+        private void AddItemToTreeView(FilePreview preview)
         {
             this.SafeInvoke(() =>
             {
+                tvFiles.BeginUpdate();
+                var parts = preview.FileName?.Split(Path.DirectorySeparatorChar);
+                if (parts == null) return;
+
+                TreeNode? currentNode = null;
+                var currentNodeCollection = tvFiles.Nodes;
+
+                foreach (var part in parts)
+                {
+                    var existingNode = currentNodeCollection.Cast<TreeNode>().FirstOrDefault(n => n.Text.Equals(part));
+                    if (existingNode == null)
+                    {
+                        var isRoot = currentNode == null;
+                        var imageKey = GetImageKey(part, isRoot);
+                        var node = new TreeNode(part)
+                        { 
+                            Tag = new List<FilePreview>(),
+                            ImageKey = imageKey,
+                            SelectedImageKey = imageKey
+                        };
+
+                        currentNodeCollection.Add(node);
+                        currentNode = node;
+                    }
+                    else
+                    {
+                        currentNode = existingNode;
+                    }
+                    currentNodeCollection = currentNode.Nodes;
+                }
+
+                if (currentNode?.Parent?.Tag is List<FilePreview> previews)
+                    previews.Add(preview);
+
+                tvFiles.EndUpdate();
+            });
+        }
+
+        private void PopulateListView(TreeNode? node)
+        {
+            this.SafeInvoke(() =>
+            {
+                if (node == null) return;
+
                 lvFilePreviews.BeginUpdate();
-                lvFilePreviews.Items.Add(new ListViewItem(
-                [
-                    preview.FileName ?? string.Empty,
-                    ((ulong)preview.Size).FormatSize()
-                ]) { Tag = preview });
+                lvFilePreviews.Items.Clear();
+
+                if (node.Tag is List<FilePreview?> previews)
+                {
+                    foreach (var preview in previews)
+                    {
+                        if (preview == null) continue;
+
+                        // Remove the root directory from the file name
+                        var displayFileName = preview?.FileName?.Replace(node.Text + Path.DirectorySeparatorChar, "");
+
+                        var size = ((ulong)(preview?.Size ?? 0)).FormatSize();
+
+                        lvFilePreviews.Items.Add(new ListViewItem(
+                        [
+                            displayFileName ?? string.Empty,
+                            size
+                        ])
+                        { Tag = preview });
+                    }
+                }
 
                 lvFilePreviews.ResizeColumns();
                 lvFilePreviews.EndUpdate();
             });
-        }
-
-        private void PopulateTreeView()
-        {
-
         }
 
         private void SetSizeLabels()
@@ -155,6 +192,20 @@ namespace RadioExt_Helper.forms
                 lblTotalSize.Text = ((ulong)_totalSize).FormatSize();
                 lblEstimatedSize.Text = ((ulong)_estimatedCompressedSize).FormatSize();
             });
+        }
+
+        private string GetImageKey(string fileName, bool isRoot)
+        {
+            if (isRoot)
+                return "folder";
+
+            return PathHelper.IsValidAudioFile(fileName) ? "music_file" : "file";
+        }
+
+        private void TvFiles_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            if (e.Node?.Parent == null)
+                PopulateListView(e.Node);
         }
     }
 }

@@ -628,7 +628,7 @@ public partial class StationManager : IDisposable
                 .FirstOrDefault();
             var songList = files.Where(file => file.EndsWith("songs.sgls")).Select(_songListJson.LoadJson)
                 .FirstOrDefault() ?? [];
-            var songFiles = files.Where(file => _validAudioExtensions.Contains(Path.GetExtension(file).ToLower()))
+            var songFiles = files.Where(file => ValidAudioExtensions.Contains(Path.GetExtension(file).ToLower()))
                 .ToList();
 
             if (metadata == null) return;
@@ -774,13 +774,6 @@ public partial class StationManager : IDisposable
     /// </summary>
     private readonly List<Guid> _newStations = [];
 
-    /// <summary>
-    /// A list of valid audio file extensions for song files.
-    /// </summary>
-    private readonly string?[] _validAudioExtensions =
-        EnumHelper<ValidAudioFiles>.GetEnumDescriptions() as string[] ??
-        EnumHelper<ValidAudioFiles>.GetEnumDescriptions().ToArray();
-
     #endregion
 
     #region Properties
@@ -798,6 +791,12 @@ public partial class StationManager : IDisposable
             }
         }
     }
+
+    /// <summary>
+    /// Get a list of valid audio file extensions for song files.
+    /// </summary>
+    public string?[] ValidAudioExtensions { get; } = EnumHelper<ValidAudioFiles>.GetEnumDescriptions() as string[] ??
+                                                      EnumHelper<ValidAudioFiles>.GetEnumDescriptions().ToArray();
 
     /// <summary>
     /// The current list of stations managed by the manager as a binding list. Auto-updates when stations are added or removed.

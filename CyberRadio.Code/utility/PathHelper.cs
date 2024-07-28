@@ -14,8 +14,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+using AetherUtils.Core.Files;
 using AetherUtils.Core.Logging;
-using RadioExt_Helper.forms;
 
 namespace RadioExt_Helper.utility;
 
@@ -200,5 +200,16 @@ public static class PathHelper
                 .Error(ex, "An error occurred while getting the relative path.");
             return fullPath;
         }
+    }
+
+    /// <summary>
+    /// Get a value indicating whether the specified file is a valid audio file based on the extension and <see cref="models.ValidAudioFiles"/>.
+    /// </summary>
+    /// <param name="filePath">The path to the file to check.</param>
+    /// <returns><c>true</c> if the file is a valid audio file; <c>false</c> otherwise.</returns>
+    public static bool IsValidAudioFile(string filePath)
+    {
+        var extension = FileHelper.GetExtension(filePath);
+        return StationManager.Instance.ValidAudioExtensions.Contains(extension);
     }
 }
