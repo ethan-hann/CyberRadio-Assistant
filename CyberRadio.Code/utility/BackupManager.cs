@@ -17,14 +17,13 @@
 using AetherUtils.Core.Files;
 using ICSharpCode.SharpZipLib.Core;
 using ICSharpCode.SharpZipLib.Zip;
-using CompressionLevel=RadioExt_Helper.utility.CompressionLevel;
 
 namespace RadioExt_Helper.utility;
 
 /// <summary>
 /// Represents a class for managing the backup of files and folders. Subscribe to the event handlers to track the backup operation.
 /// </summary>
-public class BackupManager
+public class BackupManager(CompressionLevel level)
 {
     /// <summary>
     /// Occurs whenever the progress of the backup operation changes.
@@ -65,24 +64,37 @@ public class BackupManager
     /// <summary>
     /// Get or set the compression level used for the backup operation.
     /// </summary>
-    public CompressionLevel BackupCompressionLevel { get; set; } = CompressionLevel.Fast;
+    public CompressionLevel BackupCompressionLevel { get; } = level;
 
     /// <summary>
     /// Dictionary containing the mapping between compression levels and their corresponding compression ratios.
     /// </summary>
-    private readonly Dictionary<CompressionLevel, double> CompressionRatios = new()
+    private readonly Dictionary<CompressionLevel, double> _compressionRatios = new()
     {
         {CompressionLevel.None, 1.0},
-        {CompressionLevel.SuperFast, 0.9},
-        {CompressionLevel.Fastest, 0.8},
-        {CompressionLevel.Fast, 0.7},
+        {CompressionLevel.Fastest, 0.9},
+        {CompressionLevel.Fast, 0.8},
+        {CompressionLevel.SuperFast, 0.7},
         {CompressionLevel.Normal, 0.6},
         {CompressionLevel.High, 0.5},
         {CompressionLevel.Maximum, 0.4},
         {CompressionLevel.Ultra, 0.3},
         {CompressionLevel.Extreme, 0.25},
-        {CompressionLevel.Ultimate, 0.2 } 
+        {CompressionLevel.Ultimate, 0.2} 
     };
+
+    /*
+     *None = 0,          // No compression (ratio: 1.0)
+       Fastest = 1,     // Very low compression (ratio: 0.9)
+       Fast = 2,       // Low compression (ratio: 0.8)
+       SuperFast = 3,          // Medium-low compression (ratio: 0.7)
+       Normal = 4,        // Medium compression (ratio: 0.6)
+       High = 5,          // Medium-high compression (ratio: 0.5)
+       Maximum = 6,       // High compression (ratio: 0.4)
+       Ultra = 7,         // Very high compression (ratio: 0.3)
+       Extreme = 8,       // Maximum compression (ratio: 0.25)
+       Ultimate = 9       // Ultra compression (ratio: 0.2)
+     */
 
     /// <summary>
     /// Asynchronously get a preview of the files that will be backed up from the staging folder.
@@ -96,8 +108,8 @@ public class BackupManager
         if (string.IsNullOrEmpty(stagingPath))
             throw new ArgumentNullException(nameof(stagingPath));
 
-        // Default to ratio of 0.7 if compression level is not found in the dictionary
-        var compressionRatio = CompressionRatios.TryGetValue(BackupCompressionLevel, out var ratio) ? ratio : 0.7;
+        // Default to ratio of 0.6 if compression level is not found in the dictionary
+        var compressionRatio = _compressionRatios.GetValueOrDefault(BackupCompressionLevel, 0.6);
 
         var files = FileHelper.SafeEnumerateFiles(stagingPath, "*.*", SearchOption.AllDirectories).ToArray();
 

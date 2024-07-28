@@ -32,8 +32,11 @@
             tableLayoutPanel1 = new TableLayoutPanel();
             chkCheckForUpdates = new CheckBox();
             chkAutoExportToGame = new CheckBox();
-            btnEditPaths = new Button();
             chkWatchForChanges = new CheckBox();
+            flowLayoutPanel1 = new FlowLayoutPanel();
+            lblBackupCompressionLvl = new Label();
+            cmbCompressionLevels = new ComboBox();
+            btnEditPaths = new Button();
             tabConfigs = new TabControl();
             tabGeneral = new TabPage();
             tabLogging = new TabPage();
@@ -64,6 +67,7 @@
             statusStrip1 = new StatusStrip();
             lblHelpText = new ToolStripStatusLabel();
             tableLayoutPanel1.SuspendLayout();
+            flowLayoutPanel1.SuspendLayout();
             tabConfigs.SuspendLayout();
             tabGeneral.SuspendLayout();
             tabLogging.SuspendLayout();
@@ -80,11 +84,12 @@
             // tableLayoutPanel1
             // 
             tableLayoutPanel1.ColumnCount = 1;
-            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 40F));
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
             tableLayoutPanel1.Controls.Add(chkCheckForUpdates, 0, 0);
             tableLayoutPanel1.Controls.Add(chkAutoExportToGame, 0, 1);
-            tableLayoutPanel1.Controls.Add(btnEditPaths, 0, 3);
             tableLayoutPanel1.Controls.Add(chkWatchForChanges, 0, 2);
+            tableLayoutPanel1.Controls.Add(flowLayoutPanel1, 0, 3);
+            tableLayoutPanel1.Controls.Add(btnEditPaths, 0, 4);
             tableLayoutPanel1.Dock = DockStyle.Fill;
             tableLayoutPanel1.Location = new Point(3, 3);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -94,7 +99,7 @@
             tableLayoutPanel1.RowStyles.Add(new RowStyle());
             tableLayoutPanel1.RowStyles.Add(new RowStyle());
             tableLayoutPanel1.RowStyles.Add(new RowStyle());
-            tableLayoutPanel1.Size = new Size(779, 157);
+            tableLayoutPanel1.Size = new Size(779, 158);
             tableLayoutPanel1.TabIndex = 0;
             // 
             // chkCheckForUpdates
@@ -104,7 +109,7 @@
             chkCheckForUpdates.Location = new Point(10, 3);
             chkCheckForUpdates.Margin = new Padding(10, 3, 3, 3);
             chkCheckForUpdates.Name = "chkCheckForUpdates";
-            chkCheckForUpdates.Size = new Size(766, 20);
+            chkCheckForUpdates.Size = new Size(766, 19);
             chkCheckForUpdates.TabIndex = 1;
             chkCheckForUpdates.Tag = "CheckForUpdatesOptionHelp";
             chkCheckForUpdates.Text = "Check for Updates at Startup?";
@@ -116,10 +121,10 @@
             // 
             chkAutoExportToGame.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             chkAutoExportToGame.AutoSize = true;
-            chkAutoExportToGame.Location = new Point(10, 29);
+            chkAutoExportToGame.Location = new Point(10, 28);
             chkAutoExportToGame.Margin = new Padding(10, 3, 3, 3);
             chkAutoExportToGame.Name = "chkAutoExportToGame";
-            chkAutoExportToGame.Size = new Size(766, 20);
+            chkAutoExportToGame.Size = new Size(766, 19);
             chkAutoExportToGame.TabIndex = 2;
             chkAutoExportToGame.Tag = "AutoExportOptionHelp";
             chkAutoExportToGame.Text = "Auto-Export to Game?";
@@ -127,15 +132,61 @@
             chkAutoExportToGame.MouseEnter += ControlMouseEnter;
             chkAutoExportToGame.MouseLeave += ControlMouseLeave;
             // 
+            // chkWatchForChanges
+            // 
+            chkWatchForChanges.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            chkWatchForChanges.AutoSize = true;
+            chkWatchForChanges.Location = new Point(10, 53);
+            chkWatchForChanges.Margin = new Padding(10, 3, 3, 3);
+            chkWatchForChanges.Name = "chkWatchForChanges";
+            chkWatchForChanges.Size = new Size(766, 19);
+            chkWatchForChanges.TabIndex = 7;
+            chkWatchForChanges.Tag = "WatchForChangesHelp";
+            chkWatchForChanges.Text = "Watch For Station Changes?";
+            chkWatchForChanges.UseVisualStyleBackColor = true;
+            chkWatchForChanges.MouseEnter += ControlMouseEnter;
+            chkWatchForChanges.MouseLeave += ControlMouseLeave;
+            // 
+            // flowLayoutPanel1
+            // 
+            flowLayoutPanel1.Controls.Add(lblBackupCompressionLvl);
+            flowLayoutPanel1.Controls.Add(cmbCompressionLevels);
+            flowLayoutPanel1.Dock = DockStyle.Fill;
+            flowLayoutPanel1.Location = new Point(3, 78);
+            flowLayoutPanel1.Name = "flowLayoutPanel1";
+            flowLayoutPanel1.Size = new Size(773, 32);
+            flowLayoutPanel1.TabIndex = 8;
+            // 
+            // lblBackupCompressionLvl
+            // 
+            lblBackupCompressionLvl.AutoSize = true;
+            lblBackupCompressionLvl.Location = new Point(3, 0);
+            lblBackupCompressionLvl.Name = "lblBackupCompressionLvl";
+            lblBackupCompressionLvl.Size = new Size(155, 15);
+            lblBackupCompressionLvl.TabIndex = 2;
+            lblBackupCompressionLvl.Text = "Backup Compression Level: ";
+            lblBackupCompressionLvl.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // cmbCompressionLevels
+            // 
+            cmbCompressionLevels.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbCompressionLevels.FormattingEnabled = true;
+            cmbCompressionLevels.Location = new Point(164, 3);
+            cmbCompressionLevels.Name = "cmbCompressionLevels";
+            cmbCompressionLevels.Size = new Size(191, 23);
+            cmbCompressionLevels.TabIndex = 1;
+            cmbCompressionLevels.Tag = "BackupCompressionLevelHelp";
+            cmbCompressionLevels.MouseEnter += ControlMouseEnter;
+            cmbCompressionLevels.MouseLeave += ControlMouseLeave;
+            // 
             // btnEditPaths
             // 
             btnEditPaths.BackColor = Color.Yellow;
-            btnEditPaths.Dock = DockStyle.Fill;
             btnEditPaths.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
             btnEditPaths.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
             btnEditPaths.FlatStyle = FlatStyle.Flat;
             btnEditPaths.Image = Properties.Resources.folder__16x16;
-            btnEditPaths.Location = new Point(3, 81);
+            btnEditPaths.Location = new Point(3, 116);
             btnEditPaths.Name = "btnEditPaths";
             btnEditPaths.Size = new Size(773, 30);
             btnEditPaths.TabIndex = 5;
@@ -147,21 +198,6 @@
             btnEditPaths.Click += BtnEditPaths_Click;
             btnEditPaths.MouseEnter += ControlMouseEnter;
             btnEditPaths.MouseLeave += ControlMouseLeave;
-            // 
-            // chkWatchForChanges
-            // 
-            chkWatchForChanges.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            chkWatchForChanges.AutoSize = true;
-            chkWatchForChanges.Location = new Point(10, 55);
-            chkWatchForChanges.Margin = new Padding(10, 3, 3, 3);
-            chkWatchForChanges.Name = "chkWatchForChanges";
-            chkWatchForChanges.Size = new Size(766, 20);
-            chkWatchForChanges.TabIndex = 7;
-            chkWatchForChanges.Tag = "WatchForChangesHelp";
-            chkWatchForChanges.Text = "Watch For Station Changes?";
-            chkWatchForChanges.UseVisualStyleBackColor = true;
-            chkWatchForChanges.MouseEnter += ControlMouseEnter;
-            chkWatchForChanges.MouseLeave += ControlMouseLeave;
             // 
             // tabConfigs
             // 
@@ -180,10 +216,10 @@
             tabGeneral.BackColor = Color.White;
             tabGeneral.Controls.Add(tableLayoutPanel1);
             tabGeneral.ImageKey = "config";
-            tabGeneral.Location = new Point(4, 25);
+            tabGeneral.Location = new Point(4, 24);
             tabGeneral.Name = "tabGeneral";
             tabGeneral.Padding = new Padding(3);
-            tabGeneral.Size = new Size(785, 163);
+            tabGeneral.Size = new Size(785, 164);
             tabGeneral.TabIndex = 0;
             tabGeneral.Text = "General";
             // 
@@ -192,10 +228,10 @@
             tabLogging.BackColor = Color.White;
             tabLogging.Controls.Add(tableLayoutPanel3);
             tabLogging.ImageKey = "logging";
-            tabLogging.Location = new Point(4, 25);
+            tabLogging.Location = new Point(4, 24);
             tabLogging.Name = "tabLogging";
             tabLogging.Padding = new Padding(3);
-            tabLogging.Size = new Size(785, 163);
+            tabLogging.Size = new Size(785, 164);
             tabLogging.TabIndex = 1;
             tabLogging.Text = "Logging";
             // 
@@ -220,7 +256,7 @@
             tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 37F));
             tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
             tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel3.Size = new Size(779, 157);
+            tableLayoutPanel3.Size = new Size(779, 158);
             tableLayoutPanel3.TabIndex = 1;
             // 
             // chkNewFileEveryLaunch
@@ -231,7 +267,7 @@
             chkNewFileEveryLaunch.Location = new Point(10, 3);
             chkNewFileEveryLaunch.Margin = new Padding(10, 3, 3, 3);
             chkNewFileEveryLaunch.Name = "chkNewFileEveryLaunch";
-            chkNewFileEveryLaunch.Size = new Size(766, 20);
+            chkNewFileEveryLaunch.Size = new Size(766, 19);
             chkNewFileEveryLaunch.TabIndex = 1;
             chkNewFileEveryLaunch.Tag = "NewLogFileOptionHelp";
             chkNewFileEveryLaunch.Text = "New File Every Launch?";
@@ -248,7 +284,7 @@
             btnEditLogsPath.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
             btnEditLogsPath.FlatStyle = FlatStyle.Flat;
             btnEditLogsPath.Image = Properties.Resources.folder__16x16;
-            btnEditLogsPath.Location = new Point(3, 29);
+            btnEditLogsPath.Location = new Point(3, 28);
             btnEditLogsPath.Name = "btnEditLogsPath";
             btnEditLogsPath.Size = new Size(773, 31);
             btnEditLogsPath.TabIndex = 7;
@@ -265,9 +301,9 @@
             // 
             lblLogPathLabel.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             lblLogPathLabel.AutoSize = true;
-            lblLogPathLabel.Location = new Point(3, 65);
+            lblLogPathLabel.Location = new Point(3, 64);
             lblLogPathLabel.Name = "lblLogPathLabel";
-            lblLogPathLabel.Size = new Size(231, 16);
+            lblLogPathLabel.Size = new Size(231, 15);
             lblLogPathLabel.TabIndex = 9;
             lblLogPathLabel.Text = "Log Path:";
             lblLogPathLabel.TextAlign = ContentAlignment.MiddleRight;
@@ -278,7 +314,7 @@
             lblCurrentLogPath.AutoSize = true;
             lblCurrentLogPath.Font = new Font("Segoe UI Variable Display", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblCurrentLogPath.ForeColor = Color.Green;
-            lblCurrentLogPath.Location = new Point(240, 64);
+            lblCurrentLogPath.Location = new Point(240, 63);
             lblCurrentLogPath.Name = "lblCurrentLogPath";
             lblCurrentLogPath.Size = new Size(536, 17);
             lblCurrentLogPath.TabIndex = 10;
@@ -287,10 +323,10 @@
             // tabNexus
             // 
             tabNexus.Controls.Add(tableLayoutPanel4);
-            tabNexus.Location = new Point(4, 25);
+            tabNexus.Location = new Point(4, 24);
             tabNexus.Name = "tabNexus";
             tabNexus.Padding = new Padding(3);
-            tabNexus.Size = new Size(785, 163);
+            tabNexus.Size = new Size(785, 164);
             tabNexus.TabIndex = 2;
             tabNexus.Text = "Nexus API";
             tabNexus.UseVisualStyleBackColor = true;
@@ -314,7 +350,7 @@
             tableLayoutPanel4.RowStyles.Add(new RowStyle());
             tableLayoutPanel4.RowStyles.Add(new RowStyle());
             tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Absolute, 37F));
-            tableLayoutPanel4.Size = new Size(779, 157);
+            tableLayoutPanel4.Size = new Size(779, 158);
             tableLayoutPanel4.TabIndex = 2;
             // 
             // panel2
@@ -327,7 +363,7 @@
             panel2.Dock = DockStyle.Fill;
             panel2.Location = new Point(3, 32);
             panel2.Name = "panel2";
-            panel2.Size = new Size(470, 122);
+            panel2.Size = new Size(470, 123);
             panel2.TabIndex = 3;
             // 
             // btnClearApiKey
@@ -390,9 +426,9 @@
             // 
             lblApiHelp.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             lblApiHelp.AutoSize = true;
-            lblApiHelp.Location = new Point(25, 61);
+            lblApiHelp.Location = new Point(25, 62);
             lblApiHelp.Name = "lblApiHelp";
-            lblApiHelp.Size = new Size(415, 48);
+            lblApiHelp.Size = new Size(416, 45);
             lblApiHelp.TabIndex = 12;
             lblApiHelp.Text = resources.GetString("lblApiHelp.Text");
             // 
@@ -404,7 +440,7 @@
             panel1.Dock = DockStyle.Fill;
             panel1.Location = new Point(479, 32);
             panel1.Name = "panel1";
-            panel1.Size = new Size(297, 122);
+            panel1.Size = new Size(297, 123);
             panel1.TabIndex = 3;
             // 
             // lblApiKeyUnlocks
@@ -425,7 +461,7 @@
             lnkApiAcceptableUse.AutoSize = true;
             lnkApiAcceptableUse.Location = new Point(3, 25);
             lnkApiAcceptableUse.Name = "lnkApiAcceptableUse";
-            lnkApiAcceptableUse.Size = new Size(188, 16);
+            lnkApiAcceptableUse.Size = new Size(188, 15);
             lnkApiAcceptableUse.TabIndex = 14;
             lnkApiAcceptableUse.TabStop = true;
             lnkApiAcceptableUse.Text = "API Acceptable Use Policy (Nexus)";
@@ -437,7 +473,7 @@
             lnkNexusApiKeyPage.AutoSize = true;
             lnkNexusApiKeyPage.Location = new Point(3, 14);
             lnkNexusApiKeyPage.Name = "lnkNexusApiKeyPage";
-            lnkNexusApiKeyPage.Size = new Size(98, 16);
+            lnkNexusApiKeyPage.Size = new Size(98, 15);
             lnkNexusApiKeyPage.TabIndex = 13;
             lnkNexusApiKeyPage.TabStop = true;
             lnkNexusApiKeyPage.Text = "Get Your API Key!";
@@ -447,9 +483,9 @@
             // 
             lblApiInputHelp.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             lblApiInputHelp.AutoSize = true;
-            lblApiInputHelp.Location = new Point(479, 6);
+            lblApiInputHelp.Location = new Point(479, 7);
             lblApiInputHelp.Name = "lblApiInputHelp";
-            lblApiInputHelp.Size = new Size(297, 16);
+            lblApiInputHelp.Size = new Size(297, 15);
             lblApiInputHelp.TabIndex = 3;
             lblApiInputHelp.Text = "Specify your Nexus Mods API key.";
             // 
@@ -580,6 +616,8 @@
             Load += ConfigForm_Load;
             tableLayoutPanel1.ResumeLayout(false);
             tableLayoutPanel1.PerformLayout();
+            flowLayoutPanel1.ResumeLayout(false);
+            flowLayoutPanel1.PerformLayout();
             tabConfigs.ResumeLayout(false);
             tabGeneral.ResumeLayout(false);
             tabLogging.ResumeLayout(false);
@@ -636,5 +674,8 @@
         private CheckBox chkWatchForChanges;
         private StatusStrip statusStrip1;
         private ToolStripStatusLabel lblHelpText;
+        private FlowLayoutPanel flowLayoutPanel1;
+        private ComboBox cmbCompressionLevels;
+        private Label lblBackupCompressionLvl;
     }
 }

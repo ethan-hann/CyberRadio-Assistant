@@ -784,4 +784,37 @@ exported to the game.</value>
     <data name="BackupPathIsSubpathGame" xml:space="preserve">
       <value>Backup path cannot be within the game path.</value>
     </data>
+    <data name="None" xml:space="preserve">
+      <value>None</value>
+    </data>
+    <data name="SuperFast" xml:space="preserve">
+      <value>Super Fast</value>
+    </data>
+    <data name="Fast" xml:space="preserve">
+      <value>Fast</value>
+    </data>
+    <data name="Fastest" xml:space="preserve">
+      <value>Fastest</value>
+    </data>
+    <data name="Normal" xml:space="preserve">
+      <value>Normal</value>
+    </data>
+    <data name="High" xml:space="preserve">
+      <value>High</value>
+    </data>
+    <data name="Maxium" xml:space="preserve">
+      <value>Maximum</value>
+    </data>
+    <data name="Ultra" xml:space="preserve">
+      <value>Ultra</value>
+    </data>
+    <data name="Extreme" xml:space="preserve">
+      <value>Extreme</value>
+    </data>
+    <data name="Ultimate" xml:space="preserve">
+      <value>Ultimate</value>
+    </data>
+    <data name="BackupCompressionLevel" xml:space="preserve">
+      <value>Backup Compression Level: </value>
+    </data>
 </root>

@@ -18,26 +18,20 @@ namespace RadioExt_Helper.forms
 {
     public partial class BackupPreview : Form
     {
-        private BackupManager _backupManager = new();
+        private readonly BackupManager _backupManager;
 
-        private List<FilePreview> Previews = [];
-        private long TotalSize;
-        private long EstimatedCompressedSize;
+        private List<FilePreview> _previews = [];
+        private long _totalSize;
+        private long _estimatedCompressedSize;
 
-        public BackupPreview()
+        public BackupPreview(CompressionLevel compressionLevel)
         {
             InitializeComponent();
+            _backupManager = new BackupManager(compressionLevel);
 
             _backupManager.PreviewProgressChanged += _backupManager_PreviewProgressChanged;
             _backupManager.PreviewStatusChanged += _backupManager_PreviewStatusChanged;
             _backupManager.BackupPreviewCompleted += _backupManager_BackupPreviewCompleted;
-        }
-
-        public BackupPreview(List<FilePreview> Previews, long TotalSize, long EstimatedCompressedSize) : this()
-        {
-            this.Previews = Previews;
-            this.TotalSize = TotalSize;
-            this.EstimatedCompressedSize = EstimatedCompressedSize;
         }
 
         private void lvFilePreviews_ColumnClick(object sender, ColumnClickEventArgs e)
@@ -56,11 +50,8 @@ namespace RadioExt_Helper.forms
 
         private void BackupPreview_Load(object sender, EventArgs e)
         {
-            var backupManager = new BackupManager();
-
             pgPreviewProgress.Visible = true;
-            lblPreviewStatusLabel.Text = 
-                $"Loading preview. Using {GlobalData.ConfigManager.Get("backupCompressionLevel") ?? CompressionLevel.Normal} compression...";
+            lblPreviewStatusLabel.Text = $"Loading preview. Using {_backupManager.BackupCompressionLevel} compression...";
 
             _ = StartPreviewLoading();
             //var bgTask = Task.Run(async () => 
@@ -105,9 +96,9 @@ namespace RadioExt_Helper.forms
 
         private void _backupManager_PreviewStatusChanged((FilePreview, long) obj)
         {
-            Previews.Add(obj.Item1);
-            TotalSize += obj.Item1.Size;
-            EstimatedCompressedSize = obj.Item2;
+            _previews.Add(obj.Item1);
+            _totalSize += obj.Item1.Size;
+            _estimatedCompressedSize = obj.Item2;
 
             AddItemToListView(obj.Item1);
             SetSizeLabels();
@@ -115,18 +106,18 @@ namespace RadioExt_Helper.forms
 
         private void _backupManager_BackupPreviewCompleted((List<FilePreview> Previews, long TotalSize, long EstimatedCompressedSize) obj)
         {
-            if (Previews.Count != obj.Previews.Count)
+            if (_previews.Count != obj.Previews.Count)
                 throw new Exception("Preview data mismatch!");
 
-            if (TotalSize != obj.TotalSize)
+            if (_totalSize != obj.TotalSize)
                 throw new Exception("Total size mismatch!");
 
-            if (EstimatedCompressedSize != obj.EstimatedCompressedSize)
+            if (_estimatedCompressedSize != obj.EstimatedCompressedSize)
                 throw new Exception("Estimated compressed size mismatch!");
 
-            Previews = obj.Previews;
-            TotalSize = obj.TotalSize;
-            EstimatedCompressedSize = obj.EstimatedCompressedSize;
+            _previews = obj.Previews;
+            _totalSize = obj.TotalSize;
+            _estimatedCompressedSize = obj.EstimatedCompressedSize;
             SetSizeLabels();
 
             this.SafeInvoke(() =>
@@ -161,8 +152,8 @@ namespace RadioExt_Helper.forms
         {
             this.SafeInvoke(() =>
             {
-                lblTotalSize.Text = ((ulong)TotalSize).FormatSize();
-                lblEstimatedSize.Text = ((ulong)EstimatedCompressedSize).FormatSize();
+                lblTotalSize.Text = ((ulong)_totalSize).FormatSize();
+                lblEstimatedSize.Text = ((ulong)_estimatedCompressedSize).FormatSize();
             });
         }
     }

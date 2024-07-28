@@ -35,7 +35,6 @@ namespace RadioExt_Helper.forms;
 /// </summary>
 public partial class MainForm : Form
 {
-    private readonly BackupManager _backupManager = new();
     private DirectoryWatcher? _directoryWatcher = null;
 
     private readonly ImageComboBox<ImageComboBoxItem> _languageComboBox = new();
@@ -75,8 +74,6 @@ public partial class MainForm : Form
         lbStations.DataSource = StationManager.Instance.StationsAsBindingList;
         lbStations.DisplayMember = "TrackedObject.MetaData";
 
-        _backupManager.BackupCompressionLevel = GlobalData.ConfigManager.Get("backupCompressionLevel") as CompressionLevel? ?? CompressionLevel.Fast;
-
         SetupDirectoryWatcher();
     }
 
@@ -94,9 +91,9 @@ public partial class MainForm : Form
     {
         _languageComboBox.SelectedIndexChanged += CmbLanguageSelect_SelectedIndexChanged;
 
-        _backupManager.ProgressChanged += OnBackupManagerProgressChanged;
-        _backupManager.StatusChanged += OnBackupManagerStatusChanged;
-        _backupManager.BackupCompleted += OnBackupManagerBackupCompleted;
+        //_backupManager.ProgressChanged += OnBackupManagerProgressChanged;
+        //_backupManager.StatusChanged += OnBackupManagerStatusChanged;
+        //_backupManager.BackupCompleted += OnBackupManagerBackupCompleted;
 
         //StationManager.Instance.StationNameDuplicate += OnStationNameDuplicateEvent;
         StationManager.Instance.StationUpdated += OnStationUpdated;
@@ -144,9 +141,9 @@ public partial class MainForm : Form
     {
         _languageComboBox.SelectedIndexChanged -= CmbLanguageSelect_SelectedIndexChanged;
 
-        _backupManager.ProgressChanged -= OnBackupManagerProgressChanged;
-        _backupManager.StatusChanged -= OnBackupManagerStatusChanged;
-        _backupManager.BackupCompleted -= OnBackupManagerBackupCompleted;
+        //_backupManager.ProgressChanged -= OnBackupManagerProgressChanged;
+        //_backupManager.StatusChanged -= OnBackupManagerStatusChanged;
+        //_backupManager.BackupCompleted -= OnBackupManagerBackupCompleted;
 
         //StationManager.Instance.StationNameDuplicate -= OnStationNameDuplicateEvent;
         StationManager.Instance.StationUpdated -= OnStationUpdated;
@@ -923,7 +920,8 @@ public partial class MainForm : Form
         //TODO: Add a check for the game path to prevent backing up the game folder.
         //TODO: Show a preview of the backup before starting the operation.
 
-        var showPreview = new BackupPreview().ShowDialog();
+        var compressionLevel = GlobalData.ConfigManager.GetConfig()?.BackupCompressionLevel ?? CompressionLevel.Normal;
+        var showPreview = new BackupPreview(compressionLevel).ShowDialog();
         if (showPreview == DialogResult.Cancel) return;
 
         var backupPath = GetBackupPath();
@@ -957,15 +955,6 @@ public partial class MainForm : Form
         _ = StartBackupAsync(StagingPath, backupPath);
     }
 
-    //private async Task<bool> ShowBackupPreview()
-    //{
-    //    var (Previews, TotalSize, EstimatedCompressedSize) = await _backupManager.GetBackupPreviewAsync(StagingPath);
-    //    var previewForm = new BackupPreview(Previews, TotalSize, EstimatedCompressedSize);
-
-    //    previewForm.ShowDialog();
-    //    return false;
-    //}
-
     /// <summary>
     /// Shows a folder browser dialog to select a folder to save the backup to.
     /// </summary>
@@ -995,7 +984,7 @@ public partial class MainForm : Form
         try
         {
             _isBackupInProgress = true;
-            await _backupManager.BackupStagingFolderAsync(stagingPath, backupPath);
+            //await _backupManager.BackupStagingFolderAsync(stagingPath, backupPath);
         }
         catch (Exception ex)
         {
@@ -1113,10 +1102,7 @@ public partial class MainForm : Form
                                  ?? "There are {0} stations pending export. Are you sure you want to quit?", count);
         var caption = GlobalData.Strings.GetString("Confirm");
 
-        if (MessageBox.Show(this, text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
-            return false;
-
-        return true;
+        return MessageBox.Show(this, text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning) != DialogResult.No;
     }
 
     private void MainForm_Resize(object sender, EventArgs e)
@@ -1132,7 +1118,7 @@ public partial class MainForm : Form
 
         if (e.CloseReason is CloseReason.TaskManagerClosing or CloseReason.WindowsShutDown) return;
 
-        if (CheckForPendingSaveStations())
+        if (!CheckForPendingSaveStations())
             e.Cancel = true;
         else
             CleanupEvents(); // Clean up events (unsubscribe) before closing the application

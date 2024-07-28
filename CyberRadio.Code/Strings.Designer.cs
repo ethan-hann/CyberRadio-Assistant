@@ -231,6 +231,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Backup Compression Level: .
+        /// </summary>
+        internal static string BackupCompressionLevel {
+            get {
+                return ResourceManager.GetString("BackupCompressionLevel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Indicates the level of compression used when backing up the staging directory..
         /// </summary>
         internal static string BackupCompressionLevelHelp {
@@ -793,6 +802,33 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Extreme.
+        /// </summary>
+        internal static string Extreme {
+            get {
+                return ResourceManager.GetString("Extreme", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fast.
+        /// </summary>
+        internal static string Fast {
+            get {
+                return ResourceManager.GetString("Fast", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fastest.
+        /// </summary>
+        internal static string Fastest {
+            get {
+                return ResourceManager.GetString("Fastest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to File.
         /// </summary>
         internal static string File {
@@ -870,6 +906,15 @@ namespace RadioExt_Helper {
         internal static string Help {
             get {
                 return ResourceManager.GetString("Help", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to High.
+        /// </summary>
+        internal static string High {
+            get {
+                return ResourceManager.GetString("High", resourceCulture);
             }
         }
         
@@ -1081,6 +1126,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Maximum.
+        /// </summary>
+        internal static string Maxium {
+            get {
+                return ResourceManager.GetString("Maxium", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Min:.
         /// </summary>
         internal static string Min {
@@ -1217,12 +1271,30 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to None.
+        /// </summary>
+        internal static string None {
+            get {
+                return ResourceManager.GetString("None", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You do not have the radioExt mod installed.
         ///Can&apos;t export radio stations to game..
         /// </summary>
         internal static string NoRadioExtMsg {
             get {
                 return ResourceManager.GetString("NoRadioExtMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Normal.
+        /// </summary>
+        internal static string Normal {
+            get {
+                return ResourceManager.GetString("Normal", resourceCulture);
             }
         }
         
@@ -1750,6 +1822,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Super Fast.
+        /// </summary>
+        internal static string SuperFast {
+            get {
+                return ResourceManager.GetString("SuperFast", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sync.
         /// </summary>
         internal static string SyncAbbrev {
@@ -1809,6 +1890,24 @@ namespace RadioExt_Helper {
         internal static string TotalStationSizeLabel {
             get {
                 return ResourceManager.GetString("TotalStationSizeLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ultimate.
+        /// </summary>
+        internal static string Ultimate {
+            get {
+                return ResourceManager.GetString("Ultimate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ultra.
+        /// </summary>
+        internal static string Ultra {
+            get {
+                return ResourceManager.GetString("Ultra", resourceCulture);
             }
         }
         

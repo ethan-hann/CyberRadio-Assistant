@@ -67,9 +67,12 @@ public sealed class ApplicationConfig
     [Description("WatchForChangesHelp")]
     public bool WatchForGameChanges { get; set; } = true;
 
+    /// <summary>
+    ///     Specifies the backup compression level to use when zipping the staging folder.
+    /// </summary>
     [Config(BackupCompressionLevelKey)]
     [Description("BackupCompressionLevelHelp")]
-    public CompressionLevel BackupCompressionLevel { get; set; } = CompressionLevel.Fast;
+    public CompressionLevel BackupCompressionLevel { get; set; } = CompressionLevel.Normal;
 
     /// <summary>
     ///     The path to the staging directory.

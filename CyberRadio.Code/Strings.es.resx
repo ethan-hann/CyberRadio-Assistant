@@ -784,4 +784,37 @@ exportado al juego.</value>
     <data name="BackupPathIsSubpathGame" xml:space="preserve">
       <value>La ruta de respaldo no puede estar dentro del camino del juego.</value>
     </data>
+    <data name="None" xml:space="preserve">
+      <value>Ninguno</value>
+    </data>
+    <data name="SuperFast" xml:space="preserve">
+      <value>Súper rápido</value>
+    </data>
+    <data name="Fast" xml:space="preserve">
+      <value>Rápido</value>
+    </data>
+    <data name="Fastest" xml:space="preserve">
+      <value>Más rápido</value>
+    </data>
+    <data name="Normal" xml:space="preserve">
+      <value>Normal</value>
+    </data>
+    <data name="High" xml:space="preserve">
+      <value>Alto</value>
+    </data>
+    <data name="Maxium" xml:space="preserve">
+      <value>Máximo</value>
+    </data>
+    <data name="Ultra" xml:space="preserve">
+      <value>Ultra</value>
+    </data>
+    <data name="Extreme" xml:space="preserve">
+      <value>Extremo</value>
+    </data>
+    <data name="Ultimate" xml:space="preserve">
+      <value>Último</value>
+    </data>
+    <data name="BackupCompressionLevel" xml:space="preserve">
+      <value>Nivel de compresión de respaldo:</value>
+    </data>
 </root>
