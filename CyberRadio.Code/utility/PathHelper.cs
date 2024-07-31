@@ -213,4 +213,27 @@ public static class PathHelper
         var extension = FileHelper.GetExtension(filePath);
         return StationManager.Instance.ValidAudioExtensions.Contains(extension);
     }
+
+    /// <summary>
+    /// Replaces invalid path characters and specific characters (like the apostrophe (') which can causing issues with pathing.
+    /// </summary>
+    /// <param name="path">The path to sanitize.</param>
+    /// <returns>The sanitized path.</returns>
+    public static string SanitizePath(string path)
+    {
+        try
+        {
+            foreach (char c in Path.GetInvalidPathChars())
+            {
+                path = path.Replace(c, '_');
+            }
+            path = path.Replace("'", "_"); // Replace specific characters causing issues
+            return path;
+        } catch (Exception ex)
+        {
+            AuLogger.GetCurrentLogger("PathHelper.SanitizePath")
+                .Error(ex, "An error occurred while sanitizing the path.");
+            return path;
+        }
+    }
 }

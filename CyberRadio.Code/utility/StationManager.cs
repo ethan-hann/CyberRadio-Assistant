@@ -71,20 +71,22 @@ public partial class StationManager : IDisposable
     /// </summary>
     /// <param name="directory">The directory to load the station from.</param>
     /// <param name="treatAsNewStation">Indicates whether the station should be treated as a new station (i.e., it is not present in the staging directory already.</param>
-    public void LoadStationFromDirectory(string? directory, bool treatAsNewStation)
+    /// <returns>The <see cref="Guid"/> of the processed station or <c>null</c> if the directory couldn't be processed.</returns>
+    public Guid? LoadStationFromDirectory(string? directory, bool treatAsNewStation)
     {
         try
         {
-            if (string.IsNullOrEmpty(directory)) return;
+            if (string.IsNullOrEmpty(directory)) return null;
             if (!PathHelper.IsSubPath(GlobalData.ConfigManager.Get("stagingPath") as string ?? string.Empty, directory))
-                ProcessDirectory(directory, !treatAsNewStation);
+                return ProcessDirectory(directory, treatAsNewStation);
             else
                 AuLogger.GetCurrentLogger<StationManager>().Warn($"Attempted to load station from staging directory: {directory}");
-
+            return null;
         }
         catch (Exception ex)
         {
             AuLogger.GetCurrentLogger<StationManager>().Error(ex, "Error loading station from directory.");
+            return null;
         }
     }
 
@@ -634,9 +636,7 @@ public partial class StationManager : IDisposable
             }
         };
         var trackedStation = new TrackableObject<Station>(station);
-        AddStation(trackedStation, false);
-
-        return trackedStation.Id;
+        return AddStation(trackedStation, false);
     }
 
     /// <summary>
@@ -644,7 +644,8 @@ public partial class StationManager : IDisposable
     /// </summary>
     /// <param name="directory">The directory to process.</param>
     /// <param name="treatAsNewStation">Indicates if this directory should be treated as a new station (i.e., not in the staging directory already) or not.</param>
-    private void ProcessDirectory(string directory, bool treatAsNewStation)
+    /// <returns>The newly processed Station ID; or <c>null</c> if the directory couldn't be processed.</returns>
+    private Guid? ProcessDirectory(string directory, bool treatAsNewStation)
     {
         try
         {
@@ -656,7 +657,7 @@ public partial class StationManager : IDisposable
             var songFiles = files.Where(file => ValidAudioExtensions.Contains(Path.GetExtension(file).ToLower()))
                 .ToList();
 
-            if (metadata == null) return;
+            if (metadata == null) return null;
 
             if (songList.Count == 0)
                 songFiles.ForEach(path =>
@@ -670,11 +671,12 @@ public partial class StationManager : IDisposable
             var trackedStation = new TrackableObject<Station>(station);
             EnsureDisplayNameFormat(trackedStation);
 
-            AddStation(trackedStation, !treatAsNewStation, directory);
+            return AddStation(trackedStation, !treatAsNewStation, directory);
         }
         catch (Exception ex)
         {
             AuLogger.GetCurrentLogger<StationManager>().Error(ex, "Error processing directory.");
+            return null;
         }
     }
 

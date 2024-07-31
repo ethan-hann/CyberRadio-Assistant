@@ -15,6 +15,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 using AetherUtils.Core.Extensions;
+using AetherUtils.Core.Files;
 using AetherUtils.Core.Logging;
 using AetherUtils.Core.WinForms.Controls;
 using AetherUtils.Core.WinForms.Models;
@@ -96,8 +97,27 @@ public sealed partial class MainForm : Form
         StationManager.Instance.SyncStatusChanged += OnStationSyncStatusChanged;
         StationManager.Instance.StationsSynchronized += OnStationsSynchronized;
 
+        lbStations.StationImported += LbStations_StationImported;
+
         // Save the configuration when resizing has stopped
         _resizeTimer.Elapsed += (_, _) => { SaveWindowSize(); };
+    }
+
+    private void LbStations_StationImported(object? sender, StationImportedEventArgs e)
+    {
+        // Handle custom icon
+        SaveCustomIcon(e.IconFilePath, e.IconFileName);
+        AuLogger.GetCurrentLogger<MainForm>("StationImported")
+            .Info($"Station imported: {e.Station.TrackedObject.MetaData.DisplayName}");
+    }
+
+    private void SaveCustomIcon(string? iconFilePath, string? iconFileName)
+    {
+        if (string.IsNullOrEmpty(iconFilePath) || string.IsNullOrEmpty(iconFileName)) return;
+
+        var archivePath = Path.Combine(StagingPath, "archive", iconFileName);
+        FileHelper.CreateDirectories(Path.GetDirectoryName(archivePath));
+        File.Copy(iconFilePath, archivePath, true);
     }
 
     /// <summary>

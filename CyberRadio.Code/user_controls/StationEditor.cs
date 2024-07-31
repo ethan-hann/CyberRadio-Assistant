@@ -181,7 +181,7 @@ public sealed partial class StationEditor : UserControl, IUserControl
         lblSelectedVolume.Text = $@"{Station.TrackedObject.MetaData.Volume:F1}";
 
         dgvMetadata.Rows.Clear();
-        foreach (var (key, value) in Station.TrackedObject.MetaData.CustomKeyValuePairs)
+        foreach (var (key, value) in Station.TrackedObject.MetaData.CustomData)
             dgvMetadata.Rows.Add(key, value);
     }
 
@@ -377,7 +377,7 @@ public sealed partial class StationEditor : UserControl, IUserControl
         var row = dgvMetadata.Rows[e.Row.Index - 1];
         var key = row.Cells[0].Value?.ToString();
         var value = row.Cells[1].Value?.ToString();
-        if (key != null && value != null && Station.TrackedObject.MetaData.CustomKeyValuePairs.TryAdd(key, value))
+        if (key != null && value != null && Station.TrackedObject.MetaData.CustomData.TryAdd(key, value))
             StationUpdated?.Invoke(this, EventArgs.Empty);
     }
 
@@ -387,9 +387,9 @@ public sealed partial class StationEditor : UserControl, IUserControl
         foreach (DataGridViewCell cell in e.Row.Cells)
         {
             var key = cell.Value?.ToString();
-            if (key == null || !Station.TrackedObject.MetaData.CustomKeyValuePairs.ContainsKey(key)) continue;
+            if (key == null || !Station.TrackedObject.MetaData.CustomData.ContainsKey(key)) continue;
 
-            Station.TrackedObject.MetaData.CustomKeyValuePairs.Remove(key);
+            Station.TrackedObject.MetaData.CustomData.Remove(key);
             StationUpdated?.Invoke(this, EventArgs.Empty);
         }
     }
@@ -404,7 +404,7 @@ public sealed partial class StationEditor : UserControl, IUserControl
         var value = row.Cells[1].Value?.ToString();
         if (key == null || value == null) return;
 
-        Station.TrackedObject.MetaData.CustomKeyValuePairs[key] = value;
+        Station.TrackedObject.MetaData.CustomData[key] = value;
         StationUpdated?.Invoke(this, EventArgs.Empty);
     }
 

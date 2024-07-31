@@ -14,6 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+using AetherUtils.Core.Files;
 using AetherUtils.Core.Utility;
 using Newtonsoft.Json;
 using System.ComponentModel;
@@ -27,7 +28,7 @@ public sealed class MetaData : INotifyPropertyChanged, ICloneable, IEquatable<Me
 {
     private CustomIcon _customIcon = new();
 
-    private SerializableDictionary<string, string> _customKeyValuePairs = [];
+    private SerializableDictionary<string, object> _customData = [];
     private string _displayName = "69.9 Your Station Name";
 
     private float _fm = 69.9f;
@@ -159,14 +160,26 @@ public sealed class MetaData : INotifyPropertyChanged, ICloneable, IEquatable<Me
     }
 
     [JsonProperty("custom_data")]
-    public SerializableDictionary<string, string> CustomKeyValuePairs
+    public SerializableDictionary<string, object> CustomData
     {
-        get => _customKeyValuePairs;
+        get => _customData;
         set
         {
-            _customKeyValuePairs = value;
-            OnPropertyChanged(nameof(CustomKeyValuePairs));
+            _customData = value;
+            OnPropertyChanged(nameof(CustomData));
         }
+    }
+
+    /// <summary>
+    /// Serialize the custom icon <c>.archive</c> file to the <see cref="CustomData"/> dictionary.
+    /// </summary>
+    /// <param name="archivePath">The path to the archive file.</param>
+    /// <param name="archiveFileName">The name of the archive file.</param>
+    public void SerializeArchive(string archivePath, string archiveFileName)
+    {
+        byte[] archiveBytes = FileHelper.OpenNonTextFile(archivePath);
+        CustomData["customIconFile"] = archiveFileName;
+        CustomData["customIconData"] = archiveBytes;
     }
 
     public object Clone()
@@ -182,8 +195,8 @@ public sealed class MetaData : INotifyPropertyChanged, ICloneable, IEquatable<Me
             SongOrder = [.. SongOrder],
             IsActive = IsActive
         };
-        foreach (var kvp in CustomKeyValuePairs)
-            m.CustomKeyValuePairs.Add(kvp.Key, kvp.Value);
+        foreach (var kvp in CustomData)
+            m.CustomData.Add(kvp.Key, kvp.Value);
 
         return m;
     }
@@ -199,7 +212,7 @@ public sealed class MetaData : INotifyPropertyChanged, ICloneable, IEquatable<Me
                StreamInfo.Equals(other.StreamInfo) &&
                SongOrder.SequenceEqual(other.SongOrder) &&
                IsActive == other.IsActive &&
-               CustomKeyValuePairs.SequenceEqual(other.CustomKeyValuePairs);
+               CustomData.SequenceEqual(other.CustomData);
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;
@@ -226,6 +239,6 @@ public sealed class MetaData : INotifyPropertyChanged, ICloneable, IEquatable<Me
     public override int GetHashCode()
     {
         var hashCode = HashCode.Combine(DisplayName, Fm, Volume, Icon, CustomIcon, StreamInfo, SongOrder, IsActive);
-        return CustomKeyValuePairs.Aggregate(hashCode, (current, kvp) => HashCode.Combine(current, kvp.Key, kvp.Value));
+        return CustomData.Aggregate(hashCode, (current, kvp) => HashCode.Combine(current, kvp.Key, kvp.Value));
     }
 }
