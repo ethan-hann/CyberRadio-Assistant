@@ -33,7 +33,7 @@ namespace RadioExt_Helper.forms;
 /// <summary>
 ///     Represents the main form of the RadioExt-Helper application.
 /// </summary>
-public partial class MainForm : Form
+public sealed partial class MainForm : Form
 {
     private DirectoryWatcher? _directoryWatcher;
 
@@ -90,7 +90,6 @@ public partial class MainForm : Form
     {
         _languageComboBox.SelectedIndexChanged += CmbLanguageSelect_SelectedIndexChanged;
 
-        //StationManager.Instance.StationNameDuplicate += OnStationNameDuplicateEvent;
         StationManager.Instance.StationUpdated += OnStationUpdated;
         StationManager.Instance.SyncProgressChanged += OnStationSyncProgressChanged;
         StationManager.Instance.SyncStatusChanged += OnStationSyncStatusChanged;
@@ -100,11 +99,38 @@ public partial class MainForm : Form
         _resizeTimer.Elapsed += (_, _) => { SaveWindowSize(); };
     }
 
-    private void OnDirectoryWatcherFileDeleted(object? sender, string e)
+    private void OnDirectoryWatcherError(object? sender, Exception e)
+    {
+        AuLogger.GetCurrentLogger<MainForm>("DirectoryWatcher")
+            .Error(e, $"An error occurred while watching for changes in {GameBasePath}");
+    }
+
+    private void OnDirectoryWatcherFileCreated(object? sender, string path)
     {
         this.SafeInvoke(() =>
         {
-            MessageBox.Show(this, e, "File Deleted", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            _ = StationManager.Instance.SynchronizeStationsAsync(StagingPath, GameBasePath);
+            AuLogger.GetCurrentLogger<MainForm>("DirectoryWatcher")
+                .Info($"File created: {path}");
+        });
+    }
+
+    private void OnDirectoryWatcherFileChanged(object? sender, string path)
+    {
+        this.SafeInvoke(() =>
+        {
+            _ = StationManager.Instance.SynchronizeStationsAsync(StagingPath, GameBasePath);
+            AuLogger.GetCurrentLogger<MainForm>("DirectoryWatcher")
+                .Info($"File changed: {path}");
+        });
+    }
+
+    private void OnDirectoryWatcherFileDeleted(object? sender, string path)
+    {
+        this.SafeInvoke(() =>
+        {
+            AuLogger.GetCurrentLogger<MainForm>("DirectoryWatcher")
+                .Info($"File deleted: {path}");
         });
     }
 
@@ -112,23 +138,8 @@ public partial class MainForm : Form
     {
         this.SafeInvoke(() =>
         {
-            MessageBox.Show(this, "File renamed: " + e.OldPath + " to " + e.NewPath, "File Renamed", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        });
-    }
-
-    private void OnDirectoryWatcherFileChanged(object? sender, string e)
-    {
-        /*this.SafeInvoke(() =>
-        {
-            MessageBox.Show(this, e, "File Changed", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        });*/
-    }
-
-    private void OnDirectoryWatcherFileCreated(object? sender, string e)
-    {
-        this.SafeInvoke(() =>
-        {
-            MessageBox.Show(this, "File created: " + e, "File Created", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            AuLogger.GetCurrentLogger<MainForm>("DirectoryWatcher")
+                .Info($"File renamed from {e.OldPath} to {e.NewPath}");
         });
     }
 
@@ -198,7 +209,7 @@ public partial class MainForm : Form
 
         if (GlobalData.ConfigManager.Get("watchForGameChanges") as bool? == true)
         {
-            _directoryWatcher = new DirectoryWatcher(PathHelper.GetRadiosPath(GameBasePath));
+            _directoryWatcher = new DirectoryWatcher(PathHelper.GetRadiosPath(GameBasePath), TimeSpan.FromSeconds(5));
             _directoryWatcher.FileCreated += OnDirectoryWatcherFileCreated;
             _directoryWatcher.FileChanged += OnDirectoryWatcherFileChanged;
             _directoryWatcher.FileRenamed += OnDirectoryWatcherFileRenamed;

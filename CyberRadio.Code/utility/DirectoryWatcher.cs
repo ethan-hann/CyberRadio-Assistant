@@ -1,5 +1,6 @@
 ﻿using AetherUtils.Core.Files;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -39,14 +40,17 @@ namespace RadioExt_Helper.utility
         public event EventHandler<Exception>? Error;
 
         private readonly FileSystemWatcher _watcher;
+        private readonly ConcurrentDictionary<string, DateTime> _processedDirectories;
+        private readonly TimeSpan _timeWindow;
 
         /// <summary>
         /// Create a new instance of <see cref="DirectoryWatcher"/> to watch the specified directory for changes.
         /// </summary>
         /// <param name="watchPath">The path to watch for changes.</param>
+        /// <param name="timeWindow"> The time window to wait before processing another event in the same directory.</param>
         /// <exception cref="ArgumentNullException">Occurs when the <paramref name="watchPath"/> is <c>null</c> or empty.</exception>
         /// <exception cref="ArgumentException">Occurs if the directory specified by <paramref name="watchPath"/> does not exist.</exception>
-        public DirectoryWatcher(string watchPath)
+        public DirectoryWatcher(string watchPath, TimeSpan timeWindow)
         {
             if (string.IsNullOrEmpty(watchPath))
                 throw new ArgumentNullException(nameof(watchPath));
@@ -64,6 +68,9 @@ namespace RadioExt_Helper.utility
             _watcher.Deleted += OnDeleted;
             _watcher.Renamed += OnRenamed;
             _watcher.Error += OnError;
+
+            _processedDirectories = new ConcurrentDictionary<string, DateTime>();
+            _timeWindow = timeWindow;
         }
 
         /// <summary>
@@ -82,14 +89,26 @@ namespace RadioExt_Helper.utility
             _watcher.EnableRaisingEvents = false;
         }
 
-        private void OnChanged(object sender, FileSystemEventArgs e) => FileChanged?.Invoke(this, e.FullPath);
-
-        private void OnCreated(object sender, FileSystemEventArgs e) => FileCreated?.Invoke(this, e.FullPath);
-
-        private void OnDeleted(object sender, FileSystemEventArgs e) => FileDeleted?.Invoke(this, e.FullPath);
-
+        private void OnChanged(object sender, FileSystemEventArgs e) => HandleEvent(FileChanged, e.FullPath);
+        private void OnCreated(object sender, FileSystemEventArgs e) => HandleEvent(FileCreated, e.FullPath);
+        private void OnDeleted(object sender, FileSystemEventArgs e) => HandleEvent(FileDeleted, e.FullPath);
         private void OnRenamed(object sender, RenamedEventArgs e) => FileRenamed?.Invoke(this, (e.OldFullPath, e.FullPath));
-
         private void OnError(object sender, ErrorEventArgs e) => Error?.Invoke(this, e.GetException());
+
+        private void HandleEvent(EventHandler<string>? eventHandler, string path)
+        {
+            string? directory = Path.GetDirectoryName(path);
+            if (directory == null)
+                return;
+
+            if (_processedDirectories.TryGetValue(directory, out var lastProcessed))
+            {
+                if ((DateTime.Now - lastProcessed) < _timeWindow)
+                    return;
+            }
+
+            _processedDirectories[directory] = DateTime.Now;
+            eventHandler?.Invoke(this, path);
+        }
     }
 }

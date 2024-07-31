@@ -25,7 +25,7 @@ namespace RadioExt_Helper.forms;
 /// <summary>
 ///     Represents a configuration form.
 /// </summary>
-public partial class ConfigForm : Form
+public sealed partial class ConfigForm : Form
 {
     private readonly ImageList _tabImages = new();
     private readonly Dictionary<string, CompressionLevel> _localizedCompressionLevels = new();

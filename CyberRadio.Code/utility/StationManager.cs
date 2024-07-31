@@ -56,11 +56,34 @@ public partial class StationManager : IDisposable
         {
             ClearStations();
             foreach (var d in FileHelper.SafeEnumerateDirectories(directory))
-                ProcessDirectory(d);
+                ProcessDirectory(d, false);
         }
         catch (Exception ex)
         {
             AuLogger.GetCurrentLogger<StationManager>().Error(ex, "Error loading stations from directory.");
+        }
+    }
+
+    /// <summary>
+    /// Loads a station from the specified directory into the manager.
+    /// This method will not clear existing stations, unlike <see cref="LoadStations"/> 
+    /// and is used to load a single station from a single directory, not necessarily from the staging directory.
+    /// </summary>
+    /// <param name="directory">The directory to load the station from.</param>
+    /// <param name="treatAsNewStation">Indicates whether the station should be treated as a new station (i.e., it is not present in the staging directory already.</param>
+    public void LoadStationFromDirectory(string? directory, bool treatAsNewStation)
+    {
+        try
+        {
+            if (string.IsNullOrEmpty(directory)) return;
+            if (!PathHelper.IsSubPath(GlobalData.ConfigManager.Get("stagingPath") as string ?? string.Empty, directory))
+                ProcessDirectory(directory, !treatAsNewStation);
+            else
+                AuLogger.GetCurrentLogger<StationManager>().Warn($"Attempted to load station from staging directory: {directory}");
+
+        } catch (Exception ex)
+        {
+            AuLogger.GetCurrentLogger<StationManager>().Error(ex, "Error loading station from directory.");
         }
     }
 
@@ -89,16 +112,16 @@ public partial class StationManager : IDisposable
                 StationsAsBindingList.Add(station);
 
                 if (pathOnDisk.Equals("\\"))
-                    StationPaths.Add(station.Id, Path.Combine(pathOnDisk, station.TrackedObject.MetaData.DisplayName));
+                    StationPaths[station.Id] = Path.Combine(pathOnDisk, station.TrackedObject.MetaData.DisplayName);
                 else
                 {
                     string stagingPath = GlobalData.ConfigManager.Get("stagingPath") as string ?? string.Empty;
                     string relativePath = PathHelper.GetRelativePath(pathOnDisk, stagingPath);
                     
                     if (relativePath.Equals(pathOnDisk))
-                        StationPaths.Add(station.Id, Path.Combine("\\", station.TrackedObject.MetaData.DisplayName));
+                        StationPaths[station.Id] = Path.Combine("\\", station.TrackedObject.MetaData.DisplayName);
                     else
-                        StationPaths.Add(station.Id, relativePath);
+                        StationPaths[station.Id] = relativePath;
                 }
 
                 StationAdded?.Invoke(this, station.Id);
@@ -619,7 +642,8 @@ public partial class StationManager : IDisposable
     /// Processes a directory by loading the metadata and songs from the files in the directory and adding them to the manager.
     /// </summary>
     /// <param name="directory">The directory to process.</param>
-    private void ProcessDirectory(string directory)
+    /// <param name="treatAsNewStation">Indicates if this directory should be treated as a new station (i.e., not in the staging directory already) or not.</param>
+    private void ProcessDirectory(string directory, bool treatAsNewStation)
     {
         try
         {
@@ -645,7 +669,7 @@ public partial class StationManager : IDisposable
             var trackedStation = new TrackableObject<Station>(station);
             EnsureDisplayNameFormat(trackedStation);
 
-            AddStation(trackedStation, true, directory);
+            AddStation(trackedStation, !treatAsNewStation, directory);
         }
         catch (Exception ex)
         {

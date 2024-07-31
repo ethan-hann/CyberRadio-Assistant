@@ -6,7 +6,7 @@ using RadioExt_Helper.utility;
 
 namespace RadioExt_Helper.forms
 {
-    public partial class BackupPreview : Form
+    public sealed partial class BackupPreview : Form
     {
         private readonly BackupManager _backupManager;
         private bool _isBackupInProgress;
