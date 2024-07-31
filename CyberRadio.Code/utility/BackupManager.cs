@@ -14,6 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+using AetherUtils.Core.Files;
 using ICSharpCode.SharpZipLib.Core;
 using ICSharpCode.SharpZipLib.Zip;
 
@@ -22,7 +23,7 @@ namespace RadioExt_Helper.utility;
 /// <summary>
 /// Represents a class for managing the backup of files and folders. Subscribe to the event handlers to track the backup operation.
 /// </summary>
-public class BackupManager
+public class BackupManager(CompressionLevel level)
 {
     /// <summary>
     /// Occurs whenever the progress of the backup operation changes.
@@ -43,6 +44,97 @@ public class BackupManager
     public event Action<bool, string, string>? BackupCompleted;
 
     /// <summary>
+    /// Occurs whenever the progress of the backup preview operation changes.
+    /// <para>Event data includes the current progress percentage.</para>
+    /// </summary>
+    public event Action<int>? PreviewProgressChanged;
+
+    /// <summary>
+    /// Occurs whenever the status of the backup preview operation changes.
+    /// <para>Event data is a tuple containing the current <see cref="FilePreview"/> object and the current estimated backup size, in bytes.</para>
+    /// </summary>
+    public event Action<(FilePreview, long)>? PreviewStatusChanged;
+
+    /// <summary>
+    /// Occurs whenever the backup preview operation is completed.
+    /// <para>Event data is a tuple with the list of previews, the total size of the files, and the estimated compressed size.</para>
+    /// </summary>
+    public event Action<(List<FilePreview> Previews, long TotalSize, long EstimatedCompressedSize)>? BackupPreviewCompleted;
+
+    /// <summary>
+    /// Get or set the compression level used for the backup operation.
+    /// </summary>
+    public CompressionLevel BackupCompressionLevel { get; } = level;
+
+    private bool _isCancelling;
+
+    /// <summary>
+    /// Dictionary containing the mapping between compression levels and their corresponding compression ratios.
+    /// </summary>
+    private readonly Dictionary<CompressionLevel, double> _compressionRatios = new()
+    {
+        {CompressionLevel.None, 1.0},
+        {CompressionLevel.Fastest, 0.9},
+        {CompressionLevel.Fast, 0.85},
+        {CompressionLevel.SuperFast, 0.8},
+        {CompressionLevel.Normal, 0.75},
+        {CompressionLevel.High, 0.7},
+        {CompressionLevel.Maximum, 0.65},
+        {CompressionLevel.Ultra, 0.6},
+        {CompressionLevel.Extreme, 0.55},
+        {CompressionLevel.Ultimate, 0.5}
+    };
+
+    /// <summary>
+    /// Asynchronously get a preview of the files that will be backed up from the staging folder.
+    /// <para>The preview includes a list of <see cref="FilePreview"/> objects, the total size of the files, and the estimated compressed size.</para>
+    /// </summary>
+    /// <param name="stagingPath">The path to preview the backup of.</param>
+    /// <returns>A task representing the asynchronous operation.</returns>
+    /// <exception cref="ArgumentNullException">Occurs if the <paramref name="stagingPath"/> is <c>null</c> or empty.</exception>
+    public async Task GetBackupPreviewAsync(string stagingPath)
+    {
+        if (string.IsNullOrEmpty(stagingPath))
+            throw new ArgumentNullException(nameof(stagingPath));
+
+        if (_isCancelling) return;
+
+        // Default to ratio of 0.75 (Normal) if compression level is not found in the dictionary
+        var compressionRatio = _compressionRatios.GetValueOrDefault(BackupCompressionLevel, 0.75);
+
+        var files = FileHelper.SafeEnumerateFiles(stagingPath, "*.*", SearchOption.AllDirectories).ToArray();
+
+        var previews = new List<FilePreview>();
+        var totalSize = 0L;
+
+        await Task.Run(() =>
+        {
+            foreach (var file in files)
+            {
+                if (_isCancelling) return;
+
+                var fileInfo = new FileInfo(file);
+                previews.Add(new FilePreview
+                {
+                    FileName = file[(stagingPath.Length + 1)..],
+                    Size = fileInfo.Length
+                });
+
+                if (_isCancelling) return;
+                PreviewProgressChanged?.Invoke((int)((float)previews.Count / files.Length * 100));
+                totalSize += fileInfo.Length;
+
+                if (_isCancelling) return;
+                PreviewStatusChanged?.Invoke((previews.Last(), (long)(totalSize * compressionRatio)));
+            }
+        });
+
+        if (_isCancelling) return;
+
+        BackupPreviewCompleted?.Invoke((previews, totalSize, (long)(totalSize * compressionRatio)));
+    }
+
+    /// <summary>
     /// Asynchronously backs up the contents of the staging folder to a zip file in the backup folder.
     /// </summary>
     /// <param name="stagingPath">The path to the staging folder.</param>
@@ -50,6 +142,7 @@ public class BackupManager
     /// <returns>A <see cref="Task"/> representing the backup operation.</returns>
     /// <exception cref="ArgumentNullException">If either <paramref name="stagingPath"/> or <paramref name="backupPath"/> are <c>null</c> or empty.</exception>
     /// <exception cref="ArgumentException">If the backup path is the same as the staging path.</exception>
+    /// <exception cref="ArgumentException">If the compression level is not between 0 and 9.</exception>
     public async Task BackupStagingFolderAsync(string stagingPath, string backupPath)
     {
         if (string.IsNullOrEmpty(stagingPath)) throw new ArgumentNullException(nameof(stagingPath));
@@ -59,20 +152,27 @@ public class BackupManager
 
         var backupFileName = Path.Combine(backupPath, $"radio_stations-{DateTime.Now:yy-MM-dd-hh-mm-ss}.zip");
 
+        if (_isCancelling) return;
+
         try
         {
             await Task.Run(() =>
             {
+                if (_isCancelling) return;
+
                 using var zipOutputStream = new ZipOutputStream(File.Create(backupFileName));
 
-                zipOutputStream.SetLevel(3); // Compression level 0-9
+                var level = (int)BackupCompressionLevel;
+                zipOutputStream.SetLevel(level);
 
                 var buffer = new byte[4096];
                 var fileCount = 0;
-                var files = Directory.GetFiles(stagingPath, "*.*", SearchOption.AllDirectories);
+                var files = FileHelper.SafeEnumerateFiles(stagingPath, "*.*", SearchOption.AllDirectories).ToArray();
 
                 foreach (var file in files)
                 {
+                    if (_isCancelling) return;
+
                     var entryName = file[(stagingPath.Length + 1)..];
                     var entry = new ZipEntry(entryName)
                     {
@@ -90,10 +190,14 @@ public class BackupManager
 
                     // Report progress
                     var progress = (int)((float)fileCount / files.Length * 100);
+                    if (_isCancelling) break;
+
                     ProgressChanged?.Invoke(progress);
                     var status =
                         string.Format(GlobalData.Strings.GetString("BackupProgressChanged") ?? "Backing up... {0}%",
                             progress);
+
+                    if (_isCancelling) break;
                     StatusChanged?.Invoke(status);
                 }
 
@@ -104,13 +208,19 @@ public class BackupManager
             if (File.Exists(backupFileName))
             {
                 var status = GlobalData.Strings.GetString("BackupCompleted") ?? "Backup completed successfully.";
+                if (_isCancelling) return;
                 StatusChanged?.Invoke(status);
+
+                if (_isCancelling) return;
                 BackupCompleted?.Invoke(true, backupPath, backupFileName);
             }
             else
             {
                 var status = GlobalData.Strings.GetString("BackupFailed") ?? "Backup failed.";
+                if (_isCancelling) return;
                 StatusChanged?.Invoke(status);
+
+                if (_isCancelling) return;
                 BackupCompleted?.Invoke(false, backupPath, backupFileName);
             }
         }
@@ -120,9 +230,15 @@ public class BackupManager
                 string.Format(
                     GlobalData.Strings.GetString("BackupFailedException") ?? "Backup failed due to an error: {0}",
                     ex.Message);
+
+            if (_isCancelling) return;
             StatusChanged?.Invoke(status);
+
+            if (_isCancelling) return;
             BackupCompleted?.Invoke(false, backupPath, backupFileName);
             throw;
         }
     }
+
+    public void CancelBackup() => _isCancelling = true;
 }

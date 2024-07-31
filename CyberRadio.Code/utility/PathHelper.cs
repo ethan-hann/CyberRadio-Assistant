@@ -14,8 +14,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+using AetherUtils.Core.Files;
 using AetherUtils.Core.Logging;
-using RadioExt_Helper.forms;
 
 namespace RadioExt_Helper.utility;
 
@@ -168,5 +168,49 @@ public static class PathHelper
                 .Error(ex, "An error occurred while checking if the path is a subpath.");
             return false;
         }
+    }
+
+    /// <summary>
+    /// Get a relative path to the <paramref name="fullPath"/> from the <paramref name="stagingPath"/>.
+    /// </summary>
+    /// <param name="fullPath">The full path.</param>
+    /// <param name="stagingPath">The path to the staging folder.</param>
+    /// <returns></returns>
+    public static string GetRelativePath(string fullPath, string stagingPath)
+    {
+        try
+        {
+            Uri fullUri = new(fullPath);
+            Uri stagingUri = new(stagingPath);
+
+            if (fullUri.Scheme != stagingUri.Scheme)
+                return fullPath;
+
+            Uri relativeUri = stagingUri.MakeRelativeUri(fullUri);
+            string relativePath = Uri.UnescapeDataString(relativeUri.ToString());
+
+            if (string.IsNullOrEmpty(relativePath))
+                return fullPath;
+
+            // Replace forward slashes with backslashes for Windows paths
+            return relativePath.Replace('/', '\\');
+        }
+        catch (Exception ex)
+        {
+            AuLogger.GetCurrentLogger("PathHelper.GetRelativePath")
+                .Error(ex, "An error occurred while getting the relative path.");
+            return fullPath;
+        }
+    }
+
+    /// <summary>
+    /// Get a value indicating whether the specified file is a valid audio file based on the extension and <see cref="models.ValidAudioFiles"/>.
+    /// </summary>
+    /// <param name="filePath">The path to the file to check.</param>
+    /// <returns><c>true</c> if the file is a valid audio file; <c>false</c> otherwise.</returns>
+    public static bool IsValidAudioFile(string filePath)
+    {
+        var extension = FileHelper.GetExtension(filePath);
+        return StationManager.Instance.ValidAudioExtensions.Contains(extension);
     }
 }

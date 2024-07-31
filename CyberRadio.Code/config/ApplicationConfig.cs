@@ -17,18 +17,27 @@
 using AetherUtils.Core.Attributes;
 using AetherUtils.Core.Configuration;
 using RadioExt_Helper.utility;
+using System.ComponentModel;
 
 namespace RadioExt_Helper.config;
 
 /// <summary>
 ///     Represents the configuration for the application; replaces the need for a settings file.
 ///     All present and future configuration options will be managed via this class.
+///     <para>
+///         <remarks>
+///             The <see cref="ConfigAttribute"/> is used to specify the key for each property in the configuration file.
+///             The <see cref="DescriptionAttribute"/> is used to provide a localizable help description for each property.
+///         </remarks>    
+///     </para>
 /// </summary>
 public sealed class ApplicationConfig
 {
     // Constants for config keys
     private const string AutoCheckForUpdatesKey = "autoCheckForUpdates";
     private const string AutoExportToGameKey = "autoExportToGame";
+    private const string WatchForGameChangesKey = "watchForGameChanges";
+    private const string BackupCompressionLevelKey = "backupCompressionLevel";
     private const string StagingPathKey = "stagingPath";
     private const string GameBasePathKey = "gameBasePath";
     private const string LanguageKey = "language";
@@ -40,6 +49,7 @@ public sealed class ApplicationConfig
     ///     Specifies whether the application should automatically check for updates on startup.
     /// </summary>
     [Config(AutoCheckForUpdatesKey)]
+    [Description("CheckForUpdatesOptionHelp")]
     public bool AutoCheckForUpdates { get; set; } = true;
 
     /// <summary>
@@ -47,7 +57,22 @@ public sealed class ApplicationConfig
     ///     directory after exporting to staging.
     /// </summary>
     [Config(AutoExportToGameKey)]
+    [Description("AutoExportOptionHelp")]
     public bool AutoExportToGame { get; set; } = false;
+
+    /// <summary>
+    ///     Specifies whether the application should automatically watch for changes in the game's radios directory.
+    /// </summary>
+    [Config(WatchForGameChangesKey)]
+    [Description("WatchForChangesHelp")]
+    public bool WatchForGameChanges { get; set; } = true;
+
+    /// <summary>
+    ///     Specifies the backup compression level to use when zipping the staging folder.
+    /// </summary>
+    [Config(BackupCompressionLevelKey)]
+    [Description("BackupCompressionLevelHelp")]
+    public CompressionLevel BackupCompressionLevel { get; set; } = CompressionLevel.Normal;
 
     /// <summary>
     ///     The path to the staging directory.

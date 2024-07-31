@@ -25,9 +25,10 @@ namespace RadioExt_Helper.forms;
 /// <summary>
 ///     Represents a configuration form.
 /// </summary>
-public partial class ConfigForm : Form
+public sealed partial class ConfigForm : Form
 {
     private readonly ImageList _tabImages = new();
+    private readonly Dictionary<string, CompressionLevel> _localizedCompressionLevels = new();
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="ConfigForm" /> class.
@@ -78,6 +79,7 @@ public partial class ConfigForm : Form
             .Remove(tabNexus); //TODO: Disable the Nexus API tab for now. Enable when feature is implemented to download mods.
 
         Translate();
+        AddCompressionOptions();
         SetValues();
     }
 
@@ -96,17 +98,13 @@ public partial class ConfigForm : Form
         chkCheckForUpdates.Text = GlobalData.Strings.GetString("CheckForUpdatesOption");
         chkAutoExportToGame.Text = GlobalData.Strings.GetString("AutoExportOption");
         btnEditPaths.Text = GlobalData.Strings.GetString("EditPathsOption");
-        lblUpdatesHelp.Text = GlobalData.Strings.GetString("CheckForUpdatesOptionHelp");
-        lblAutoExportHelp.Text = GlobalData.Strings.GetString("AutoExportOptionHelp");
-        lblEditPathsHelp.Text = GlobalData.Strings.GetString("EditPathsOptionHelp");
+        chkWatchForChanges.Text = GlobalData.Strings.GetString("WatchForChangesOption");
         lblLogPathLabel.Text = GlobalData.Strings.GetString("LogPathLabel");
         lblCurrentLogPath.Text = GlobalData.Strings.GetString("NoLogPathSet");
 
         //Logging Tab
         chkNewFileEveryLaunch.Text = GlobalData.Strings.GetString("NewLogFileOption");
-        lblNewFileEveryLaunchHelp.Text = GlobalData.Strings.GetString("NewLogFileOptionHelp");
         btnEditLogsPath.Text = GlobalData.Strings.GetString("EditLogsPathOption");
-        lblEditLogPathHelp.Text = GlobalData.Strings.GetString("EditLogsPathOptionHelp");
 
         //Buttons
         btnSaveAndClose.Text = GlobalData.Strings.GetString("SaveAndClose");
@@ -127,6 +125,7 @@ public partial class ConfigForm : Form
         chkCheckForUpdates.Checked = config.AutoCheckForUpdates;
         chkAutoExportToGame.Checked = config.AutoExportToGame;
         chkNewFileEveryLaunch.Checked = config.LogOptions.NewFileEveryLaunch;
+        chkWatchForChanges.Checked = config.WatchForGameChanges;
 
         lblCurrentLogPath.Text = config.LogOptions.LogFileDirectory == string.Empty
             ? lblCurrentLogPath.Text
@@ -135,28 +134,58 @@ public partial class ConfigForm : Form
         txtApiKey.Text = config.NexusApiKey;
 
         //SetApiAuthStatus(); //TODO: Re-enable this line when the feature is fully implemented.
+
+        // Set the combo box to the current compression level
+        var compressionLevel = config.BackupCompressionLevel;
+        cmbCompressionLevels.SelectedItem = GetLocalizedName(compressionLevel);
     }
 
     /// <summary>
-    /// Set the status of the API authentication on the UI.
+    /// Add the available compression levels to the combo box.
     /// </summary>
-    private void SetApiAuthStatus()
+    private void AddCompressionOptions()
     {
-        btnClearApiKey.Enabled = txtApiKey.Text.Length > 0;
+        _localizedCompressionLevels.Clear();
+        cmbCompressionLevels.Items.Clear();
 
-        var isSameKey = txtApiKey.Text.Equals(GlobalData.ConfigManager.Get("nexusApiKey") as string);
+        foreach (CompressionLevel level in Enum.GetValues(typeof(CompressionLevel)))
+        {
+            var localizedName = GetLocalizedName(level);
+            _localizedCompressionLevels[localizedName] = level;
+            cmbCompressionLevels.Items.Add(localizedName);
+        }
 
-        var authText = GlobalData.Strings.GetString("ApiAuthenticated") ?? "Authenticated";
-        var notAuthText = GlobalData.Strings.GetString("ApiNotAuthenticated") ?? "Not Authenticated";
-
-        lblAuthenticatedStatus.Text = isSameKey && !txtApiKey.Text.Equals(string.Empty) ? authText : notAuthText;
-        picApiStatus.Image = isSameKey && !txtApiKey.Text.Equals(string.Empty)
-            ? Resources.enabled__16x16
-            : Resources.disabled__16x16;
-        lblAuthenticatedStatus.ForeColor =
-            isSameKey && !txtApiKey.Text.Equals(string.Empty) ? Color.DarkGreen : Color.Red;
-        btnAuthenticate.Enabled = !isSameKey && !txtApiKey.Text.Equals(string.Empty);
+        cmbCompressionLevels.SelectedIndex = 0;
     }
+
+    /// <summary>
+    /// Get the localized name for the backup compression level.
+    /// </summary>
+    /// <param name="level">The <see cref="CompressionLevel"/> to localize.</param>
+    /// <returns>A string localized into the current UI culture.</returns>
+    private string GetLocalizedName(CompressionLevel level) => GlobalData.Strings.GetString(level.ToString()) ?? level.ToString();
+
+    //TODO: Uncomment the below when the API feature is implemented
+    ///// <summary>
+    ///// Set the status of the API authentication on the UI.
+    ///// </summary>
+    //private void SetApiAuthStatus()
+    //{
+    //    btnClearApiKey.Enabled = txtApiKey.Text.Length > 0;
+
+    //    var isSameKey = txtApiKey.Text.Equals(GlobalData.ConfigManager.Get("nexusApiKey") as string);
+
+    //    var authText = GlobalData.Strings.GetString("ApiAuthenticated") ?? "Authenticated";
+    //    var notAuthText = GlobalData.Strings.GetString("ApiNotAuthenticated") ?? "Not Authenticated";
+
+    //    lblAuthenticatedStatus.Text = isSameKey && !txtApiKey.Text.Equals(string.Empty) ? authText : notAuthText;
+    //    picApiStatus.Image = isSameKey && !txtApiKey.Text.Equals(string.Empty)
+    //        ? Resources.enabled__16x16
+    //        : Resources.disabled__16x16;
+    //    lblAuthenticatedStatus.ForeColor =
+    //        isSameKey && !txtApiKey.Text.Equals(string.Empty) ? Color.DarkGreen : Color.Red;
+    //    btnAuthenticate.Enabled = !isSameKey && !txtApiKey.Text.Equals(string.Empty);
+    //}
 
     /// <summary>
     ///     Resets the configuration to the default values.
@@ -195,6 +224,13 @@ public partial class ConfigForm : Form
         var saved = GlobalData.ConfigManager.Set("autoCheckForUpdates", chkCheckForUpdates.Checked);
         saved &= GlobalData.ConfigManager.Set("autoExportToGame", chkAutoExportToGame.Checked);
         saved &= GlobalData.ConfigManager.Set("newFileEveryLaunch", chkNewFileEveryLaunch.Checked);
+        saved &= GlobalData.ConfigManager.Set("watchForGameChanges", chkWatchForChanges.Checked);
+
+        var selectedLocalizedName = cmbCompressionLevels.SelectedItem?.ToString();
+        if (selectedLocalizedName != null && _localizedCompressionLevels.TryGetValue(selectedLocalizedName, out var compressionLevel))
+            saved &= GlobalData.ConfigManager.Set("backupCompressionLevel", compressionLevel);
+        else
+            saved &= GlobalData.ConfigManager.Set("backupCompressionLevel", CompressionLevel.Normal);
 
         if (NexusApi.IsAuthenticated)
             saved &= GlobalData.ConfigManager.Set("nexusApiKey", txtApiKey.Text);
@@ -359,5 +395,23 @@ public partial class ConfigForm : Form
         if (e.CloseReason is CloseReason.WindowsShutDown or CloseReason.TaskManagerClosing) return;
 
         if (!NoUnsavedApiChanges()) e.Cancel = true;
+    }
+
+    private void ControlMouseEnter(object sender, EventArgs e)
+    {
+        this.SafeInvoke(() =>
+        {
+            if (sender is Control hoveredControl)
+            {
+                string helpKey = hoveredControl.Tag as string ?? string.Empty;
+                if (!string.IsNullOrEmpty(helpKey))
+                    lblHelpText.Text = GlobalData.Strings.GetString(helpKey);
+            }
+        });
+    }
+
+    private void ControlMouseLeave(object sender, EventArgs e)
+    {
+        this.SafeInvoke(() => lblHelpText.Text = GlobalData.Strings.GetString("Ready"));
     }
 }

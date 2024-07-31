@@ -37,6 +37,7 @@ namespace RadioExt_Helper.forms
             fileToolStripMenuItem = new ToolStripMenuItem();
             exportToGameToolStripMenuItem = new ToolStripMenuItem();
             refreshStationsToolStripMenuItem = new ToolStripMenuItem();
+            synchronizeStationsToolStripMenuItem = new ToolStripMenuItem();
             toolStripSeparator2 = new ToolStripSeparator();
             backupStagingFolderToolStripMenuItem = new ToolStripMenuItem();
             openStagingPathToolStripMenuItem = new ToolStripMenuItem();
@@ -78,10 +79,10 @@ namespace RadioExt_Helper.forms
             stationBindingSource = new BindingSource(components);
             cmsRevertStationChanges = new ContextMenuStrip(components);
             revertChangesToolStripMenuItem = new ToolStripMenuItem();
-            statusStripBackup = new StatusStrip();
             lblBackupStatus = new ToolStripStatusLabel();
             pgBackupProgress = new ToolStripProgressBar();
             lblSpring2 = new ToolStripStatusLabel();
+            statusStripBackup = new StatusStrip();
             menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
@@ -111,7 +112,7 @@ namespace RadioExt_Helper.forms
             // 
             // fileToolStripMenuItem
             // 
-            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { exportToGameToolStripMenuItem, refreshStationsToolStripMenuItem, toolStripSeparator2, backupStagingFolderToolStripMenuItem, openStagingPathToolStripMenuItem, openGamePathToolStripMenuItem, openLogFolderToolStripMenuItem, toolStripSeparator3, configurationToolStripMenuItem, pathsToolStripMenuItem, toolStripSeparator4, exitToolStripMenuItem });
+            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { exportToGameToolStripMenuItem, refreshStationsToolStripMenuItem, synchronizeStationsToolStripMenuItem, toolStripSeparator2, backupStagingFolderToolStripMenuItem, openStagingPathToolStripMenuItem, openGamePathToolStripMenuItem, openLogFolderToolStripMenuItem, toolStripSeparator3, configurationToolStripMenuItem, pathsToolStripMenuItem, toolStripSeparator4, exitToolStripMenuItem });
             fileToolStripMenuItem.Image = Properties.Resources.file;
             fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             fileToolStripMenuItem.Size = new Size(53, 20);
@@ -132,8 +133,17 @@ namespace RadioExt_Helper.forms
             refreshStationsToolStripMenuItem.Name = "refreshStationsToolStripMenuItem";
             refreshStationsToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.R;
             refreshStationsToolStripMenuItem.Size = new Size(273, 22);
-            refreshStationsToolStripMenuItem.Text = "Refresh Stations";
+            refreshStationsToolStripMenuItem.Text = "Reload From Staging";
             refreshStationsToolStripMenuItem.Click += RefreshStationsToolStripMenuItem_Click;
+            // 
+            // synchronizeStationsToolStripMenuItem
+            // 
+            synchronizeStationsToolStripMenuItem.Image = Properties.Resources.sync;
+            synchronizeStationsToolStripMenuItem.Name = "synchronizeStationsToolStripMenuItem";
+            synchronizeStationsToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.S;
+            synchronizeStationsToolStripMenuItem.Size = new Size(273, 22);
+            synchronizeStationsToolStripMenuItem.Text = "Synchronize Stations";
+            synchronizeStationsToolStripMenuItem.Click += SynchronizeStationsToolStripMenuItem_Click;
             // 
             // toolStripSeparator2
             // 
@@ -226,7 +236,7 @@ namespace RadioExt_Helper.forms
             // 
             downloadRadioModsToolStripMenuItem.Image = Properties.Resources.download_16x16;
             downloadRadioModsToolStripMenuItem.Name = "downloadRadioModsToolStripMenuItem";
-            downloadRadioModsToolStripMenuItem.Size = new Size(193, 22);
+            downloadRadioModsToolStripMenuItem.Size = new Size(194, 22);
             downloadRadioModsToolStripMenuItem.Text = "Download Radio Mods";
             downloadRadioModsToolStripMenuItem.Click += DownloadRadioModsToolStripMenuItem_Click;
             // 
@@ -434,6 +444,7 @@ namespace RadioExt_Helper.forms
             // btnDisableAll
             // 
             btnDisableAll.BackColor = Color.White;
+            btnDisableAll.Image = Properties.Resources.disabled__16x16;
             btnDisableAll.Name = "btnDisableAll";
             btnDisableAll.Size = new Size(129, 22);
             btnDisableAll.Text = "Disable All";
@@ -466,6 +477,7 @@ namespace RadioExt_Helper.forms
             // 
             // btnEnableAll
             // 
+            btnEnableAll.Image = Properties.Resources.enabled__16x16;
             btnEnableAll.Name = "btnEnableAll";
             btnEnableAll.Size = new Size(126, 22);
             btnEnableAll.Text = "Enable All";
@@ -533,27 +545,15 @@ namespace RadioExt_Helper.forms
             // 
             cmsRevertStationChanges.Items.AddRange(new ToolStripItem[] { revertChangesToolStripMenuItem });
             cmsRevertStationChanges.Name = "cmsRevertStationChanges";
-            cmsRevertStationChanges.Size = new Size(157, 26);
+            cmsRevertStationChanges.Size = new Size(156, 26);
             // 
             // revertChangesToolStripMenuItem
             // 
             revertChangesToolStripMenuItem.Image = Properties.Resources.refresh__16x16;
             revertChangesToolStripMenuItem.Name = "revertChangesToolStripMenuItem";
-            revertChangesToolStripMenuItem.Size = new Size(156, 22);
+            revertChangesToolStripMenuItem.Size = new Size(155, 22);
             revertChangesToolStripMenuItem.Text = "Revert Changes";
             revertChangesToolStripMenuItem.Click += RevertChangesToolStripMenuItem_Click;
-            // 
-            // statusStripBackup
-            // 
-            statusStripBackup.BackColor = Color.Transparent;
-            statusStripBackup.Items.AddRange(new ToolStripItem[] { lblBackupStatus, pgBackupProgress, lblSpring2 });
-            statusStripBackup.Location = new Point(0, 539);
-            statusStripBackup.Name = "statusStripBackup";
-            statusStripBackup.Size = new Size(1224, 22);
-            statusStripBackup.SizingGrip = false;
-            statusStripBackup.TabIndex = 3;
-            statusStripBackup.Text = "statusStrip2";
-            statusStripBackup.Visible = false;
             // 
             // lblBackupStatus
             // 
@@ -574,6 +574,18 @@ namespace RadioExt_Helper.forms
             lblSpring2.Size = new Size(806, 17);
             lblSpring2.Spring = true;
             // 
+            // statusStripBackup
+            // 
+            statusStripBackup.BackColor = Color.Transparent;
+            statusStripBackup.Items.AddRange(new ToolStripItem[] { lblBackupStatus, pgBackupProgress, lblSpring2 });
+            statusStripBackup.Location = new Point(0, 539);
+            statusStripBackup.Name = "statusStripBackup";
+            statusStripBackup.Size = new Size(1224, 22);
+            statusStripBackup.SizingGrip = false;
+            statusStripBackup.TabIndex = 3;
+            statusStripBackup.Text = "statusStrip2";
+            statusStripBackup.Visible = false;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(96F, 96F);
@@ -590,8 +602,6 @@ namespace RadioExt_Helper.forms
             KeyPreview = true;
             MainMenuStrip = menuStrip1;
             Margin = new Padding(3, 2, 3, 2);
-            MaximizeBox = false;
-            MinimizeBox = false;
             Name = "MainForm";
             StartPosition = FormStartPosition.CenterParent;
             Text = "Cyber Radio Assistant";
@@ -668,9 +678,10 @@ namespace RadioExt_Helper.forms
         private ToolStripMenuItem backupStagingFolderToolStripMenuItem;
         private ToolStripSeparator toolStripSeparator4;
         private ToolStripMenuItem exitToolStripMenuItem;
-        private StatusStrip statusStripBackup;
+        private ToolStripMenuItem synchronizeStationsToolStripMenuItem;
         private ToolStripStatusLabel lblBackupStatus;
         private ToolStripProgressBar pgBackupProgress;
         private ToolStripStatusLabel lblSpring2;
+        private StatusStrip statusStripBackup;
     }
 }

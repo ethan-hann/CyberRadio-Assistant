@@ -14,14 +14,13 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-using System.Globalization;
-using System.Text.RegularExpressions;
 using AetherUtils.Core.WinForms.Controls;
 using AetherUtils.Core.WinForms.CustomArgs;
 using RadioExt_Helper.custom_controls;
 using RadioExt_Helper.models;
 using RadioExt_Helper.Properties;
 using RadioExt_Helper.utility;
+using System.Globalization;
 
 namespace RadioExt_Helper.user_controls;
 
@@ -80,6 +79,9 @@ public sealed partial class StationEditor : UserControl, IUserControl
         grpDisplay.Text = GlobalData.Strings.GetString("Display");
         grpCustomIcon.Text = GlobalData.Strings.GetString("CustomIcon");
         grpSettings.Text = GlobalData.Strings.GetString("Settings");
+        grpNotes.Text = GlobalData.Strings.GetString("CustomDataGroup");
+        dgvMetadata.Columns[0].HeaderText = GlobalData.Strings.GetString("CustomDataKey");
+        dgvMetadata.Columns[1].HeaderText = GlobalData.Strings.GetString("CustomDataValue");
 
         tabMusic.Text = GlobalData.Strings.GetString("Music");
         lblUseStream.Text = GlobalData.Strings.GetString("UseStream");
@@ -99,9 +101,6 @@ public sealed partial class StationEditor : UserControl, IUserControl
     /// Event that is raised when the station is updated.
     /// </summary>
     public event EventHandler? StationUpdated;
-
-    [GeneratedRegex(@"^\d+(\.\d+)?\s*")]
-    private static partial Regex DisplayNameRegex();
 
     private void InitializeDataGridViewColumns()
     {
@@ -214,7 +213,9 @@ public sealed partial class StationEditor : UserControl, IUserControl
     /// <param name="e"></param>
     private void TxtDisplayName_Leave(object sender, EventArgs e)
     {
-        EnsureDisplayNameFormat();
+        StationManager.Instance.EnsureDisplayNameFormat(Station);
+        nudFM.Value = (decimal)Station.TrackedObject.MetaData.Fm;
+        StationUpdated?.Invoke(this, EventArgs.Empty);
     }
 
     /// <summary>
@@ -283,29 +284,8 @@ public sealed partial class StationEditor : UserControl, IUserControl
     /// <param name="e"></param>
     private void NudFM_ValueChanged(object sender, EventArgs e)
     {
-        Station.TrackedObject.MetaData.Fm = (float)nudFM.Value;
-        EnsureDisplayNameFormat();
+        Station.TrackedObject.MetaData.Fm = StationManager.Instance.EnsureDisplayNameFormat(Station, (float)nudFM.Value);
         StationUpdated?.Invoke(this, EventArgs.Empty);
-    }
-
-    /// <summary>
-    /// Ensures the display name contains the station's FM number at the beginning of its name.
-    /// </summary>
-    private void EnsureDisplayNameFormat()
-    {
-        var fmValue = nudFM.Value.ToString("00.00", CultureInfo.InvariantCulture); // Format to two decimal places
-        var currentText = txtDisplayName.Text;
-
-        // Use a regular expression to detect and remove any existing FM value at the start
-        var regex = DisplayNameRegex();
-        var match = regex.Match(currentText);
-
-        if (match.Success)
-            // Remove the existing FM value from the start
-            currentText = currentText[match.Length..].TrimStart();
-
-        // Combine FM value and station name with the correct format
-        txtDisplayName.Text = @$"{fmValue} {currentText}";
     }
 
     /// <summary>

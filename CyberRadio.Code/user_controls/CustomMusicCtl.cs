@@ -14,12 +14,12 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-using System.Diagnostics;
 using AetherUtils.Core.Extensions;
 using AetherUtils.Core.Files;
 using RadioExt_Helper.models;
 using RadioExt_Helper.Properties;
 using RadioExt_Helper.utility;
+using System.Diagnostics;
 using ListView = System.Windows.Forms.ListView;
 
 namespace RadioExt_Helper.user_controls;
@@ -68,6 +68,10 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
         lvSongs.Columns[2].Text = GlobalData.Strings.GetString("SongArtistHeader");
         lvSongs.Columns[3].Text = GlobalData.Strings.GetString("SongLengthHeader");
         lvSongs.Columns[4].Text = GlobalData.Strings.GetString("SongFileSizeHeader");
+        lvSongs.Columns[5].Text = GlobalData.Strings.GetString("SongFilePathHeader");
+
+        lblTotalSongsLabel.Text = GlobalData.Strings.GetString("TotalSongsLabel");
+        lblStationSizeLabel.Text = GlobalData.Strings.GetString("TotalStationSizeLabel");
 
         fdlgOpenSongs.Title = GlobalData.Strings.GetString("AddSongs");
         tabSongs.Text = GlobalData.Strings.GetString("SongListing");
@@ -152,9 +156,10 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
                              song.Title,
                              song.Artist,
                              $"{song.Duration:hh\\:mm\\:ss}",
-                             song.FileSize.FormatSize()
+                             song.FileSize.FormatSize(),
+                             song.FilePath
                          ])
-                         { Tag = song }))
+                     { Tag = song }))
             lvSongs.Items.Add(lvItem);
 
         lvSongs.ResizeColumns();
@@ -282,6 +287,13 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
         PopulateListView();
         PopulateSongListBox();
         SynchronizeSongOrder();
+        UpdateStatLabels();
+    }
+
+    private void UpdateStatLabels()
+    {
+        lblTotalSongsVal.Text = Station.TrackedObject.Songs.Count.ToString();
+        lblStationSizeVal.Text = ((ulong)Station.TrackedObject.Songs.Sum(s => (long)s.FileSize)).FormatSize();
     }
 
     /// <summary>
