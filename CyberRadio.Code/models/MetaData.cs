@@ -14,10 +14,10 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+using System.ComponentModel;
 using AetherUtils.Core.Files;
 using AetherUtils.Core.Utility;
 using Newtonsoft.Json;
-using System.ComponentModel;
 
 namespace RadioExt_Helper.models;
 
@@ -26,9 +26,8 @@ namespace RadioExt_Helper.models;
 /// </summary>
 public sealed class MetaData : INotifyPropertyChanged, ICloneable, IEquatable<MetaData>
 {
-    private CustomIcon _customIcon = new();
-
     private SerializableDictionary<string, object> _customData = [];
+    private CustomIcon _customIcon = new();
     private string _displayName = "69.9 Your Station Name";
 
     private float _fm = 69.9f;
@@ -170,18 +169,6 @@ public sealed class MetaData : INotifyPropertyChanged, ICloneable, IEquatable<Me
         }
     }
 
-    /// <summary>
-    /// Serialize the custom icon <c>.archive</c> file to the <see cref="CustomData"/> dictionary.
-    /// </summary>
-    /// <param name="archivePath">The path to the archive file.</param>
-    /// <param name="archiveFileName">The name of the archive file.</param>
-    public void SerializeArchive(string archivePath, string archiveFileName)
-    {
-        byte[] archiveBytes = FileHelper.OpenNonTextFile(archivePath);
-        CustomData["customIconFile"] = archiveFileName;
-        CustomData["customIconData"] = archiveBytes;
-    }
-
     public object Clone()
     {
         var m = new MetaData
@@ -216,6 +203,18 @@ public sealed class MetaData : INotifyPropertyChanged, ICloneable, IEquatable<Me
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;
+
+    /// <summary>
+    /// Serialize the custom icon <c>.archive</c> file to the <see cref="CustomData"/> dictionary.
+    /// </summary>
+    /// <param name="archivePath">The path to the archive file.</param>
+    /// <param name="archiveFileName">The name of the archive file.</param>
+    public void SerializeArchive(string archivePath, string archiveFileName)
+    {
+        var archiveBytes = FileHelper.OpenNonTextFile(archivePath);
+        CustomData["customIconFile"] = archiveFileName;
+        CustomData["customIconData"] = archiveBytes;
+    }
 
     private void OnPropertyChanged(string propertyName)
     {

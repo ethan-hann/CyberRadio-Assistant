@@ -14,13 +14,13 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+using System.Globalization;
 using AetherUtils.Core.WinForms.Controls;
 using AetherUtils.Core.WinForms.CustomArgs;
 using RadioExt_Helper.custom_controls;
 using RadioExt_Helper.models;
 using RadioExt_Helper.Properties;
 using RadioExt_Helper.utility;
-using System.Globalization;
 
 namespace RadioExt_Helper.user_controls;
 
@@ -284,7 +284,8 @@ public sealed partial class StationEditor : UserControl, IUserControl
     /// <param name="e"></param>
     private void NudFM_ValueChanged(object sender, EventArgs e)
     {
-        Station.TrackedObject.MetaData.Fm = StationManager.Instance.EnsureDisplayNameFormat(Station, (float)nudFM.Value);
+        Station.TrackedObject.MetaData.Fm =
+            StationManager.Instance.EnsureDisplayNameFormat(Station, (float)nudFM.Value);
         StationUpdated?.Invoke(this, EventArgs.Empty);
     }
 

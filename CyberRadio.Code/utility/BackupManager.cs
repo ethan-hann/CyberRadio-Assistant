@@ -26,6 +26,30 @@ namespace RadioExt_Helper.utility;
 public class BackupManager(CompressionLevel level)
 {
     /// <summary>
+    /// Dictionary containing the mapping between compression levels and their corresponding compression ratios.
+    /// </summary>
+    private readonly Dictionary<CompressionLevel, double> _compressionRatios = new()
+    {
+        { CompressionLevel.None, 1.0 },
+        { CompressionLevel.Fastest, 0.9 },
+        { CompressionLevel.Fast, 0.85 },
+        { CompressionLevel.SuperFast, 0.8 },
+        { CompressionLevel.Normal, 0.75 },
+        { CompressionLevel.High, 0.7 },
+        { CompressionLevel.Maximum, 0.65 },
+        { CompressionLevel.Ultra, 0.6 },
+        { CompressionLevel.Extreme, 0.55 },
+        { CompressionLevel.Ultimate, 0.5 }
+    };
+
+    private bool _isCancelling;
+
+    /// <summary>
+    /// Get or set the compression level used for the backup operation.
+    /// </summary>
+    public CompressionLevel BackupCompressionLevel { get; } = level;
+
+    /// <summary>
     /// Occurs whenever the progress of the backup operation changes.
     /// <para>Event data includes the current progress percentage.</para>
     /// </summary>
@@ -59,31 +83,8 @@ public class BackupManager(CompressionLevel level)
     /// Occurs whenever the backup preview operation is completed.
     /// <para>Event data is a tuple with the list of previews, the total size of the files, and the estimated compressed size.</para>
     /// </summary>
-    public event Action<(List<FilePreview> Previews, long TotalSize, long EstimatedCompressedSize)>? BackupPreviewCompleted;
-
-    /// <summary>
-    /// Get or set the compression level used for the backup operation.
-    /// </summary>
-    public CompressionLevel BackupCompressionLevel { get; } = level;
-
-    private bool _isCancelling;
-
-    /// <summary>
-    /// Dictionary containing the mapping between compression levels and their corresponding compression ratios.
-    /// </summary>
-    private readonly Dictionary<CompressionLevel, double> _compressionRatios = new()
-    {
-        {CompressionLevel.None, 1.0},
-        {CompressionLevel.Fastest, 0.9},
-        {CompressionLevel.Fast, 0.85},
-        {CompressionLevel.SuperFast, 0.8},
-        {CompressionLevel.Normal, 0.75},
-        {CompressionLevel.High, 0.7},
-        {CompressionLevel.Maximum, 0.65},
-        {CompressionLevel.Ultra, 0.6},
-        {CompressionLevel.Extreme, 0.55},
-        {CompressionLevel.Ultimate, 0.5}
-    };
+    public event Action<(List<FilePreview> Previews, long TotalSize, long EstimatedCompressedSize)>?
+        BackupPreviewCompleted;
 
     /// <summary>
     /// Asynchronously get a preview of the files that will be backed up from the staging folder.
@@ -240,5 +241,8 @@ public class BackupManager(CompressionLevel level)
         }
     }
 
-    public void CancelBackup() => _isCancelling = true;
+    public void CancelBackup()
+    {
+        _isCancelling = true;
+    }
 }

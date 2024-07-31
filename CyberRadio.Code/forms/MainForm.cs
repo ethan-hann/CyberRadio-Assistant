@@ -14,6 +14,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+using System.ComponentModel;
+using System.Diagnostics;
 using AetherUtils.Core.Extensions;
 using AetherUtils.Core.Files;
 using AetherUtils.Core.Logging;
@@ -25,8 +27,6 @@ using RadioExt_Helper.nexus_api;
 using RadioExt_Helper.Properties;
 using RadioExt_Helper.user_controls;
 using RadioExt_Helper.utility;
-using System.ComponentModel;
-using System.Diagnostics;
 using Timer = System.Timers.Timer;
 
 namespace RadioExt_Helper.forms;
@@ -36,8 +36,6 @@ namespace RadioExt_Helper.forms;
 /// </summary>
 public sealed partial class MainForm : Form
 {
-    private DirectoryWatcher? _directoryWatcher;
-
     private readonly ImageComboBox<ImageComboBoxItem> _languageComboBox = new();
     private readonly List<ImageComboBoxItem> _languages = [];
     private readonly NoStationsCtl _noStationsCtrl = new();
@@ -45,11 +43,12 @@ public sealed partial class MainForm : Form
     private readonly ImageList _stationImageList = new();
 
     private StationEditor? _currentEditor;
+    private DirectoryWatcher? _directoryWatcher;
     private bool _ignoreSelectedIndexChanged;
 
     private bool _isAppClosing;
-    private bool _isSyncInProgress;
     private bool _isExportInProgress;
+    private bool _isSyncInProgress;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="MainForm" /> class.
@@ -124,7 +123,10 @@ public sealed partial class MainForm : Form
     /// Set the flag indicating whether the application is currently performing an export operation.
     /// </summary>
     /// <param name="isInProgress"></param>
-    public void SetExportInProgress(bool isInProgress) => _isExportInProgress = isInProgress;
+    public void SetExportInProgress(bool isInProgress)
+    {
+        _isExportInProgress = isInProgress;
+    }
 
     private void OnDirectoryWatcherError(object? sender, Exception e)
     {
@@ -138,7 +140,6 @@ public sealed partial class MainForm : Form
 
         this.SafeInvoke(() =>
         {
-
             _ = StationManager.Instance.SynchronizeStationsAsync(StagingPath, GameBasePath);
             AuLogger.GetCurrentLogger<MainForm>("DirectoryWatcher")
                 .Info($"File created: {path}");
@@ -236,7 +237,7 @@ public sealed partial class MainForm : Form
             _directoryWatcher.Error -= (_, error) =>
             {
                 AuLogger.GetCurrentLogger<MainForm>("DirectoryWatcher")
-                .Error(error, $"An error occured while watching for changes in {GameBasePath}");
+                    .Error(error, $"An error occured while watching for changes in {GameBasePath}");
             };
         }
 
@@ -253,7 +254,7 @@ public sealed partial class MainForm : Form
             _directoryWatcher.Error += (_, error) =>
             {
                 AuLogger.GetCurrentLogger<MainForm>("DirectoryWatcher")
-                .Error(error, $"An error occured while watching for changes in {GameBasePath}");
+                    .Error(error, $"An error occured while watching for changes in {GameBasePath}");
             };
 
             _directoryWatcher.Start();
@@ -290,11 +291,13 @@ public sealed partial class MainForm : Form
         var missingStationsCount = StationManager.Instance.CheckGameForExistingStations(StagingPath, GameBasePath);
         if (missingStationsCount > 0)
         {
-            var text = string.Format(GlobalData.Strings.GetString("MissingStations") ?? "There are {0} station(s) in the game's folder missing from the staging folder. " +
-                "Would you like to synchronize the stations?",
+            var text = string.Format(GlobalData.Strings.GetString("MissingStations") ??
+                                     "There are {0} station(s) in the game's folder missing from the staging folder. " +
+                                     "Would you like to synchronize the stations?",
                 missingStationsCount);
             var caption = GlobalData.Strings.GetString("MissingStationsCaption") ?? "Missing Stations";
-            if (MessageBox.Show(this, text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+            if (MessageBox.Show(this, text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning) ==
+                DialogResult.Yes)
                 _ = SyncStationsAsync();
         }
         else
@@ -447,7 +450,9 @@ public sealed partial class MainForm : Form
             }
         }
         else
+        {
             lbStations.SelectedIndex = index;
+        }
 
         if (lbStations.SelectedItem is not TrackableObject<Station> station) return;
         SelectStationEditor(station.Id);
@@ -728,7 +733,8 @@ public sealed partial class MainForm : Form
         //Don't allow exporting if we are currently synchronizing stations.
         if (_isSyncInProgress)
         {
-            var text = GlobalData.Strings.GetString("SyncInProgress") ?? "Synchronization is in progress. Please wait...";
+            var text = GlobalData.Strings.GetString("SyncInProgress") ??
+                       "Synchronization is in progress. Please wait...";
             var caption = GlobalData.Strings.GetString("SyncAbbrev") ?? "Sync";
             MessageBox.Show(this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Warning);
             return;
@@ -829,7 +835,10 @@ public sealed partial class MainForm : Form
             PopulateStations();
     }
 
-    private void SynchronizeStationsToolStripMenuItem_Click(object sender, EventArgs e) => StartStationSync(true);
+    private void SynchronizeStationsToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        StartStationSync(true);
+    }
 
     /// <summary>
     /// Start the station synchronization operation. Displays a message to the user to confirm the operation depending on the context.
@@ -842,16 +851,18 @@ public sealed partial class MainForm : Form
 
         if (userInitiated)
         {
-            var text = GlobalData.Strings.GetString("ConfirmSyncStations") ?? "Are you sure you want to synchronize the stations?" +
-            " This will overwrite any modifications to stations that haven't been exported.";
+            var text = GlobalData.Strings.GetString("ConfirmSyncStations") ??
+                       "Are you sure you want to synchronize the stations?" +
+                       " This will overwrite any modifications to stations that haven't been exported.";
             var caption = GlobalData.Strings.GetString("Confirm");
             var result = MessageBox.Show(this, text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
             if (result == DialogResult.No) return;
         }
         else if (GlobalData.ConfigManager.Get("watchForChanges") as bool? == true)
         {
-            var text = GlobalData.Strings.GetString("ConfirmSyncStations") ?? "Changes were made to the game's radios directory." +
-            " Do you want to synchronize your staging and game directories?";
+            var text = GlobalData.Strings.GetString("ConfirmSyncStations") ??
+                       "Changes were made to the game's radios directory." +
+                       " Do you want to synchronize your staging and game directories?";
             var caption = GlobalData.Strings.GetString("Confirm");
             var result = MessageBox.Show(this, text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (result == DialogResult.No) return;
@@ -905,12 +916,12 @@ public sealed partial class MainForm : Form
                 _isExportInProgress = false;
 
                 AuLogger.GetCurrentLogger<MainForm>("OnStationsSynchronized")
-                    .Info($"Stations synchronized from game to staging successfully.");
+                    .Info("Stations synchronized from game to staging successfully.");
             }
             else
             {
                 var text = string.Format(
-                GlobalData.Strings.GetString("SyncFailed") ?? "Synchronization Failed!");
+                    GlobalData.Strings.GetString("SyncFailed") ?? "Synchronization Failed!");
                 var caption = GlobalData.Strings.GetString("SyncAbbrev") ?? "Sync";
                 MessageBox.Show(this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
 
@@ -942,7 +953,8 @@ public sealed partial class MainForm : Form
         //Check for sync in progress to prevent backup during sync
         if (_isSyncInProgress)
         {
-            var text = GlobalData.Strings.GetString("SyncInProgress") ?? "Synchronization is in progress. Please wait...";
+            var text = GlobalData.Strings.GetString("SyncInProgress") ??
+                       "Synchronization is in progress. Please wait...";
             var caption = GlobalData.Strings.GetString("SyncAbbrev") ?? "Sync";
             MessageBox.Show(this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Warning);
             return;

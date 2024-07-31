@@ -27,8 +27,8 @@ namespace RadioExt_Helper.forms;
 /// </summary>
 public sealed partial class ConfigForm : Form
 {
-    private readonly ImageList _tabImages = new();
     private readonly Dictionary<string, CompressionLevel> _localizedCompressionLevels = new();
+    private readonly ImageList _tabImages = new();
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="ConfigForm" /> class.
@@ -163,7 +163,10 @@ public sealed partial class ConfigForm : Form
     /// </summary>
     /// <param name="level">The <see cref="CompressionLevel"/> to localize.</param>
     /// <returns>A string localized into the current UI culture.</returns>
-    private string GetLocalizedName(CompressionLevel level) => GlobalData.Strings.GetString(level.ToString()) ?? level.ToString();
+    private string GetLocalizedName(CompressionLevel level)
+    {
+        return GlobalData.Strings.GetString(level.ToString()) ?? level.ToString();
+    }
 
     //TODO: Uncomment the below when the API feature is implemented
     ///// <summary>
@@ -227,7 +230,8 @@ public sealed partial class ConfigForm : Form
         saved &= GlobalData.ConfigManager.Set("watchForGameChanges", chkWatchForChanges.Checked);
 
         var selectedLocalizedName = cmbCompressionLevels.SelectedItem?.ToString();
-        if (selectedLocalizedName != null && _localizedCompressionLevels.TryGetValue(selectedLocalizedName, out var compressionLevel))
+        if (selectedLocalizedName != null &&
+            _localizedCompressionLevels.TryGetValue(selectedLocalizedName, out var compressionLevel))
             saved &= GlobalData.ConfigManager.Set("backupCompressionLevel", compressionLevel);
         else
             saved &= GlobalData.ConfigManager.Set("backupCompressionLevel", CompressionLevel.Normal);
@@ -403,7 +407,7 @@ public sealed partial class ConfigForm : Form
         {
             if (sender is Control hoveredControl)
             {
-                string helpKey = hoveredControl.Tag as string ?? string.Empty;
+                var helpKey = hoveredControl.Tag as string ?? string.Empty;
                 if (!string.IsNullOrEmpty(helpKey))
                     lblHelpText.Text = GlobalData.Strings.GetString(helpKey);
             }

@@ -14,14 +14,14 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+using System.ComponentModel;
+using System.Globalization;
+using System.Text.RegularExpressions;
 using AetherUtils.Core.Files;
 using AetherUtils.Core.Logging;
 using AetherUtils.Core.Structs;
 using RadioExt_Helper.models;
 using RadioExt_Helper.user_controls;
-using System.ComponentModel;
-using System.Globalization;
-using System.Text.RegularExpressions;
 
 namespace RadioExt_Helper.utility;
 
@@ -33,18 +33,27 @@ namespace RadioExt_Helper.utility;
 public partial class StationManager : IDisposable
 {
     /// <summary>
-    /// Regular expression that matches a display name with an optional FM number at the start.
-    /// </summary>
-    /// <returns></returns>
-    [GeneratedRegex(@"^\d+(\.\d+)?\s*")]
-    private static partial Regex DisplayNameRegex();
-
-    /// <summary>
     /// Initializes a new instance of the <see cref="StationManager"/> class.
     /// </summary>
     private StationManager()
     {
     }
+
+    /// <summary>
+    /// Disposes of the station manager and clears all stations.
+    /// </summary>
+    public virtual void Dispose()
+    {
+        GC.SuppressFinalize(this);
+        ClearStations();
+    }
+
+    /// <summary>
+    /// Regular expression that matches a display name with an optional FM number at the start.
+    /// </summary>
+    /// <returns></returns>
+    [GeneratedRegex(@"^\d+(\.\d+)?\s*")]
+    private static partial Regex DisplayNameRegex();
 
     /// <summary>
     /// Loads stations from the specified directory into the manager, clearing any existing stations.
@@ -79,8 +88,8 @@ public partial class StationManager : IDisposable
             if (string.IsNullOrEmpty(directory)) return null;
             if (!PathHelper.IsSubPath(GlobalData.ConfigManager.Get("stagingPath") as string ?? string.Empty, directory))
                 return ProcessDirectory(directory, treatAsNewStation);
-            else
-                AuLogger.GetCurrentLogger<StationManager>().Warn($"Attempted to load station from staging directory: {directory}");
+            AuLogger.GetCurrentLogger<StationManager>()
+                .Warn($"Attempted to load station from staging directory: {directory}");
             return null;
         }
         catch (Exception ex)
@@ -115,11 +124,13 @@ public partial class StationManager : IDisposable
                 StationsAsBindingList.Add(station);
 
                 if (pathOnDisk.Equals("\\"))
+                {
                     StationPaths[station.Id] = Path.Combine(pathOnDisk, station.TrackedObject.MetaData.DisplayName);
+                }
                 else
                 {
-                    string stagingPath = GlobalData.ConfigManager.Get("stagingPath") as string ?? string.Empty;
-                    string relativePath = PathHelper.GetRelativePath(pathOnDisk, stagingPath);
+                    var stagingPath = GlobalData.ConfigManager.Get("stagingPath") as string ?? string.Empty;
+                    var relativePath = PathHelper.GetRelativePath(pathOnDisk, stagingPath);
 
                     if (relativePath.Equals(pathOnDisk))
                         StationPaths[station.Id] = Path.Combine("\\", station.TrackedObject.MetaData.DisplayName);
@@ -436,9 +447,10 @@ public partial class StationManager : IDisposable
             if (!Directory.Exists(radiosDir)) return 0;
 
             var gameDirectories = FileHelper.SafeEnumerateDirectories(radiosDir);
-            var stagingDirectories = FileHelper.SafeEnumerateDirectories(stagingPath).Select(Path.GetFileName).ToHashSet();
+            var stagingDirectories =
+                FileHelper.SafeEnumerateDirectories(stagingPath).Select(Path.GetFileName).ToHashSet();
 
-            int count = 0;
+            var count = 0;
 
             foreach (var gameDir in gameDirectories)
             {
@@ -473,8 +485,10 @@ public partial class StationManager : IDisposable
             var radiosDir = PathHelper.GetRadiosPath(gameBasePath);
             if (!Directory.Exists(radiosDir)) return;
 
-            var stagingDirectories = FileHelper.SafeEnumerateDirectories(stagingPath, "*", SearchOption.AllDirectories).ToList();
-            var gameDirectories = FileHelper.SafeEnumerateDirectories(radiosDir, "*", SearchOption.AllDirectories).ToList();
+            var stagingDirectories = FileHelper.SafeEnumerateDirectories(stagingPath, "*", SearchOption.AllDirectories)
+                .ToList();
+            var gameDirectories = FileHelper.SafeEnumerateDirectories(radiosDir, "*", SearchOption.AllDirectories)
+                .ToList();
 
             var tasks = new List<Task>();
 
@@ -485,25 +499,23 @@ public partial class StationManager : IDisposable
                 var stagingDir = Path.Combine(stagingPath, dirName);
 
                 if (!stagingDirectories.Contains(stagingDir))
-                {
                     // Directory does not exist in the staging path, so copy it entirely
                     tasks.Add(Task.Run(() => CopyDirectoryAsync(gameDir, stagingDir)));
-                }
                 else
-                {
                     // Directory exists, synchronize files
                     tasks.Add(Task.Run(() => SynchronizeFilesAsync(gameDir, stagingDir)));
-                }
             }
 
             await Task.WhenAll(tasks);
-            SyncStatusChanged?.Invoke(GlobalData.Strings.GetString("SyncStatusComplete") ?? "Synchronization complete.");
+            SyncStatusChanged?.Invoke(GlobalData.Strings.GetString("SyncStatusComplete") ??
+                                      "Synchronization complete.");
             StationsSynchronized?.Invoke(true);
         }
         catch (Exception ex)
         {
             AuLogger.GetCurrentLogger<StationManager>().Error(ex, "Error synchronizing stations.");
-            SyncStatusChanged?.Invoke(GlobalData.Strings.GetString("SyncStatusError") ?? "Error synchronizing stations.");
+            SyncStatusChanged?.Invoke(
+                GlobalData.Strings.GetString("SyncStatusError") ?? "Error synchronizing stations.");
             StationsSynchronized?.Invoke(false);
         }
     }
@@ -517,15 +529,6 @@ public partial class StationManager : IDisposable
     {
         if (stationId == null) return string.Empty;
         return StationPaths.TryGetValue((Guid)stationId, out var path) ? path : string.Empty;
-    }
-
-    /// <summary>
-    /// Disposes of the station manager and clears all stations.
-    /// </summary>
-    public virtual void Dispose()
-    {
-        GC.SuppressFinalize(this);
-        ClearStations();
     }
 
     private async Task SynchronizeFilesAsync(string sourceDir, string targetDir)
@@ -550,7 +553,8 @@ public partial class StationManager : IDisposable
 
             var progress = (int)((float)fileCount / sourceFiles.Count() * 100);
             SyncProgressChanged?.Invoke(progress);
-            SyncStatusChanged?.Invoke(string.Format(GlobalData.Strings.GetString("SyncProgressChanged") ?? "Synchronizing Files... {0}%", progress));
+            SyncStatusChanged?.Invoke(string.Format(
+                GlobalData.Strings.GetString("SyncProgressChanged") ?? "Synchronizing Files... {0}%", progress));
         }
 
         await Task.WhenAll(fileTasks);
@@ -577,11 +581,13 @@ public partial class StationManager : IDisposable
                 // Directory exists, synchronize files recursively
                 dirTasks.Add(Task.Run(() => SynchronizeFilesAsync(sourceSubDir, targetSubDir)));
             }
+
             dirCount++;
 
             var progress = (int)((float)dirCount / sourceDirectories.Count() * 100);
             SyncProgressChanged?.Invoke(progress);
-            SyncStatusChanged?.Invoke(string.Format(GlobalData.Strings.GetString("SyncProgressChanged") ?? "Synchronizing Directories... {0}%", progress));
+            SyncStatusChanged?.Invoke(string.Format(
+                GlobalData.Strings.GetString("SyncProgressChanged") ?? "Synchronizing Directories... {0}%", progress));
         }
 
         await Task.WhenAll(dirTasks);
@@ -698,7 +704,8 @@ public partial class StationManager : IDisposable
         if (match.Success)
         {
             currentName = currentName[match.Length..].TrimStart();
-            if (float.TryParse(match.Value, CultureInfo.InvariantCulture, out float fmNumberParsed) & optionalFMVal == null)
+            if (float.TryParse(match.Value, CultureInfo.InvariantCulture, out var fmNumberParsed) &
+                (optionalFMVal == null))
                 fmNumber = fmNumberParsed;
         }
 
@@ -823,7 +830,7 @@ public partial class StationManager : IDisposable
     /// Get a list of valid audio file extensions for song files.
     /// </summary>
     public string?[] ValidAudioExtensions { get; } = EnumHelper<ValidAudioFiles>.GetEnumDescriptions() as string[] ??
-                                                      EnumHelper<ValidAudioFiles>.GetEnumDescriptions().ToArray();
+                                                     EnumHelper<ValidAudioFiles>.GetEnumDescriptions().ToArray();
 
     /// <summary>
     /// The current list of stations managed by the manager as a binding list. Auto-updates when stations are added or removed.

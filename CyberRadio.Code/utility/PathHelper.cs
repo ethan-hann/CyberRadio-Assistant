@@ -186,8 +186,8 @@ public static class PathHelper
             if (fullUri.Scheme != stagingUri.Scheme)
                 return fullPath;
 
-            Uri relativeUri = stagingUri.MakeRelativeUri(fullUri);
-            string relativePath = Uri.UnescapeDataString(relativeUri.ToString());
+            var relativeUri = stagingUri.MakeRelativeUri(fullUri);
+            var relativePath = Uri.UnescapeDataString(relativeUri.ToString());
 
             if (string.IsNullOrEmpty(relativePath))
                 return fullPath;
@@ -223,13 +223,11 @@ public static class PathHelper
     {
         try
         {
-            foreach (char c in Path.GetInvalidPathChars())
-            {
-                path = path.Replace(c, '_');
-            }
+            foreach (var c in Path.GetInvalidPathChars()) path = path.Replace(c, '_');
             path = path.Replace("'", "_"); // Replace specific characters causing issues
             return path;
-        } catch (Exception ex)
+        }
+        catch (Exception ex)
         {
             AuLogger.GetCurrentLogger("PathHelper.SanitizePath")
                 .Error(ex, "An error occurred while sanitizing the path.");

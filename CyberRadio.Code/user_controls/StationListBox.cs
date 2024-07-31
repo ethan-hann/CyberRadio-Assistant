@@ -14,13 +14,13 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+using System.ComponentModel;
 using AetherUtils.Core.Files;
 using AetherUtils.Core.Logging;
 using ICSharpCode.SharpZipLib.Core;
 using ICSharpCode.SharpZipLib.Zip;
 using RadioExt_Helper.models;
 using RadioExt_Helper.utility;
-using System.ComponentModel;
 
 namespace RadioExt_Helper.user_controls;
 
@@ -31,8 +31,6 @@ namespace RadioExt_Helper.user_controls;
 /// </summary>
 public sealed partial class StationListBox : ListBox
 {
-    public event EventHandler<StationImportedEventArgs> StationImported;
-
     private string _disabledIconKey = "disabled";
     private Color _duplicateStationsColor = Color.Orange;
     private Font _duplicateStationsFont = new(DefaultFont, FontStyle.Italic);
@@ -58,145 +56,6 @@ public sealed partial class StationListBox : ListBox
         AllowDrop = true;
         DragEnter += StationListBox_DragEnter;
         DragDrop += StationListBox_DragDrop;
-    }
-
-    private void StationListBox_DragEnter(object sender, DragEventArgs e)
-    {
-        if (e.Data.GetDataPresent(DataFormats.FileDrop))
-        {
-            string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-            if (files.Any(file => file.EndsWith(".zip") || file.EndsWith(".rar")))
-            {
-                e.Effect = DragDropEffects.Copy;
-            }
-        }
-    }
-
-    private void StationListBox_DragDrop(object sender, DragEventArgs e)
-    {
-        string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-        foreach (var file in files)
-        {
-            if (file.EndsWith(".zip") || file.EndsWith(".rar"))
-            {
-                // Handle file extraction and preview
-                HandleStationArchive(file);
-            }
-        }
-    }
-
-    private void HandleStationArchive(string filePath)
-    {
-        try
-        {
-            string tempDir = Path.Combine(Path.GetTempPath(), Path.GetFileNameWithoutExtension(filePath));
-            Directory.CreateDirectory(tempDir);
-            AuLogger.GetCurrentLogger<StationListBox>("HandleStationArchive").Info($"Temporary directory created: {tempDir}");
-
-            // Extract the contents using ZipLibSharp
-            using (var archive = new ZipFile(filePath))
-            {
-                foreach (ZipEntry entry in archive)
-                {
-                    if (!entry.IsFile) continue;
-
-                    string entryFileName = ZipEntry.CleanName(entry.Name);
-                    byte[] buffer = new byte[4096];
-
-                    // Sanitize the entry file name to avoid any path issues
-                    entryFileName = PathHelper.SanitizePath(entryFileName);
-
-                    // Get output file path
-                    string fullPath = Path.Combine(tempDir, entryFileName);
-                    var directoryName = Path.GetDirectoryName(fullPath);
-
-                    if (directoryName?.Length > 0)
-                    {
-                        Directory.CreateDirectory(directoryName);
-                        AuLogger.GetCurrentLogger<StationListBox>("HandleStationArchive").Info($"Created directory: {directoryName}");
-                    }
-
-                    if (!Directory.Exists(directoryName))
-                    {
-                        AuLogger.GetCurrentLogger<StationListBox>("HandleStationArchive").Error($"Directory does not exist after creation: {directoryName}");
-                        continue;
-                    }
-
-                    try
-                    {
-                        // Extract the file
-                        using var zipStream = archive.GetInputStream(entry);
-                        using var outputStream = File.Create(fullPath, buffer.Length);
-                        StreamUtils.Copy(zipStream, outputStream, buffer);
-                        AuLogger.GetCurrentLogger<StationListBox>("HandleStationArchive").Info($"Extracted file: {fullPath}");
-                    }
-                    catch (Exception ex)
-                    {
-                        AuLogger.GetCurrentLogger<StationListBox>("HandleStationArchive").Error(ex, $"Failed to extract file: {fullPath}");
-                    }
-                }
-            }
-
-            // Extract radio station files and custom icon .archive file, if it exists.
-            string radiosPath = Path.Combine(tempDir, "bin", "x64", "plugins", "cyber_engine_tweaks", "mods", "radioExt", "radios");
-            string archivePath = Path.Combine(tempDir, "archive", "pc", "mod");
-
-            AuLogger.GetCurrentLogger<StationListBox>("HandleStationArchive").Info($"Checking directories: {radiosPath} and {archivePath}");
-
-            if (!Directory.Exists(radiosPath))
-            {
-                AuLogger.GetCurrentLogger<StationListBox>("HandleStationArchive").Warn($"Radios path does not exist: {radiosPath}");
-            }
-
-            if (!Directory.Exists(archivePath))
-            {
-                AuLogger.GetCurrentLogger<StationListBox>("HandleStationArchive").Warn($"Archive path does not exist: {archivePath}");
-            }
-
-            var stationDirs = Directory.GetDirectories(radiosPath);
-
-            foreach (var stationDir in stationDirs)
-            {
-                var stationName = new DirectoryInfo(stationDir).Name;
-                var metadataFile = Directory.GetFiles(stationDir, "metadata.json").FirstOrDefault();
-                if (metadataFile == null) continue;
-
-                // Load the station using StationManager
-                var stationManager = StationManager.Instance;
-                var stationId = stationManager.LoadStationFromDirectory(stationDir, true);
-                if (stationId == null || stationId == Guid.Empty) continue;
-
-                // Get the station just loaded
-                var station = stationManager.GetStation(stationId)?.Key;
-                if (station == null) continue;
-
-                // Load custom icon, if it exists
-                var archiveFilePath = Directory.GetFiles(archivePath, "*.archive").FirstOrDefault();
-                if (archiveFilePath != null)
-                {
-                    var archiveFileName = Path.GetFileName(archiveFilePath);
-                    LoadCustomIcon(station, archiveFilePath, archiveFileName);
-
-                    // Raise event
-                    var eventArgs = new StationImportedEventArgs(station, archiveFilePath, archiveFileName);
-                    StationImported?.Invoke(this, eventArgs);
-                }
-            }
-
-            // Clean up temporary directory
-            Directory.Delete(tempDir, true);
-        }
-        catch (Exception ex)
-        {
-            AuLogger.GetCurrentLogger<StationListBox>("HandleStationArchive").Error(ex, "An error occurred while importing the station archive.");
-        }
-    }
-
-    private void LoadCustomIcon(TrackableObject<Station> station, string? archiveFilePath, string? archiveFileName)
-    {
-        if (archiveFilePath == null || archiveFileName == null) return;
-
-        station.TrackedObject.MetaData.SerializeArchive(archiveFilePath, archiveFileName);
     }
 
     /// <summary>
@@ -335,6 +194,146 @@ public sealed partial class StationListBox : ListBox
             _duplicateStationsFont = value;
             Invalidate();
         }
+    }
+
+    public event EventHandler<StationImportedEventArgs> StationImported;
+
+    private void StationListBox_DragEnter(object sender, DragEventArgs e)
+    {
+        if (e.Data.GetDataPresent(DataFormats.FileDrop))
+        {
+            var files = (string[])e.Data.GetData(DataFormats.FileDrop);
+            if (files.Any(file => file.EndsWith(".zip") || file.EndsWith(".rar"))) e.Effect = DragDropEffects.Copy;
+        }
+    }
+
+    private void StationListBox_DragDrop(object sender, DragEventArgs e)
+    {
+        var files = (string[])e.Data.GetData(DataFormats.FileDrop);
+        foreach (var file in files)
+            if (file.EndsWith(".zip") || file.EndsWith(".rar"))
+                // Handle file extraction and preview
+                HandleStationArchive(file);
+    }
+
+    private void HandleStationArchive(string filePath)
+    {
+        try
+        {
+            var tempDir = Path.Combine(Path.GetTempPath(), Path.GetFileNameWithoutExtension(filePath));
+            Directory.CreateDirectory(tempDir);
+            AuLogger.GetCurrentLogger<StationListBox>("HandleStationArchive")
+                .Info($"Temporary directory created: {tempDir}");
+
+            // Extract the contents using ZipLibSharp
+            using (var archive = new ZipFile(filePath))
+            {
+                foreach (ZipEntry entry in archive)
+                {
+                    if (!entry.IsFile) continue;
+
+                    var entryFileName = ZipEntry.CleanName(entry.Name);
+                    var buffer = new byte[4096];
+
+                    // Sanitize the entry file name to avoid any path issues
+                    entryFileName = PathHelper.SanitizePath(entryFileName);
+
+                    // Get output file path
+                    var fullPath = Path.Combine(tempDir, entryFileName);
+                    var directoryName = Path.GetDirectoryName(fullPath);
+
+                    if (directoryName?.Length > 0)
+                    {
+                        Directory.CreateDirectory(directoryName);
+                        AuLogger.GetCurrentLogger<StationListBox>("HandleStationArchive")
+                            .Info($"Created directory: {directoryName}");
+                    }
+
+                    if (!Directory.Exists(directoryName))
+                    {
+                        AuLogger.GetCurrentLogger<StationListBox>("HandleStationArchive")
+                            .Error($"Directory does not exist after creation: {directoryName}");
+                        continue;
+                    }
+
+                    try
+                    {
+                        // Extract the file
+                        using var zipStream = archive.GetInputStream(entry);
+                        using var outputStream = File.Create(fullPath, buffer.Length);
+                        StreamUtils.Copy(zipStream, outputStream, buffer);
+                        AuLogger.GetCurrentLogger<StationListBox>("HandleStationArchive")
+                            .Info($"Extracted file: {fullPath}");
+                    }
+                    catch (Exception ex)
+                    {
+                        AuLogger.GetCurrentLogger<StationListBox>("HandleStationArchive")
+                            .Error(ex, $"Failed to extract file: {fullPath}");
+                    }
+                }
+            }
+
+            // Extract radio station files and custom icon .archive file, if it exists.
+            var radiosPath = Path.Combine(tempDir, "bin", "x64", "plugins", "cyber_engine_tweaks", "mods", "radioExt",
+                "radios");
+            var archivePath = Path.Combine(tempDir, "archive", "pc", "mod");
+
+            AuLogger.GetCurrentLogger<StationListBox>("HandleStationArchive")
+                .Info($"Checking directories: {radiosPath} and {archivePath}");
+
+            if (!Directory.Exists(radiosPath))
+                AuLogger.GetCurrentLogger<StationListBox>("HandleStationArchive")
+                    .Warn($"Radios path does not exist: {radiosPath}");
+
+            if (!Directory.Exists(archivePath))
+                AuLogger.GetCurrentLogger<StationListBox>("HandleStationArchive")
+                    .Warn($"Archive path does not exist: {archivePath}");
+
+            var stationDirs = Directory.GetDirectories(radiosPath);
+
+            foreach (var stationDir in stationDirs)
+            {
+                var stationName = new DirectoryInfo(stationDir).Name;
+                var metadataFile = Directory.GetFiles(stationDir, "metadata.json").FirstOrDefault();
+                if (metadataFile == null) continue;
+
+                // Load the station using StationManager
+                var stationManager = StationManager.Instance;
+                var stationId = stationManager.LoadStationFromDirectory(stationDir, true);
+                if (stationId == null || stationId == Guid.Empty) continue;
+
+                // Get the station just loaded
+                var station = stationManager.GetStation(stationId)?.Key;
+                if (station == null) continue;
+
+                // Load custom icon, if it exists
+                var archiveFilePath = Directory.GetFiles(archivePath, "*.archive").FirstOrDefault();
+                if (archiveFilePath != null)
+                {
+                    var archiveFileName = Path.GetFileName(archiveFilePath);
+                    LoadCustomIcon(station, archiveFilePath, archiveFileName);
+
+                    // Raise event
+                    var eventArgs = new StationImportedEventArgs(station, archiveFilePath, archiveFileName);
+                    StationImported?.Invoke(this, eventArgs);
+                }
+            }
+
+            // Clean up temporary directory
+            Directory.Delete(tempDir, true);
+        }
+        catch (Exception ex)
+        {
+            AuLogger.GetCurrentLogger<StationListBox>("HandleStationArchive")
+                .Error(ex, "An error occurred while importing the station archive.");
+        }
+    }
+
+    private void LoadCustomIcon(TrackableObject<Station> station, string? archiveFilePath, string? archiveFileName)
+    {
+        if (archiveFilePath == null || archiveFileName == null) return;
+
+        station.TrackedObject.MetaData.SerializeArchive(archiveFilePath, archiveFileName);
     }
 
     /// <summary>

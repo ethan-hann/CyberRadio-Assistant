@@ -14,14 +14,14 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+using System.ComponentModel;
+using System.Diagnostics;
 using AetherUtils.Core.Extensions;
 using AetherUtils.Core.Files;
 using AetherUtils.Core.Logging;
 using RadioExt_Helper.models;
 using RadioExt_Helper.Properties;
 using RadioExt_Helper.utility;
-using System.ComponentModel;
-using System.Diagnostics;
 
 namespace RadioExt_Helper.forms;
 
@@ -147,30 +147,30 @@ public partial class ExportWindow : Form
 
         lvStations.SuspendLayout();
         foreach (var lvItem in from station in _stationsToExport
-                               let isActive = station.TrackedObject.GetStatus()
-                               let customIconString = station.TrackedObject.CustomIcon.UseCustom
-                                   ? GlobalData.Strings.GetString("CustomIcon")
-                                   : station.TrackedObject.MetaData.Icon
-                               let songString = station.TrackedObject.MetaData.StreamInfo.IsStream
-                                   ? GlobalData.Strings.GetString("IsStream")
-                                   : station.TrackedObject.Songs.Count.ToString()
-                               let streamString = station.TrackedObject.MetaData.StreamInfo.IsStream
-                                   ? station.TrackedObject.MetaData.StreamInfo.StreamUrl
-                                   : GlobalData.Strings.GetString("UsingSongs")
-                               let proposedPath = isActive
-                                   ? Path.Combine(radioExtPath, station.TrackedObject.MetaData.DisplayName)
-                                   : GlobalData.Strings.GetString("DisabledStation")
-                               select new ListViewItem([
-                                   string.Empty, // Placeholder for the icon column
+                 let isActive = station.TrackedObject.GetStatus()
+                 let customIconString = station.TrackedObject.CustomIcon.UseCustom
+                     ? GlobalData.Strings.GetString("CustomIcon")
+                     : station.TrackedObject.MetaData.Icon
+                 let songString = station.TrackedObject.MetaData.StreamInfo.IsStream
+                     ? GlobalData.Strings.GetString("IsStream")
+                     : station.TrackedObject.Songs.Count.ToString()
+                 let streamString = station.TrackedObject.MetaData.StreamInfo.IsStream
+                     ? station.TrackedObject.MetaData.StreamInfo.StreamUrl
+                     : GlobalData.Strings.GetString("UsingSongs")
+                 let proposedPath = isActive
+                     ? Path.Combine(radioExtPath, station.TrackedObject.MetaData.DisplayName)
+                     : GlobalData.Strings.GetString("DisabledStation")
+                 select new ListViewItem([
+                     string.Empty, // Placeholder for the icon column
                      station.TrackedObject.MetaData.DisplayName,
                      customIconString ?? string.Empty,
                      songString ?? string.Empty,
                      streamString ?? string.Empty,
                      proposedPath ?? string.Empty
-                               ])
-                               {
-                                   Tag = station
-                               })
+                 ])
+                 {
+                     Tag = station
+                 })
             lvStations.Items.Add(lvItem);
 
         lvStations.ResizeColumns();
@@ -209,7 +209,7 @@ public partial class ExportWindow : Form
     {
         if (ShowNoModDialogIfRequired() && !bgWorkerExportGame.CancellationPending && !bgWorkerExportGame.IsBusy)
         {
-            MainForm? mainForm = Owner as MainForm;
+            var mainForm = Owner as MainForm;
             mainForm?.SetExportInProgress(true);
 
             bgWorkerExportGame.RunWorkerAsync();
@@ -263,7 +263,7 @@ public partial class ExportWindow : Form
         _exportToStagingComplete = false;
         _exportToGameComplete = false;
 
-        MainForm? mainForm = Owner as MainForm;
+        var mainForm = Owner as MainForm;
         mainForm?.SetExportInProgress(false);
     }
 
@@ -324,14 +324,12 @@ public partial class ExportWindow : Form
         var songDirectoryMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
         foreach (var station in stations)
+        foreach (var song in station.TrackedObject.Songs)
         {
-            foreach (var song in station.TrackedObject.Songs)
-            {
-                var songDirectory = existingDirectories
-                    .FirstOrDefault(dir => song.FilePath.StartsWith(dir, StringComparison.OrdinalIgnoreCase));
+            var songDirectory = existingDirectories
+                .FirstOrDefault(dir => song.FilePath.StartsWith(dir, StringComparison.OrdinalIgnoreCase));
 
-                if (!string.IsNullOrEmpty(songDirectory)) songDirectoryMap[song.FilePath] = songDirectory;
-            }
+            if (!string.IsNullOrEmpty(songDirectory)) songDirectoryMap[song.FilePath] = songDirectory;
         }
 
         return songDirectoryMap;
@@ -358,7 +356,8 @@ public partial class ExportWindow : Form
 
             try
             {
-                if (oldFilePath.Equals(newFilePath)) continue; //we don't want to copy if the paths are the same; otherwise, we'll get IO errors.
+                if (oldFilePath.Equals(newFilePath))
+                    continue; //we don't want to copy if the paths are the same; otherwise, we'll get IO errors.
 
                 if (!File.Exists(oldFilePath)) continue;
 
@@ -404,7 +403,6 @@ public partial class ExportWindow : Form
             .ToList();
 
         foreach (var directory in directoriesToDelete)
-        {
             try
             {
                 Directory.Delete(directory, true);
@@ -416,7 +414,6 @@ public partial class ExportWindow : Form
                 AuLogger.GetCurrentLogger<ExportWindow>("RemoveDeletedStations")
                     .Error(ex, $"Failed to delete {directory}.");
             }
-        }
     }
 
     /// <summary>
@@ -628,7 +625,6 @@ public partial class ExportWindow : Form
     private void DeleteInactiveDirectories(List<string> inactiveStationPaths)
     {
         foreach (var path in inactiveStationPaths)
-        {
             try
             {
                 Directory.Delete(path, true);
@@ -645,7 +641,6 @@ public partial class ExportWindow : Form
                 AuLogger.GetCurrentLogger<ExportWindow>("DeleteInactiveDirectories")
                     .Error(ex, $"Failed to delete directory {path}");
             }
-        }
     }
 
     /// <summary>
@@ -679,7 +674,7 @@ public partial class ExportWindow : Form
             ToggleButtons();
             UpdateStatus(GlobalData.Strings.GetString("ExportToGameComplete") ?? "Exported to Game!");
 
-            MainForm? mainForm = Owner as MainForm;
+            var mainForm = Owner as MainForm;
             mainForm?.SetExportInProgress(false);
 
             OnExportToGameComplete?.Invoke(this, EventArgs.Empty);
