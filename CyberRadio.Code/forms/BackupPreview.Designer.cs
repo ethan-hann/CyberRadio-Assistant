@@ -38,10 +38,10 @@
             lblEstimatedSize = new Label();
             tvFiles = new TreeView();
             panel1 = new Panel();
-            lblCompressionLevel = new Label();
             tableLayoutPanel1 = new TableLayoutPanel();
-            lblEstimatedDisclaimer = new Label();
+            lblCompressionLevel = new Label();
             btnStartBackup = new Button();
+            lblEstimatedDisclaimer = new Label();
             statusStrip1 = new StatusStrip();
             lblStatus = new ToolStripStatusLabel();
             toolStripStatusLabel2 = new ToolStripStatusLabel();
@@ -143,15 +143,6 @@
             panel1.Size = new Size(1124, 108);
             panel1.TabIndex = 6;
             // 
-            // lblCompressionLevel
-            // 
-            lblCompressionLevel.AutoSize = true;
-            lblCompressionLevel.Location = new Point(745, 0);
-            lblCompressionLevel.Name = "lblCompressionLevel";
-            lblCompressionLevel.Size = new Size(121, 15);
-            lblCompressionLevel.TabIndex = 8;
-            lblCompressionLevel.Text = "<compression Level>";
-            // 
             // tableLayoutPanel1
             // 
             tableLayoutPanel1.ColumnCount = 4;
@@ -175,16 +166,15 @@
             tableLayoutPanel1.Size = new Size(1124, 86);
             tableLayoutPanel1.TabIndex = 7;
             // 
-            // lblEstimatedDisclaimer
+            // lblCompressionLevel
             // 
-            lblEstimatedDisclaimer.Anchor = AnchorStyles.Left;
-            lblEstimatedDisclaimer.AutoSize = true;
-            lblEstimatedDisclaimer.Font = new Font("Segoe UI", 9.75F, FontStyle.Italic, GraphicsUnit.Point, 0);
-            lblEstimatedDisclaimer.Location = new Point(281, 34);
-            lblEstimatedDisclaimer.Name = "lblEstimatedDisclaimer";
-            lblEstimatedDisclaimer.Size = new Size(458, 34);
-            lblEstimatedDisclaimer.TabIndex = 5;
-            lblEstimatedDisclaimer.Text = "* This is an estimate based on the selected compression level in the configuration.\r\nActual size may be different.";
+            lblCompressionLevel.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            lblCompressionLevel.AutoSize = true;
+            lblCompressionLevel.Location = new Point(763, 0);
+            lblCompressionLevel.Name = "lblCompressionLevel";
+            lblCompressionLevel.Size = new Size(358, 16);
+            lblCompressionLevel.TabIndex = 8;
+            lblCompressionLevel.Text = "<compression Level>";
             // 
             // btnStartBackup
             // 
@@ -194,16 +184,27 @@
             btnStartBackup.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
             btnStartBackup.FlatStyle = FlatStyle.Flat;
             btnStartBackup.Image = Properties.Resources.zip_file_16x16;
-            btnStartBackup.Location = new Point(745, 34);
+            btnStartBackup.Location = new Point(763, 34);
             btnStartBackup.Margin = new Padding(3, 2, 3, 2);
             btnStartBackup.Name = "btnStartBackup";
-            btnStartBackup.Size = new Size(376, 34);
+            btnStartBackup.Size = new Size(358, 34);
             btnStartBackup.TabIndex = 6;
             btnStartBackup.Text = "Start Backup";
             btnStartBackup.TextAlign = ContentAlignment.MiddleRight;
             btnStartBackup.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnStartBackup.UseVisualStyleBackColor = false;
             btnStartBackup.Click += BtnStartBackup_Click;
+            // 
+            // lblEstimatedDisclaimer
+            // 
+            lblEstimatedDisclaimer.Anchor = AnchorStyles.Left;
+            lblEstimatedDisclaimer.AutoSize = true;
+            lblEstimatedDisclaimer.Font = new Font("Segoe UI", 9.75F, FontStyle.Italic, GraphicsUnit.Point, 0);
+            lblEstimatedDisclaimer.Location = new Point(281, 33);
+            lblEstimatedDisclaimer.Name = "lblEstimatedDisclaimer";
+            lblEstimatedDisclaimer.Size = new Size(476, 36);
+            lblEstimatedDisclaimer.TabIndex = 5;
+            lblEstimatedDisclaimer.Text = "* This is an estimate based on the selected compression level in the configuration.\r\nActual size may be different.";
             // 
             // statusStrip1
             // 
@@ -220,13 +221,13 @@
             // 
             lblStatus.Image = Properties.Resources.status__16x16;
             lblStatus.Name = "lblStatus";
-            lblStatus.Size = new Size(121, 17);
+            lblStatus.Size = new Size(120, 17);
             lblStatus.Text = "Creating preview...";
             // 
             // toolStripStatusLabel2
             // 
             toolStripStatusLabel2.Name = "toolStripStatusLabel2";
-            toolStripStatusLabel2.Size = new Size(686, 17);
+            toolStripStatusLabel2.Size = new Size(687, 17);
             toolStripStatusLabel2.Spring = true;
             // 
             // pgProgress

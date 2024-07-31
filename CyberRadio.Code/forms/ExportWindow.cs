@@ -208,7 +208,12 @@ public partial class ExportWindow : Form
     private void BtnExportToGame_Click(object sender, EventArgs e)
     {
         if (ShowNoModDialogIfRequired() && !bgWorkerExportGame.CancellationPending && !bgWorkerExportGame.IsBusy)
+        {
+            MainForm? mainForm = Owner as MainForm;
+            mainForm?.SetExportInProgress(true);
+
             bgWorkerExportGame.RunWorkerAsync();
+        }
     }
 
     /// <summary>
@@ -257,6 +262,9 @@ public partial class ExportWindow : Form
         _isCancelling = false;
         _exportToStagingComplete = false;
         _exportToGameComplete = false;
+
+        MainForm? mainForm = Owner as MainForm;
+        mainForm?.SetExportInProgress(false);
     }
 
     /// <summary>
@@ -316,12 +324,14 @@ public partial class ExportWindow : Form
         var songDirectoryMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
         foreach (var station in stations)
-        foreach (var song in station.TrackedObject.Songs)
         {
-            var songDirectory = existingDirectories
-                .FirstOrDefault(dir => song.FilePath.StartsWith(dir, StringComparison.OrdinalIgnoreCase));
+            foreach (var song in station.TrackedObject.Songs)
+            {
+                var songDirectory = existingDirectories
+                    .FirstOrDefault(dir => song.FilePath.StartsWith(dir, StringComparison.OrdinalIgnoreCase));
 
-            if (!string.IsNullOrEmpty(songDirectory)) songDirectoryMap[song.FilePath] = songDirectory;
+                if (!string.IsNullOrEmpty(songDirectory)) songDirectoryMap[song.FilePath] = songDirectory;
+            }
         }
 
         return songDirectoryMap;
@@ -348,6 +358,8 @@ public partial class ExportWindow : Form
 
             try
             {
+                if (oldFilePath.Equals(newFilePath)) continue; //we don't want to copy if the paths are the same; otherwise, we'll get IO errors.
+
                 if (!File.Exists(oldFilePath)) continue;
 
                 File.Copy(oldFilePath, newFilePath, true);
@@ -416,9 +428,9 @@ public partial class ExportWindow : Form
     {
         if (string.IsNullOrEmpty(StagingPath)) return string.Empty;
 
-        var stationPath = Path.Combine(StagingPath, station.TrackedObject.MetaData.DisplayName);
-        FileHelper.CreateDirectories(stationPath);
-        return stationPath;
+        var safeStationPath = Path.Combine(StagingPath, station.TrackedObject.MetaData.DisplayName);
+        FileHelper.CreateDirectories(safeStationPath);
+        return safeStationPath;
     }
 
     /// <summary>
@@ -577,6 +589,8 @@ public partial class ExportWindow : Form
             try
             {
                 File.Delete(file);
+                AuLogger.GetCurrentLogger<ExportWindow>("CopySongsToGame")
+                    .Info($"Song: {file} is not present in the songs.sgls file. Deleting...");
             }
             catch (Exception ex)
             {
@@ -618,6 +632,8 @@ public partial class ExportWindow : Form
             try
             {
                 Directory.Delete(path, true);
+                AuLogger.GetCurrentLogger<ExportWindow>("DeleteInactiveDirectories")
+                    .Info($"Deleted disabled station folder: {path}");
 
                 if (!bgWorkerExportGame.CancellationPending) continue;
 
@@ -662,6 +678,9 @@ public partial class ExportWindow : Form
             pgExportProgress.Value = 100;
             ToggleButtons();
             UpdateStatus(GlobalData.Strings.GetString("ExportToGameComplete") ?? "Exported to Game!");
+
+            MainForm? mainForm = Owner as MainForm;
+            mainForm?.SetExportInProgress(false);
 
             OnExportToGameComplete?.Invoke(this, EventArgs.Empty);
         }

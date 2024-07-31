@@ -48,6 +48,7 @@ public sealed partial class MainForm : Form
 
     private bool _isAppClosing;
     private bool _isSyncInProgress;
+    private bool _isExportInProgress;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="MainForm" /> class.
@@ -99,6 +100,12 @@ public sealed partial class MainForm : Form
         _resizeTimer.Elapsed += (_, _) => { SaveWindowSize(); };
     }
 
+    /// <summary>
+    /// Set the flag indicating whether the application is currently performing an export operation.
+    /// </summary>
+    /// <param name="isInProgress"></param>
+    public void SetExportInProgress(bool isInProgress) => _isExportInProgress = isInProgress;
+
     private void OnDirectoryWatcherError(object? sender, Exception e)
     {
         AuLogger.GetCurrentLogger<MainForm>("DirectoryWatcher")
@@ -107,8 +114,11 @@ public sealed partial class MainForm : Form
 
     private void OnDirectoryWatcherFileCreated(object? sender, string path)
     {
+        if (_isExportInProgress) return;
+
         this.SafeInvoke(() =>
         {
+
             _ = StationManager.Instance.SynchronizeStationsAsync(StagingPath, GameBasePath);
             AuLogger.GetCurrentLogger<MainForm>("DirectoryWatcher")
                 .Info($"File created: {path}");
@@ -117,6 +127,8 @@ public sealed partial class MainForm : Form
 
     private void OnDirectoryWatcherFileChanged(object? sender, string path)
     {
+        if (_isExportInProgress) return;
+
         this.SafeInvoke(() =>
         {
             _ = StationManager.Instance.SynchronizeStationsAsync(StagingPath, GameBasePath);
@@ -127,6 +139,8 @@ public sealed partial class MainForm : Form
 
     private void OnDirectoryWatcherFileDeleted(object? sender, string path)
     {
+        if (_isExportInProgress) return;
+
         this.SafeInvoke(() =>
         {
             AuLogger.GetCurrentLogger<MainForm>("DirectoryWatcher")
@@ -136,6 +150,8 @@ public sealed partial class MainForm : Form
 
     private void OnDirectoryWatcherFileRenamed(object? sender, (string OldPath, string NewPath) e)
     {
+        if (_isExportInProgress) return;
+
         this.SafeInvoke(() =>
         {
             AuLogger.GetCurrentLogger<MainForm>("DirectoryWatcher")
@@ -835,6 +851,7 @@ public sealed partial class MainForm : Form
         try
         {
             _isSyncInProgress = true;
+            _isExportInProgress = true; //to prevent directory watcher from firing events during sync
             await StationManager.Instance.SynchronizeStationsAsync(StagingPath, GameBasePath);
         }
         catch (Exception ex)
@@ -847,6 +864,10 @@ public sealed partial class MainForm : Form
 
             AuLogger.GetCurrentLogger<MainForm>("SyncStationsAsync")
                 .Error(ex, "An error occurred while synchronizing stations from game to staging.");
+        }
+        finally
+        {
+            _isExportInProgress = false;
         }
     }
 
@@ -861,6 +882,7 @@ public sealed partial class MainForm : Form
             if (success)
             {
                 PopulateStations();
+                _isExportInProgress = false;
 
                 AuLogger.GetCurrentLogger<MainForm>("OnStationsSynchronized")
                     .Info($"Stations synchronized from game to staging successfully.");

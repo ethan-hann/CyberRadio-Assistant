@@ -133,7 +133,7 @@ namespace RadioExt_Helper.forms
             refreshStationsToolStripMenuItem.Name = "refreshStationsToolStripMenuItem";
             refreshStationsToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.R;
             refreshStationsToolStripMenuItem.Size = new Size(273, 22);
-            refreshStationsToolStripMenuItem.Text = "Refresh Stations";
+            refreshStationsToolStripMenuItem.Text = "Reload From Staging";
             refreshStationsToolStripMenuItem.Click += RefreshStationsToolStripMenuItem_Click;
             // 
             // synchronizeStationsToolStripMenuItem
@@ -236,7 +236,7 @@ namespace RadioExt_Helper.forms
             // 
             downloadRadioModsToolStripMenuItem.Image = Properties.Resources.download_16x16;
             downloadRadioModsToolStripMenuItem.Name = "downloadRadioModsToolStripMenuItem";
-            downloadRadioModsToolStripMenuItem.Size = new Size(193, 22);
+            downloadRadioModsToolStripMenuItem.Size = new Size(194, 22);
             downloadRadioModsToolStripMenuItem.Text = "Download Radio Mods";
             downloadRadioModsToolStripMenuItem.Click += DownloadRadioModsToolStripMenuItem_Click;
             // 
@@ -444,6 +444,7 @@ namespace RadioExt_Helper.forms
             // btnDisableAll
             // 
             btnDisableAll.BackColor = Color.White;
+            btnDisableAll.Image = Properties.Resources.disabled__16x16;
             btnDisableAll.Name = "btnDisableAll";
             btnDisableAll.Size = new Size(129, 22);
             btnDisableAll.Text = "Disable All";
@@ -476,6 +477,7 @@ namespace RadioExt_Helper.forms
             // 
             // btnEnableAll
             // 
+            btnEnableAll.Image = Properties.Resources.enabled__16x16;
             btnEnableAll.Name = "btnEnableAll";
             btnEnableAll.Size = new Size(126, 22);
             btnEnableAll.Text = "Enable All";
@@ -543,13 +545,13 @@ namespace RadioExt_Helper.forms
             // 
             cmsRevertStationChanges.Items.AddRange(new ToolStripItem[] { revertChangesToolStripMenuItem });
             cmsRevertStationChanges.Name = "cmsRevertStationChanges";
-            cmsRevertStationChanges.Size = new Size(157, 26);
+            cmsRevertStationChanges.Size = new Size(156, 26);
             // 
             // revertChangesToolStripMenuItem
             // 
             revertChangesToolStripMenuItem.Image = Properties.Resources.refresh__16x16;
             revertChangesToolStripMenuItem.Name = "revertChangesToolStripMenuItem";
-            revertChangesToolStripMenuItem.Size = new Size(156, 22);
+            revertChangesToolStripMenuItem.Size = new Size(155, 22);
             revertChangesToolStripMenuItem.Text = "Revert Changes";
             revertChangesToolStripMenuItem.Click += RevertChangesToolStripMenuItem_Click;
             // 
