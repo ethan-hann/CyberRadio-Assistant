@@ -14,8 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-using System.ComponentModel;
-using System.Diagnostics;
 using AetherUtils.Core.Extensions;
 using AetherUtils.Core.Logging;
 using AetherUtils.Core.WinForms.Controls;
@@ -26,6 +24,8 @@ using RadioExt_Helper.nexus_api;
 using RadioExt_Helper.Properties;
 using RadioExt_Helper.user_controls;
 using RadioExt_Helper.utility;
+using System.ComponentModel;
+using System.Diagnostics;
 using Timer = System.Timers.Timer;
 
 namespace RadioExt_Helper.forms;
@@ -231,9 +231,9 @@ public sealed partial class MainForm : Form
             _directoryWatcher.FileRenamed += OnDirectoryWatcherFileRenamed;
             _directoryWatcher.FileDeleted += OnDirectoryWatcherFileDeleted;
             _directoryWatcher.Error += (_, error) =>
-            { 
+            {
                 AuLogger.GetCurrentLogger<MainForm>("DirectoryWatcher")
-                .Error(error, $"An error occured while watching for changes in {GameBasePath}"); 
+                .Error(error, $"An error occured while watching for changes in {GameBasePath}");
             };
 
             _directoryWatcher.Start();

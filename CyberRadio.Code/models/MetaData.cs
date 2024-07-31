@@ -14,9 +14,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-using System.ComponentModel;
 using AetherUtils.Core.Utility;
 using Newtonsoft.Json;
+using System.ComponentModel;
 
 namespace RadioExt_Helper.models;
 
@@ -179,7 +179,7 @@ public sealed class MetaData : INotifyPropertyChanged, ICloneable, IEquatable<Me
             Icon = Icon,
             CustomIcon = (CustomIcon)CustomIcon.Clone(),
             StreamInfo = (StreamInfo)StreamInfo.Clone(),
-            SongOrder = [..SongOrder],
+            SongOrder = [.. SongOrder],
             IsActive = IsActive
         };
         foreach (var kvp in CustomKeyValuePairs)

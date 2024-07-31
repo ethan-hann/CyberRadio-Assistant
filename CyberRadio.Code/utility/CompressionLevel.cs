@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace RadioExt_Helper.utility
+﻿namespace RadioExt_Helper.utility
 {
     /// <summary>
     /// Represents the various levels of compression that can be used for the backup operation.

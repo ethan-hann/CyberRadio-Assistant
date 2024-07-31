@@ -14,14 +14,14 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-using System.ComponentModel;
-using System.Globalization;
-using System.Text.RegularExpressions;
 using AetherUtils.Core.Files;
 using AetherUtils.Core.Logging;
 using AetherUtils.Core.Structs;
 using RadioExt_Helper.models;
 using RadioExt_Helper.user_controls;
+using System.ComponentModel;
+using System.Globalization;
+using System.Text.RegularExpressions;
 
 namespace RadioExt_Helper.utility;
 
@@ -81,7 +81,8 @@ public partial class StationManager : IDisposable
             else
                 AuLogger.GetCurrentLogger<StationManager>().Warn($"Attempted to load station from staging directory: {directory}");
 
-        } catch (Exception ex)
+        }
+        catch (Exception ex)
         {
             AuLogger.GetCurrentLogger<StationManager>().Error(ex, "Error loading station from directory.");
         }
@@ -117,7 +118,7 @@ public partial class StationManager : IDisposable
                 {
                     string stagingPath = GlobalData.ConfigManager.Get("stagingPath") as string ?? string.Empty;
                     string relativePath = PathHelper.GetRelativePath(pathOnDisk, stagingPath);
-                    
+
                     if (relativePath.Equals(pathOnDisk))
                         StationPaths[station.Id] = Path.Combine("\\", station.TrackedObject.MetaData.DisplayName);
                     else

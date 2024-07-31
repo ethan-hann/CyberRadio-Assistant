@@ -1,8 +1,8 @@
-﻿using System.Diagnostics;
-using AetherUtils.Core.Extensions;
+﻿using AetherUtils.Core.Extensions;
 using AetherUtils.Core.Logging;
 using RadioExt_Helper.Properties;
 using RadioExt_Helper.utility;
+using System.Diagnostics;
 
 namespace RadioExt_Helper.forms
 {
@@ -110,9 +110,10 @@ namespace RadioExt_Helper.forms
         private void OnPreviewProgressChanged(int progress)
         {
             try
-            { 
+            {
                 this.SafeInvoke(() => pgProgress.Value = progress);
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 AuLogger.GetCurrentLogger<BackupPreview>("OnPreviewProgressChanged").Error(ex, "Error updating backup preview progress.");
             }
@@ -132,7 +133,8 @@ namespace RadioExt_Helper.forms
 
                 AddItemToTreeView(previewTuple.Item1);
                 SetSizeLabels();
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 AuLogger.GetCurrentLogger<BackupPreview>("OnPreviewStatusChanged").Error(ex, "Error updating backup preview status.");
             }
@@ -250,7 +252,8 @@ namespace RadioExt_Helper.forms
             try
             {
                 this.SafeInvoke(() => pgProgress.Value = progress);
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 AuLogger.GetCurrentLogger<BackupPreview>("OnBackupProgressChanged").Error(ex, "Error updating backup progress.");
             }
@@ -265,7 +268,8 @@ namespace RadioExt_Helper.forms
             try
             {
                 this.SafeInvoke(() => lblStatus.Text = status);
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 AuLogger.GetCurrentLogger<BackupPreview>("OnBackupStatusChanged").Error(ex, "Error updating backup status.");
             }

@@ -14,14 +14,14 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-using System.ComponentModel;
-using System.Diagnostics;
 using AetherUtils.Core.Extensions;
 using AetherUtils.Core.Files;
 using AetherUtils.Core.Logging;
 using RadioExt_Helper.models;
 using RadioExt_Helper.Properties;
 using RadioExt_Helper.utility;
+using System.ComponentModel;
+using System.Diagnostics;
 
 namespace RadioExt_Helper.forms;
 
@@ -147,30 +147,30 @@ public partial class ExportWindow : Form
 
         lvStations.SuspendLayout();
         foreach (var lvItem in from station in _stationsToExport
-                 let isActive = station.TrackedObject.GetStatus()
-                 let customIconString = station.TrackedObject.CustomIcon.UseCustom
-                     ? GlobalData.Strings.GetString("CustomIcon")
-                     : station.TrackedObject.MetaData.Icon
-                 let songString = station.TrackedObject.MetaData.StreamInfo.IsStream
-                     ? GlobalData.Strings.GetString("IsStream")
-                     : station.TrackedObject.Songs.Count.ToString()
-                 let streamString = station.TrackedObject.MetaData.StreamInfo.IsStream
-                     ? station.TrackedObject.MetaData.StreamInfo.StreamUrl
-                     : GlobalData.Strings.GetString("UsingSongs")
-                 let proposedPath = isActive
-                     ? Path.Combine(radioExtPath, station.TrackedObject.MetaData.DisplayName)
-                     : GlobalData.Strings.GetString("DisabledStation")
-                 select new ListViewItem([
-                     string.Empty, // Placeholder for the icon column
+                               let isActive = station.TrackedObject.GetStatus()
+                               let customIconString = station.TrackedObject.CustomIcon.UseCustom
+                                   ? GlobalData.Strings.GetString("CustomIcon")
+                                   : station.TrackedObject.MetaData.Icon
+                               let songString = station.TrackedObject.MetaData.StreamInfo.IsStream
+                                   ? GlobalData.Strings.GetString("IsStream")
+                                   : station.TrackedObject.Songs.Count.ToString()
+                               let streamString = station.TrackedObject.MetaData.StreamInfo.IsStream
+                                   ? station.TrackedObject.MetaData.StreamInfo.StreamUrl
+                                   : GlobalData.Strings.GetString("UsingSongs")
+                               let proposedPath = isActive
+                                   ? Path.Combine(radioExtPath, station.TrackedObject.MetaData.DisplayName)
+                                   : GlobalData.Strings.GetString("DisabledStation")
+                               select new ListViewItem([
+                                   string.Empty, // Placeholder for the icon column
                      station.TrackedObject.MetaData.DisplayName,
                      customIconString ?? string.Empty,
                      songString ?? string.Empty,
                      streamString ?? string.Empty,
                      proposedPath ?? string.Empty
-                 ])
-                 {
-                     Tag = station
-                 })
+                               ])
+                               {
+                                   Tag = station
+                               })
             lvStations.Items.Add(lvItem);
 
         lvStations.ResizeColumns();

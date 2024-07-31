@@ -14,8 +14,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-using System.ComponentModel;
 using Newtonsoft.Json;
+using System.ComponentModel;
 
 namespace RadioExt_Helper.models;
 
@@ -89,7 +89,7 @@ public sealed class Station : INotifyPropertyChanged, ICloneable, IEquatable<Sta
         return new Station
         {
             MetaData = (MetaData)MetaData.Clone(),
-            Songs = [..Songs]
+            Songs = [.. Songs]
         };
     }
 

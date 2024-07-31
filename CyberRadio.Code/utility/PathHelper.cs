@@ -194,7 +194,8 @@ public static class PathHelper
 
             // Replace forward slashes with backslashes for Windows paths
             return relativePath.Replace('/', '\\');
-        } catch (Exception ex)
+        }
+        catch (Exception ex)
         {
             AuLogger.GetCurrentLogger("PathHelper.GetRelativePath")
                 .Error(ex, "An error occurred while getting the relative path.");
