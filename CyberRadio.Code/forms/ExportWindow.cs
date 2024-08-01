@@ -278,6 +278,10 @@ public partial class ExportWindow : Form
 
         // Get the list of existing directories before exporting
         var existingDirectories = FileHelper.SafeEnumerateDirectories(StagingPath).ToList();
+
+        // Remove protected directories from the list
+        existingDirectories.RemoveAll(dir => StationManager.Instance.IsProtectedFolder(dir));
+
         var songDirectoryMap = MapSongsToDirectories(existingDirectories, _stationsToExport);
 
         for (var i = 0; i < _stationsToExport.Count; i++)
@@ -303,8 +307,7 @@ public partial class ExportWindow : Form
 
             if (!CreateSongListJson(newStationPath, station))
                 AuLogger.GetCurrentLogger<ExportWindow>("BG_ExportStaging")
-                    .Error(
-                        "Couldn't save the songs.sgls file. This means that CRA doesn't know where your station's songs are located.");
+                    .Error("Couldn't save the songs.sgls file. This means that CRA won't know where your station's songs are located.");
         }
 
         RemoveDeletedStations(existingDirectories);
@@ -400,9 +403,11 @@ public partial class ExportWindow : Form
 
         var directoriesToDelete = existingDirectories
             .Where(dir => !stationNames.Contains(Path.GetFileName(dir)))
+            .Where(dir => !StationManager.Instance.IsProtectedFolder(dir))
             .ToList();
 
         foreach (var directory in directoriesToDelete)
+        {
             try
             {
                 Directory.Delete(directory, true);
@@ -414,6 +419,7 @@ public partial class ExportWindow : Form
                 AuLogger.GetCurrentLogger<ExportWindow>("RemoveDeletedStations")
                     .Error(ex, $"Failed to delete {directory}.");
             }
+        }
     }
 
     /// <summary>
@@ -510,6 +516,7 @@ public partial class ExportWindow : Form
         }
 
         var activeStations = _stationsToExport.Where(s => s.TrackedObject.GetStatus()).ToList();
+        var inactiveStations = _stationsToExport.Where(s => !s.TrackedObject.GetStatus()).ToList();
         var activeStationNames = activeStations.Select(s => s.TrackedObject.MetaData.DisplayName).ToList();
 
         var stagingPaths = FileHelper.SafeEnumerateDirectories(StagingPath).ToList();
@@ -519,6 +526,7 @@ public partial class ExportWindow : Form
             .ToList();
 
         CopyDirectoriesToGame(radiosPath, activeStationPaths);
+        CopyIconsToGame(activeStations);
 
         var liveStationPaths = FileHelper.SafeEnumerateDirectories(radiosPath).ToList();
 
@@ -527,6 +535,7 @@ public partial class ExportWindow : Form
             .ToList();
 
         DeleteInactiveDirectories(inactiveStationPaths);
+        DeleteInactiveIconsFromGame(inactiveStations);
 
         AuLogger.GetCurrentLogger<ExportWindow>("BG_ExportToGame")
             .Info($"Exported {activeStations.Count} stations to game radios directory: {radiosPath}");
@@ -557,9 +566,9 @@ public partial class ExportWindow : Form
     /// <summary>
     ///     Copies songs specified in the .sgls file from the original path to the target path.
     /// </summary>
-    /// <param name="originalPath">The original path of the station.</param>
+    /// <param name="originalPath">The original path of the station in the staging directory.</param>
     /// <param name="targetPath">The target path in the game directory.</param>
-    /// <returns>True if songs were successfully copied; otherwise, false.</returns>
+    /// <returns><c>true</c> if the songs were successfully copied; otherwise, <c>false</c>.</returns>
     private bool CopySongsToGame(string originalPath, string targetPath)
     {
         var songFile = Directory.GetFiles(originalPath).FirstOrDefault(file =>
@@ -619,12 +628,69 @@ public partial class ExportWindow : Form
     }
 
     /// <summary>
+    /// Copy the icons from the staging directory (if present and the hash matches) to the game directory.
+    /// </summary>
+    /// <param name="activeStations">The list of active stations to copy the icons of.</param>
+    private void CopyIconsToGame(List<TrackableObject<Station>> activeStations)
+    {
+        try
+        {
+            var looseArchiveGamePath = Path.Combine(GameBasePath, "archive", "pc", "mod");
+            var looseArchiveStagingPath = Path.Combine(StagingPath, "icons");
+
+            if (!StationManager.Instance.IsProtectedFolder(looseArchiveStagingPath))
+                AuLogger.GetCurrentLogger<ExportWindow>("CopyIconsToGame")
+                    .Warn("The icons folder in the staging directory is not protected; it should be at this point!");
+
+            //Get the icon for each station based on the custom metadata
+            foreach (var station 
+                     in activeStations.Where(station => station.TrackedObject.CustomIcon.UseCustom))
+            {
+                if (!station.TrackedObject.MetaData.CustomData.TryGetValue("IconFileName",
+                        out var iconFileNameObj)) continue;
+                if (!station.TrackedObject.MetaData.CustomData.TryGetValue("IconFileHash",
+                        out var iconHashObj)) continue;
+
+                var iconFileName = iconFileNameObj as string;
+                var iconHash = iconHashObj as string;
+
+                if (string.IsNullOrEmpty(iconFileName)) continue;
+                if (string.IsNullOrEmpty(iconHash)) continue;
+
+                var iconPath = Path.Combine(looseArchiveStagingPath, iconFileName);
+
+                if (!FileHelper.DoesFileExist(iconPath, false)) continue;
+
+                var fileHash = PathHelper.ComputeSha256Hash(iconPath, true);
+                if (!PathHelper.CompareSha256Hash(fileHash, iconHash))
+                {
+                    AuLogger.GetCurrentLogger<ExportWindow>("CopyIconsToGame")
+                        .Warn($"Icon hash mismatch for station: {station.TrackedObject.MetaData.DisplayName}");
+                    continue;
+                }
+
+                //If the hashes matched, copy the icon to the game directory
+                var targetPath = Path.Combine(looseArchiveGamePath, iconFileName);
+                File.Copy(iconPath, targetPath, true);
+                AuLogger.GetCurrentLogger<ExportWindow>("CopyIconsToGame")
+                    .Info($"Copied icon: {iconPath} to {targetPath}");
+            }
+        } 
+        catch (Exception ex)
+        {
+            AuLogger.GetCurrentLogger<ExportWindow>("CopyIconsToGame")
+                .Error(ex, "Failed to copy icons to game directory.");
+        }
+    }
+
+    /// <summary>
     ///     Deletes directories of inactive stations from the game directory.
     /// </summary>
     /// <param name="inactiveStationPaths">List of paths of inactive stations to be deleted.</param>
     private void DeleteInactiveDirectories(List<string> inactiveStationPaths)
     {
         foreach (var path in inactiveStationPaths)
+        {
             try
             {
                 Directory.Delete(path, true);
@@ -641,6 +707,48 @@ public partial class ExportWindow : Form
                 AuLogger.GetCurrentLogger<ExportWindow>("DeleteInactiveDirectories")
                     .Error(ex, $"Failed to delete directory {path}");
             }
+        }
+    }
+
+    private void DeleteInactiveIconsFromGame(List<TrackableObject<Station>> inactiveStations)
+    {
+        try
+        {
+            var looseArchiveGamePath = Path.Combine(GameBasePath, "archive", "pc", "mod");
+
+            //Get the icon for each station based on the custom metadata
+            foreach (var station in inactiveStations)
+            {
+                if (!station.TrackedObject.CustomIcon.UseCustom) continue; //skip if not using custom icon
+
+                var iconFileName = station.TrackedObject.MetaData.CustomData["IconFileName"] as string;
+                var iconHash = station.TrackedObject.MetaData.CustomData["IconFileHash"] as string;
+                if (string.IsNullOrEmpty(iconFileName)) continue;
+                if (string.IsNullOrEmpty(iconHash)) continue;
+
+                var iconPath = Path.Combine(looseArchiveGamePath, iconFileName);
+
+                if (!FileHelper.DoesFileExist(iconPath, false)) continue;
+
+                var fileHash = PathHelper.ComputeSha256Hash(iconPath, true);
+                if (!PathHelper.CompareSha256Hash(fileHash, iconHash))
+                {
+                    AuLogger.GetCurrentLogger<ExportWindow>("DeleteInactiveIconsFromGame")
+                        .Warn($"Icon hash mismatch for station: {station.TrackedObject.MetaData.DisplayName}");
+                    continue;
+                }
+
+                //If the hashes matched, delete the icon from the game directory
+                File.Delete(iconPath);
+                AuLogger.GetCurrentLogger<ExportWindow>("DeleteInactiveIconsFromGame")
+                    .Info($"Deleted disabled station's icon: {iconPath}");
+            }
+        } 
+        catch (Exception ex)
+        {
+            AuLogger.GetCurrentLogger<ExportWindow>("DeleteInactiveIconsFromGame")
+                .Error(ex, "Failed to delete icons from game directory.");
+        }
     }
 
     /// <summary>

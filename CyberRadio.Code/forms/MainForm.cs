@@ -74,6 +74,9 @@ public sealed partial class MainForm : Form
         lbStations.DataSource = StationManager.Instance.StationsAsBindingList;
         lbStations.DisplayMember = "TrackedObject.MetaData";
 
+        //Add the icons folder to the protected folders list
+        StationManager.Instance.AddProtectedFolder(Path.Combine(StagingPath, "icons"));
+
         SetupDirectoryWatcher();
     }
 
@@ -102,22 +105,23 @@ public sealed partial class MainForm : Form
         _resizeTimer.Elapsed += (_, _) => { SaveWindowSize(); };
     }
 
-    private void LbStations_StationImported(object? sender, StationImportedEventArgs e)
+    private void LbStations_StationImported(object? sender, TrackableObject<Station> e)
     {
-        // Handle custom icon
-        SaveCustomIcon(e.IconFilePath, e.IconFileName);
-        AuLogger.GetCurrentLogger<MainForm>("StationImported")
-            .Info($"Station imported: {e.Station.TrackedObject.MetaData.DisplayName}");
+        MessageBox.Show(this, "Station imported: " + e.TrackedObject.MetaData.DisplayName);
+        //// Handle custom icon
+        //SaveCustomIcon(e.IconFilePath, e.IconFileName);
+        //AuLogger.GetCurrentLogger<MainForm>("StationImported")
+        //    .Info($"Station imported: {e.Station.TrackedObject.MetaData.DisplayName}");
     }
 
-    private void SaveCustomIcon(string? iconFilePath, string? iconFileName)
-    {
-        if (string.IsNullOrEmpty(iconFilePath) || string.IsNullOrEmpty(iconFileName)) return;
+    //private void SaveCustomIcon(string? iconFilePath, string? iconFileName)
+    //{
+    //    if (string.IsNullOrEmpty(iconFilePath) || string.IsNullOrEmpty(iconFileName)) return;
 
-        var archivePath = Path.Combine(StagingPath, "archive", iconFileName);
-        FileHelper.CreateDirectories(Path.GetDirectoryName(archivePath));
-        File.Copy(iconFilePath, archivePath, true);
-    }
+    //    var archivePath = Path.Combine(StagingPath, "archive", iconFileName);
+    //    FileHelper.CreateDirectories(Path.GetDirectoryName(archivePath));
+    //    File.Copy(iconFilePath, archivePath, true);
+    //}
 
     /// <summary>
     /// Set the flag indicating whether the application is currently performing an export operation.
@@ -130,6 +134,8 @@ public sealed partial class MainForm : Form
 
     private void OnDirectoryWatcherError(object? sender, Exception e)
     {
+        if (_isExportInProgress) return;
+
         AuLogger.GetCurrentLogger<MainForm>("DirectoryWatcher")
             .Error(e, $"An error occurred while watching for changes in {GameBasePath}");
     }
@@ -234,31 +240,22 @@ public sealed partial class MainForm : Form
             _directoryWatcher.FileChanged -= OnDirectoryWatcherFileChanged;
             _directoryWatcher.FileRenamed -= OnDirectoryWatcherFileRenamed;
             _directoryWatcher.FileDeleted -= OnDirectoryWatcherFileDeleted;
-            _directoryWatcher.Error -= (_, error) =>
-            {
-                AuLogger.GetCurrentLogger<MainForm>("DirectoryWatcher")
-                    .Error(error, $"An error occured while watching for changes in {GameBasePath}");
-            };
+            _directoryWatcher.Error -= OnDirectoryWatcherError;
         }
 
         _directoryWatcher?.Stop();
         _directoryWatcher = null;
 
-        if (GlobalData.ConfigManager.Get("watchForGameChanges") as bool? == true)
-        {
-            _directoryWatcher = new DirectoryWatcher(PathHelper.GetRadiosPath(GameBasePath), TimeSpan.FromSeconds(5));
-            _directoryWatcher.FileCreated += OnDirectoryWatcherFileCreated;
-            _directoryWatcher.FileChanged += OnDirectoryWatcherFileChanged;
-            _directoryWatcher.FileRenamed += OnDirectoryWatcherFileRenamed;
-            _directoryWatcher.FileDeleted += OnDirectoryWatcherFileDeleted;
-            _directoryWatcher.Error += (_, error) =>
-            {
-                AuLogger.GetCurrentLogger<MainForm>("DirectoryWatcher")
-                    .Error(error, $"An error occured while watching for changes in {GameBasePath}");
-            };
+        if (GlobalData.ConfigManager.Get("watchForGameChanges") as bool? != true) return;
 
-            _directoryWatcher.Start();
-        }
+        _directoryWatcher = new DirectoryWatcher(PathHelper.GetRadiosPath(GameBasePath), TimeSpan.FromSeconds(5));
+        _directoryWatcher.FileCreated += OnDirectoryWatcherFileCreated;
+        _directoryWatcher.FileChanged += OnDirectoryWatcherFileChanged;
+        _directoryWatcher.FileRenamed += OnDirectoryWatcherFileRenamed;
+        _directoryWatcher.FileDeleted += OnDirectoryWatcherFileDeleted;
+        _directoryWatcher.Error += OnDirectoryWatcherError;
+
+        _directoryWatcher.Start();
     }
 
     /// <summary>
@@ -288,7 +285,7 @@ public sealed partial class MainForm : Form
         SelectLanguage();
         Translate();
 
-        var missingStationsCount = StationManager.Instance.CheckGameForExistingStations(StagingPath, GameBasePath);
+        var missingStationsCount = StationManager.CheckGameForExistingStations(StagingPath, GameBasePath);
         if (missingStationsCount > 0)
         {
             var text = string.Format(GlobalData.Strings.GetString("MissingStations") ??
