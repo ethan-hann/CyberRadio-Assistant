@@ -43,7 +43,11 @@ public sealed partial class StationListBox : ListBox
 
     private Color _songsMissingColor = Color.Orange;
 
+    private Color _newStationColor = Color.Green;
+
     private Font _songsMissingFont = new(DefaultFont, FontStyle.Bold);
+
+    private Font _newStationFont = new(DefaultFont, FontStyle.Bold);
 
     /// <summary>
     /// Initializes a new instance of the <see cref="StationListBox"/> class.
@@ -172,6 +176,19 @@ public sealed partial class StationListBox : ListBox
     }
 
     [Browsable(true)]
+    [Category("Colors")]
+    [Description("The color used to highlight new stations.")]
+    public Color NewStationColor
+    {
+        get => _newStationColor;
+        set
+        {
+            _newStationColor = value;
+            Invalidate();
+        }
+    }
+
+    [Browsable(true)]
     [Category("Fonts")]
     [Description("The font used to highlight stations with missing songs.")]
     public Font SongsMissingFont
@@ -193,6 +210,19 @@ public sealed partial class StationListBox : ListBox
         set
         {
             _duplicateStationsFont = value;
+            Invalidate();
+        }
+    }
+
+    [Browsable(true)]
+    [Category("Fonts")]
+    [Description("The font used to highlight new stations.")]
+    public Font NewStationFont
+    {
+        get => _newStationFont;
+        set
+        {
+            _newStationFont = value;
             Invalidate();
         }
     }
@@ -234,118 +264,7 @@ public sealed partial class StationListBox : ListBox
         }
 
         StationImported?.Invoke(this, station);
-        //try
-        //{
-        //    var tempDir = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
-        //    Directory.CreateDirectory(tempDir);
-        //    AuLogger.GetCurrentLogger<StationListBox>("HandleStationArchive").Info($"Temporary directory created: {tempDir}");
-
-
-
-        //    // Extract radio station files and custom icon .archive file, if it exists.
-        //    //var radiosPath = PathHelper.GetRadiosPath(tempDir);
-        //    //var iconPath = Path.Combine(tempDir, "archive", "pc", "mod");
-
-        //    //AuLogger.GetCurrentLogger<StationListBox>("HandleStationArchive").Info($"Checking directories: {radiosPath} and {iconPath}");
-
-        //    //if (!Directory.Exists(radiosPath))
-        //    //    AuLogger.GetCurrentLogger<StationListBox>("HandleStationArchive").Warn($"Radios path does not exist: {radiosPath}");
-
-        //    //if (!Directory.Exists(iconPath))
-        //    //    AuLogger.GetCurrentLogger<StationListBox>("HandleStationArchive").Warn($"Icon path does not exist: {iconPath}");
-
-
-        //    var stationDirs = Directory.GetDirectories(tempDir, "*", SearchOption.AllDirectories);
-
-        //    foreach (var stationDir in stationDirs)
-        //    {
-        //        Guid? stationId = null;
-        //        if (Directory.GetFiles(stationDir, "metadata.json", SearchOption.TopDirectoryOnly).Length != 0)
-        //        {
-        //            // Load the station using StationManager if a metadata.json file is found
-        //            stationId = StationManager.Instance.LoadStationFromDirectory(stationDir, true);
-        //        }
-
-        //        TrackableObject<Station>? station = null;
-        //        if (stationId != null && stationId != Guid.Empty)
-        //            station = StationManager.Instance.GetStation(stationId)?.Key;
-
-        //        if (station == null) // Skip if the station is not found
-        //        {
-        //            AuLogger.GetCurrentLogger<StationListBox>("HandleStationArchive").Warn($"Station not found in directory: {stationDir}");
-        //            continue;
-        //        }
-
-        //        // Load custom icon, if it exists
-        //        var iconFilePath = Directory.GetFiles(stationDir, "*.archive", SearchOption.AllDirectories).FirstOrDefault();
-        //        if (iconFilePath == null) //Skip loading the icon if it doesn't exist
-        //            StationImported?.Invoke(this, new StationImportedEventArgs(station, null, null));
-        //        else
-        //        {
-        //            var stagingIconsFolder = 
-        //                GlobalData.ConfigManager.Get("stagingPath") is string stagingPath ? 
-        //                    Path.Combine(stagingPath, "icons") : null;
-        //            LoadCustomIcon(station, iconFilePath, stagingIconsFolder);
-
-        //            // Raise event
-        //            var eventArgs = new StationImportedEventArgs(station, iconFilePath, Path.GetFileName(iconFilePath));
-        //            StationImported?.Invoke(this, eventArgs);
-        //        }
-        //    }
-
-        //    // Clean up temporary directory
-        //    Directory.Delete(tempDir, true);
-        //}
-        //catch (Exception ex)
-        //{
-        //    AuLogger.GetCurrentLogger<StationListBox>("HandleStationArchive").Error(ex, "An error occurred while importing the station archive.");
-        //}
     }
-
-    //private void LoadCustomIcon(TrackableObject<Station> station, string? iconFilePath, string? stagingIconsFolder)
-    //{
-    //    try
-    //    {
-    //        if (!File.Exists(iconFilePath))
-    //        {
-    //            AuLogger.GetCurrentLogger<StationListBox>("LoadCustomIcon").Error($"Icon file does not exist: {iconFilePath}");
-    //            return;
-    //        }
-
-    //        if (stagingIconsFolder == null)
-    //        {
-    //            AuLogger.GetCurrentLogger<StationListBox>("LoadCustomIcon").Error($"Staging icons folder is null.");
-    //            return;
-    //        }
-
-    //        // Ensure the icons folder exists
-    //        Directory.CreateDirectory(stagingIconsFolder);
-
-    //        // Copy the icon to the icons folder
-    //        var iconFileName = Path.GetFileName(iconFilePath);
-    //        var destIconPath = Path.Combine(stagingIconsFolder, iconFileName);
-    //        File.Copy(iconFilePath, destIconPath, true);
-
-    //        // Calculate the hash of the icon file
-    //        string fileHash;
-    //        using (var sha256 = SHA256.Create())
-    //        using (var fileStream = File.OpenRead(destIconPath))
-    //        {
-    //            var hashBytes = sha256.ComputeHash(fileStream);
-    //            fileHash = BitConverter.ToString(hashBytes).Replace("-", "").ToLowerInvariant();
-    //        }
-
-    //        // Store the file name and hash in the CustomData dictionary
-    //        station.TrackedObject.MetaData.CustomData["IconFileName"] = iconFileName;
-    //        station.TrackedObject.MetaData.CustomData["IconFileHash"] = fileHash;
-
-    //        AuLogger.GetCurrentLogger<StationListBox>("LoadCustomIcon").Info($"Custom icon loaded for station: {station.TrackedObject.MetaData.DisplayName}");
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        AuLogger.GetCurrentLogger<StationListBox>("LoadCustomIcon").Error(ex, $"Failed to load custom icon: {iconFilePath}");
-    //    }
-    //}
 
     /// <summary>
     /// Sets the default values for the control.
@@ -418,8 +337,8 @@ public sealed partial class StationListBox : ListBox
     /// Retrieves the appropriate color for the item based on its properties.
     /// </summary>
     /// <param name="station">A station to get the color of.</param>
-    /// <returns>If the station has no missing songs and is not a duplicate name, returns the original forecolor. Otherwise, returns a
-    /// blend of colors depending on whether the station is missing songs or is a duplicate or both.</returns>
+    /// <returns>If the station has no missing songs, is not a duplicate name, and is not a new station, returns the original fore color. Otherwise, returns a
+    /// blend of colors depending on whether the station is missing songs, is a duplicate, and/or is a new station.</returns>
     private Color GetItemColor(TrackableObject<Station> station)
     {
         var returnColor = ForeColor;
@@ -431,6 +350,9 @@ public sealed partial class StationListBox : ListBox
                 s.TrackedObject.MetaData.DisplayName.Equals(station.TrackedObject.MetaData.DisplayName)) > 1)
             returnColor = CombineColors(returnColor, _duplicateStationsColor);
 
+        if (StationManager.Instance.IsNewStation(station.Id))
+            returnColor = CombineColors(returnColor, _newStationColor);
+
         return returnColor;
     }
 
@@ -441,9 +363,12 @@ public sealed partial class StationListBox : ListBox
         if (station.TrackedObject.Songs.Any(s => !FileHelper.DoesFileExist(s.FilePath)))
             font = _songsMissingFont;
 
-        if (Items.OfType<TrackableObject<Station>>().Count(s =>
+        else if (Items.OfType<TrackableObject<Station>>().Count(s =>
                 s.TrackedObject.MetaData.DisplayName.Equals(station.TrackedObject.MetaData.DisplayName)) > 1)
             font = _duplicateStationsFont;
+
+        else if (StationManager.Instance.IsNewStation(station.Id))
+            font = _newStationFont;
 
         return font;
     }
