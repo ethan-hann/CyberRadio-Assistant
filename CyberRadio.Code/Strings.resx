@@ -839,4 +839,7 @@ Actual size may be different.</value>
   <data name="FileName" xml:space="preserve">
     <value>File Name</value>
   </data>
+  <data name="CopySongFilesToBackupOption" xml:space="preserve">
+    <value>Copy Song Files to Backup?</value>
+  </data>
 </root>

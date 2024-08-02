@@ -15,10 +15,13 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 using AetherUtils.Core.Files;
+using AetherUtils.Core.Logging;
 using ICSharpCode.SharpZipLib.Core;
 using ICSharpCode.SharpZipLib.Zip;
 
 namespace RadioExt_Helper.utility;
+
+//TODO: refactor this to use the new SharpCompress library
 
 /// <summary>
 /// Represents a class for managing the backup of files and folders. Subscribe to the event handlers to track the backup operation.
@@ -140,11 +143,12 @@ public class BackupManager(CompressionLevel level)
     /// </summary>
     /// <param name="stagingPath">The path to the staging folder.</param>
     /// <param name="backupPath">The path to a backup folder.</param>
+    /// <param name="shouldCopySongFiles">Indicate whether the actual song files should be included in the backed up file or not.</param>
     /// <returns>A <see cref="Task"/> representing the backup operation.</returns>
     /// <exception cref="ArgumentNullException">If either <paramref name="stagingPath"/> or <paramref name="backupPath"/> are <c>null</c> or empty.</exception>
     /// <exception cref="ArgumentException">If the backup path is the same as the staging path.</exception>
     /// <exception cref="ArgumentException">If the compression level is not between 0 and 9.</exception>
-    public async Task BackupStagingFolderAsync(string stagingPath, string backupPath)
+    public async Task BackupStagingFolderAsync(string stagingPath, string backupPath, bool shouldCopySongFiles)
     {
         if (string.IsNullOrEmpty(stagingPath)) throw new ArgumentNullException(nameof(stagingPath));
         if (string.IsNullOrEmpty(backupPath)) throw new ArgumentNullException(nameof(backupPath));
@@ -168,13 +172,17 @@ public class BackupManager(CompressionLevel level)
 
                 var buffer = new byte[4096];
                 var fileCount = 0;
-                var files = FileHelper.SafeEnumerateFiles(stagingPath, "*.*", SearchOption.AllDirectories).ToArray();
+
+                string[] files = shouldCopySongFiles ? GetFilesIncludingSongs(stagingPath) : GetFilesOnly(stagingPath);
 
                 foreach (var file in files)
                 {
                     if (_isCancelling) return;
 
-                    var entryName = file[(stagingPath.Length + 1)..];
+                    var entryName = PathHelper.IsSubPath(stagingPath, file) ? 
+                        file[(stagingPath.Length + 1)..] : Path.GetFileName(file);
+                    //TODO: fix entry name for files in different directories outside the staging folder
+
                     var entry = new ZipEntry(entryName)
                     {
                         DateTime = File.GetLastWriteTime(file)
@@ -238,6 +246,46 @@ public class BackupManager(CompressionLevel level)
             if (_isCancelling) return;
             BackupCompleted?.Invoke(false, backupPath, backupFileName);
             throw;
+        }
+    }
+
+    private string[] GetFilesIncludingSongs(string stagingPath)
+    {
+        var files = GetFilesOnly(stagingPath).ToList();
+
+        StationManager.Instance.StationsAsList.ForEach(station =>
+        {
+            if (station.TrackedObject.Songs.Count > 0)
+            {
+                station.TrackedObject.Songs.ForEach(song =>
+                {
+                    if (string.IsNullOrEmpty(song.FilePath)) return;
+
+                    if (File.Exists(song.FilePath))
+                        files.Add(song.FilePath);
+                });
+            }
+        });
+
+        return [..files];
+    }
+
+    /// <summary>
+    /// Retrieve the files from the staging folder, excluding audio files.
+    /// </summary>
+    /// <param name="stagingPath">The staging path.</param>
+    /// <returns>An array of file paths.</returns>
+    private string[] GetFilesOnly(string stagingPath)
+    {
+        try
+        {
+            return FileHelper.SafeEnumerateFiles(stagingPath, "*.*", SearchOption.AllDirectories)
+                .Where(file => !StationManager.Instance.ValidAudioExtensions.Contains(Path.GetExtension(file))).ToArray();
+        }
+        catch (Exception ex)
+        {
+            AuLogger.GetCurrentLogger<BackupManager>("GetFilesOnly").Error(ex, "Failed to get files from staging folder.");
+            return [];
         }
     }
 

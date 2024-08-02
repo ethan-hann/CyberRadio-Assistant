@@ -248,10 +248,12 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
 
         if (fdlgOpenSongs.ShowDialog(this) == DialogResult.OK)
         {
+            lvSongs.BeginUpdate();
             // Ensure the selected file has the same name as song.FilePath
             if (Path.GetFileName(fdlgOpenSongs.FileName).Equals(fileName, StringComparison.OrdinalIgnoreCase))
             {
                 song.FilePath = fdlgOpenSongs.FileName;
+                lvSongs.SelectedItems[0].SubItems[5].Text = song.FilePath;
                 lvSongs.Invalidate();
             }
             else
@@ -260,6 +262,7 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
                 var caption = GlobalData.Strings.GetString("InvalidFileCaption") ?? "Invalid File";
                 MessageBox.Show(text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            lvSongs.EndUpdate();
         }
 
         fdlgOpenSongs.Multiselect = true;

@@ -34,6 +34,8 @@
             chkAutoExportToGame = new CheckBox();
             chkWatchForChanges = new CheckBox();
             flowLayoutPanel1 = new FlowLayoutPanel();
+            chkCopySongFilesToBackup = new CheckBox();
+            tableLayoutPanel5 = new TableLayoutPanel();
             lblBackupCompressionLvl = new Label();
             cmbCompressionLevels = new ComboBox();
             btnEditPaths = new Button();
@@ -68,6 +70,7 @@
             lblHelpText = new ToolStripStatusLabel();
             tableLayoutPanel1.SuspendLayout();
             flowLayoutPanel1.SuspendLayout();
+            tableLayoutPanel5.SuspendLayout();
             tabConfigs.SuspendLayout();
             tabGeneral.SuspendLayout();
             tabLogging.SuspendLayout();
@@ -149,7 +152,8 @@
             // 
             // flowLayoutPanel1
             // 
-            flowLayoutPanel1.Controls.Add(lblBackupCompressionLvl);
+            flowLayoutPanel1.Controls.Add(chkCopySongFilesToBackup);
+            flowLayoutPanel1.Controls.Add(tableLayoutPanel5);
             flowLayoutPanel1.Controls.Add(cmbCompressionLevels);
             flowLayoutPanel1.Dock = DockStyle.Fill;
             flowLayoutPanel1.Location = new Point(3, 78);
@@ -157,12 +161,38 @@
             flowLayoutPanel1.Size = new Size(773, 32);
             flowLayoutPanel1.TabIndex = 8;
             // 
+            // chkCopySongFilesToBackup
+            // 
+            chkCopySongFilesToBackup.AutoSize = true;
+            chkCopySongFilesToBackup.Location = new Point(3, 3);
+            chkCopySongFilesToBackup.Name = "chkCopySongFilesToBackup";
+            chkCopySongFilesToBackup.Size = new Size(171, 19);
+            chkCopySongFilesToBackup.TabIndex = 3;
+            chkCopySongFilesToBackup.Tag = "CopySongFilesToBackupHelp";
+            chkCopySongFilesToBackup.Text = "Copy Song Files to Backup?";
+            chkCopySongFilesToBackup.UseVisualStyleBackColor = true;
+            chkCopySongFilesToBackup.MouseEnter += ControlMouseEnter;
+            chkCopySongFilesToBackup.MouseLeave += ControlMouseLeave;
+            // 
+            // tableLayoutPanel5
+            // 
+            tableLayoutPanel5.ColumnCount = 1;
+            tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tableLayoutPanel5.Controls.Add(lblBackupCompressionLvl, 0, 0);
+            tableLayoutPanel5.Location = new Point(180, 3);
+            tableLayoutPanel5.Name = "tableLayoutPanel5";
+            tableLayoutPanel5.RowCount = 1;
+            tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tableLayoutPanel5.Size = new Size(175, 23);
+            tableLayoutPanel5.TabIndex = 4;
+            // 
             // lblBackupCompressionLvl
             // 
+            lblBackupCompressionLvl.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             lblBackupCompressionLvl.AutoSize = true;
-            lblBackupCompressionLvl.Location = new Point(3, 0);
+            lblBackupCompressionLvl.Location = new Point(3, 4);
             lblBackupCompressionLvl.Name = "lblBackupCompressionLvl";
-            lblBackupCompressionLvl.Size = new Size(155, 15);
+            lblBackupCompressionLvl.Size = new Size(169, 15);
             lblBackupCompressionLvl.TabIndex = 2;
             lblBackupCompressionLvl.Text = "Backup Compression Level: ";
             lblBackupCompressionLvl.TextAlign = ContentAlignment.MiddleLeft;
@@ -171,9 +201,9 @@
             // 
             cmbCompressionLevels.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbCompressionLevels.FormattingEnabled = true;
-            cmbCompressionLevels.Location = new Point(164, 3);
+            cmbCompressionLevels.Location = new Point(361, 3);
             cmbCompressionLevels.Name = "cmbCompressionLevels";
-            cmbCompressionLevels.Size = new Size(191, 23);
+            cmbCompressionLevels.Size = new Size(276, 23);
             cmbCompressionLevels.TabIndex = 1;
             cmbCompressionLevels.Tag = "BackupCompressionLevelHelp";
             cmbCompressionLevels.MouseEnter += ControlMouseEnter;
@@ -618,6 +648,8 @@
             tableLayoutPanel1.PerformLayout();
             flowLayoutPanel1.ResumeLayout(false);
             flowLayoutPanel1.PerformLayout();
+            tableLayoutPanel5.ResumeLayout(false);
+            tableLayoutPanel5.PerformLayout();
             tabConfigs.ResumeLayout(false);
             tabGeneral.ResumeLayout(false);
             tabLogging.ResumeLayout(false);
@@ -677,5 +709,7 @@
         private FlowLayoutPanel flowLayoutPanel1;
         private ComboBox cmbCompressionLevels;
         private Label lblBackupCompressionLvl;
+        private CheckBox chkCopySongFilesToBackup;
+        private TableLayoutPanel tableLayoutPanel5;
     }
 }

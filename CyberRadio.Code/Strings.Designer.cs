@@ -484,6 +484,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Copy Song Files to Backup?.
+        /// </summary>
+        internal static string CopySongFilesToBackupOption {
+            get {
+                return ResourceManager.GetString("CopySongFilesToBackupOption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Creating preview....
         /// </summary>
         internal static string CreatingPreview {

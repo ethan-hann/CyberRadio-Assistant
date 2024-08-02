@@ -37,6 +37,7 @@ public sealed class ApplicationConfig
     private const string AutoCheckForUpdatesKey = "autoCheckForUpdates";
     private const string AutoExportToGameKey = "autoExportToGame";
     private const string WatchForGameChangesKey = "watchForGameChanges";
+    private const string CopySongFilesToBackupKey = "copySongFilesToBackup";
     private const string BackupCompressionLevelKey = "backupCompressionLevel";
     private const string StagingPathKey = "stagingPath";
     private const string GameBasePathKey = "gameBasePath";
@@ -66,6 +67,13 @@ public sealed class ApplicationConfig
     [Config(WatchForGameChangesKey)]
     [Description("WatchForChangesHelp")]
     public bool WatchForGameChanges { get; set; } = true;
+
+    /// <summary>
+    ///    Specifies whether the application should copy the song files when creating a backup of the staging folder.
+    /// </summary>
+    [Config(CopySongFilesToBackupKey)]
+    [Description("CopySongFilesToBackupHelp")]
+    public bool CopySongFilesToBackup { get; set; } = true;
 
     /// <summary>
     ///     Specifies the backup compression level to use when zipping the staging folder.

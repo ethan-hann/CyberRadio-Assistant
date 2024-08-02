@@ -190,6 +190,7 @@ public sealed partial class BackupPreview : Form
             pgProgress.Visible = false;
             lblStatus.Text = GlobalData.Strings.GetString("BackupPreviewCompleted");
             btnStartBackup.Enabled = true;
+            tvFiles.SelectedNode = tvFiles.Nodes[0];
         });
     }
 
@@ -252,7 +253,11 @@ public sealed partial class BackupPreview : Form
         try
         {
             _isBackupInProgress = true;
-            await _backupManager.BackupStagingFolderAsync(stagingPath, backupPath);
+            var shouldBackupSongs = GlobalData.ConfigManager.Get("copySongFilesToBackup");
+            if (shouldBackupSongs is bool backupSongs)
+                await _backupManager.BackupStagingFolderAsync(stagingPath, backupPath, backupSongs);
+            else
+                await _backupManager.BackupStagingFolderAsync(stagingPath, backupPath, true);
         }
         catch (Exception ex)
         {
@@ -264,6 +269,12 @@ public sealed partial class BackupPreview : Form
 
             AuLogger.GetCurrentLogger<MainForm>("StartBackupAsync")
                 .Error(ex, "An error occurred during staging folder backup.");
+
+            _isBackupInProgress = false;
+            pgProgress.Value = 0;
+            pgProgress.Visible = false;
+            btnStartBackup.Enabled = true;
+            this.SafeInvoke(() => lblStatus.Text = text);
         }
     }
 

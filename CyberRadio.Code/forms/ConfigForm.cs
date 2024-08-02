@@ -99,10 +99,12 @@ public sealed partial class ConfigForm : Form
         chkAutoExportToGame.Text = GlobalData.Strings.GetString("AutoExportOption");
         btnEditPaths.Text = GlobalData.Strings.GetString("EditPathsOption");
         chkWatchForChanges.Text = GlobalData.Strings.GetString("WatchForChangesOption");
-        lblLogPathLabel.Text = GlobalData.Strings.GetString("LogPathLabel");
-        lblCurrentLogPath.Text = GlobalData.Strings.GetString("NoLogPathSet");
+        lblBackupCompressionLvl.Text = GlobalData.Strings.GetString("BackupCompressionLevel");
+        chkCopySongFilesToBackup.Text = GlobalData.Strings.GetString("CopySongFilesToBackupOption");
 
         //Logging Tab
+        lblLogPathLabel.Text = GlobalData.Strings.GetString("LogPathLabel");
+        lblCurrentLogPath.Text = GlobalData.Strings.GetString("NoLogPathSet");
         chkNewFileEveryLaunch.Text = GlobalData.Strings.GetString("NewLogFileOption");
         btnEditLogsPath.Text = GlobalData.Strings.GetString("EditLogsPathOption");
 
@@ -126,6 +128,7 @@ public sealed partial class ConfigForm : Form
         chkAutoExportToGame.Checked = config.AutoExportToGame;
         chkNewFileEveryLaunch.Checked = config.LogOptions.NewFileEveryLaunch;
         chkWatchForChanges.Checked = config.WatchForGameChanges;
+        chkCopySongFilesToBackup.Checked = config.CopySongFilesToBackup;
 
         lblCurrentLogPath.Text = config.LogOptions.LogFileDirectory == string.Empty
             ? lblCurrentLogPath.Text
@@ -228,6 +231,7 @@ public sealed partial class ConfigForm : Form
         saved &= GlobalData.ConfigManager.Set("autoExportToGame", chkAutoExportToGame.Checked);
         saved &= GlobalData.ConfigManager.Set("newFileEveryLaunch", chkNewFileEveryLaunch.Checked);
         saved &= GlobalData.ConfigManager.Set("watchForGameChanges", chkWatchForChanges.Checked);
+        saved &= GlobalData.ConfigManager.Set("copySongFilesToBackup", chkCopySongFilesToBackup.Checked);
 
         var selectedLocalizedName = cmbCompressionLevels.SelectedItem?.ToString();
         if (selectedLocalizedName != null &&
