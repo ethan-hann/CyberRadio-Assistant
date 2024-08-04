@@ -146,19 +146,12 @@ public static class PathHelper
         try
         {
             // Check if the paths are valid
-            if (string.IsNullOrEmpty(basePath) || string.IsNullOrEmpty(subPath) || !Directory.Exists(basePath) ||
-                !Directory.Exists(subPath))
+            if (string.IsNullOrEmpty(basePath) || string.IsNullOrEmpty(subPath) || !Directory.Exists(basePath))
                 return false;
 
             // Get the full paths
-            var fullBasePath = Path.GetFullPath(basePath);
+            var fullBasePath = Path.GetFullPath(basePath).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar) + Path.DirectorySeparatorChar;
             var fullSubPath = Path.GetFullPath(subPath);
-
-            // Normalize directory separators
-            fullBasePath = fullBasePath.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar) +
-                           Path.DirectorySeparatorChar;
-            fullSubPath = fullSubPath.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar) +
-                          Path.DirectorySeparatorChar;
 
             // Check if the fullSubPath starts with fullBasePath
             return fullSubPath.StartsWith(fullBasePath, StringComparison.OrdinalIgnoreCase);

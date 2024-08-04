@@ -83,6 +83,7 @@ namespace RadioExt_Helper.forms
             pgBackupProgress = new ToolStripProgressBar();
             lblSpring2 = new ToolStripStatusLabel();
             statusStripBackup = new StatusStrip();
+            restoreStagingFolderToolStripMenuItem = new ToolStripMenuItem();
             menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
@@ -112,7 +113,7 @@ namespace RadioExt_Helper.forms
             // 
             // fileToolStripMenuItem
             // 
-            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { exportToGameToolStripMenuItem, refreshStationsToolStripMenuItem, synchronizeStationsToolStripMenuItem, toolStripSeparator2, backupStagingFolderToolStripMenuItem, openStagingPathToolStripMenuItem, openGamePathToolStripMenuItem, openLogFolderToolStripMenuItem, toolStripSeparator3, configurationToolStripMenuItem, pathsToolStripMenuItem, toolStripSeparator4, exitToolStripMenuItem });
+            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { exportToGameToolStripMenuItem, refreshStationsToolStripMenuItem, synchronizeStationsToolStripMenuItem, toolStripSeparator2, backupStagingFolderToolStripMenuItem, restoreStagingFolderToolStripMenuItem, openStagingPathToolStripMenuItem, openGamePathToolStripMenuItem, openLogFolderToolStripMenuItem, toolStripSeparator3, configurationToolStripMenuItem, pathsToolStripMenuItem, toolStripSeparator4, exitToolStripMenuItem });
             fileToolStripMenuItem.Image = Properties.Resources.file;
             fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             fileToolStripMenuItem.Size = new Size(53, 20);
@@ -123,7 +124,7 @@ namespace RadioExt_Helper.forms
             exportToGameToolStripMenuItem.Image = Properties.Resources.export;
             exportToGameToolStripMenuItem.Name = "exportToGameToolStripMenuItem";
             exportToGameToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.E;
-            exportToGameToolStripMenuItem.Size = new Size(273, 22);
+            exportToGameToolStripMenuItem.Size = new Size(275, 22);
             exportToGameToolStripMenuItem.Text = "Export Stations";
             exportToGameToolStripMenuItem.Click += ExportToGameToolStripMenuItem_Click;
             // 
@@ -132,7 +133,7 @@ namespace RadioExt_Helper.forms
             refreshStationsToolStripMenuItem.Image = Properties.Resources.refresh;
             refreshStationsToolStripMenuItem.Name = "refreshStationsToolStripMenuItem";
             refreshStationsToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.R;
-            refreshStationsToolStripMenuItem.Size = new Size(273, 22);
+            refreshStationsToolStripMenuItem.Size = new Size(275, 22);
             refreshStationsToolStripMenuItem.Text = "Reload From Staging";
             refreshStationsToolStripMenuItem.Click += RefreshStationsToolStripMenuItem_Click;
             // 
@@ -141,21 +142,21 @@ namespace RadioExt_Helper.forms
             synchronizeStationsToolStripMenuItem.Image = Properties.Resources.sync;
             synchronizeStationsToolStripMenuItem.Name = "synchronizeStationsToolStripMenuItem";
             synchronizeStationsToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.S;
-            synchronizeStationsToolStripMenuItem.Size = new Size(273, 22);
+            synchronizeStationsToolStripMenuItem.Size = new Size(275, 22);
             synchronizeStationsToolStripMenuItem.Text = "Synchronize Stations";
             synchronizeStationsToolStripMenuItem.Click += SynchronizeStationsToolStripMenuItem_Click;
             // 
             // toolStripSeparator2
             // 
             toolStripSeparator2.Name = "toolStripSeparator2";
-            toolStripSeparator2.Size = new Size(270, 6);
+            toolStripSeparator2.Size = new Size(272, 6);
             // 
             // backupStagingFolderToolStripMenuItem
             // 
             backupStagingFolderToolStripMenuItem.Image = Properties.Resources.zip_file_16x16;
             backupStagingFolderToolStripMenuItem.Name = "backupStagingFolderToolStripMenuItem";
             backupStagingFolderToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.B;
-            backupStagingFolderToolStripMenuItem.Size = new Size(273, 22);
+            backupStagingFolderToolStripMenuItem.Size = new Size(275, 22);
             backupStagingFolderToolStripMenuItem.Text = "Backup Staging Folder";
             backupStagingFolderToolStripMenuItem.Click += BackupStagingFolderToolStripMenuItem_Click;
             // 
@@ -164,7 +165,7 @@ namespace RadioExt_Helper.forms
             openStagingPathToolStripMenuItem.Image = Properties.Resources.link;
             openStagingPathToolStripMenuItem.Name = "openStagingPathToolStripMenuItem";
             openStagingPathToolStripMenuItem.ShortcutKeys = Keys.Alt | Keys.S;
-            openStagingPathToolStripMenuItem.Size = new Size(273, 22);
+            openStagingPathToolStripMenuItem.Size = new Size(275, 22);
             openStagingPathToolStripMenuItem.Text = "Open Staging Folder";
             openStagingPathToolStripMenuItem.Click += OpenStagingPathToolStripMenuItem_Click;
             // 
@@ -173,7 +174,7 @@ namespace RadioExt_Helper.forms
             openGamePathToolStripMenuItem.Image = Properties.Resources.link;
             openGamePathToolStripMenuItem.Name = "openGamePathToolStripMenuItem";
             openGamePathToolStripMenuItem.ShortcutKeys = Keys.Alt | Keys.G;
-            openGamePathToolStripMenuItem.Size = new Size(273, 22);
+            openGamePathToolStripMenuItem.Size = new Size(275, 22);
             openGamePathToolStripMenuItem.Text = "Open Game Radios Folder";
             openGamePathToolStripMenuItem.Click += OpenGamePathToolStripMenuItem_Click;
             // 
@@ -182,21 +183,21 @@ namespace RadioExt_Helper.forms
             openLogFolderToolStripMenuItem.Image = Properties.Resources.link;
             openLogFolderToolStripMenuItem.Name = "openLogFolderToolStripMenuItem";
             openLogFolderToolStripMenuItem.ShortcutKeys = Keys.Alt | Keys.L;
-            openLogFolderToolStripMenuItem.Size = new Size(273, 22);
+            openLogFolderToolStripMenuItem.Size = new Size(275, 22);
             openLogFolderToolStripMenuItem.Text = "Open Log Folder";
             openLogFolderToolStripMenuItem.Click += OpenLogFolderToolStripMenuItem_Click;
             // 
             // toolStripSeparator3
             // 
             toolStripSeparator3.Name = "toolStripSeparator3";
-            toolStripSeparator3.Size = new Size(270, 6);
+            toolStripSeparator3.Size = new Size(272, 6);
             // 
             // configurationToolStripMenuItem
             // 
             configurationToolStripMenuItem.Image = Properties.Resources.settings;
             configurationToolStripMenuItem.Name = "configurationToolStripMenuItem";
             configurationToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.C;
-            configurationToolStripMenuItem.Size = new Size(273, 22);
+            configurationToolStripMenuItem.Size = new Size(275, 22);
             configurationToolStripMenuItem.Text = "Configuration";
             configurationToolStripMenuItem.Click += ConfigurationToolStripMenuItem_Click;
             // 
@@ -205,21 +206,21 @@ namespace RadioExt_Helper.forms
             pathsToolStripMenuItem.Image = Properties.Resources.folder;
             pathsToolStripMenuItem.Name = "pathsToolStripMenuItem";
             pathsToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.P;
-            pathsToolStripMenuItem.Size = new Size(273, 22);
+            pathsToolStripMenuItem.Size = new Size(275, 22);
             pathsToolStripMenuItem.Text = "Game Paths";
             pathsToolStripMenuItem.Click += PathsToolStripMenuItem_Click;
             // 
             // toolStripSeparator4
             // 
             toolStripSeparator4.Name = "toolStripSeparator4";
-            toolStripSeparator4.Size = new Size(270, 6);
+            toolStripSeparator4.Size = new Size(272, 6);
             // 
             // exitToolStripMenuItem
             // 
             exitToolStripMenuItem.Image = Properties.Resources.exit_16x16;
             exitToolStripMenuItem.Name = "exitToolStripMenuItem";
             exitToolStripMenuItem.ShortcutKeys = Keys.Alt | Keys.F4;
-            exitToolStripMenuItem.Size = new Size(273, 22);
+            exitToolStripMenuItem.Size = new Size(275, 22);
             exitToolStripMenuItem.Text = "Exit";
             exitToolStripMenuItem.Click += ExitToolStripMenuItem_Click;
             // 
@@ -589,6 +590,15 @@ namespace RadioExt_Helper.forms
             statusStripBackup.Text = "statusStrip2";
             statusStripBackup.Visible = false;
             // 
+            // restoreStagingFolderToolStripMenuItem
+            // 
+            restoreStagingFolderToolStripMenuItem.Image = Properties.Resources.zip_file_16x16;
+            restoreStagingFolderToolStripMenuItem.Name = "restoreStagingFolderToolStripMenuItem";
+            restoreStagingFolderToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.R;
+            restoreStagingFolderToolStripMenuItem.Size = new Size(275, 22);
+            restoreStagingFolderToolStripMenuItem.Text = "Restore Staging Folder";
+            restoreStagingFolderToolStripMenuItem.Click += RestoreStagingFolderToolStripMenuItem_Click;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(96F, 96F);
@@ -686,5 +696,6 @@ namespace RadioExt_Helper.forms
         private ToolStripProgressBar pgBackupProgress;
         private ToolStripStatusLabel lblSpring2;
         private StatusStrip statusStripBackup;
+        private ToolStripMenuItem restoreStagingFolderToolStripMenuItem;
     }
 }

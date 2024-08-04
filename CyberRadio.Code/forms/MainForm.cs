@@ -961,6 +961,52 @@ public sealed partial class MainForm : Form
         new BackupPreview(compressionLevel).ShowDialog();
     }
 
+    private void RestoreStagingFolderToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        //Check for sync in progress to prevent restore during sync
+        if (_isSyncInProgress)
+        {
+            var text = GlobalData.Strings.GetString("SyncInProgress") ??
+                       "Synchronization is in progress. Please wait...";
+            var caption = GlobalData.Strings.GetString("SyncAbbrev") ?? "Sync";
+            MessageBox.Show(this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            return;
+        }
+        //TODO: translations
+        if (_isExportInProgress)
+        {
+            var text = GlobalData.Strings.GetString("ExportInProgress") ??
+                       "Export is in progress. Please wait...";
+            var caption = GlobalData.Strings.GetString("ExportAbbrev") ?? "Exporting";
+            MessageBox.Show(this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            return;
+        }
+
+        var confirmText = GlobalData.Strings.GetString("ConfirmRestore") ??
+                   "Are you sure you want to restore the staging folder? This will overwrite your existing stations!";
+        var confirmCaption = GlobalData.Strings.GetString("Confirm");
+        if (MessageBox.Show(this, confirmText, confirmCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
+            return;
+
+        var fileBrowser = new OpenFileDialog
+        {
+            Filter = "Backup files (*.zip)|*.zip",
+            Title = GlobalData.Strings.GetString("SelectBackupFile") ?? "Select Backup File"
+        };
+
+        if (fileBrowser.ShowDialog(this) != DialogResult.OK) return;
+
+        _isExportInProgress = true; //to prevent directory watcher from firing events.
+
+        var restoreWindow = new RestoreForm(fileBrowser.FileName, StagingPath);
+        restoreWindow.RestoreCompleted += (_, _) =>
+        {
+            _isExportInProgress = false;
+            PopulateStations();
+        };
+        restoreWindow.ShowDialog(this);
+    }
+
     private void RadioExtHelpToolStripMenuItem_Click(object sender, EventArgs e)
     {
         "https://github.com/justarandomguyintheinternet/CP77_radioExt".OpenUrl();

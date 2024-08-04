@@ -479,7 +479,7 @@ public partial class StationManager : IDisposable
             if (!Directory.Exists(radiosDir)) return;
 
             var stagingDirectories = FileHelper.SafeEnumerateDirectories(stagingPath, "*", SearchOption.AllDirectories)
-                .ToList();
+                .ToList().Where(folder => !folder.EndsWith("icons")); //Do not synchronize the icons folder
             var gameDirectories = FileHelper.SafeEnumerateDirectories(radiosDir, "*", SearchOption.AllDirectories)
                 .ToList();
 
@@ -596,7 +596,9 @@ public partial class StationManager : IDisposable
                 File.Copy(file, targetFilePath, true);
             })).ToList();
 
-        copyTasks.AddRange(from directory in directories let targetDirectoryPath = Path.Combine(targetDir, Path.GetFileName(directory)) select Task.Run(() => CopyDirectoryAsync(directory, targetDirectoryPath)));
+        copyTasks.AddRange(from directory in directories 
+            let targetDirectoryPath = Path.Combine(targetDir, Path.GetFileName(directory)) 
+            select Task.Run(() => CopyDirectoryAsync(directory, targetDirectoryPath)));
 
         await Task.WhenAll(copyTasks);
     }
