@@ -38,6 +38,7 @@ public sealed class ApplicationConfig
     private const string AutoExportToGameKey = "autoExportToGame";
     private const string WatchForGameChangesKey = "watchForGameChanges";
     private const string CopySongFilesToBackupKey = "copySongFilesToBackup";
+    private const string DefaultSongLocationKey = "defaultSongLocation";
     private const string BackupCompressionLevelKey = "backupCompressionLevel";
     private const string StagingPathKey = "stagingPath";
     private const string GameBasePathKey = "gameBasePath";
@@ -74,6 +75,10 @@ public sealed class ApplicationConfig
     [Config(CopySongFilesToBackupKey)]
     [Description("CopySongFilesToBackupHelp")]
     public bool CopySongFilesToBackup { get; set; } = true;
+
+    [Config(DefaultSongLocationKey)]
+    [Description("DefaultSongLocationHelp")]
+    public string DefaultSongLocation { get; set; } = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic);
 
     /// <summary>
     ///     Specifies the backup compression level to use when zipping the staging folder.

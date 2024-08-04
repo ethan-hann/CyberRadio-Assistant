@@ -547,6 +547,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Indicates the folder that imported station&apos;s song files should be saved to. Default&apos;s to the MyMusic folder..
+        /// </summary>
+        internal static string DefaultSongLocationHelp {
+            get {
+                return ResourceManager.GetString("DefaultSongLocationHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to remove all songs?.
         /// </summary>
         internal static string DeleteAllSongsConfirm {

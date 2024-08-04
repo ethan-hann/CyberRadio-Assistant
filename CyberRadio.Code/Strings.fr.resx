@@ -839,4 +839,7 @@ La taille réelle peut être différente.</value>
   <data name="CopySongFilesToBackupOption" xml:space="preserve">
     <value>Copier les fichiers de chansons vers la sauvegarde ?</value>
   </data>
+  <data name="DefaultSongLocationHelp" xml:space="preserve">
+    <value>Indique le dossier dans lequel les fichiers de chansons de la station importée doivent être enregistrés. La valeur par défaut est le dossier Ma musique.</value>
+  </data>
 </root>

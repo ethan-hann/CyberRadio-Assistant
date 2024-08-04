@@ -253,13 +253,13 @@ public sealed partial class StationListBox : ListBox
 
     private void HandleStationArchive(string filePath)
     {
-        var tempDir = StationManager.ExtractStationArchive(filePath);
-        var stationId = StationManager.Instance.LoadStationFromDirectory(tempDir, true);
+        var directories = StationManager.ExtractStationArchive(filePath);
+        var stationId = StationManager.Instance.LoadStationFromDirectory(directories.tempDir, directories.songDir, true);
         var station = StationManager.Instance.GetStation(stationId)?.Key;
 
         if (station == null)
         {
-            AuLogger.GetCurrentLogger<StationListBox>("HandleStationArchive").Warn($"Station not found in directory: {tempDir}");
+            AuLogger.GetCurrentLogger<StationListBox>("HandleStationArchive").Warn($"Station not found in directory: {directories.tempDir}");
             return;
         }
 

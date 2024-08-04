@@ -16,7 +16,6 @@
 
 using System.ComponentModel;
 using System.Globalization;
-using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using AetherUtils.Core.Files;
 using AetherUtils.Core.Logging;
@@ -67,7 +66,7 @@ public partial class StationManager : IDisposable
         {
             ClearStations();
             foreach (var d in FileHelper.SafeEnumerateDirectories(directory))
-                ProcessDirectory(d, false);
+                ProcessDirectory(d, d, false);
         }
         catch (Exception ex)
         {
@@ -81,15 +80,18 @@ public partial class StationManager : IDisposable
     /// and is used to load a single station from a single directory, not necessarily from the staging directory.
     /// </summary>
     /// <param name="directory">The directory to load the station from.</param>
+    /// <param name="songDirectory">The song directory to load the station's songs from.</param>
     /// <param name="treatAsNewStation">Indicates whether the station should be treated as a new station (i.e., it is not present in the staging directory already.</param>
     /// <returns>The <see cref="Guid"/> of the processed station or <c>null</c> if the directory couldn't be processed.</returns>
-    public Guid? LoadStationFromDirectory(string? directory, bool treatAsNewStation)
+    public Guid? LoadStationFromDirectory(string? directory, string? songDirectory, bool treatAsNewStation)
     {
         try
         {
             if (string.IsNullOrEmpty(directory)) return null;
+            if (string.IsNullOrEmpty(songDirectory)) return null;
+
             if (!PathHelper.IsSubPath(GlobalData.ConfigManager.Get("stagingPath") as string ?? string.Empty, directory))
-                return ProcessDirectory(directory, treatAsNewStation);
+                return ProcessDirectory(directory, songDirectory, treatAsNewStation);
             AuLogger.GetCurrentLogger<StationManager>()
                 .Warn($"Attempted to load station from staging directory: {directory}");
             return null;
@@ -479,7 +481,7 @@ public partial class StationManager : IDisposable
             if (!Directory.Exists(radiosDir)) return;
 
             var stagingDirectories = FileHelper.SafeEnumerateDirectories(stagingPath, "*", SearchOption.AllDirectories)
-                .ToList().Where(folder => !folder.EndsWith("icons")); //Do not synchronize the icons folder
+                .ToList().Where(folder => !IsProtectedFolder(folder)); //Do not synchronize protected folders
             var gameDirectories = FileHelper.SafeEnumerateDirectories(radiosDir, "*", SearchOption.AllDirectories)
                 .ToList();
 
@@ -631,18 +633,21 @@ public partial class StationManager : IDisposable
     /// Processes a directory by loading the metadata, songs, and icons from the files in the directory and adding them to the manager.
     /// </summary>
     /// <param name="directory">The directory to process.</param>
+    /// <param name="songDirectory">The directory to load songs from.</param>
     /// <param name="treatAsNewStation">Indicates if this directory should be treated as a new station (i.e., not in the staging directory already) or not.</param>
     /// <returns>The newly processed Station ID; or <c>null</c> if the directory couldn't be processed.</returns>
-    private Guid? ProcessDirectory(string directory, bool treatAsNewStation)
+    private Guid? ProcessDirectory(string directory, string songDirectory, bool treatAsNewStation)
     {
         try
         {
             var files = FileHelper.SafeEnumerateFiles(directory, "*.*", SearchOption.AllDirectories).ToList();
+            var songDirFiles = !directory.Equals(songDirectory) ? FileHelper.SafeEnumerateFiles(songDirectory, "*.*", SearchOption.AllDirectories).ToList() : files;
+
             var metadata = files.Where(file => file.EndsWith("metadata.json")).Select(_metaDataJson.LoadJson)
                 .FirstOrDefault();
             var songList = files.Where(file => file.EndsWith("songs.sgls")).Select(_songListJson.LoadJson)
                 .FirstOrDefault() ?? [];
-            var songFiles = files.Where(file => ValidAudioExtensions.Contains(Path.GetExtension(file).ToLower()))
+            var songFiles = songDirFiles.Where(file => ValidAudioExtensions.Contains(Path.GetExtension(file).ToLower()))
                 .ToList();
             var iconFiles = files.Where(file => file.EndsWith(".archive")).ToList();
 
@@ -723,11 +728,12 @@ public partial class StationManager : IDisposable
     /// </summary>
     /// <param name="filePath"></param>
     /// <returns></returns>
-    public static string ExtractStationArchive(string filePath)
+    public static (string tempDir, string songDir) ExtractStationArchive(string filePath)
     {
         try
         {
             var tempDir = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+            var songDir = GlobalData.ConfigManager.Get("defaultSongLocation") as string ?? Environment.GetFolderPath(Environment.SpecialFolder.MyMusic);
             Directory.CreateDirectory(tempDir);
 
             using var archive = ArchiveFactory.Open(filePath);
@@ -737,7 +743,12 @@ public partial class StationManager : IDisposable
                 if (entry.IsDirectory) continue;
 
                 var entryFileName = PathHelper.SanitizePath(entry.Key);
-                var fullPath = Path.Combine(tempDir, entryFileName);
+
+                if (string.IsNullOrEmpty(entryFileName)) continue;
+
+                //If the file is a song file, extract it to the song directory, otherwise extract it to the temp directory
+                var fullPath = Path.Combine(Instance.ValidAudioExtensions.Contains(Path.GetExtension(entryFileName)) ? songDir : tempDir, Path.GetFileName(entryFileName));
+
                 var directoryName = Path.GetDirectoryName(fullPath);
 
                 if (directoryName?.Length > 0)
@@ -766,12 +777,12 @@ public partial class StationManager : IDisposable
                 }
             }
 
-            return tempDir;
+            return (tempDir, songDir);
         } 
         catch (Exception ex)
         {
             AuLogger.GetCurrentLogger<StationManager>("ExtractStationArchive").Error(ex, "Error extracting station archive.");
-            return string.Empty;
+            return (string.Empty, string.Empty);
         }
     }
 

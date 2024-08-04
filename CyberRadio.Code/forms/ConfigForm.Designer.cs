@@ -31,14 +31,16 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ConfigForm));
             tableLayoutPanel1 = new TableLayoutPanel();
             chkCheckForUpdates = new CheckBox();
-            chkAutoExportToGame = new CheckBox();
-            chkWatchForChanges = new CheckBox();
-            flowLayoutPanel1 = new FlowLayoutPanel();
+            tableLayoutPanel7 = new TableLayoutPanel();
             chkCopySongFilesToBackup = new CheckBox();
-            tableLayoutPanel5 = new TableLayoutPanel();
             lblBackupCompressionLvl = new Label();
             cmbCompressionLevels = new ComboBox();
+            chkAutoExportToGame = new CheckBox();
+            chkWatchForChanges = new CheckBox();
             btnEditPaths = new Button();
+            tableLayoutPanel6 = new TableLayoutPanel();
+            btnEditDefaultSongLocation = new Button();
+            lblDefaultSongLocation = new Label();
             tabConfigs = new TabControl();
             tabGeneral = new TabPage();
             tabLogging = new TabPage();
@@ -68,9 +70,10 @@
             fldrOpenLogPath = new FolderBrowserDialog();
             statusStrip1 = new StatusStrip();
             lblHelpText = new ToolStripStatusLabel();
+            fldrOpenDefaultMusicPath = new FolderBrowserDialog();
             tableLayoutPanel1.SuspendLayout();
-            flowLayoutPanel1.SuspendLayout();
-            tableLayoutPanel5.SuspendLayout();
+            tableLayoutPanel7.SuspendLayout();
+            tableLayoutPanel6.SuspendLayout();
             tabConfigs.SuspendLayout();
             tabGeneral.SuspendLayout();
             tabLogging.SuspendLayout();
@@ -89,20 +92,22 @@
             tableLayoutPanel1.ColumnCount = 1;
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
             tableLayoutPanel1.Controls.Add(chkCheckForUpdates, 0, 0);
+            tableLayoutPanel1.Controls.Add(tableLayoutPanel7, 0, 3);
             tableLayoutPanel1.Controls.Add(chkAutoExportToGame, 0, 1);
             tableLayoutPanel1.Controls.Add(chkWatchForChanges, 0, 2);
-            tableLayoutPanel1.Controls.Add(flowLayoutPanel1, 0, 3);
-            tableLayoutPanel1.Controls.Add(btnEditPaths, 0, 4);
+            tableLayoutPanel1.Controls.Add(btnEditPaths, 0, 5);
+            tableLayoutPanel1.Controls.Add(tableLayoutPanel6, 0, 4);
             tableLayoutPanel1.Dock = DockStyle.Fill;
             tableLayoutPanel1.Location = new Point(3, 3);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
-            tableLayoutPanel1.RowCount = 5;
+            tableLayoutPanel1.RowCount = 6;
             tableLayoutPanel1.RowStyles.Add(new RowStyle());
             tableLayoutPanel1.RowStyles.Add(new RowStyle());
             tableLayoutPanel1.RowStyles.Add(new RowStyle());
             tableLayoutPanel1.RowStyles.Add(new RowStyle());
             tableLayoutPanel1.RowStyles.Add(new RowStyle());
-            tableLayoutPanel1.Size = new Size(779, 158);
+            tableLayoutPanel1.RowStyles.Add(new RowStyle());
+            tableLayoutPanel1.Size = new Size(779, 220);
             tableLayoutPanel1.TabIndex = 0;
             // 
             // chkCheckForUpdates
@@ -119,6 +124,59 @@
             chkCheckForUpdates.UseVisualStyleBackColor = true;
             chkCheckForUpdates.MouseEnter += ControlMouseEnter;
             chkCheckForUpdates.MouseLeave += ControlMouseLeave;
+            // 
+            // tableLayoutPanel7
+            // 
+            tableLayoutPanel7.ColumnCount = 3;
+            tableLayoutPanel7.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 56.6607475F));
+            tableLayoutPanel7.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 43.3392525F));
+            tableLayoutPanel7.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 209F));
+            tableLayoutPanel7.Controls.Add(chkCopySongFilesToBackup, 0, 0);
+            tableLayoutPanel7.Controls.Add(lblBackupCompressionLvl, 1, 0);
+            tableLayoutPanel7.Controls.Add(cmbCompressionLevels, 2, 0);
+            tableLayoutPanel7.Dock = DockStyle.Fill;
+            tableLayoutPanel7.Location = new Point(3, 78);
+            tableLayoutPanel7.Name = "tableLayoutPanel7";
+            tableLayoutPanel7.RowCount = 1;
+            tableLayoutPanel7.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tableLayoutPanel7.Size = new Size(773, 33);
+            tableLayoutPanel7.TabIndex = 2;
+            // 
+            // chkCopySongFilesToBackup
+            // 
+            chkCopySongFilesToBackup.AutoSize = true;
+            chkCopySongFilesToBackup.Location = new Point(3, 3);
+            chkCopySongFilesToBackup.Name = "chkCopySongFilesToBackup";
+            chkCopySongFilesToBackup.Size = new Size(171, 19);
+            chkCopySongFilesToBackup.TabIndex = 3;
+            chkCopySongFilesToBackup.Tag = "CopySongFilesToBackupHelp";
+            chkCopySongFilesToBackup.Text = "Copy Song Files to Backup?";
+            chkCopySongFilesToBackup.UseVisualStyleBackColor = true;
+            chkCopySongFilesToBackup.MouseEnter += ControlMouseEnter;
+            chkCopySongFilesToBackup.MouseLeave += ControlMouseLeave;
+            // 
+            // lblBackupCompressionLvl
+            // 
+            lblBackupCompressionLvl.Anchor = AnchorStyles.Right;
+            lblBackupCompressionLvl.AutoSize = true;
+            lblBackupCompressionLvl.Location = new Point(405, 9);
+            lblBackupCompressionLvl.Name = "lblBackupCompressionLvl";
+            lblBackupCompressionLvl.Size = new Size(155, 15);
+            lblBackupCompressionLvl.TabIndex = 2;
+            lblBackupCompressionLvl.Text = "Backup Compression Level: ";
+            lblBackupCompressionLvl.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // cmbCompressionLevels
+            // 
+            cmbCompressionLevels.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbCompressionLevels.FormattingEnabled = true;
+            cmbCompressionLevels.Location = new Point(566, 3);
+            cmbCompressionLevels.Name = "cmbCompressionLevels";
+            cmbCompressionLevels.Size = new Size(204, 23);
+            cmbCompressionLevels.TabIndex = 1;
+            cmbCompressionLevels.Tag = "BackupCompressionLevelHelp";
+            cmbCompressionLevels.MouseEnter += ControlMouseEnter;
+            cmbCompressionLevels.MouseLeave += ControlMouseLeave;
             // 
             // chkAutoExportToGame
             // 
@@ -150,65 +208,6 @@
             chkWatchForChanges.MouseEnter += ControlMouseEnter;
             chkWatchForChanges.MouseLeave += ControlMouseLeave;
             // 
-            // flowLayoutPanel1
-            // 
-            flowLayoutPanel1.Controls.Add(chkCopySongFilesToBackup);
-            flowLayoutPanel1.Controls.Add(tableLayoutPanel5);
-            flowLayoutPanel1.Controls.Add(cmbCompressionLevels);
-            flowLayoutPanel1.Dock = DockStyle.Fill;
-            flowLayoutPanel1.Location = new Point(3, 78);
-            flowLayoutPanel1.Name = "flowLayoutPanel1";
-            flowLayoutPanel1.Size = new Size(773, 32);
-            flowLayoutPanel1.TabIndex = 8;
-            // 
-            // chkCopySongFilesToBackup
-            // 
-            chkCopySongFilesToBackup.AutoSize = true;
-            chkCopySongFilesToBackup.Location = new Point(3, 3);
-            chkCopySongFilesToBackup.Name = "chkCopySongFilesToBackup";
-            chkCopySongFilesToBackup.Size = new Size(171, 19);
-            chkCopySongFilesToBackup.TabIndex = 3;
-            chkCopySongFilesToBackup.Tag = "CopySongFilesToBackupHelp";
-            chkCopySongFilesToBackup.Text = "Copy Song Files to Backup?";
-            chkCopySongFilesToBackup.UseVisualStyleBackColor = true;
-            chkCopySongFilesToBackup.MouseEnter += ControlMouseEnter;
-            chkCopySongFilesToBackup.MouseLeave += ControlMouseLeave;
-            // 
-            // tableLayoutPanel5
-            // 
-            tableLayoutPanel5.ColumnCount = 1;
-            tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tableLayoutPanel5.Controls.Add(lblBackupCompressionLvl, 0, 0);
-            tableLayoutPanel5.Location = new Point(180, 3);
-            tableLayoutPanel5.Name = "tableLayoutPanel5";
-            tableLayoutPanel5.RowCount = 1;
-            tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel5.Size = new Size(175, 23);
-            tableLayoutPanel5.TabIndex = 4;
-            // 
-            // lblBackupCompressionLvl
-            // 
-            lblBackupCompressionLvl.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            lblBackupCompressionLvl.AutoSize = true;
-            lblBackupCompressionLvl.Location = new Point(3, 4);
-            lblBackupCompressionLvl.Name = "lblBackupCompressionLvl";
-            lblBackupCompressionLvl.Size = new Size(169, 15);
-            lblBackupCompressionLvl.TabIndex = 2;
-            lblBackupCompressionLvl.Text = "Backup Compression Level: ";
-            lblBackupCompressionLvl.TextAlign = ContentAlignment.MiddleLeft;
-            // 
-            // cmbCompressionLevels
-            // 
-            cmbCompressionLevels.DropDownStyle = ComboBoxStyle.DropDownList;
-            cmbCompressionLevels.FormattingEnabled = true;
-            cmbCompressionLevels.Location = new Point(361, 3);
-            cmbCompressionLevels.Name = "cmbCompressionLevels";
-            cmbCompressionLevels.Size = new Size(276, 23);
-            cmbCompressionLevels.TabIndex = 1;
-            cmbCompressionLevels.Tag = "BackupCompressionLevelHelp";
-            cmbCompressionLevels.MouseEnter += ControlMouseEnter;
-            cmbCompressionLevels.MouseLeave += ControlMouseLeave;
-            // 
             // btnEditPaths
             // 
             btnEditPaths.BackColor = Color.Yellow;
@@ -216,7 +215,7 @@
             btnEditPaths.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
             btnEditPaths.FlatStyle = FlatStyle.Flat;
             btnEditPaths.Image = Properties.Resources.folder__16x16;
-            btnEditPaths.Location = new Point(3, 116);
+            btnEditPaths.Location = new Point(3, 160);
             btnEditPaths.Name = "btnEditPaths";
             btnEditPaths.Size = new Size(773, 30);
             btnEditPaths.TabIndex = 5;
@@ -229,6 +228,52 @@
             btnEditPaths.MouseEnter += ControlMouseEnter;
             btnEditPaths.MouseLeave += ControlMouseLeave;
             // 
+            // tableLayoutPanel6
+            // 
+            tableLayoutPanel6.ColumnCount = 2;
+            tableLayoutPanel6.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 36.86934F));
+            tableLayoutPanel6.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 63.13066F));
+            tableLayoutPanel6.Controls.Add(btnEditDefaultSongLocation, 0, 0);
+            tableLayoutPanel6.Controls.Add(lblDefaultSongLocation, 1, 0);
+            tableLayoutPanel6.Dock = DockStyle.Fill;
+            tableLayoutPanel6.Location = new Point(3, 117);
+            tableLayoutPanel6.Name = "tableLayoutPanel6";
+            tableLayoutPanel6.RowCount = 1;
+            tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tableLayoutPanel6.Size = new Size(773, 37);
+            tableLayoutPanel6.TabIndex = 9;
+            // 
+            // btnEditDefaultSongLocation
+            // 
+            btnEditDefaultSongLocation.BackColor = Color.Yellow;
+            btnEditDefaultSongLocation.Dock = DockStyle.Fill;
+            btnEditDefaultSongLocation.FlatStyle = FlatStyle.Flat;
+            btnEditDefaultSongLocation.Image = Properties.Resources.folder__16x16;
+            btnEditDefaultSongLocation.Location = new Point(3, 3);
+            btnEditDefaultSongLocation.Name = "btnEditDefaultSongLocation";
+            btnEditDefaultSongLocation.Size = new Size(279, 31);
+            btnEditDefaultSongLocation.TabIndex = 1;
+            btnEditDefaultSongLocation.Tag = "DefaultSongLocationHelp";
+            btnEditDefaultSongLocation.Text = "Default Song Location";
+            btnEditDefaultSongLocation.TextAlign = ContentAlignment.MiddleRight;
+            btnEditDefaultSongLocation.TextImageRelation = TextImageRelation.ImageBeforeText;
+            btnEditDefaultSongLocation.UseVisualStyleBackColor = false;
+            btnEditDefaultSongLocation.Click += BtnEditDefaultSongLocation_Click;
+            btnEditDefaultSongLocation.MouseEnter += ControlMouseEnter;
+            btnEditDefaultSongLocation.MouseLeave += ControlMouseLeave;
+            // 
+            // lblDefaultSongLocation
+            // 
+            lblDefaultSongLocation.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            lblDefaultSongLocation.AutoSize = true;
+            lblDefaultSongLocation.Font = new Font("Segoe UI Variable Display", 9.75F, FontStyle.Bold);
+            lblDefaultSongLocation.ForeColor = Color.Green;
+            lblDefaultSongLocation.Location = new Point(288, 10);
+            lblDefaultSongLocation.Name = "lblDefaultSongLocation";
+            lblDefaultSongLocation.Size = new Size(482, 17);
+            lblDefaultSongLocation.TabIndex = 2;
+            lblDefaultSongLocation.Text = "<default_song_location>";
+            // 
             // tabConfigs
             // 
             tabConfigs.Controls.Add(tabGeneral);
@@ -238,7 +283,7 @@
             tabConfigs.Location = new Point(0, 0);
             tabConfigs.Name = "tabConfigs";
             tabConfigs.SelectedIndex = 0;
-            tabConfigs.Size = new Size(793, 192);
+            tabConfigs.Size = new Size(793, 254);
             tabConfigs.TabIndex = 1;
             // 
             // tabGeneral
@@ -249,7 +294,7 @@
             tabGeneral.Location = new Point(4, 24);
             tabGeneral.Name = "tabGeneral";
             tabGeneral.Padding = new Padding(3);
-            tabGeneral.Size = new Size(785, 164);
+            tabGeneral.Size = new Size(785, 226);
             tabGeneral.TabIndex = 0;
             tabGeneral.Text = "General";
             // 
@@ -261,7 +306,7 @@
             tabLogging.Location = new Point(4, 24);
             tabLogging.Name = "tabLogging";
             tabLogging.Padding = new Padding(3);
-            tabLogging.Size = new Size(785, 164);
+            tabLogging.Size = new Size(785, 226);
             tabLogging.TabIndex = 1;
             tabLogging.Text = "Logging";
             // 
@@ -286,7 +331,7 @@
             tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 37F));
             tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
             tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel3.Size = new Size(779, 158);
+            tableLayoutPanel3.Size = new Size(779, 220);
             tableLayoutPanel3.TabIndex = 1;
             // 
             // chkNewFileEveryLaunch
@@ -356,7 +401,7 @@
             tabNexus.Location = new Point(4, 24);
             tabNexus.Name = "tabNexus";
             tabNexus.Padding = new Padding(3);
-            tabNexus.Size = new Size(785, 164);
+            tabNexus.Size = new Size(785, 226);
             tabNexus.TabIndex = 2;
             tabNexus.Text = "Nexus API";
             tabNexus.UseVisualStyleBackColor = true;
@@ -380,7 +425,7 @@
             tableLayoutPanel4.RowStyles.Add(new RowStyle());
             tableLayoutPanel4.RowStyles.Add(new RowStyle());
             tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Absolute, 37F));
-            tableLayoutPanel4.Size = new Size(779, 158);
+            tableLayoutPanel4.Size = new Size(779, 220);
             tableLayoutPanel4.TabIndex = 2;
             // 
             // panel2
@@ -393,7 +438,7 @@
             panel2.Dock = DockStyle.Fill;
             panel2.Location = new Point(3, 32);
             panel2.Name = "panel2";
-            panel2.Size = new Size(470, 123);
+            panel2.Size = new Size(470, 185);
             panel2.TabIndex = 3;
             // 
             // btnClearApiKey
@@ -456,7 +501,7 @@
             // 
             lblApiHelp.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             lblApiHelp.AutoSize = true;
-            lblApiHelp.Location = new Point(25, 62);
+            lblApiHelp.Location = new Point(25, 124);
             lblApiHelp.Name = "lblApiHelp";
             lblApiHelp.Size = new Size(416, 45);
             lblApiHelp.TabIndex = 12;
@@ -470,7 +515,7 @@
             panel1.Dock = DockStyle.Fill;
             panel1.Location = new Point(479, 32);
             panel1.Name = "panel1";
-            panel1.Size = new Size(297, 123);
+            panel1.Size = new Size(297, 185);
             panel1.TabIndex = 3;
             // 
             // lblApiKeyUnlocks
@@ -478,7 +523,7 @@
             lblApiKeyUnlocks.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             lblApiKeyUnlocks.AutoSize = true;
             lblApiKeyUnlocks.Font = new Font("Segoe UI Variable Text", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblApiKeyUnlocks.Location = new Point(3, 55);
+            lblApiKeyUnlocks.Location = new Point(3, 86);
             lblApiKeyUnlocks.MaximumSize = new Size(200, 0);
             lblApiKeyUnlocks.Name = "lblApiKeyUnlocks";
             lblApiKeyUnlocks.Size = new Size(176, 48);
@@ -501,7 +546,7 @@
             // 
             lnkNexusApiKeyPage.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             lnkNexusApiKeyPage.AutoSize = true;
-            lnkNexusApiKeyPage.Location = new Point(3, 14);
+            lnkNexusApiKeyPage.Location = new Point(3, 45);
             lnkNexusApiKeyPage.Name = "lnkNexusApiKeyPage";
             lnkNexusApiKeyPage.Size = new Size(98, 15);
             lnkNexusApiKeyPage.TabIndex = 13;
@@ -539,7 +584,7 @@
             tableLayoutPanel2.Controls.Add(btnResetToDefault, 0, 0);
             tableLayoutPanel2.Controls.Add(btnSaveAndClose, 0, 0);
             tableLayoutPanel2.Dock = DockStyle.Bottom;
-            tableLayoutPanel2.Location = new Point(0, 192);
+            tableLayoutPanel2.Location = new Point(0, 254);
             tableLayoutPanel2.Name = "tableLayoutPanel2";
             tableLayoutPanel2.RowCount = 1;
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
@@ -609,7 +654,7 @@
             // 
             statusStrip1.BackColor = Color.Transparent;
             statusStrip1.Items.AddRange(new ToolStripItem[] { lblHelpText });
-            statusStrip1.Location = new Point(0, 233);
+            statusStrip1.Location = new Point(0, 295);
             statusStrip1.Name = "statusStrip1";
             statusStrip1.Size = new Size(793, 22);
             statusStrip1.SizingGrip = false;
@@ -623,12 +668,17 @@
             lblHelpText.Size = new Size(55, 17);
             lblHelpText.Text = "Ready";
             // 
+            // fldrOpenDefaultMusicPath
+            // 
+            fldrOpenDefaultMusicPath.Description = "Select the default path for song files when importing stations";
+            fldrOpenDefaultMusicPath.UseDescriptionForTitle = true;
+            // 
             // ConfigForm
             // 
             AutoScaleDimensions = new SizeF(96F, 96F);
             AutoScaleMode = AutoScaleMode.Dpi;
             BackColor = Color.White;
-            ClientSize = new Size(793, 255);
+            ClientSize = new Size(793, 317);
             Controls.Add(tabConfigs);
             Controls.Add(tableLayoutPanel2);
             Controls.Add(statusStrip1);
@@ -646,10 +696,10 @@
             Load += ConfigForm_Load;
             tableLayoutPanel1.ResumeLayout(false);
             tableLayoutPanel1.PerformLayout();
-            flowLayoutPanel1.ResumeLayout(false);
-            flowLayoutPanel1.PerformLayout();
-            tableLayoutPanel5.ResumeLayout(false);
-            tableLayoutPanel5.PerformLayout();
+            tableLayoutPanel7.ResumeLayout(false);
+            tableLayoutPanel7.PerformLayout();
+            tableLayoutPanel6.ResumeLayout(false);
+            tableLayoutPanel6.PerformLayout();
             tabConfigs.ResumeLayout(false);
             tabGeneral.ResumeLayout(false);
             tabLogging.ResumeLayout(false);
@@ -706,10 +756,13 @@
         private CheckBox chkWatchForChanges;
         private StatusStrip statusStrip1;
         private ToolStripStatusLabel lblHelpText;
-        private FlowLayoutPanel flowLayoutPanel1;
         private ComboBox cmbCompressionLevels;
         private Label lblBackupCompressionLvl;
         private CheckBox chkCopySongFilesToBackup;
-        private TableLayoutPanel tableLayoutPanel5;
+        private TableLayoutPanel tableLayoutPanel6;
+        private Button btnEditDefaultSongLocation;
+        private TableLayoutPanel tableLayoutPanel7;
+        private Label lblDefaultSongLocation;
+        private FolderBrowserDialog fldrOpenDefaultMusicPath;
     }
 }

@@ -17,7 +17,6 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using AetherUtils.Core.Extensions;
-using AetherUtils.Core.Files;
 using AetherUtils.Core.Logging;
 using AetherUtils.Core.WinForms.Controls;
 using AetherUtils.Core.WinForms.Models;

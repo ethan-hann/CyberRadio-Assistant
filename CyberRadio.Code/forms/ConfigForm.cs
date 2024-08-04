@@ -101,6 +101,7 @@ public sealed partial class ConfigForm : Form
         chkWatchForChanges.Text = GlobalData.Strings.GetString("WatchForChangesOption");
         lblBackupCompressionLvl.Text = GlobalData.Strings.GetString("BackupCompressionLevel");
         chkCopySongFilesToBackup.Text = GlobalData.Strings.GetString("CopySongFilesToBackupOption");
+        //TODO: add translations for new "Default Song Location" label when feature is implemented.
 
         //Logging Tab
         lblLogPathLabel.Text = GlobalData.Strings.GetString("LogPathLabel");
@@ -129,6 +130,7 @@ public sealed partial class ConfigForm : Form
         chkNewFileEveryLaunch.Checked = config.LogOptions.NewFileEveryLaunch;
         chkWatchForChanges.Checked = config.WatchForGameChanges;
         chkCopySongFilesToBackup.Checked = config.CopySongFilesToBackup;
+        lblDefaultSongLocation.Text = config.DefaultSongLocation;
 
         lblCurrentLogPath.Text = config.LogOptions.LogFileDirectory == string.Empty
             ? lblCurrentLogPath.Text
@@ -232,6 +234,7 @@ public sealed partial class ConfigForm : Form
         saved &= GlobalData.ConfigManager.Set("newFileEveryLaunch", chkNewFileEveryLaunch.Checked);
         saved &= GlobalData.ConfigManager.Set("watchForGameChanges", chkWatchForChanges.Checked);
         saved &= GlobalData.ConfigManager.Set("copySongFilesToBackup", chkCopySongFilesToBackup.Checked);
+        saved &= GlobalData.ConfigManager.Set("defaultSongLocation", lblDefaultSongLocation.Text);
 
         var selectedLocalizedName = cmbCompressionLevels.SelectedItem?.ToString();
         if (selectedLocalizedName != null &&
@@ -254,6 +257,21 @@ public sealed partial class ConfigForm : Form
             saved &= GlobalData.ConfigManager.Set("logFileDirectory", lblCurrentLogPath.Text);
 
         return saved && GlobalData.ConfigManager.Save();
+    }
+
+    /// <summary>
+    ///     Handles the Click event of the btnEditDefaultSongLocation control.
+    /// </summary>
+    /// <param name="sender">The source of the event.</param>
+    /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
+    private void BtnEditDefaultSongLocation_Click(object sender, EventArgs e)
+    {
+        fldrOpenDefaultMusicPath.Description = GlobalData.Strings.GetString("SelectDefaultSongLocationDesc") ??
+                                             "Select the default location to store song files";
+        fldrOpenDefaultMusicPath.SelectedPath = lblDefaultSongLocation.Text;
+
+        if (fldrOpenDefaultMusicPath.ShowDialog(this) == DialogResult.OK)
+            lblDefaultSongLocation.Text = fldrOpenDefaultMusicPath.SelectedPath;
     }
 
     /// <summary>

@@ -842,4 +842,7 @@ Actual size may be different.</value>
   <data name="CopySongFilesToBackupOption" xml:space="preserve">
     <value>Copy Song Files to Backup?</value>
   </data>
+  <data name="DefaultSongLocationHelp" xml:space="preserve">
+    <value>Indicates the folder that imported station's song files should be saved to. Default's to the MyMusic folder.</value>
+  </data>
 </root>
