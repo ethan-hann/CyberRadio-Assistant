@@ -315,4 +315,29 @@ public class IconManager : IDisposable
         }
         return tempPath;
     }
+
+    /// <summary>
+    /// Get a value indicating whether the specified file is a .png file. Checks if the file exists and has a .png extension.
+    /// </summary>
+    /// <param name="file">The path to a file on disk.</param>
+    /// <returns><c>true</c> if the file is a .png; <c>false</c> otherwise.</returns>
+    public bool IsPngFile(string file) => Path.Exists(file) && Path.GetExtension(file).Equals(".png", StringComparison.OrdinalIgnoreCase);
+
+    /// <summary>
+    /// Get an image from a file.
+    /// </summary>
+    /// <param name="file">The path to an image on disk.</param>
+    /// <returns>A <see cref="Image"/> object or <c>null</c> if the image couldn't be loaded.</returns>
+    public Image? LoadImage(string file)
+    {
+        try
+        {
+            return Image.FromFile(file);
+        }
+        catch (Exception e)
+        {
+            AuLogger.GetCurrentLogger<IconManager>().Error(e.Message);
+            return null;
+        }
+    }
 }

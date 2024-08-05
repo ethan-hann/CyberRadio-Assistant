@@ -18,6 +18,7 @@ using System.Globalization;
 using AetherUtils.Core.WinForms.Controls;
 using AetherUtils.Core.WinForms.CustomArgs;
 using RadioExt_Helper.custom_controls;
+using RadioExt_Helper.forms;
 using RadioExt_Helper.models;
 using RadioExt_Helper.Properties;
 using RadioExt_Helper.utility;
@@ -629,4 +630,9 @@ public sealed partial class StationEditor : UserControl, IUserControl
     }
 
     #endregion
+
+    private void picStationIcon_DragDrop(object sender, DragEventArgs e)
+    {
+        new IconImportForm(Station, e).Show(this);
+    }
 }
