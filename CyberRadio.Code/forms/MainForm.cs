@@ -20,6 +20,7 @@ using AetherUtils.Core.Extensions;
 using AetherUtils.Core.Logging;
 using AetherUtils.Core.WinForms.Controls;
 using AetherUtils.Core.WinForms.Models;
+using Python.Runtime;
 using RadioExt_Helper.config;
 using RadioExt_Helper.models;
 using RadioExt_Helper.nexus_api;
@@ -1125,5 +1126,29 @@ public sealed partial class MainForm : Form
             e.Cancel = true;
         else
             CleanupEvents(); // Clean up events (unsubscribe) before closing the application
+    }
+
+    private void IconGeneratorToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        if (lbStations.SelectedItem is not TrackableObject<Station> station) return;
+        if (!station.TrackedObject.CustomIcon.UseCustom ||
+            (station.TrackedObject.CustomIcon.InkAtlasPath.Equals(string.Empty)
+             && station.TrackedObject.CustomIcon.InkAtlasPart.Equals(string.Empty))) return;
+
+        var text = GlobalData.Strings.GetString("IconGeneratorCustomIcon") ??
+                   "This station already has a custom icon. Do you want to overwrite it?";
+        var caption = GlobalData.Strings.GetString("IconGenerator") ?? "Icon Generator";
+        if (MessageBox.Show(this, text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
+            return;
+
+        new IconGeneratorForm().ShowDialog(this);
+        //PythonEngine.Initialize();
+        //using (Py.GIL())
+        //{
+        //    dynamic pillow = Py.Import("pillow");
+        //    //TODO: Implement icon generator
+        //    //See https://wiki.redmodding.org/wolvenkit/wolvenkit-cli/usage/command-list#pack
+        //    //See https://github.com/DoctorPresto/Cyberpunk-Helper-Scripts/blob/main/generate_inkatlas.py
+        //}
     }
 }

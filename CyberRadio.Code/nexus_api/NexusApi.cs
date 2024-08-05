@@ -19,6 +19,9 @@ using Pathoschild.FluentNexus;
 using Pathoschild.FluentNexus.Models;
 using RadioExt_Helper.Properties;
 using RadioExt_Helper.utility;
+using SharpCompress.Archives;
+using SharpCompress.Archives.Zip;
+using SharpCompress.Common;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using Image = SixLabors.ImageSharp.Image;
@@ -191,5 +194,27 @@ public static class NexusApi
         image.SaveAsBmp(memoryStream);
         memoryStream.Seek(0, SeekOrigin.Begin);
         return new Bitmap(memoryStream);
+    }
+
+    public static async Task ExtractZipFileAsync(string zipFilePath, string destinationDirectory)
+    {
+        if (string.IsNullOrEmpty(zipFilePath)) throw new ArgumentNullException(nameof(zipFilePath));
+        if (string.IsNullOrEmpty(destinationDirectory)) throw new ArgumentNullException(nameof(destinationDirectory));
+        if (!File.Exists(zipFilePath)) throw new FileNotFoundException("Zip file not found.", zipFilePath);
+
+        Directory.CreateDirectory(destinationDirectory);
+
+        await Task.Run(() =>
+        {
+            using (var archive = ZipArchive.Open(zipFilePath))
+            {
+                foreach (var entry in archive.Entries.Where(entry => !entry.IsDirectory))
+                {
+                    var destinationPath = Path.Combine(destinationDirectory, entry.Key);
+                    Directory.CreateDirectory(Path.GetDirectoryName(destinationPath));
+                    entry.WriteToFile(destinationPath, new ExtractionOptions() { ExtractFullPath = true, Overwrite = true });
+                }
+            }
+        });
     }
 }

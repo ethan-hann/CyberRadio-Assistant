@@ -48,10 +48,15 @@ namespace RadioExt_Helper.forms
             toolStripSeparator3 = new ToolStripSeparator();
             configurationToolStripMenuItem = new ToolStripMenuItem();
             pathsToolStripMenuItem = new ToolStripMenuItem();
+            openStagingPathToolStripMenuItem = new ToolStripMenuItem();
+            openGamePathToolStripMenuItem = new ToolStripMenuItem();
+            openLogFolderToolStripMenuItem = new ToolStripMenuItem();
             toolStripSeparator4 = new ToolStripSeparator();
             exitToolStripMenuItem = new ToolStripMenuItem();
             modsToolStripMenuItem = new ToolStripMenuItem();
             downloadRadioModsToolStripMenuItem = new ToolStripMenuItem();
+            toolsToolStripMenuItem = new ToolStripMenuItem();
+            iconGeneratorToolStripMenuItem = new ToolStripMenuItem();
             helpToolStripMenuItem = new ToolStripMenuItem();
             howToUseToolStripMenuItem = new ToolStripMenuItem();
             radioExtOnNexusModsToolStripMenuItem = new ToolStripMenuItem();
@@ -85,9 +90,7 @@ namespace RadioExt_Helper.forms
             pgBackupProgress = new ToolStripProgressBar();
             lblSpring2 = new ToolStripStatusLabel();
             statusStripBackup = new StatusStrip();
-            openStagingPathToolStripMenuItem = new ToolStripMenuItem();
-            openGamePathToolStripMenuItem = new ToolStripMenuItem();
-            openLogFolderToolStripMenuItem = new ToolStripMenuItem();
+            wolvenKitCLIUpdatesToolStripMenuItem = new ToolStripMenuItem();
             menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
@@ -107,7 +110,7 @@ namespace RadioExt_Helper.forms
             // 
             menuStrip1.BackColor = Color.Transparent;
             menuStrip1.Font = new Font("Segoe UI Variable Display Semib", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, modsToolStripMenuItem, helpToolStripMenuItem, languageToolStripMenuItem, apiStatusToolStripMenuItem });
+            menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, modsToolStripMenuItem, toolsToolStripMenuItem, helpToolStripMenuItem, languageToolStripMenuItem, apiStatusToolStripMenuItem });
             menuStrip1.LayoutStyle = ToolStripLayoutStyle.HorizontalStackWithOverflow;
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
@@ -228,6 +231,33 @@ namespace RadioExt_Helper.forms
             pathsToolStripMenuItem.Text = "Game Paths";
             pathsToolStripMenuItem.Click += PathsToolStripMenuItem_Click;
             // 
+            // openStagingPathToolStripMenuItem
+            // 
+            openStagingPathToolStripMenuItem.Image = Properties.Resources.link;
+            openStagingPathToolStripMenuItem.Name = "openStagingPathToolStripMenuItem";
+            openStagingPathToolStripMenuItem.ShortcutKeys = Keys.Alt | Keys.S;
+            openStagingPathToolStripMenuItem.Size = new Size(251, 22);
+            openStagingPathToolStripMenuItem.Text = "Open Staging Folder";
+            openStagingPathToolStripMenuItem.Click += OpenStagingPathToolStripMenuItem_Click;
+            // 
+            // openGamePathToolStripMenuItem
+            // 
+            openGamePathToolStripMenuItem.Image = Properties.Resources.link;
+            openGamePathToolStripMenuItem.Name = "openGamePathToolStripMenuItem";
+            openGamePathToolStripMenuItem.ShortcutKeys = Keys.Alt | Keys.G;
+            openGamePathToolStripMenuItem.Size = new Size(251, 22);
+            openGamePathToolStripMenuItem.Text = "Open Game Radios Folder";
+            openGamePathToolStripMenuItem.Click += OpenGamePathToolStripMenuItem_Click;
+            // 
+            // openLogFolderToolStripMenuItem
+            // 
+            openLogFolderToolStripMenuItem.Image = Properties.Resources.link;
+            openLogFolderToolStripMenuItem.Name = "openLogFolderToolStripMenuItem";
+            openLogFolderToolStripMenuItem.ShortcutKeys = Keys.Alt | Keys.L;
+            openLogFolderToolStripMenuItem.Size = new Size(251, 22);
+            openLogFolderToolStripMenuItem.Text = "Open Log Folder";
+            openLogFolderToolStripMenuItem.Click += OpenLogFolderToolStripMenuItem_Click;
+            // 
             // toolStripSeparator4
             // 
             toolStripSeparator4.Name = "toolStripSeparator4";
@@ -258,6 +288,21 @@ namespace RadioExt_Helper.forms
             downloadRadioModsToolStripMenuItem.Size = new Size(193, 22);
             downloadRadioModsToolStripMenuItem.Text = "Download Radio Mods";
             downloadRadioModsToolStripMenuItem.Click += DownloadRadioModsToolStripMenuItem_Click;
+            // 
+            // toolsToolStripMenuItem
+            // 
+            toolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { iconGeneratorToolStripMenuItem, wolvenKitCLIUpdatesToolStripMenuItem });
+            toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
+            toolsToolStripMenuItem.Size = new Size(47, 20);
+            toolsToolStripMenuItem.Text = "Tools";
+            // 
+            // iconGeneratorToolStripMenuItem
+            // 
+            iconGeneratorToolStripMenuItem.Image = Properties.Resources.magic_wand_16x16;
+            iconGeneratorToolStripMenuItem.Name = "iconGeneratorToolStripMenuItem";
+            iconGeneratorToolStripMenuItem.Size = new Size(248, 22);
+            iconGeneratorToolStripMenuItem.Text = "Icon Generator";
+            iconGeneratorToolStripMenuItem.Click += IconGeneratorToolStripMenuItem_Click;
             // 
             // helpToolStripMenuItem
             // 
@@ -608,32 +653,12 @@ namespace RadioExt_Helper.forms
             statusStripBackup.Text = "statusStrip2";
             statusStripBackup.Visible = false;
             // 
-            // openStagingPathToolStripMenuItem
+            // wolvenKitCLIUpdatesToolStripMenuItem
             // 
-            openStagingPathToolStripMenuItem.Image = Properties.Resources.link;
-            openStagingPathToolStripMenuItem.Name = "openStagingPathToolStripMenuItem";
-            openStagingPathToolStripMenuItem.ShortcutKeys = Keys.Alt | Keys.S;
-            openStagingPathToolStripMenuItem.Size = new Size(251, 22);
-            openStagingPathToolStripMenuItem.Text = "Open Staging Folder";
-            openStagingPathToolStripMenuItem.Click += OpenStagingPathToolStripMenuItem_Click;
-            // 
-            // openGamePathToolStripMenuItem
-            // 
-            openGamePathToolStripMenuItem.Image = Properties.Resources.link;
-            openGamePathToolStripMenuItem.Name = "openGamePathToolStripMenuItem";
-            openGamePathToolStripMenuItem.ShortcutKeys = Keys.Alt | Keys.G;
-            openGamePathToolStripMenuItem.Size = new Size(251, 22);
-            openGamePathToolStripMenuItem.Text = "Open Game Radios Folder";
-            openGamePathToolStripMenuItem.Click += OpenGamePathToolStripMenuItem_Click;
-            // 
-            // openLogFolderToolStripMenuItem
-            // 
-            openLogFolderToolStripMenuItem.Image = Properties.Resources.link;
-            openLogFolderToolStripMenuItem.Name = "openLogFolderToolStripMenuItem";
-            openLogFolderToolStripMenuItem.ShortcutKeys = Keys.Alt | Keys.L;
-            openLogFolderToolStripMenuItem.Size = new Size(251, 22);
-            openLogFolderToolStripMenuItem.Text = "Open Log Folder";
-            openLogFolderToolStripMenuItem.Click += OpenLogFolderToolStripMenuItem_Click;
+            wolvenKitCLIUpdatesToolStripMenuItem.Image = Properties.Resources.update__16x16;
+            wolvenKitCLIUpdatesToolStripMenuItem.Name = "wolvenKitCLIUpdatesToolStripMenuItem";
+            wolvenKitCLIUpdatesToolStripMenuItem.Size = new Size(248, 22);
+            wolvenKitCLIUpdatesToolStripMenuItem.Text = "Check for WolvenKit CLI Update";
             // 
             // MainForm
             // 
@@ -737,5 +762,8 @@ namespace RadioExt_Helper.forms
         private ToolStripMenuItem openStagingPathToolStripMenuItem;
         private ToolStripMenuItem openGamePathToolStripMenuItem;
         private ToolStripMenuItem openLogFolderToolStripMenuItem;
+        private ToolStripMenuItem toolsToolStripMenuItem;
+        private ToolStripMenuItem iconGeneratorToolStripMenuItem;
+        private ToolStripMenuItem wolvenKitCLIUpdatesToolStripMenuItem;
     }
 }

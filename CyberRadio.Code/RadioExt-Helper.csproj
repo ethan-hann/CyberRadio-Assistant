@@ -11,9 +11,9 @@
         <ApplicationIcon>resources\cyber-radio-assistant.ico</ApplicationIcon>
         <StartupObject>RadioExt_Helper.Program</StartupObject>
         <GenerateDocumentationFile>False</GenerateDocumentationFile>
-        <AssemblyVersion>2.0.216.0</AssemblyVersion>
-        <FileVersion>2.0.216.0</FileVersion>
-        <Version>2.0.216</Version>
+        <AssemblyVersion>2.0.224.0</AssemblyVersion>
+        <FileVersion>2.0.224.0</FileVersion>
+        <Version>2.0.224</Version>
         <Company>Ethan Hann</Company>
         <Product>Cyber Radio Assistant</Product>
         <NeutralLanguage>en</NeutralLanguage>
@@ -56,6 +56,11 @@
 
     <ItemGroup>
         <None Remove="resources\final_ui_icon_strings.txt" />
+        <None Remove="tools\generate_inkatlas.exe" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Include="tools\InkAtlas\generate_inkatlas.exe" />
     </ItemGroup>
 
     <ItemGroup>
@@ -70,6 +75,7 @@
         <PackageReference Include="AetherUtils.Core" Version="1.0.8" />
         <PackageReference Include="NAudio" Version="2.2.1" />
         <PackageReference Include="Pathoschild.FluentNexus" Version="1.0.5" />
+        <PackageReference Include="pythonnet" Version="3.0.3" />
         <PackageReference Include="SharpCompress" Version="0.37.2" />
         <PackageReference Include="SharpZipLib" Version="1.4.2" />
         <PackageReference Include="SixLabors.ImageSharp" Version="3.1.5" />

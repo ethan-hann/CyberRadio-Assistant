@@ -108,6 +108,11 @@ public partial class SplashScreen : Form
             await Task.Delay(500); // Simulate delay
         }
 
+        //Download WolvenKit CLI tool
+        //UpdateStatus(GlobalData.Strings.GetString("SplashScreen_DownloadWolvenKit") ?? "Downloading WolvenKit CLI...");
+        //await IconGenerator.DownloadWolvenKitCli();
+        //await Task.Delay(500); // Simulate delay
+
         //TODO: Add Nexus API key authentication when feature is implemented
         //var nexusApiKey = GlobalData.ConfigManager.Get("nexusApiKey") as string ?? string.Empty;
         //if (!nexusApiKey.Equals(string.Empty))
