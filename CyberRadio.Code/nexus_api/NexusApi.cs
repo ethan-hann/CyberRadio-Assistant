@@ -105,7 +105,7 @@ public static class NexusApi
         try
         {
             var imageUrl = mod.PictureUrl;
-            var image = await DownloadImageAsync(imageUrl.AbsoluteUri);
+            var image = await PathHelper.DownloadImageAsync(imageUrl.AbsoluteUri);
             return image;
         }
         catch (Exception ex)
@@ -122,99 +122,20 @@ public static class NexusApi
     /// <returns>A task, that when completed, contains the user's profile image or the default profile image if the user did not have an image.</returns>
     public static async Task<Bitmap> GetUserImage()
     {
-        if (!IsAuthenticated) return ConvertToBitmap(null);
-        if (NexusClient == null) return ConvertToBitmap(null);
-        if (CurrentApiUser == null) return ConvertToBitmap(null);
+        if (!IsAuthenticated) return PathHelper.ConvertToBitmap(null);
+        if (NexusClient == null) return PathHelper.ConvertToBitmap(null);
+        if (CurrentApiUser == null) return PathHelper.ConvertToBitmap(null);
 
         try
         {
-            var image = await DownloadImageAsync(CurrentApiUser?.ProfileUrl ?? string.Empty);
+            var image = await PathHelper.DownloadImageAsync(CurrentApiUser?.ProfileUrl ?? string.Empty);
             return image;
         }
         catch (Exception ex)
         {
             AuLogger.GetCurrentLogger("NexusApi.GetUserImage")
                 .Error(ex, "Couldn't retrieve user profile image. Using fall back image.");
-            return ConvertToBitmap(null);
+            return PathHelper.ConvertToBitmap(null);
         }
-    }
-
-    /// <summary>
-    /// Download a file from the specified URL to the specified destination file path.
-    /// </summary>
-    /// <param name="fileUrl">The URL of the file to download.</param>
-    /// <param name="destinationFilePath">The path to save the file on disk, including file name.</param>
-    /// <returns>A task that represents the current async operation.</returns>
-    public static async Task DownloadFileAsync(string fileUrl, string destinationFilePath)
-    {
-        using var client = new HttpClient();
-        using var response = await client.GetAsync(fileUrl, HttpCompletionOption.ResponseHeadersRead);
-        response.EnsureSuccessStatusCode();
-
-        await using var contentStream = await response.Content.ReadAsStreamAsync();
-        var fileStream = new FileStream(destinationFilePath, FileMode.Create, FileAccess.Write, FileShare.None, 8192,
-            true);
-        await using var stream = fileStream.ConfigureAwait(false);
-
-        await contentStream.CopyToAsync(fileStream);
-    }
-
-    /// <summary>
-    /// Download an image from the specified URL and convert it to a <see cref="Bitmap"/>.
-    /// </summary>
-    /// <param name="imageUrl">The URL of the image to download.</param>
-    /// <returns>A task, that when completed, contains the downloaded image as a bitmap or the default missing image if the image could not be downloaded.</returns>
-    private static async Task<Bitmap> DownloadImageAsync(string imageUrl)
-    {
-        if (string.IsNullOrWhiteSpace(imageUrl))
-            return ConvertToBitmap(null);
-
-        using var client = new HttpClient();
-        using var response = await client.GetAsync(imageUrl, HttpCompletionOption.ResponseHeadersRead);
-        response.EnsureSuccessStatusCode();
-
-        await using var contentStream = await response.Content.ReadAsStreamAsync();
-        var image = await Image.LoadAsync<Rgba32>(contentStream);
-        return ConvertToBitmap(image);
-    }
-
-    /// <summary>
-    /// Convert a <see cref="Image"/> to a <see cref="Bitmap"/>.
-    /// </summary>
-    /// <param name="image">The <see cref="Image"/> to convert.</param>
-    /// <returns>If <paramref name="image"/> is <c>null</c>, returns the default missing image;
-    /// otherwise, returns a <see cref="Bitmap"/> representing the <see cref="Image"/>.</returns>
-    private static Bitmap ConvertToBitmap(Image<Rgba32>? image)
-    {
-        if (image == null)
-            return Resources.missing_16x16;
-
-        using var memoryStream = new MemoryStream();
-
-        image.SaveAsBmp(memoryStream);
-        memoryStream.Seek(0, SeekOrigin.Begin);
-        return new Bitmap(memoryStream);
-    }
-
-    public static async Task ExtractZipFileAsync(string zipFilePath, string destinationDirectory)
-    {
-        if (string.IsNullOrEmpty(zipFilePath)) throw new ArgumentNullException(nameof(zipFilePath));
-        if (string.IsNullOrEmpty(destinationDirectory)) throw new ArgumentNullException(nameof(destinationDirectory));
-        if (!File.Exists(zipFilePath)) throw new FileNotFoundException("Zip file not found.", zipFilePath);
-
-        Directory.CreateDirectory(destinationDirectory);
-
-        await Task.Run(() =>
-        {
-            using (var archive = ZipArchive.Open(zipFilePath))
-            {
-                foreach (var entry in archive.Entries.Where(entry => !entry.IsDirectory))
-                {
-                    var destinationPath = Path.Combine(destinationDirectory, entry.Key);
-                    Directory.CreateDirectory(Path.GetDirectoryName(destinationPath));
-                    entry.WriteToFile(destinationPath, new ExtractionOptions() { ExtractFullPath = true, Overwrite = true });
-                }
-            }
-        });
     }
 }
