@@ -263,6 +263,7 @@ public sealed partial class MainForm : Form
     private void MainForm_Load(object sender, EventArgs e)
     {
         _noStationsCtrl.PathsSet += OnPathsChanged;
+        _noStationsCtrl.RestoringFromBackup += OnRestoringFromBackup;
         splitContainer1.Panel2.Controls.Add(_noStationsCtrl);
 
         var windowSize = GlobalData.ConfigManager.Get("windowSize") as WindowSize
@@ -994,16 +995,56 @@ public sealed partial class MainForm : Form
         };
 
         if (fileBrowser.ShowDialog(this) != DialogResult.OK) return;
+        RestoreFromBackup(fileBrowser.FileName);
+    }
 
+    private void OnRestoringFromBackup(object? sender, string backupFilePath) => RestoreFromBackup(backupFilePath);
+
+    private void RestoreFromBackup(string backupFile)
+    {
         _isExportInProgress = true; //to prevent directory watcher from firing events.
 
-        var restoreWindow = new RestoreForm(fileBrowser.FileName, StagingPath);
+        var restoreWindow = new RestoreForm(backupFile, StagingPath);
         restoreWindow.RestoreCompleted += (_, _) =>
         {
             _isExportInProgress = false;
             PopulateStations();
         };
         restoreWindow.ShowDialog(this);
+    }
+
+    private void ClearAllDataToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        //Check for sync in progress to prevent restore during sync
+        if (_isSyncInProgress)
+        {
+            var text = GlobalData.Strings.GetString("SyncInProgress") ??
+                       "Synchronization is in progress. Please wait...";
+            var caption = GlobalData.Strings.GetString("SyncAbbrev") ?? "Sync";
+            MessageBox.Show(this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            return;
+        }
+        //TODO: translations
+        if (_isExportInProgress)
+        {
+            var text = GlobalData.Strings.GetString("ExportInProgress") ??
+                       "Export is in progress. Please wait...";
+            var caption = GlobalData.Strings.GetString("ExportAbbrev") ?? "Exporting";
+            MessageBox.Show(this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            return;
+        }
+
+        var confirmText = GlobalData.Strings.GetString("ConfirmClearAllData") ??
+                   "**Destructive Operation**\nAre you sure you want to clear all data? This will remove all stations immediately from staging.";
+        var confirmCaption = GlobalData.Strings.GetString("Confirm");
+        if (MessageBox.Show(this, confirmText, confirmCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
+            return;
+
+        //Remove all stations and the folders from the staging directory.
+        StationManager.Instance.ClearStations(true);
+
+        //Populate the (what should be the empty) stations list.
+        PopulateStations();
     }
 
     private void RadioExtHelpToolStripMenuItem_Click(object sender, EventArgs e)

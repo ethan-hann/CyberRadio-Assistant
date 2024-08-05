@@ -58,6 +58,11 @@ public sealed partial class NoStationsCtl : UserControl, IUserControl
     public event EventHandler? PathsSet;
 
     /// <summary>
+    /// Event that is raised when the user wants to restore from a backup.
+    /// </summary>
+    public event EventHandler<string>? RestoringFromBackup;
+
+    /// <summary>
     /// Occurs when the control is loaded.
     /// </summary>
     /// <param name="sender"></param>
@@ -98,6 +103,8 @@ public sealed partial class NoStationsCtl : UserControl, IUserControl
         tlpNoGamePath.Visible = gamePath;
         tlpNoStagingPath.Visible = stagePath;
 
+        btnRestoreFromBackup.Visible = !gamePath && !stagePath;
+
         //Trigger population of stations
         if (!tlpNoGamePath.Visible && !tlpNoStagingPath.Visible)
             PathsSet?.Invoke(this, EventArgs.Empty);
@@ -114,5 +121,18 @@ public sealed partial class NoStationsCtl : UserControl, IUserControl
         pathDialog.GameBasePathChanged += (s, e) => CheckPaths();
         pathDialog.StagingPathChanged += (s, e) => CheckPaths();
         pathDialog.ShowDialog(this);
+    }
+
+    private void BtnRestoreFromBackup_Click(object sender, EventArgs e)
+    {//TODO: translations
+        var fileBrowser = new OpenFileDialog
+        {
+            Filter = "Backup files (*.zip)|*.zip",
+            Title = GlobalData.Strings.GetString("SelectBackupFile") ?? "Select Backup File"
+        };
+
+        if (fileBrowser.ShowDialog(this) != DialogResult.OK) return;
+
+        RestoringFromBackup?.Invoke(this, fileBrowser.FileName);
     }
 }

@@ -203,8 +203,9 @@ public partial class StationManager : IDisposable
 
     /// <summary>
     /// Clears all stations and their editors from the manager.
+    /// <param name="deleteFoldersFromStaging">Indicates if the folders in the staging directory should also be deleted.</param>
     /// </summary>
-    public void ClearStations()
+    public void ClearStations(bool deleteFoldersFromStaging = false)
     {
         try
         {
@@ -216,6 +217,13 @@ public partial class StationManager : IDisposable
                 StationsAsBindingList.Clear();
                 StationPaths.Clear();
                 _newStations.Clear();
+
+                if (deleteFoldersFromStaging)
+                {
+                    var stagingPath = GlobalData.ConfigManager.Get("stagingPath") as string ?? string.Empty;
+                    foreach (var folder in FileHelper.SafeEnumerateDirectories(stagingPath))
+                        Directory.Delete(folder, true);
+                }
 
                 StationsCleared?.Invoke(this, EventArgs.Empty);
             }
@@ -649,6 +657,9 @@ public partial class StationManager : IDisposable
                 .FirstOrDefault() ?? [];
             var songFiles = songDirFiles.Where(file => ValidAudioExtensions.Contains(Path.GetExtension(file).ToLower()))
                 .ToList();
+            //TODO: fix issue with songs.sgls where it is not being loaded correctly. The file is being created based on the song files in the directory but if all the stations have their songs in the same directory,
+            // we are getting the same songs.sgls file for every station (even one's that don't have any songs). This is causing the station to have songs that it shouldn't have.
+
             var iconFiles = files.Where(file => file.EndsWith(".archive")).ToList();
 
             if (metadata == null) return null;

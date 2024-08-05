@@ -183,6 +183,36 @@ namespace RadioExt_Helper.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap back_up {
+            get {
+                object obj = ResourceManager.GetObject("back-up", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap back_up_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("back-up_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap back_up_32x32 {
+            get {
+                object obj = ResourceManager.GetObject("back-up_32x32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap cancel {
             get {
                 object obj = ResourceManager.GetObject("cancel", resourceCulture);
@@ -1296,6 +1326,36 @@ namespace RadioExt_Helper.Properties {
         internal static System.Drawing.Bitmap play_over__32x32 {
             get {
                 object obj = ResourceManager.GetObject("play_over__32x32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap radio {
+            get {
+                object obj = ResourceManager.GetObject("radio", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap radio_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("radio_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap radio_32x32 {
+            get {
+                object obj = ResourceManager.GetObject("radio_32x32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
