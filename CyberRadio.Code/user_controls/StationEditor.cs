@@ -254,6 +254,19 @@ public sealed partial class StationEditor : UserControl, IUserControl
         txtInkAtlasPath.Visible = !radUseCustomNo.Checked;
         lblInkPart.Visible = !radUseCustomNo.Checked;
         lblInkPath.Visible = !radUseCustomNo.Checked;
+        picStationIcon.Visible = !radUseCustomNo.Checked;
+    }
+
+    private void PicStationIcon_DragDrop(object sender, DragEventArgs e)
+    {
+        var image = picStationIcon.Image;
+        var importForm = new IconImportForm(Station, image);
+        importForm.IconImported += (_, args) =>
+        {
+            Station.TrackedObject.CustomIcon = args.Icon;
+            StationUpdated?.Invoke(this, EventArgs.Empty);
+        };
+        importForm.Show(this);
     }
 
     /// <summary>
@@ -630,9 +643,4 @@ public sealed partial class StationEditor : UserControl, IUserControl
     }
 
     #endregion
-
-    private void picStationIcon_DragDrop(object sender, DragEventArgs e)
-    {
-        new IconImportForm(Station, e).Show(this);
-    }
 }

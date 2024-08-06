@@ -557,7 +557,7 @@ namespace RadioExt_Helper.user_controls
             picStationIcon.TabIndex = 4;
             picStationIcon.TabStop = false;
             picStationIcon.Tag = "dropTarget";
-            picStationIcon.DragDrop += picStationIcon_DragDrop;
+            picStationIcon.DragDrop += PicStationIcon_DragDrop;
             // 
             // tabMusic
             // 

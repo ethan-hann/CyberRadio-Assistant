@@ -24,13 +24,13 @@ namespace RadioExt_Helper.forms
             IconManager.Instance.ProgressChanged += Instance_ProgressChanged;
         }
 
-        private void Instance_ProgressChanged(object? sender, int e)
+        private void Instance_ProgressChanged(int e)
         {
-            this.SafeInvoke(() => lblPercent.Text = string.Format("Percent Done: {0}%", e));
+            this.SafeInvoke(() => lblPercent.Text = $"Percent Done: {e}%");
             this.SafeInvoke(() => pbProgress.Value = e);
         }
 
-        private void IconManager_StatusChanged(object? sender, string e)
+        private void IconManager_StatusChanged(string e)
         {
             this.SafeInvoke(() =>
             {
@@ -64,7 +64,7 @@ namespace RadioExt_Helper.forms
             {
                 _isGenerating = true;
                 //this.SafeInvoke(() => pictureBox1.Load(Directory.GetFiles(fldrBrowserInput.SelectedPath).FirstOrDefault() ?? string.Empty));
-                e.Result = IconManager.Instance.CreateIcon(fldrBrowserInput.SelectedPath, textBox1.Text);
+                e.Result = IconManager.Instance.ArchiveFromPngs(fldrBrowserInput.SelectedPath, textBox1.Text);
             }
         }
 
@@ -108,7 +108,7 @@ namespace RadioExt_Helper.forms
                 result.Add("Unpack", IconManager.Instance.UnpackArchive(ofdArchiveDialog.FileName, Path.Combine(IconManager.Instance.WorkingDirectory, "unpackTest")));
                 var unpackedDir = Path.Combine(IconManager.Instance.WorkingDirectory, "unpackTest");
                 var xmbFiles = Directory.GetFiles(unpackedDir, "*.xbm", SearchOption.AllDirectories);
-                result.Add("Convert", IconManager.Instance.ExportPNG(xmbFiles.First(), unpackedDir));
+                result.Add("Convert", IconManager.Instance.ExportPng(xmbFiles.First(), unpackedDir));
 
                 var pngFiles = Directory.GetFiles(unpackedDir).Where(file => Path.GetExtension(file).Equals(".png"));
                 this.SafeInvoke(() => pictureBox1.Load(pngFiles.First()));

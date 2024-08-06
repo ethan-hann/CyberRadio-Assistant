@@ -1,34 +1,55 @@
-﻿using RadioExt_Helper.models;
+﻿using System.Drawing;
+using System.Drawing.Imaging;
+using RadioExt_Helper.models;
 using RadioExt_Helper.utility;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace RadioExt_Helper.forms
 {
     public partial class IconImportForm : Form
     {
-        private readonly TrackableObject<Station> _station;
-        private readonly DragEventArgs _dragEvent;
+        public event EventHandler<IconImportEventArgs>? IconImported;
 
-        public IconImportForm(TrackableObject<Station> station, DragEventArgs dragEvent)
+        private readonly TrackableObject<Station> _station;
+
+        private CustomIcon? icon;
+
+        public IconImportForm(TrackableObject<Station> station, Image iconImage)
         {
             InitializeComponent();
 
             _station = station;
-            _dragEvent = dragEvent;
+            picIconPreview.Image = iconImage;
+
+            IconManager.Instance.StatusChanged += Instance_StatusChanged;
+            IconManager.Instance.ProgressChanged += Instance_ProgressChanged;
+            IconManager.Instance.ErrorOccurred += Instance_ErrorOccurred;
+            IconManager.Instance.WarningOccurred += Instance_WarningOccurred;
+        }
+
+        private void Instance_WarningOccurred(string warning)
+        {
+            this.SafeInvoke(() => rtbImportProgress.Text += $"\n{warning}\n");
+        }
+
+        private void Instance_ErrorOccurred(string error)
+        {
+            this.SafeInvoke(() => rtbImportProgress.Text += $"\n{error}\n");
+        }
+
+        private void Instance_ProgressChanged(int progress)
+        {
+            this.SafeInvoke(() => pgProgress.Value = progress);
+        }
+
+        private void Instance_StatusChanged(string status)
+        {
+            this.SafeInvoke(() => lblStatus.Text = status);
         }
 
         private void IconImportForm_Load(object sender, EventArgs e)
         {
             Translate();
-            LoadPreviewIcon();
+
         }
 
         private void Translate()
@@ -38,27 +59,30 @@ namespace RadioExt_Helper.forms
 
         }
 
-        private void LoadPreviewIcon()
+        private void BtnImportIcon_Click(object sender, EventArgs e)
         {
-            if (_station == null) return;
+            var customIcon = IconManager.Instance.SaveIconToStation(_station, txtAtlasName.Text, picIconPreview.Image, true);
+            IconImported?.Invoke(this, new IconImportEventArgs(customIcon));
+        }
 
-            var data = _dragEvent.Data;
-            if (data != null && data.GetDataPresent(DataFormats.FileDrop))
-            {
-                var files = data.GetData(DataFormats.FileDrop) as string[];
-                if (files?.Length > 0)
-                {
-                    var file = files[0];
-                    if (IconManager.Instance.IsPngFile(file))
-                    {
-                        var image = IconManager.Instance.LoadImage(file);
-                        if (image != null)
-                        {
-                            picIconPreview.Image = image;
-                        }
-                    }
-                }
-            }
+        private void bgImportWorker_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+        {
+
+        }
+
+        private void bgImportWorker_ProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
+        {
+
+        }
+
+        private void bgImportWorker_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
+        {
+
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            IconManager.Instance.CancelIconImport();
         }
     }
 }

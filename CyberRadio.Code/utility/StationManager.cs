@@ -677,11 +677,7 @@ public partial class StationManager : IDisposable
 
             if (iconFiles.Count > 0)
             {
-                var stagingIconsFolder = 
-                    GlobalData.ConfigManager.Get("stagingPath") is string stagingPath ? 
-                        Path.Combine(stagingPath, "icons") : null;
-
-                LoadIconFromFile(trackedStation, iconFiles.First(), stagingIconsFolder);
+                IconManager.Instance.LoadIconFromFile(trackedStation, iconFiles.First());
             }
 
             EnsureDisplayNameFormat(trackedStation);
@@ -695,44 +691,7 @@ public partial class StationManager : IDisposable
         }
     }
 
-    /// <summary>
-    /// Loads a custom icon from a file and stores the file name and hash in the station's metadata.
-    /// </summary>
-    /// <param name="station">The station to load the icon into.</param>
-    /// <param name="iconFilePath">The full file path to the icon.</param>
-    /// <param name="stagingIconsFolder">The icon's folder under the staging path. If this path does not exist, it will be created.</param>
-    public static void LoadIconFromFile(TrackableObject<Station> station, string? iconFilePath, string? stagingIconsFolder)
-    {
-        if (stagingIconsFolder == null)
-        { 
-            AuLogger.GetCurrentLogger<StationManager>("LoadIconFromFile").Warn("Staging icons folder is null. This could indicate a configuration issue.");
-            return;
-        }
-
-        if (iconFilePath == null)
-        {
-            AuLogger.GetCurrentLogger<StationManager>("LoadIconFromFile").Warn("Icon file path is null. This could indicate a configuration issue.");
-            return;
-        }
-
-        // Ensure the icons folder exists
-        if (!Directory.Exists(stagingIconsFolder))
-            Directory.CreateDirectory(stagingIconsFolder);
-
-        // Copy the icon to the icons folder
-        var iconFileName = Path.GetFileName(iconFilePath);
-        var destIconPath = Path.Combine(stagingIconsFolder, iconFileName);
-        File.Copy(iconFilePath, destIconPath, true);
-
-        // Calculate the hash of the icon file
-        var fileHash = PathHelper.ComputeSha256Hash(destIconPath, true);
-
-        // Store the file name and hash in the CustomData dictionary
-        station.TrackedObject.MetaData.CustomData["IconFileName"] = iconFileName;
-        station.TrackedObject.MetaData.CustomData["IconFileHash"] = fileHash;
-
-        AuLogger.GetCurrentLogger<StationManager>("LoadIconFromFile").Info($"Custom icon loaded for station: {station.TrackedObject.MetaData.DisplayName}");
-    }
+    
 
     /// <summary>
     /// Extracts the contents of a station archive file (.zip or .rar) to a temporary directory.
