@@ -15,6 +15,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 using System.ComponentModel;
+using AetherUtils.Core.Logging;
 using Newtonsoft.Json;
 
 namespace RadioExt_Helper.models;
@@ -27,6 +28,8 @@ public sealed class Station : INotifyPropertyChanged, ICloneable, IEquatable<Sta
     private MetaData _metaData = new();
 
     private List<Song> _songs = [];
+
+    private List<Icon> _icons = [];
 
     /// <summary>
     ///     The metadata associated with this station.
@@ -84,6 +87,21 @@ public sealed class Station : INotifyPropertyChanged, ICloneable, IEquatable<Sta
         }
     }
 
+    /// <summary>
+    ///     Represents a list of icons associated with a radio station.
+    ///     A station can only have one active icon at a time.
+    /// </summary>
+    [JsonProperty("icons")]
+    public List<Icon> Icons
+    {
+        get => _icons;
+        set
+        {
+            _icons = value;
+            OnPropertyChanged(nameof(Icons));
+        }
+    }
+
     public object Clone()
     {
         return new Station
@@ -109,6 +127,27 @@ public sealed class Station : INotifyPropertyChanged, ICloneable, IEquatable<Sta
     public bool GetStatus()
     {
         return MetaData.IsActive;
+    }
+
+    /// <summary>
+    /// Get the active <see cref="Icon"/> for the station.
+    /// </summary>
+    /// <returns>The active <see cref="Icon"/> or <c>null</c> if no active icons or there was more than 1 active icon.</returns>
+    /// <exception cref="InvalidOperationException">Occurs when there are more than 1 active icon in the station.</exception>
+    public Icon? GetActiveIcon()
+    {
+        try
+        {
+            if (Icons.Count == 0) return null;
+            if (Icons.Count(i => i.IsActive) > 1) throw new InvalidOperationException("A station can only have one active icon.");
+            return Icons.FirstOrDefault(i => i.IsActive);
+        }
+        catch (Exception e)
+        {
+            AuLogger.GetCurrentLogger<Station>().Error(e);
+        }
+
+        return null;
     }
 
     private void OnPropertyChanged(string propertyName)

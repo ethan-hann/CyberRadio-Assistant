@@ -2,6 +2,7 @@
 using System.Drawing.Imaging;
 using RadioExt_Helper.models;
 using RadioExt_Helper.utility;
+using RadioExt_Helper.utility.event_args;
 
 namespace RadioExt_Helper.forms
 {
@@ -20,10 +21,10 @@ namespace RadioExt_Helper.forms
             _station = station;
             picIconPreview.Image = iconImage;
 
-            IconManager.Instance.StatusChanged += Instance_StatusChanged;
-            IconManager.Instance.ProgressChanged += Instance_ProgressChanged;
-            IconManager.Instance.ErrorOccurred += Instance_ErrorOccurred;
-            IconManager.Instance.WarningOccurred += Instance_WarningOccurred;
+            //IconManager.Instance.StatusChanged += Instance_StatusChanged;
+            //IconManager.Instance.ProgressChanged += Instance_ProgressChanged;
+            //IconManager.Instance.ErrorOccurred += Instance_ErrorOccurred;
+            //IconManager.Instance.WarningOccurred += Instance_WarningOccurred;
         }
 
         private void Instance_WarningOccurred(string warning)
@@ -61,8 +62,8 @@ namespace RadioExt_Helper.forms
 
         private void BtnImportIcon_Click(object sender, EventArgs e)
         {
-            var customIcon = IconManager.Instance.SaveIconToStation(_station, txtAtlasName.Text, picIconPreview.Image, true);
-            IconImported?.Invoke(this, new IconImportEventArgs(customIcon));
+            //var customIcon = IconManager.Instance.SaveIconToStation(_station, txtAtlasName.Text, picIconPreview.Image, true);
+            //IconImported?.Invoke(this, new IconImportEventArgs(customIcon));
         }
 
         private void bgImportWorker_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
@@ -82,7 +83,7 @@ namespace RadioExt_Helper.forms
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            IconManager.Instance.CancelIconImport();
+            //IconManager.Instance.CancelIconImport();
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using RadioExt_Helper.models;
 
-namespace RadioExt_Helper.utility;
+namespace RadioExt_Helper.utility.event_args;
 
 /// <summary>
 /// Event data for when an icon is imported.

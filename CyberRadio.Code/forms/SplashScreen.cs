@@ -108,10 +108,13 @@ public partial class SplashScreen : Form
             await Task.Delay(500); // Simulate delay
         }
 
-        //Download WolvenKit CLI tool
-        //UpdateStatus(GlobalData.Strings.GetString("SplashScreen_DownloadWolvenKit") ?? "Downloading WolvenKit CLI...");
-        //await IconGenerator.DownloadWolvenKitCli();
-        //await Task.Delay(500); // Simulate delay
+        //Setup Icon Manager
+        UpdateStatus(GlobalData.Strings.GetString("SplashScreen_SetupIconManager") ?? "Setting up Icon Manager...");
+        utility.IconManager.Instance.Initialize();
+        await Task.Delay(500); // Simulate delay
+        statusMessages.Add(utility.IconManager.Instance.IsInitialized
+            ? "Icon Manager initialized successfully."
+            : "Icon Manager initialization failed.");
 
         //TODO: Add Nexus API key authentication when feature is implemented
         //var nexusApiKey = GlobalData.ConfigManager.Get("nexusApiKey") as string ?? string.Empty;

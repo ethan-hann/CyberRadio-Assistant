@@ -23,6 +23,7 @@ using AetherUtils.Core.Structs;
 using RadioExt_Helper.models;
 using RadioExt_Helper.user_controls;
 using SharpCompress.Archives;
+using Icon = RadioExt_Helper.models.Icon;
 
 namespace RadioExt_Helper.utility;
 
@@ -199,6 +200,16 @@ public partial class StationManager : IDisposable
         var enabledCount = _stations.Select(pair => pair.Value.Key.TrackedObject.MetaData.IsActive)
             .Count(isActive => isActive);
         return string.Format(StationCountFormat, enabledCount, _stations.Count);
+    }
+
+    /// <summary>
+    /// Gets the station icon for the specified station ID.
+    /// </summary>
+    /// <param name="stationId">The station to get the icon of, by id.</param>
+    /// <returns>The active <see cref="Icon"/> of the station or <c>null</c> if no active icons.</returns>
+    public Icon? GetStationIcon(Guid stationId)
+    {
+        return _stations.TryGetValue(stationId, out var pair) ? pair.Key.TrackedObject.GetActiveIcon() : null;
     }
 
     /// <summary>
@@ -677,7 +688,7 @@ public partial class StationManager : IDisposable
 
             if (iconFiles.Count > 0)
             {
-                IconManager.Instance.LoadIconFromFile(trackedStation, iconFiles.First());
+                //IconManager.Instance.LoadIconFromFile(trackedStation, iconFiles.First());
             }
 
             EnsureDisplayNameFormat(trackedStation);

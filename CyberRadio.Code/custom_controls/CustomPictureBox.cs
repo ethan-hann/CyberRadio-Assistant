@@ -33,14 +33,14 @@ namespace RadioExt_Helper.custom_controls
                 if (files?.Length > 0)
                 {
                     var file = files[0];
-                    if (IconManager.Instance.IsPngFile(file))
-                    {
-                        var image = IconManager.Instance.LoadImage(file);
-                        if (image != null)
-                        {
-                            Image = image;
-                        }
-                    }
+                    //if (IconManager.Instance.IsPngFile(file))
+                    //{
+                    //    var image = IconManager.Instance.LoadImage(file);
+                    //    if (image != null)
+                    //    {
+                    //        Image = image;
+                    //    }
+                    //}
                 }
             }
         }

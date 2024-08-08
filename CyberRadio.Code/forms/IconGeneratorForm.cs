@@ -20,8 +20,8 @@ namespace RadioExt_Helper.forms
 
         private void IconGeneratorForm_Load(object sender, EventArgs e)
         {
-            IconManager.Instance.StatusChanged += IconManager_StatusChanged;
-            IconManager.Instance.ProgressChanged += Instance_ProgressChanged;
+            //IconManager.Instance.StatusChanged += IconManager_StatusChanged;
+            //IconManager.Instance.ProgressChanged += Instance_ProgressChanged;
         }
 
         private void Instance_ProgressChanged(int e)
@@ -64,7 +64,7 @@ namespace RadioExt_Helper.forms
             {
                 _isGenerating = true;
                 //this.SafeInvoke(() => pictureBox1.Load(Directory.GetFiles(fldrBrowserInput.SelectedPath).FirstOrDefault() ?? string.Empty));
-                e.Result = IconManager.Instance.ArchiveFromPngs(fldrBrowserInput.SelectedPath, textBox1.Text);
+                //e.Result = IconManager.Instance.ArchiveFromPngs(fldrBrowserInput.SelectedPath, textBox1.Text);
             }
         }
 
@@ -105,10 +105,10 @@ namespace RadioExt_Helper.forms
             if (!bgUnpacker.CancellationPending)
             {
                 var result = new Dictionary<string, (string output, string error)>();
-                result.Add("Unpack", IconManager.Instance.UnpackArchive(ofdArchiveDialog.FileName, Path.Combine(IconManager.Instance.WorkingDirectory, "unpackTest")));
+                //result.Add("Unpack", IconManager.Instance.UnpackArchive(ofdArchiveDialog.FileName, Path.Combine(IconManager.Instance.WorkingDirectory, "unpackTest")));
                 var unpackedDir = Path.Combine(IconManager.Instance.WorkingDirectory, "unpackTest");
                 var xmbFiles = Directory.GetFiles(unpackedDir, "*.xbm", SearchOption.AllDirectories);
-                result.Add("Convert", IconManager.Instance.ExportPng(xmbFiles.First(), unpackedDir));
+                //result.Add("Convert", IconManager.Instance.ExportPng(xmbFiles.First(), unpackedDir));
 
                 var pngFiles = Directory.GetFiles(unpackedDir).Where(file => Path.GetExtension(file).Equals(".png"));
                 this.SafeInvoke(() => pictureBox1.Load(pngFiles.First()));
