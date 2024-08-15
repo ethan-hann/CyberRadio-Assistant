@@ -131,7 +131,7 @@ public class IconManager : IDisposable
     /// Initialize the icon manager. This method will set up the required paths and download the WolvenKit CLI if required. Only
     /// needs to be called once.
     /// </summary>
-    public void Initialize()
+    public async Task Initialize()
     {
         if (_isInitialized) return;
 
@@ -147,7 +147,7 @@ public class IconManager : IDisposable
 
             _wolvenKitCliExe = Path.Combine(WolvenKitTempDirectory, "WolvenKit.CLI.exe");
 
-            DownloadWolvenKitIfRequired();
+            await DownloadWolvenKitIfRequiredAsync();
 
             if (!File.Exists(_inkAtlasExe))
                 throw new FileNotFoundException("The inkatlas executable could not be found.", _inkAtlasExe);
@@ -189,10 +189,10 @@ public class IconManager : IDisposable
     /// Downloads the WolvenKit CLI if it has not been downloaded yet and extracts it to the temporary directory: <see cref="WolvenKitTempDirectory"/>.
     /// </summary>
     /// <exception cref="InvalidOperationException">Occurs if either <see cref="WorkingDirectory"/> or <see cref="WolvenKitTempDirectory"/> are <c>null</c>.</exception>
-    private void DownloadWolvenKitIfRequired()
+    private async Task DownloadWolvenKitIfRequiredAsync()
     {
         if (_isWolvenKitDownloaded && _isWolvenKitExtracted) return;
-        //TODO: fix the issue with downloading and extracting wolven kit before implementing any more of this class!
+
         try
         {
             if (WorkingDirectory == null || WolvenKitTempDirectory == null)
@@ -203,15 +203,15 @@ public class IconManager : IDisposable
             if (File.Exists(zipFile))
             {
                 _isWolvenKitDownloaded = true;
-                if (!ExtractWolvenKit(zipFile))
+                if (!await ExtractWolvenKitAsync(zipFile))
                     throw new InvalidOperationException("The WolvenKit CLI could not be extracted.");
             }
             else
             {
-                if (!DownloadWolvenKit(zipFile))
+                if (!await DownloadWolvenKitAsync(zipFile))
                     throw new InvalidOperationException("The WolvenKit CLI could not be downloaded.");
 
-                if (!ExtractWolvenKit(zipFile))
+                if (!await ExtractWolvenKitAsync(zipFile))
                     throw new InvalidOperationException("The WolvenKit CLI could not be extracted.");
             }
         }
@@ -226,14 +226,17 @@ public class IconManager : IDisposable
     /// </summary>
     /// <param name="zipFile">The zip file to save.</param>
     /// <returns>A task representing the asynchronous download operation.</returns>
-    private bool DownloadWolvenKit(string zipFile)
+    private async Task<bool> DownloadWolvenKitAsync(string zipFile)
     {
         if (_wolvenKitCliDownloadUrl == null)
             throw new InvalidOperationException("The WolvenKit CLI download URL is null.");
 
-        PathHelper.DownloadFileAsync(_wolvenKitCliDownloadUrl, zipFile).RunSynchronously();
+        await PathHelper.DownloadFileAsync(_wolvenKitCliDownloadUrl, zipFile);
         if (File.Exists(zipFile))
+        {
             _isWolvenKitDownloaded = true;
+            AuLogger.GetCurrentLogger<IconManager>().Info("WolvenKit CLI downloaded successfully.");
+        }
         return _isWolvenKitDownloaded;
     }
 
@@ -242,14 +245,17 @@ public class IconManager : IDisposable
     /// </summary>
     /// <param name="zipFile">The zip file to extract.</param>
     /// <returns>A task representing the asynchronous extraction operation.</returns>
-    private bool ExtractWolvenKit(string zipFile)
+    private async Task<bool> ExtractWolvenKitAsync(string zipFile)
     {
         if (WolvenKitTempDirectory == null)
             throw new InvalidOperationException("The WolvenKit temp directory is null.");
 
-        PathHelper.ExtractZipFileAsync(zipFile, WolvenKitTempDirectory).RunSynchronously();
+        await PathHelper.ExtractZipFileAsync(zipFile, WolvenKitTempDirectory);
         if (File.Exists(_wolvenKitCliExe))
+        {
             _isWolvenKitExtracted = true;
+            AuLogger.GetCurrentLogger<IconManager>().Info("WolvenKit CLI extracted successfully.");
+        }
         return _isWolvenKitExtracted;
     }
 

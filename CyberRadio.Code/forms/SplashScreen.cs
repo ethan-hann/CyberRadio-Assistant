@@ -110,9 +110,9 @@ public partial class SplashScreen : Form
 
         //Setup Icon Manager
         UpdateStatus(GlobalData.Strings.GetString("SplashScreen_SetupIconManager") ?? "Setting up Icon Manager...");
-        utility.IconManager.Instance.Initialize();
+        await IconManager.Instance.Initialize();
         await Task.Delay(500); // Simulate delay
-        statusMessages.Add(utility.IconManager.Instance.IsInitialized
+        statusMessages.Add(IconManager.Instance.IsInitialized
             ? "Icon Manager initialized successfully."
             : "Icon Manager initialization failed.");
 
