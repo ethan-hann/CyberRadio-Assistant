@@ -1,4 +1,5 @@
-﻿using RadioExt_Helper.utility;
+﻿using AetherUtils.Core.Logging;
+using RadioExt_Helper.utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,8 @@ namespace RadioExt_Helper.custom_controls
 {
     internal class CustomPictureBox : PictureBox
     {
+        public string ImagePath { get; private set; } = string.Empty;
+
         public CustomPictureBox()
         {
             AllowDrop = true;
@@ -26,22 +29,26 @@ namespace RadioExt_Helper.custom_controls
 
         private void CustomPictureBox_DragDrop(object? sender, DragEventArgs e)
         {
-            var data = e.Data;
-            if (data != null && data.GetDataPresent(DataFormats.FileDrop))
+            try
             {
-                var files = data.GetData(DataFormats.FileDrop) as string[];
-                if (files?.Length > 0)
+                var data = e.Data;
+                if (data != null && data.GetDataPresent(DataFormats.FileDrop))
                 {
-                    var file = files[0];
-                    //if (IconManager.Instance.IsPngFile(file))
-                    //{
-                    //    var image = IconManager.Instance.LoadImage(file);
-                    //    if (image != null)
-                    //    {
-                    //        Image = image;
-                    //    }
-                    //}
+                    var files = data.GetData(DataFormats.FileDrop) as string[];
+                    if (files?.Length > 0)
+                    {
+                        var file = files[0];
+                        var image = IconManager.Instance.LoadImage(file);
+                        if (image != null)
+                        {
+                            Image = image;
+                            ImagePath = file;
+                        }
+                    }
                 }
+            } catch (Exception ex)
+            {
+                AuLogger.GetCurrentLogger<CustomPictureBox>().Error(ex.Message);
             }
         }
     }

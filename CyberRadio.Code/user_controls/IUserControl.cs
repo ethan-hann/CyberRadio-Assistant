@@ -14,21 +14,14 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-using RadioExt_Helper.models;
-
 namespace RadioExt_Helper.user_controls;
 
 /// <summary>
 /// Interface for a custom user control.
-/// Implementors should define the station they are associated with and how to translate the strings of the control.
+/// Implementors should define how to translate the strings of the control.
 /// </summary>
 public interface IUserControl
 {
-    /// <summary>
-    ///     The tracked station associated with this control.
-    /// </summary>
-    public TrackableObject<Station> Station { get; }
-
     /// <summary>
     ///     Specify how to translate the strings of this control.
     /// </summary>

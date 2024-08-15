@@ -28,11 +28,18 @@ namespace RadioExt_Helper.user_controls;
 /// <summary>
 /// Represents a user control for editing a station.
 /// </summary>
-public sealed partial class StationEditor : UserControl, IUserControl
+public sealed partial class StationEditor : UserControl, IEditor
 {
     private readonly ComboBox _cmbUiIcons;
     private readonly CustomMusicCtl _musicCtl;
     private readonly ImageList _tabImages = new();
+
+    /// <summary>
+    /// Gets the trackable station object.
+    /// </summary>
+    public TrackableObject<Station> Station { get; }
+    public Guid Id { get; set; } = Guid.NewGuid();
+    public EditorType Type { get; set; } = EditorType.StationEditor;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="StationEditor"/> class.
@@ -55,11 +62,6 @@ public sealed partial class StationEditor : UserControl, IUserControl
         // Initialize DataGridView columns
         InitializeDataGridViewColumns();
     }
-
-    /// <summary>
-    /// Gets the trackable station object.
-    /// </summary>
-    public TrackableObject<Station> Station { get; }
 
     /// <summary>
     /// Translates the user control to the current language.

@@ -276,8 +276,11 @@ public partial class StationManager : IDisposable
     {
         try
         {
-            foreach (var editor in _stations.Values.Select(pair => pair.Value))
+            foreach (var editor in _stations.Values.SelectMany(pair => pair.Value
+            .Where(e => e.Type == EditorType.StationEditor)).Cast<StationEditor>())
                 editor.GetMusicPlayer().StopStream();
+                
+                //editor.GetMusicPlayer().StopStream();
         }
         catch (Exception ex)
         {
@@ -335,7 +338,7 @@ public partial class StationManager : IDisposable
         var newName = CheckForDuplicateStation(stationId);
         CheckStatus(stationId);
 
-        _stations[stationId].Value.UpdateStationName(newName);
+        ((StationEditor)_stations[stationId].Value.First(e => e.Type == EditorType.StationEditor)).UpdateStationName(newName);
     }
 
     /// <summary>
@@ -375,14 +378,15 @@ public partial class StationManager : IDisposable
     }
 
     /// <summary>
-    /// Translates all station editors in the manager to the current language.
+    /// Translates all editors in the manager to the current language.
     /// </summary>
     public void TranslateEditors()
     {
         try
         {
-            foreach (var editor in _stations.Values.Select(pair => pair.Value))
-                editor.Translate();
+            foreach (var editorList in _stations.Values.Select(pair => pair.Value))
+                foreach (var editor in editorList)
+                    editor.Translate();
         }
         catch (Exception ex)
         {
@@ -903,10 +907,10 @@ public partial class StationManager : IDisposable
     /// <para>Value: Pair with following:</para>
     ///     <list type="bullet">
     ///         <item>Key: <c>Trackable station</c></item>
-    ///         <item>Value: <c>Station's editor control</c></item>
+    ///         <item>Value: <c>List of all editor's associated with the station.</c></item>
     ///     </list>
     /// </summary>
-    private readonly Dictionary<Guid, Pair<TrackableObject<Station>, StationEditor>> _stations = [];
+    private readonly Dictionary<Guid, Pair<TrackableObject<Station>, List<IEditor>>> _stations = [];
 
     /// <summary>
     /// The JSON object used to serialize and deserialize the metadata of a station.

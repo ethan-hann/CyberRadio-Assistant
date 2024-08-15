@@ -57,6 +57,7 @@ namespace RadioExt_Helper.forms
             downloadRadioModsToolStripMenuItem = new ToolStripMenuItem();
             toolsToolStripMenuItem = new ToolStripMenuItem();
             iconGeneratorToolStripMenuItem = new ToolStripMenuItem();
+            wolvenKitCLIUpdatesToolStripMenuItem = new ToolStripMenuItem();
             helpToolStripMenuItem = new ToolStripMenuItem();
             howToUseToolStripMenuItem = new ToolStripMenuItem();
             radioExtOnNexusModsToolStripMenuItem = new ToolStripMenuItem();
@@ -90,7 +91,6 @@ namespace RadioExt_Helper.forms
             pgBackupProgress = new ToolStripProgressBar();
             lblSpring2 = new ToolStripStatusLabel();
             statusStripBackup = new StatusStrip();
-            wolvenKitCLIUpdatesToolStripMenuItem = new ToolStripMenuItem();
             menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
@@ -285,7 +285,7 @@ namespace RadioExt_Helper.forms
             // 
             downloadRadioModsToolStripMenuItem.Image = Properties.Resources.download_16x16;
             downloadRadioModsToolStripMenuItem.Name = "downloadRadioModsToolStripMenuItem";
-            downloadRadioModsToolStripMenuItem.Size = new Size(193, 22);
+            downloadRadioModsToolStripMenuItem.Size = new Size(194, 22);
             downloadRadioModsToolStripMenuItem.Text = "Download Radio Mods";
             downloadRadioModsToolStripMenuItem.Click += DownloadRadioModsToolStripMenuItem_Click;
             // 
@@ -303,6 +303,13 @@ namespace RadioExt_Helper.forms
             iconGeneratorToolStripMenuItem.Size = new Size(248, 22);
             iconGeneratorToolStripMenuItem.Text = "Icon Generator";
             iconGeneratorToolStripMenuItem.Click += IconGeneratorToolStripMenuItem_Click;
+            // 
+            // wolvenKitCLIUpdatesToolStripMenuItem
+            // 
+            wolvenKitCLIUpdatesToolStripMenuItem.Image = Properties.Resources.update__16x16;
+            wolvenKitCLIUpdatesToolStripMenuItem.Name = "wolvenKitCLIUpdatesToolStripMenuItem";
+            wolvenKitCLIUpdatesToolStripMenuItem.Size = new Size(248, 22);
+            wolvenKitCLIUpdatesToolStripMenuItem.Text = "Check for WolvenKit CLI Update";
             // 
             // helpToolStripMenuItem
             // 
@@ -435,7 +442,7 @@ namespace RadioExt_Helper.forms
             lbStations.SongsMissingColor = Color.FromArgb(192, 0, 0);
             lbStations.SongsMissingFont = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lbStations.TabIndex = 0;
-            lbStations.SelectedIndexChanged += LbStations_SelectedIndexChanged;
+            lbStations.DataSourceChanged += LbStations_SelectedIndexChanged;
             lbStations.MouseDown += LbStations_MouseDown;
             // 
             // statusStrip1
@@ -612,13 +619,13 @@ namespace RadioExt_Helper.forms
             // 
             cmsRevertStationChanges.Items.AddRange(new ToolStripItem[] { revertChangesToolStripMenuItem });
             cmsRevertStationChanges.Name = "cmsRevertStationChanges";
-            cmsRevertStationChanges.Size = new Size(157, 26);
+            cmsRevertStationChanges.Size = new Size(156, 26);
             // 
             // revertChangesToolStripMenuItem
             // 
             revertChangesToolStripMenuItem.Image = Properties.Resources.refresh__16x16;
             revertChangesToolStripMenuItem.Name = "revertChangesToolStripMenuItem";
-            revertChangesToolStripMenuItem.Size = new Size(156, 22);
+            revertChangesToolStripMenuItem.Size = new Size(155, 22);
             revertChangesToolStripMenuItem.Text = "Revert Changes";
             revertChangesToolStripMenuItem.Click += RevertChangesToolStripMenuItem_Click;
             // 
@@ -652,13 +659,6 @@ namespace RadioExt_Helper.forms
             statusStripBackup.TabIndex = 3;
             statusStripBackup.Text = "statusStrip2";
             statusStripBackup.Visible = false;
-            // 
-            // wolvenKitCLIUpdatesToolStripMenuItem
-            // 
-            wolvenKitCLIUpdatesToolStripMenuItem.Image = Properties.Resources.update__16x16;
-            wolvenKitCLIUpdatesToolStripMenuItem.Name = "wolvenKitCLIUpdatesToolStripMenuItem";
-            wolvenKitCLIUpdatesToolStripMenuItem.Size = new Size(248, 22);
-            wolvenKitCLIUpdatesToolStripMenuItem.Text = "Check for WolvenKit CLI Update";
             // 
             // MainForm
             // 
