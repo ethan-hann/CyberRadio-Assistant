@@ -123,7 +123,8 @@ public partial class StationManager : IDisposable
                     _newStations.Add(station.Id);
 
                 var editor = new StationEditor(station);
-                _stations[station.Id] = new Pair<TrackableObject<Station>, StationEditor>(station, editor);
+                var iconEditor = new IconEditor(station);
+                _stations[station.Id] = new Pair<TrackableObject<Station>, List<IEditor>>(station, [editor, iconEditor]);
                 editor.StationUpdated += Editor_StationUpdated;
 
                 StationsAsBindingList.Add(station);
@@ -175,7 +176,10 @@ public partial class StationManager : IDisposable
             lock (_stations)
             {
                 if (!_stations.TryGetValue(stationId, out var pair)) return;
-                pair.Value.Dispose();
+
+                foreach (var editor in pair.Value.Where(e => e.Type == EditorType.StationEditor).Cast<StationEditor>())
+                    editor.Dispose();
+
                 _stations.Remove(stationId);
                 _newStations.Remove(stationId);
                 StationPaths.Remove(stationId);
@@ -222,8 +226,13 @@ public partial class StationManager : IDisposable
         {
             lock (_stations)
             {
-                foreach (var pair in _stations.Values)
-                    pair.Value.Dispose();
+                foreach (var editor in _stations.Values
+                    .SelectMany(p => p.Value.Where(e => e.Type == EditorType.StationEditor))
+                    .Cast<StationEditor>())
+                {
+                    editor.Dispose();
+                }
+                    
                 _stations.Clear();
                 StationsAsBindingList.Clear();
                 StationPaths.Clear();
@@ -246,12 +255,13 @@ public partial class StationManager : IDisposable
     }
 
     /// <summary>
-    /// Get the station and editor for the specified station ID.
+    /// Get the station and editors for the specified station ID.
     /// </summary>
     /// <param name="stationId">The ID of the station to get.</param>
-    /// <returns>A pair where the key is the <see cref="TrackableObject{T}"/> and the value is the <see cref="StationEditor"/>; 
+    /// <returns>A pair where the key is the <see cref="TrackableObject{T}"/> and the value is 
+    /// the list of <see cref="IEditor"/>s associated with the station; 
     /// or <c>null</c> if the <paramref name="stationId"/> did not exist in the manager.</returns>
-    public Pair<TrackableObject<Station>, StationEditor>? GetStation(Guid? stationId)
+    public Pair<TrackableObject<Station>, List<IEditor>>? GetStation(Guid? stationId)
     {
         try
         {
@@ -279,8 +289,6 @@ public partial class StationManager : IDisposable
             foreach (var editor in _stations.Values.SelectMany(pair => pair.Value
             .Where(e => e.Type == EditorType.StationEditor)).Cast<StationEditor>())
                 editor.GetMusicPlayer().StopStream();
-                
-                //editor.GetMusicPlayer().StopStream();
         }
         catch (Exception ex)
         {
@@ -390,7 +398,7 @@ public partial class StationManager : IDisposable
         }
         catch (Exception ex)
         {
-            AuLogger.GetCurrentLogger<StationManager>().Error(ex, "Error translating station editors.");
+            AuLogger.GetCurrentLogger<StationManager>().Error(ex, "Error translating station's editors.");
         }
     }
 

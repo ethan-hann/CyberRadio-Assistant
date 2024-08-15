@@ -627,7 +627,7 @@ public sealed partial class MainForm : Form
         if (stationId == null) return;
 
         StationManager.Instance.StopAllMusicPlayers();
-        UpdateStationEditor(StationManager.Instance.GetStation(stationId)?.Value);
+        UpdateStationEditor(StationManager.Instance.GetStation(stationId)?.Value.Select(e => e.Type == EditorType.StationEditor).Cast<StationEditor>().First());
     }
 
     /// <summary>
