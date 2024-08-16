@@ -15,34 +15,30 @@ namespace RadioExt_Helper.user_controls
 {
     public partial class IconEditor : UserControl, IEditor
     {
-        private readonly TrackableObject<Station> _station;
-
         public Guid Id { get; set; } = Guid.NewGuid();
         public EditorType Type { get; set; } = EditorType.IconEditor;
-        public TrackableObject<Station> Station => _station;
+        public TrackableObject<Station> Station { get; }
 
-        private Icon? _activeIcon;
+        public Icon? Icon { get; }
         private string _iconPath = string.Empty;
 
-        public IconEditor(TrackableObject<Station> station)
+        public IconEditor(TrackableObject<Station> station, Icon? icon)
         {
             InitializeComponent();
 
-            _station = station;
-            _activeIcon = _station.TrackedObject.GetActiveIcon();
+            Station = station;
+            Icon = icon;
         }
 
         public void Translate()
         {
-            throw new NotImplementedException();
+            
         }
 
         private void IconEditor_Load(object sender, EventArgs e)
         {
-            if (_activeIcon?.IconImage != null)
-                picStationIcon.Image = _activeIcon.IconImage;
-            else
-                picStationIcon.Image = Properties.Resources.drag_and_drop_128x128;
+            Icon?.EnsureImage();
+            picStationIcon.Image = Icon?.IconImage ?? Properties.Resources.drag_and_drop_128x128;
         }
 
         private void picStationIcon_DragDrop(object sender, DragEventArgs e)

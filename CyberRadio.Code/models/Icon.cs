@@ -7,7 +7,7 @@ namespace RadioExt_Helper.models
 {
     /// <summary>
     /// Represents an Icon that was uploaded by the user for a radio station or extracted from an imported <c>.archive</c> file.
-    /// <para>Tracks a unique identifier, the path to the image, the name of the icon, and the associated station name.</para>
+    /// <para>Tracks a unique identifier, the path to the image, the name of the icon, and the archive file.</para>
     /// </summary>
     public class Icon : INotifyPropertyChanged, ICloneable, IEquatable<Icon>
     {

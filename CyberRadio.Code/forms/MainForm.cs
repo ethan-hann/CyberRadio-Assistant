@@ -627,7 +627,7 @@ public sealed partial class MainForm : Form
         if (stationId == null) return;
 
         StationManager.Instance.StopAllMusicPlayers();
-        UpdateStationEditor(StationManager.Instance.GetStation(stationId)?.Value.Select(e => e.Type == EditorType.StationEditor).Cast<StationEditor>().First());
+        UpdateStationEditor(StationManager.Instance.GetStationEditor(stationId));
     }
 
     /// <summary>
@@ -1141,7 +1141,10 @@ public sealed partial class MainForm : Form
         if (MessageBox.Show(this, text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
             return;
 
-        new IconGeneratorForm().ShowDialog(this);
+        var managerForm = new IconManagerForm(station);
+        managerForm.ShowDialog(this);
+
+        //new IconGeneratorForm().ShowDialog(this);
         //PythonEngine.Initialize();
         //using (Py.GIL())
         //{

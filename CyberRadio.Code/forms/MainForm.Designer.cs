@@ -285,7 +285,7 @@ namespace RadioExt_Helper.forms
             // 
             downloadRadioModsToolStripMenuItem.Image = Properties.Resources.download_16x16;
             downloadRadioModsToolStripMenuItem.Name = "downloadRadioModsToolStripMenuItem";
-            downloadRadioModsToolStripMenuItem.Size = new Size(194, 22);
+            downloadRadioModsToolStripMenuItem.Size = new Size(193, 22);
             downloadRadioModsToolStripMenuItem.Text = "Download Radio Mods";
             downloadRadioModsToolStripMenuItem.Click += DownloadRadioModsToolStripMenuItem_Click;
             // 
@@ -301,7 +301,7 @@ namespace RadioExt_Helper.forms
             iconGeneratorToolStripMenuItem.Image = Properties.Resources.magic_wand_16x16;
             iconGeneratorToolStripMenuItem.Name = "iconGeneratorToolStripMenuItem";
             iconGeneratorToolStripMenuItem.Size = new Size(248, 22);
-            iconGeneratorToolStripMenuItem.Text = "Icon Generator";
+            iconGeneratorToolStripMenuItem.Text = "Icon Manager";
             iconGeneratorToolStripMenuItem.Click += IconGeneratorToolStripMenuItem_Click;
             // 
             // wolvenKitCLIUpdatesToolStripMenuItem
@@ -442,6 +442,7 @@ namespace RadioExt_Helper.forms
             lbStations.SongsMissingColor = Color.FromArgb(192, 0, 0);
             lbStations.SongsMissingFont = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lbStations.TabIndex = 0;
+            lbStations.SelectedIndexChanged += LbStations_SelectedIndexChanged;
             lbStations.DataSourceChanged += LbStations_SelectedIndexChanged;
             lbStations.MouseDown += LbStations_MouseDown;
             // 
@@ -619,13 +620,13 @@ namespace RadioExt_Helper.forms
             // 
             cmsRevertStationChanges.Items.AddRange(new ToolStripItem[] { revertChangesToolStripMenuItem });
             cmsRevertStationChanges.Name = "cmsRevertStationChanges";
-            cmsRevertStationChanges.Size = new Size(156, 26);
+            cmsRevertStationChanges.Size = new Size(157, 26);
             // 
             // revertChangesToolStripMenuItem
             // 
             revertChangesToolStripMenuItem.Image = Properties.Resources.refresh__16x16;
             revertChangesToolStripMenuItem.Name = "revertChangesToolStripMenuItem";
-            revertChangesToolStripMenuItem.Size = new Size(155, 22);
+            revertChangesToolStripMenuItem.Size = new Size(156, 22);
             revertChangesToolStripMenuItem.Text = "Revert Changes";
             revertChangesToolStripMenuItem.Click += RevertChangesToolStripMenuItem_Click;
             // 

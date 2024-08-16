@@ -13,6 +13,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Icon = RadioExt_Helper.models.Icon;
 
 namespace RadioExt_Helper.forms
 {
@@ -25,20 +26,22 @@ namespace RadioExt_Helper.forms
         private readonly ImageList _stationImageList = new();
         private bool _ignoreSelectedIndexChanged;
         private IconEditor? _currentEditor;
+        private readonly TrackableObject<Station> _station;
 
-        public IconManagerForm()
+        public IconManagerForm(TrackableObject<Station> station)
         {
             InitializeComponent();
+
+            _station = station;
         }
 
         private void IconManagerForm_Load(object sender, EventArgs e)
         {
-            lbStations.DataSource = StationManager.Instance.StationsAsBindingList;
-            lbStations.DisplayMember = "TrackedObject.MetaData";
+            lbIcons.Station = _station;
+            lbIcons.DataSource = _station.TrackedObject.Icons;
+            lbIcons.DisplayMember = "Name";
 
             SetImageList();
-
-
         }
 
         /// <summary>
@@ -48,20 +51,18 @@ namespace RadioExt_Helper.forms
         {
             _stationImageList.Images.Add("disabled", Resources.disabled);
             _stationImageList.Images.Add("enabled", Resources.enabled);
-            _stationImageList.Images.Add("edited_station", Resources.save_pending);
-            _stationImageList.Images.Add("saved_station", Resources.disk);
             _stationImageList.ImageSize = new Size(16, 16);
-            lbStations.ImageList = _stationImageList;
+            lbIcons.ImageList = _stationImageList;
         }
 
-        private void lbStations_SelectedIndexChanged(object sender, EventArgs e)
+        private void lbIcons_SelectedIndexChanged(object sender, EventArgs e)
         {
-            this.SafeInvoke(() => SelectListBoxItem(lbStations.SelectedIndex, true));
+            this.SafeInvoke(() => SelectListBoxItem(lbIcons.SelectedIndex, true));
         }
 
         private void SelectListBoxItem(int index, bool userDriven)
         {
-            if (index < 0 || index >= lbStations.Items.Count) return;
+            if (index < 0 || index >= lbIcons.Items.Count) return;
 
             if (userDriven)
             {
@@ -73,30 +74,31 @@ namespace RadioExt_Helper.forms
             }
             else
             {
-                lbStations.SelectedIndex = index;
+                lbIcons.SelectedIndex = index;
             }
 
-            if (lbStations.SelectedItem is not TrackableObject<Station> station) return;
-            SelectStationEditor(station.Id);
-            UpdateTitleBar(station.Id);
+            if (lbIcons.SelectedItem is not Icon icon) return;
+            SelectIconEditor(_station.Id, icon.IconId);
         }
 
         /// <summary>
         /// Updates the UI with the correct icon editor based on the station's ID.
         /// </summary>
         /// <param name="stationId">The ID of the station to get the editor of.</param>
-        private void SelectStationEditor(Guid? stationId)
+        /// <param name="iconId">The ID of the icon associated with the editor.</param>
+        private void SelectIconEditor(Guid? stationId, Guid? iconId)
         {
             if (stationId == null) return;
 
-            UpdateIconEditor(StationManager.Instance.GetStation(stationId)?.Value);
+            var editor = StationManager.Instance.GetStationIconEditor(stationId, iconId);
+            UpdateIconEditor(editor);
         }
 
         /// <summary>
-        ///     Updates the currently displayed station editor.
+        ///     Updates the currently displayed icon editor.
         ///     <param name="editor">The editor to display in the split panel.</param>
         /// </summary>
-        private void UpdateIconEditor(StationEditor? editor)
+        private void UpdateIconEditor(IconEditor? editor)
         {
             try
             {
@@ -112,8 +114,8 @@ namespace RadioExt_Helper.forms
             }
             catch (Exception ex)
             {
-                AuLogger.GetCurrentLogger<MainForm>("UpdateStationEditor")
-                    .Error(ex, "An error occurred while updating the station editor.");
+                AuLogger.GetCurrentLogger<IconManagerForm>("UpdateIconEditor")
+                    .Error(ex, "An error occurred while updating the icon editor.");
             }
         }
     }

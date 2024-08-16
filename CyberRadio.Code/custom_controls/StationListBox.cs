@@ -15,15 +15,12 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 using System.ComponentModel;
-using System.Security.Cryptography;
 using AetherUtils.Core.Files;
 using AetherUtils.Core.Logging;
-using ICSharpCode.SharpZipLib.Core;
-using ICSharpCode.SharpZipLib.Zip;
 using RadioExt_Helper.models;
 using RadioExt_Helper.utility;
 
-namespace RadioExt_Helper.user_controls;
+namespace RadioExt_Helper.custom_controls;
 
 /// <summary>
 /// Represents a custom ListBox control for displaying stations.
