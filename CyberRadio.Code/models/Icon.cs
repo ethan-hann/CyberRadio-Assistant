@@ -8,6 +8,7 @@ namespace RadioExt_Helper.models
     /// <summary>
     /// Represents an Icon that was uploaded by the user for a radio station or extracted from an imported <c>.archive</c> file.
     /// <para>Tracks a unique identifier, the path to the image, the name of the icon, and the archive file.</para>
+    /// <para>The <see cref="CustomIcon"/> property contains the icon definition for the metadata.json for the station.</para>
     /// </summary>
     public class Icon : INotifyPropertyChanged, ICloneable, IEquatable<Icon>
     {
@@ -18,6 +19,8 @@ namespace RadioExt_Helper.models
         private string? _archivePath = "\\path\\to\\archive\\file";
         private string? _iconName = "custom_icon";
         private string? _sha256HashOfArchiveFile = string.Empty;
+
+        private CustomIcon? _customIcon;
 
         private bool _isActive;
 
@@ -102,6 +105,17 @@ namespace RadioExt_Helper.models
             {
                 _isActive = value;
                 OnPropertyChanged(nameof(IsActive));
+            }
+        }
+
+        [JsonProperty("customIcon")]
+        public CustomIcon? CustomIcon
+        {
+            get => _customIcon;
+            set
+            {
+                _customIcon = value;
+                OnPropertyChanged(nameof(CustomIcon));
             }
         }
 

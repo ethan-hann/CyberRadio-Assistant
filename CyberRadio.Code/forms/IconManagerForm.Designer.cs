@@ -175,6 +175,7 @@ namespace RadioExt_Helper.forms
             btnAddIcon.TextAlign = ContentAlignment.MiddleRight;
             btnAddIcon.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnAddIcon.UseVisualStyleBackColor = false;
+            btnAddIcon.Click += btnAddIcon_Click;
             // 
             // tableLayoutPanel2
             // 

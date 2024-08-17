@@ -167,16 +167,15 @@ public partial class StationManager : IDisposable
         {
             if (!_stations.TryGetValue(stationId, out var pair)) return false;
 
-            var removed = pair.Key.TrackedObject.AddIcon(icon);
-            if (!removed) return removed;
-
-            StationsAsBindingList.First(s => s.Id == stationId).TrackedObject.AddIcon(icon);
-            pair.Value.Add(new IconEditor(pair.Key, icon));
+            pair.Key.TrackedObject.Icons.Add(icon);
+            StationsAsBindingList.First(s => s.Id == stationId).TrackedObject.Icons.Add(icon);
+            var iconEditor = new IconEditor(pair.Key, icon);
+            pair.Value.Add(iconEditor);
 
             StationUpdated?.Invoke(this, stationId);
 
-            return removed;
-
+            return pair.Key.TrackedObject.Icons.Contains(icon) &&
+                   StationsAsBindingList.First(s => s.Id == stationId).TrackedObject.Icons.Contains(icon);
         } catch (Exception ex)
         {
             AuLogger.GetCurrentLogger<StationManager>().Error(ex, "Error adding icon to station.");
@@ -196,15 +195,26 @@ public partial class StationManager : IDisposable
         {
             if (!_stations.TryGetValue(stationId, out var pair)) return false;
 
-            var removed = pair.Key.TrackedObject.RemoveIcon(icon);
-            if (!removed) return removed;
-
-            StationsAsBindingList.First(s => s.Id == stationId).TrackedObject.RemoveIcon(icon);
+            pair.Key.TrackedObject.Icons.Remove(icon);
+            StationsAsBindingList.First(s => s.Id == stationId).TrackedObject.Icons.Remove(icon);
             pair.Value.Remove(pair.Value.First(e => e.Type == EditorType.IconEditor && ((IconEditor)e).Icon.IconId == icon.IconId));
 
             StationUpdated?.Invoke(this, stationId);
 
-            return removed;
+            return !pair.Key.TrackedObject.Icons.Contains(icon) &&
+                   !StationsAsBindingList.First(s => s.Id == stationId).TrackedObject.Icons.Contains(icon);
+
+            //if (!_stations.TryGetValue(stationId, out var pair)) return false;
+
+            //var removed = pair.Key.TrackedObject.RemoveIcon(icon);
+            //if (!removed) return removed;
+
+            //StationsAsBindingList.First(s => s.Id == stationId).TrackedObject.RemoveIcon(icon);
+            //pair.Value.Remove(pair.Value.First(e => e.Type == EditorType.IconEditor && ((IconEditor)e).Icon.IconId == icon.IconId));
+
+            //StationUpdated?.Invoke(this, stationId);
+
+            //return removed;
         }
         catch (Exception ex)
         {
@@ -271,11 +281,21 @@ public partial class StationManager : IDisposable
     /// <returns>The active <see cref="Icon"/> of the station or <c>null</c> if no active icons.</returns>
     public Icon? GetStationActiveIcon(Guid? stationId)
     {
-        lock (_stations)
+        try
         {
-            if (stationId == null) return null;
+            lock (_stations)
+            {
+                if (stationId == null) return null;
 
-            return _stations.TryGetValue((Guid)stationId, out var pair) ? pair.Key.TrackedObject.GetActiveIcon() : null;
+                return _stations.TryGetValue((Guid)stationId, out var pair)
+                    ? pair.Key.TrackedObject.GetActiveIcon()
+                    : null;
+            }
+        }
+        catch (Exception ex)
+        {
+            AuLogger.GetCurrentLogger<StationManager>().Error(ex, "Error getting active icon from station.");
+            return null;
         }
     }
 
@@ -287,13 +307,73 @@ public partial class StationManager : IDisposable
     /// <returns>The <see cref="IconEditor"/> for the specified station and icon or <c>null</c> if the editor could not be found in the manager.</returns>
     public IconEditor? GetStationIconEditor(Guid? stationId, Guid? iconId)
     {
-        lock (_stations)
+        try
         {
-            if (stationId == null || iconId == null) return null;
+            lock (_stations)
+            {
+                if (stationId == null || iconId == null) return null;
 
-            return _stations.TryGetValue((Guid)stationId, out var pair) ? 
-                pair.Value.FirstOrDefault(e => e.Type == EditorType.IconEditor && ((IconEditor)e).Icon.IconId == iconId) 
-                    as IconEditor : null;
+                return _stations.TryGetValue((Guid)stationId, out var pair) ? 
+                    pair.Value.FirstOrDefault(e => e.Type == EditorType.IconEditor && ((IconEditor)e)?.Icon?.IconId == iconId) 
+                        as IconEditor : null;
+            }
+        } catch (Exception ex)
+        {
+            AuLogger.GetCurrentLogger<StationManager>().Error(ex, "Error getting icon editor from station.");
+            return null;
+        }
+    }
+
+    /// <summary>
+    /// Add an icon editor the station based on the station ID and icon ID.
+    /// </summary>
+    /// <param name="stationId">The station to add an editor of, by id.</param>
+    /// <param name="iconId">The icon to associate with the editor, by id.</param>
+    public void AddStationIconEditor(Guid? stationId, Guid? iconId)
+    {
+        try
+        {
+            lock (_stations)
+            {
+                if (stationId == null || iconId == null) return;
+
+                if (!_stations.TryGetValue((Guid)stationId, out var pair)) return;
+
+                var icon = pair.Key.TrackedObject.Icons.FirstOrDefault(i => i.IconId == iconId);
+                if (icon == null) return;
+
+                var editor = new IconEditor(pair.Key, icon);
+                pair.Value.Add(editor);
+            }
+        } catch (Exception ex)
+        {
+            AuLogger.GetCurrentLogger<StationManager>().Error(ex, "Error adding icon editor to station.");
+        }
+    }
+
+    /// <summary>
+    /// Remove the icon editor for the specified station ID and icon ID.
+    /// </summary>
+    /// <param name="stationId">The station to remove the editor from, by id.</param>
+    /// <param name="iconId">The icon to remove the editor of, by id.</param>
+    public void RemoveStationIconEditor(Guid? stationId, Guid? iconId)
+    {
+        try
+        {
+            lock (_stations)
+            {
+                if (stationId == null || iconId == null) return;
+
+                if (!_stations.TryGetValue((Guid)stationId, out var pair)) return;
+
+                var editor = pair.Value.FirstOrDefault(e => e.Type == EditorType.IconEditor && ((IconEditor)e)?.Icon?.IconId == iconId);
+                if (editor == null) return;
+
+                pair.Value.Remove(editor);
+            }
+        } catch (Exception ex)
+        {
+            AuLogger.GetCurrentLogger<StationManager>().Error(ex, "Error removing icon editor from station.");
         }
     }
 
@@ -344,22 +424,29 @@ public partial class StationManager : IDisposable
     /// or <c>null</c> if the <paramref name="stationId"/> did not exist in the manager.</returns>
     public Pair<TrackableObject<Station>, List<IEditor>>? GetStation(Guid? stationId)
     {
-        lock (_stations)
+        try
         {
-            try
+            lock (_stations)
             {
-                if (stationId == null) return null;
-                var id = (Guid)stationId;
-                lock (_stations)
+                try
                 {
-                    return _stations.TryGetValue(id, out var pair) ? pair : null;
+                    if (stationId == null) return null;
+                    var id = (Guid)stationId;
+                    lock (_stations)
+                    {
+                        return _stations.TryGetValue(id, out var pair) ? pair : null;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    AuLogger.GetCurrentLogger<StationManager>().Error(ex, "Error getting station from manager.");
+                    return null;
                 }
             }
-            catch (Exception ex)
-            {
-                AuLogger.GetCurrentLogger<StationManager>().Error(ex, "Error getting station from manager.");
-                return null;
-            }
+        } catch (Exception ex)
+        {
+            AuLogger.GetCurrentLogger<StationManager>().Error(ex, "Error getting station from manager.");
+            return null;
         }
     }
 
@@ -370,23 +457,30 @@ public partial class StationManager : IDisposable
     /// <returns>The station editor for the specified station id or <c>null</c> if no editor exists in the manager.</returns>
     public StationEditor? GetStationEditor(Guid? stationId)
     {
-        lock (_stations)
+        try
         {
-            try
+            lock (_stations)
             {
-                if (stationId == null) return null;
-                var id = (Guid)stationId;
-                lock (_stations)
+                try
                 {
-                    return _stations.TryGetValue(id, out var pair) ? 
-                        pair.Value.FirstOrDefault(e => e.Type == EditorType.StationEditor) as StationEditor : null;
+                    if (stationId == null) return null;
+                    var id = (Guid)stationId;
+                    lock (_stations)
+                    {
+                        return _stations.TryGetValue(id, out var pair) ? 
+                            pair.Value.FirstOrDefault(e => e.Type == EditorType.StationEditor) as StationEditor : null;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    AuLogger.GetCurrentLogger<StationManager>().Error(ex, "Error getting station editor from manager.");
+                    return null;
                 }
             }
-            catch (Exception ex)
-            {
-                AuLogger.GetCurrentLogger<StationManager>().Error(ex, "Error getting station editor from manager.");
-                return null;
-            }
+        } catch (Exception ex)
+        {
+            AuLogger.GetCurrentLogger<StationManager>().Error(ex, "Error getting station editor from manager.");
+            return null;
         }
     }
 
@@ -824,8 +918,6 @@ public partial class StationManager : IDisposable
             return null;
         }
     }
-
-    
 
     /// <summary>
     /// Extracts the contents of a station archive file (.zip or .rar) to a temporary directory.

@@ -3,16 +3,6 @@ using RadioExt_Helper.models;
 using RadioExt_Helper.Properties;
 using RadioExt_Helper.user_controls;
 using RadioExt_Helper.utility;
-using RadioExt_Helper.utility.event_args;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using Icon = RadioExt_Helper.models.Icon;
 
 namespace RadioExt_Helper.forms
@@ -78,19 +68,16 @@ namespace RadioExt_Helper.forms
             }
 
             if (lbIcons.SelectedItem is not Icon icon) return;
-            SelectIconEditor(_station.Id, icon.IconId);
+            SelectIconEditor(icon.IconId);
         }
 
         /// <summary>
         /// Updates the UI with the correct icon editor based on the station's ID.
         /// </summary>
-        /// <param name="stationId">The ID of the station to get the editor of.</param>
         /// <param name="iconId">The ID of the icon associated with the editor.</param>
-        private void SelectIconEditor(Guid? stationId, Guid? iconId)
+        private void SelectIconEditor(Guid? iconId)
         {
-            if (stationId == null) return;
-
-            var editor = StationManager.Instance.GetStationIconEditor(stationId, iconId);
+            var editor = StationManager.Instance.GetStationIconEditor(_station.Id, iconId);
             UpdateIconEditor(editor);
         }
 
@@ -117,6 +104,21 @@ namespace RadioExt_Helper.forms
                 AuLogger.GetCurrentLogger<IconManagerForm>("UpdateIconEditor")
                     .Error(ex, "An error occurred while updating the icon editor.");
             }
+        }
+
+        private void btnAddIcon_Click(object sender, EventArgs e)
+        {
+            var icon = new Icon();
+
+            var added = StationManager.Instance.AddStationIcon(_station.Id, icon);
+            if (!added) return;
+
+            lbIcons.DataSource = _station.TrackedObject.Icons;
+            lbIcons.SelectedItem = icon;
+            SelectIconEditor(icon.IconId);
+            IconAdded?.Invoke(this, (Guid)icon.IconId);
+
+            //_station.TrackedObject.AddIcon(new Icon());
         }
     }
 }

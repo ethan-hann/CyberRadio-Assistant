@@ -30,6 +30,9 @@ public class IconManager : IDisposable
     private bool _isInitialized;
     private CancellationTokenSource? _cancellationTokenSource;
 
+    private Cli? _inkAtlasCli;
+    private Cli? _wolvenKitCli;
+
     public static IconManager Instance
     {
         get
@@ -155,6 +158,14 @@ public class IconManager : IDisposable
             if (!File.Exists(_wolvenKitCliExe))
                 throw new FileNotFoundException("The WolvenKit CLI executable could not be found.", _wolvenKitCliExe);
 
+            _inkAtlasCli = new Cli(_inkAtlasExe);
+            _inkAtlasCli.ErrorChanged += InkAtlasCli_ErrorChanged;
+            _inkAtlasCli.OutputChanged += InkAtlasCli_OutputChanged;
+
+            _wolvenKitCli = new Cli(_wolvenKitCliExe);
+            _wolvenKitCli.ErrorChanged += _wolvenKitCli_ErrorChanged;
+            _wolvenKitCli.OutputChanged += _wolvenKitCli_OutputChanged;
+
             _isInitialized = true;
         } 
         catch (Exception e)
@@ -269,10 +280,17 @@ public class IconManager : IDisposable
     /// <param name="stationId">The ID for the station.</param>
     /// <param name="atlasName">The name that icon atlas will be generated with.</param>
     /// <param name="overwrite">Indicates whether existing directories should be overwritten if they exist.</param>
-    /// <returns>A tuple containing the path to the directory for imported PNG files, the path to the 'raw' files for the project,
-    /// and the path to the folder holding the .inkatlas and .xbm files.</returns>
-    private (string importedPngsPath, string rawProjectFiles, string iconFilesPath) 
-        CreateImportDirectories(Guid stationId, string atlasName, bool overwrite = false)
+    /// <returns>A dictionary where the key is the type of project folder and the value is the folder path.
+    /// <list type="bullet">
+    ///     <item>"importedPngs" - input to the generate ink atlas json function: <c>tools\\imported\\{stationID}\\atlasName</c>.</item>
+    ///     <item>"iconFiles" - output folder for the converted .inkatlas and .xbm files: <c>tools\\atlasName\\archive\\base\\icon</c>.</item>
+    ///     <item>"projectBasePath" - the faux project's base path: <c>tools\\atlasName</c></item>
+    ///     <item>"projectRawPath" - the faux project's raw path: <c>tools\\atlasName\\source\\raw</c>.</item>
+    ///     <item>"archiveBasePath" - the base path to the archive folder within the project: <c>tools\\atlasName\\archive</c></item>
+    /// </list>
+    /// If any of the directories could not be created or an error occurred, an empty dictionary is returned.
+    /// </returns>
+    private Dictionary<string, string> CreateImportDirectories(Guid stationId, string atlasName, bool overwrite = false)
     {
         try
         {
@@ -286,30 +304,44 @@ public class IconManager : IDisposable
             if (ImageImportDirectory == null)
                 throw new InvalidOperationException("The image import directory is null.");
 
+            var outputDictionary = new Dictionary<string, string>();
+
             //Create the path that imported PNGs are stored: %LOCALAPPDATA%\RadioExt-Helper\tools\imported\{stationId}
-            var importedPngsPath = Path.Combine(ImageImportDirectory, stationId.ToString());
+            var importedPngsPath = Path.Combine(ImageImportDirectory, stationId.ToString(), atlasName);
             if (overwrite && Directory.Exists(importedPngsPath))
                 Directory.Delete(importedPngsPath, true);
             Directory.CreateDirectory(importedPngsPath);
+            outputDictionary["importedPngs"] = importedPngsPath;
 
-            //Create the path that the import project files will be stored: %LOCALAPPDATA%\RadioExt-Helper\tools\{atlasName}\source\raw
-            var projectPath = Path.Combine(WorkingDirectory, "tools", atlasName, "source", "raw");
-            if (overwrite && Directory.Exists(projectPath))
-                Directory.Delete(projectPath, true);
-            Directory.CreateDirectory(projectPath);
+            //Create the project's base path; also the folder for the final .archive file to be stored.
+            var projectBasePath = Path.Combine(WorkingDirectory, "tools", atlasName);
+            if (overwrite && Directory.Exists(projectBasePath))
+                Directory.Delete(projectBasePath, true);
+            Directory.CreateDirectory(projectBasePath);
+            outputDictionary["projectBasePath"] = projectBasePath;
 
             //Create the path for the .inkatlas and .xbm files to be stored in.
-            var iconFilesPath = Path.Combine(WorkingDirectory, "tools", atlasName, "archive", "base", "icon");
+            var iconFilesPath = Path.Combine(projectBasePath, "archive", "base", "icon");
             if (overwrite && Directory.Exists(iconFilesPath))
                 Directory.Delete(iconFilesPath, true);
             Directory.CreateDirectory(iconFilesPath);
+            outputDictionary["iconFiles"] = iconFilesPath;
+            outputDictionary["archiveBasePath"] = Path.Combine(projectBasePath, "archive");
 
-            return (importedPngsPath, projectPath, iconFilesPath);
+            //Create the path that the import project files will be stored: %LOCALAPPDATA%\RadioExt-Helper\tools\{atlasName}\source\raw
+            var projectRawPath = Path.Combine(projectBasePath, "source", "raw");
+            if (overwrite && Directory.Exists(projectRawPath))
+                Directory.Delete(projectRawPath, true);
+            Directory.CreateDirectory(projectRawPath);
+            outputDictionary["projectRawPath"] = projectRawPath;
+
+            return outputDictionary;
         } catch (Exception e)
         {
             AuLogger.GetCurrentLogger<IconManager>("CreateImportDirectories").Error(e.Message);
         }
-        return (string.Empty, string.Empty, string.Empty);
+
+        return [];
     }
 
     #endregion
@@ -323,8 +355,10 @@ public class IconManager : IDisposable
     /// </summary>
     /// <param name="stationId">The station ID to associate with the icon.</param>
     /// <param name="imagePath">The path to the image file on disk.</param>
+    /// <param name="atlasName">The name that icon atlas will be generated with.</param>
+    /// <param name="overwrite">Indicates whether existing directories should be overwritten if they exist.</param>
     /// <returns>A task that represents the asynchronous operation.</returns>
-    public async Task ImportIconImageAsync(Guid stationId, string imagePath)
+    public async Task ImportIconImageAsync(Guid stationId, string imagePath, string atlasName, bool overwrite = true)
     {
         if (!_isInitialized)
             throw new InvalidOperationException("The icon manager has not been initialized.");
@@ -336,7 +370,7 @@ public class IconManager : IDisposable
         {
             var status = GlobalData.Strings.GetString("IconManager_ImportStarted") ?? "The icon import operation has started.";
             OnIconImportStarted(new IconManagerEventArgs(status, _currentProgress, false));
-            await Task.Run(() => CreateIcon(stationId, imagePath, token), token);
+            await Task.Run(() => CreateIcon(stationId, imagePath, atlasName, overwrite, token), token);
         }
         catch (OperationCanceledException)
         {
@@ -352,11 +386,76 @@ public class IconManager : IDisposable
         }
     }
 
-    private void CreateIcon(Guid stationId, string imagePath, CancellationToken token)
+    private CustomIcon CreateIcon(Guid stationId, string imagePath, string atlasName, bool overwrite, CancellationToken token)
     {
+        if (!_isInitialized)
+        {
+            OnIconImportStatus(new IconManagerEventArgs("An error occurred.", _currentProgress, true, "The icon manager has not been initialized."));
+            CancelOperation();
+        }
+        _currentProgress += 2;
         token.ThrowIfCancellationRequested();
-        SetProgress(5, 100);
+        SetProgress(_currentProgress, 100);
 
+        if (!File.Exists(imagePath))
+        {
+            OnIconImportStatus(new IconManagerEventArgs("An error occurred.", _currentProgress, true, "The image file could not be found."));
+            CancelOperation();
+        }
+        _currentProgress += 2;
+        token.ThrowIfCancellationRequested();
+        SetProgress(_currentProgress, 100);
+
+        if (!IsPngFile(imagePath))
+        {
+            OnIconImportStatus(new IconManagerEventArgs("An error occurred.", _currentProgress, true, "The image file is not a PNG file."));
+            CancelOperation();
+        }
+        _currentProgress += 2;
+        token.ThrowIfCancellationRequested();
+        SetProgress(_currentProgress, 100);
+
+        var projectDirectories = CreateImportDirectories(stationId, atlasName, overwrite);
+        if (projectDirectories.Count == 0)
+        {
+            OnIconImportStatus(new IconManagerEventArgs("An error occurred.", _currentProgress, true, "The project directories could not be created."));
+            CancelOperation();
+        }
+        _currentProgress += 2;
+        token.ThrowIfCancellationRequested();
+        SetProgress(_currentProgress, 100);
+
+        if (_inkAtlasExe == null)
+        {
+            OnIconImportStatus(new IconManagerEventArgs("An error occurred.", _currentProgress, true, "The inkatlas executable could not be found."));
+            CancelOperation();
+        }
+        _currentProgress += 2;
+        token.ThrowIfCancellationRequested();
+        SetProgress(_currentProgress, 100);
+
+        if (StagingIconsPath == null)
+        {
+            OnIconImportStatus(new IconManagerEventArgs("An error occurred.", _currentProgress, true, "The staging icons path is null."));
+            CancelOperation();
+        }
+        _currentProgress += 2;
+        token.ThrowIfCancellationRequested();
+        SetProgress(_currentProgress, 100);
+        
+        //Generate .archive file
+        _ = _inkAtlasCli?.GenerateInkAtlasJsonAsync(projectDirectories["importedPngs"], projectDirectories["projectRawPath"], atlasName);
+        _ = _wolvenKitCli?.ConvertToInkAtlasFile(projectDirectories["projectRawPath"]);
+        _ = _wolvenKitCli?.ImportToWolvenKitProject(projectDirectories["projectRawPath"]);
+        //Copy files needed to the icon project folder
+        CopyProjectFiles(projectDirectories["projectRawPath"], projectDirectories["iconFiles"]);
+
+        //Pack the icon project folder into a .archive file
+        _ = _wolvenKitCli?.PackArchive(projectDirectories["archiveBasePath"], StagingIconsPath);
+        
+        //Create the icon object and add it to the station
+        //Icon icon = new Icon(imagePath, projectDirectories["iconFiles"]);
+        return new CustomIcon();
         //var icon = await CreateIconAsync(imagePath);
         //if (icon == null)
         //    throw new InvalidOperationException("The icon could not be created.");
@@ -366,6 +465,61 @@ public class IconManager : IDisposable
         //    throw new InvalidOperationException("The station could not be found in the station manager.");
 
         //station.Value.Key.TrackedObject.Icons.Add(icon);
+    }
+
+    /// <summary>
+    /// Copy the required .inkatlas and .xbm files to the project's icon folder. This is the folder that will be packed into a .archive file.
+    /// </summary>
+    /// <param name="sourcePath">The path to the project's raw files.</param>
+    /// <param name="destinationPath">The project's icon folder.</param>
+    private void CopyProjectFiles(string sourcePath, string destinationPath)
+    {
+        try
+        {
+            if (!Directory.Exists(sourcePath))
+                throw new DirectoryNotFoundException("The source path does not exist.");
+
+            if (!Directory.Exists(destinationPath))
+                throw new DirectoryNotFoundException("The destination path does not exist.");
+
+            foreach (var file in Directory.GetFiles(sourcePath))
+            {
+                var fileName = Path.GetFileName(file);
+                if (!Path.GetExtension(fileName).Equals(".inkatlas") || !Path.GetExtension(fileName).Equals(".xbm"))
+                    continue;
+
+                var destFile = Path.Combine(destinationPath, fileName);
+                File.Copy(file, destFile, true);
+            }
+        }
+        catch (Exception e)
+        {
+            AuLogger.GetCurrentLogger<IconManager>("CopyProjectFiles").Error(e.Message);
+        }
+    }
+
+    private void InkAtlasCli_OutputChanged(object? sender, string? e)
+    {
+        _currentProgress += 2;
+        SetProgress(_currentProgress, 100);
+        OnIconImportStatus(new IconManagerEventArgs(e, _currentProgress, false));
+    }
+
+    private void InkAtlasCli_ErrorChanged(object? sender, string? e)
+    {
+        OnIconImportStatus(new IconManagerEventArgs("An error occurred.", _currentProgress, true, e));
+    }
+
+    private void _wolvenKitCli_OutputChanged(object? sender, string? e)
+    {
+        _currentProgress += 2;
+        SetProgress(_currentProgress, 100);
+        OnIconExportStatus(new IconManagerEventArgs(e, _currentProgress, false));
+    }
+
+    private void _wolvenKitCli_ErrorChanged(object? sender, string? e)
+    {
+        OnIconExportStatus(new IconManagerEventArgs("An error occurred.", _currentProgress, true, e));
     }
 
     /// <summary>

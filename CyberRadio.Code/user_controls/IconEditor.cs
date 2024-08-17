@@ -39,6 +39,7 @@ namespace RadioExt_Helper.user_controls
         {
             Icon?.EnsureImage();
             picStationIcon.Image = Icon?.IconImage ?? Properties.Resources.drag_and_drop_128x128;
+            lblEditingText.Text = $"Editing Icon: {(Icon == null ? Icon?.IconId : "Null icon")}";
         }
 
         private void picStationIcon_DragDrop(object sender, DragEventArgs e)
