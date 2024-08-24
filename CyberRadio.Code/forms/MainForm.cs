@@ -16,11 +16,11 @@
 
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Timers;
 using AetherUtils.Core.Extensions;
 using AetherUtils.Core.Logging;
 using AetherUtils.Core.WinForms.Controls;
 using AetherUtils.Core.WinForms.Models;
-using Python.Runtime;
 using RadioExt_Helper.config;
 using RadioExt_Helper.models;
 using RadioExt_Helper.nexus_api;
@@ -200,7 +200,12 @@ public sealed partial class MainForm : Form
         StationManager.Instance.SyncStatusChanged -= OnStationSyncStatusChanged;
         StationManager.Instance.StationsSynchronized -= OnStationsSynchronized;
 
-        _resizeTimer.Elapsed -= (_, _) => { SaveWindowSize(); };
+        _resizeTimer.Elapsed -= resizeTimerOnElapsed;
+    }
+
+    private void resizeTimerOnElapsed(object? o, ElapsedEventArgs elapsedEventArgs)
+    {
+        SaveWindowSize();
     }
 
     /// <summary>
@@ -1134,12 +1139,6 @@ public sealed partial class MainForm : Form
         if (!station.TrackedObject.CustomIcon.UseCustom ||
             (station.TrackedObject.CustomIcon.InkAtlasPath.Equals(string.Empty)
              && station.TrackedObject.CustomIcon.InkAtlasPart.Equals(string.Empty))) return;
-
-        var text = GlobalData.Strings.GetString("IconGeneratorCustomIcon") ??
-                   "This station already has a custom icon. Do you want to overwrite it?";
-        var caption = GlobalData.Strings.GetString("IconGenerator") ?? "Icon Generator";
-        if (MessageBox.Show(this, text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
-            return;
 
         var managerForm = new IconManagerForm(station);
         managerForm.ShowDialog(this);

@@ -14,31 +14,9 @@ namespace RadioExt_Helper.custom_controls
 {
     public sealed partial class IconListBox : ListBox
     {
-        public event EventHandler<Icon>? IconAddedViaDragDrop;
-
         private string _disabledIconKey = "disabled";
         private string _enabledIconKey = "enabled";
         private ImageList _imageList;
-
-        private TrackableObject<Station> _station = new(new Station());
-
-        [Browsable(true)]
-        [Category("Data")]
-        [Description("The station that the icon list is associated with.")]
-        public TrackableObject<Station> Station
-        {
-            get => _station;
-            set
-            {
-                _station = value;
-                Items.Clear();
-
-                foreach (var icon in _station.TrackedObject.Icons)
-                {
-                    Items.Add(icon);
-                }
-            }
-        }
 
         [Browsable(true)]
         [Category("Icons")]
@@ -84,48 +62,7 @@ namespace RadioExt_Helper.custom_controls
             InitializeComponent();
 
             _imageList ??= new ImageList();
-
-            AllowDrop = true;
-            DragEnter += IconListBox_DragEnter;
-            DragDrop += IconListBox_DragDrop;
             SetValues();
-        }
-
-        private void IconListBox_DragEnter(object? sender, DragEventArgs e)
-        {
-            try
-            {
-                if (e.Data == null) return;
-                if (!e.Data.GetDataPresent(DataFormats.FileDrop)) return;
-                if (e.Data.GetData(DataFormats.FileDrop) is not string[] files) return;
-
-                if (files.Any(file => file.EndsWith(".png"))) 
-                    e.Effect = DragDropEffects.Copy;
-            } catch (Exception ex)
-            {
-                AuLogger.GetCurrentLogger<IconListBox>("IconListBox_DragEnter").Error(ex, "An error occured while dragging the icon.");
-            }
-        }
-
-        private void IconListBox_DragDrop(object? sender, DragEventArgs e)
-        {
-            try
-            {
-                if (e.Data == null) return;
-                if (!e.Data.GetDataPresent(DataFormats.FileDrop)) return;
-                if (e.Data.GetData(DataFormats.FileDrop) is not string[] files) return;
-                if (files.Length <= 0) return;
-
-                var file = files[0];
-                var icon = Icon.FromPath(file);
-                StationManager.Instance.AddStationIcon(_station.Id, icon);
-
-                IconAddedViaDragDrop?.Invoke(this, icon);
-            } 
-            catch (Exception ex)
-            {
-                AuLogger.GetCurrentLogger<IconListBox>("IconListBox_DragDrop").Error(ex, "An error occured while dropping the icon.");
-            }
         }
 
         private void SetValues()

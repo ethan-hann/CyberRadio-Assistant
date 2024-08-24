@@ -35,7 +35,7 @@ public partial class ExportWindow : Form
 
     private readonly Json<MetaData> _metaDataJson = new();
     private readonly Json<List<Song>> _songListJson = new();
-    private readonly Json<List<Icon>> _iconListJson = new();
+    private readonly Json<BindingList<Icon>> _iconListJson = new();
     private readonly List<TrackableObject<Station>> _stationsToExport;
 
     private readonly string _statusString =

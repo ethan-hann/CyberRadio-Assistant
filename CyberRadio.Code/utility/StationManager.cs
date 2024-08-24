@@ -167,15 +167,13 @@ public partial class StationManager : IDisposable
         {
             if (!_stations.TryGetValue(stationId, out var pair)) return false;
 
-            pair.Key.TrackedObject.Icons.Add(icon);
-            StationsAsBindingList.First(s => s.Id == stationId).TrackedObject.Icons.Add(icon);
+            pair.Key.TrackedObject.AddIcon(icon);
             var iconEditor = new IconEditor(pair.Key, icon);
             pair.Value.Add(iconEditor);
 
             StationUpdated?.Invoke(this, stationId);
 
-            return pair.Key.TrackedObject.Icons.Contains(icon) &&
-                   StationsAsBindingList.First(s => s.Id == stationId).TrackedObject.Icons.Contains(icon);
+            return pair.Key.TrackedObject.Icons.Contains(icon);
         } catch (Exception ex)
         {
             AuLogger.GetCurrentLogger<StationManager>().Error(ex, "Error adding icon to station.");
@@ -188,33 +186,28 @@ public partial class StationManager : IDisposable
     /// </summary>
     /// <param name="stationId">The station ID to remove the icon from.</param>
     /// <param name="icon">The <see cref="Icon"/> to remove.</param>
+    /// <param name="deleteFiles">Indicates whether to delete the Icon files from disk.</param>
     /// <returns><c>true</c> if the icon was removed successfully; <c>false</c> otherwise.</returns>
-    public bool RemoveStationIcon(Guid stationId, Icon icon)
+    public bool RemoveStationIcon(Guid stationId, Icon icon, bool deleteFiles = false)
     {
         try
         {
             if (!_stations.TryGetValue(stationId, out var pair)) return false;
 
-            pair.Key.TrackedObject.Icons.Remove(icon);
-            StationsAsBindingList.First(s => s.Id == stationId).TrackedObject.Icons.Remove(icon);
+            pair.Key.TrackedObject.RemoveIcon(icon);
             pair.Value.Remove(pair.Value.First(e => e.Type == EditorType.IconEditor && ((IconEditor)e).Icon.IconId == icon.IconId));
+
+            if (deleteFiles)
+            {
+                if (icon.ArchivePath != null && FileHelper.DoesFileExist(icon.ArchivePath))
+                    FileHelper.DeleteFile(icon.ArchivePath);
+                if (icon.ImagePath != null && FileHelper.DoesFileExist(icon.ImagePath))
+                    FileHelper.DeleteFile(icon.ImagePath);
+            }
 
             StationUpdated?.Invoke(this, stationId);
 
-            return !pair.Key.TrackedObject.Icons.Contains(icon) &&
-                   !StationsAsBindingList.First(s => s.Id == stationId).TrackedObject.Icons.Contains(icon);
-
-            //if (!_stations.TryGetValue(stationId, out var pair)) return false;
-
-            //var removed = pair.Key.TrackedObject.RemoveIcon(icon);
-            //if (!removed) return removed;
-
-            //StationsAsBindingList.First(s => s.Id == stationId).TrackedObject.RemoveIcon(icon);
-            //pair.Value.Remove(pair.Value.First(e => e.Type == EditorType.IconEditor && ((IconEditor)e).Icon.IconId == icon.IconId));
-
-            //StationUpdated?.Invoke(this, stationId);
-
-            //return removed;
+            return !pair.Key.TrackedObject.Icons.Contains(icon);
         }
         catch (Exception ex)
         {

@@ -14,7 +14,7 @@ namespace RadioExt_Helper.models
     {
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        private Guid? _iconId = Guid.NewGuid();
+        private Guid _iconId = Guid.NewGuid();
         private string? _imagePath = "\\path\\to\\custom\\image\\file";
         private string? _archivePath = "\\path\\to\\archive\\file";
         private string? _iconName = "custom_icon";
@@ -28,7 +28,7 @@ namespace RadioExt_Helper.models
         /// The unique identifier for the icon.
         /// </summary>
         [JsonProperty("iconId")]
-        public Guid? IconId
+        public Guid IconId
         {
             get => _iconId;
             set

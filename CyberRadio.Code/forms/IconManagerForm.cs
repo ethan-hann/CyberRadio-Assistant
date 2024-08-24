@@ -27,7 +27,8 @@ namespace RadioExt_Helper.forms
 
         private void IconManagerForm_Load(object sender, EventArgs e)
         {
-            lbIcons.Station = _station;
+            Text = $"Icon Manager - {_station.TrackedObject.MetaData.DisplayName}";
+
             lbIcons.DataSource = _station.TrackedObject.Icons;
             lbIcons.DisplayMember = "Name";
 
@@ -113,12 +114,24 @@ namespace RadioExt_Helper.forms
             var added = StationManager.Instance.AddStationIcon(_station.Id, icon);
             if (!added) return;
 
-            lbIcons.DataSource = _station.TrackedObject.Icons;
             lbIcons.SelectedItem = icon;
             SelectIconEditor(icon.IconId);
-            IconAdded?.Invoke(this, (Guid)icon.IconId);
+            IconAdded?.Invoke(this, icon.IconId);
+        }
 
-            //_station.TrackedObject.AddIcon(new Icon());
+        private void btnDeleteIcon_Click(object sender, EventArgs e)
+        {
+            if (lbIcons.SelectedItem is not Icon icon) return;
+            var text = GlobalData.Strings.GetString("ConfirmIconDelete") ?? "Do you want to delete associated icon files from disk?";
+            var caption = GlobalData.Strings.GetString("Confirm") ?? "Confirm Delete";
+            var result = MessageBox.Show(text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+            if (result == DialogResult.Yes)
+                StationManager.Instance.RemoveStationIcon(_station.Id, icon, true);
+            else
+                StationManager.Instance.RemoveStationIcon(_station.Id, icon);
+
+            IconDeleted?.Invoke(this, icon.IconId);
         }
     }
 }

@@ -443,7 +443,6 @@ namespace RadioExt_Helper.forms
             lbStations.SongsMissingFont = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lbStations.TabIndex = 0;
             lbStations.SelectedIndexChanged += LbStations_SelectedIndexChanged;
-            lbStations.DataSourceChanged += LbStations_SelectedIndexChanged;
             lbStations.MouseDown += LbStations_MouseDown;
             // 
             // statusStrip1

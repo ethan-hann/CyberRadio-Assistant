@@ -157,6 +157,7 @@ namespace RadioExt_Helper.forms
             btnDeleteIcon.TextAlign = ContentAlignment.MiddleRight;
             btnDeleteIcon.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnDeleteIcon.UseVisualStyleBackColor = false;
+            btnDeleteIcon.Click += btnDeleteIcon_Click;
             // 
             // btnAddIcon
             // 

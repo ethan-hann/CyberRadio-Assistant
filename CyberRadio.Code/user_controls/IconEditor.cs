@@ -19,10 +19,10 @@ namespace RadioExt_Helper.user_controls
         public EditorType Type { get; set; } = EditorType.IconEditor;
         public TrackableObject<Station> Station { get; }
 
-        public Icon? Icon { get; }
+        public Icon Icon { get; }
         private string _iconPath = string.Empty;
 
-        public IconEditor(TrackableObject<Station> station, Icon? icon)
+        public IconEditor(TrackableObject<Station> station, Icon icon)
         {
             InitializeComponent();
 
@@ -37,9 +37,9 @@ namespace RadioExt_Helper.user_controls
 
         private void IconEditor_Load(object sender, EventArgs e)
         {
-            Icon?.EnsureImage();
-            picStationIcon.Image = Icon?.IconImage ?? Properties.Resources.drag_and_drop_128x128;
-            lblEditingText.Text = $"Editing Icon: {(Icon == null ? Icon?.IconId : "Null icon")}";
+            Icon.EnsureImage();
+            picStationIcon.Image = Icon.IconImage ?? Properties.Resources.drag_and_drop_128x128;
+            lblEditingText.Text = $"Editing Icon: {Icon.IconId}";
         }
 
         private void picStationIcon_DragDrop(object sender, DragEventArgs e)

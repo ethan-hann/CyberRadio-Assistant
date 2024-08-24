@@ -27,10 +27,8 @@ namespace RadioExt_Helper.models;
 public sealed class Station : INotifyPropertyChanged, ICloneable, IEquatable<Station>
 {
     private MetaData _metaData = new();
-
     private List<Song> _songs = [];
-
-    private List<Icon> _icons = [];
+    private BindingList<Icon> _icons = [];
 
     /// <summary>
     ///     The metadata associated with this station.
@@ -93,7 +91,7 @@ public sealed class Station : INotifyPropertyChanged, ICloneable, IEquatable<Sta
     ///     A station can only have one active icon at a time.
     /// </summary>
     [JsonProperty("icons")]
-    public List<Icon> Icons
+    public BindingList<Icon> Icons
     {
         get => _icons;
         set
