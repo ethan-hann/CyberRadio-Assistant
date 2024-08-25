@@ -2,6 +2,7 @@
 using System.Drawing.Imaging;
 using System.Reflection;
 using AetherUtils.Core.Logging;
+using RadioExt_Helper.forms;
 using RadioExt_Helper.models;
 using RadioExt_Helper.utility.event_args;
 using Icon = RadioExt_Helper.models.Icon;
@@ -22,16 +23,16 @@ public class IconManager : IDisposable
     private static readonly object Lock = new();
     private static IconManager? _instance;
 
-    private string? _wolvenKitCliDownloadUrl;
-    private string? _inkAtlasExe;
-    private string? _wolvenKitCliExe;
+    private string _wolvenKitCliDownloadUrl = string.Empty;
+    private string _inkAtlasExe = string.Empty;
+    private string _wolvenKitCliExe = string.Empty;
     private bool _isWolvenKitDownloaded;
     private bool _isWolvenKitExtracted;
     private bool _isInitialized;
     private CancellationTokenSource? _cancellationTokenSource;
 
-    private Cli? _inkAtlasCli;
-    private Cli? _wolvenKitCli;
+    private Cli _inkAtlasCli;
+    private Cli _wolvenKitCli;
 
     public static IconManager Instance
     {
@@ -45,17 +46,20 @@ public class IconManager : IDisposable
         }
     }
     
+    /// <summary>
+    /// Event that is raised when the status of the CLI changes.
+    /// </summary>
+    public event EventHandler<IconManagerEventArgs>? CliStatus;
+
     #region Import Events
     public event EventHandler<IconManagerEventArgs>? IconImportStarted;
     public event EventHandler<IconManagerEventArgs>? IconImportProgress;
-    public event EventHandler<IconManagerEventArgs>? IconImportStatus;
     public event EventHandler<IconManagerEventArgs>? IconImportFinished;
     #endregion
 
     #region Export Events
     public event EventHandler<IconManagerEventArgs>? IconExportStarted;
     public event EventHandler<IconManagerEventArgs>? IconExportProgress;
-    public event EventHandler<IconManagerEventArgs>? IconExportStatus;
     public event EventHandler<IconManagerEventArgs>? IconExportFinished;
     #endregion
 
@@ -306,8 +310,8 @@ public class IconManager : IDisposable
 
             var outputDictionary = new Dictionary<string, string>();
 
-            //Create the path that imported PNGs are stored: %LOCALAPPDATA%\RadioExt-Helper\tools\imported\{stationId}
-            var importedPngsPath = Path.Combine(ImageImportDirectory, stationId.ToString(), atlasName);
+            //Create the path that imported PNGs are stored: %LOCALAPPDATA%\RadioExt-Helper\tools\imported\{stationName}
+            var importedPngsPath = Path.Combine(ImageImportDirectory, station.Value.Key.TrackedObject.MetaData.DisplayName, atlasName);
             if (overwrite && Directory.Exists(importedPngsPath))
                 Directory.Delete(importedPngsPath, true);
             Directory.CreateDirectory(importedPngsPath);
@@ -354,11 +358,12 @@ public class IconManager : IDisposable
     /// Import a PNG image file as a custom icon for a station.
     /// </summary>
     /// <param name="stationId">The station ID to associate with the icon.</param>
+    /// <param name="iconId">The icon ID to create. This should already be set by the <see cref="IconManagerForm"/>.</param>
     /// <param name="imagePath">The path to the image file on disk.</param>
     /// <param name="atlasName">The name that icon atlas will be generated with.</param>
     /// <param name="overwrite">Indicates whether existing directories should be overwritten if they exist.</param>
-    /// <returns>A task that represents the asynchronous operation.</returns>
-    public async Task ImportIconImageAsync(Guid stationId, string imagePath, string atlasName, bool overwrite = true)
+    /// <returns>A task that when complete contains an <see cref="Icon"/> or <c>null</c> if the import failed.</returns>
+    public async Task<Icon?> ImportIconImageAsync(Guid stationId, Guid iconId, string imagePath, string atlasName, bool overwrite = true)
     {
         if (!_isInitialized)
             throw new InvalidOperationException("The icon manager has not been initialized.");
@@ -370,7 +375,16 @@ public class IconManager : IDisposable
         {
             var status = GlobalData.Strings.GetString("IconManager_ImportStarted") ?? "The icon import operation has started.";
             OnIconImportStarted(new IconManagerEventArgs(status, _currentProgress, false));
-            await Task.Run(() => CreateIcon(stationId, imagePath, atlasName, overwrite, token), token);
+            Icon? icon = null;
+
+            await Task.Run(async () =>
+            {
+                icon = await CreateIcon(stationId, imagePath, atlasName, overwrite, token);
+                if (icon == null)
+                    throw new InvalidOperationException("The icon could not be created.");
+                icon.IconId = iconId;
+            }, token);
+            return icon;
         }
         catch (OperationCanceledException)
         {
@@ -384,9 +398,17 @@ public class IconManager : IDisposable
             var status = GlobalData.Strings.GetString("IconManager_ImportError") ?? "An error occurred during the icon import operation.";
             OnIconImportStatus(new IconManagerEventArgs(status, _currentProgress, true, e.Message));
         }
+        finally
+        {
+            _cancellationTokenSource?.Dispose();
+            _cancellationTokenSource = null;
+            ResetProgress();
+        }
+
+        return null;
     }
 
-    private CustomIcon CreateIcon(Guid stationId, string imagePath, string atlasName, bool overwrite, CancellationToken token)
+    private async Task<Icon> CreateIcon(Guid stationId, string imagePath, string atlasName, bool overwrite, CancellationToken token)
     {
         if (!_isInitialized)
         {
@@ -425,7 +447,12 @@ public class IconManager : IDisposable
         token.ThrowIfCancellationRequested();
         SetProgress(_currentProgress, 100);
 
-        if (_inkAtlasExe == null)
+        //Copy the image to the images folder for the project
+        var imageFileName = Path.GetFileName(imagePath);
+        var projectImagePath = Path.Combine(projectDirectories["importedPngs"], imageFileName);
+        File.Copy(imagePath, projectImagePath, overwrite);
+
+        if (_inkAtlasExe.Equals(string.Empty))
         {
             OnIconImportStatus(new IconManagerEventArgs("An error occurred.", _currentProgress, true, "The inkatlas executable could not be found."));
             CancelOperation();
@@ -444,18 +471,60 @@ public class IconManager : IDisposable
         SetProgress(_currentProgress, 100);
         
         //Generate .archive file
-        _ = _inkAtlasCli?.GenerateInkAtlasJsonAsync(projectDirectories["importedPngs"], projectDirectories["projectRawPath"], atlasName);
-        _ = _wolvenKitCli?.ConvertToInkAtlasFile(projectDirectories["projectRawPath"]);
-        _ = _wolvenKitCli?.ImportToWolvenKitProject(projectDirectories["projectRawPath"]);
+        await _inkAtlasCli.GenerateInkAtlasJsonAsync(projectDirectories["importedPngs"], projectDirectories["projectRawPath"], atlasName);
+
+        _currentProgress += 2;
+        token.ThrowIfCancellationRequested();
+        SetProgress(_currentProgress, 100);
+
+        await _wolvenKitCli.ConvertToInkAtlasFile(projectDirectories["projectRawPath"]);
+
+        _currentProgress += 2;
+        token.ThrowIfCancellationRequested();
+        SetProgress(_currentProgress, 100);
+
+        await _wolvenKitCli.ImportToWolvenKitProject(projectDirectories["projectRawPath"]);
+
+        _currentProgress += 2;
+        token.ThrowIfCancellationRequested();
+        SetProgress(_currentProgress, 100);
+
         //Copy files needed to the icon project folder
         CopyProjectFiles(projectDirectories["projectRawPath"], projectDirectories["iconFiles"]);
 
+        _currentProgress += 2;
+        token.ThrowIfCancellationRequested();
+        SetProgress(_currentProgress, 100);
+
         //Pack the icon project folder into a .archive file
-        _ = _wolvenKitCli?.PackArchive(projectDirectories["archiveBasePath"], StagingIconsPath);
+        await _wolvenKitCli.PackArchive(projectDirectories["archiveBasePath"], projectDirectories["projectBasePath"]);
         
-        //Create the icon object and add it to the station
-        //Icon icon = new Icon(imagePath, projectDirectories["iconFiles"]);
-        return new CustomIcon();
+        //Rename the .archive file to the atlas name
+        var originalArchivePath = Path.Combine(projectDirectories["projectBasePath"], "archive.archive");
+        var newArchivePath = Path.Combine(projectDirectories["projectBasePath"], $"{atlasName}.archive");
+        File.Copy(originalArchivePath, newArchivePath, overwrite);
+        File.Delete(originalArchivePath);
+
+        _currentProgress += 2;
+        token.ThrowIfCancellationRequested();
+        SetProgress(_currentProgress, 100);
+
+        //Copy the archive to the staging icons folder
+        var stagingIconPath = Path.Combine(StagingIconsPath, $"{atlasName}.archive");
+        File.Copy(newArchivePath, stagingIconPath, overwrite);
+
+        //Finally, create the icon object and return it
+        var icon = new Icon(projectImagePath, stagingIconPath)
+        {
+            CustomIcon = new CustomIcon()
+            {
+                UseCustom = true,
+                InkAtlasPath = Path.Combine("base", "icon", $"{atlasName}.inkatlas"),
+                InkAtlasPart = $"{atlasName}"
+            }
+        };
+
+        return icon;
         //var icon = await CreateIconAsync(imagePath);
         //if (icon == null)
         //    throw new InvalidOperationException("The icon could not be created.");
@@ -485,8 +554,7 @@ public class IconManager : IDisposable
             foreach (var file in Directory.GetFiles(sourcePath))
             {
                 var fileName = Path.GetFileName(file);
-                if (!Path.GetExtension(fileName).Equals(".inkatlas") || !Path.GetExtension(fileName).Equals(".xbm"))
-                    continue;
+                if (!fileName.EndsWith(".inkatlas") && !fileName.EndsWith(".xbm")) continue;
 
                 var destFile = Path.Combine(destinationPath, fileName);
                 File.Copy(file, destFile, true);
@@ -590,11 +658,11 @@ public class IconManager : IDisposable
     #region Event Handlers
     private void OnIconImportStarted(IconManagerEventArgs e) => IconImportStarted?.Invoke(this, e);
     private void OnIconImportProgress(IconManagerEventArgs e) => IconImportProgress?.Invoke(this, e);
-    private void OnIconImportStatus(IconManagerEventArgs e) => IconImportStatus?.Invoke(this, e);
+    private void OnIconImportStatus(IconManagerEventArgs e) => CliStatus?.Invoke(this, e);
     private void OnIconImportFinished(IconManagerEventArgs e) => IconImportFinished?.Invoke(this, e);
     private void OnIconExportStarted(IconManagerEventArgs e) => IconExportStarted?.Invoke(this, e);
     private void OnIconExportProgress(IconManagerEventArgs e) => IconExportProgress?.Invoke(this, e);
-    private void OnIconExportStatus(IconManagerEventArgs e) => IconExportStatus?.Invoke(this, e);
+    private void OnIconExportStatus(IconManagerEventArgs e) => CliStatus?.Invoke(this, e);
     private void OnIconExportFinished(IconManagerEventArgs e) => IconExportFinished?.Invoke(this, e);
     #endregion
 }

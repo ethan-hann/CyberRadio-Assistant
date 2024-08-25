@@ -133,5 +133,29 @@ namespace RadioExt_Helper.forms
 
             IconDeleted?.Invoke(this, icon.IconId);
         }
+
+        private void btnEnableIcon_Click(object sender, EventArgs e)
+        {
+            if (lbIcons.SelectedItem is not Icon icon) return;
+            lbIcons.BeginUpdate();
+            foreach (var i in _station.TrackedObject.Icons)
+            {
+                i.IsActive = false;
+            }
+
+            icon.IsActive = true;
+            lbIcons.Invalidate();
+            lbIcons.EndUpdate();
+        }
+
+        private void btnDisableIcon_Click(object sender, EventArgs e)
+        {
+            if (lbIcons.SelectedItem is not Icon icon) return;
+
+            lbIcons.BeginUpdate();
+            icon.IsActive = false;
+            lbIcons.Invalidate();
+            lbIcons.EndUpdate();
+        }
     }
 }

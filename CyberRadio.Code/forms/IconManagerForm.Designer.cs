@@ -32,10 +32,6 @@ namespace RadioExt_Helper.forms
         {
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(IconManagerForm));
-            statusStrip1 = new StatusStrip();
-            lblStatus = new ToolStripStatusLabel();
-            toolStripStatusLabel2 = new ToolStripStatusLabel();
-            pgProgressBar = new ToolStripProgressBar();
             splitContainer1 = new SplitContainer();
             grpIcons = new GroupBox();
             lbIcons = new IconListBox();
@@ -43,9 +39,8 @@ namespace RadioExt_Helper.forms
             btnDeleteIcon = new Button();
             btnAddIcon = new Button();
             tableLayoutPanel2 = new TableLayoutPanel();
-            button2 = new Button();
+            btnDisableIcon = new Button();
             btnEnableIcon = new Button();
-            statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.SuspendLayout();
@@ -53,35 +48,6 @@ namespace RadioExt_Helper.forms
             tableLayoutPanel1.SuspendLayout();
             tableLayoutPanel2.SuspendLayout();
             SuspendLayout();
-            // 
-            // statusStrip1
-            // 
-            statusStrip1.BackColor = Color.Transparent;
-            statusStrip1.Items.AddRange(new ToolStripItem[] { lblStatus, toolStripStatusLabel2, pgProgressBar });
-            statusStrip1.Location = new Point(0, 633);
-            statusStrip1.Name = "statusStrip1";
-            statusStrip1.Size = new Size(936, 22);
-            statusStrip1.SizingGrip = false;
-            statusStrip1.TabIndex = 0;
-            statusStrip1.Text = "statusStrip1";
-            // 
-            // lblStatus
-            // 
-            lblStatus.Image = Properties.Resources.status__16x16;
-            lblStatus.Name = "lblStatus";
-            lblStatus.Size = new Size(55, 17);
-            lblStatus.Text = "Ready";
-            // 
-            // toolStripStatusLabel2
-            // 
-            toolStripStatusLabel2.Name = "toolStripStatusLabel2";
-            toolStripStatusLabel2.Size = new Size(614, 17);
-            toolStripStatusLabel2.Spring = true;
-            // 
-            // pgProgressBar
-            // 
-            pgProgressBar.Name = "pgProgressBar";
-            pgProgressBar.Size = new Size(250, 16);
             // 
             // splitContainer1
             // 
@@ -92,7 +58,7 @@ namespace RadioExt_Helper.forms
             // splitContainer1.Panel1
             // 
             splitContainer1.Panel1.Controls.Add(grpIcons);
-            splitContainer1.Size = new Size(936, 633);
+            splitContainer1.Size = new Size(936, 655);
             splitContainer1.SplitterDistance = 312;
             splitContainer1.TabIndex = 1;
             // 
@@ -104,7 +70,7 @@ namespace RadioExt_Helper.forms
             grpIcons.Dock = DockStyle.Fill;
             grpIcons.Location = new Point(0, 0);
             grpIcons.Name = "grpIcons";
-            grpIcons.Size = new Size(312, 633);
+            grpIcons.Size = new Size(312, 655);
             grpIcons.TabIndex = 0;
             grpIcons.TabStop = false;
             grpIcons.Text = "Icons";
@@ -120,7 +86,7 @@ namespace RadioExt_Helper.forms
             lbIcons.ItemHeight = 15;
             lbIcons.Location = new Point(3, 53);
             lbIcons.Name = "lbIcons";
-            lbIcons.Size = new Size(306, 540);
+            lbIcons.Size = new Size(306, 562);
             lbIcons.TabIndex = 6;
             lbIcons.SelectedIndexChanged += lbIcons_SelectedIndexChanged;
             // 
@@ -132,7 +98,7 @@ namespace RadioExt_Helper.forms
             tableLayoutPanel1.Controls.Add(btnDeleteIcon, 1, 0);
             tableLayoutPanel1.Controls.Add(btnAddIcon, 0, 0);
             tableLayoutPanel1.Dock = DockStyle.Bottom;
-            tableLayoutPanel1.Location = new Point(3, 593);
+            tableLayoutPanel1.Location = new Point(3, 615);
             tableLayoutPanel1.Margin = new Padding(3, 2, 3, 2);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 1;
@@ -183,7 +149,7 @@ namespace RadioExt_Helper.forms
             tableLayoutPanel2.ColumnCount = 2;
             tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tableLayoutPanel2.Controls.Add(button2, 0, 0);
+            tableLayoutPanel2.Controls.Add(btnDisableIcon, 0, 0);
             tableLayoutPanel2.Controls.Add(btnEnableIcon, 0, 0);
             tableLayoutPanel2.Dock = DockStyle.Top;
             tableLayoutPanel2.Location = new Point(3, 19);
@@ -193,23 +159,24 @@ namespace RadioExt_Helper.forms
             tableLayoutPanel2.Size = new Size(306, 34);
             tableLayoutPanel2.TabIndex = 4;
             // 
-            // button2
+            // btnDisableIcon
             // 
-            button2.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            button2.BackColor = Color.Yellow;
-            button2.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
-            button2.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
-            button2.FlatStyle = FlatStyle.Flat;
-            button2.Image = Properties.Resources.disabled__16x16;
-            button2.Location = new Point(156, 2);
-            button2.Margin = new Padding(3, 2, 3, 2);
-            button2.Name = "button2";
-            button2.Size = new Size(147, 30);
-            button2.TabIndex = 2;
-            button2.Text = "Disable Selected";
-            button2.TextAlign = ContentAlignment.MiddleRight;
-            button2.TextImageRelation = TextImageRelation.ImageBeforeText;
-            button2.UseVisualStyleBackColor = false;
+            btnDisableIcon.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            btnDisableIcon.BackColor = Color.Yellow;
+            btnDisableIcon.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
+            btnDisableIcon.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
+            btnDisableIcon.FlatStyle = FlatStyle.Flat;
+            btnDisableIcon.Image = Properties.Resources.disabled__16x16;
+            btnDisableIcon.Location = new Point(156, 2);
+            btnDisableIcon.Margin = new Padding(3, 2, 3, 2);
+            btnDisableIcon.Name = "btnDisableIcon";
+            btnDisableIcon.Size = new Size(147, 30);
+            btnDisableIcon.TabIndex = 2;
+            btnDisableIcon.Text = "Disable Selected";
+            btnDisableIcon.TextAlign = ContentAlignment.MiddleRight;
+            btnDisableIcon.TextImageRelation = TextImageRelation.ImageBeforeText;
+            btnDisableIcon.UseVisualStyleBackColor = false;
+            btnDisableIcon.Click += btnDisableIcon_Click;
             // 
             // btnEnableIcon
             // 
@@ -228,6 +195,7 @@ namespace RadioExt_Helper.forms
             btnEnableIcon.TextAlign = ContentAlignment.MiddleRight;
             btnEnableIcon.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnEnableIcon.UseVisualStyleBackColor = false;
+            btnEnableIcon.Click += btnEnableIcon_Click;
             // 
             // IconManagerForm
             // 
@@ -236,14 +204,11 @@ namespace RadioExt_Helper.forms
             BackColor = Color.White;
             ClientSize = new Size(936, 655);
             Controls.Add(splitContainer1);
-            Controls.Add(statusStrip1);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "IconManagerForm";
             StartPosition = FormStartPosition.CenterParent;
             Text = "Icon Manager - {0}";
             Load += IconManagerForm_Load;
-            statusStrip1.ResumeLayout(false);
-            statusStrip1.PerformLayout();
             splitContainer1.Panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
             splitContainer1.ResumeLayout(false);
@@ -251,22 +216,16 @@ namespace RadioExt_Helper.forms
             tableLayoutPanel1.ResumeLayout(false);
             tableLayoutPanel2.ResumeLayout(false);
             ResumeLayout(false);
-            PerformLayout();
         }
 
         #endregion
-
-        private StatusStrip statusStrip1;
-        private ToolStripStatusLabel lblStatus;
-        private ToolStripStatusLabel toolStripStatusLabel2;
-        private ToolStripProgressBar pgProgressBar;
         private SplitContainer splitContainer1;
         private GroupBox grpIcons;
         private TableLayoutPanel tableLayoutPanel1;
         private Button btnDeleteIcon;
         private Button btnAddIcon;
         private TableLayoutPanel tableLayoutPanel2;
-        private Button button2;
+        private Button btnDisableIcon;
         private Button btnEnableIcon;
         private IconListBox lbIcons;
     }

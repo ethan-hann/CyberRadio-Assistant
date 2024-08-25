@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
 using AetherUtils.Core.Logging;
 
 namespace RadioExt_Helper.utility;
@@ -32,16 +27,16 @@ public class Cli(string executablePath)
     /// <param name="iconFolderPath">The path to the folder containing the <c>.png</c> files.</param>
     /// <param name="outputFolderPath">The output path the final <c>.inkatlas.json</c> file should be saved.</param>
     /// <param name="atlasName">The name of the atlas to generate.</param>
-    /// <returns>A task that when complete contains a tuple with the final output and error streams from the command.</returns>
+    /// <returns>A task that represents the asynchronous operation.</returns>
     /// <remarks>
     ///     The <c>generate_inkatlas.exe</c> is a tool that generates an <c>.inkatlas.json</c> file from a folder of <c>.png</c> files.
     ///     It was built from a modified version of the original <see href="https://github.com/DoctorPresto/Cyberpunk-Helper-Scripts/blob/main/generate_inkatlas.py">generate_inkatlas.py</see> script and allows for command line arguments to be passed in.
     ///     The modified tool is embedded as a resource in this project and is extracted to a temporary location before being executed.
     /// </remarks>
-    public async Task<(string output, string error)> GenerateInkAtlasJsonAsync(string iconFolderPath, string outputFolderPath, string atlasName)
+    public async Task GenerateInkAtlasJsonAsync(string iconFolderPath, string outputFolderPath, string atlasName)
     {
         var arguments = $"\"{iconFolderPath}\" \"{outputFolderPath}\" \"{atlasName}\"";
-        return await ExecuteCommandAsync(arguments);
+        await ExecuteCommandAsync(arguments);
     }
     #endregion
 
@@ -51,22 +46,22 @@ public class Cli(string executablePath)
     /// Convert a <c>.inkatlas.json</c> file to a <c>.inkatlas</c> file.
     /// </summary>
     /// <param name="inkAtlasJsonPath">The full path to the <c>.inkatlas.json</c> file.</param>
-    /// <returns>A task that when complete contains a tuple with the final output and error streams from the command.</returns>
-    public async Task<(string output, string error)> ConvertToInkAtlasFile(string inkAtlasJsonPath)
+    /// <returns>A task that represents the asynchronous operation.</returns>
+    public async Task ConvertToInkAtlasFile(string inkAtlasJsonPath)
     {
         var arguments = $"convert deserialize \"{inkAtlasJsonPath}\"";
-        return await ExecuteCommandAsync(arguments);
+        await ExecuteCommandAsync(arguments);
     }
 
     /// <summary>
     /// Import a folder of raw files to a WolvenKit faux project.
     /// </summary>
     /// <param name="sourcePath">The full path to the raw input files.</param>
-    /// <returns>A task that when complete contains a tuple with the final output and error streams from the command.</returns>
-    public async Task<(string output, string error)> ImportToWolvenKitProject(string sourcePath)
+    /// <returns>A task that represents the asynchronous operation.</returns>
+    public async Task ImportToWolvenKitProject(string sourcePath)
     {
         var arguments = $"import -p \"{sourcePath}\"";
-        return await ExecuteCommandAsync(arguments);
+        await ExecuteCommandAsync(arguments);
     }
 
     /// <summary>
@@ -74,11 +69,11 @@ public class Cli(string executablePath)
     /// </summary>
     /// <param name="modPath">The path to a faux mod directory.</param>
     /// <param name="outputFolder">The output folder to store the packed <c>.archive</c> file in.</param>
-    /// <returns>A task that when complete contains a tuple with the final output and error streams from the command.</returns>
-    public async Task<(string output, string error)> PackArchive(string modPath, string outputFolder)
+    /// <returns>A task that represents the asynchronous operation.</returns>
+    public async Task PackArchive(string modPath, string outputFolder)
     {
         var arguments = $"pack -p \"{modPath}\" -o \"{outputFolder}\"";
-        return await ExecuteCommandAsync(arguments);
+        await ExecuteCommandAsync(arguments);
     }
 
     /// <summary>
@@ -86,11 +81,11 @@ public class Cli(string executablePath)
     /// </summary>
     /// <param name="archivePath">The full path to the <c>.archive</c> file.</param>
     /// <param name="outputFolder">The output folder to store the extracted contents in.</param>
-    /// <returns>A task that when complete contains a tuple with the final output and error streams from the command.</returns>
-    public async Task<(string output, string error)> UnpackArchive(string archivePath, string outputFolder)
+    /// <returns>A task that represents the asynchronous operation.</returns>
+    public async Task UnpackArchive(string archivePath, string outputFolder)
     {
         var arguments = $"unbundle -p \"{archivePath}\" -o \"{outputFolder}\"";
-        return await ExecuteCommandAsync(arguments);
+        await ExecuteCommandAsync(arguments);
     }
 
     /// <summary>
@@ -98,21 +93,21 @@ public class Cli(string executablePath)
     /// </summary>
     /// <param name="modPath">The path to the folder containing the <c>.xbm</c> files to export.</param>
     /// <param name="outputFolder">The output folder to store the exported <c>.png</c> files.</param>
-    /// <returns>A task that when complete contains a tuple with the final output and error streams from the command.</returns>
-    public async Task<(string output, string error)> ExportPng(string modPath, string outputFolder)
+    /// <returns>A task that represents the asynchronous operation.</returns>
+    public async Task ExportPng(string modPath, string outputFolder)
     {
         var arguments = $"export --uext png -p \"{modPath}\" -o \"{outputFolder}\"";
-        return await ExecuteCommandAsync(arguments);
+        await ExecuteCommandAsync(arguments);
     }
 
     #endregion
 
     /// <summary>
-    /// Executes a CLI command asynchronously.
+    /// Executes a CLI command asynchronously. All output and error streams are redirected to events.
     /// </summary>
     /// <param name="arguments">The arguments to run the command with.</param>
-    /// <returns>A task that when complete contains a tuple with the output and error streams from the command.</returns>
-    private async Task<(string output, string error)> ExecuteCommandAsync(string arguments)
+    /// <returns>A task that represents the asynchronous operation.</returns>
+    private async Task ExecuteCommandAsync(string arguments)
     {
         try
         {
@@ -135,38 +130,26 @@ public class Cli(string executablePath)
             process.BeginErrorReadLine();
 
             await process.WaitForExitAsync();
-
-            var output = await process.StandardOutput.ReadToEndAsync();
-            var error = await process.StandardError.ReadToEndAsync();
-
-            var result = (output, error);
-            if (!string.IsNullOrEmpty(error))
-            {
-                AuLogger.GetCurrentLogger<Cli>("ExecuteCommand").Error(error);
-            }
-
-            return result;
         }
         catch (Exception ex)
         {
             AuLogger.GetCurrentLogger<Cli>("ExecuteCommand").Error(ex);
-            return (string.Empty, $"Couldn't execute command: {_executableName} {arguments}");
         }
     }
 
     private void OnOutputChanged(string? output)
     {
-        if (!string.IsNullOrEmpty(output))
-        {
-            OutputChanged?.Invoke(this, output);
-        }
+        if (string.IsNullOrEmpty(output)) return;
+
+        OutputChanged?.Invoke(this, output);
+        AuLogger.GetCurrentLogger<Cli>("ExecuteCommand").Info(output);
     }
 
     private void OnErrorChanged(string? error)
     {
-        if (!string.IsNullOrEmpty(error))
-        {
-            ErrorChanged?.Invoke(this, error);
-        }
+        if (string.IsNullOrEmpty(error)) return;
+
+        ErrorChanged?.Invoke(this, error);
+        AuLogger.GetCurrentLogger<Cli>("ExecuteCommand").Error(error);
     }
 }
