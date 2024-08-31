@@ -22,6 +22,7 @@ using RadioExt_Helper.forms;
 using RadioExt_Helper.models;
 using RadioExt_Helper.Properties;
 using RadioExt_Helper.utility;
+using Icon = RadioExt_Helper.models.Icon;
 
 namespace RadioExt_Helper.user_controls;
 
@@ -196,6 +197,18 @@ public sealed partial class StationEditor : UserControl, IEditor
     {
         txtDisplayName.Text = newName;
         Station.TrackedObject.MetaData.DisplayName = newName;
+    }
+
+    public void UpdateIcon(Icon icon)
+    {
+        if (icon.CustomIcon is not { } customIcon) return;
+
+        Station.TrackedObject.CustomIcon = customIcon;
+        txtInkAtlasPath.Text = customIcon.InkAtlasPath;
+        txtInkAtlasPart.Text = customIcon.InkAtlasPart;
+        picStationIcon.Image = icon.IconImage;
+
+        StationUpdated?.Invoke(this, EventArgs.Empty);
     }
 
     /// <summary>

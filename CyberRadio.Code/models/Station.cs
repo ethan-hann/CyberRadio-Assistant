@@ -134,7 +134,7 @@ public sealed class Station : INotifyPropertyChanged, ICloneable, IEquatable<Sta
     /// <param name="icon">The <see cref="Icon"/> to add to the station.</param>
     /// <param name="makeActive">Indicates whether to make the newly added icon active for the station.</param>
     /// <returns><c>true</c> if the icon was added successfully; <c>false</c> otherwise.</returns>
-    public bool AddIcon(Icon icon, bool makeActive = false)
+    public bool AddIcon(ref Icon icon, bool makeActive = false)
     {
         if (Icons.Contains(icon)) return false;
 

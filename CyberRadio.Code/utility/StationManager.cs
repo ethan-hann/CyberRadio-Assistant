@@ -123,8 +123,7 @@ public partial class StationManager : IDisposable
                     _newStations.Add(station.Id);
 
                 var editor = new StationEditor(station);
-                var iconEditor = new IconEditor(station, station.TrackedObject.GetActiveIcon());
-                _stations[station.Id] = new Pair<TrackableObject<Station>, List<IEditor>>(station, [editor, iconEditor]);
+                _stations[station.Id] = new Pair<TrackableObject<Station>, List<IEditor>>(station, [editor]);
                 editor.StationUpdated += Editor_StationUpdated;
 
                 StationsAsBindingList.Add(station);
@@ -161,14 +160,14 @@ public partial class StationManager : IDisposable
     /// <param name="stationId">The station ID to add the icon to.</param>
     /// <param name="icon">The <see cref="Icon"/> to add.</param>
     /// <returns><c>true</c> if the icon was added successfully; <c>false</c> otherwise.</returns>
-    public bool AddStationIcon(Guid stationId, Icon icon)
+    public bool AddStationIcon(Guid stationId, ref Icon icon)
     {
         try
         {
             if (!_stations.TryGetValue(stationId, out var pair)) return false;
 
-            pair.Key.TrackedObject.AddIcon(icon);
-            var iconEditor = new IconEditor(pair.Key, icon);
+            pair.Key.TrackedObject.AddIcon(ref icon);
+            var iconEditor = new IconEditor(pair.Key, ref icon);
             pair.Value.Add(iconEditor);
 
             StationUpdated?.Invoke(this, stationId);
@@ -188,14 +187,16 @@ public partial class StationManager : IDisposable
     /// <param name="icon">The <see cref="Icon"/> to remove.</param>
     /// <param name="deleteFiles">Indicates whether to delete the Icon files from disk.</param>
     /// <returns><c>true</c> if the icon was removed successfully; <c>false</c> otherwise.</returns>
-    public bool RemoveStationIcon(Guid stationId, Icon icon, bool deleteFiles = false)
+    public bool RemoveStationIcon(Guid stationId, ref Icon icon, bool deleteFiles = false)
     {
         try
         {
             if (!_stations.TryGetValue(stationId, out var pair)) return false;
 
             pair.Key.TrackedObject.RemoveIcon(icon);
-            pair.Value.Remove(pair.Value.First(e => e.Type == EditorType.IconEditor && ((IconEditor)e).Icon.IconId == icon.IconId));
+            var iconEditor = GetStationIconEditor(stationId, icon.IconId);
+            if (iconEditor != null)
+                pair.Value.Remove(iconEditor);
 
             if (deleteFiles)
             {
@@ -335,7 +336,7 @@ public partial class StationManager : IDisposable
                 var icon = pair.Key.TrackedObject.Icons.FirstOrDefault(i => i.IconId == iconId);
                 if (icon == null) return;
 
-                var editor = new IconEditor(pair.Key, icon);
+                var editor = new IconEditor(pair.Key, ref icon);
                 pair.Value.Add(editor);
             }
         } catch (Exception ex)

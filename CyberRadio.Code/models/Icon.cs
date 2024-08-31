@@ -145,7 +145,6 @@ namespace RadioExt_Helper.models
                 if (!Path.GetExtension(imagePath).Equals(".png"))
                     throw new ArgumentException("The image file must be a .png file.");
 
-                IconId = Guid.NewGuid();
                 ImagePath = imagePath;
                 IconName = imagePath.Split('\\').Last();
                 IconImage = Image.FromFile(imagePath);
@@ -162,7 +161,6 @@ namespace RadioExt_Helper.models
         /// <param name="archivePath">The path to the <c>.archive</c> file for this icon.</param>
         public Icon(string imagePath, string archivePath)
         {
-            IconId = Guid.NewGuid();
             ImagePath = imagePath;
             ArchivePath = archivePath;
             Sha256HashOfArchiveFile = PathHelper.ComputeSha256Hash(archivePath, true);

@@ -19,7 +19,7 @@ namespace RadioExt_Helper.user_controls
         private readonly ImageList _tabImageList = new();
         private bool _isImporting;
 
-        public IconEditor(TrackableObject<Station> station, Icon icon)
+        public IconEditor(TrackableObject<Station> station, ref Icon icon)
         {
             InitializeComponent();
 

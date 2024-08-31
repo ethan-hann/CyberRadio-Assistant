@@ -111,11 +111,12 @@ namespace RadioExt_Helper.forms
         {
             var icon = new Icon();
 
-            var added = StationManager.Instance.AddStationIcon(_station.Id, icon);
+            var added = StationManager.Instance.AddStationIcon(_station.Id, ref icon);
             if (!added) return;
 
             lbIcons.SelectedItem = icon;
             SelectIconEditor(icon.IconId);
+
             IconAdded?.Invoke(this, icon.IconId);
         }
 
@@ -127,9 +128,9 @@ namespace RadioExt_Helper.forms
             var result = MessageBox.Show(text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
             if (result == DialogResult.Yes)
-                StationManager.Instance.RemoveStationIcon(_station.Id, icon, true);
+                StationManager.Instance.RemoveStationIcon(_station.Id, ref icon, true);
             else
-                StationManager.Instance.RemoveStationIcon(_station.Id, icon);
+                StationManager.Instance.RemoveStationIcon(_station.Id, ref icon);
 
             IconDeleted?.Invoke(this, icon.IconId);
         }
@@ -146,6 +147,8 @@ namespace RadioExt_Helper.forms
             icon.IsActive = true;
             lbIcons.Invalidate();
             lbIcons.EndUpdate();
+
+            IconUpdated?.Invoke(this, icon.IconId);
         }
 
         private void btnDisableIcon_Click(object sender, EventArgs e)
@@ -156,6 +159,8 @@ namespace RadioExt_Helper.forms
             icon.IsActive = false;
             lbIcons.Invalidate();
             lbIcons.EndUpdate();
+
+            IconUpdated?.Invoke(this, icon.IconId);
         }
     }
 }

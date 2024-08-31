@@ -514,7 +514,7 @@ public class IconManager : IDisposable
         File.Copy(newArchivePath, stagingIconPath, overwrite);
 
         //Finally, create the icon object and return it
-        var icon = new Icon(projectImagePath, stagingIconPath)
+        var icon = new Icon(projectImagePath, stagingIconPath, atlasName)
         {
             CustomIcon = new CustomIcon()
             {

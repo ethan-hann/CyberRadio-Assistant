@@ -1141,6 +1141,9 @@ public sealed partial class MainForm : Form
              && station.TrackedObject.CustomIcon.InkAtlasPart.Equals(string.Empty))) return;
 
         var managerForm = new IconManagerForm(station);
+        managerForm.IconAdded += ManagerFormOnIconUpdated;
+        managerForm.IconDeleted += ManagerFormOnIconUpdated;
+        managerForm.IconUpdated += ManagerFormOnIconUpdated;
         managerForm.ShowDialog(this);
 
         //new IconGeneratorForm().ShowDialog(this);
@@ -1152,5 +1155,24 @@ public sealed partial class MainForm : Form
         //    //See https://wiki.redmodding.org/wolvenkit/wolvenkit-cli/usage/command-list#pack
         //    //See https://github.com/DoctorPresto/Cyberpunk-Helper-Scripts/blob/main/generate_inkatlas.py
         //}
+    }
+
+    private void ManagerFormOnIconUpdated(object? sender, Guid e)
+    {
+        try
+        {
+            if (lbStations.SelectedItem is not TrackableObject<Station> station) return;
+
+            var icon = StationManager.Instance.GetStationActiveIcon(station.Id);
+            if (icon == null) return;
+
+            var editor = StationManager.Instance.GetStationEditor(station.Id);
+            editor?.UpdateIcon(icon);
+        }
+        catch (Exception ex)
+        {
+            AuLogger.GetCurrentLogger<MainForm>("ManagerFormOnIconUpdated")
+                .Error(ex, "An error occurred while updating the station icon.");
+        }
     }
 }
