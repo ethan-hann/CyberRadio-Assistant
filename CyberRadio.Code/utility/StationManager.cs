@@ -404,7 +404,12 @@ public partial class StationManager : IDisposable
                 {
                     var stagingPath = GlobalData.ConfigManager.Get("stagingPath") as string ?? string.Empty;
                     foreach (var folder in FileHelper.SafeEnumerateDirectories(stagingPath))
-                        Directory.Delete(folder, true);
+                    {
+                        if (IsProtectedFolder(folder))
+                            PathHelper.ClearDirectory(folder); //Don't remove protected folders; just remove their contents
+                        else
+                            Directory.Delete(folder, true);
+                    }
                 }
 
                 StationsCleared?.Invoke(this, EventArgs.Empty);

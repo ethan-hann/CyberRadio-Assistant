@@ -358,4 +358,39 @@ public static class PathHelper
             }
         });
     }
+
+    /// <summary>
+    /// Clear all files and folders from the specified directory.
+    /// </summary>
+    /// <param name="directoryPath">The path to the directory clear.</param>
+    public static void ClearDirectory(string directoryPath)
+    {
+        try
+        {
+            // Check if the directory exists
+            if (Directory.Exists(directoryPath))
+            {
+                // Delete all files
+                foreach (var file in FileHelper.SafeEnumerateFiles(directoryPath))
+                    File.Delete(file);
+
+                // Delete all subdirectories and their contents
+                foreach (var directory in FileHelper.SafeEnumerateDirectories(directoryPath))
+                {
+                    if (StationManager.Instance.IsProtectedFolder(directory))
+                        ClearDirectory(directory); //recurse down until we no longer have protected folders.
+                    else
+                        Directory.Delete(directory, true);
+                }
+            }
+            else
+            {
+                AuLogger.GetCurrentLogger("PathHelper.ClearDirectory").Warn($"The directory to clear did not exist: {directoryPath}");
+            }
+        }
+        catch (Exception ex)
+        {
+            AuLogger.GetCurrentLogger("PathHelper.ClearDirectory").Error(ex, "An error occured while clearing the directory.");
+        }
+    }
 }

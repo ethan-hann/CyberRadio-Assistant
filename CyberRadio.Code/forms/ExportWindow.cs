@@ -35,7 +35,7 @@ public partial class ExportWindow : Form
 
     private readonly Json<MetaData> _metaDataJson = new();
     private readonly Json<List<Song>> _songListJson = new();
-    private readonly Json<List<TrackableObject<WolvenIcon>>> _iconListJson = new();
+    private readonly Json<List<WolvenIcon>> _iconListJson = new();
     private readonly List<TrackableObject<Station>> _stationsToExport;
 
     private readonly string _statusString =
@@ -486,7 +486,7 @@ public partial class ExportWindow : Form
         foreach (var icon in station.TrackedObject.Icons)
             iconList.Add(icon.TrackedObject);
 
-        return _iconListJson.SaveJson(iconPath, station.TrackedObject.Icons);
+        return _iconListJson.SaveJson(iconPath, iconList);
     }
 
     /// <summary>
