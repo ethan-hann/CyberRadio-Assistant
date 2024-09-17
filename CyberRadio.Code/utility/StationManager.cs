@@ -23,6 +23,7 @@ using AetherUtils.Core.Structs;
 using RadioExt_Helper.models;
 using RadioExt_Helper.user_controls;
 using SharpCompress.Archives;
+using WIG.Lib.Models;
 using Icon = RadioExt_Helper.models.Icon;
 
 namespace RadioExt_Helper.utility;
@@ -160,7 +161,7 @@ public partial class StationManager : IDisposable
     /// <param name="stationId">The station ID to add the icon to.</param>
     /// <param name="icon">The <see cref="Icon"/> to add.</param>
     /// <returns><c>true</c> if the icon was added successfully; <c>false</c> otherwise.</returns>
-    public bool AddStationIcon(Guid stationId, ref Icon icon)
+    public bool AddStationIcon(Guid stationId, ref WolvenIcon icon)
     {
         try
         {
@@ -187,14 +188,14 @@ public partial class StationManager : IDisposable
     /// <param name="icon">The <see cref="Icon"/> to remove.</param>
     /// <param name="deleteFiles">Indicates whether to delete the Icon files from disk.</param>
     /// <returns><c>true</c> if the icon was removed successfully; <c>false</c> otherwise.</returns>
-    public bool RemoveStationIcon(Guid stationId, ref Icon icon, bool deleteFiles = false)
+    public bool RemoveStationIcon(Guid stationId, ref WolvenIcon icon, bool deleteFiles = false)
     {
         try
         {
             if (!_stations.TryGetValue(stationId, out var pair)) return false;
 
             pair.Key.TrackedObject.RemoveIcon(icon);
-            var iconEditor = GetStationIconEditor(stationId, icon.IconId);
+            var iconEditor = GetStationIconEditor(stationId, icon);
             if (iconEditor != null)
                 pair.Value.Remove(iconEditor);
 
@@ -273,7 +274,7 @@ public partial class StationManager : IDisposable
     /// </summary>
     /// <param name="stationId">The station to get the icon of, by id.</param>
     /// <returns>The active <see cref="Icon"/> of the station or <c>null</c> if no active icons.</returns>
-    public Icon? GetStationActiveIcon(Guid? stationId)
+    public WolvenIcon? GetStationActiveIcon(Guid? stationId)
     {
         try
         {
@@ -299,16 +300,16 @@ public partial class StationManager : IDisposable
     /// <param name="stationId">The station to get the editor of, by id.</param>
     /// <param name="iconId">The icon associated with the editor, by id.</param>
     /// <returns>The <see cref="IconEditor"/> for the specified station and icon or <c>null</c> if the editor could not be found in the manager.</returns>
-    public IconEditor? GetStationIconEditor(Guid? stationId, Guid? iconId)
+    public IconEditor? GetStationIconEditor(Guid? stationId, WolvenIcon? icon)
     {
         try
         {
             lock (_stations)
             {
-                if (stationId == null || iconId == null) return null;
+                if (stationId == null || icon == null) return null;
 
-                return _stations.TryGetValue((Guid)stationId, out var pair) ? 
-                    pair.Value.FirstOrDefault(e => e.Type == EditorType.IconEditor && ((IconEditor)e)?.Icon?.IconId == iconId) 
+                return _stations.TryGetValue((Guid)stationId, out var pair) ?
+                    pair.Value.FirstOrDefault(e => e.Type == EditorType.IconEditor && ((IconEditor)e).Icon.Equals(icon))
                         as IconEditor : null;
             }
         } catch (Exception ex)
@@ -323,20 +324,20 @@ public partial class StationManager : IDisposable
     /// </summary>
     /// <param name="stationId">The station to add an editor of, by id.</param>
     /// <param name="iconId">The icon to associate with the editor, by id.</param>
-    public void AddStationIconEditor(Guid? stationId, Guid? iconId)
+    public void AddStationIconEditor(Guid? stationId, WolvenIcon? icon)
     {
         try
         {
             lock (_stations)
             {
-                if (stationId == null || iconId == null) return;
+                if (stationId == null || icon == null) return;
 
                 if (!_stations.TryGetValue((Guid)stationId, out var pair)) return;
 
-                var icon = pair.Key.TrackedObject.Icons.FirstOrDefault(i => i.IconId == iconId);
-                if (icon == null) return;
+                var wolvenIcon = pair.Key.TrackedObject.Icons.FirstOrDefault(i => i.Equals(icon));
+                if (wolvenIcon == null) return;
 
-                var editor = new IconEditor(pair.Key, ref icon);
+                var editor = new IconEditor(pair.Key, ref wolvenIcon);
                 pair.Value.Add(editor);
             }
         } catch (Exception ex)
@@ -350,17 +351,17 @@ public partial class StationManager : IDisposable
     /// </summary>
     /// <param name="stationId">The station to remove the editor from, by id.</param>
     /// <param name="iconId">The icon to remove the editor of, by id.</param>
-    public void RemoveStationIconEditor(Guid? stationId, Guid? iconId)
+    public void RemoveStationIconEditor(Guid? stationId, WolvenIcon? icon)
     {
         try
         {
             lock (_stations)
             {
-                if (stationId == null || iconId == null) return;
+                if (stationId == null || icon == null) return;
 
                 if (!_stations.TryGetValue((Guid)stationId, out var pair)) return;
 
-                var editor = pair.Value.FirstOrDefault(e => e.Type == EditorType.IconEditor && ((IconEditor)e)?.Icon?.IconId == iconId);
+                var editor = pair.Value.FirstOrDefault(e => e.Type == EditorType.IconEditor && ((IconEditor)e).Icon.Equals(icon));
                 if (editor == null) return;
 
                 pair.Value.Remove(editor);

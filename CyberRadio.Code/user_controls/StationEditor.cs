@@ -22,6 +22,7 @@ using RadioExt_Helper.forms;
 using RadioExt_Helper.models;
 using RadioExt_Helper.Properties;
 using RadioExt_Helper.utility;
+using WIG.Lib.Models;
 using Icon = RadioExt_Helper.models.Icon;
 
 namespace RadioExt_Helper.user_controls;
@@ -199,11 +200,17 @@ public sealed partial class StationEditor : UserControl, IEditor
         Station.TrackedObject.MetaData.DisplayName = newName;
     }
 
-    public void UpdateIcon(Icon icon)
+    public void UpdateIcon(WolvenIcon icon)
     {
         if (icon.CustomIcon is not { } customIcon) return;
 
-        Station.TrackedObject.CustomIcon = customIcon;
+        Station.TrackedObject.CustomIcon = new CustomIcon
+        {
+            UseCustom = true,
+            InkAtlasPath = customIcon.InkAtlasPath,
+            InkAtlasPart = customIcon.InkAtlasPart
+        };
+
         txtInkAtlasPath.Text = customIcon.InkAtlasPath;
         txtInkAtlasPart.Text = customIcon.InkAtlasPart;
         picStationIcon.Image = icon.IconImage;

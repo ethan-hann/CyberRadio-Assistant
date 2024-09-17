@@ -56,11 +56,6 @@
 
     <ItemGroup>
         <None Remove="resources\final_ui_icon_strings.txt" />
-        <None Remove="tools\generate_inkatlas.exe" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <EmbeddedResource Include="tools\InkAtlas\generate_inkatlas.exe" />
     </ItemGroup>
 
     <ItemGroup>
@@ -76,7 +71,7 @@
         <PackageReference Include="NAudio" Version="2.2.1" />
         <PackageReference Include="Pathoschild.FluentNexus" Version="1.0.5" />
         <PackageReference Include="pythonnet" Version="3.0.3" />
-        <PackageReference Include="SharpCompress" Version="0.37.2" />
+        <PackageReference Include="SharpCompress" Version="0.38.0" />
         <PackageReference Include="SharpZipLib" Version="1.4.2" />
         <PackageReference Include="SixLabors.ImageSharp" Version="3.1.5" />
         <PackageReference Include="System.Management" Version="8.0.0" />
@@ -84,6 +79,12 @@
         <PackageReference Include="System.Text.Json" Version="8.0.4" />
         <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
         <PackageReference Include="TagLibSharp" Version="2.3.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="WIG.Lib">
+        <HintPath>..\..\WolvenIconGenerator\WIG.Lib\bin\Debug\net8.0-windows\WIG.Lib.dll</HintPath>
+      </Reference>
     </ItemGroup>
 
     <ItemGroup>

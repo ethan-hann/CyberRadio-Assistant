@@ -3,15 +3,16 @@ using RadioExt_Helper.models;
 using RadioExt_Helper.Properties;
 using RadioExt_Helper.user_controls;
 using RadioExt_Helper.utility;
+using WIG.Lib.Models;
 using Icon = RadioExt_Helper.models.Icon;
 
 namespace RadioExt_Helper.forms
 {
     public partial class IconManagerForm : Form
     {
-        public event EventHandler<Guid>? IconAdded;
-        public event EventHandler<Guid>? IconUpdated;
-        public event EventHandler<Guid>? IconDeleted;
+        public event EventHandler<WolvenIcon>? IconAdded;
+        public event EventHandler<WolvenIcon>? IconUpdated;
+        public event EventHandler<WolvenIcon>? IconDeleted;
 
         private readonly ImageList _stationImageList = new();
         private bool _ignoreSelectedIndexChanged;
@@ -68,17 +69,17 @@ namespace RadioExt_Helper.forms
                 lbIcons.SelectedIndex = index;
             }
 
-            if (lbIcons.SelectedItem is not Icon icon) return;
-            SelectIconEditor(icon.IconId);
+            if (lbIcons.SelectedItem is not WolvenIcon icon) return;
+            SelectIconEditor(icon);
         }
 
         /// <summary>
         /// Updates the UI with the correct icon editor based on the station's ID.
         /// </summary>
         /// <param name="iconId">The ID of the icon associated with the editor.</param>
-        private void SelectIconEditor(Guid? iconId)
+        private void SelectIconEditor(WolvenIcon icon)
         {
-            var editor = StationManager.Instance.GetStationIconEditor(_station.Id, iconId);
+            var editor = StationManager.Instance.GetStationIconEditor(_station.Id, icon);
             UpdateIconEditor(editor);
         }
 
@@ -109,20 +110,20 @@ namespace RadioExt_Helper.forms
 
         private void btnAddIcon_Click(object sender, EventArgs e)
         {
-            var icon = new Icon();
+            var icon = new WolvenIcon();
 
             var added = StationManager.Instance.AddStationIcon(_station.Id, ref icon);
             if (!added) return;
 
             lbIcons.SelectedItem = icon;
-            SelectIconEditor(icon.IconId);
+            SelectIconEditor(icon);
 
-            IconAdded?.Invoke(this, icon.IconId);
+            IconAdded?.Invoke(this, icon);
         }
 
         private void btnDeleteIcon_Click(object sender, EventArgs e)
         {
-            if (lbIcons.SelectedItem is not Icon icon) return;
+            if (lbIcons.SelectedItem is not WolvenIcon icon) return;
             var text = GlobalData.Strings.GetString("ConfirmIconDelete") ?? "Do you want to delete associated icon files from disk?";
             var caption = GlobalData.Strings.GetString("Confirm") ?? "Confirm Delete";
             var result = MessageBox.Show(text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
@@ -132,12 +133,12 @@ namespace RadioExt_Helper.forms
             else
                 StationManager.Instance.RemoveStationIcon(_station.Id, ref icon);
 
-            IconDeleted?.Invoke(this, icon.IconId);
+            IconDeleted?.Invoke(this, icon);
         }
 
         private void btnEnableIcon_Click(object sender, EventArgs e)
         {
-            if (lbIcons.SelectedItem is not Icon icon) return;
+            if (lbIcons.SelectedItem is not WolvenIcon icon) return;
             lbIcons.BeginUpdate();
             foreach (var i in _station.TrackedObject.Icons)
             {
@@ -148,19 +149,19 @@ namespace RadioExt_Helper.forms
             lbIcons.Invalidate();
             lbIcons.EndUpdate();
 
-            IconUpdated?.Invoke(this, icon.IconId);
+            IconUpdated?.Invoke(this, icon);
         }
 
         private void btnDisableIcon_Click(object sender, EventArgs e)
         {
-            if (lbIcons.SelectedItem is not Icon icon) return;
+            if (lbIcons.SelectedItem is not WolvenIcon icon) return;
 
             lbIcons.BeginUpdate();
             icon.IsActive = false;
             lbIcons.Invalidate();
             lbIcons.EndUpdate();
 
-            IconUpdated?.Invoke(this, icon.IconId);
+            IconUpdated?.Invoke(this, icon);
         }
     }
 }

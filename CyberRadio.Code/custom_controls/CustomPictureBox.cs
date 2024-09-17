@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WIG.Lib.Utility;
 
 namespace RadioExt_Helper.custom_controls
 {
@@ -38,7 +39,7 @@ namespace RadioExt_Helper.custom_controls
                     if (files?.Length > 0)
                     {
                         var file = files[0];
-                        var image = IconManager.Instance.LoadImage(file);
+                        var image = ImageUtils.LoadImage(file);
                         if (image != null)
                         {
                             Image = image;

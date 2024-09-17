@@ -27,6 +27,7 @@ using RadioExt_Helper.nexus_api;
 using RadioExt_Helper.Properties;
 using RadioExt_Helper.user_controls;
 using RadioExt_Helper.utility;
+using WIG.Lib.Models;
 using Timer = System.Timers.Timer;
 
 namespace RadioExt_Helper.forms;
@@ -1157,17 +1158,17 @@ public sealed partial class MainForm : Form
         //}
     }
 
-    private void ManagerFormOnIconUpdated(object? sender, Guid e)
+    private void ManagerFormOnIconUpdated(object? sender, WolvenIcon icon)
     {
         try
         {
             if (lbStations.SelectedItem is not TrackableObject<Station> station) return;
 
-            var icon = StationManager.Instance.GetStationActiveIcon(station.Id);
-            if (icon == null) return;
+            var activeIcon = StationManager.Instance.GetStationActiveIcon(station.Id);
+            if (activeIcon == null) return;
 
             var editor = StationManager.Instance.GetStationEditor(station.Id);
-            editor?.UpdateIcon(icon);
+            editor?.UpdateIcon(activeIcon);
         }
         catch (Exception ex)
         {

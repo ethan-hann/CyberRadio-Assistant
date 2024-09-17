@@ -3,6 +3,8 @@ using RadioExt_Helper.models;
 using RadioExt_Helper.Properties;
 using RadioExt_Helper.utility;
 using RadioExt_Helper.utility.event_args;
+using WIG.Lib.Models;
+using WIG.Lib.Utility;
 using Icon = RadioExt_Helper.models.Icon;
 
 namespace RadioExt_Helper.user_controls
@@ -13,13 +15,13 @@ namespace RadioExt_Helper.user_controls
         public EditorType Type { get; set; } = EditorType.IconEditor;
         public TrackableObject<Station> Station { get; }
 
-        public Icon Icon { get; private set; }
+        public WolvenIcon Icon { get; private set; }
         private string _iconPath = string.Empty;
 
         private readonly ImageList _tabImageList = new();
         private bool _isImporting;
 
-        public IconEditor(TrackableObject<Station> station, ref Icon icon)
+        public IconEditor(TrackableObject<Station> station, ref WolvenIcon icon)
         {
             InitializeComponent();
 
@@ -38,7 +40,6 @@ namespace RadioExt_Helper.user_controls
         {
             IconManager.Instance.IconImportStarted -= Instance_IconImportStarted;
             IconManager.Instance.CliStatus -= Instance_IconImportStatus;
-            IconManager.Instance.IconImportProgress -= Instance_IconImportProgress;
         }
 
         public void Translate()
@@ -48,33 +49,29 @@ namespace RadioExt_Helper.user_controls
 
         private void IconEditor_Load(object sender, EventArgs e)
         {
-            Icon.EnsureImage();
+            if (Path.Exists(Icon.ImagePath))
+                Icon.EnsureImage();
+
             picStationIcon.Image = Icon.IconImage ?? Resources.drag_and_drop_128x128;
-            lblEditingText.Text = $"Editing Icon: {Icon.IconId}";
+            lblEditingText.Text = $"Editing Icon: {Icon.IconName}";
 
             IconManager.Instance.IconImportStarted += Instance_IconImportStarted;
             IconManager.Instance.CliStatus += Instance_IconImportStatus;
-            IconManager.Instance.IconImportProgress += Instance_IconImportProgress;
 
             SetIconFields();
             dgvStatus.Rows.Clear();
         }
 
-        private void Instance_IconImportProgress(object? sender, IconManagerEventArgs e)
+        private void Instance_IconImportStatus(object? sender, StatusEventArgs e)
         {
-            this.SafeInvoke(() => pgProgress.Value = e.Progress);
+            this.SafeInvoke(() => pgProgress.Value = e.ProgressPercentage);
+            AddStatusRow(e.Message);
         }
 
-        private void Instance_IconImportStatus(object? sender, IconManagerEventArgs e)
-        {
-            this.SafeInvoke(() => pgProgress.Value = e.Progress);
-            AddStatusRow(e.IsError ? e.ErrorMessage : e.Status);
-        }
-
-        private void Instance_IconImportStarted(object? sender, IconManagerEventArgs e)
+        private void Instance_IconImportStarted(object? sender, StatusEventArgs e)
         {
             this.SafeInvoke(() => pgProgress.Value = 0);
-            this.SafeInvoke(() => lblStatus.Text = e.Status);
+            this.SafeInvoke(() => lblStatus.Text = e.Message);
         }
 
         private void AddStatusRow(string? status)
@@ -89,7 +86,11 @@ namespace RadioExt_Helper.user_controls
         private void picStationIcon_DragDrop(object sender, DragEventArgs e)
         {
             _iconPath = picStationIcon.ImagePath;
+            Icon.ImagePath = _iconPath;
+            Icon.IconName = Path.GetFileNameWithoutExtension(_iconPath);
+
             txtImagePath.Text = _iconPath;
+            lblEditingText.Text = $"Editing Icon: {Icon.IconName}";
         }
 
         private void btnImportIcon_Click(object sender, EventArgs e)
@@ -101,7 +102,15 @@ namespace RadioExt_Helper.user_controls
 
             Task.Run(async () =>
             {
-                var icon = await IconManager.Instance.ImportIconImageAsync(Station.Id, Icon.IconId, _iconPath, txtAtlasName.Text);
+                var stagingIcons = GlobalData.ConfigManager.Get("stagingPath") as string ?? string.Empty;
+                if (stagingIcons == string.Empty)
+                {
+                    AddStatusRow("Staging path not set.");
+                    return;
+                }
+
+                var outputPath = Path.Combine(stagingIcons, "icons");
+                var icon = await IconManager.Instance.ImportIconImageAsync(Icon.ImagePath, txtAtlasName.Text, outputPath);
                 if (icon == null)
                     AddStatusRow("Failed to import icon.");
                 else
@@ -128,7 +137,7 @@ namespace RadioExt_Helper.user_controls
                 txtImagePath.Text = Icon.ImagePath;
                 txtIconPath.Text = Icon?.CustomIcon?.InkAtlasPath;
                 txtIconPart.Text = Icon?.CustomIcon?.InkAtlasPart;
-                Icon?.EnsureImage();
+                //Icon?.EnsureImage();
             });
         }
 

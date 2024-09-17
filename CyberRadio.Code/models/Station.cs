@@ -18,6 +18,7 @@ using System.ComponentModel;
 using AetherUtils.Core.Logging;
 using Newtonsoft.Json;
 using RadioExt_Helper.utility;
+using WIG.Lib.Models;
 
 namespace RadioExt_Helper.models;
 
@@ -28,7 +29,7 @@ public sealed class Station : INotifyPropertyChanged, ICloneable, IEquatable<Sta
 {
     private MetaData _metaData = new();
     private List<Song> _songs = [];
-    private BindingList<Icon> _icons = [];
+    private BindingList<WolvenIcon> _icons = [];
 
     /// <summary>
     ///     The metadata associated with this station.
@@ -91,7 +92,7 @@ public sealed class Station : INotifyPropertyChanged, ICloneable, IEquatable<Sta
     ///     A station can only have one active icon at a time.
     /// </summary>
     [JsonProperty("icons")]
-    public BindingList<Icon> Icons
+    public BindingList<WolvenIcon> Icons
     {
         get => _icons;
         set
@@ -134,7 +135,7 @@ public sealed class Station : INotifyPropertyChanged, ICloneable, IEquatable<Sta
     /// <param name="icon">The <see cref="Icon"/> to add to the station.</param>
     /// <param name="makeActive">Indicates whether to make the newly added icon active for the station.</param>
     /// <returns><c>true</c> if the icon was added successfully; <c>false</c> otherwise.</returns>
-    public bool AddIcon(ref Icon icon, bool makeActive = false)
+    public bool AddIcon(ref WolvenIcon icon, bool makeActive = false)
     {
         if (Icons.Contains(icon)) return false;
 
@@ -150,7 +151,7 @@ public sealed class Station : INotifyPropertyChanged, ICloneable, IEquatable<Sta
     /// </summary>
     /// <param name="icon">The <see cref="Icon"/> to remove.</param>
     /// <returns><c>true</c> if the icon was removed successfully; <c>false</c> otherwise.</returns>
-    public bool RemoveIcon(Icon icon)
+    public bool RemoveIcon(WolvenIcon icon)
     {
         if (!Icons.Contains(icon)) return false;
 
@@ -164,7 +165,7 @@ public sealed class Station : INotifyPropertyChanged, ICloneable, IEquatable<Sta
     /// </summary>
     /// <returns>The active <see cref="Icon"/> or <c>null</c> if no active icons or there was more than 1 active icon.</returns>
     /// <exception cref="InvalidOperationException">Occurs when there are more than 1 active icon in the station.</exception>
-    public Icon? GetActiveIcon()
+    public WolvenIcon? GetActiveIcon()
     {
         try
         {
