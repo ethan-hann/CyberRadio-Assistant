@@ -59,8 +59,7 @@ namespace RadioExt_Helper.user_controls
             btnCopyIconPath = new Button();
             txtIconPath = new TextBox();
             picStationIcon = new CustomPictureBox();
-            tabImportExport = new TabControl();
-            tabImport = new TabPage();
+            panel1 = new Panel();
             dgvStatus = new DataGridView();
             colDateTime = new DataGridViewTextBoxColumn();
             colOutput = new DataGridViewTextBoxColumn();
@@ -70,7 +69,6 @@ namespace RadioExt_Helper.user_controls
             tableLayoutPanel7 = new TableLayoutPanel();
             lblAtlasName = new Label();
             txtAtlasName = new TextBox();
-            tabExport = new TabPage();
             tableLayoutPanel1.SuspendLayout();
             statusStrip1.SuspendLayout();
             tableLayoutPanel2.SuspendLayout();
@@ -81,8 +79,7 @@ namespace RadioExt_Helper.user_controls
             tableLayoutPanel4.SuspendLayout();
             tableLayoutPanel9.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)picStationIcon).BeginInit();
-            tabImportExport.SuspendLayout();
-            tabImport.SuspendLayout();
+            panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvStatus).BeginInit();
             tableLayoutPanel8.SuspendLayout();
             tableLayoutPanel7.SuspendLayout();
@@ -100,18 +97,18 @@ namespace RadioExt_Helper.user_controls
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 3;
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 552F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel1.Size = new Size(708, 612);
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 589F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 21F));
+            tableLayoutPanel1.Size = new Size(708, 653);
             tableLayoutPanel1.TabIndex = 0;
             // 
             // statusStrip1
             // 
             statusStrip1.BackColor = Color.Transparent;
             statusStrip1.Items.AddRange(new ToolStripItem[] { lblStatus, toolStripStatusLabel2, pgProgress });
-            statusStrip1.Location = new Point(0, 592);
+            statusStrip1.Location = new Point(0, 632);
             statusStrip1.Name = "statusStrip1";
-            statusStrip1.Size = new Size(708, 20);
+            statusStrip1.Size = new Size(708, 21);
             statusStrip1.SizingGrip = false;
             statusStrip1.TabIndex = 3;
             statusStrip1.Text = "statusStrip1";
@@ -120,19 +117,19 @@ namespace RadioExt_Helper.user_controls
             // 
             lblStatus.Image = Properties.Resources.status__16x16;
             lblStatus.Name = "lblStatus";
-            lblStatus.Size = new Size(55, 15);
+            lblStatus.Size = new Size(55, 16);
             lblStatus.Text = "Ready";
             // 
             // toolStripStatusLabel2
             // 
             toolStripStatusLabel2.Name = "toolStripStatusLabel2";
-            toolStripStatusLabel2.Size = new Size(436, 15);
+            toolStripStatusLabel2.Size = new Size(436, 16);
             toolStripStatusLabel2.Spring = true;
             // 
             // pgProgress
             // 
             pgProgress.Name = "pgProgress";
-            pgProgress.Size = new Size(200, 14);
+            pgProgress.Size = new Size(200, 15);
             pgProgress.Step = 1;
             pgProgress.Style = ProgressBarStyle.Continuous;
             // 
@@ -141,7 +138,7 @@ namespace RadioExt_Helper.user_controls
             lblEditingText.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             lblEditingText.AutoSize = true;
             lblEditingText.Font = new Font("Segoe UI Variable Display", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblEditingText.Location = new Point(3, 9);
+            lblEditingText.Location = new Point(3, 11);
             lblEditingText.Name = "lblEditingText";
             lblEditingText.Size = new Size(702, 21);
             lblEditingText.TabIndex = 0;
@@ -155,14 +152,14 @@ namespace RadioExt_Helper.user_controls
             tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 76.47059F));
             tableLayoutPanel2.Controls.Add(tableLayoutPanel3, 1, 0);
             tableLayoutPanel2.Controls.Add(picStationIcon, 0, 0);
-            tableLayoutPanel2.Controls.Add(tabImportExport, 0, 1);
+            tableLayoutPanel2.Controls.Add(panel1, 0, 1);
             tableLayoutPanel2.Dock = DockStyle.Fill;
-            tableLayoutPanel2.Location = new Point(3, 43);
+            tableLayoutPanel2.Location = new Point(3, 46);
             tableLayoutPanel2.Name = "tableLayoutPanel2";
             tableLayoutPanel2.RowCount = 2;
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 36.9963379F));
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 63.0036621F));
-            tableLayoutPanel2.Size = new Size(702, 546);
+            tableLayoutPanel2.Size = new Size(702, 583);
             tableLayoutPanel2.TabIndex = 1;
             // 
             // tableLayoutPanel3
@@ -187,9 +184,9 @@ namespace RadioExt_Helper.user_controls
             tableLayoutPanel3.RowStyles.Add(new RowStyle());
             tableLayoutPanel3.RowStyles.Add(new RowStyle());
             tableLayoutPanel3.RowStyles.Add(new RowStyle());
-            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 35F));
-            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 14F));
-            tableLayoutPanel3.Size = new Size(531, 196);
+            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 37F));
+            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 15F));
+            tableLayoutPanel3.Size = new Size(531, 209);
             tableLayoutPanel3.TabIndex = 1;
             // 
             // tableLayoutPanel10
@@ -200,11 +197,11 @@ namespace RadioExt_Helper.user_controls
             tableLayoutPanel10.Controls.Add(btnCopyIconPart, 0, 0);
             tableLayoutPanel10.Controls.Add(txtIconPart, 0, 0);
             tableLayoutPanel10.Dock = DockStyle.Fill;
-            tableLayoutPanel10.Location = new Point(117, 162);
+            tableLayoutPanel10.Location = new Point(117, 171);
             tableLayoutPanel10.Name = "tableLayoutPanel10";
             tableLayoutPanel10.RowCount = 1;
             tableLayoutPanel10.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel10.Size = new Size(411, 31);
+            tableLayoutPanel10.Size = new Size(411, 35);
             tableLayoutPanel10.TabIndex = 10;
             // 
             // btnCopyIconPart
@@ -215,9 +212,9 @@ namespace RadioExt_Helper.user_controls
             btnCopyIconPart.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
             btnCopyIconPart.FlatStyle = FlatStyle.Flat;
             btnCopyIconPart.Image = Properties.Resources.copy_alt_16x16;
-            btnCopyIconPart.Location = new Point(364, 4);
+            btnCopyIconPart.Location = new Point(364, 6);
             btnCopyIconPart.Name = "btnCopyIconPart";
-            btnCopyIconPart.Size = new Size(44, 22);
+            btnCopyIconPart.Size = new Size(44, 23);
             btnCopyIconPart.TabIndex = 3;
             btnCopyIconPart.UseVisualStyleBackColor = false;
             btnCopyIconPart.Click += btnCopyIconPart_Click;
@@ -225,7 +222,7 @@ namespace RadioExt_Helper.user_controls
             // txtIconPart
             // 
             txtIconPart.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            txtIconPart.Location = new Point(3, 4);
+            txtIconPart.Location = new Point(3, 6);
             txtIconPart.Name = "txtIconPart";
             txtIconPart.ReadOnly = true;
             txtIconPart.Size = new Size(355, 23);
@@ -235,9 +232,9 @@ namespace RadioExt_Helper.user_controls
             // 
             lblIconPart.Anchor = AnchorStyles.Right;
             lblIconPart.AutoSize = true;
-            lblIconPart.Location = new Point(54, 170);
+            lblIconPart.Location = new Point(54, 180);
             lblIconPart.Name = "lblIconPart";
-            lblIconPart.Size = new Size(57, 15);
+            lblIconPart.Size = new Size(57, 16);
             lblIconPart.TabIndex = 8;
             lblIconPart.Text = "Icon Part:";
             lblIconPart.MouseEnter += lblIconPart_MouseEnter;
@@ -251,17 +248,17 @@ namespace RadioExt_Helper.user_controls
             tableLayoutPanel6.Controls.Add(txtSha256Hash, 0, 0);
             tableLayoutPanel6.Controls.Add(btnCopySha256Hash, 1, 0);
             tableLayoutPanel6.Dock = DockStyle.Fill;
-            tableLayoutPanel6.Location = new Point(117, 86);
+            tableLayoutPanel6.Location = new Point(117, 91);
             tableLayoutPanel6.Name = "tableLayoutPanel6";
             tableLayoutPanel6.RowCount = 1;
             tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel6.Size = new Size(411, 35);
+            tableLayoutPanel6.Size = new Size(411, 37);
             tableLayoutPanel6.TabIndex = 6;
             // 
             // txtSha256Hash
             // 
             txtSha256Hash.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            txtSha256Hash.Location = new Point(3, 6);
+            txtSha256Hash.Location = new Point(3, 7);
             txtSha256Hash.Name = "txtSha256Hash";
             txtSha256Hash.ReadOnly = true;
             txtSha256Hash.Size = new Size(356, 23);
@@ -275,9 +272,9 @@ namespace RadioExt_Helper.user_controls
             btnCopySha256Hash.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
             btnCopySha256Hash.FlatStyle = FlatStyle.Flat;
             btnCopySha256Hash.Image = Properties.Resources.copy_alt_16x16;
-            btnCopySha256Hash.Location = new Point(365, 6);
+            btnCopySha256Hash.Location = new Point(365, 7);
             btnCopySha256Hash.Name = "btnCopySha256Hash";
-            btnCopySha256Hash.Size = new Size(43, 22);
+            btnCopySha256Hash.Size = new Size(43, 23);
             btnCopySha256Hash.TabIndex = 2;
             btnCopySha256Hash.UseVisualStyleBackColor = false;
             btnCopySha256Hash.Click += btnCopySha256Hash_Click;
@@ -286,9 +283,9 @@ namespace RadioExt_Helper.user_controls
             // 
             lblSha256Hash.Anchor = AnchorStyles.Right;
             lblSha256Hash.AutoSize = true;
-            lblSha256Hash.Location = new Point(30, 96);
+            lblSha256Hash.Location = new Point(30, 101);
             lblSha256Hash.Name = "lblSha256Hash";
-            lblSha256Hash.Size = new Size(81, 15);
+            lblSha256Hash.Size = new Size(81, 16);
             lblSha256Hash.TabIndex = 5;
             lblSha256Hash.Text = "SHA256 Hash:";
             lblSha256Hash.MouseEnter += lblSha256Hash_MouseEnter;
@@ -302,17 +299,17 @@ namespace RadioExt_Helper.user_controls
             tableLayoutPanel5.Controls.Add(txtArchivePath, 0, 0);
             tableLayoutPanel5.Controls.Add(btnCopyArchivePath, 1, 0);
             tableLayoutPanel5.Dock = DockStyle.Fill;
-            tableLayoutPanel5.Location = new Point(117, 49);
+            tableLayoutPanel5.Location = new Point(117, 52);
             tableLayoutPanel5.Name = "tableLayoutPanel5";
             tableLayoutPanel5.RowCount = 1;
             tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel5.Size = new Size(411, 31);
+            tableLayoutPanel5.Size = new Size(411, 33);
             tableLayoutPanel5.TabIndex = 4;
             // 
             // txtArchivePath
             // 
             txtArchivePath.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            txtArchivePath.Location = new Point(3, 4);
+            txtArchivePath.Location = new Point(3, 5);
             txtArchivePath.Name = "txtArchivePath";
             txtArchivePath.ReadOnly = true;
             txtArchivePath.Size = new Size(356, 23);
@@ -328,7 +325,7 @@ namespace RadioExt_Helper.user_controls
             btnCopyArchivePath.Image = Properties.Resources.copy_alt_16x16;
             btnCopyArchivePath.Location = new Point(365, 3);
             btnCopyArchivePath.Name = "btnCopyArchivePath";
-            btnCopyArchivePath.Size = new Size(43, 25);
+            btnCopyArchivePath.Size = new Size(43, 27);
             btnCopyArchivePath.TabIndex = 2;
             btnCopyArchivePath.UseVisualStyleBackColor = false;
             btnCopyArchivePath.Click += btnCopyArchivePath_Click;
@@ -337,9 +334,9 @@ namespace RadioExt_Helper.user_controls
             // 
             lblArchivePath.Anchor = AnchorStyles.Right;
             lblArchivePath.AutoSize = true;
-            lblArchivePath.Location = new Point(34, 57);
+            lblArchivePath.Location = new Point(34, 60);
             lblArchivePath.Name = "lblArchivePath";
-            lblArchivePath.Size = new Size(77, 15);
+            lblArchivePath.Size = new Size(77, 16);
             lblArchivePath.TabIndex = 3;
             lblArchivePath.Text = "Archive Path:";
             lblArchivePath.MouseEnter += lblArchivePath_MouseEnter;
@@ -349,9 +346,9 @@ namespace RadioExt_Helper.user_controls
             // 
             lblImagePath.Anchor = AnchorStyles.Right;
             lblImagePath.AutoSize = true;
-            lblImagePath.Location = new Point(41, 15);
+            lblImagePath.Location = new Point(42, 16);
             lblImagePath.Name = "lblImagePath";
-            lblImagePath.Size = new Size(70, 15);
+            lblImagePath.Size = new Size(69, 16);
             lblImagePath.TabIndex = 0;
             lblImagePath.Text = "Image Path:";
             lblImagePath.MouseEnter += lblImagePath_MouseEnter;
@@ -369,13 +366,13 @@ namespace RadioExt_Helper.user_controls
             tableLayoutPanel4.Name = "tableLayoutPanel4";
             tableLayoutPanel4.RowCount = 1;
             tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel4.Size = new Size(411, 40);
+            tableLayoutPanel4.Size = new Size(411, 43);
             tableLayoutPanel4.TabIndex = 2;
             // 
             // txtImagePath
             // 
             txtImagePath.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            txtImagePath.Location = new Point(3, 8);
+            txtImagePath.Location = new Point(3, 10);
             txtImagePath.Name = "txtImagePath";
             txtImagePath.ReadOnly = true;
             txtImagePath.Size = new Size(356, 23);
@@ -389,9 +386,9 @@ namespace RadioExt_Helper.user_controls
             btnCopyImagePath.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
             btnCopyImagePath.FlatStyle = FlatStyle.Flat;
             btnCopyImagePath.Image = Properties.Resources.copy_alt_16x16;
-            btnCopyImagePath.Location = new Point(365, 7);
+            btnCopyImagePath.Location = new Point(365, 8);
             btnCopyImagePath.Name = "btnCopyImagePath";
-            btnCopyImagePath.Size = new Size(43, 25);
+            btnCopyImagePath.Size = new Size(43, 27);
             btnCopyImagePath.TabIndex = 2;
             btnCopyImagePath.UseVisualStyleBackColor = false;
             btnCopyImagePath.Click += btnCopyImagePath_Click;
@@ -400,9 +397,9 @@ namespace RadioExt_Helper.user_controls
             // 
             lblIconPath.Anchor = AnchorStyles.Right;
             lblIconPath.AutoSize = true;
-            lblIconPath.Location = new Point(51, 134);
+            lblIconPath.Location = new Point(51, 141);
             lblIconPath.Name = "lblIconPath";
-            lblIconPath.Size = new Size(60, 15);
+            lblIconPath.Size = new Size(60, 16);
             lblIconPath.TabIndex = 7;
             lblIconPath.Text = "Icon Path:";
             lblIconPath.MouseEnter += lblIconPath_MouseEnter;
@@ -416,11 +413,11 @@ namespace RadioExt_Helper.user_controls
             tableLayoutPanel9.Controls.Add(btnCopyIconPath, 0, 0);
             tableLayoutPanel9.Controls.Add(txtIconPath, 0, 0);
             tableLayoutPanel9.Dock = DockStyle.Fill;
-            tableLayoutPanel9.Location = new Point(117, 127);
+            tableLayoutPanel9.Location = new Point(117, 134);
             tableLayoutPanel9.Name = "tableLayoutPanel9";
             tableLayoutPanel9.RowCount = 1;
             tableLayoutPanel9.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel9.Size = new Size(411, 29);
+            tableLayoutPanel9.Size = new Size(411, 31);
             tableLayoutPanel9.TabIndex = 9;
             // 
             // btnCopyIconPath
@@ -431,9 +428,9 @@ namespace RadioExt_Helper.user_controls
             btnCopyIconPath.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
             btnCopyIconPath.FlatStyle = FlatStyle.Flat;
             btnCopyIconPath.Image = Properties.Resources.copy_alt_16x16;
-            btnCopyIconPath.Location = new Point(364, 3);
+            btnCopyIconPath.Location = new Point(364, 4);
             btnCopyIconPath.Name = "btnCopyIconPath";
-            btnCopyIconPath.Size = new Size(44, 22);
+            btnCopyIconPath.Size = new Size(44, 23);
             btnCopyIconPath.TabIndex = 3;
             btnCopyIconPath.UseVisualStyleBackColor = false;
             btnCopyIconPath.Click += btnCopyIconPath_Click;
@@ -441,7 +438,7 @@ namespace RadioExt_Helper.user_controls
             // txtIconPath
             // 
             txtIconPath.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            txtIconPath.Location = new Point(3, 3);
+            txtIconPath.Location = new Point(3, 4);
             txtIconPath.Name = "txtIconPath";
             txtIconPath.ReadOnly = true;
             txtIconPath.Size = new Size(355, 23);
@@ -451,38 +448,25 @@ namespace RadioExt_Helper.user_controls
             // 
             picStationIcon.AllowDrop = true;
             picStationIcon.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            picStationIcon.Location = new Point(3, 40);
+            picStationIcon.Location = new Point(3, 42);
             picStationIcon.Name = "picStationIcon";
-            picStationIcon.Size = new Size(159, 122);
+            picStationIcon.Size = new Size(159, 130);
             picStationIcon.SizeMode = PictureBoxSizeMode.Zoom;
             picStationIcon.TabIndex = 0;
             picStationIcon.TabStop = false;
             picStationIcon.DragDrop += picStationIcon_DragDrop;
             // 
-            // tabImportExport
+            // panel1
             // 
-            tableLayoutPanel2.SetColumnSpan(tabImportExport, 2);
-            tabImportExport.Controls.Add(tabImport);
-            tabImportExport.Controls.Add(tabExport);
-            tabImportExport.Dock = DockStyle.Fill;
-            tabImportExport.Location = new Point(3, 205);
-            tabImportExport.Name = "tabImportExport";
-            tabImportExport.SelectedIndex = 0;
-            tabImportExport.Size = new Size(696, 338);
-            tabImportExport.TabIndex = 2;
-            // 
-            // tabImport
-            // 
-            tabImport.Controls.Add(dgvStatus);
-            tabImport.Controls.Add(tableLayoutPanel8);
-            tabImport.Controls.Add(tableLayoutPanel7);
-            tabImport.Location = new Point(4, 24);
-            tabImport.Name = "tabImport";
-            tabImport.Padding = new Padding(3);
-            tabImport.Size = new Size(688, 310);
-            tabImport.TabIndex = 0;
-            tabImport.Text = "Import Icon";
-            tabImport.UseVisualStyleBackColor = true;
+            tableLayoutPanel2.SetColumnSpan(panel1, 2);
+            panel1.Controls.Add(dgvStatus);
+            panel1.Controls.Add(tableLayoutPanel8);
+            panel1.Controls.Add(tableLayoutPanel7);
+            panel1.Dock = DockStyle.Fill;
+            panel1.Location = new Point(3, 218);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(696, 362);
+            panel1.TabIndex = 3;
             // 
             // dgvStatus
             // 
@@ -492,11 +476,11 @@ namespace RadioExt_Helper.user_controls
             dgvStatus.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvStatus.Columns.AddRange(new DataGridViewColumn[] { colDateTime, colOutput });
             dgvStatus.Dock = DockStyle.Fill;
-            dgvStatus.Location = new Point(3, 38);
+            dgvStatus.Location = new Point(0, 37);
             dgvStatus.MultiSelect = false;
             dgvStatus.Name = "dgvStatus";
             dgvStatus.ReadOnly = true;
-            dgvStatus.Size = new Size(682, 233);
+            dgvStatus.Size = new Size(696, 287);
             dgvStatus.TabIndex = 3;
             // 
             // colDateTime
@@ -505,7 +489,7 @@ namespace RadioExt_Helper.user_controls
             colDateTime.HeaderText = "Timestamp";
             colDateTime.Name = "colDateTime";
             colDateTime.ReadOnly = true;
-            colDateTime.Width = 91;
+            colDateTime.Width = 89;
             // 
             // colOutput
             // 
@@ -522,11 +506,11 @@ namespace RadioExt_Helper.user_controls
             tableLayoutPanel8.Controls.Add(btnCancelImport, 0, 0);
             tableLayoutPanel8.Controls.Add(btnImportIcon, 0, 0);
             tableLayoutPanel8.Dock = DockStyle.Bottom;
-            tableLayoutPanel8.Location = new Point(3, 271);
+            tableLayoutPanel8.Location = new Point(0, 324);
             tableLayoutPanel8.Name = "tableLayoutPanel8";
             tableLayoutPanel8.RowCount = 1;
             tableLayoutPanel8.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel8.Size = new Size(682, 36);
+            tableLayoutPanel8.Size = new Size(696, 38);
             tableLayoutPanel8.TabIndex = 2;
             // 
             // btnCancelImport
@@ -537,9 +521,9 @@ namespace RadioExt_Helper.user_controls
             btnCancelImport.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
             btnCancelImport.FlatStyle = FlatStyle.Flat;
             btnCancelImport.Image = Properties.Resources.cancel_16x16;
-            btnCancelImport.Location = new Point(529, 3);
+            btnCancelImport.Location = new Point(539, 3);
             btnCancelImport.Name = "btnCancelImport";
-            btnCancelImport.Size = new Size(150, 30);
+            btnCancelImport.Size = new Size(154, 32);
             btnCancelImport.TabIndex = 4;
             btnCancelImport.Text = "Cancel Import";
             btnCancelImport.TextAlign = ContentAlignment.MiddleRight;
@@ -557,7 +541,7 @@ namespace RadioExt_Helper.user_controls
             btnImportIcon.Image = Properties.Resources.magic_wand_16x16;
             btnImportIcon.Location = new Point(3, 3);
             btnImportIcon.Name = "btnImportIcon";
-            btnImportIcon.Size = new Size(520, 30);
+            btnImportIcon.Size = new Size(530, 32);
             btnImportIcon.TabIndex = 3;
             btnImportIcon.Text = "Start Import";
             btnImportIcon.TextAlign = ContentAlignment.MiddleRight;
@@ -573,20 +557,20 @@ namespace RadioExt_Helper.user_controls
             tableLayoutPanel7.Controls.Add(lblAtlasName, 0, 0);
             tableLayoutPanel7.Controls.Add(txtAtlasName, 1, 0);
             tableLayoutPanel7.Dock = DockStyle.Top;
-            tableLayoutPanel7.Location = new Point(3, 3);
+            tableLayoutPanel7.Location = new Point(0, 0);
             tableLayoutPanel7.Name = "tableLayoutPanel7";
             tableLayoutPanel7.RowCount = 1;
             tableLayoutPanel7.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel7.Size = new Size(682, 35);
+            tableLayoutPanel7.Size = new Size(696, 37);
             tableLayoutPanel7.TabIndex = 0;
             // 
             // lblAtlasName
             // 
             lblAtlasName.Anchor = AnchorStyles.Right;
             lblAtlasName.AutoSize = true;
-            lblAtlasName.Location = new Point(48, 10);
+            lblAtlasName.Location = new Point(51, 10);
             lblAtlasName.Name = "lblAtlasName";
-            lblAtlasName.Size = new Size(71, 15);
+            lblAtlasName.Size = new Size(70, 16);
             lblAtlasName.TabIndex = 6;
             lblAtlasName.Text = "Atlas Name:";
             lblAtlasName.MouseEnter += lblAtlasName_MouseEnter;
@@ -595,29 +579,20 @@ namespace RadioExt_Helper.user_controls
             // txtAtlasName
             // 
             txtAtlasName.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            txtAtlasName.Location = new Point(125, 6);
+            txtAtlasName.Location = new Point(127, 7);
             txtAtlasName.Name = "txtAtlasName";
-            txtAtlasName.Size = new Size(554, 23);
+            txtAtlasName.Size = new Size(566, 23);
             txtAtlasName.TabIndex = 7;
-            // 
-            // tabExport
-            // 
-            tabExport.Location = new Point(4, 24);
-            tabExport.Name = "tabExport";
-            tabExport.Padding = new Padding(3);
-            tabExport.Size = new Size(688, 310);
-            tabExport.TabIndex = 1;
-            tabExport.Text = "Export Icon";
-            tabExport.UseVisualStyleBackColor = true;
+            txtAtlasName.TextChanged += txtAtlasName_TextChanged;
             // 
             // IconEditor
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(7F, 16F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;
             Controls.Add(tableLayoutPanel1);
             Name = "IconEditor";
-            Size = new Size(708, 612);
+            Size = new Size(708, 653);
             Load += IconEditor_Load;
             tableLayoutPanel1.ResumeLayout(false);
             tableLayoutPanel1.PerformLayout();
@@ -637,8 +612,7 @@ namespace RadioExt_Helper.user_controls
             tableLayoutPanel9.ResumeLayout(false);
             tableLayoutPanel9.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)picStationIcon).EndInit();
-            tabImportExport.ResumeLayout(false);
-            tabImport.ResumeLayout(false);
+            panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dgvStatus).EndInit();
             tableLayoutPanel8.ResumeLayout(false);
             tableLayoutPanel7.ResumeLayout(false);
@@ -669,9 +643,6 @@ namespace RadioExt_Helper.user_controls
         private TextBox txtArchivePath;
         private Button btnCopyArchivePath;
         private Label lblArchivePath;
-        private TabControl tabImportExport;
-        private TabPage tabImport;
-        private TabPage tabExport;
         private TableLayoutPanel tableLayoutPanel7;
         private Label lblAtlasName;
         private TextBox txtAtlasName;
@@ -689,5 +660,6 @@ namespace RadioExt_Helper.user_controls
         private TextBox txtIconPart;
         private Button btnCopyIconPath;
         private TextBox txtIconPath;
+        private Panel panel1;
     }
 }

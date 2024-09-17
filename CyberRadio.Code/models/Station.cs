@@ -29,7 +29,7 @@ public sealed class Station : INotifyPropertyChanged, ICloneable, IEquatable<Sta
 {
     private MetaData _metaData = new();
     private List<Song> _songs = [];
-    private BindingList<WolvenIcon> _icons = [];
+    private List<TrackableObject<WolvenIcon>> _icons = [];
 
     /// <summary>
     ///     The metadata associated with this station.
@@ -92,7 +92,7 @@ public sealed class Station : INotifyPropertyChanged, ICloneable, IEquatable<Sta
     ///     A station can only have one active icon at a time.
     /// </summary>
     [JsonProperty("icons")]
-    public BindingList<WolvenIcon> Icons
+    public List<TrackableObject<WolvenIcon>> Icons
     {
         get => _icons;
         set
@@ -135,12 +135,12 @@ public sealed class Station : INotifyPropertyChanged, ICloneable, IEquatable<Sta
     /// <param name="icon">The <see cref="Icon"/> to add to the station.</param>
     /// <param name="makeActive">Indicates whether to make the newly added icon active for the station.</param>
     /// <returns><c>true</c> if the icon was added successfully; <c>false</c> otherwise.</returns>
-    public bool AddIcon(ref WolvenIcon icon, bool makeActive = false)
+    public bool AddIcon(TrackableObject<WolvenIcon> icon, bool makeActive = false)
     {
         if (Icons.Contains(icon)) return false;
 
         Icons.Add(icon);
-        if (makeActive) icon.IsActive = true;
+        if (makeActive) icon.TrackedObject.IsActive = true;
 
         OnPropertyChanged(nameof(Icons));
         return true;
@@ -151,7 +151,7 @@ public sealed class Station : INotifyPropertyChanged, ICloneable, IEquatable<Sta
     /// </summary>
     /// <param name="icon">The <see cref="Icon"/> to remove.</param>
     /// <returns><c>true</c> if the icon was removed successfully; <c>false</c> otherwise.</returns>
-    public bool RemoveIcon(WolvenIcon icon)
+    public bool RemoveIcon(TrackableObject<WolvenIcon> icon)
     {
         if (!Icons.Contains(icon)) return false;
 
@@ -165,13 +165,13 @@ public sealed class Station : INotifyPropertyChanged, ICloneable, IEquatable<Sta
     /// </summary>
     /// <returns>The active <see cref="Icon"/> or <c>null</c> if no active icons or there was more than 1 active icon.</returns>
     /// <exception cref="InvalidOperationException">Occurs when there are more than 1 active icon in the station.</exception>
-    public WolvenIcon? GetActiveIcon()
+    public TrackableObject<WolvenIcon>? GetActiveIcon()
     {
         try
         {
             if (Icons.Count == 0) return null;
-            if (Icons.Count(i => i.IsActive) > 1) throw new InvalidOperationException("A station can only have one active icon.");
-            return Icons.FirstOrDefault(i => i.IsActive);
+            if (Icons.Count(i => i.TrackedObject.IsActive) > 1) throw new InvalidOperationException("A station can only have one active icon.");
+            return Icons.FirstOrDefault(i => i.TrackedObject.IsActive);
         }
         catch (Exception e)
         {
@@ -179,6 +179,38 @@ public sealed class Station : INotifyPropertyChanged, ICloneable, IEquatable<Sta
         }
 
         return null;
+    }
+
+    /// <summary>
+    /// Add custom data to the station. If the key already exists, the value will be updated.
+    /// </summary>
+    /// <param name="key">The key of the data to add.</param>
+    /// <param name="value">The data contents to add with the specified key.</param>
+    public void AddCustomData(string key, object value)
+    {
+        try
+        {
+            MetaData.CustomData[key] = value;
+        } catch (Exception ex)
+        {
+            AuLogger.GetCurrentLogger<Station>("AddCustomData").Error(ex, $"An error occurred while adding custom data for the station: {MetaData.DisplayName}");
+        }
+    }
+
+    /// <summary>
+    /// Remove the custom data associated with the specified key.
+    /// </summary>
+    /// <param name="key">The key of the data to remove.</param>
+    public void RemoveCustomData(string key)
+    {
+        try
+        {
+            MetaData.CustomData.Remove(key);
+        }
+        catch (Exception ex)
+        {
+            AuLogger.GetCurrentLogger<Station>("RemoveCustomData").Error(ex, $"An error occurred while removing custom data for the station: {MetaData.DisplayName}");
+        }
     }
 
     private void OnPropertyChanged(string propertyName)

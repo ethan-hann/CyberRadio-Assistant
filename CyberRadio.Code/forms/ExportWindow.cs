@@ -23,7 +23,6 @@ using RadioExt_Helper.models;
 using RadioExt_Helper.Properties;
 using RadioExt_Helper.utility;
 using WIG.Lib.Models;
-using Icon = RadioExt_Helper.models.Icon;
 
 namespace RadioExt_Helper.forms;
 
@@ -36,7 +35,7 @@ public partial class ExportWindow : Form
 
     private readonly Json<MetaData> _metaDataJson = new();
     private readonly Json<List<Song>> _songListJson = new();
-    private readonly Json<BindingList<WolvenIcon>> _iconListJson = new();
+    private readonly Json<List<TrackableObject<WolvenIcon>>> _iconListJson = new();
     private readonly List<TrackableObject<Station>> _stationsToExport;
 
     private readonly string _statusString =
@@ -303,20 +302,23 @@ public partial class ExportWindow : Form
             if (string.IsNullOrEmpty(newStationPath)) continue;
 
             if (!CreateMetaDataJson(newStationPath, station)) continue;
-            if (station.TrackedObject.Songs.Count <= 0) continue;
 
-            // Copy song files from old directory to new directory
-            CopySongFiles(songDirectoryMap, newStationPath, station);
+            if (station.TrackedObject.Songs.Count >= 1)
+            {
+                // Copy song files from old directory to new directory
+                CopySongFiles(songDirectoryMap, newStationPath, station);
 
-            if (!CreateSongListJson(newStationPath, station))
-                AuLogger.GetCurrentLogger<ExportWindow>("BG_ExportStaging")
-                    .Error("Couldn't save the songs.sgls file. This means that CRA won't know where your station's songs are located.");
+                if (!CreateSongListJson(newStationPath, station))
+                    AuLogger.GetCurrentLogger<ExportWindow>("BG_ExportStaging")
+                        .Error("Couldn't save the songs.sgls file. This means that CRA won't know where your station's songs are located.");
+            }
 
-            if (station.TrackedObject.Icons.Count <= 0) continue;
-
-            if (!CreateIconListJson(newStationPath, station))
-                AuLogger.GetCurrentLogger<ExportWindow>("BG_ExportStaging")
-                    .Error("Couldn't save the icons.json file. This means that CRA won't know where your station's icons are located.");
+            if (station.TrackedObject.Icons.Count >= 1)
+            {
+                if (!CreateIconListJson(newStationPath, station))
+                    AuLogger.GetCurrentLogger<ExportWindow>("BG_ExportStaging")
+                        .Error("Couldn't save the icons.json file. This means that CRA won't know where your station's icons are located.");
+            }
         }
 
         RemoveDeletedStations(existingDirectories);
@@ -477,7 +479,13 @@ public partial class ExportWindow : Form
     /// <returns>True if the file was successfully saved; otherwise, false.</returns>
     private bool CreateIconListJson(string stationPath, TrackableObject<Station> station)
     {
-        var iconPath = Path.Combine(stationPath, "icons.json");
+        var iconPath = Path.Combine(stationPath, "icons.icls");
+
+        //Convert our trackable object list into a normal list for serialization
+        var iconList = new List<WolvenIcon>();
+        foreach (var icon in station.TrackedObject.Icons)
+            iconList.Add(icon.TrackedObject);
+
         return _iconListJson.SaveJson(iconPath, station.TrackedObject.Icons);
     }
 
@@ -667,11 +675,11 @@ public partial class ExportWindow : Form
             foreach (var station 
                      in activeStations.Where(station => station.TrackedObject.CustomIcon.UseCustom))
             {
-                var activeIcon = station.TrackedObject.Icons.FirstOrDefault(i => i.IsActive);
+                var activeIcon = station.TrackedObject.Icons.FirstOrDefault(i => i.TrackedObject.IsActive);
                 if (activeIcon == null) continue;
 
-                var iconPath = activeIcon.ArchivePath;
-                var iconHash = activeIcon.Sha256HashOfArchiveFile;
+                var iconPath = activeIcon.TrackedObject.ArchivePath;
+                var iconHash = activeIcon.TrackedObject.Sha256HashOfArchiveFile;
 
                 if (string.IsNullOrEmpty(iconPath)) continue;
                 if (string.IsNullOrEmpty(iconHash)) continue;
@@ -774,8 +782,8 @@ public partial class ExportWindow : Form
                 var icons = station.TrackedObject.Icons;
                 foreach (var icon in icons)
                 {
-                    var iconPath = icon.ArchivePath;
-                    var iconHash = icon.Sha256HashOfArchiveFile;
+                    var iconPath = icon.TrackedObject.ArchivePath;
+                    var iconHash = icon.TrackedObject.Sha256HashOfArchiveFile;
 
                     if (string.IsNullOrEmpty(iconPath)) continue;
                     if (string.IsNullOrEmpty(iconHash)) continue;

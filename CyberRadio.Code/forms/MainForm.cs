@@ -1137,9 +1137,9 @@ public sealed partial class MainForm : Form
     private void IconGeneratorToolStripMenuItem_Click(object sender, EventArgs e)
     {
         if (lbStations.SelectedItem is not TrackableObject<Station> station) return;
-        if (!station.TrackedObject.CustomIcon.UseCustom ||
-            (station.TrackedObject.CustomIcon.InkAtlasPath.Equals(string.Empty)
-             && station.TrackedObject.CustomIcon.InkAtlasPart.Equals(string.Empty))) return;
+        //if (!station.TrackedObject.CustomIcon.UseCustom ||
+        //    (station.TrackedObject.CustomIcon.InkAtlasPath.Equals(string.Empty)
+        //     && station.TrackedObject.CustomIcon.InkAtlasPart.Equals(string.Empty))) return;
 
         var managerForm = new IconManagerForm(station);
         managerForm.IconAdded += ManagerFormOnIconUpdated;
@@ -1158,17 +1158,26 @@ public sealed partial class MainForm : Form
         //}
     }
 
-    private void ManagerFormOnIconUpdated(object? sender, WolvenIcon icon)
+    private void ManagerFormOnIconUpdated(object? sender, TrackableObject<WolvenIcon> icon)
+    {
+        if (InvokeRequired) { Invoke(() => UpdateStationIcon(icon)); }
+        else
+            UpdateStationIcon(icon);
+    }
+
+    private void UpdateStationIcon(TrackableObject<WolvenIcon> icon)
     {
         try
         {
             if (lbStations.SelectedItem is not TrackableObject<Station> station) return;
 
-            var activeIcon = StationManager.Instance.GetStationActiveIcon(station.Id);
-            if (activeIcon == null) return;
+            lbStations.BeginUpdate();
 
+            var activeIcon = StationManager.Instance.GetStationActiveIcon(station.Id);
             var editor = StationManager.Instance.GetStationEditor(station.Id);
             editor?.UpdateIcon(activeIcon);
+
+            lbStations.EndUpdate();
         }
         catch (Exception ex)
         {

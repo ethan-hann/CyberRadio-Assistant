@@ -57,7 +57,7 @@ namespace RadioExt_Helper.forms
             downloadRadioModsToolStripMenuItem = new ToolStripMenuItem();
             toolsToolStripMenuItem = new ToolStripMenuItem();
             iconGeneratorToolStripMenuItem = new ToolStripMenuItem();
-            wolvenKitCLIUpdatesToolStripMenuItem = new ToolStripMenuItem();
+            extractarchiveIconToolStripMenuItem = new ToolStripMenuItem();
             helpToolStripMenuItem = new ToolStripMenuItem();
             howToUseToolStripMenuItem = new ToolStripMenuItem();
             radioExtOnNexusModsToolStripMenuItem = new ToolStripMenuItem();
@@ -285,31 +285,32 @@ namespace RadioExt_Helper.forms
             // 
             downloadRadioModsToolStripMenuItem.Image = Properties.Resources.download_16x16;
             downloadRadioModsToolStripMenuItem.Name = "downloadRadioModsToolStripMenuItem";
-            downloadRadioModsToolStripMenuItem.Size = new Size(193, 22);
+            downloadRadioModsToolStripMenuItem.Size = new Size(194, 22);
             downloadRadioModsToolStripMenuItem.Text = "Download Radio Mods";
             downloadRadioModsToolStripMenuItem.Click += DownloadRadioModsToolStripMenuItem_Click;
             // 
             // toolsToolStripMenuItem
             // 
-            toolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { iconGeneratorToolStripMenuItem, wolvenKitCLIUpdatesToolStripMenuItem });
+            toolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { iconGeneratorToolStripMenuItem, extractarchiveIconToolStripMenuItem });
+            toolsToolStripMenuItem.Image = Properties.Resources.tools_16x16;
             toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
-            toolsToolStripMenuItem.Size = new Size(47, 20);
+            toolsToolStripMenuItem.Size = new Size(63, 20);
             toolsToolStripMenuItem.Text = "Tools";
             // 
             // iconGeneratorToolStripMenuItem
             // 
             iconGeneratorToolStripMenuItem.Image = Properties.Resources.magic_wand_16x16;
             iconGeneratorToolStripMenuItem.Name = "iconGeneratorToolStripMenuItem";
-            iconGeneratorToolStripMenuItem.Size = new Size(248, 22);
-            iconGeneratorToolStripMenuItem.Text = "Icon Manager";
+            iconGeneratorToolStripMenuItem.Size = new Size(191, 22);
+            iconGeneratorToolStripMenuItem.Text = "Station Icon Manager";
             iconGeneratorToolStripMenuItem.Click += IconGeneratorToolStripMenuItem_Click;
             // 
-            // wolvenKitCLIUpdatesToolStripMenuItem
+            // extractarchiveIconToolStripMenuItem
             // 
-            wolvenKitCLIUpdatesToolStripMenuItem.Image = Properties.Resources.update__16x16;
-            wolvenKitCLIUpdatesToolStripMenuItem.Name = "wolvenKitCLIUpdatesToolStripMenuItem";
-            wolvenKitCLIUpdatesToolStripMenuItem.Size = new Size(248, 22);
-            wolvenKitCLIUpdatesToolStripMenuItem.Text = "Check for WolvenKit CLI Update";
+            extractarchiveIconToolStripMenuItem.Image = Properties.Resources.zip_file_16x16;
+            extractarchiveIconToolStripMenuItem.Name = "extractarchiveIconToolStripMenuItem";
+            extractarchiveIconToolStripMenuItem.Size = new Size(191, 22);
+            extractarchiveIconToolStripMenuItem.Text = "Extract .archive Icon";
             // 
             // helpToolStripMenuItem
             // 
@@ -619,13 +620,13 @@ namespace RadioExt_Helper.forms
             // 
             cmsRevertStationChanges.Items.AddRange(new ToolStripItem[] { revertChangesToolStripMenuItem });
             cmsRevertStationChanges.Name = "cmsRevertStationChanges";
-            cmsRevertStationChanges.Size = new Size(157, 26);
+            cmsRevertStationChanges.Size = new Size(156, 26);
             // 
             // revertChangesToolStripMenuItem
             // 
             revertChangesToolStripMenuItem.Image = Properties.Resources.refresh__16x16;
             revertChangesToolStripMenuItem.Name = "revertChangesToolStripMenuItem";
-            revertChangesToolStripMenuItem.Size = new Size(156, 22);
+            revertChangesToolStripMenuItem.Size = new Size(155, 22);
             revertChangesToolStripMenuItem.Text = "Revert Changes";
             revertChangesToolStripMenuItem.Click += RevertChangesToolStripMenuItem_Click;
             // 
@@ -764,6 +765,6 @@ namespace RadioExt_Helper.forms
         private ToolStripMenuItem openLogFolderToolStripMenuItem;
         private ToolStripMenuItem toolsToolStripMenuItem;
         private ToolStripMenuItem iconGeneratorToolStripMenuItem;
-        private ToolStripMenuItem wolvenKitCLIUpdatesToolStripMenuItem;
+        private ToolStripMenuItem extractarchiveIconToolStripMenuItem;
     }
 }

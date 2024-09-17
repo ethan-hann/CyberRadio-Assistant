@@ -5,35 +5,45 @@ using RadioExt_Helper.utility;
 using RadioExt_Helper.utility.event_args;
 using WIG.Lib.Models;
 using WIG.Lib.Utility;
-using Icon = RadioExt_Helper.models.Icon;
 
 namespace RadioExt_Helper.user_controls
 {//TODO: Translations
     public sealed partial class IconEditor : UserControl, IEditor
     {
+        /// <summary>
+        /// Event that occurs when the icon is updated.
+        /// </summary>
+        public event EventHandler<TrackableObject<WolvenIcon>>? IconUpdated;
+
         public Guid Id { get; set; } = Guid.NewGuid();
         public EditorType Type { get; set; } = EditorType.IconEditor;
+
+        /// <summary>
+        /// The station that the icon is associated with.
+        /// </summary>
         public TrackableObject<Station> Station { get; }
 
-        public WolvenIcon Icon { get; private set; }
+        /// <summary>
+        /// The icon that is being edited.
+        /// </summary>
+        public TrackableObject<WolvenIcon> Icon { get; }
+
         private string _iconPath = string.Empty;
 
-        private readonly ImageList _tabImageList = new();
         private bool _isImporting;
 
-        public IconEditor(TrackableObject<Station> station, ref WolvenIcon icon)
+        /// <summary>
+        /// Create a new icon editor.
+        /// </summary>
+        /// <param name="station"></param>
+        /// <param name="icon"></param>
+        public IconEditor(TrackableObject<Station> station, TrackableObject<WolvenIcon> icon)
         {
             InitializeComponent();
 
             Station = station;
             Icon = icon;
             Dock = DockStyle.Fill;
-
-            _tabImageList.Images.Add("import", Resources.download_16x16);
-            _tabImageList.Images.Add("export", Resources.export_16x16);
-            tabImportExport.ImageList = _tabImageList;
-            tabImport.ImageKey = @"import";
-            tabExport.ImageKey = @"export";
         }
 
         ~IconEditor()
@@ -49,11 +59,11 @@ namespace RadioExt_Helper.user_controls
 
         private void IconEditor_Load(object sender, EventArgs e)
         {
-            if (Path.Exists(Icon.ImagePath))
-                Icon.EnsureImage();
+            if (Path.Exists(Icon.TrackedObject.ImagePath))
+                Icon.TrackedObject.EnsureImage();
 
-            picStationIcon.Image = Icon.IconImage ?? Resources.drag_and_drop_128x128;
-            lblEditingText.Text = $"Editing Icon: {Icon.IconName}";
+            picStationIcon.Image = Icon.TrackedObject.IconImage ?? Resources.drag_and_drop_128x128;
+            lblEditingText.Text = $"Editing Icon: {Icon.TrackedObject.IconName}";
 
             IconManager.Instance.IconImportStarted += Instance_IconImportStarted;
             IconManager.Instance.CliStatus += Instance_IconImportStatus;
@@ -86,11 +96,14 @@ namespace RadioExt_Helper.user_controls
         private void picStationIcon_DragDrop(object sender, DragEventArgs e)
         {
             _iconPath = picStationIcon.ImagePath;
-            Icon.ImagePath = _iconPath;
-            Icon.IconName = Path.GetFileNameWithoutExtension(_iconPath);
+            Icon.TrackedObject.ImagePath = _iconPath;
+            Icon.TrackedObject.IconName = Path.GetFileNameWithoutExtension(_iconPath);
+            Icon.TrackedObject.EnsureImage();
 
             txtImagePath.Text = _iconPath;
-            lblEditingText.Text = $"Editing Icon: {Icon.IconName}";
+            lblEditingText.Text = $"Editing Icon: {Icon.TrackedObject.IconName}";
+
+            IconUpdated?.Invoke(this, Icon);
         }
 
         private void btnImportIcon_Click(object sender, EventArgs e)
@@ -99,6 +112,8 @@ namespace RadioExt_Helper.user_controls
 
             pgProgress.Visible = true;
             _isImporting = true;
+            btnImportIcon.Enabled = false;
+            btnCancelImport.Enabled = true;
 
             Task.Run(async () =>
             {
@@ -110,12 +125,23 @@ namespace RadioExt_Helper.user_controls
                 }
 
                 var outputPath = Path.Combine(stagingIcons, "icons");
-                var icon = await IconManager.Instance.ImportIconImageAsync(Icon.ImagePath, txtAtlasName.Text, outputPath);
+                var icon = await IconManager.Instance.GenerateIconImageAsync(txtImagePath.Text, txtAtlasName.Text, outputPath);
                 if (icon == null)
                     AddStatusRow("Failed to import icon.");
                 else
-                    Icon = icon;
+                {
+                    Icon.TrackedObject.IconName = icon.AtlasName; //TODO: remove the set here and make the ICON NAME it's own entry field in the UI.
+                    Icon.TrackedObject.ImagePath = icon.ImagePath;
+                    Icon.TrackedObject.ArchivePath = icon.ArchivePath;
+                    Icon.TrackedObject.Sha256HashOfArchiveFile = icon.Sha256HashOfArchiveFile;
+                    Icon.TrackedObject.CustomIcon = icon.CustomIcon;
+
+                    IconUpdated?.Invoke(this, Icon);
+                }
                 SetIconFields();
+
+                btnImportIcon.Enabled = true;
+                btnCancelImport.Enabled = false;
             });
 
             _isImporting = false;
@@ -132,12 +158,13 @@ namespace RadioExt_Helper.user_controls
         {
             this.SafeInvoke(() =>
             {
-                txtArchivePath.Text = Icon.ArchivePath;
-                txtSha256Hash.Text = Icon.Sha256HashOfArchiveFile;
-                txtImagePath.Text = Icon.ImagePath;
-                txtIconPath.Text = Icon?.CustomIcon?.InkAtlasPath;
-                txtIconPart.Text = Icon?.CustomIcon?.InkAtlasPart;
-                //Icon?.EnsureImage();
+                txtArchivePath.Text = Icon.TrackedObject.ArchivePath;
+                txtSha256Hash.Text = Icon.TrackedObject.Sha256HashOfArchiveFile;
+                txtImagePath.Text = Icon.TrackedObject.ImagePath;
+                txtIconPath.Text = Icon.TrackedObject.CustomIcon?.InkAtlasPath;
+                txtIconPart.Text = Icon.TrackedObject.CustomIcon?.InkAtlasPart;
+                if (Path.Exists(Icon.TrackedObject.ImagePath))
+                    Icon.TrackedObject.EnsureImage();
             });
         }
 
@@ -234,6 +261,16 @@ namespace RadioExt_Helper.user_controls
         private void LblMouseLeave(object sender, EventArgs e)
         {
             lblStatus.Text = GlobalData.Strings.GetString("Ready") ?? "Ready";
+        }
+
+        private void txtAtlasName_TextChanged(object sender, EventArgs e)
+        {
+            Icon.TrackedObject.IconName = txtAtlasName.Text;
+            Icon.TrackedObject.AtlasName = txtAtlasName.Text;
+
+            lblEditingText.Text = $"Editing Icon: {Icon.TrackedObject.IconName}";
+
+            IconUpdated?.Invoke(this, Icon);
         }
     }
 }

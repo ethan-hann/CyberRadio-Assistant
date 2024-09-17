@@ -24,7 +24,7 @@ using RadioExt_Helper.models;
 using RadioExt_Helper.user_controls;
 using SharpCompress.Archives;
 using WIG.Lib.Models;
-using Icon = RadioExt_Helper.models.Icon;
+using WIG.Lib.Utility;
 
 namespace RadioExt_Helper.utility;
 
@@ -144,6 +144,12 @@ public partial class StationManager : IDisposable
                         StationPaths[station.Id] = relativePath;
                 }
 
+                //Add the station's icon editors as well and find the active icon to display.
+                foreach (var icon in station.TrackedObject.Icons) 
+                {
+                    AddStationIconEditor(station.Id, icon.Id);
+                }
+
                 StationAdded?.Invoke(this, station.Id);
                 return station.Id;
             }
@@ -156,19 +162,19 @@ public partial class StationManager : IDisposable
     }
 
     /// <summary>
-    /// Add an icon to a station.
+    /// Add an icon to a station. Also, adds an IconEditor the internal list of editors for the station.
     /// </summary>
     /// <param name="stationId">The station ID to add the icon to.</param>
     /// <param name="icon">The <see cref="Icon"/> to add.</param>
     /// <returns><c>true</c> if the icon was added successfully; <c>false</c> otherwise.</returns>
-    public bool AddStationIcon(Guid stationId, ref WolvenIcon icon)
+    public bool AddStationIcon(Guid stationId, TrackableObject<WolvenIcon> icon)
     {
         try
         {
             if (!_stations.TryGetValue(stationId, out var pair)) return false;
 
-            pair.Key.TrackedObject.AddIcon(ref icon);
-            var iconEditor = new IconEditor(pair.Key, ref icon);
+            pair.Key.TrackedObject.AddIcon(icon);
+            var iconEditor = new IconEditor(pair.Key, icon);
             pair.Value.Add(iconEditor);
 
             StationUpdated?.Invoke(this, stationId);
@@ -188,28 +194,28 @@ public partial class StationManager : IDisposable
     /// <param name="icon">The <see cref="Icon"/> to remove.</param>
     /// <param name="deleteFiles">Indicates whether to delete the Icon files from disk.</param>
     /// <returns><c>true</c> if the icon was removed successfully; <c>false</c> otherwise.</returns>
-    public bool RemoveStationIcon(Guid stationId, ref WolvenIcon icon, bool deleteFiles = false)
+    public bool RemoveStationIcon(Guid stationId, TrackableObject<WolvenIcon> icon, bool deleteFiles = false)
     {
         try
         {
             if (!_stations.TryGetValue(stationId, out var pair)) return false;
 
             pair.Key.TrackedObject.RemoveIcon(icon);
-            var iconEditor = GetStationIconEditor(stationId, icon);
+            var iconEditor = GetStationIconEditor(stationId, icon.Id);
             if (iconEditor != null)
                 pair.Value.Remove(iconEditor);
 
             if (deleteFiles)
             {
-                if (icon.ArchivePath != null && FileHelper.DoesFileExist(icon.ArchivePath))
-                    FileHelper.DeleteFile(icon.ArchivePath);
-                if (icon.ImagePath != null && FileHelper.DoesFileExist(icon.ImagePath))
-                    FileHelper.DeleteFile(icon.ImagePath);
+                if (icon.TrackedObject.ArchivePath != null && FileHelper.DoesFileExist(icon.TrackedObject.ArchivePath))
+                    FileHelper.DeleteFile(icon.TrackedObject.ArchivePath);
+                if (icon.TrackedObject.ImagePath != null && FileHelper.DoesFileExist(icon.TrackedObject.ImagePath))
+                    FileHelper.DeleteFile(icon.TrackedObject.ImagePath);
             }
 
             StationUpdated?.Invoke(this, stationId);
 
-            return !pair.Key.TrackedObject.Icons.Contains(icon);
+            return !pair.Key.TrackedObject.Icons.Any(i => i.Id == icon.Id);
         }
         catch (Exception ex)
         {
@@ -274,7 +280,7 @@ public partial class StationManager : IDisposable
     /// </summary>
     /// <param name="stationId">The station to get the icon of, by id.</param>
     /// <returns>The active <see cref="Icon"/> of the station or <c>null</c> if no active icons.</returns>
-    public WolvenIcon? GetStationActiveIcon(Guid? stationId)
+    public TrackableObject<WolvenIcon>? GetStationActiveIcon(Guid? stationId)
     {
         try
         {
@@ -300,16 +306,16 @@ public partial class StationManager : IDisposable
     /// <param name="stationId">The station to get the editor of, by id.</param>
     /// <param name="iconId">The icon associated with the editor, by id.</param>
     /// <returns>The <see cref="IconEditor"/> for the specified station and icon or <c>null</c> if the editor could not be found in the manager.</returns>
-    public IconEditor? GetStationIconEditor(Guid? stationId, WolvenIcon? icon)
+    public IconEditor? GetStationIconEditor(Guid? stationId, Guid? iconId)
     {
         try
         {
             lock (_stations)
             {
-                if (stationId == null || icon == null) return null;
+                if (stationId == null || iconId == null) return null;
 
                 return _stations.TryGetValue((Guid)stationId, out var pair) ?
-                    pair.Value.FirstOrDefault(e => e.Type == EditorType.IconEditor && ((IconEditor)e).Icon.Equals(icon))
+                    pair.Value.FirstOrDefault(e => e.Type == EditorType.IconEditor && ((IconEditor)e).Icon.Id.Equals(iconId))
                         as IconEditor : null;
             }
         } catch (Exception ex)
@@ -324,20 +330,20 @@ public partial class StationManager : IDisposable
     /// </summary>
     /// <param name="stationId">The station to add an editor of, by id.</param>
     /// <param name="iconId">The icon to associate with the editor, by id.</param>
-    public void AddStationIconEditor(Guid? stationId, WolvenIcon? icon)
+    public void AddStationIconEditor(Guid? stationId, Guid? iconId)
     {
         try
         {
             lock (_stations)
             {
-                if (stationId == null || icon == null) return;
+                if (stationId == null || iconId == null) return;
 
                 if (!_stations.TryGetValue((Guid)stationId, out var pair)) return;
 
-                var wolvenIcon = pair.Key.TrackedObject.Icons.FirstOrDefault(i => i.Equals(icon));
+                var wolvenIcon = pair.Key.TrackedObject.Icons.FirstOrDefault(i => i.Id.Equals(iconId));
                 if (wolvenIcon == null) return;
 
-                var editor = new IconEditor(pair.Key, ref wolvenIcon);
+                var editor = new IconEditor(pair.Key, wolvenIcon);
                 pair.Value.Add(editor);
             }
         } catch (Exception ex)
@@ -351,17 +357,17 @@ public partial class StationManager : IDisposable
     /// </summary>
     /// <param name="stationId">The station to remove the editor from, by id.</param>
     /// <param name="iconId">The icon to remove the editor of, by id.</param>
-    public void RemoveStationIconEditor(Guid? stationId, WolvenIcon? icon)
+    public void RemoveStationIconEditor(Guid? stationId, Guid? iconId)
     {
         try
         {
             lock (_stations)
             {
-                if (stationId == null || icon == null) return;
+                if (stationId == null || iconId == null) return;
 
                 if (!_stations.TryGetValue((Guid)stationId, out var pair)) return;
 
-                var editor = pair.Value.FirstOrDefault(e => e.Type == EditorType.IconEditor && ((IconEditor)e).Icon.Equals(icon));
+                var editor = pair.Value.FirstOrDefault(e => e.Type == EditorType.IconEditor && ((IconEditor)e).Icon.Id.Equals(iconId));
                 if (editor == null) return;
 
                 pair.Value.Remove(editor);
@@ -878,12 +884,15 @@ public partial class StationManager : IDisposable
                 .FirstOrDefault();
             var songList = files.Where(file => file.EndsWith("songs.sgls")).Select(_songListJson.LoadJson)
                 .FirstOrDefault() ?? [];
+            var iconList = files.Where(file => file.EndsWith("icons.icls")).Select(_iconListJson.LoadJson)
+                .FirstOrDefault() ?? [];
+
             var songFiles = songDirFiles.Where(file => ValidAudioExtensions.Contains(Path.GetExtension(file).ToLower()))
                 .ToList();
             //TODO: fix issue with songs.sgls where it is not being loaded correctly. The file is being created based on the song files in the directory but if all the stations have their songs in the same directory,
             // we are getting the same songs.sgls file for every station (even one's that don't have any songs). This is causing the station to have songs that it shouldn't have.
 
-            var iconFiles = files.Where(file => file.EndsWith(".archive")).ToList();
+            
 
             if (metadata == null) return null;
 
@@ -898,8 +907,18 @@ public partial class StationManager : IDisposable
             var station = new Station { MetaData = metadata, Songs = songList };
             var trackedStation = new TrackableObject<Station>(station);
 
-            if (iconFiles.Count > 0)
+            if (iconList.Count > 0)
             {
+                foreach (var icon in iconList)
+                {
+                    if (icon == null)
+                    {
+                        AuLogger.GetCurrentLogger<StationManager>().Error($"Error processing icon for station: {station.MetaData.DisplayName}. The icon was null.");
+                        continue;
+                    }
+                    trackedStation.TrackedObject.Icons.Add(new TrackableObject<WolvenIcon>(icon));
+                }
+                
                 //IconManager.Instance.LoadIconFromFile(trackedStation, iconFiles.First());
             }
 
@@ -1130,6 +1149,11 @@ public partial class StationManager : IDisposable
     /// The JSON object used to serialize and deserialize the list of songs.
     /// </summary>
     private readonly Json<List<Song>> _songListJson = new();
+
+    /// <summary>
+    /// The JSON object used to serialize and deserialize the list of icons.
+    /// </summary>
+    private readonly Json<List<WolvenIcon>> _iconListJson = new();
 
     /// <summary>
     /// List of new station IDs added to the manager during the current session. These stations should not be allowed to revert changes unless saved to disk.

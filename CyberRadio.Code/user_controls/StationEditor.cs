@@ -23,7 +23,6 @@ using RadioExt_Helper.models;
 using RadioExt_Helper.Properties;
 using RadioExt_Helper.utility;
 using WIG.Lib.Models;
-using Icon = RadioExt_Helper.models.Icon;
 
 namespace RadioExt_Helper.user_controls;
 
@@ -185,6 +184,24 @@ public sealed partial class StationEditor : UserControl, IEditor
         volumeSlider.Value = (int)(Station.TrackedObject.MetaData.Volume / 0.1f);
         lblSelectedVolume.Text = $@"{Station.TrackedObject.MetaData.Volume:F1}";
 
+        if (Station.TrackedObject.MetaData.CustomData.TryGetValue("Original Image Path", out object? value))
+        {
+            var imagePath = value as string;
+            if (Path.Exists(imagePath))
+            {
+                picStationIcon.Load(imagePath);
+                Station.TrackedObject.GetActiveIcon()?.TrackedObject.EnsureImage();
+            }
+        }
+
+        UpdateCustomDataView();
+    }
+
+    /// <summary>
+    /// Forces an update to the station's custom data grid view.
+    /// </summary>
+    public void UpdateCustomDataView()
+    {
         dgvMetadata.Rows.Clear();
         foreach (var (key, value) in Station.TrackedObject.MetaData.CustomData)
             dgvMetadata.Rows.Add(key, value);
@@ -200,20 +217,44 @@ public sealed partial class StationEditor : UserControl, IEditor
         Station.TrackedObject.MetaData.DisplayName = newName;
     }
 
-    public void UpdateIcon(WolvenIcon icon)
+    public void UpdateIcon(TrackableObject<WolvenIcon>? icon)
     {
-        if (icon.CustomIcon is not { } customIcon) return;
+        if (icon == null)
+        {
+            Station.TrackedObject.CustomIcon.UseCustom = false;
+            radUseCustomYes.Checked = false;
+            radUseCustomNo.Checked = true;
+            Station.TrackedObject.RemoveCustomData("Icon Name");
+            Station.TrackedObject.RemoveCustomData("SHA256 Archive Hash");
+            Station.TrackedObject.RemoveCustomData("Original Image Path");
+            UpdateCustomDataView();
+            return;
+        }
+
+        radUseCustomYes.Checked = true;
+        radUseCustomNo.Checked = false;
 
         Station.TrackedObject.CustomIcon = new CustomIcon
         {
             UseCustom = true,
-            InkAtlasPath = customIcon.InkAtlasPath,
-            InkAtlasPart = customIcon.InkAtlasPart
+            InkAtlasPath = icon.TrackedObject.CustomIcon.InkAtlasPath,
+            InkAtlasPart = icon.TrackedObject.CustomIcon.InkAtlasPart
         };
 
-        txtInkAtlasPath.Text = customIcon.InkAtlasPath;
-        txtInkAtlasPart.Text = customIcon.InkAtlasPart;
-        picStationIcon.Image = icon.IconImage;
+        txtInkAtlasPath.Text = Station.TrackedObject.CustomIcon.InkAtlasPath;
+        txtInkAtlasPart.Text = Station.TrackedObject.CustomIcon.InkAtlasPart;
+
+        if (Path.Exists(icon.TrackedObject.ImagePath))
+            picStationIcon.Load(icon.TrackedObject.ImagePath);
+        else
+            picStationIcon.Image = Resources.drag_and_drop;
+
+        //Update custom data pertaining to the active icon
+        Station.TrackedObject.AddCustomData("Icon Name", icon.TrackedObject.IconName ?? string.Empty);
+        Station.TrackedObject.AddCustomData("SHA256 Archive Hash", icon.TrackedObject.Sha256HashOfArchiveFile ?? string.Empty);
+        Station.TrackedObject.AddCustomData("Original Image Path", icon.TrackedObject.ImagePath ?? string.Empty);
+
+        UpdateCustomDataView();
 
         StationUpdated?.Invoke(this, EventArgs.Empty);
     }
@@ -282,13 +323,54 @@ public sealed partial class StationEditor : UserControl, IEditor
     private void PicStationIcon_DragDrop(object sender, DragEventArgs e)
     {
         var image = picStationIcon.Image;
-        var importForm = new IconImportForm(Station, image);
-        importForm.IconImported += (_, args) =>
+        var iconManagerForm = new IconManagerForm(Station, picStationIcon.ImagePath);
+
+        iconManagerForm.IconAdded += IconManagerForm_IconAdded;
+        iconManagerForm.IconDeleted += IconManagerForm_IconDeleted;
+        iconManagerForm.IconUpdated += IconManagerForm_IconUpdated;
+        iconManagerForm.ShowDialog();
+    }
+
+    private void IconManagerForm_IconUpdated(object? sender, TrackableObject<WolvenIcon> e)
+    {
+        if (e.TrackedObject.CustomIcon != null)
         {
-            Station.TrackedObject.CustomIcon = args.Icon;
+            Station.TrackedObject.CustomIcon = new CustomIcon()
+            {
+                InkAtlasPart = e.TrackedObject.CustomIcon.InkAtlasPart,
+                InkAtlasPath = e.TrackedObject.CustomIcon.InkAtlasPath,
+                UseCustom = true
+            };
             StationUpdated?.Invoke(this, EventArgs.Empty);
-        };
-        importForm.Show(this);
+        }
+    }
+
+    private void IconManagerForm_IconDeleted(object? sender, TrackableObject<WolvenIcon> e)
+    {
+        if (e.TrackedObject.CustomIcon != null)
+        {
+            Station.TrackedObject.CustomIcon = new CustomIcon()
+            {
+                InkAtlasPart = e.TrackedObject.CustomIcon.InkAtlasPart,
+                InkAtlasPath = e.TrackedObject.CustomIcon.InkAtlasPath,
+                UseCustom = true
+            };
+            StationUpdated?.Invoke(this, EventArgs.Empty);
+        }
+    }
+
+    private void IconManagerForm_IconAdded(object? sender, TrackableObject<WolvenIcon> e)
+    {
+        if (e.TrackedObject.CustomIcon != null)
+        {
+            Station.TrackedObject.CustomIcon = new CustomIcon()
+            {
+                InkAtlasPart = e.TrackedObject.CustomIcon.InkAtlasPart,
+                InkAtlasPath = e.TrackedObject.CustomIcon.InkAtlasPath,
+                UseCustom = true
+            };
+            StationUpdated?.Invoke(this, EventArgs.Empty);
+        }
     }
 
     /// <summary>

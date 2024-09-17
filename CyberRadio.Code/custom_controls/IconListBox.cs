@@ -6,9 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AetherUtils.Core.Logging;
 using RadioExt_Helper.models;
-using RadioExt_Helper.utility;
-using static System.Collections.Specialized.BitVector32;
-using Icon = RadioExt_Helper.models.Icon;
+using WIG.Lib.Models;
 
 namespace RadioExt_Helper.custom_controls
 {
@@ -80,9 +78,9 @@ namespace RadioExt_Helper.custom_controls
 
                 e.DrawBackground();
 
-                if (Items[e.Index] is Icon icon)
+                if (Items[e.Index] is TrackableObject<WolvenIcon> icon)
                 {
-                    var iconKey = icon.IsActive ? _enabledIconKey : _disabledIconKey;
+                    var iconKey = icon.TrackedObject.IsActive ? _enabledIconKey : _disabledIconKey;
                     if (_imageList.Images.ContainsKey(iconKey))
                     {
                         var primaryIcon = _imageList.Images[iconKey];

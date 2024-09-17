@@ -56,6 +56,9 @@
 
     <ItemGroup>
         <None Remove="resources\final_ui_icon_strings.txt" />
+        <None Remove="resources\tools.png" />
+        <None Remove="resources\tools_16x16.png" />
+        <None Remove="resources\tools_32x32.png" />
     </ItemGroup>
 
     <ItemGroup>
@@ -64,6 +67,9 @@
 
     <ItemGroup>
         <EmbeddedResource Include="resources\final_ui_icon_strings.txt" />
+        <EmbeddedResource Include="resources\tools.png" />
+        <EmbeddedResource Include="resources\tools_16x16.png" />
+        <EmbeddedResource Include="resources\tools_32x32.png" />
     </ItemGroup>
 
     <ItemGroup>
