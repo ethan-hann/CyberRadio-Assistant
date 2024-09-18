@@ -123,21 +123,27 @@ public sealed class TrackableObject<T> : INotifyPropertyChanged, ITrackable wher
     /// <returns>A deep clone of the object.</returns>
     private static object? DeepClone(object? obj)
     {
+        if (obj == null) return null;
+
         switch (obj)
         {
-            case null:
-                return null;
             case ICloneable cloneable:
                 return cloneable.Clone();
+
             case IEnumerable enumerable when obj.GetType().IsGenericType:
-            {
-                var listType = typeof(List<>).MakeGenericType(obj.GetType().GetGenericArguments().First());
-                var list = Activator.CreateInstance(listType) as IList;
-                foreach (var item in enumerable) list?.Add(DeepClone(item));
-                return list;
-            }
+                {
+                    var listType = typeof(List<>).MakeGenericType(obj.GetType().GetGenericArguments().First());
+                    var list = Activator.CreateInstance(listType) as IList;
+                    foreach (var item in enumerable)
+                    {
+                        // Deep clone each item, ensuring TrackableObjects are cloned correctly
+                        list?.Add(DeepClone(item));
+                    }
+                    return list;
+                }
+
             default:
-                return obj;
+                return obj;  // Return the object as-is if it's not cloneable or enumerable
         }
     }
 
@@ -184,13 +190,13 @@ public sealed class TrackableObject<T> : INotifyPropertyChanged, ITrackable wher
                         }
                     }
                 }
-                else
-                {
-                    _originalValues[prop.Name] = DeepClone(value);
-                }
+
+                // Deep clone the enumerable object, including all TrackableObjects inside it
+                _originalValues[prop.Name] = DeepClone(value);
             }
             else
             {
+                // Handle non-collection properties
                 _originalValues[prop.Name] = DeepClone(value);
             }
         }
@@ -223,10 +229,9 @@ public sealed class TrackableObject<T> : INotifyPropertyChanged, ITrackable wher
                         }
                     }
                 }
-                else
-                {
-                    prop.SetValue(TrackedObject, DeepClone(originalValue));
-                }
+
+                // Restore the deep-cloned enumerable object (the original list of trackable objects)
+                prop.SetValue(TrackedObject, DeepClone(originalValue));
             }
             else
             {
