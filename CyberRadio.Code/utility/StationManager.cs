@@ -921,13 +921,14 @@ public partial class StationManager : IDisposable
                         AuLogger.GetCurrentLogger<StationManager>().Error($"Error processing icon for station: {station.MetaData.DisplayName}. The icon was null.");
                         continue;
                     }
-                    trackedStation.TrackedObject.Icons.Add(new TrackableObject<WolvenIcon>(icon));
+                    trackedStation.TrackedObject.AddIcon(new TrackableObject<WolvenIcon>(icon), icon.IsActive);
                 }
                 
                 //IconManager.Instance.LoadIconFromFile(trackedStation, iconFiles.First());
             }
 
             EnsureDisplayNameFormat(trackedStation);
+            trackedStation.AcceptChanges();
 
             return AddStation(trackedStation, !treatAsNewStation, directory);
         }

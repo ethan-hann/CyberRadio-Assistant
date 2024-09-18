@@ -106,7 +106,8 @@ public sealed class Station : INotifyPropertyChanged, ICloneable, IEquatable<Sta
         return new Station
         {
             MetaData = (MetaData)MetaData.Clone(),
-            Songs = [.. Songs]
+            Songs = [.. Songs],
+            Icons = new List<TrackableObject<WolvenIcon>>(Icons.Select(icon => new TrackableObject<WolvenIcon>(icon.TrackedObject)))
         };
     }
 

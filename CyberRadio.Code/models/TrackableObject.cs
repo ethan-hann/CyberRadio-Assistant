@@ -14,6 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+using RadioExt_Helper.utility;
 using System.Collections;
 using System.ComponentModel;
 using System.Reflection;
@@ -21,7 +22,7 @@ using System.Reflection;
 namespace RadioExt_Helper.models;
 
 /// <summary>
-///     Represents a trackable object that implements the <see cref="INotifyPropertyChanged" /> interface.
+///     Represents a trackable object that implements the <see cref="ITrackable" /> interface.
 ///     This class can track changes made to the object and determines if there are pending changes to its properties.
 ///     <para>The object must have public properties in order to be tracked.</para>
 ///     <para>
@@ -32,7 +33,7 @@ namespace RadioExt_Helper.models;
 ///     </para>
 /// </summary>
 /// <typeparam name="T">The type of the object being tracked.</typeparam>
-public sealed class TrackableObject<T> : INotifyPropertyChanged where T : class, INotifyPropertyChanged, new()
+public sealed class TrackableObject<T> : INotifyPropertyChanged, ITrackable where T : class, INotifyPropertyChanged, new()
 {
     private readonly Dictionary<string, object?> _originalValues = [];
     private bool _isPendingSave;
@@ -168,7 +169,30 @@ public sealed class TrackableObject<T> : INotifyPropertyChanged where T : class,
             if (!prop.CanRead) continue;
 
             var value = prop.GetValue(TrackedObject);
-            _originalValues[prop.Name] = DeepClone(value);
+
+            // Handle only TrackableObject lists of type ITrackable
+            if (value is IEnumerable enumerable)
+            {
+                var isTrackable = enumerable.Cast<object>().Any(item => item is ITrackable);
+                if (isTrackable)
+                {
+                    foreach (var item in enumerable)
+                    {
+                        if (item is ITrackable trackableItem)
+                        {
+                            trackableItem.AcceptChanges();  // Accept changes for each TrackableObject
+                        }
+                    }
+                }
+                else
+                {
+                    _originalValues[prop.Name] = DeepClone(value);
+                }
+            }
+            else
+            {
+                _originalValues[prop.Name] = DeepClone(value);
+            }
         }
 
         IsPendingSave = false;
@@ -184,7 +208,30 @@ public sealed class TrackableObject<T> : INotifyPropertyChanged where T : class,
             var prop = typeof(T).GetProperty(kvp.Key);
             if (prop == null || !prop.CanWrite) continue;
 
-            prop.SetValue(TrackedObject, DeepClone(kvp.Value));
+            var originalValue = kvp.Value;
+
+            if (originalValue is IEnumerable enumerable)
+            {
+                var isTrackable = enumerable.Cast<object>().Any(item => item is ITrackable);
+                if (isTrackable)
+                {
+                    foreach (var item in enumerable)
+                    {
+                        if (item is ITrackable trackableItem)
+                        {
+                            trackableItem.DeclineChanges();  // Revert changes for each TrackableObject
+                        }
+                    }
+                }
+                else
+                {
+                    prop.SetValue(TrackedObject, DeepClone(originalValue));
+                }
+            }
+            else
+            {
+                prop.SetValue(TrackedObject, DeepClone(originalValue));
+            }
         }
 
         IsPendingSave = false;
@@ -207,10 +254,43 @@ public sealed class TrackableObject<T> : INotifyPropertyChanged where T : class,
         foreach (var kvp in _originalValues)
         {
             var currentValue = typeof(T).GetProperty(kvp.Key)?.GetValue(TrackedObject);
-            if (!DeepEquals(currentValue, kvp.Value))
+
+            // If the property is a collection, check if any items are trackable and have pending changes
+            if (currentValue is IEnumerable enumerable)
             {
-                isPendingSave = true;
-                break;
+                var isTrackable = enumerable.Cast<object>().Any(item => item is ITrackable);
+                if (isTrackable)
+                {
+                    foreach (var item in enumerable)
+                    {
+                        if (item is ITrackable trackableItem)
+                        {
+                            if (trackableItem.IsPendingSave)
+                            {
+                                isPendingSave = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    // Otherwise, compare the property value to the original value
+                    if (!DeepEquals(currentValue, kvp.Value))
+                    {
+                        isPendingSave = true;
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                // Otherwise, compare the property value to the original value
+                if (!DeepEquals(currentValue, kvp.Value))
+                {
+                    isPendingSave = true;
+                    break;
+                }
             }
         }
 
