@@ -17,7 +17,6 @@
 using System.ComponentModel;
 using AetherUtils.Core.Logging;
 using Newtonsoft.Json;
-using RadioExt_Helper.utility;
 using WIG.Lib.Models;
 
 namespace RadioExt_Helper.models;
@@ -213,6 +212,41 @@ public sealed class Station : INotifyPropertyChanged, ICloneable, IEquatable<Sta
         }
     }
 
+    /// <summary>
+    /// Get a value indicating if the station's custom data contains the specified key.
+    /// </summary>
+    /// <param name="key">The key of the data to check existence of.</param>
+    /// <returns><c>true</c> if the key was present in the custom data; <c>false</c> otherwise.</returns>
+    public bool ContainsCustomData(string key)
+    {
+        try
+        {
+            return MetaData.CustomData.ContainsKey(key);
+        } catch (Exception ex)
+        {
+            AuLogger.GetCurrentLogger<Station>("ContainsCustomData").Error(ex, $"An error occurred while checking the custom data with key ({key}) for the station: {MetaData.DisplayName}");
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// Get the custom data specified by the key in the station.
+    /// </summary>
+    /// <param name="key">The key of the data to get.</param>
+    /// <returns>A data object referenced with the specified key or a blank, new <see cref="object"/> if an error occurred.</returns>
+    public object GetCustomData(string key)
+    {
+        try
+        {
+            return MetaData.CustomData[key];
+        }
+        catch (Exception ex)
+        {
+            AuLogger.GetCurrentLogger<Station>("ContainsCustomData").Error(ex, $"An error occurred while getting the custom data with key ({key}) for the station: {MetaData.DisplayName}");
+        }
+        return new object();
+    }
+
     private void OnPropertyChanged(string propertyName)
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
@@ -230,6 +264,6 @@ public sealed class Station : INotifyPropertyChanged, ICloneable, IEquatable<Sta
 
     public override int GetHashCode()
     {
-        return HashCode.Combine(MetaData, Songs);
+        return HashCode.Combine(MetaData, Songs, Icons);
     }
 }

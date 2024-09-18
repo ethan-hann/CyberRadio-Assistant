@@ -190,6 +190,12 @@ namespace RadioExt_Helper.forms
             EnableIcon(icon);
         }
 
+        private void btnDisableIcon_Click(object sender, EventArgs e)
+        {
+            if (lbIcons.SelectedItem is not TrackableObject<WolvenIcon> icon) return;
+            DisableIcon(icon);
+        }
+
         private void EnableIcon(TrackableObject<WolvenIcon> icon)
         {
             lbIcons.BeginUpdate();
@@ -198,7 +204,9 @@ namespace RadioExt_Helper.forms
                 i.TrackedObject.IsActive = false;
             }
 
-            icon.TrackedObject.IsActive = true;
+            _station.TrackedObject.Icons.Where(i => i.Id == icon.Id).First().TrackedObject.IsActive = true;
+
+            //icon.TrackedObject.IsActive = true;
             lbIcons.Invalidate();
             lbIcons.EndUpdate();
 
@@ -208,17 +216,12 @@ namespace RadioExt_Helper.forms
         private void DisableIcon(TrackableObject<WolvenIcon> icon)
         {
             lbIcons.BeginUpdate();
-            icon.TrackedObject.IsActive = false;
+            _station.TrackedObject.Icons.Where(i => i.Id == icon.Id).First().TrackedObject.IsActive = false;
+            //icon.TrackedObject.IsActive = false;
             lbIcons.Invalidate();
             lbIcons.EndUpdate();
 
             IconUpdated?.Invoke(this, icon);
-        }
-
-        private void btnDisableIcon_Click(object sender, EventArgs e)
-        {
-            if (lbIcons.SelectedItem is not TrackableObject<WolvenIcon> icon) return;
-            DisableIcon(icon);
         }
     }
 }

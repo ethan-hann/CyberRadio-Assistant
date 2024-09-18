@@ -331,47 +331,23 @@ public sealed partial class StationEditor : UserControl, IEditor
         iconManagerForm.ShowDialog();
     }
 
-    private void IconManagerForm_IconUpdated(object? sender, TrackableObject<WolvenIcon> e)
+    private void SetIconProperties(TrackableObject<WolvenIcon> icon)
     {
-        if (e.TrackedObject.CustomIcon != null)
+        if (icon.TrackedObject.CustomIcon != null)
         {
             Station.TrackedObject.CustomIcon = new CustomIcon()
             {
-                InkAtlasPart = e.TrackedObject.CustomIcon.InkAtlasPart,
-                InkAtlasPath = e.TrackedObject.CustomIcon.InkAtlasPath,
+                InkAtlasPart = icon.TrackedObject.CustomIcon.InkAtlasPart,
+                InkAtlasPath = icon.TrackedObject.CustomIcon.InkAtlasPath,
                 UseCustom = true
             };
             StationUpdated?.Invoke(this, EventArgs.Empty);
         }
     }
 
-    private void IconManagerForm_IconDeleted(object? sender, TrackableObject<WolvenIcon> e)
-    {
-        if (e.TrackedObject.CustomIcon != null)
-        {
-            Station.TrackedObject.CustomIcon = new CustomIcon()
-            {
-                InkAtlasPart = e.TrackedObject.CustomIcon.InkAtlasPart,
-                InkAtlasPath = e.TrackedObject.CustomIcon.InkAtlasPath,
-                UseCustom = true
-            };
-            StationUpdated?.Invoke(this, EventArgs.Empty);
-        }
-    }
-
-    private void IconManagerForm_IconAdded(object? sender, TrackableObject<WolvenIcon> e)
-    {
-        if (e.TrackedObject.CustomIcon != null)
-        {
-            Station.TrackedObject.CustomIcon = new CustomIcon()
-            {
-                InkAtlasPart = e.TrackedObject.CustomIcon.InkAtlasPart,
-                InkAtlasPath = e.TrackedObject.CustomIcon.InkAtlasPath,
-                UseCustom = true
-            };
-            StationUpdated?.Invoke(this, EventArgs.Empty);
-        }
-    }
+    private void IconManagerForm_IconUpdated(object? sender, TrackableObject<WolvenIcon> e) => SetIconProperties(e);
+    private void IconManagerForm_IconDeleted(object? sender, TrackableObject<WolvenIcon> e) => SetIconProperties(e);
+    private void IconManagerForm_IconAdded(object? sender, TrackableObject<WolvenIcon> e) => SetIconProperties(e);
 
     /// <summary>
     /// Occurs when the ink atlas path text is changed.
@@ -496,8 +472,11 @@ public sealed partial class StationEditor : UserControl, IEditor
         var row = dgvMetadata.Rows[e.Row.Index - 1];
         var key = row.Cells[0].Value?.ToString();
         var value = row.Cells[1].Value?.ToString();
-        if (key != null && value != null && Station.TrackedObject.MetaData.CustomData.TryAdd(key, value))
+        if (key != null && value != null)
+        {
+            Station.TrackedObject.AddCustomData(key, value);
             StationUpdated?.Invoke(this, EventArgs.Empty);
+        }
     }
 
     private void DgvMetadata_UserDeletedRow(object sender, DataGridViewRowEventArgs e)
@@ -506,9 +485,9 @@ public sealed partial class StationEditor : UserControl, IEditor
         foreach (DataGridViewCell cell in e.Row.Cells)
         {
             var key = cell.Value?.ToString();
-            if (key == null || !Station.TrackedObject.MetaData.CustomData.ContainsKey(key)) continue;
+            if (key == null || !Station.TrackedObject.ContainsCustomData(key)) continue;
 
-            Station.TrackedObject.MetaData.CustomData.Remove(key);
+            Station.TrackedObject.RemoveCustomData(key);
             StationUpdated?.Invoke(this, EventArgs.Empty);
         }
     }
@@ -523,7 +502,7 @@ public sealed partial class StationEditor : UserControl, IEditor
         var value = row.Cells[1].Value?.ToString();
         if (key == null || value == null) return;
 
-        Station.TrackedObject.MetaData.CustomData[key] = value;
+        Station.TrackedObject.AddCustomData(key, value);
         StationUpdated?.Invoke(this, EventArgs.Empty);
     }
 
