@@ -232,7 +232,7 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Backup Compression Level: .
+        ///   Looks up a localized string similar to Backup Compression Level:.
         /// </summary>
         internal static string BackupCompressionLevel {
             get {
@@ -1020,6 +1020,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Icon Manager - {0}.
+        /// </summary>
+        internal static string IconManagerFormTitle {
+            get {
+                return ResourceManager.GetString("IconManagerFormTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ink Atlas Part:.
         /// </summary>
         internal static string InkAtlasPart {
@@ -1052,6 +1061,24 @@ namespace RadioExt_Helper {
         internal static string InkPathHelp {
             get {
                 return ResourceManager.GetString("InkPathHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The active icon is invalid. Please ensure the icon is imported and the archive file is present..
+        /// </summary>
+        internal static string InvalidActiveIcon {
+            get {
+                return ResourceManager.GetString("InvalidActiveIcon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid Active Icon.
+        /// </summary>
+        internal static string InvalidActiveIconCaption {
+            get {
+                return ResourceManager.GetString("InvalidActiveIconCaption", resourceCulture);
             }
         }
         
@@ -1518,7 +1545,7 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter the radio.garden URL from the web: .
+        ///   Looks up a localized string similar to Enter the radio.garden URL from the web:.
         /// </summary>
         internal static string RadioGardenInput {
             get {
@@ -1968,7 +1995,7 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Total Songs: .
+        ///   Looks up a localized string similar to Total Songs:.
         /// </summary>
         internal static string TotalSongsLabel {
             get {
@@ -1977,7 +2004,7 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Station Size: .
+        ///   Looks up a localized string similar to Station Size:.
         /// </summary>
         internal static string TotalStationSizeLabel {
             get {

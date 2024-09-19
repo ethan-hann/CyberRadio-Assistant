@@ -842,4 +842,16 @@ La taille réelle peut être différente.</value>
   <data name="DefaultSongLocationHelp" xml:space="preserve">
     <value>Indique le dossier dans lequel les fichiers de chansons de la station importée doivent être enregistrés. La valeur par défaut est le dossier Ma musique.</value>
   </data>
+  <data name="High" xml:space="preserve">
+    <value>Haut</value>
+  </data>
+  <data name="IconManagerFormTitle" xml:space="preserve">
+    <value>Icône Manager - {0}</value>
+  </data>
+  <data name="InvalidActiveIcon" xml:space="preserve">
+    <value>L'icône active n'est pas valide. Veuillez vous assurer que l'icône est importée et que le fichier d'archive est présent.</value>
+  </data>
+  <data name="InvalidActiveIconCaption" xml:space="preserve">
+    <value>Icône active non valide</value>
+  </data>
 </root>

@@ -23,6 +23,7 @@ using RadioExt_Helper.models;
 using RadioExt_Helper.Properties;
 using RadioExt_Helper.utility;
 using WIG.Lib.Models;
+using ApplicationContext = RadioExt_Helper.utility.ApplicationContext;
 
 namespace RadioExt_Helper.user_controls;
 
@@ -222,6 +223,7 @@ public sealed partial class StationEditor : UserControl, IEditor
         if (icon == null)
         {
             Station.TrackedObject.CustomIcon.UseCustom = false;
+            picStationIcon.Image = Resources.drag_and_drop;
             radUseCustomYes.Checked = false;
             radUseCustomNo.Checked = true;
             Station.TrackedObject.RemoveCustomData("Icon Name");
@@ -322,32 +324,8 @@ public sealed partial class StationEditor : UserControl, IEditor
 
     private void PicStationIcon_DragDrop(object sender, DragEventArgs e)
     {
-        var image = picStationIcon.Image;
-        var iconManagerForm = new IconManagerForm(Station, picStationIcon.ImagePath);
-
-        iconManagerForm.IconAdded += IconManagerForm_IconAdded;
-        iconManagerForm.IconDeleted += IconManagerForm_IconDeleted;
-        iconManagerForm.IconUpdated += IconManagerForm_IconUpdated;
-        iconManagerForm.ShowDialog();
+        ApplicationContext.MainFormInstance?.ShowIconManagerForm(Station, picStationIcon.ImagePath);
     }
-
-    private void SetIconProperties(TrackableObject<WolvenIcon> icon)
-    {
-        if (icon.TrackedObject.CustomIcon != null)
-        {
-            Station.TrackedObject.CustomIcon = new CustomIcon()
-            {
-                InkAtlasPart = icon.TrackedObject.CustomIcon.InkAtlasPart,
-                InkAtlasPath = icon.TrackedObject.CustomIcon.InkAtlasPath,
-                UseCustom = true
-            };
-            StationUpdated?.Invoke(this, EventArgs.Empty);
-        }
-    }
-
-    private void IconManagerForm_IconUpdated(object? sender, TrackableObject<WolvenIcon> e) => SetIconProperties(e);
-    private void IconManagerForm_IconDeleted(object? sender, TrackableObject<WolvenIcon> e) => SetIconProperties(e);
-    private void IconManagerForm_IconAdded(object? sender, TrackableObject<WolvenIcon> e) => SetIconProperties(e);
 
     /// <summary>
     /// Occurs when the ink atlas path text is changed.

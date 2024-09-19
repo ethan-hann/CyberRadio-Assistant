@@ -18,8 +18,8 @@ namespace RadioExt_Helper.forms
         private IconEditor? _currentEditor;
         private readonly TrackableObject<Station> _station;
 
-        private bool _addedFromImagePath = false;
-        private TrackableObject<WolvenIcon>? _iconFromImagePath = null;
+        private readonly bool _addedFromImagePath;
+        private readonly TrackableObject<WolvenIcon>? _iconFromImagePath;
 
         public IconManagerForm(TrackableObject<Station> station)
         {
@@ -39,7 +39,7 @@ namespace RadioExt_Helper.forms
 
         private void IconManagerForm_Load(object sender, EventArgs e)
         {
-            Text = $"Icon Manager - {_station.TrackedObject.MetaData.DisplayName}";
+            Text = string.Format(GlobalData.Strings.GetString("IconManagerFormTitle") ?? "Icon Manager: {0}", _station.TrackedObject.MetaData.DisplayName);
 
             lbIcons.DataSource = _station.TrackedObject.Icons.ToBindingList();
             lbIcons.DisplayMember = "TrackedObject.AtlasName";
@@ -48,7 +48,7 @@ namespace RadioExt_Helper.forms
 
             if (_addedFromImagePath && _iconFromImagePath != null)
             {
-                AddNewIcon(_iconFromImagePath);
+                AddNewIcon(_iconFromImagePath, true);
             }
         }
 
@@ -108,7 +108,16 @@ namespace RadioExt_Helper.forms
             try
             {
                 if (_currentEditor == editor) return;
-                if (editor == null) return;
+                if (editor == null)
+                {
+                    //Remove the subscribed event if the current editor is not null.
+                    if (_currentEditor != null)
+                        _currentEditor.IconUpdated -= _currentEditor_IconUpdated;
+
+                    splitContainer1.Panel2.SuspendLayout();
+                    splitContainer1.Panel2.Controls.Clear();
+                    splitContainer1.Panel2.ResumeLayout();
+                }
 
                 //Remove the subscribed event if the current editor is not null.
                 if (_currentEditor != null)
@@ -122,7 +131,8 @@ namespace RadioExt_Helper.forms
                 _currentEditor = editor;
 
                 //Resubscribe to the event for the icon updating
-                _currentEditor.IconUpdated += _currentEditor_IconUpdated;
+                if (_currentEditor != null)
+                    _currentEditor.IconUpdated += _currentEditor_IconUpdated;
             }
             catch (Exception ex)
             {
@@ -136,9 +146,9 @@ namespace RadioExt_Helper.forms
             IconUpdated?.Invoke(this, icon);
         }
 
-        private void AddNewIcon(TrackableObject<WolvenIcon> icon)
+        private void AddNewIcon(TrackableObject<WolvenIcon> icon, bool makeActive)
         {
-            var added = StationManager.Instance.AddStationIcon(_station.Id, icon);
+            var added = StationManager.Instance.AddStationIcon(_station.Id, icon, makeActive);
             if (!added) return;
 
             ResetListBox();
@@ -151,7 +161,8 @@ namespace RadioExt_Helper.forms
 
         private void RemoveIcon(TrackableObject<WolvenIcon> icon)
         {
-            var text = GlobalData.Strings.GetString("ConfirmIconDelete") ?? "Do you want to delete associated icon files from disk?";
+            var text = GlobalData.Strings.GetString("ConfirmIconDelete") ?? "Do you want to delete associated icon files from disk?" +
+                "This will delete the generated .archive file from staging and the imported copy of the PNG from AppData.";
             var caption = GlobalData.Strings.GetString("Confirm") ?? "Confirm Delete";
             var result = MessageBox.Show(text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
@@ -161,6 +172,16 @@ namespace RadioExt_Helper.forms
                 StationManager.Instance.RemoveStationIcon(_station.Id, icon);
 
             ResetListBox();
+
+            if (lbIcons.Items.Count > 0)
+            {
+                lbIcons.SelectedIndex = 0;
+                SelectListBoxItem(0, false);
+            }
+            else
+            {
+                UpdateIconEditor(null);
+            }
 
             IconDeleted?.Invoke(this, icon);
         }
@@ -175,7 +196,7 @@ namespace RadioExt_Helper.forms
         private void btnAddIcon_Click(object sender, EventArgs e)
         {
             var icon = new TrackableObject<WolvenIcon>(new WolvenIcon());
-            AddNewIcon(icon);
+            AddNewIcon(icon, false);
         }
 
         private void btnDeleteIcon_Click(object sender, EventArgs e)
@@ -204,7 +225,7 @@ namespace RadioExt_Helper.forms
                 i.TrackedObject.IsActive = false;
             }
 
-            _station.TrackedObject.Icons.Where(i => i.Id == icon.Id).First().TrackedObject.IsActive = true;
+            _station.TrackedObject.Icons.First(i => i.Id == icon.Id).TrackedObject.IsActive = true;
 
             //icon.TrackedObject.IsActive = true;
             lbIcons.Invalidate();
@@ -216,12 +237,27 @@ namespace RadioExt_Helper.forms
         private void DisableIcon(TrackableObject<WolvenIcon> icon)
         {
             lbIcons.BeginUpdate();
-            _station.TrackedObject.Icons.Where(i => i.Id == icon.Id).First().TrackedObject.IsActive = false;
+            _station.TrackedObject.Icons.First(i => i.Id == icon.Id).TrackedObject.IsActive = false;
             //icon.TrackedObject.IsActive = false;
             lbIcons.Invalidate();
             lbIcons.EndUpdate();
 
             IconUpdated?.Invoke(this, icon);
+        }
+
+        private void IconManagerForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (_currentEditor != null)
+                _currentEditor.IconUpdated -= _currentEditor_IconUpdated;
+
+            if (_station.TrackedObject.GetActiveIcon() == null) return;
+            if (_station.TrackedObject.CheckActiveIconValid()) return;
+
+            var text = GlobalData.Strings.GetString("InvalidActiveIcon") ??
+                       "The active icon is invalid. Please ensure the icon is imported and the .archive file is present.";
+            var caption = GlobalData.Strings.GetString("InvalidActiveIconCaption") ?? "Invalid Active Icon";
+            MessageBox.Show(text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            e.Cancel = true;
         }
     }
 }

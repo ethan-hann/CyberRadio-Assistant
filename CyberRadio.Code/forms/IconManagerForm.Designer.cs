@@ -208,6 +208,7 @@ namespace RadioExt_Helper.forms
             Name = "IconManagerForm";
             StartPosition = FormStartPosition.CenterParent;
             Text = "Icon Manager - {0}";
+            FormClosing += IconManagerForm_FormClosing;
             Load += IconManagerForm_Load;
             splitContainer1.Panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();

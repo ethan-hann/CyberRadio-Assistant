@@ -28,6 +28,7 @@ using RadioExt_Helper.Properties;
 using RadioExt_Helper.user_controls;
 using RadioExt_Helper.utility;
 using WIG.Lib.Models;
+using ApplicationContext = RadioExt_Helper.utility.ApplicationContext;
 using Timer = System.Timers.Timer;
 
 namespace RadioExt_Helper.forms;
@@ -57,6 +58,8 @@ public sealed partial class MainForm : Form
     public MainForm()
     {
         InitializeComponent();
+
+        ApplicationContext.MainFormInstance = this;
 
         GlobalData.InitializeComboBoxTemplate();
 
@@ -1137,15 +1140,17 @@ public sealed partial class MainForm : Form
     private void IconGeneratorToolStripMenuItem_Click(object sender, EventArgs e)
     {
         if (lbStations.SelectedItem is not TrackableObject<Station> station) return;
-        //if (!station.TrackedObject.CustomIcon.UseCustom ||
-        //    (station.TrackedObject.CustomIcon.InkAtlasPath.Equals(string.Empty)
-        //     && station.TrackedObject.CustomIcon.InkAtlasPart.Equals(string.Empty))) return;
 
-        var managerForm = new IconManagerForm(station);
-        managerForm.IconAdded += ManagerFormOnIconUpdated;
-        managerForm.IconDeleted += ManagerFormOnIconUpdated;
-        managerForm.IconUpdated += ManagerFormOnIconUpdated;
-        managerForm.ShowDialog(this);
+        ShowIconManagerForm(station);
+        ////if (!station.TrackedObject.CustomIcon.UseCustom ||
+        ////    (station.TrackedObject.CustomIcon.InkAtlasPath.Equals(string.Empty)
+        ////     && station.TrackedObject.CustomIcon.InkAtlasPart.Equals(string.Empty))) return;
+
+        //var managerForm = new IconManagerForm(station);
+        //managerForm.IconAdded += ManagerFormOnIconUpdated;
+        //managerForm.IconDeleted += ManagerFormOnIconUpdated;
+        //managerForm.IconUpdated += ManagerFormOnIconUpdated;
+        //managerForm.ShowDialog(this);
 
         //new IconGeneratorForm().ShowDialog(this);
         //PythonEngine.Initialize();
@@ -1156,6 +1161,15 @@ public sealed partial class MainForm : Form
         //    //See https://wiki.redmodding.org/wolvenkit/wolvenkit-cli/usage/command-list#pack
         //    //See https://github.com/DoctorPresto/Cyberpunk-Helper-Scripts/blob/main/generate_inkatlas.py
         //}
+    }
+
+    public void ShowIconManagerForm(TrackableObject<Station> station, string newIconImagePath = "")
+    {
+        var managerForm = newIconImagePath == "" ? new IconManagerForm(station) : new IconManagerForm(station, newIconImagePath);
+        managerForm.IconAdded += ManagerFormOnIconUpdated;
+        managerForm.IconDeleted += ManagerFormOnIconUpdated;
+        managerForm.IconUpdated += ManagerFormOnIconUpdated;
+        managerForm.ShowDialog(this);
     }
 
     private void ManagerFormOnIconUpdated(object? sender, TrackableObject<WolvenIcon> icon)

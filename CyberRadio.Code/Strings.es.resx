@@ -845,4 +845,13 @@ El tamaño real puede ser diferente.</value>
   <data name="DefaultSongLocationHelp" xml:space="preserve">
     <value>Indica la carpeta en la que se deben guardar los archivos de canciones de la estación importada. El valor predeterminado es la carpeta Mi música.</value>
   </data>
+  <data name="IconManagerFormTitle" xml:space="preserve">
+    <value>Icon Manager - {0}</value>
+  </data>
+  <data name="InvalidActiveIcon" xml:space="preserve">
+    <value>El icono activo no es válido. Asegúrese de importar el icono y el archivo de archivo está presente.</value>
+  </data>
+  <data name="InvalidActiveIconCaption" xml:space="preserve">
+    <value>Icono activo no válido</value>
+  </data>
 </root>

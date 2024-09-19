@@ -511,7 +511,7 @@ Can't export radio stations to game.</value>
     <value>Radio Garden URL</value>
   </data>
   <data name="RadioGardenInput" xml:space="preserve">
-    <value>Enter the radio.garden URL from the web: </value>
+    <value>Enter the radio.garden URL from the web:</value>
   </data>
   <data name="EnableSelectedStation" xml:space="preserve">
     <value>Enable Selected</value>
@@ -761,10 +761,10 @@ exported to the game.</value>
     <value>File Path</value>
   </data>
   <data name="TotalSongsLabel" xml:space="preserve">
-    <value>Total Songs: </value>
+    <value>Total Songs:</value>
   </data>
   <data name="TotalStationSizeLabel" xml:space="preserve">
-    <value>Station Size: </value>
+    <value>Station Size:</value>
   </data>
   <data name="WatchForChangesOption" xml:space="preserve">
     <value>Watch for Station Changes?</value>
@@ -809,7 +809,7 @@ exported to the game.</value>
     <value>Ultimate</value>
   </data>
   <data name="BackupCompressionLevel" xml:space="preserve">
-    <value>Backup Compression Level: </value>
+    <value>Backup Compression Level:</value>
   </data>
   <data name="BackupPreviewCompleted" xml:space="preserve">
     <value>Backup preview completed.</value>
@@ -844,5 +844,14 @@ Actual size may be different.</value>
   </data>
   <data name="DefaultSongLocationHelp" xml:space="preserve">
     <value>Indicates the folder that imported station's song files should be saved to. Default's to the MyMusic folder.</value>
+  </data>
+  <data name="IconManagerFormTitle" xml:space="preserve">
+    <value>Icon Manager - {0}</value>
+  </data>
+  <data name="InvalidActiveIcon" xml:space="preserve">
+    <value>The active icon is invalid. Please ensure the icon is imported and the archive file is present.</value>
+  </data>
+  <data name="InvalidActiveIconCaption" xml:space="preserve">
+    <value>Invalid Active Icon</value>
   </data>
 </root>

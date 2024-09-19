@@ -166,12 +166,23 @@ public partial class StationManager : IDisposable
     /// </summary>
     /// <param name="stationId">The station ID to add the icon to.</param>
     /// <param name="icon">The <see cref="Icon"/> to add.</param>
+    /// <param name="makeActive">Whether to immediately make this icon the active one for the station, de-activating other icons.</param>
     /// <returns><c>true</c> if the icon was added successfully; <c>false</c> otherwise.</returns>
-    public bool AddStationIcon(Guid stationId, TrackableObject<WolvenIcon> icon)
+    public bool AddStationIcon(Guid stationId, TrackableObject<WolvenIcon> icon, bool makeActive = false)
     {
         try
         {
             if (!_stations.TryGetValue(stationId, out var pair)) return false;
+
+            if (makeActive)
+            {
+                //First, de-active other icons.
+                foreach (var i in pair.Key.TrackedObject.Icons)
+                    i.TrackedObject.IsActive = false;
+
+                //Make this new icon the active one.
+                icon.TrackedObject.IsActive = true;
+            }
 
             pair.Key.TrackedObject.AddIcon(icon);
             var iconEditor = new IconEditor(pair.Key, icon);
@@ -215,7 +226,7 @@ public partial class StationManager : IDisposable
 
             StationUpdated?.Invoke(this, stationId);
 
-            return !pair.Key.TrackedObject.Icons.Any(i => i.Id == icon.Id);
+            return pair.Key.TrackedObject.Icons.All(i => i.Id != icon.Id);
         }
         catch (Exception ex)
         {

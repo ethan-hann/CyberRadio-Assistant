@@ -107,7 +107,7 @@ public sealed class Station : INotifyPropertyChanged, ICloneable, IEquatable<Sta
         {
             MetaData = (MetaData)MetaData.Clone(),
             Songs = [.. Songs],
-            Icons = new List<TrackableObject<WolvenIcon>>(Icons.Select(icon => new TrackableObject<WolvenIcon>(icon.TrackedObject)))
+            Icons = [..Icons.Select(icon => new TrackableObject<WolvenIcon>(icon.TrackedObject))]
         };
     }
 
@@ -179,6 +179,27 @@ public sealed class Station : INotifyPropertyChanged, ICloneable, IEquatable<Sta
         }
 
         return null;
+    }
+
+    /// <summary>
+    /// Ensures the active icon (if any) is valid for the station. A valid active icon has been imported and has its archive file present.
+    /// This should be the case when either the icon is generated from a PNG or imported from a .zip file containing a station.
+    /// </summary>
+    /// <returns><c>true</c> if the active icon is valid. <c>false</c> otherwise or there were no active icons.</returns>
+    public bool CheckActiveIconValid()
+    {
+        try
+        {
+            if (Icons.Count == 0) return false;
+            if (Icons.Count(i => i.TrackedObject.IsActive) > 1) throw new InvalidOperationException("A station can only have one active icon.");
+            var activeIcon = Icons.FirstOrDefault(i => i.TrackedObject.IsActive);
+            return activeIcon != null && activeIcon.TrackedObject.CheckIconValid();
+        } catch (Exception e)
+        {
+            AuLogger.GetCurrentLogger<Station>().Error(e);
+        }
+
+        return false;
     }
 
     /// <summary>
