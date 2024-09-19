@@ -1,9 +1,7 @@
-﻿using AetherUtils.Core.Files;
-using AetherUtils.Core.Logging;
+﻿using AetherUtils.Core.Logging;
 using RadioExt_Helper.models;
 using RadioExt_Helper.Properties;
 using RadioExt_Helper.utility;
-using RadioExt_Helper.utility.event_args;
 using WIG.Lib.Models;
 using WIG.Lib.Utility;
 
@@ -191,7 +189,17 @@ namespace RadioExt_Helper.user_controls
                 txtIconPart.Text = Icon.TrackedObject.CustomIcon?.InkAtlasPart;
                 if (Path.Exists(Icon.TrackedObject.ImagePath))
                     Icon.TrackedObject.EnsureImage();
+
+                if (Icon.TrackedObject.CheckIconValid())
+                {
+                    MakeEditorReadOnly();
+                }
             });
+        }
+
+        private void MakeEditorReadOnly()
+        {
+
         }
 
         private void btnCopyImagePath_Click(object sender, EventArgs e)

@@ -14,9 +14,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-using System.ComponentModel;
 using AetherUtils.Core.Logging;
 using Newtonsoft.Json;
+using System.ComponentModel;
 using WIG.Lib.Models;
 
 namespace RadioExt_Helper.models;
@@ -107,7 +107,7 @@ public sealed class Station : INotifyPropertyChanged, ICloneable, IEquatable<Sta
         {
             MetaData = (MetaData)MetaData.Clone(),
             Songs = [.. Songs],
-            Icons = [..Icons.Select(icon => new TrackableObject<WolvenIcon>(icon.TrackedObject))]
+            Icons = [.. Icons.Select(icon => new TrackableObject<WolvenIcon>(icon.TrackedObject))]
         };
     }
 
@@ -194,7 +194,8 @@ public sealed class Station : INotifyPropertyChanged, ICloneable, IEquatable<Sta
             if (Icons.Count(i => i.TrackedObject.IsActive) > 1) throw new InvalidOperationException("A station can only have one active icon.");
             var activeIcon = Icons.FirstOrDefault(i => i.TrackedObject.IsActive);
             return activeIcon != null && activeIcon.TrackedObject.CheckIconValid();
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             AuLogger.GetCurrentLogger<Station>().Error(e);
         }
@@ -212,7 +213,8 @@ public sealed class Station : INotifyPropertyChanged, ICloneable, IEquatable<Sta
         try
         {
             MetaData.CustomData[key] = value;
-        } catch (Exception ex)
+        }
+        catch (Exception ex)
         {
             AuLogger.GetCurrentLogger<Station>("AddCustomData").Error(ex, $"An error occurred while adding custom data for the station: {MetaData.DisplayName}");
         }
@@ -244,7 +246,8 @@ public sealed class Station : INotifyPropertyChanged, ICloneable, IEquatable<Sta
         try
         {
             return MetaData.CustomData.ContainsKey(key);
-        } catch (Exception ex)
+        }
+        catch (Exception ex)
         {
             AuLogger.GetCurrentLogger<Station>("ContainsCustomData").Error(ex, $"An error occurred while checking the custom data with key ({key}) for the station: {MetaData.DisplayName}");
         }

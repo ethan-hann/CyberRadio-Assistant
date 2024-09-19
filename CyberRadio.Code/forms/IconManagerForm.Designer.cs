@@ -1,4 +1,5 @@
-﻿using RadioExt_Helper.custom_controls;
+﻿using AetherUtils.Core.WinForms.Controls;
+using RadioExt_Helper.custom_controls;
 
 namespace RadioExt_Helper.forms
 {
@@ -37,7 +38,9 @@ namespace RadioExt_Helper.forms
             lbIcons = new IconListBox();
             tableLayoutPanel1 = new TableLayoutPanel();
             btnDeleteIcon = new Button();
-            btnAddIcon = new Button();
+            btnAddIcon = new SplitButton();
+            newIconContextStrip = new ContextMenuStrip(components);
+            fromArchiveFileToolStripMenuItem = new ToolStripMenuItem();
             tableLayoutPanel2 = new TableLayoutPanel();
             btnDisableIcon = new Button();
             btnEnableIcon = new Button();
@@ -46,6 +49,7 @@ namespace RadioExt_Helper.forms
             splitContainer1.SuspendLayout();
             grpIcons.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
+            newIconContextStrip.SuspendLayout();
             tableLayoutPanel2.SuspendLayout();
             SuspendLayout();
             // 
@@ -135,14 +139,30 @@ namespace RadioExt_Helper.forms
             btnAddIcon.Image = Properties.Resources.add__16x16;
             btnAddIcon.Location = new Point(3, 2);
             btnAddIcon.Margin = new Padding(3, 2, 3, 2);
+            btnAddIcon.Menu = newIconContextStrip;
             btnAddIcon.Name = "btnAddIcon";
             btnAddIcon.Size = new Size(147, 33);
+            btnAddIcon.SplitWidth = 25;
             btnAddIcon.TabIndex = 0;
             btnAddIcon.Text = "New Icon";
             btnAddIcon.TextAlign = ContentAlignment.MiddleRight;
             btnAddIcon.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnAddIcon.UseVisualStyleBackColor = false;
             btnAddIcon.Click += btnAddIcon_Click;
+            // 
+            // newIconContextStrip
+            // 
+            newIconContextStrip.Items.AddRange(new ToolStripItem[] { fromArchiveFileToolStripMenuItem });
+            newIconContextStrip.Name = "newIconContextStrip";
+            newIconContextStrip.Size = new Size(166, 26);
+            // 
+            // fromArchiveFileToolStripMenuItem
+            // 
+            fromArchiveFileToolStripMenuItem.Image = Properties.Resources.file__16x16;
+            fromArchiveFileToolStripMenuItem.Name = "fromArchiveFileToolStripMenuItem";
+            fromArchiveFileToolStripMenuItem.Size = new Size(165, 22);
+            fromArchiveFileToolStripMenuItem.Text = "From .archive file";
+            fromArchiveFileToolStripMenuItem.Click += fromArchiveFileToolStripMenuItem_Click;
             // 
             // tableLayoutPanel2
             // 
@@ -215,6 +235,7 @@ namespace RadioExt_Helper.forms
             splitContainer1.ResumeLayout(false);
             grpIcons.ResumeLayout(false);
             tableLayoutPanel1.ResumeLayout(false);
+            newIconContextStrip.ResumeLayout(false);
             tableLayoutPanel2.ResumeLayout(false);
             ResumeLayout(false);
         }
@@ -224,10 +245,12 @@ namespace RadioExt_Helper.forms
         private GroupBox grpIcons;
         private TableLayoutPanel tableLayoutPanel1;
         private Button btnDeleteIcon;
-        private Button btnAddIcon;
+        private SplitButton btnAddIcon;
         private TableLayoutPanel tableLayoutPanel2;
         private Button btnDisableIcon;
         private Button btnEnableIcon;
         private IconListBox lbIcons;
+        private ContextMenuStrip newIconContextStrip;
+        private ToolStripMenuItem fromArchiveFileToolStripMenuItem;
     }
 }

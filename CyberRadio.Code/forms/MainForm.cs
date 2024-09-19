@@ -14,9 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Timers;
 using AetherUtils.Core.Extensions;
 using AetherUtils.Core.Logging;
 using AetherUtils.Core.WinForms.Controls;
@@ -27,6 +24,9 @@ using RadioExt_Helper.nexus_api;
 using RadioExt_Helper.Properties;
 using RadioExt_Helper.user_controls;
 using RadioExt_Helper.utility;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Timers;
 using WIG.Lib.Models;
 using ApplicationContext = RadioExt_Helper.utility.ApplicationContext;
 using Timer = System.Timers.Timer;
@@ -112,7 +112,7 @@ public sealed partial class MainForm : Form
     private void LbStations_StationImported(object? sender, TrackableObject<Station> e)
     {
         MessageBox.Show(this, "Station imported: " + e.TrackedObject.MetaData.DisplayName);
-        //// Handle custom icon
+        //// Handle custom icon //TODO: handle custom icon from imported station .zip
         //SaveCustomIcon(e.IconFilePath, e.IconFileName);
         //AuLogger.GetCurrentLogger<MainForm>("StationImported")
         //    .Info($"Station imported: {e.Station.TrackedObject.MetaData.DisplayName}");
@@ -1189,6 +1189,7 @@ public sealed partial class MainForm : Form
 
             var activeIcon = StationManager.Instance.GetStationActiveIcon(station.Id);
             var editor = StationManager.Instance.GetStationEditor(station.Id);
+            icon.CheckPendingSaveStatus();
             editor?.UpdateIcon(activeIcon);
 
             lbStations.EndUpdate();

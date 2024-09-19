@@ -1,5 +1,5 @@
-﻿using System.Diagnostics;
-using AetherUtils.Core.Logging;
+﻿using AetherUtils.Core.Logging;
+using System.Diagnostics;
 
 namespace RadioExt_Helper.utility;
 

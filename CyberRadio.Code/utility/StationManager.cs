@@ -14,17 +14,16 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-using System.ComponentModel;
-using System.Globalization;
-using System.Text.RegularExpressions;
 using AetherUtils.Core.Files;
 using AetherUtils.Core.Logging;
 using AetherUtils.Core.Structs;
 using RadioExt_Helper.models;
 using RadioExt_Helper.user_controls;
 using SharpCompress.Archives;
+using System.ComponentModel;
+using System.Globalization;
+using System.Text.RegularExpressions;
 using WIG.Lib.Models;
-using WIG.Lib.Utility;
 
 namespace RadioExt_Helper.utility;
 
@@ -145,7 +144,7 @@ public partial class StationManager : IDisposable
                 }
 
                 //Add the station's icon editors as well and find the active icon to display.
-                foreach (var icon in station.TrackedObject.Icons) 
+                foreach (var icon in station.TrackedObject.Icons)
                 {
                     AddStationIconEditor(station.Id, icon.Id);
                 }
@@ -191,7 +190,8 @@ public partial class StationManager : IDisposable
             StationUpdated?.Invoke(this, stationId);
 
             return pair.Key.TrackedObject.Icons.Contains(icon);
-        } catch (Exception ex)
+        }
+        catch (Exception ex)
         {
             AuLogger.GetCurrentLogger<StationManager>().Error(ex, "Error adding icon to station.");
             return false;
@@ -329,7 +329,8 @@ public partial class StationManager : IDisposable
                     pair.Value.FirstOrDefault(e => e.Type == EditorType.IconEditor && ((IconEditor)e).Icon.Id.Equals(iconId))
                         as IconEditor : null;
             }
-        } catch (Exception ex)
+        }
+        catch (Exception ex)
         {
             AuLogger.GetCurrentLogger<StationManager>().Error(ex, "Error getting icon editor from station.");
             return null;
@@ -357,7 +358,8 @@ public partial class StationManager : IDisposable
                 var editor = new IconEditor(pair.Key, wolvenIcon);
                 pair.Value.Add(editor);
             }
-        } catch (Exception ex)
+        }
+        catch (Exception ex)
         {
             AuLogger.GetCurrentLogger<StationManager>().Error(ex, "Error adding icon editor to station.");
         }
@@ -383,7 +385,8 @@ public partial class StationManager : IDisposable
 
                 pair.Value.Remove(editor);
             }
-        } catch (Exception ex)
+        }
+        catch (Exception ex)
         {
             AuLogger.GetCurrentLogger<StationManager>().Error(ex, "Error removing icon editor from station.");
         }
@@ -405,7 +408,7 @@ public partial class StationManager : IDisposable
                 {
                     editor.Dispose();
                 }
-                    
+
                 _stations.Clear();
                 StationsAsBindingList.Clear();
                 StationPaths.Clear();
@@ -460,7 +463,8 @@ public partial class StationManager : IDisposable
                     return null;
                 }
             }
-        } catch (Exception ex)
+        }
+        catch (Exception ex)
         {
             AuLogger.GetCurrentLogger<StationManager>().Error(ex, "Error getting station from manager.");
             return null;
@@ -484,7 +488,7 @@ public partial class StationManager : IDisposable
                     var id = (Guid)stationId;
                     lock (_stations)
                     {
-                        return _stations.TryGetValue(id, out var pair) ? 
+                        return _stations.TryGetValue(id, out var pair) ?
                             pair.Value.FirstOrDefault(e => e.Type == EditorType.StationEditor) as StationEditor : null;
                     }
                 }
@@ -494,7 +498,8 @@ public partial class StationManager : IDisposable
                     return null;
                 }
             }
-        } catch (Exception ex)
+        }
+        catch (Exception ex)
         {
             AuLogger.GetCurrentLogger<StationManager>().Error(ex, "Error getting station editor from manager.");
             return null;
@@ -740,12 +745,12 @@ public partial class StationManager : IDisposable
 
             // Synchronize directories
             var tasks = (from gameDir in gameDirectories
-                let dirName = Path.GetFileName(gameDir)
-                let stagingDir = Path.Combine(stagingPath, dirName)
-                select !stagingDirectories.Contains(stagingDir)
-                    ? Task.Run(() => CopyDirectoryAsync(gameDir, stagingDir))
-                    // Directory exists, synchronize files
-                    : Task.Run(() => SynchronizeFilesAsync(gameDir, stagingDir))).ToList();
+                         let dirName = Path.GetFileName(gameDir)
+                         let stagingDir = Path.Combine(stagingPath, dirName)
+                         select !stagingDirectories.Contains(stagingDir)
+                             ? Task.Run(() => CopyDirectoryAsync(gameDir, stagingDir))
+                             // Directory exists, synchronize files
+                             : Task.Run(() => SynchronizeFilesAsync(gameDir, stagingDir))).ToList();
 
             await Task.WhenAll(tasks);
             SyncStatusChanged?.Invoke(GlobalData.Strings.GetString("SyncStatusComplete") ??
@@ -844,16 +849,16 @@ public partial class StationManager : IDisposable
         FileHelper.CreateDirectories(targetDir);
 
         var copyTasks = (from file in files
-            let targetFilePath = Path.Combine(targetDir, Path.GetFileName(file))
-            select Task.Run(() =>
-            {
-                FileHelper.CreateDirectories(targetFilePath);
-                File.Copy(file, targetFilePath, true);
-            })).ToList();
+                         let targetFilePath = Path.Combine(targetDir, Path.GetFileName(file))
+                         select Task.Run(() =>
+                         {
+                             FileHelper.CreateDirectories(targetFilePath);
+                             File.Copy(file, targetFilePath, true);
+                         })).ToList();
 
-        copyTasks.AddRange(from directory in directories 
-            let targetDirectoryPath = Path.Combine(targetDir, Path.GetFileName(directory)) 
-            select Task.Run(() => CopyDirectoryAsync(directory, targetDirectoryPath)));
+        copyTasks.AddRange(from directory in directories
+                           let targetDirectoryPath = Path.Combine(targetDir, Path.GetFileName(directory))
+                           select Task.Run(() => CopyDirectoryAsync(directory, targetDirectoryPath)));
 
         await Task.WhenAll(copyTasks);
     }
@@ -908,7 +913,7 @@ public partial class StationManager : IDisposable
             //TODO: fix issue with songs.sgls where it is not being loaded correctly. The file is being created based on the song files in the directory but if all the stations have their songs in the same directory,
             // we are getting the same songs.sgls file for every station (even one's that don't have any songs). This is causing the station to have songs that it shouldn't have.
 
-            
+
 
             if (metadata == null) return null;
 
@@ -934,7 +939,7 @@ public partial class StationManager : IDisposable
                     }
                     trackedStation.TrackedObject.AddIcon(new TrackableObject<WolvenIcon>(icon), icon.IsActive);
                 }
-                
+
                 //IconManager.Instance.LoadIconFromFile(trackedStation, iconFiles.First());
             }
 
@@ -1007,7 +1012,7 @@ public partial class StationManager : IDisposable
             }
 
             return (tempDir, songDir);
-        } 
+        }
         catch (Exception ex)
         {
             AuLogger.GetCurrentLogger<StationManager>("ExtractStationArchive").Error(ex, "Error extracting station archive.");
@@ -1216,7 +1221,7 @@ public partial class StationManager : IDisposable
     /// <summary>
     /// The list of protected staging folders that should not be deleted. Normally, this contains at least the path to the "icons" folder.
     /// </summary>
-    private List<string> ProtectedStagingFolders { get; }= [];
+    private List<string> ProtectedStagingFolders { get; } = [];
 
     /// <summary>
     /// A dictionary of station IDs and their relative paths in the staging directory.

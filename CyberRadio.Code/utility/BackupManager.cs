@@ -16,12 +16,8 @@
 
 using AetherUtils.Core.Files;
 using AetherUtils.Core.Logging;
-using SharpCompress.Archives;
-using SharpCompress.Common;
-using SharpCompress.Writers;
-using SharpCompress.Archives.Zip;
-using System.Text;
 using System.IO.Compression;
+using System.Text;
 
 namespace RadioExt_Helper.utility;
 
@@ -291,15 +287,15 @@ public class BackupManager(CompressionLevel level)
                 if (_isCancelling) return;
 
                 var externalSongMappings = new Dictionary<string, string>();
-                
+
                 using var zipArchive = ZipFile.OpenRead(backupFilePath);
-                
+
                 foreach (var entry in zipArchive.Entries)
                 {
                     if (_isCancelling) return;
 
                     var entryName = entry.FullName;
-                    
+
                     // Skip directories
                     if (string.IsNullOrEmpty(entry.Name)) continue;
 
@@ -386,7 +382,7 @@ public class BackupManager(CompressionLevel level)
             }
         });
 
-        return [..files];
+        return [.. files];
     }
 
     /// <summary>

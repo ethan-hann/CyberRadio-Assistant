@@ -14,7 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-using System.Security.Cryptography;
 using AetherUtils.Core.Files;
 using AetherUtils.Core.Logging;
 using RadioExt_Helper.Properties;
@@ -23,6 +22,7 @@ using SharpCompress.Archives.Zip;
 using SharpCompress.Common;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
+using System.Security.Cryptography;
 using Image = SixLabors.ImageSharp.Image;
 
 namespace RadioExt_Helper.utility;

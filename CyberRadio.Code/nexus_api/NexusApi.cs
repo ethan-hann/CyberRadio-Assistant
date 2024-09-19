@@ -19,12 +19,6 @@ using Pathoschild.FluentNexus;
 using Pathoschild.FluentNexus.Models;
 using RadioExt_Helper.Properties;
 using RadioExt_Helper.utility;
-using SharpCompress.Archives;
-using SharpCompress.Archives.Zip;
-using SharpCompress.Common;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.PixelFormats;
-using Image = SixLabors.ImageSharp.Image;
 
 namespace RadioExt_Helper.nexus_api;
 

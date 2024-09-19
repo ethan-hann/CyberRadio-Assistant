@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace RadioExt_Helper.utility.event_args
+﻿namespace RadioExt_Helper.utility.event_args
 {
     /// <summary>
     /// Represents the event arguments for the various events in the <see cref="IconManager"/> class.

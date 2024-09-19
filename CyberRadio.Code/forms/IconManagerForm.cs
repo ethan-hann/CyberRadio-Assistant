@@ -226,6 +226,7 @@ namespace RadioExt_Helper.forms
             }
 
             _station.TrackedObject.Icons.First(i => i.Id == icon.Id).TrackedObject.IsActive = true;
+            _station.CheckPendingSaveStatus();
 
             //icon.TrackedObject.IsActive = true;
             lbIcons.Invalidate();
@@ -237,7 +238,10 @@ namespace RadioExt_Helper.forms
         private void DisableIcon(TrackableObject<WolvenIcon> icon)
         {
             lbIcons.BeginUpdate();
+
             _station.TrackedObject.Icons.First(i => i.Id == icon.Id).TrackedObject.IsActive = false;
+            _station.CheckPendingSaveStatus();
+
             //icon.TrackedObject.IsActive = false;
             lbIcons.Invalidate();
             lbIcons.EndUpdate();
@@ -258,6 +262,11 @@ namespace RadioExt_Helper.forms
             var caption = GlobalData.Strings.GetString("InvalidActiveIconCaption") ?? "Invalid Active Icon";
             MessageBox.Show(text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
             e.Cancel = true;
+        }
+
+        private void fromArchiveFileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //TODO: implement extracting icon from archive file.
         }
     }
 }

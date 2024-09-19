@@ -14,16 +14,15 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-using System.ComponentModel;
-using System.Diagnostics;
 using AetherUtils.Core.Extensions;
 using AetherUtils.Core.Files;
 using AetherUtils.Core.Logging;
 using RadioExt_Helper.models;
 using RadioExt_Helper.Properties;
 using RadioExt_Helper.utility;
+using System.ComponentModel;
+using System.Diagnostics;
 using WIG.Lib.Models;
-using static System.Collections.Specialized.BitVector32;
 
 namespace RadioExt_Helper.forms;
 
@@ -150,30 +149,30 @@ public partial class ExportWindow : Form
 
         lvStations.SuspendLayout();
         foreach (var lvItem in from station in _stationsToExport
-                 let isActive = station.TrackedObject.GetStatus()
-                 let customIconString = station.TrackedObject.CustomIcon.UseCustom
-                     ? GlobalData.Strings.GetString("CustomIcon")
-                     : station.TrackedObject.MetaData.Icon
-                 let songString = station.TrackedObject.MetaData.StreamInfo.IsStream
-                     ? GlobalData.Strings.GetString("IsStream")
-                     : station.TrackedObject.Songs.Count.ToString()
-                 let streamString = station.TrackedObject.MetaData.StreamInfo.IsStream
-                     ? station.TrackedObject.MetaData.StreamInfo.StreamUrl
-                     : GlobalData.Strings.GetString("UsingSongs")
-                 let proposedPath = isActive
-                     ? Path.Combine(radioExtPath, station.TrackedObject.MetaData.DisplayName)
-                     : GlobalData.Strings.GetString("DisabledStation")
-                 select new ListViewItem([
-                     string.Empty, // Placeholder for the icon column
+                               let isActive = station.TrackedObject.GetStatus()
+                               let customIconString = station.TrackedObject.CustomIcon.UseCustom
+                                   ? GlobalData.Strings.GetString("CustomIcon")
+                                   : station.TrackedObject.MetaData.Icon
+                               let songString = station.TrackedObject.MetaData.StreamInfo.IsStream
+                                   ? GlobalData.Strings.GetString("IsStream")
+                                   : station.TrackedObject.Songs.Count.ToString()
+                               let streamString = station.TrackedObject.MetaData.StreamInfo.IsStream
+                                   ? station.TrackedObject.MetaData.StreamInfo.StreamUrl
+                                   : GlobalData.Strings.GetString("UsingSongs")
+                               let proposedPath = isActive
+                                   ? Path.Combine(radioExtPath, station.TrackedObject.MetaData.DisplayName)
+                                   : GlobalData.Strings.GetString("DisabledStation")
+                               select new ListViewItem([
+                                   string.Empty, // Placeholder for the icon column
                      station.TrackedObject.MetaData.DisplayName,
                      customIconString ?? string.Empty,
                      songString ?? string.Empty,
                      streamString ?? string.Empty,
                      proposedPath ?? string.Empty
-                 ])
-                 {
-                     Tag = station
-                 })
+                               ])
+                               {
+                                   Tag = station
+                               })
             lvStations.Items.Add(lvItem);
 
         lvStations.ResizeColumns();
@@ -339,13 +338,13 @@ public partial class ExportWindow : Form
         var songDirectoryMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
         foreach (var station in stations)
-        foreach (var song in station.TrackedObject.Songs)
-        {
-            var songDirectory = existingDirectories
-                .FirstOrDefault(dir => song.FilePath.StartsWith(dir, StringComparison.OrdinalIgnoreCase));
+            foreach (var song in station.TrackedObject.Songs)
+            {
+                var songDirectory = existingDirectories
+                    .FirstOrDefault(dir => song.FilePath.StartsWith(dir, StringComparison.OrdinalIgnoreCase));
 
-            if (!string.IsNullOrEmpty(songDirectory)) songDirectoryMap[song.FilePath] = songDirectory;
-        }
+                if (!string.IsNullOrEmpty(songDirectory)) songDirectoryMap[song.FilePath] = songDirectory;
+            }
 
         return songDirectoryMap;
     }
@@ -674,7 +673,7 @@ public partial class ExportWindow : Form
                     .Warn("The icons folder in the staging directory is not protected; it should be at this point!");
 
             //Get the active icon for each station based on the icons list
-            foreach (var station 
+            foreach (var station
                      in activeStations.Where(station => station.TrackedObject.CustomIcon.UseCustom))
             {
                 var activeIcon = station.TrackedObject.Icons.FirstOrDefault(i => i.TrackedObject.IsActive);
@@ -712,7 +711,7 @@ public partial class ExportWindow : Form
                 AuLogger.GetCurrentLogger<ExportWindow>("CopyIconsToGame")
                     .Info($"Copied icon: {iconPath} to {targetPath}");
             }
-        } 
+        }
         catch (Exception ex)
         {
             AuLogger.GetCurrentLogger<ExportWindow>("CopyIconsToGame")
@@ -757,7 +756,8 @@ public partial class ExportWindow : Form
                     .Info($"Deleted icon: {icon.TrackedObject.IconName} from {expectedGamePath}");
             }
 
-        } catch (Exception ex)
+        }
+        catch (Exception ex)
         {
             AuLogger.GetCurrentLogger<ExportWindow>("DeleteAllStationIconsFromGame").Error(ex, "Failed to delete station's old icons from game.");
         }

@@ -11,9 +11,9 @@
         <ApplicationIcon>resources\cyber-radio-assistant.ico</ApplicationIcon>
         <StartupObject>RadioExt_Helper.Program</StartupObject>
         <GenerateDocumentationFile>False</GenerateDocumentationFile>
-        <AssemblyVersion>2.0.292.0</AssemblyVersion>
-        <FileVersion>2.0.292.0</FileVersion>
-        <Version>2.0.292</Version>
+        <AssemblyVersion>2.0.299.0</AssemblyVersion>
+        <FileVersion>2.0.299.0</FileVersion>
+        <Version>2.0.299</Version>
         <Company>Ethan Hann</Company>
         <Product>Cyber Radio Assistant</Product>
         <NeutralLanguage>en</NeutralLanguage>
