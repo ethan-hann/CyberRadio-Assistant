@@ -854,4 +854,7 @@ Actual size may be different.</value>
   <data name="InvalidActiveIconCaption" xml:space="preserve">
     <value>Invalid Active Icon</value>
   </data>
+  <data name="IconEditorCopyIconToStagingNullEmpty" xml:space="preserve">
+    <value>The icon archive path was null or empty.</value>
+  </data>
 </root>

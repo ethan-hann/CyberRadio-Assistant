@@ -1011,6 +1011,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The icon archive path was null or empty..
+        /// </summary>
+        internal static string IconEditorCopyIconToStagingNullEmpty {
+            get {
+                return ResourceManager.GetString("IconEditorCopyIconToStagingNullEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The icon for the station, if you don&apos;t use a custom one. It can be any UIIcon record..
         /// </summary>
         internal static string IconHelp {

@@ -1,4 +1,5 @@
-﻿using AetherUtils.Core.Logging;
+﻿using AetherUtils.Core.Files;
+using AetherUtils.Core.Logging;
 using RadioExt_Helper.models;
 using RadioExt_Helper.Properties;
 using RadioExt_Helper.utility;
@@ -117,15 +118,14 @@ namespace RadioExt_Helper.user_controls
 
             Task.Run(async () =>
             {
-                var stagingIcons = GlobalData.ConfigManager.Get("stagingPath") as string ?? string.Empty;
-                if (stagingIcons == string.Empty)
+                var stagingPath = GlobalData.ConfigManager.Get("stagingPath") as string ?? string.Empty;
+                if (stagingPath == string.Empty)
                 {
                     AddStatusRow("Staging path not set.");
                     return;
                 }
 
-                var outputPath = Path.Combine(stagingIcons, "icons");
-                var icon = await IconManager.Instance.GenerateIconImageAsync(txtImagePath.Text, txtAtlasName.Text, outputPath);
+                var icon = await IconManager.Instance.GenerateIconImageAsync(txtImagePath.Text, txtAtlasName.Text);
                 if (icon == null)
                     AddStatusRow("Failed to import icon.");
                 else
@@ -135,6 +135,8 @@ namespace RadioExt_Helper.user_controls
                     Icon.TrackedObject.ArchivePath = icon.ArchivePath;
                     Icon.TrackedObject.Sha256HashOfArchiveFile = icon.Sha256HashOfArchiveFile;
                     Icon.TrackedObject.CustomIcon = icon.CustomIcon;
+
+                    CopyIconToStaging(Icon.TrackedObject.ArchivePath, stagingPath);
 
                     IconUpdated?.Invoke(this, Icon);
                 }
@@ -146,6 +148,30 @@ namespace RadioExt_Helper.user_controls
 
             _isImporting = false;
             pgProgress.Visible = false;
+        }
+
+        /// <summary>
+        /// Copy the icon's .archive to the staging directory.
+        /// </summary>
+        /// <param name="iconArchivePath">The path to the final .archive generated with Wolven Icon Generator.</param>
+        /// <param name="stagingPath">The path to the staging folder.</param>
+        private void CopyIconToStaging(string? iconArchivePath, string stagingPath)
+        {
+            var outputPath = Path.Combine(stagingPath, "icons");
+            try
+            {
+                if (!Directory.Exists(outputPath))
+                    Directory.CreateDirectory(outputPath);
+
+                if (string.IsNullOrEmpty(iconArchivePath))
+                    throw new ArgumentNullException(nameof(iconArchivePath), GlobalData.Strings.GetString("IconEditorCopyIconToStagingNullEmpty"));
+
+                File.Copy(iconArchivePath, Path.Combine(outputPath, Path.GetFileName(iconArchivePath)), true);
+            }
+            catch (Exception ex)
+            {
+                AuLogger.GetCurrentLogger<IconEditor>("CopyIconToStaging").Error(ex);
+            }
         }
 
         private void btnCancelImport_Click(object sender, EventArgs e)
