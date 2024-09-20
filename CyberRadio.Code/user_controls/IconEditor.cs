@@ -1,5 +1,4 @@
-﻿using System.Data;
-using AetherUtils.Core.Logging;
+﻿using AetherUtils.Core.Logging;
 using RadioExt_Helper.models;
 using RadioExt_Helper.Properties;
 using RadioExt_Helper.utility;
@@ -152,6 +151,8 @@ namespace RadioExt_Helper.user_controls
                 {
                     Icon.TrackedObject.AtlasName = icon.AtlasName;
                     Icon.TrackedObject.ImagePath = icon.ImagePath;
+
+                    //TODO: change this to the archive path within the staging folder! Add a new property to the icon object to track where the original archive file came from (in AppData).
                     Icon.TrackedObject.ArchivePath = icon.ArchivePath;
                     Icon.TrackedObject.Sha256HashOfArchiveFile = icon.Sha256HashOfArchiveFile;
                     Icon.TrackedObject.CustomIcon = icon.CustomIcon;
@@ -215,8 +216,8 @@ namespace RadioExt_Helper.user_controls
                 txtArchivePath.Text = Icon.TrackedObject.ArchivePath;
                 txtSha256Hash.Text = Icon.TrackedObject.Sha256HashOfArchiveFile;
                 txtImagePath.Text = Icon.TrackedObject.ImagePath;
-                txtIconPath.Text = Icon.TrackedObject.CustomIcon?.InkAtlasPath;
-                txtIconPart.Text = Icon.TrackedObject.CustomIcon?.InkAtlasPart;
+                txtIconPath.Text = Icon.TrackedObject.CustomIcon.InkAtlasPath;
+                txtIconPart.Text = Icon.TrackedObject.CustomIcon.InkAtlasPart;
                 txtAtlasName.Text = Icon.TrackedObject.AtlasName;
                 txtIconName.Text = Icon.TrackedObject.IconName;
                 editorTabs.TabPages[0].Text = string.Format(Strings.IconEditor_txtIconName_TextChanged_Editing_Tab___0_, Icon.TrackedObject.IconName);

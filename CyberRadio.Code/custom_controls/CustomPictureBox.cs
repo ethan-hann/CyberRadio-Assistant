@@ -131,7 +131,22 @@ namespace RadioExt_Helper.custom_controls
 
         private void CustomPictureBox_DragEnter(object? sender, DragEventArgs e)
         {
-            e.Effect = e.Data?.GetDataPresent(DataFormats.FileDrop) is true ? DragDropEffects.Copy : DragDropEffects.None;
+            if (e.Data?.GetDataPresent(DataFormats.FileDrop) == true)
+            {
+                if (e.Data.GetData(DataFormats.FileDrop) is string?[] { Length: > 0 } files && 
+                    Path.GetExtension(files[0])?.ToLower() == ".png")
+                {
+                    e.Effect = DragDropEffects.Copy; // Allow only .png files
+                }
+                else
+                {
+                    e.Effect = DragDropEffects.None; // Disallow non-.png files
+                }
+            }
+            else
+            {
+                e.Effect = DragDropEffects.None; // Disallow other data types
+            }
         }
 
         private void CustomPictureBox_DragDrop(object? sender, DragEventArgs e)
@@ -141,10 +156,10 @@ namespace RadioExt_Helper.custom_controls
                 var data = e.Data;
                 if (data == null || !data.GetDataPresent(DataFormats.FileDrop)) return;
 
-                var files = data.GetData(DataFormats.FileDrop) as string[];
-                if (!(files?.Length > 0)) return;
-
+                if (data.GetData(DataFormats.FileDrop) is not string?[] files || files.Length == 0 || Path.GetExtension(files[0])?.ToLower() != ".png") return;
                 var file = files[0];
+                if (file == null) return;
+
                 ClearImage();
                 SetImage(file);
             }
