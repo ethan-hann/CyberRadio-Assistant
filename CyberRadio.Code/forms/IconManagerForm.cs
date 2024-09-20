@@ -42,7 +42,7 @@ namespace RadioExt_Helper.forms
             Text = string.Format(GlobalData.Strings.GetString("IconManagerFormTitle") ?? "Icon Manager: {0}", _station.TrackedObject.MetaData.DisplayName);
 
             lbIcons.DataSource = _station.TrackedObject.Icons.ToBindingList();
-            lbIcons.DisplayMember = "TrackedObject.AtlasName";
+            lbIcons.DisplayMember = "TrackedObject.IconName";
 
             SetImageList();
 

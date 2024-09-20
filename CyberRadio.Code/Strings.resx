@@ -857,4 +857,16 @@ Actual size may be different.</value>
   <data name="IconEditorCopyIconToStagingNullEmpty" xml:space="preserve">
     <value>The icon archive path was null or empty.</value>
   </data>
+  <data name="IconEditor_txtIconName_TextChanged_Editing_Tab___0_" xml:space="preserve">
+	  <value>Editing Icon: {0}</value>
+  </data>
+  <data name="IconEditor_IconAlreadyCreated_DragDrop" xml:space="preserve">
+	  <value>This icon has already been created and marked as read-only. Please create a new icon if you want a different image.</value>
+  </data>
+  <data name="IconEditor_IconAlreadyCreated_DragDrop_Caption" xml:space="preserve">
+	  <value>Icon Already Created</value>
+  </data>
+  <data name="IconEditor_ImageNotSquare" xml:space="preserve">
+	  <value>The image is not square. Problems may occur in game.</value>
+  </data>
 </root>

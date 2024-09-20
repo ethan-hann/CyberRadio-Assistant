@@ -1,4 +1,7 @@
 ﻿using AetherUtils.Core.Logging;
+using RadioExt_Helper.models;
+using RadioExt_Helper.Properties;
+using WIG.Lib.Models;
 using WIG.Lib.Utility;
 
 namespace RadioExt_Helper.custom_controls
@@ -6,6 +9,7 @@ namespace RadioExt_Helper.custom_controls
     internal class CustomPictureBox : PictureBox
     {
         public string ImagePath { get; private set; } = string.Empty;
+        public ImageProperties ImageProperties { get; set; } = new();
 
         public CustomPictureBox()
         {
@@ -141,19 +145,97 @@ namespace RadioExt_Helper.custom_controls
                 if (!(files?.Length > 0)) return;
 
                 var file = files[0];
-                var image = ImageUtils.LoadImage(file);
-                if (image == null) return;
-
-                Image = image;
-                ImagePath = file;
-
-                // Redraw the picture box after setting the image
-                Invalidate(); // Force the control to repaint with the new image
+                ClearImage();
+                SetImage(file);
             }
             catch (Exception ex)
             {
                 AuLogger.GetCurrentLogger<CustomPictureBox>().Error(ex.Message);
             }
+        }
+
+        /// <summary>
+        /// Clear the image and image path from the picture box.
+        /// </summary>
+        public void ClearImage()
+        {
+            try
+            {
+                Image?.Dispose();
+                Image = null;
+                ImagePath = string.Empty;
+                ImageProperties = new ImageProperties();
+                Invalidate();
+            }
+            catch (Exception ex)
+            {
+                AuLogger.GetCurrentLogger<CustomPictureBox>().Error(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Set the image to display in the picture box from the given <see cref="Image"/> object.
+        /// </summary>
+        /// <param name="image">The <see cref="Image"/> to load.</param>
+        public void SetImage(Image? image)
+        {
+            try
+            {
+                Image = image ?? Resources.drag_and_drop;
+                UpdateImageProperties();
+                SetSizeMode();
+                Invalidate();
+            }
+            catch (Exception ex)
+            {
+                AuLogger.GetCurrentLogger<CustomPictureBox>().Error(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Set the image to display in the picture box from the given file path.
+        /// </summary>
+        /// <param name="imagePath">The path to the image to load.</param>
+        public void SetImage(string? imagePath)
+        {
+            try
+            {
+                Image = ImageUtils.LoadImage(imagePath ?? string.Empty) ?? Resources.drag_and_drop;
+                ImagePath = imagePath ?? string.Empty;
+                UpdateImageProperties();
+
+                SetSizeMode();
+                Invalidate();
+            }
+            catch (Exception ex)
+            {
+                AuLogger.GetCurrentLogger<CustomPictureBox>().Error(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Set the size mode based on the aspect ratio of the image and the control.
+        /// </summary>
+        private void SetSizeMode()
+        {
+            if (Image == null) return;
+
+            var imageAspect = (float)Image.Width / Image.Height;
+            var controlAspect = (float)Width / Height;
+
+            SizeMode = imageAspect > controlAspect ? PictureBoxSizeMode.Zoom : PictureBoxSizeMode.CenterImage;
+        }
+
+        private void UpdateImageProperties()
+        {
+            if (Image == null) return;
+            ImageProperties = new ImageProperties
+            {
+                Width = Image.Width,
+                Height = Image.Height,
+                ImageFormat = Image.RawFormat,
+                PixelFormat = Image.PixelFormat
+            };
         }
     }
 }

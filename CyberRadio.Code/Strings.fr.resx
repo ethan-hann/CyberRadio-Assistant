@@ -854,4 +854,16 @@ La taille réelle peut être différente.</value>
   <data name="InvalidActiveIconCaption" xml:space="preserve">
     <value>Icône active non valide</value>
   </data>
+  <data name="IconEditorCopyIconToStagingNullEmpty" xml:space="preserve">
+    <value>Le chemin des archives de l'icône était nul ou vide.</value>
+  </data>
+  <data name="IconEditor_txtIconName_TextChanged_Editing_Tab___0_" xml:space="preserve">
+    <value>Icône d'édition: {0}</value>
+  </data>
+  <data name="IconEditor_IconAlreadyCreated_DragDrop" xml:space="preserve">
+    <value>Cette icône a déjà été créée et marquée en lecture seule. Veuillez créer une nouvelle icône si vous voulez une image différente.</value>
+  </data>
+  <data name="IconEditor_IconAlreadyCreated_DragDrop_Caption" xml:space="preserve">
+    <value>Icône déjà créée</value>
+  </data>
 </root>

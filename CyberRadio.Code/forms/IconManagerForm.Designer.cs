@@ -62,8 +62,8 @@ namespace RadioExt_Helper.forms
             // splitContainer1.Panel1
             // 
             splitContainer1.Panel1.Controls.Add(grpIcons);
-            splitContainer1.Size = new Size(936, 655);
-            splitContainer1.SplitterDistance = 312;
+            splitContainer1.Size = new Size(1284, 815);
+            splitContainer1.SplitterDistance = 336;
             splitContainer1.TabIndex = 1;
             // 
             // grpIcons
@@ -74,7 +74,7 @@ namespace RadioExt_Helper.forms
             grpIcons.Dock = DockStyle.Fill;
             grpIcons.Location = new Point(0, 0);
             grpIcons.Name = "grpIcons";
-            grpIcons.Size = new Size(312, 655);
+            grpIcons.Size = new Size(336, 815);
             grpIcons.TabIndex = 0;
             grpIcons.TabStop = false;
             grpIcons.Text = "Icons";
@@ -90,7 +90,7 @@ namespace RadioExt_Helper.forms
             lbIcons.ItemHeight = 15;
             lbIcons.Location = new Point(3, 53);
             lbIcons.Name = "lbIcons";
-            lbIcons.Size = new Size(306, 562);
+            lbIcons.Size = new Size(330, 722);
             lbIcons.TabIndex = 6;
             lbIcons.SelectedIndexChanged += lbIcons_SelectedIndexChanged;
             // 
@@ -102,12 +102,12 @@ namespace RadioExt_Helper.forms
             tableLayoutPanel1.Controls.Add(btnDeleteIcon, 1, 0);
             tableLayoutPanel1.Controls.Add(btnAddIcon, 0, 0);
             tableLayoutPanel1.Dock = DockStyle.Bottom;
-            tableLayoutPanel1.Location = new Point(3, 615);
+            tableLayoutPanel1.Location = new Point(3, 775);
             tableLayoutPanel1.Margin = new Padding(3, 2, 3, 2);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 1;
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel1.Size = new Size(306, 37);
+            tableLayoutPanel1.Size = new Size(330, 37);
             tableLayoutPanel1.TabIndex = 5;
             // 
             // btnDeleteIcon
@@ -117,11 +117,12 @@ namespace RadioExt_Helper.forms
             btnDeleteIcon.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
             btnDeleteIcon.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
             btnDeleteIcon.FlatStyle = FlatStyle.Flat;
+            btnDeleteIcon.Font = new Font("Segoe UI Variable Display Semib", 9.75F, FontStyle.Bold);
             btnDeleteIcon.Image = Properties.Resources.delete__16x16;
-            btnDeleteIcon.Location = new Point(156, 2);
+            btnDeleteIcon.Location = new Point(168, 2);
             btnDeleteIcon.Margin = new Padding(3, 2, 3, 2);
             btnDeleteIcon.Name = "btnDeleteIcon";
-            btnDeleteIcon.Size = new Size(147, 33);
+            btnDeleteIcon.Size = new Size(159, 33);
             btnDeleteIcon.TabIndex = 1;
             btnDeleteIcon.Text = "Delete Icon";
             btnDeleteIcon.TextAlign = ContentAlignment.MiddleRight;
@@ -136,12 +137,13 @@ namespace RadioExt_Helper.forms
             btnAddIcon.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
             btnAddIcon.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
             btnAddIcon.FlatStyle = FlatStyle.Flat;
+            btnAddIcon.Font = new Font("Segoe UI Variable Display Semib", 9.75F, FontStyle.Bold);
             btnAddIcon.Image = Properties.Resources.add__16x16;
             btnAddIcon.Location = new Point(3, 2);
             btnAddIcon.Margin = new Padding(3, 2, 3, 2);
             btnAddIcon.Menu = newIconContextStrip;
             btnAddIcon.Name = "btnAddIcon";
-            btnAddIcon.Size = new Size(147, 33);
+            btnAddIcon.Size = new Size(159, 33);
             btnAddIcon.SplitWidth = 25;
             btnAddIcon.TabIndex = 0;
             btnAddIcon.Text = "New Icon";
@@ -176,7 +178,7 @@ namespace RadioExt_Helper.forms
             tableLayoutPanel2.Name = "tableLayoutPanel2";
             tableLayoutPanel2.RowCount = 1;
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel2.Size = new Size(306, 34);
+            tableLayoutPanel2.Size = new Size(330, 34);
             tableLayoutPanel2.TabIndex = 4;
             // 
             // btnDisableIcon
@@ -187,10 +189,10 @@ namespace RadioExt_Helper.forms
             btnDisableIcon.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
             btnDisableIcon.FlatStyle = FlatStyle.Flat;
             btnDisableIcon.Image = Properties.Resources.disabled__16x16;
-            btnDisableIcon.Location = new Point(156, 2);
+            btnDisableIcon.Location = new Point(168, 2);
             btnDisableIcon.Margin = new Padding(3, 2, 3, 2);
             btnDisableIcon.Name = "btnDisableIcon";
-            btnDisableIcon.Size = new Size(147, 30);
+            btnDisableIcon.Size = new Size(159, 30);
             btnDisableIcon.TabIndex = 2;
             btnDisableIcon.Text = "Disable Selected";
             btnDisableIcon.TextAlign = ContentAlignment.MiddleRight;
@@ -209,7 +211,7 @@ namespace RadioExt_Helper.forms
             btnEnableIcon.Location = new Point(3, 2);
             btnEnableIcon.Margin = new Padding(3, 2, 3, 2);
             btnEnableIcon.Name = "btnEnableIcon";
-            btnEnableIcon.Size = new Size(147, 30);
+            btnEnableIcon.Size = new Size(159, 30);
             btnEnableIcon.TabIndex = 1;
             btnEnableIcon.Text = "Enable Selected";
             btnEnableIcon.TextAlign = ContentAlignment.MiddleRight;
@@ -222,7 +224,7 @@ namespace RadioExt_Helper.forms
             AutoScaleDimensions = new SizeF(96F, 96F);
             AutoScaleMode = AutoScaleMode.Dpi;
             BackColor = Color.White;
-            ClientSize = new Size(936, 655);
+            ClientSize = new Size(1284, 815);
             Controls.Add(splitContainer1);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "IconManagerForm";

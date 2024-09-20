@@ -189,7 +189,7 @@ public sealed partial class StationEditor : UserControl, IEditor
             var imagePath = value as string;
             if (Path.Exists(imagePath))
             {
-                picStationIcon.Load(imagePath);
+                picStationIcon.SetImage(imagePath);
                 Station.TrackedObject.GetActiveIcon()?.TrackedObject.EnsureImage();
             }
         }
@@ -248,10 +248,9 @@ public sealed partial class StationEditor : UserControl, IEditor
         txtInkAtlasPath.Text = Station.TrackedObject.CustomIcon.InkAtlasPath;
         txtInkAtlasPart.Text = Station.TrackedObject.CustomIcon.InkAtlasPart;
 
-        if (Path.Exists(icon.TrackedObject.ImagePath))
-            picStationIcon.Load(icon.TrackedObject.ImagePath);
-        else
-            picStationIcon.Image = Resources.drag_and_drop;
+        picStationIcon.SetImage(Path.Exists(icon.TrackedObject.ImagePath)
+            ? icon.TrackedObject.ImagePath
+            : string.Empty);
 
         //Update custom data pertaining to the active icon
         Station.TrackedObject.AddCustomData("Icon Name", icon.TrackedObject.IconName ?? string.Empty);

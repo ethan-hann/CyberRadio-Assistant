@@ -121,7 +121,7 @@ namespace RadioExt_Helper.forms
             // fileToolStripMenuItem
             // 
             fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { stationsToolStripMenuItem, toolStripSeparator2, backupToolStripMenuItem, toolStripSeparator3, configurationToolStripMenuItem, pathsToolStripMenuItem, toolStripSeparator4, exitToolStripMenuItem });
-            fileToolStripMenuItem.Image = Properties.Resources.file;
+            fileToolStripMenuItem.Image = Properties.Resources.file__16x16;
             fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             fileToolStripMenuItem.Size = new Size(53, 20);
             fileToolStripMenuItem.Text = "File";
@@ -285,7 +285,7 @@ namespace RadioExt_Helper.forms
             // 
             downloadRadioModsToolStripMenuItem.Image = Properties.Resources.download_16x16;
             downloadRadioModsToolStripMenuItem.Name = "downloadRadioModsToolStripMenuItem";
-            downloadRadioModsToolStripMenuItem.Size = new Size(194, 22);
+            downloadRadioModsToolStripMenuItem.Size = new Size(193, 22);
             downloadRadioModsToolStripMenuItem.Text = "Download Radio Mods";
             downloadRadioModsToolStripMenuItem.Click += DownloadRadioModsToolStripMenuItem_Click;
             // 
@@ -581,6 +581,7 @@ namespace RadioExt_Helper.forms
             btnDeleteStation.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
             btnDeleteStation.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
             btnDeleteStation.FlatStyle = FlatStyle.Flat;
+            btnDeleteStation.Font = new Font("Segoe UI Variable Display Semib", 9.75F, FontStyle.Bold);
             btnDeleteStation.Image = Properties.Resources.delete__16x16;
             btnDeleteStation.Location = new Point(160, 2);
             btnDeleteStation.Margin = new Padding(3, 2, 3, 2);
@@ -600,6 +601,7 @@ namespace RadioExt_Helper.forms
             btnAddStation.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
             btnAddStation.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
             btnAddStation.FlatStyle = FlatStyle.Flat;
+            btnAddStation.Font = new Font("Segoe UI Variable Display Semib", 9.75F, FontStyle.Bold);
             btnAddStation.Image = Properties.Resources.add__16x16;
             btnAddStation.Location = new Point(3, 2);
             btnAddStation.Margin = new Padding(3, 2, 3, 2);
@@ -620,13 +622,13 @@ namespace RadioExt_Helper.forms
             // 
             cmsRevertStationChanges.Items.AddRange(new ToolStripItem[] { revertChangesToolStripMenuItem });
             cmsRevertStationChanges.Name = "cmsRevertStationChanges";
-            cmsRevertStationChanges.Size = new Size(156, 26);
+            cmsRevertStationChanges.Size = new Size(157, 26);
             // 
             // revertChangesToolStripMenuItem
             // 
             revertChangesToolStripMenuItem.Image = Properties.Resources.refresh__16x16;
             revertChangesToolStripMenuItem.Name = "revertChangesToolStripMenuItem";
-            revertChangesToolStripMenuItem.Size = new Size(155, 22);
+            revertChangesToolStripMenuItem.Size = new Size(156, 22);
             revertChangesToolStripMenuItem.Text = "Revert Changes";
             revertChangesToolStripMenuItem.Click += RevertChangesToolStripMenuItem_Click;
             // 

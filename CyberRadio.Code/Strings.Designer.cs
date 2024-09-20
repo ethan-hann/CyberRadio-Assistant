@@ -1011,6 +1011,42 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This icon has already been created and marked as read-only. Please create a new icon if you want a different image..
+        /// </summary>
+        internal static string IconEditor_IconAlreadyCreated_DragDrop {
+            get {
+                return ResourceManager.GetString("IconEditor_IconAlreadyCreated_DragDrop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Icon Already Created.
+        /// </summary>
+        internal static string IconEditor_IconAlreadyCreated_DragDrop_Caption {
+            get {
+                return ResourceManager.GetString("IconEditor_IconAlreadyCreated_DragDrop_Caption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The image is not square. Problems may occur in game..
+        /// </summary>
+        internal static string IconEditor_ImageNotSquare {
+            get {
+                return ResourceManager.GetString("IconEditor_ImageNotSquare", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Editing Icon: {0}.
+        /// </summary>
+        internal static string IconEditor_txtIconName_TextChanged_Editing_Tab___0_ {
+            get {
+                return ResourceManager.GetString("IconEditor_txtIconName_TextChanged_Editing_Tab___0_", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The icon archive path was null or empty..
         /// </summary>
         internal static string IconEditorCopyIconToStagingNullEmpty {
