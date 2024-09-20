@@ -13,8 +13,10 @@ namespace RadioExt_Helper.custom_controls
         private float _zoomFactor = 1.0f; // Track the zoom level
         private Point _imageOffset = Point.Empty; // Track the offset for panning
         private Point _lastMousePosition = Point.Empty; // Last mouse position during panning
-        private bool _isPanning = false; // Whether the user is currently panning
+        private bool _isZooming = false; // Track whether the user is zooming
+        private bool _isPanning = false; // Track whether the user is panning
         private Rectangle _initialImageRect; // Initial rectangle of the image
+        private Image? _downsampledImage; // Store the downsampled version of the image
 
         public string ImagePath { get; private set; } = string.Empty;
         public ImageProperties ImageProperties { get; set; } = new();
@@ -67,9 +69,11 @@ namespace RadioExt_Helper.custom_controls
                 _isManualMode = true;
 
                 // Set the initial zoom factor and image offset based on the current PictureBox view
-                var scaledRect = GetScaledImageRect();
+                var scaledRect = GetScaledImageRect(Image);
                 _imageOffset = new Point(scaledRect.X, scaledRect.Y);
             }
+
+            _isZooming = true;
 
             const float zoomStep = 0.1f;
             var oldZoomFactor = _zoomFactor;
@@ -90,6 +94,8 @@ namespace RadioExt_Helper.custom_controls
             _imageOffset.X = (int)(e.X - mousePosRelativeToImage.X * zoomFactorChange);
             _imageOffset.Y = (int)(e.Y - mousePosRelativeToImage.Y * zoomFactorChange);
 
+            _isZooming = false;
+            //_zoomFactor = zoomFactorChange;
             Invalidate(); // Redraw with the updated zoom and offset
         }
 
@@ -102,7 +108,7 @@ namespace RadioExt_Helper.custom_controls
                 _isManualMode = true;
 
                 // Set the initial image offset based on the current PictureBox view
-                var scaledRect = GetScaledImageRect();
+                var scaledRect = GetScaledImageRect(Image);
                 _imageOffset = new Point(scaledRect.X, scaledRect.Y);
             }
 
@@ -110,7 +116,7 @@ namespace RadioExt_Helper.custom_controls
             {
                 _isPanning = true;
                 _lastMousePosition = e.Location;
-                Cursor = Cursors.Hand; // Change the cursor to indicate panning
+                Cursor = Cursors.SizeAll; // Change the cursor to indicate panning
             }
         }
 
@@ -138,16 +144,19 @@ namespace RadioExt_Helper.custom_controls
             if (e.Button == MouseButtons.Left)
             {
                 _isPanning = false;
+                _isManualMode = false;
                 Cursor = Cursors.Default; // Reset the cursor
+
+                Invalidate();
             }
         }
 
-        private Rectangle GetImageRectangle()
+        private Rectangle GetImageRectangle(Image? image)
         {
-            if (Image == null) return Rectangle.Empty;
+            if (image == null) return Rectangle.Empty;
 
-            var zoomedWidth = (int)(Image.Width * _zoomFactor);
-            var zoomedHeight = (int)(Image.Height * _zoomFactor);
+            var zoomedWidth = (int)(image.Width * _zoomFactor);
+            var zoomedHeight = (int)(image.Height * _zoomFactor);
 
             return new Rectangle(_imageOffset.X, _imageOffset.Y, zoomedWidth, zoomedHeight);
         }
@@ -180,33 +189,63 @@ namespace RadioExt_Helper.custom_controls
 
         protected override void OnPaint(PaintEventArgs pe)
         {
-            if (!_isManualMode)
+            // Adjust graphics quality based on user interaction
+            if (_isManualMode)
             {
-                base.OnPaint(pe); // Use base PictureBox behavior until manual zoom/pan is activated
-                return;
-            }
+                // Lower quality during active interaction (e.g., zooming/panning) for performance
+                if (_isPanning || _isZooming)  // Add a flag to track zooming/panning
+                {
+                    pe.Graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+                    pe.Graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.None;
 
-            // Custom rendering logic if zoom/pan is applied
-            if (Image != null)
-            {
-                pe.Graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.Low;
-                pe.Graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighSpeed;
+                    // Custom rendering logic for manual zoom/pan. Use the downsampled image for performance.
+                    if (_downsampledImage != null)
+                    {
+                        var imageRect = GetScaledImageRect(_downsampledImage);
+                        pe.Graphics.DrawImage(_downsampledImage, imageRect);
+                    }
+                    else
+                    {
+                        base.OnPaint(pe);
+                    }
+                }
+                else
+                {
+                    // High quality when not interacting
+                    pe.Graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+                    pe.Graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
 
-                var imageRect = GetImageRectangle();
-                pe.Graphics.DrawImage(Image, imageRect);
+                    if (Image != null)
+                    {
+                        var imageRect = GetImageRectangle(_downsampledImage);
+                        pe.Graphics.DrawImage(Image, imageRect);
+                    }
+                    else
+                    {
+                        base.OnPaint(pe);
+                    }
+                }
             }
             else
             {
-                base.OnPaint(pe);
+                if (Image != null)
+                {
+                    var imageRect = GetImageRectangle(_downsampledImage);
+                    pe.Graphics.DrawImage(Image, imageRect);
+                }
+                else
+                {
+                    base.OnPaint(pe);
+                }
             }
         }
 
         // Helper method to get the scaled and centered image rectangle
-        private Rectangle GetScaledImageRect()
+        private Rectangle GetScaledImageRect(Image? image)
         {
-            if (Image == null) return new Rectangle(0, 0, Width, Height);
+            if (image == null) return new Rectangle(0, 0, Width, Height);
 
-            var imageAspect = (float)Image.Width / Image.Height;
+            var imageAspect = (float)image.Width / image.Height;
             var controlAspect = (float)Width / Height;
 
             int drawWidth, drawHeight;
@@ -328,6 +367,7 @@ namespace RadioExt_Helper.custom_controls
             try
             {
                 Image = image ?? Resources.drag_and_drop;
+                _downsampledImage = ImageUtils.DownsampleImage(Image, Width, Height);
                 UpdateImageProperties();
                 ResetView();
             }
@@ -345,8 +385,9 @@ namespace RadioExt_Helper.custom_controls
         {
             try
             {
-                Image = ImageUtils.LoadImage(imagePath ?? string.Empty) ?? Resources.drag_and_drop;
+                Image = ImageUtils.LoadAndOptimizeImage(imagePath ?? string.Empty) ?? Resources.drag_and_drop;
                 ImagePath = imagePath ?? string.Empty;
+                _downsampledImage = ImageUtils.DownsampleImage(Image, Width, Height);
                 UpdateImageProperties();
                 ResetView();
             }
