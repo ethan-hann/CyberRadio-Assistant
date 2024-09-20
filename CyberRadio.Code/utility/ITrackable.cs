@@ -4,6 +4,7 @@
     {
         void AcceptChanges();
         void DeclineChanges();
+        bool CheckPendingSaveStatus();
         bool IsPendingSave { get; }
     }
 }

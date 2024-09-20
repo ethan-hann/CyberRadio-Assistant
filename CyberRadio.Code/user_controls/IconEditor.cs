@@ -2,6 +2,7 @@
 using RadioExt_Helper.models;
 using RadioExt_Helper.Properties;
 using RadioExt_Helper.utility;
+using System.Text.RegularExpressions;
 using WIG.Lib.Models;
 using WIG.Lib.Utility;
 
@@ -97,7 +98,7 @@ namespace RadioExt_Helper.user_controls
         {
             if (Icon.TrackedObject.CheckIconValid())
             {
-                MessageBox.Show(Strings.IconEditor_IconAlreadyCreated_DragDrop, Strings.IconEditor_IconAlreadyCreated_DragDrop_Caption, 
+                MessageBox.Show(Strings.IconEditor_IconAlreadyCreated_DragDrop, Strings.IconEditor_IconAlreadyCreated_DragDrop_Caption,
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                 picStationIcon.SetImage(Icon.TrackedObject.ImagePath ?? string.Empty);
@@ -200,7 +201,7 @@ namespace RadioExt_Helper.user_controls
         private void btnCancelImport_Click(object sender, EventArgs e)
         {
             IconManager.Instance.CancelOperation();
-            
+
             if (Icon.TrackedObject.CheckIconValid())
                 MakeEditorReadOnly();
             else
@@ -390,7 +391,18 @@ namespace RadioExt_Helper.user_controls
         private void txtAtlasName_TextChanged(object sender, EventArgs e)
         {
             if (!_isReadOnly)
+            {
+                // Store the current cursor position
+                int cursorPosition = txtAtlasName.SelectionStart;
+
+                // Update the text box content with the transformed text
+                txtAtlasName.Text = FormatAtlasName(txtAtlasName.Text);
+
+                // Restore the cursor position to where it was before the text was changed
+                txtAtlasName.SelectionStart = Math.Min(cursorPosition, txtAtlasName.Text.Length);
+
                 Icon.TrackedObject.AtlasName = txtAtlasName.Text;
+            }
 
             IconUpdated?.Invoke(this, Icon);
         }
@@ -402,11 +414,23 @@ namespace RadioExt_Helper.user_controls
 
             if (!_isReadOnly)
             {
-                txtAtlasName.Text = txtIconName.Text.ToLower();
+                txtAtlasName.Text = FormatAtlasName(Icon.TrackedObject.IconName);
                 Icon.TrackedObject.AtlasName = txtAtlasName.Text;
             }
 
             IconUpdated?.Invoke(this, Icon);
         }
+
+        private string FormatAtlasName(string iconName)
+        {
+            string lowerName = iconName.ToLower();
+            // Replace spaces with underscores and remove all special characters except underscores.
+            return NoSpecialCharactersRegEx().Replace(lowerName, "_");
+        }
+
+        [GeneratedRegex(@"[^a-z0-9_]+")]
+        private static partial Regex NoSpecialCharactersRegEx();
+
+        private void btnResetPicView_Click(object sender, EventArgs e) => picStationIcon.ResetView();
     }
 }

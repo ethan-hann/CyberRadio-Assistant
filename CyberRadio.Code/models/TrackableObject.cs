@@ -270,7 +270,8 @@ public sealed class TrackableObject<T> : INotifyPropertyChanged, ITrackable wher
                     {
                         if (item is ITrackable trackableItem)
                         {
-                            if (trackableItem.IsPendingSave)
+                            //Recursive call to check pending save status on each TrackableObject in the list
+                            if (trackableItem.CheckPendingSaveStatus())
                             {
                                 isPendingSave = true;
                                 break;

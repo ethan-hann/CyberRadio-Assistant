@@ -1,6 +1,7 @@
 ﻿using AetherUtils.Core.Logging;
 using RadioExt_Helper.models;
 using RadioExt_Helper.Properties;
+using SixLabors.ImageSharp.Processing;
 using WIG.Lib.Models;
 using WIG.Lib.Utility;
 
@@ -8,6 +9,13 @@ namespace RadioExt_Helper.custom_controls
 {
     internal class CustomPictureBox : PictureBox
     {
+        private bool _isManualMode = false; // Track whether zoom/pan is in manual mode
+        private float _zoomFactor = 1.0f; // Track the zoom level
+        private Point _imageOffset = Point.Empty; // Track the offset for panning
+        private Point _lastMousePosition = Point.Empty; // Last mouse position during panning
+        private bool _isPanning = false; // Whether the user is currently panning
+        private Rectangle _initialImageRect; // Initial rectangle of the image
+
         public string ImagePath { get; private set; } = string.Empty;
         public ImageProperties ImageProperties { get; set; } = new();
 
@@ -17,14 +25,131 @@ namespace RadioExt_Helper.custom_controls
             DragEnter += CustomPictureBox_DragEnter;
             DragDrop += CustomPictureBox_DragDrop;
 
-            // Set this to true so we can handle painting manually
-            SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer, true);
+            // Set control styles for smooth rendering
+            SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.UserPaint, true);
+
+            // Set the initial size mode to Zoom (so it handles aspect ratio correctly)
+            SizeMode = PictureBoxSizeMode.Zoom;
+
+            // Handle mouse events for zoom and pan
+            MouseWheel += CustomPictureBox_MouseWheel;
+            MouseDown += CustomPictureBox_MouseDown;
+            MouseMove += CustomPictureBox_MouseMove;
+            MouseUp += CustomPictureBox_MouseUp;
+
+            ResetView(); // Ensure it's ready with a default view
         }
 
         public sealed override bool AllowDrop
         {
             get => base.AllowDrop;
             set => base.AllowDrop = value;
+        }
+
+        public void ResetView()
+        {
+            // Reset manual mode and revert to native PictureBox behavior
+            _isManualMode = false;
+            _zoomFactor = 1.0f;
+            _imageOffset = Point.Empty;
+
+            // Ensure we're using the appropriate size mode based on aspect ratio
+            SetSizeMode();
+
+            Invalidate(); // Redraw to reflect the reset view
+        }
+
+        private void CustomPictureBox_MouseWheel(object? sender, MouseEventArgs e)
+        {
+            if (!_isManualMode)
+            {
+                // Switch to manual mode if the user starts zooming
+                _isManualMode = true;
+
+                // Set the initial zoom factor and image offset based on the current PictureBox view
+                var scaledRect = GetScaledImageRect();
+                _imageOffset = new Point(scaledRect.X, scaledRect.Y);
+            }
+
+            const float zoomStep = 0.1f;
+            var oldZoomFactor = _zoomFactor;
+
+            if (e.Delta > 0)
+            {
+                _zoomFactor += zoomStep;
+            }
+            else if (e.Delta < 0 && _zoomFactor > zoomStep)
+            {
+                _zoomFactor -= zoomStep;
+            }
+
+            // Use the image offset and cursor position to zoom like Google Maps
+            var mousePosRelativeToImage = new Point(e.X - _imageOffset.X, e.Y - _imageOffset.Y);
+            var zoomFactorChange = _zoomFactor / oldZoomFactor;
+
+            _imageOffset.X = (int)(e.X - mousePosRelativeToImage.X * zoomFactorChange);
+            _imageOffset.Y = (int)(e.Y - mousePosRelativeToImage.Y * zoomFactorChange);
+
+            Invalidate(); // Redraw with the updated zoom and offset
+        }
+
+        // Handle mouse down for panning
+        private void CustomPictureBox_MouseDown(object? sender, MouseEventArgs e)
+        {
+            if (!_isManualMode && e.Button == MouseButtons.Left)
+            {
+                // Switch to manual mode if the user starts panning
+                _isManualMode = true;
+
+                // Set the initial image offset based on the current PictureBox view
+                var scaledRect = GetScaledImageRect();
+                _imageOffset = new Point(scaledRect.X, scaledRect.Y);
+            }
+
+            if (e.Button == MouseButtons.Left)
+            {
+                _isPanning = true;
+                _lastMousePosition = e.Location;
+                Cursor = Cursors.Hand; // Change the cursor to indicate panning
+            }
+        }
+
+        // Handle mouse move for panning
+        private void CustomPictureBox_MouseMove(object? sender, MouseEventArgs e)
+        {
+            if (_isPanning)
+            {
+                var deltaX = e.X - _lastMousePosition.X;
+                var deltaY = e.Y - _lastMousePosition.Y;
+
+                // Update the image offset for panning
+                _imageOffset.X += deltaX;
+                _imageOffset.Y += deltaY;
+
+                _lastMousePosition = e.Location;
+
+                Invalidate(); // Redraw the image with the updated offset
+            }
+        }
+
+        // Handle mouse up to stop panning
+        private void CustomPictureBox_MouseUp(object? sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                _isPanning = false;
+                Cursor = Cursors.Default; // Reset the cursor
+            }
+        }
+
+        private Rectangle GetImageRectangle()
+        {
+            if (Image == null) return Rectangle.Empty;
+
+            var zoomedWidth = (int)(Image.Width * _zoomFactor);
+            var zoomedHeight = (int)(Image.Height * _zoomFactor);
+
+            return new Rectangle(_imageOffset.X, _imageOffset.Y, zoomedWidth, zoomedHeight);
         }
 
         // Override OnPaintBackground to draw the checkered background based on the image lightness
@@ -53,15 +178,21 @@ namespace RadioExt_Helper.custom_controls
             }
         }
 
-        // Override OnPaint to draw the image on top of the background
         protected override void OnPaint(PaintEventArgs pe)
         {
-            // Draw the checkered background first (handled by OnPaintBackground)
+            if (!_isManualMode)
+            {
+                base.OnPaint(pe); // Use base PictureBox behavior until manual zoom/pan is activated
+                return;
+            }
 
-            // Now draw the image, if it exists
+            // Custom rendering logic if zoom/pan is applied
             if (Image != null)
             {
-                var imageRect = GetScaledImageRect();
+                pe.Graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.Low;
+                pe.Graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighSpeed;
+
+                var imageRect = GetImageRectangle();
                 pe.Graphics.DrawImage(Image, imageRect);
             }
             else
@@ -90,8 +221,8 @@ namespace RadioExt_Helper.custom_controls
                 drawWidth = (int)(Height * imageAspect);
             }
 
-            var drawX = (Width - drawWidth) / 2;
-            var drawY = (Height - drawHeight) / 2;
+            var drawX = (Width - drawWidth) / 2; // Center X
+            var drawY = (Height - drawHeight) / 2; // Center Y
 
             return new Rectangle(drawX, drawY, drawWidth, drawHeight);
         }
@@ -180,7 +311,7 @@ namespace RadioExt_Helper.custom_controls
                 Image = null;
                 ImagePath = string.Empty;
                 ImageProperties = new ImageProperties();
-                Invalidate();
+                ResetView();
             }
             catch (Exception ex)
             {
@@ -198,8 +329,7 @@ namespace RadioExt_Helper.custom_controls
             {
                 Image = image ?? Resources.drag_and_drop;
                 UpdateImageProperties();
-                SetSizeMode();
-                Invalidate();
+                ResetView();
             }
             catch (Exception ex)
             {
@@ -218,9 +348,7 @@ namespace RadioExt_Helper.custom_controls
                 Image = ImageUtils.LoadImage(imagePath ?? string.Empty) ?? Resources.drag_and_drop;
                 ImagePath = imagePath ?? string.Empty;
                 UpdateImageProperties();
-
-                SetSizeMode();
-                Invalidate();
+                ResetView();
             }
             catch (Exception ex)
             {
@@ -238,7 +366,7 @@ namespace RadioExt_Helper.custom_controls
             var imageAspect = (float)Image.Width / Image.Height;
             var controlAspect = (float)Width / Height;
 
-            SizeMode = imageAspect > controlAspect ? PictureBoxSizeMode.Zoom : PictureBoxSizeMode.CenterImage;
+            SizeMode = imageAspect > controlAspect ? PictureBoxSizeMode.CenterImage : PictureBoxSizeMode.Zoom;
         }
 
         private void UpdateImageProperties()
