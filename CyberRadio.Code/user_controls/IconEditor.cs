@@ -15,6 +15,9 @@ namespace RadioExt_Helper.user_controls
         /// </summary>
         public event EventHandler<TrackableObject<WolvenIcon>>? IconUpdated;
 
+        public event EventHandler? IconImportStarted;
+        public event EventHandler? IconImportFinished;
+
         public Guid Id { get; set; } = Guid.NewGuid();
         public EditorType Type { get; set; } = EditorType.IconEditor;
 
@@ -101,6 +104,7 @@ namespace RadioExt_Helper.user_controls
                 MessageBox.Show(Strings.IconEditor_IconAlreadyCreated_DragDrop, Strings.IconEditor_IconAlreadyCreated_DragDrop_Caption,
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
 
+                //Revert to the icon that was already created.
                 picStationIcon.SetImage(Icon.TrackedObject.ImagePath ?? string.Empty);
                 SetImagePreviewProperties();
                 return;
@@ -131,6 +135,7 @@ namespace RadioExt_Helper.user_controls
             btnImportIcon.Enabled = false;
             btnCancelImport.Enabled = true;
 
+            IconImportStarted?.Invoke(this, EventArgs.Empty);
             Task.Run(async () =>
             {
                 var stagingPath = GlobalData.ConfigManager.Get("stagingPath") as string ?? string.Empty;
@@ -146,6 +151,8 @@ namespace RadioExt_Helper.user_controls
                 if (icon == null)
                 {
                     AddStatusRow("Failed to import icon.");
+
+                    _isImporting = false;
                     UnmakeEditorReadOnly();
                 }
                 else
@@ -153,25 +160,23 @@ namespace RadioExt_Helper.user_controls
                     Icon.TrackedObject.AtlasName = icon.AtlasName;
                     Icon.TrackedObject.ImagePath = icon.ImagePath;
 
-                    //TODO: change this to the archive path within the staging folder! Add a new property to the icon object to track where the original archive file came from (in AppData).
-                    Icon.TrackedObject.ArchivePath = icon.ArchivePath;
+                    Icon.TrackedObject.OriginalArchivePath = icon.OriginalArchivePath;
                     Icon.TrackedObject.Sha256HashOfArchiveFile = icon.Sha256HashOfArchiveFile;
                     Icon.TrackedObject.CustomIcon = icon.CustomIcon;
 
-                    CopyIconToStaging(Icon.TrackedObject.ArchivePath, stagingPath);
+                    Icon.TrackedObject.ArchivePath = CopyIconToStaging(Icon.TrackedObject.OriginalArchivePath, stagingPath);
 
                     SetIconFields();
                     SetImagePreviewProperties();
 
                     IconUpdated?.Invoke(this, Icon);
+                    _isImporting = false;
                 }
-
-                btnImportIcon.Enabled = true;
-                btnCancelImport.Enabled = false;
             });
 
-            _isImporting = false;
             pgProgress.Visible = false;
+            btnCancelImport.Enabled = false;
+            IconImportFinished?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -179,7 +184,8 @@ namespace RadioExt_Helper.user_controls
         /// </summary>
         /// <param name="iconArchivePath">The path to the final .archive generated with Wolven Icon Generator.</param>
         /// <param name="stagingPath">The path to the staging folder.</param>
-        private void CopyIconToStaging(string? iconArchivePath, string stagingPath)
+        /// <returns>The path to the archive file within staging.</returns>
+        private string CopyIconToStaging(string? iconArchivePath, string stagingPath)
         {
             var outputPath = Path.Combine(stagingPath, "icons");
             try
@@ -190,12 +196,15 @@ namespace RadioExt_Helper.user_controls
                 if (string.IsNullOrEmpty(iconArchivePath))
                     throw new ArgumentNullException(nameof(iconArchivePath), GlobalData.Strings.GetString("IconEditorCopyIconToStagingNullEmpty"));
 
-                File.Copy(iconArchivePath, Path.Combine(outputPath, Path.GetFileName(iconArchivePath)), true);
+                var stagingIconPath = Path.Combine(outputPath, Path.GetFileName(iconArchivePath));
+                File.Copy(iconArchivePath, stagingIconPath, true);
+                return stagingIconPath;
             }
             catch (Exception ex)
             {
                 AuLogger.GetCurrentLogger<IconEditor>("CopyIconToStaging").Error(ex);
             }
+            return string.Empty;
         }
 
         private void btnCancelImport_Click(object sender, EventArgs e)
@@ -247,12 +256,14 @@ namespace RadioExt_Helper.user_controls
                         lblImageHeight.ForeColor = Color.OrangeRed;
 
                         lblImageStatus.Text = Strings.IconEditor_ImageNotSquare;
+                        tblWarning.Visible = true;
                     }
                     else
                     {
                         lblImageWidth.ForeColor = Color.Black;
                         lblImageHeight.ForeColor = Color.Black;
                         lblImageStatus.Text = string.Empty;
+                        tblWarning.Visible = false;
                     }
                 }
 

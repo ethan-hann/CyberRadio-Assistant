@@ -19,6 +19,8 @@ namespace RadioExt_Helper.forms
         private readonly TrackableObject<Station> _station;
 
         private readonly bool _addedFromImagePath;
+        private bool _isImportingIcon;
+        private bool _isExportingIcon;
         private readonly TrackableObject<WolvenIcon>? _iconFromImagePath;
 
         public IconManagerForm(TrackableObject<Station> station)
@@ -108,37 +110,74 @@ namespace RadioExt_Helper.forms
             try
             {
                 if (_currentEditor == editor) return;
+
+                //Remove the subscribed event if the current editor is not null.
+                if (_currentEditor != null)
+                {
+                    _currentEditor.IconUpdated -= _currentEditor_IconUpdated;
+                    _currentEditor.IconImportStarted -= _currentEditor_IconImportStarted;
+                    _currentEditor.IconImportFinished -= _currentEditor_IconImportFinished;
+                }
+
                 if (editor == null)
                 {
-                    //Remove the subscribed event if the current editor is not null.
-                    if (_currentEditor != null)
-                        _currentEditor.IconUpdated -= _currentEditor_IconUpdated;
-
                     splitContainer1.Panel2.SuspendLayout();
                     splitContainer1.Panel2.Controls.Clear();
                     splitContainer1.Panel2.ResumeLayout();
                 }
+                else
+                {
+                    splitContainer1.Panel2.SuspendLayout();
+                    splitContainer1.Panel2.Controls.Clear();
+                    splitContainer1.Panel2.Controls.Add(editor);
+                    splitContainer1.Panel2.ResumeLayout();
 
-                //Remove the subscribed event if the current editor is not null.
-                if (_currentEditor != null)
-                    _currentEditor.IconUpdated -= _currentEditor_IconUpdated;
+                    _currentEditor = editor;
 
-                splitContainer1.Panel2.SuspendLayout();
-                splitContainer1.Panel2.Controls.Clear();
-                splitContainer1.Panel2.Controls.Add(editor);
-                splitContainer1.Panel2.ResumeLayout();
-
-                _currentEditor = editor;
-
-                //Resubscribe to the event for the icon updating
-                if (_currentEditor != null)
-                    _currentEditor.IconUpdated += _currentEditor_IconUpdated;
+                    //Resubscribe to the event for the icon updating
+                    if (_currentEditor != null)
+                    {
+                        _currentEditor.IconUpdated += _currentEditor_IconUpdated;
+                        _currentEditor.IconImportStarted += _currentEditor_IconImportStarted;
+                        _currentEditor.IconImportFinished += _currentEditor_IconImportFinished;
+                    }
+                }
             }
             catch (Exception ex)
             {
                 AuLogger.GetCurrentLogger<IconManagerForm>("UpdateIconEditor")
                     .Error(ex, "An error occurred while updating the icon editor.");
             }
+        }
+
+        private void _currentEditor_IconImportStarted(object? sender, EventArgs e)
+        {
+            _isImportingIcon = true;
+            SetManagerReadOnly();
+        }
+
+        private void _currentEditor_IconImportFinished(object? sender, EventArgs e)
+        {
+            _isImportingIcon = false;
+            SetManagerEditable();
+        }
+
+        private void SetManagerReadOnly()
+        {
+            lbIcons.Enabled = false;
+            btnAddIcon.Enabled = false;
+            btnDeleteIcon.Enabled = false;
+            btnEnableIcon.Enabled = false;
+            btnDisableIcon.Enabled = false;
+        }
+
+        private void SetManagerEditable()
+        {
+            lbIcons.Enabled = true;
+            btnAddIcon.Enabled = true;
+            btnDeleteIcon.Enabled = true;
+            btnEnableIcon.Enabled = true;
+            btnDisableIcon.Enabled = true;
         }
 
         private void _currentEditor_IconUpdated(object? sender, TrackableObject<WolvenIcon> icon)
@@ -251,8 +290,32 @@ namespace RadioExt_Helper.forms
 
         private void IconManagerForm_FormClosing(object sender, FormClosingEventArgs e)
         {
+            if (e.CloseReason is CloseReason.TaskManagerClosing or CloseReason.WindowsShutDown) return;
+
+            if (_isImportingIcon)
+            {
+                var mText = GlobalData.Strings.GetString("IconImportInProgress") ?? "An icon import is currently in progress. Please wait for the import to finish.";
+                var mCaption = GlobalData.Strings.GetString("IconImportInProgressCaption") ?? "Icon Import In Progress";
+                MessageBox.Show(mText, mCaption, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                e.Cancel = true;
+                return;
+            }
+
+            if (_isExportingIcon)
+            {
+                var mText = GlobalData.Strings.GetString("IconExportInProgress") ?? "An icon export is currently in progress. Please wait for the export to finish.";
+                var mCaption = GlobalData.Strings.GetString("IconExportInProgressCaption") ?? "Icon Export In Progress";
+                MessageBox.Show(mText, mCaption, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                e.Cancel = true;
+                return;
+            }
+
             if (_currentEditor != null)
+            {
                 _currentEditor.IconUpdated -= _currentEditor_IconUpdated;
+                _currentEditor.IconImportStarted -= _currentEditor_IconImportStarted;
+                _currentEditor.IconImportFinished -= _currentEditor_IconImportFinished;
+            }
 
             if (_station.TrackedObject.GetActiveIcon() == null) return;
             if (_station.TrackedObject.CheckActiveIconValid()) return;
