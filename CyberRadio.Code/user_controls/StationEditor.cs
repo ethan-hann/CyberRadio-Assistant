@@ -14,9 +14,11 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+using AetherUtils.Core.Logging;
 using AetherUtils.Core.WinForms.Controls;
 using AetherUtils.Core.WinForms.CustomArgs;
 using RadioExt_Helper.custom_controls;
+using RadioExt_Helper.forms;
 using RadioExt_Helper.models;
 using RadioExt_Helper.Properties;
 using RadioExt_Helper.utility;
@@ -198,13 +200,23 @@ public sealed partial class StationEditor : UserControl, IEditor
     }
 
     /// <summary>
+    /// Reset the UI values to the defaults for the station.
+    /// </summary>
+    public void ResetUI()
+    {
+        SetDisplayTabValues();
+        SetMusicTabValues();
+        _musicCtl.ResetUI();
+    }
+
+    /// <summary>
     /// Forces an update to the station's custom data grid view.
     /// </summary>
     public void UpdateCustomDataView()
     {
         dgvMetadata.Rows.Clear();
         foreach (var (key, value) in Station.TrackedObject.MetaData.CustomData)
-            dgvMetadata.Rows.Add(key, value);
+            dgvMetadata.Rows.Add(key, value); //TODO: this is causing the station to have pending changes when it shouldn't
     }
 
     /// <summary>
@@ -305,6 +317,20 @@ public sealed partial class StationEditor : UserControl, IEditor
     private void RadUseCustomYes_CheckedChanged(object sender, EventArgs e)
     {
         Station.TrackedObject.CustomIcon.UseCustom = radUseCustomYes.Checked;
+
+        try
+        {
+            Station.TrackedObject.Icons.ForEach(i => i.TrackedObject.IsActive = false);
+            //Find the matching wolven icon in the station's list of icons
+            var matchingIcon = Station.TrackedObject.Icons.Where(i => i.TrackedObject.CustomIcon.InkAtlasPath.Equals(txtInkAtlasPath.Text)).FirstOrDefault();
+            if (matchingIcon != null)
+                matchingIcon.TrackedObject.IsActive = true;
+        }
+        catch (Exception ex)
+        {
+            AuLogger.GetCurrentLogger<StationEditor>("UseCustom_YesChanged").Error(ex, "An error occured while trying to set the active icon!");
+        }
+
         StationUpdated?.Invoke(this, EventArgs.Empty);
     }
 
@@ -321,6 +347,10 @@ public sealed partial class StationEditor : UserControl, IEditor
         lblInkPart.Visible = !radUseCustomNo.Checked;
         lblInkPath.Visible = !radUseCustomNo.Checked;
         picStationIcon.Visible = !radUseCustomNo.Checked;
+        btnOpenIconManager.Visible = !radUseCustomNo.Checked;
+        _cmbUiIcons.Enabled = radUseCustomNo.Checked;
+
+        Station.TrackedObject.Icons.ForEach(i => i.TrackedObject.IsActive = false);
     }
 
     private void PicStationIcon_DragDrop(object sender, DragEventArgs e)
@@ -339,6 +369,25 @@ public sealed partial class StationEditor : UserControl, IEditor
         StationUpdated?.Invoke(this, EventArgs.Empty);
     }
 
+    private void txtInkAtlasPath_Leave(object sender, EventArgs e)
+    {
+        try
+        {
+            //Find the matching wolven icon in the station's list of icons
+            var matchingIcon = Station.TrackedObject.Icons.Where(i => i.TrackedObject.CustomIcon.InkAtlasPath.Equals(txtInkAtlasPath.Text)).FirstOrDefault();
+            if (matchingIcon != null)
+            {
+                matchingIcon.TrackedObject.IsActive = true;
+                txtInkAtlasPart.Text = matchingIcon.TrackedObject.CustomIcon.InkAtlasPart;
+                picStationIcon.SetImage(matchingIcon.TrackedObject.ImagePath);
+            }
+        }
+        catch (Exception ex)
+        {
+            AuLogger.GetCurrentLogger<StationEditor>("InkAtlasPath_Leave").Error(ex, "An error occured while trying to set the active icon!");
+        }
+    }
+
     /// <summary>
     /// Occurs when the ink atlas part text is changed.
     /// </summary>
@@ -347,7 +396,13 @@ public sealed partial class StationEditor : UserControl, IEditor
     private void TxtInkAtlasPart_TextChanged(object sender, EventArgs e)
     {
         Station.TrackedObject.CustomIcon.InkAtlasPart = txtInkAtlasPart.Text;
+
         StationUpdated?.Invoke(this, EventArgs.Empty);
+    }
+
+    private void btnOpenIconManager_Click(object sender, EventArgs e)
+    {
+        ApplicationContext.MainFormInstance?.ShowIconManagerForm(Station);
     }
 
     /// <summary>

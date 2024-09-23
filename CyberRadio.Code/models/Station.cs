@@ -115,7 +115,8 @@ public sealed class Station : INotifyPropertyChanged, ICloneable, IEquatable<Sta
     {
         if (other == null) return false;
         return MetaData.Equals(other.MetaData) &&
-               Songs.SequenceEqual(other.Songs);
+               Songs.SequenceEqual(other.Songs) &&
+               Icons.SequenceEqual(other.Icons);
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;
@@ -170,7 +171,8 @@ public sealed class Station : INotifyPropertyChanged, ICloneable, IEquatable<Sta
         try
         {
             if (Icons.Count == 0) return null;
-            if (Icons.Count(i => i.TrackedObject.IsActive) > 1) throw new InvalidOperationException("A station can only have one active icon.");
+            if (Icons.Count(i => i.TrackedObject.IsActive) > 1)
+                throw new InvalidOperationException("A station can only have one active icon.");
             return Icons.FirstOrDefault(i => i.TrackedObject.IsActive);
         }
         catch (Exception e)
@@ -213,6 +215,7 @@ public sealed class Station : INotifyPropertyChanged, ICloneable, IEquatable<Sta
         try
         {
             MetaData.CustomData[key] = value;
+            OnPropertyChanged(nameof(MetaData.CustomData));
         }
         catch (Exception ex)
         {
@@ -229,6 +232,7 @@ public sealed class Station : INotifyPropertyChanged, ICloneable, IEquatable<Sta
         try
         {
             MetaData.CustomData.Remove(key);
+            OnPropertyChanged(nameof(MetaData.CustomData));
         }
         catch (Exception ex)
         {

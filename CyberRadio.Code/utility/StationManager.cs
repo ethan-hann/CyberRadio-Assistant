@@ -246,7 +246,7 @@ public partial class StationManager : IDisposable
     }
 
     /// <summary>
-    /// Removes a station, and it's editor from the manager.
+    /// Removes a station, and it's editors from the manager.
     /// </summary>
     /// <param name="stationId">The station to remove, by ID.</param>
     public void RemoveStation(Guid stationId)
@@ -258,6 +258,9 @@ public partial class StationManager : IDisposable
                 if (!_stations.TryGetValue(stationId, out var pair)) return;
 
                 foreach (var editor in pair.Value.Where(e => e.Type == EditorType.StationEditor).Cast<StationEditor>())
+                    editor.Dispose();
+
+                foreach (var editor in pair.Value.Where(e => e.Type == EditorType.IconEditor).Cast<IconEditor>())
                     editor.Dispose();
 
                 _stations.Remove(stationId);
@@ -926,7 +929,6 @@ public partial class StationManager : IDisposable
                 });
 
             var station = new Station { MetaData = metadata, Songs = songList };
-            var trackedStation = new TrackableObject<Station>(station);
 
             if (iconList.Count > 0)
             {
@@ -937,11 +939,15 @@ public partial class StationManager : IDisposable
                         AuLogger.GetCurrentLogger<StationManager>().Error($"Error processing icon for station: {station.MetaData.DisplayName}. The icon was null.");
                         continue;
                     }
-                    trackedStation.TrackedObject.AddIcon(new TrackableObject<WolvenIcon>(icon), icon.IsActive);
+                    var trackedIcon = new TrackableObject<WolvenIcon>(icon);
+                    trackedIcon.AcceptChanges();
+                    station.AddIcon(trackedIcon, icon.IsActive);
                 }
 
                 //IconManager.Instance.LoadIconFromFile(trackedStation, iconFiles.First());
             }
+
+            var trackedStation = new TrackableObject<Station>(station);
 
             EnsureDisplayNameFormat(trackedStation);
             trackedStation.AcceptChanges();

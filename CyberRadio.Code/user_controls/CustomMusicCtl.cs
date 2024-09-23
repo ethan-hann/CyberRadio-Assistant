@@ -101,6 +101,15 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
         SetOrderedList();
     }
 
+    /// <summary>
+    /// Reset the UI values to the defaults for the station.
+    /// </summary>
+    public void ResetUI()
+    {
+        UpdateListsAndViews();
+        SetOrderedList();
+    }
+
     private void LvSongs_DrawSubItem(object? sender, DrawListViewSubItemEventArgs e)
     {
         if (e.ColumnIndex == 0) // Assuming the icon is in the first column

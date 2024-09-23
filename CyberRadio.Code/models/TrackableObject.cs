@@ -14,6 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+using AetherUtils.Core.Logging;
 using RadioExt_Helper.utility;
 using System.Collections;
 using System.ComponentModel;
@@ -104,12 +105,45 @@ public sealed class TrackableObject<T> : INotifyPropertyChanged, ITrackable wher
     {
         if (_originalValuesInitialized) return; // Prevent multiple initializations
 
+        AuLogger.GetCurrentLogger<TrackableObject<T>>().Info($"Initializing original values for {typeof(T).Name}");
+
         foreach (var prop in typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance))
         {
-            if (!prop.CanRead) continue;
+            if (!prop.CanRead)
+            {
+                AuLogger.GetCurrentLogger<TrackableObject<T>>().Warn($"Skipping property {prop.Name}: Cannot read.");
+                continue;
+            }
 
-            var value = prop.GetValue(_trackedObject);
-            _originalValues[prop.Name] = DeepClone(value);
+            try
+            {
+                var value = prop.GetValue(_trackedObject);
+
+                // Handle collections of trackable objects (similar to DeepClone and DeepEquals)
+                if (value is IEnumerable enumerable)
+                {
+                    var isTrackable = enumerable.Cast<object>().Any(item => item is ITrackable);
+                    if (isTrackable)
+                    {
+                        // Ensure each trackable object in the collection is initialized
+                        foreach (var item in enumerable)
+                        {
+                            if (item is ITrackable trackableItem)
+                            {
+                                trackableItem.AcceptChanges(); // Initialize original values for trackable items
+                            }
+                        }
+                    }
+                }
+
+                // Deep clone the current value and store it as the original value
+                _originalValues[prop.Name] = DeepClone(value);
+                AuLogger.GetCurrentLogger<TrackableObject<T>>().Info($"Cloning property {prop.Name}: {value}");
+            }
+            catch (Exception ex)
+            {
+                AuLogger.GetCurrentLogger<TrackableObject<T>>().Error(ex, $"Error initializing property {prop.Name}: {ex.Message}");
+            }
         }
 
         IsPendingSave = false;
@@ -190,9 +224,11 @@ public sealed class TrackableObject<T> : INotifyPropertyChanged, ITrackable wher
                         }
                     }
                 }
-
-                // Deep clone the enumerable object, including all TrackableObjects inside it
-                _originalValues[prop.Name] = DeepClone(value);
+                else
+                {
+                    // Deep clone the enumerable object, including all TrackableObjects inside it
+                    _originalValues[prop.Name] = DeepClone(value);
+                }
             }
             else
             {

@@ -259,11 +259,7 @@ namespace RadioExt_Helper.forms
         private void EnableIcon(TrackableObject<WolvenIcon> icon)
         {
             lbIcons.BeginUpdate();
-            foreach (var i in _station.TrackedObject.Icons)
-            {
-                i.TrackedObject.IsActive = false;
-            }
-
+            _station.TrackedObject.Icons.ForEach(i => i.TrackedObject.IsActive = false);
             _station.TrackedObject.Icons.First(i => i.Id == icon.Id).TrackedObject.IsActive = true;
             _station.CheckPendingSaveStatus();
 

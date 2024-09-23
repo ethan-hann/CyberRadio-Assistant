@@ -30,7 +30,7 @@ namespace RadioExt_Helper.user_controls
         /// </summary>
         private void InitializeComponent()
         {
-            lblIcon = new Label();
+            models.ImageProperties imageProperties3 = new models.ImageProperties();
             txtDisplayName = new TextBox();
             lblName = new Label();
             label3 = new Label();
@@ -61,6 +61,7 @@ namespace RadioExt_Helper.user_controls
             flowLayoutPanel1 = new FlowLayoutPanel();
             radUseCustomYes = new RadioButton();
             radUseCustomNo = new RadioButton();
+            btnOpenIconManager = new Button();
             lblInkPart = new Label();
             lblInkPath = new Label();
             picStationIcon = new CustomPictureBox();
@@ -80,6 +81,9 @@ namespace RadioExt_Helper.user_controls
             txtStreamURL = new TextBox();
             statusStrip1 = new StatusStrip();
             lblStatus = new ToolStripStatusLabel();
+            tableLayoutPanel2 = new TableLayoutPanel();
+            lblIcon = new Label();
+            picGameIcon = new PictureBox();
             grpDisplay.SuspendLayout();
             tlpDisplayTable.SuspendLayout();
             tabControl.SuspendLayout();
@@ -104,20 +108,9 @@ namespace RadioExt_Helper.user_controls
             tableLayoutPanel6.SuspendLayout();
             flpStreamUrlTesting.SuspendLayout();
             statusStrip1.SuspendLayout();
+            tableLayoutPanel2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)picGameIcon).BeginInit();
             SuspendLayout();
-            // 
-            // lblIcon
-            // 
-            lblIcon.Anchor = AnchorStyles.Right;
-            lblIcon.AutoSize = true;
-            lblIcon.Font = new Font("Segoe UI Variable Text", 9F);
-            lblIcon.Location = new Point(68, 64);
-            lblIcon.Name = "lblIcon";
-            lblIcon.Size = new Size(36, 16);
-            lblIcon.TabIndex = 2;
-            lblIcon.Text = "Icon: ";
-            lblIcon.MouseEnter += LblIcon_MouseEnter;
-            lblIcon.MouseLeave += Lbl_MouseLeave;
             // 
             // txtDisplayName
             // 
@@ -172,8 +165,8 @@ namespace RadioExt_Helper.user_controls
             tlpDisplayTable.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 11.141304F));
             tlpDisplayTable.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 88.858696F));
             tlpDisplayTable.Controls.Add(lblName, 0, 0);
-            tlpDisplayTable.Controls.Add(lblIcon, 0, 1);
             tlpDisplayTable.Controls.Add(txtDisplayName, 1, 0);
+            tlpDisplayTable.Controls.Add(tableLayoutPanel2, 0, 1);
             tlpDisplayTable.Dock = DockStyle.Fill;
             tlpDisplayTable.Location = new Point(3, 21);
             tlpDisplayTable.Name = "tlpDisplayTable";
@@ -452,6 +445,7 @@ namespace RadioExt_Helper.user_controls
             txtInkAtlasPart.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             txtInkAtlasPart.Location = new Point(284, 85);
             txtInkAtlasPart.Name = "txtInkAtlasPart";
+            txtInkAtlasPart.ReadOnly = true;
             txtInkAtlasPart.Size = new Size(675, 23);
             txtInkAtlasPart.TabIndex = 2;
             txtInkAtlasPart.TextChanged += TxtInkAtlasPart_TextChanged;
@@ -462,9 +456,11 @@ namespace RadioExt_Helper.user_controls
             txtInkAtlasPath.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             txtInkAtlasPath.Location = new Point(284, 45);
             txtInkAtlasPath.Name = "txtInkAtlasPath";
+            txtInkAtlasPath.ReadOnly = true;
             txtInkAtlasPath.Size = new Size(675, 23);
             txtInkAtlasPath.TabIndex = 3;
             txtInkAtlasPath.TextChanged += TxtInkAtlasPath_TextChanged;
+            txtInkAtlasPath.Leave += txtInkAtlasPath_Leave;
             // 
             // lblUsingCustomIcon
             // 
@@ -483,6 +479,7 @@ namespace RadioExt_Helper.user_controls
             // 
             flowLayoutPanel1.Controls.Add(radUseCustomYes);
             flowLayoutPanel1.Controls.Add(radUseCustomNo);
+            flowLayoutPanel1.Controls.Add(btnOpenIconManager);
             flowLayoutPanel1.Dock = DockStyle.Fill;
             flowLayoutPanel1.Location = new Point(284, 3);
             flowLayoutPanel1.Name = "flowLayoutPanel1";
@@ -497,7 +494,7 @@ namespace RadioExt_Helper.user_controls
             radUseCustomYes.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             radUseCustomYes.Location = new Point(3, 3);
             radUseCustomYes.Name = "radUseCustomYes";
-            radUseCustomYes.Size = new Size(45, 20);
+            radUseCustomYes.Size = new Size(45, 29);
             radUseCustomYes.TabIndex = 5;
             radUseCustomYes.TabStop = true;
             radUseCustomYes.Text = "Yes";
@@ -511,12 +508,31 @@ namespace RadioExt_Helper.user_controls
             radUseCustomNo.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             radUseCustomNo.Location = new Point(54, 3);
             radUseCustomNo.Name = "radUseCustomNo";
-            radUseCustomNo.Size = new Size(41, 20);
+            radUseCustomNo.Size = new Size(41, 29);
             radUseCustomNo.TabIndex = 6;
             radUseCustomNo.TabStop = true;
             radUseCustomNo.Text = "No";
             radUseCustomNo.UseVisualStyleBackColor = true;
             radUseCustomNo.CheckedChanged += RadUseCustomNo_CheckedChanged;
+            // 
+            // btnOpenIconManager
+            // 
+            btnOpenIconManager.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            btnOpenIconManager.BackColor = Color.Yellow;
+            btnOpenIconManager.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
+            btnOpenIconManager.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
+            btnOpenIconManager.FlatStyle = FlatStyle.Flat;
+            btnOpenIconManager.Image = Properties.Resources.magic_wand_16x16;
+            btnOpenIconManager.Location = new Point(101, 2);
+            btnOpenIconManager.Margin = new Padding(3, 2, 3, 2);
+            btnOpenIconManager.Name = "btnOpenIconManager";
+            btnOpenIconManager.Size = new Size(189, 31);
+            btnOpenIconManager.TabIndex = 7;
+            btnOpenIconManager.Text = "Icon Manager";
+            btnOpenIconManager.TextAlign = ContentAlignment.MiddleRight;
+            btnOpenIconManager.TextImageRelation = TextImageRelation.ImageBeforeText;
+            btnOpenIconManager.UseVisualStyleBackColor = false;
+            btnOpenIconManager.Click += btnOpenIconManager_Click;
             // 
             // lblInkPart
             // 
@@ -549,6 +565,11 @@ namespace RadioExt_Helper.user_controls
             picStationIcon.AllowDrop = true;
             picStationIcon.Dock = DockStyle.Fill;
             picStationIcon.Image = Properties.Resources.drag_and_drop;
+            imageProperties3.Height = 0;
+            imageProperties3.ImageFormat = System.Drawing.Imaging.ImageFormat.Png;
+            imageProperties3.PixelFormat = System.Drawing.Imaging.PixelFormat.DontCare;
+            imageProperties3.Width = 0;
+            picStationIcon.ImageProperties = imageProperties3;
             picStationIcon.Location = new Point(3, 3);
             picStationIcon.Name = "picStationIcon";
             tlpCustomIcon.SetRowSpan(picStationIcon, 3);
@@ -767,6 +788,42 @@ namespace RadioExt_Helper.user_controls
             lblStatus.Size = new Size(59, 20);
             lblStatus.Text = "Ready";
             // 
+            // tableLayoutPanel2
+            // 
+            tableLayoutPanel2.ColumnCount = 2;
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tableLayoutPanel2.Controls.Add(lblIcon, 1, 0);
+            tableLayoutPanel2.Controls.Add(picGameIcon, 0, 0);
+            tableLayoutPanel2.Location = new Point(3, 47);
+            tableLayoutPanel2.Name = "tableLayoutPanel2";
+            tableLayoutPanel2.RowCount = 1;
+            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tableLayoutPanel2.Size = new Size(101, 50);
+            tableLayoutPanel2.TabIndex = 2;
+            // 
+            // lblIcon
+            // 
+            lblIcon.Anchor = AnchorStyles.Right;
+            lblIcon.AutoSize = true;
+            lblIcon.Font = new Font("Segoe UI Variable Text", 9F);
+            lblIcon.Location = new Point(62, 17);
+            lblIcon.Name = "lblIcon";
+            lblIcon.Size = new Size(36, 16);
+            lblIcon.TabIndex = 3;
+            lblIcon.Text = "Icon: ";
+            // 
+            // picGameIcon
+            // 
+            picGameIcon.Dock = DockStyle.Fill;
+            picGameIcon.Image = Properties.Resources.add;
+            picGameIcon.Location = new Point(3, 3);
+            picGameIcon.Name = "picGameIcon";
+            picGameIcon.Size = new Size(44, 44);
+            picGameIcon.SizeMode = PictureBoxSizeMode.Zoom;
+            picGameIcon.TabIndex = 4;
+            picGameIcon.TabStop = false;
+            // 
             // StationEditor
             // 
             AllowDrop = true;
@@ -813,6 +870,9 @@ namespace RadioExt_Helper.user_controls
             flpStreamUrlTesting.ResumeLayout(false);
             statusStrip1.ResumeLayout(false);
             statusStrip1.PerformLayout();
+            tableLayoutPanel2.ResumeLayout(false);
+            tableLayoutPanel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)picGameIcon).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -820,7 +880,6 @@ namespace RadioExt_Helper.user_controls
         #endregion
         private Label lblName;
         private TextBox txtDisplayName;
-        private Label lblIcon;
         private Label label3;
         private GroupBox grpDisplay;
         private TableLayoutPanel tlpDisplayTable;
@@ -868,5 +927,9 @@ namespace RadioExt_Helper.user_controls
         private GroupBox grpNotes;
         private DataGridView dgvMetadata;
         private CustomPictureBox picStationIcon;
+        private Button btnOpenIconManager;
+        private TableLayoutPanel tableLayoutPanel2;
+        private Label lblIcon;
+        private PictureBox picGameIcon;
     }
 }

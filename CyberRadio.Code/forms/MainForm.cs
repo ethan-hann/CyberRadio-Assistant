@@ -529,9 +529,11 @@ public sealed partial class MainForm : Form
 
         if (StationManager.Instance.IsNewStation(station.Id)) return; //Don't allow reverting changes on new stations.
 
-        StationManager.Instance.RemoveStation(station.Id); //Remove station from manager
+        //StationManager.Instance.RemoveStation(station.Id); //Remove station from manager
         station.DeclineChanges(); // Revert the changes made to the station's properties since the last save.
-        StationManager.Instance.AddStation(station, true); //Re-add the station to the manager after reverting changes.
+        //StationManager.Instance.AddStation(station, true); //Re-add the station to the manager after reverting changes.
+
+        StationManager.Instance.GetStationEditor(station.Id)?.ResetUI();
 
         OnStationUpdated(sender, station.Id); //Update the UI to reflect the changes.
         SelectStationEditor(station.Id); //Update the editor to reflect the changes.
