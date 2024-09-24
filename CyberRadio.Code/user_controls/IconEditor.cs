@@ -18,6 +18,9 @@ namespace RadioExt_Helper.user_controls
         public event EventHandler? IconImportStarted;
         public event EventHandler? IconImportFinished;
 
+        public event EventHandler? IconExtractStarted;
+        public event EventHandler? IconExtractFinished;
+
         public Guid Id { get; set; } = Guid.NewGuid();
         public EditorType Type { get; set; } = EditorType.IconEditor;
 
@@ -35,14 +38,16 @@ namespace RadioExt_Helper.user_controls
         private readonly ImageList _tabImages = new();
 
         private bool _isImporting;
+        private bool _isExtracting;
         private bool _isReadOnly;
 
         /// <summary>
         /// Create a new icon editor.
         /// </summary>
-        /// <param name="station"></param>
-        /// <param name="icon"></param>
-        public IconEditor(TrackableObject<Station> station, TrackableObject<WolvenIcon> icon)
+        /// <param name="station">The station associated with the editor.</param>
+        /// <param name="icon">The icon to initialze the editor with.</param>
+        /// <param name="type">The <see cref="IconEditorType"/> to set the initial state of the editor.</param>
+        public IconEditor(TrackableObject<Station> station, TrackableObject<WolvenIcon> icon, IconEditorType type)
         {
             InitializeComponent();
 
@@ -128,7 +133,7 @@ namespace RadioExt_Helper.user_controls
 
         private void btnImportIcon_Click(object sender, EventArgs e)
         {
-            if (_isImporting) return;
+            if (_isImporting || _isExtracting) return;
 
             pgProgress.Visible = true;
             _isImporting = true;
@@ -177,6 +182,60 @@ namespace RadioExt_Helper.user_controls
             pgProgress.Visible = false;
             btnCancelImport.Enabled = false;
             IconImportFinished?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void btnStartExtract_Click(object sender, EventArgs e)
+        {
+            if (_isImporting || _isExtracting) return;
+
+            pgProgress.Visible = true;
+            _isExtracting = true;
+            btnImportIcon.Enabled = false;
+            btnStartExtract.Enabled = false;
+            btnCancelImport.Enabled = true;
+
+            IconExtractStarted?.Invoke(this, EventArgs.Empty);
+            Task.Run(async () =>
+            {
+                var stagingPath = GlobalData.ConfigManager.Get("stagingPath") as string ?? string.Empty;
+                if (stagingPath == string.Empty)
+                {
+                    AddStatusRow("Staging path not set.");
+                    return;
+                }
+
+                MakeEditorReadOnly();
+
+                var icon = await IconManager.Instance.ExtractIconImageAsync(txtArchivePath.Text, true);
+                if (icon == null)
+                {
+                    AddStatusRow("Failed to extract icon.");
+
+                    _isExtracting = false;
+                    UnmakeEditorReadOnly();
+                }
+                else
+                {
+                    Icon.TrackedObject.AtlasName = icon.AtlasName;
+                    Icon.TrackedObject.ImagePath = icon.ImagePath;
+
+                    Icon.TrackedObject.OriginalArchivePath = icon.OriginalArchivePath;
+                    Icon.TrackedObject.Sha256HashOfArchiveFile = icon.Sha256HashOfArchiveFile;
+                    Icon.TrackedObject.CustomIcon = icon.CustomIcon;
+
+                    Icon.TrackedObject.ArchivePath = CopyIconToStaging(Icon.TrackedObject.OriginalArchivePath, stagingPath);
+
+                    SetIconFields();
+                    SetImagePreviewProperties();
+
+                    IconUpdated?.Invoke(this, Icon);
+                    _isExtracting = false;
+                }
+            });
+
+            pgProgress.Visible = false;
+            btnCancelImport.Enabled = false;
+            IconExtractFinished?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
