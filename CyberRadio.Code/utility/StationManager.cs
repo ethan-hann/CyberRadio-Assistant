@@ -146,7 +146,7 @@ public partial class StationManager : IDisposable
                 //Add the station's icon editors as well and find the active icon to display.
                 foreach (var icon in station.TrackedObject.Icons)
                 {
-                    AddStationIconEditor(station.Id, icon.Id);
+                    AddStationIconEditor(station.Id, icon.Id, false);
                 }
 
                 StationAdded?.Invoke(this, station.Id);
@@ -166,8 +166,9 @@ public partial class StationManager : IDisposable
     /// <param name="stationId">The station ID to add the icon to.</param>
     /// <param name="icon">The <see cref="Icon"/> to add.</param>
     /// <param name="makeActive">Whether to immediately make this icon the active one for the station, de-activating other icons.</param>
+    /// <param name="isExistingIcon">Whether the icon editor should be initialized with an existing .archive file.</param>
     /// <returns><c>true</c> if the icon was added successfully; <c>false</c> otherwise.</returns>
-    public bool AddStationIcon(Guid stationId, TrackableObject<WolvenIcon> icon, bool makeActive = false)
+    public bool AddStationIcon(Guid stationId, TrackableObject<WolvenIcon> icon, bool makeActive = false, bool isExistingIcon = false)
     {
         try
         {
@@ -184,7 +185,7 @@ public partial class StationManager : IDisposable
             }
 
             pair.Key.TrackedObject.AddIcon(icon);
-            var iconEditor = new IconEditor(pair.Key, icon);
+            var iconEditor = new IconEditor(pair.Key, icon, isExistingIcon ? IconEditorType.FromArchive : IconEditorType.FromPNG);
             pair.Value.Add(iconEditor);
 
             StationUpdated?.Invoke(this, stationId);
@@ -204,8 +205,9 @@ public partial class StationManager : IDisposable
     /// <param name="stationId">The station ID to remove the icon from.</param>
     /// <param name="icon">The <see cref="Icon"/> to remove.</param>
     /// <param name="deleteFiles">Indicates whether to delete the Icon files from disk.</param>
+    /// <param name="isExistingArchive">Indicates whether the icon was added from an existing archive. In this case, we shouldn't delete the archive file.</param>
     /// <returns><c>true</c> if the icon was removed successfully; <c>false</c> otherwise.</returns>
-    public bool RemoveStationIcon(Guid stationId, TrackableObject<WolvenIcon> icon, bool deleteFiles = false)
+    public bool RemoveStationIcon(Guid stationId, TrackableObject<WolvenIcon> icon, bool deleteFiles = false, bool isExistingArchive = false)
     {
         try
         {
@@ -218,7 +220,7 @@ public partial class StationManager : IDisposable
 
             if (deleteFiles)
             {
-                if (icon.TrackedObject.ArchivePath != null && FileHelper.DoesFileExist(icon.TrackedObject.ArchivePath))
+                if (icon.TrackedObject.ArchivePath != null && FileHelper.DoesFileExist(icon.TrackedObject.ArchivePath) && !isExistingArchive)
                     FileHelper.DeleteFile(icon.TrackedObject.ArchivePath);
                 if (icon.TrackedObject.ImagePath != null && FileHelper.DoesFileExist(icon.TrackedObject.ImagePath))
                     FileHelper.DeleteFile(icon.TrackedObject.ImagePath);
@@ -345,7 +347,8 @@ public partial class StationManager : IDisposable
     /// </summary>
     /// <param name="stationId">The station to add an editor of, by id.</param>
     /// <param name="iconId">The icon to associate with the editor, by id.</param>
-    public void AddStationIconEditor(Guid? stationId, Guid? iconId)
+    /// <param name="isExistingArchive">Whether the editor should be initialized with an existing .archive file.</param>
+    public void AddStationIconEditor(Guid? stationId, Guid? iconId, bool isExistingArchive)
     {
         try
         {
@@ -358,7 +361,7 @@ public partial class StationManager : IDisposable
                 var wolvenIcon = pair.Key.TrackedObject.Icons.FirstOrDefault(i => i.Id.Equals(iconId));
                 if (wolvenIcon == null) return;
 
-                var editor = new IconEditor(pair.Key, wolvenIcon);
+                var editor = new IconEditor(pair.Key, wolvenIcon, isExistingArchive ? IconEditorType.FromArchive : IconEditorType.FromPNG);
                 pair.Value.Add(editor);
             }
         }

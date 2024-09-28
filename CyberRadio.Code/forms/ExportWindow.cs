@@ -687,7 +687,7 @@ public partial class ExportWindow : Form
                     continue;
                 }
 
-                var inactiveIcons = station.TrackedObject.Icons.Except([activeIcon]);
+                //var inactiveIcons = station.TrackedObject.Icons.Except([activeIcon]);
 
                 var iconPath = activeIcon.TrackedObject.ArchivePath;
                 var iconHash = activeIcon.TrackedObject.Sha256HashOfArchiveFile;

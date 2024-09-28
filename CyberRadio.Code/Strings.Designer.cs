@@ -1038,11 +1038,38 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Color Mode: {0}.
+        /// </summary>
+        internal static string IconEditor_SetImagePreviewProperties_Color_Mode___0_ {
+            get {
+                return ResourceManager.GetString("IconEditor_SetImagePreviewProperties_Color_Mode___0_", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Img. Fmt.: {0}.
+        /// </summary>
+        internal static string IconEditor_SetImagePreviewProperties_Img__Fmt____0_ {
+            get {
+                return ResourceManager.GetString("IconEditor_SetImagePreviewProperties_Img__Fmt____0_", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Editing Icon: {0}.
         /// </summary>
         internal static string IconEditor_txtIconName_TextChanged_Editing_Tab___0_ {
             get {
                 return ResourceManager.GetString("IconEditor_txtIconName_TextChanged_Editing_Tab___0_", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The icon .png path was null or empty..
+        /// </summary>
+        internal static string IconEditorCopyIconToStagingImageNullEmpty {
+            get {
+                return ResourceManager.GetString("IconEditorCopyIconToStagingImageNullEmpty", resourceCulture);
             }
         }
         

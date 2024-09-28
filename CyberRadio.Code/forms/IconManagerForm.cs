@@ -50,7 +50,7 @@ namespace RadioExt_Helper.forms
 
             if (_addedFromImagePath && _iconFromImagePath != null)
             {
-                AddNewIcon(_iconFromImagePath, true);
+                AddNewIcon(_iconFromImagePath, true, false);
             }
         }
 
@@ -117,6 +117,8 @@ namespace RadioExt_Helper.forms
                     _currentEditor.IconUpdated -= _currentEditor_IconUpdated;
                     _currentEditor.IconImportStarted -= _currentEditor_IconImportStarted;
                     _currentEditor.IconImportFinished -= _currentEditor_IconImportFinished;
+                    _currentEditor.IconExtractStarted -= _currentEditor_IconExtractStarted;
+                    _currentEditor.IconExtractFinished -= _currentEditor_IconExtractFinished;
                 }
 
                 if (editor == null)
@@ -140,6 +142,8 @@ namespace RadioExt_Helper.forms
                         _currentEditor.IconUpdated += _currentEditor_IconUpdated;
                         _currentEditor.IconImportStarted += _currentEditor_IconImportStarted;
                         _currentEditor.IconImportFinished += _currentEditor_IconImportFinished;
+                        _currentEditor.IconExtractStarted += _currentEditor_IconExtractStarted;
+                        _currentEditor.IconExtractFinished += _currentEditor_IconExtractFinished;
                     }
                 }
             }
@@ -162,22 +166,40 @@ namespace RadioExt_Helper.forms
             SetManagerEditable();
         }
 
+        private void _currentEditor_IconExtractStarted(object? sender, EventArgs e)
+        {
+            _isExportingIcon = true;
+            SetManagerReadOnly();
+        }
+
+        private void _currentEditor_IconExtractFinished(object? sender, EventArgs e)
+        {
+            _isExportingIcon = false;
+            SetManagerEditable();
+        }
+
         private void SetManagerReadOnly()
         {
-            lbIcons.Enabled = false;
-            btnAddIcon.Enabled = false;
-            btnDeleteIcon.Enabled = false;
-            btnEnableIcon.Enabled = false;
-            btnDisableIcon.Enabled = false;
+            this.SafeInvoke(() =>
+            {
+                lbIcons.Enabled = false;
+                btnAddIcon.Enabled = false;
+                btnDeleteIcon.Enabled = false;
+                btnEnableIcon.Enabled = false;
+                btnDisableIcon.Enabled = false;
+            });
         }
 
         private void SetManagerEditable()
         {
-            lbIcons.Enabled = true;
-            btnAddIcon.Enabled = true;
-            btnDeleteIcon.Enabled = true;
-            btnEnableIcon.Enabled = true;
-            btnDisableIcon.Enabled = true;
+            this.SafeInvoke(() =>
+            {
+                lbIcons.Enabled = true;
+                btnAddIcon.Enabled = true;
+                btnDeleteIcon.Enabled = true;
+                btnEnableIcon.Enabled = true;
+                btnDisableIcon.Enabled = true;
+            });
         }
 
         private void _currentEditor_IconUpdated(object? sender, TrackableObject<WolvenIcon> icon)
@@ -185,9 +207,9 @@ namespace RadioExt_Helper.forms
             IconUpdated?.Invoke(this, icon);
         }
 
-        private void AddNewIcon(TrackableObject<WolvenIcon> icon, bool makeActive)
+        private void AddNewIcon(TrackableObject<WolvenIcon> icon, bool makeActive, bool isExistingArchive)
         {
-            var added = StationManager.Instance.AddStationIcon(_station.Id, icon, makeActive);
+            var added = StationManager.Instance.AddStationIcon(_station.Id, icon, makeActive, isExistingArchive);
             if (!added) return;
 
             ResetListBox();
@@ -204,9 +226,10 @@ namespace RadioExt_Helper.forms
                 "This will delete the generated .archive file from staging and the imported copy of the PNG from AppData.";
             var caption = GlobalData.Strings.GetString("Confirm") ?? "Confirm Delete";
             var result = MessageBox.Show(text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-
+            
             if (result == DialogResult.Yes)
-                StationManager.Instance.RemoveStationIcon(_station.Id, icon, true);
+                StationManager.Instance.RemoveStationIcon(_station.Id, icon, true, 
+                    _currentEditor?.IconEditorType == IconEditorType.FromArchive);
             else
                 StationManager.Instance.RemoveStationIcon(_station.Id, icon);
 
@@ -232,10 +255,19 @@ namespace RadioExt_Helper.forms
             lbIcons.DisplayMember = "TrackedObject.AtlasName";
         }
 
+        private void fromArchiveFileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (fdlgOpenArchive.ShowDialog() == DialogResult.OK)
+            {
+                var icon = new TrackableObject<WolvenIcon>(WolvenIcon.FromArchive(fdlgOpenArchive.FileName));
+                AddNewIcon(icon, false, true);
+            }
+        }
+
         private void btnAddIcon_Click(object sender, EventArgs e)
         {
             var icon = new TrackableObject<WolvenIcon>(new WolvenIcon());
-            AddNewIcon(icon, false);
+            AddNewIcon(icon, false, false);
         }
 
         private void btnDeleteIcon_Click(object sender, EventArgs e)
@@ -263,7 +295,7 @@ namespace RadioExt_Helper.forms
             _station.TrackedObject.Icons.First(i => i.Id == icon.Id).TrackedObject.IsActive = true;
             _station.CheckPendingSaveStatus();
 
-            //icon.TrackedObject.IsActive = true;
+            icon.TrackedObject.IsActive = true;
             lbIcons.Invalidate();
             lbIcons.EndUpdate();
 
@@ -277,7 +309,7 @@ namespace RadioExt_Helper.forms
             _station.TrackedObject.Icons.First(i => i.Id == icon.Id).TrackedObject.IsActive = false;
             _station.CheckPendingSaveStatus();
 
-            //icon.TrackedObject.IsActive = false;
+            icon.TrackedObject.IsActive = false;
             lbIcons.Invalidate();
             lbIcons.EndUpdate();
 
@@ -311,6 +343,8 @@ namespace RadioExt_Helper.forms
                 _currentEditor.IconUpdated -= _currentEditor_IconUpdated;
                 _currentEditor.IconImportStarted -= _currentEditor_IconImportStarted;
                 _currentEditor.IconImportFinished -= _currentEditor_IconImportFinished;
+                _currentEditor.IconExtractStarted -= _currentEditor_IconExtractStarted;
+                _currentEditor.IconExtractFinished -= _currentEditor_IconExtractFinished;
             }
 
             if (_station.TrackedObject.GetActiveIcon() == null) return;
@@ -321,11 +355,6 @@ namespace RadioExt_Helper.forms
             var caption = GlobalData.Strings.GetString("InvalidActiveIconCaption") ?? "Invalid Active Icon";
             MessageBox.Show(text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
             e.Cancel = true;
-        }
-
-        private void fromArchiveFileToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            //TODO: implement extracting icon from archive file.
         }
     }
 }

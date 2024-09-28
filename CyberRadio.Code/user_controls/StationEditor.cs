@@ -163,17 +163,21 @@ public sealed partial class StationEditor : UserControl, IEditor
     private void SetDisplayTabValues()
     {
         txtDisplayName.Text = Station.TrackedObject.MetaData.DisplayName;
-        _cmbUiIcons.SelectedIndex = _cmbUiIcons.Items.IndexOf(Station.TrackedObject.MetaData.Icon);
 
         if (Station.TrackedObject.CustomIcon.UseCustom)
         {
             radUseCustomYes.Checked = true;
             radUseCustomNo.Checked = false;
+            _cmbUiIcons.SelectionLength = 0;
+            _cmbUiIcons.Enabled = false;
         }
         else
         {
             radUseCustomNo.Checked = true;
             radUseCustomYes.Checked = false;
+            _cmbUiIcons.Enabled = true;
+            _cmbUiIcons.SelectedIndex = _cmbUiIcons.Items.IndexOf(Station.TrackedObject.MetaData.Icon);
+            _cmbUiIcons.SelectionLength = 0;
             txtInkAtlasPart.Visible = !radUseCustomNo.Checked;
             txtInkAtlasPath.Visible = !radUseCustomNo.Checked;
             lblInkPart.Visible = !radUseCustomNo.Checked;
@@ -317,12 +321,13 @@ public sealed partial class StationEditor : UserControl, IEditor
     private void RadUseCustomYes_CheckedChanged(object sender, EventArgs e)
     {
         Station.TrackedObject.CustomIcon.UseCustom = radUseCustomYes.Checked;
+        _cmbUiIcons.SelectionLength = 0;
 
         try
         {
             Station.TrackedObject.Icons.ForEach(i => i.TrackedObject.IsActive = false);
             //Find the matching wolven icon in the station's list of icons
-            var matchingIcon = Station.TrackedObject.Icons.Where(i => i.TrackedObject.CustomIcon.InkAtlasPath.Equals(txtInkAtlasPath.Text)).FirstOrDefault();
+            var matchingIcon = Station.TrackedObject.Icons.FirstOrDefault(i => i.TrackedObject.CustomIcon.InkAtlasPath.Equals(txtInkAtlasPath.Text));
             if (matchingIcon != null)
                 matchingIcon.TrackedObject.IsActive = true;
         }
@@ -349,6 +354,7 @@ public sealed partial class StationEditor : UserControl, IEditor
         picStationIcon.Visible = !radUseCustomNo.Checked;
         btnOpenIconManager.Visible = !radUseCustomNo.Checked;
         _cmbUiIcons.Enabled = radUseCustomNo.Checked;
+        _cmbUiIcons.SelectionLength = 0;
 
         Station.TrackedObject.Icons.ForEach(i => i.TrackedObject.IsActive = false);
     }

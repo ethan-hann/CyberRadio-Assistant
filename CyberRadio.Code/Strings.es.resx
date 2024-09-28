@@ -866,4 +866,16 @@ El tamaño real puede ser diferente.</value>
   <data name="IconEditor_IconAlreadyCreated_DragDrop_Caption" xml:space="preserve">
     <value>Icono ya creado</value>
   </data>
+  <data name="IconEditor_ImageNotSquare" xml:space="preserve">
+    <value>La imagen no es cuadrada. Los problemas pueden ocurrir en el juego.</value>
+  </data>
+  <data name="IconEditorCopyIconToStagingImageNullEmpty" xml:space="preserve">
+    <value>La ruta icono .png era nula o vacía.</value>
+  </data>
+  <data name="IconEditor_SetImagePreviewProperties_Color_Mode___0_" xml:space="preserve">
+    <value>Modo de color: {0}</value>
+  </data>
+  <data name="IconEditor_SetImagePreviewProperties_Img__Fmt____0_" xml:space="preserve">
+    <value>Img. Fmt.: {0}</value>
+  </data>
 </root>

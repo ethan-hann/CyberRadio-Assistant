@@ -44,6 +44,7 @@ namespace RadioExt_Helper.forms
             tableLayoutPanel2 = new TableLayoutPanel();
             btnDisableIcon = new Button();
             btnEnableIcon = new Button();
+            fdlgOpenArchive = new OpenFileDialog();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.SuspendLayout();
@@ -219,6 +220,10 @@ namespace RadioExt_Helper.forms
             btnEnableIcon.UseVisualStyleBackColor = false;
             btnEnableIcon.Click += btnEnableIcon_Click;
             // 
+            // fdlgOpenArchive
+            // 
+            fdlgOpenArchive.Filter = "Mod Archive (*.archive) | *.archive";
+            // 
             // IconManagerForm
             // 
             AutoScaleDimensions = new SizeF(96F, 96F);
@@ -254,5 +259,6 @@ namespace RadioExt_Helper.forms
         private IconListBox lbIcons;
         private ContextMenuStrip newIconContextStrip;
         private ToolStripMenuItem fromArchiveFileToolStripMenuItem;
+        private OpenFileDialog fdlgOpenArchive;
     }
 }

@@ -23,6 +23,7 @@ namespace RadioExt_Helper.user_controls
 
         public Guid Id { get; set; } = Guid.NewGuid();
         public EditorType Type { get; set; } = EditorType.IconEditor;
+        public IconEditorType IconEditorType { get; set; }
 
         /// <summary>
         /// The station that the icon is associated with.
@@ -45,7 +46,7 @@ namespace RadioExt_Helper.user_controls
         /// Create a new icon editor.
         /// </summary>
         /// <param name="station">The station associated with the editor.</param>
-        /// <param name="icon">The icon to initialze the editor with.</param>
+        /// <param name="icon">The icon to initialize the editor with.</param>
         /// <param name="type">The <see cref="IconEditorType"/> to set the initial state of the editor.</param>
         public IconEditor(TrackableObject<Station> station, TrackableObject<WolvenIcon> icon, IconEditorType type)
         {
@@ -54,12 +55,13 @@ namespace RadioExt_Helper.user_controls
             Station = station;
             Icon = icon;
             Dock = DockStyle.Fill;
+            IconEditorType = type;
         }
 
         ~IconEditor()
         {
-            IconManager.Instance.IconImportStarted -= Instance_IconImportStarted;
-            IconManager.Instance.CliStatus -= Instance_IconImportStatus;
+            IconManager.Instance.IconImportStarted -= Instance_OperationStarted;
+            IconManager.Instance.CliStatus -= Instance_OperationStatus;
         }
 
         public void Translate()
@@ -69,25 +71,41 @@ namespace RadioExt_Helper.user_controls
 
         private void IconEditor_Load(object sender, EventArgs e)
         {
-            IconManager.Instance.IconImportStarted += Instance_IconImportStarted;
-            IconManager.Instance.CliStatus += Instance_IconImportStatus;
+            IconManager.Instance.IconImportStarted += Instance_OperationStarted;
+            IconManager.Instance.IconExportStarted += Instance_OperationStarted;
+            IconManager.Instance.CliStatus += Instance_OperationStatus;
 
             _tabImages.Images.Add("icon_editing", Resources.customize_edit_16x16);
             editorTabs.ImageList = _tabImages;
             editorTabs.TabPages[0].ImageIndex = 0;
 
             SetIconFields();
-            SetImagePreviewProperties();
+            
             dgvStatus.Rows.Clear();
+
+            if (IconEditorType == IconEditorType.FromArchive)
+            {
+                picStationIcon.Enabled = false;
+                picStationIcon.AllowDrop = false;
+                btnImportIcon.Visible = false;
+                btnStartExtract.Enabled = true;
+                SetImagePreviewProperties(true);
+            }
+            else
+            {
+                btnStartExtract.Visible = false;
+                btnStartExtract.Enabled = false;
+                SetImagePreviewProperties();
+            }
         }
 
-        private void Instance_IconImportStatus(object? sender, StatusEventArgs e)
+        private void Instance_OperationStatus(object? sender, StatusEventArgs e)
         {
             this.SafeInvoke(() => pgProgress.Value = e.ProgressPercentage);
             AddStatusRow(e.Message);
         }
 
-        private void Instance_IconImportStarted(object? sender, StatusEventArgs e)
+        private void Instance_OperationStarted(object? sender, StatusEventArgs e)
         {
             this.SafeInvoke(() => pgProgress.Value = 0);
             this.SafeInvoke(() => lblStatus.Text = e.Message);
@@ -156,32 +174,31 @@ namespace RadioExt_Helper.user_controls
                 if (icon == null)
                 {
                     AddStatusRow("Failed to import icon.");
-
-                    _isImporting = false;
                     UnmakeEditorReadOnly();
                 }
                 else
                 {
                     Icon.TrackedObject.AtlasName = icon.AtlasName;
-                    Icon.TrackedObject.ImagePath = icon.ImagePath;
-
                     Icon.TrackedObject.OriginalArchivePath = icon.OriginalArchivePath;
                     Icon.TrackedObject.Sha256HashOfArchiveFile = icon.Sha256HashOfArchiveFile;
                     Icon.TrackedObject.CustomIcon = icon.CustomIcon;
 
-                    Icon.TrackedObject.ArchivePath = CopyIconToStaging(Icon.TrackedObject.OriginalArchivePath, stagingPath);
+                    var newPaths = CopyIconToStaging(Icon.TrackedObject.OriginalArchivePath, icon.ImagePath, stagingPath);
+
+                    Icon.TrackedObject.ArchivePath = newPaths.archiveStagingPath;
+                    Icon.TrackedObject.ImagePath = newPaths.pngStagingPath;
 
                     SetIconFields();
                     SetImagePreviewProperties();
 
                     IconUpdated?.Invoke(this, Icon);
-                    _isImporting = false;
                 }
-            });
 
-            pgProgress.Visible = false;
-            btnCancelImport.Enabled = false;
-            IconImportFinished?.Invoke(this, EventArgs.Empty);
+                _isImporting = false;
+                Invoke(() => pgProgress.Visible = false);
+                Invoke(() => btnCancelImport.Enabled = false);
+                IconImportFinished?.Invoke(this, EventArgs.Empty);
+            });
         }
 
         private void btnStartExtract_Click(object sender, EventArgs e)
@@ -210,41 +227,42 @@ namespace RadioExt_Helper.user_controls
                 if (icon == null)
                 {
                     AddStatusRow("Failed to extract icon.");
-
-                    _isExtracting = false;
                     UnmakeEditorReadOnly();
                 }
                 else
                 {
                     Icon.TrackedObject.AtlasName = icon.AtlasName;
-                    Icon.TrackedObject.ImagePath = icon.ImagePath;
 
                     Icon.TrackedObject.OriginalArchivePath = icon.OriginalArchivePath;
                     Icon.TrackedObject.Sha256HashOfArchiveFile = icon.Sha256HashOfArchiveFile;
                     Icon.TrackedObject.CustomIcon = icon.CustomIcon;
 
-                    Icon.TrackedObject.ArchivePath = CopyIconToStaging(Icon.TrackedObject.OriginalArchivePath, stagingPath);
+                    var newPaths = CopyIconToStaging(Icon.TrackedObject.OriginalArchivePath, icon.ImagePath, stagingPath);
+
+                    Icon.TrackedObject.ArchivePath = newPaths.archiveStagingPath;
+                    Icon.TrackedObject.ImagePath = newPaths.pngStagingPath;
 
                     SetIconFields();
                     SetImagePreviewProperties();
 
                     IconUpdated?.Invoke(this, Icon);
-                    _isExtracting = false;
                 }
-            });
 
-            pgProgress.Visible = false;
-            btnCancelImport.Enabled = false;
-            IconExtractFinished?.Invoke(this, EventArgs.Empty);
+                _isExtracting = false;
+                Invoke(() => pgProgress.Visible = false);
+                Invoke(() => btnCancelImport.Enabled = false);
+                IconExtractFinished?.Invoke(this, EventArgs.Empty);
+            });
         }
 
         /// <summary>
-        /// Copy the icon's .archive to the staging directory.
+        /// Copy the icon's .archive and .png file to the staging directory.
         /// </summary>
         /// <param name="iconArchivePath">The path to the final .archive generated with Wolven Icon Generator.</param>
+        /// <param name="imagePath">The path to .png image file for the icon.</param>
         /// <param name="stagingPath">The path to the staging folder.</param>
         /// <returns>The path to the archive file within staging.</returns>
-        private string CopyIconToStaging(string? iconArchivePath, string stagingPath)
+        private (string archiveStagingPath, string pngStagingPath) CopyIconToStaging(string? iconArchivePath, string? imagePath, string stagingPath)
         {
             var outputPath = Path.Combine(stagingPath, "icons");
             try
@@ -255,15 +273,21 @@ namespace RadioExt_Helper.user_controls
                 if (string.IsNullOrEmpty(iconArchivePath))
                     throw new ArgumentNullException(nameof(iconArchivePath), GlobalData.Strings.GetString("IconEditorCopyIconToStagingNullEmpty"));
 
+                if (string.IsNullOrEmpty(imagePath))
+                    throw new ArgumentNullException(nameof(imagePath),
+                        GlobalData.Strings.GetString("IconEditorCopyIconToStagingImageNullEmpty"));
+
                 var stagingIconPath = Path.Combine(outputPath, Path.GetFileName(iconArchivePath));
+                var stagingPngPath = Path.Combine(outputPath, Path.GetFileName(imagePath));
                 File.Copy(iconArchivePath, stagingIconPath, true);
-                return stagingIconPath;
+                File.Copy(imagePath, stagingPngPath, true);
+                return (stagingIconPath, stagingPngPath);
             }
             catch (Exception ex)
             {
                 AuLogger.GetCurrentLogger<IconEditor>("CopyIconToStaging").Error(ex);
             }
-            return string.Empty;
+            return (string.Empty, string.Empty);
         }
 
         private void btnCancelImport_Click(object sender, EventArgs e)
@@ -293,19 +317,34 @@ namespace RadioExt_Helper.user_controls
             });
         }
 
-        private void SetImagePreviewProperties()
+        /// <summary>
+        /// Set the initial properties of the picture box image based on the icon for the editor.
+        /// </summary>
+        /// <param name="fromInitialArchive">Indicates whether this editor was created from an .archive file. In this case, the initial properties are set differently.</param>
+        private void SetImagePreviewProperties(bool fromInitialArchive = false)
         {
             this.SafeInvoke(() =>
             {
                 // Dispose of the existing image in the PictureBox (if any) to avoid resource locking
                 picStationIcon.ClearImage();
-                Icon.TrackedObject.EnsureImage();
-                picStationIcon.SetImage(Icon.TrackedObject.ImagePath);
+                if (fromInitialArchive)
+                {
+                    lblImageWidth.Text = @"W: TBD";
+                    lblImageHeight.Text = @"H: TBD";
+                    lblImageFormat.Text = string.Format(Strings.IconEditor_SetImagePreviewProperties_Img__Fmt____0_, "TBD");
+                    lblImageColorMode.Text = string.Format(Strings.IconEditor_SetImagePreviewProperties_Color_Mode___0_, "TBD");
+                    picStationIcon.Image = Resources.pending_extraction_128x128;
+                }
+                else
+                {
+                    Icon.TrackedObject.EnsureImage();
+                    picStationIcon.SetImage(Icon.TrackedObject.ImagePath);
 
-                lblImageWidth.Text = $@"W: {picStationIcon.ImageProperties.Width} px";
-                lblImageHeight.Text = $@"H: {picStationIcon.ImageProperties.Height} px";
-                lblImageFormat.Text = picStationIcon.ImageProperties.ImageFormat.ToString();
-                lblImageColorMode.Text = picStationIcon.ImageProperties.PixelFormat.ToString();
+                    lblImageWidth.Text = $@"W: {picStationIcon.ImageProperties.Width} px";
+                    lblImageHeight.Text = $@"H: {picStationIcon.ImageProperties.Height} px";
+                    lblImageFormat.Text = string.Format(Strings.IconEditor_SetImagePreviewProperties_Img__Fmt____0_, picStationIcon.ImageProperties.ImageFormat);
+                    lblImageColorMode.Text = string.Format(Strings.IconEditor_SetImagePreviewProperties_Color_Mode___0_, picStationIcon.ImageProperties.PixelFormat);
+                }
 
                 if (picStationIcon.Image != null)
                 {
@@ -345,7 +384,7 @@ namespace RadioExt_Helper.user_controls
                 txtIconPath.ReadOnly = true;
                 txtIconPart.ReadOnly = true;
                 btnImportIcon.Enabled = false;
-                btnCancelImport.Enabled = _isImporting;
+                btnCancelImport.Enabled = _isImporting || _isExtracting;
 
                 _isReadOnly = true;
             });
@@ -357,7 +396,7 @@ namespace RadioExt_Helper.user_controls
             {
                 txtAtlasName.ReadOnly = false;
                 btnImportIcon.Enabled = true;
-                btnCancelImport.Enabled = _isImporting;
+                btnCancelImport.Enabled = _isImporting || _isExtracting;
 
                 _isReadOnly = false;
             });

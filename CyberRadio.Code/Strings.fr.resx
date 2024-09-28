@@ -866,4 +866,16 @@ La taille réelle peut être différente.</value>
   <data name="IconEditor_IconAlreadyCreated_DragDrop_Caption" xml:space="preserve">
     <value>Icône déjà créée</value>
   </data>
+  <data name="IconEditor_ImageNotSquare" xml:space="preserve">
+    <value>L'image n'est pas carrée. Des problèmes peuvent survenir dans le jeu.</value>
+  </data>
+  <data name="IconEditorCopyIconToStagingImageNullEmpty" xml:space="preserve">
+    <value>Le chemin de l'icône .png était nul ou vide.</value>
+  </data>
+  <data name="IconEditor_SetImagePreviewProperties_Color_Mode___0_" xml:space="preserve">
+    <value>Mode couleur: {0}</value>
+  </data>
+  <data name="IconEditor_SetImagePreviewProperties_Img__Fmt____0_" xml:space="preserve">
+    <value>IMG. FMT.: {0}</value>
+  </data>
 </root>
