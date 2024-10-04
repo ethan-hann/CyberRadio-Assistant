@@ -1,8 +1,12 @@
 ﻿using AetherUtils.Core.Logging;
+using AetherUtils.Core.Structs;
 using RadioExt_Helper.models;
 using RadioExt_Helper.Properties;
 using RadioExt_Helper.utility;
+using System;
+using System.ComponentModel;
 using System.Text.RegularExpressions;
+using System.Threading;
 using WIG.Lib.Models;
 using WIG.Lib.Utility;
 
@@ -25,6 +29,8 @@ namespace RadioExt_Helper.user_controls
         public EditorType Type { get; set; } = EditorType.IconEditor;
         public IconEditorType IconEditorType { get; set; }
 
+        private BindingList<Pair<DateTime, string>> _commandOutputs = new();
+
         /// <summary>
         /// The station that the icon is associated with.
         /// </summary>
@@ -41,6 +47,8 @@ namespace RadioExt_Helper.user_controls
         private bool _isImporting;
         private bool _isExtracting;
         private bool _isReadOnly;
+
+        private CancellationTokenSource _cancellationTokenSource;
 
         /// <summary>
         /// Create a new icon editor.
@@ -80,8 +88,12 @@ namespace RadioExt_Helper.user_controls
             editorTabs.TabPages[0].ImageIndex = 0;
 
             SetIconFields();
-            
-            dgvStatus.Rows.Clear();
+
+            dgvStatus.Columns[0].DataPropertyName = "Key";
+            dgvStatus.Columns[1].DataPropertyName = "Value";
+
+            dgvStatus.DataSource = _commandOutputs;
+            //dgvStatus.Rows.Clear();
 
             if (IconEditorType == IconEditorType.FromArchive)
             {
@@ -108,7 +120,8 @@ namespace RadioExt_Helper.user_controls
         private void Instance_OperationStarted(object? sender, StatusEventArgs e)
         {
             this.SafeInvoke(() => pgProgress.Value = 0);
-            this.SafeInvoke(() => lblStatus.Text = e.Message);
+            AddStatusRow(e.Message);
+            //this.SafeInvoke(() => lblStatus.Text = e.Message);
         }
 
         private void AddStatusRow(string? status)
@@ -116,7 +129,8 @@ namespace RadioExt_Helper.user_controls
             this.SafeInvoke(() =>
             {
                 if (status == null) return;
-                dgvStatus.Rows.Add([DateTime.Now, status]);
+                _commandOutputs.Add(new Pair<DateTime, string>(DateTime.Now, status));
+                //dgvStatus.Rows.Add([DateTime.Now, status]);
             });
         }
 
@@ -158,6 +172,14 @@ namespace RadioExt_Helper.user_controls
             btnImportIcon.Enabled = false;
             btnCancelImport.Enabled = true;
 
+            var maxValue = 250;
+            var progress = new Progress<int>(value =>
+            {
+                // Scale progress to fit between 0 and 100
+                int scaledValue = (value * 100) / maxValue;
+                Invoke(() => pgProgress.Value = Math.Min(100, scaledValue));
+            });
+
             IconImportStarted?.Invoke(this, EventArgs.Empty);
             Task.Run(async () =>
             {
@@ -170,7 +192,10 @@ namespace RadioExt_Helper.user_controls
 
                 MakeEditorReadOnly();
 
-                var icon = await IconManager.Instance.GenerateIconImageAsync(txtImagePath.Text, txtAtlasName.Text);
+                // Create a new CancellationTokenSource for each operation
+                _cancellationTokenSource = new CancellationTokenSource();
+
+                var icon = await IconManager.Instance.GenerateIconImageAsync(txtImagePath.Text, txtAtlasName.Text, progress, true, _cancellationTokenSource.Token);
                 if (icon == null)
                 {
                     AddStatusRow("Failed to import icon.");
@@ -211,6 +236,14 @@ namespace RadioExt_Helper.user_controls
             btnStartExtract.Enabled = false;
             btnCancelImport.Enabled = true;
 
+            var maxValue = 250;
+            var progress = new Progress<int>(value =>
+            {
+                // Scale progress to fit between 0 and 100
+                int scaledValue = (value * 100) / maxValue;
+                Invoke(() => pgProgress.Value = Math.Min(100, scaledValue));
+            });
+
             IconExtractStarted?.Invoke(this, EventArgs.Empty);
             Task.Run(async () =>
             {
@@ -223,7 +256,10 @@ namespace RadioExt_Helper.user_controls
 
                 MakeEditorReadOnly();
 
-                var icon = await IconManager.Instance.ExtractIconImageAsync(txtArchivePath.Text, true);
+                // Create a new CancellationTokenSource for each operation
+                _cancellationTokenSource = new CancellationTokenSource();
+
+                var icon = await IconManager.Instance.ExtractIconImageAsync(txtArchivePath.Text, progress, true, _cancellationTokenSource.Token);
                 if (icon == null)
                 {
                     AddStatusRow("Failed to extract icon.");

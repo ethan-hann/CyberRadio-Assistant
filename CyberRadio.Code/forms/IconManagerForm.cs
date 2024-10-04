@@ -112,13 +112,13 @@ namespace RadioExt_Helper.forms
                 if (_currentEditor == editor) return;
 
                 //Remove the subscribed event if the current editor is not null.
-                if (_currentEditor != null)
+                if (_currentEditor != null && editor != null)
                 {
-                    _currentEditor.IconUpdated -= _currentEditor_IconUpdated;
-                    _currentEditor.IconImportStarted -= _currentEditor_IconImportStarted;
-                    _currentEditor.IconImportFinished -= _currentEditor_IconImportFinished;
-                    _currentEditor.IconExtractStarted -= _currentEditor_IconExtractStarted;
-                    _currentEditor.IconExtractFinished -= _currentEditor_IconExtractFinished;
+                    editor.IconUpdated -= _currentEditor_IconUpdated;
+                    editor.IconImportStarted -= _currentEditor_IconImportStarted;
+                    editor.IconImportFinished -= _currentEditor_IconImportFinished;
+                    editor.IconExtractStarted -= _currentEditor_IconExtractStarted;
+                    editor.IconExtractFinished -= _currentEditor_IconExtractFinished;
                 }
 
                 if (editor == null)
@@ -137,14 +137,11 @@ namespace RadioExt_Helper.forms
                     _currentEditor = editor;
 
                     //Resubscribe to the event for the icon updating
-                    if (_currentEditor != null)
-                    {
-                        _currentEditor.IconUpdated += _currentEditor_IconUpdated;
-                        _currentEditor.IconImportStarted += _currentEditor_IconImportStarted;
-                        _currentEditor.IconImportFinished += _currentEditor_IconImportFinished;
-                        _currentEditor.IconExtractStarted += _currentEditor_IconExtractStarted;
-                        _currentEditor.IconExtractFinished += _currentEditor_IconExtractFinished;
-                    }
+                    editor.IconUpdated += _currentEditor_IconUpdated;
+                    editor.IconImportStarted += _currentEditor_IconImportStarted;
+                    editor.IconImportFinished += _currentEditor_IconImportFinished;
+                    editor.IconExtractStarted += _currentEditor_IconExtractStarted;
+                    editor.IconExtractFinished += _currentEditor_IconExtractFinished;
                 }
             }
             catch (Exception ex)
