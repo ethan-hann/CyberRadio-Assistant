@@ -180,10 +180,9 @@ public sealed class MetaData : INotifyPropertyChanged, ICloneable, IEquatable<Me
             CustomIcon = (CustomIcon)CustomIcon.Clone(),
             StreamInfo = (StreamInfo)StreamInfo.Clone(),
             SongOrder = [.. SongOrder],
-            IsActive = IsActive
+            IsActive = IsActive,
+            CustomData = (SerializableDictionary<string, object>)CustomData.Clone()
         };
-        foreach (var kvp in CustomData)
-            m.CustomData.Add(kvp.Key, kvp.Value);
 
         return m;
     }
@@ -199,22 +198,10 @@ public sealed class MetaData : INotifyPropertyChanged, ICloneable, IEquatable<Me
                StreamInfo.Equals(other.StreamInfo) &&
                SongOrder.SequenceEqual(other.SongOrder) &&
                IsActive == other.IsActive &&
-               CustomData.SequenceEqual(other.CustomData);
+               CustomData.Equals(other.CustomData);
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;
-
-    /// <summary>
-    /// Serialize the custom icon <c>.archive</c> file to the <see cref="CustomData"/> dictionary.
-    /// </summary>
-    /// <param name="archivePath">The path to the archive file.</param>
-    /// <param name="archiveFileName">The name of the archive file.</param>
-    public void SerializeArchive(string archivePath, string archiveFileName)
-    {
-        var archiveBytes = FileHelper.OpenNonTextFile(archivePath);
-        CustomData["customIconFile"] = archiveFileName;
-        CustomData["customIconData"] = archiveBytes;
-    }
 
     private void OnPropertyChanged(string propertyName)
     {
@@ -238,6 +225,6 @@ public sealed class MetaData : INotifyPropertyChanged, ICloneable, IEquatable<Me
     public override int GetHashCode()
     {
         var hashCode = HashCode.Combine(DisplayName, Fm, Volume, Icon, CustomIcon, StreamInfo, SongOrder, IsActive);
-        return CustomData.Aggregate(hashCode, (current, kvp) => HashCode.Combine(current, kvp.Key, kvp.Value));
+        return HashCode.Combine(hashCode, CustomData.GetHashCode());
     }
 }

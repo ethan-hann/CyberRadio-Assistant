@@ -506,12 +506,12 @@ public sealed partial class MainForm : Form
             if (_currentEditor == editor) return;
             if (editor == null) return;
 
+            _currentEditor = editor;
+
             splitContainer1.Panel2.SuspendLayout();
             splitContainer1.Panel2.Controls.Clear();
-            splitContainer1.Panel2.Controls.Add(editor);
+            splitContainer1.Panel2.Controls.Add(_currentEditor);
             splitContainer1.Panel2.ResumeLayout();
-
-            _currentEditor = editor;
         }
         catch (Exception ex)
         {
@@ -533,7 +533,7 @@ public sealed partial class MainForm : Form
         station.DeclineChanges(); // Revert the changes made to the station's properties since the last save.
         //StationManager.Instance.AddStation(station, true); //Re-add the station to the manager after reverting changes.
 
-        StationManager.Instance.GetStationEditor(station.Id)?.ResetUI();
+        StationManager.Instance.GetStationEditor(station.Id)?.ResetUi();
 
         OnStationUpdated(sender, station.Id); //Update the UI to reflect the changes.
         SelectStationEditor(station.Id); //Update the editor to reflect the changes.

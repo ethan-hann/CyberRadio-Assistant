@@ -251,6 +251,7 @@ namespace RadioExt_Helper.user_controls
 
                     Icon.TrackedObject.ArchivePath = newPaths.archiveStagingPath;
                     Icon.TrackedObject.ImagePath = newPaths.pngStagingPath;
+                    Icon.TrackedObject.IconId = icon.IconId;
 
                     SetImagePreviewProperties();
                     SetFieldsBasedOnIsFromArchive();

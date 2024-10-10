@@ -114,6 +114,12 @@ namespace RadioExt_Helper.forms
                 //Remove the subscribed event if the current editor is not null.
                 if (_currentEditor != null && editor != null)
                 {
+                    _currentEditor.IconUpdated -= _currentEditor_IconUpdated;
+                    _currentEditor.IconImportStarted -= _currentEditor_IconImportStarted;
+                    _currentEditor.IconImportFinished -= _currentEditor_IconImportFinished;
+                    _currentEditor.IconExtractStarted -= _currentEditor_IconExtractStarted;
+                    _currentEditor.IconExtractFinished -= _currentEditor_IconExtractFinished;
+
                     editor.IconUpdated -= _currentEditor_IconUpdated;
                     editor.IconImportStarted -= _currentEditor_IconImportStarted;
                     editor.IconImportFinished -= _currentEditor_IconImportFinished;
@@ -129,19 +135,19 @@ namespace RadioExt_Helper.forms
                 }
                 else
                 {
-                    splitContainer1.Panel2.SuspendLayout();
-                    splitContainer1.Panel2.Controls.Clear();
-                    splitContainer1.Panel2.Controls.Add(editor);
-                    splitContainer1.Panel2.ResumeLayout();
-
                     _currentEditor = editor;
 
+                    splitContainer1.Panel2.SuspendLayout();
+                    splitContainer1.Panel2.Controls.Clear();
+                    splitContainer1.Panel2.Controls.Add(_currentEditor);
+                    splitContainer1.Panel2.ResumeLayout();
+
                     //Resubscribe to the event for the icon updating
-                    editor.IconUpdated += _currentEditor_IconUpdated;
-                    editor.IconImportStarted += _currentEditor_IconImportStarted;
-                    editor.IconImportFinished += _currentEditor_IconImportFinished;
-                    editor.IconExtractStarted += _currentEditor_IconExtractStarted;
-                    editor.IconExtractFinished += _currentEditor_IconExtractFinished;
+                    _currentEditor.IconUpdated += _currentEditor_IconUpdated;
+                    _currentEditor.IconImportStarted += _currentEditor_IconImportStarted;
+                    _currentEditor.IconImportFinished += _currentEditor_IconImportFinished;
+                    _currentEditor.IconExtractStarted += _currentEditor_IconExtractStarted;
+                    _currentEditor.IconExtractFinished += _currentEditor_IconExtractFinished;
                 }
             }
             catch (Exception ex)
@@ -222,7 +228,7 @@ namespace RadioExt_Helper.forms
             var firstResult = MessageBox.Show(Strings.IconManagerForm_RemoveIcon_Are_you_sure_you_want_to_delete_this_icon_, 
                 Strings.IconManagerForm_RemoveIcon_Confirm_Delete,
                 MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-            if (firstResult != DialogResult.OK) return;
+            if (firstResult != DialogResult.Yes) return;
 
             var secondResult = MessageBox.Show(Strings.IconManagerForm_RemoveIcon_Do_you_want_to_delete_associated_icon_files_from_staging__This_will_delete_the_copied__archive_file_and_the_associated_PNG_, 
                 Strings.IconManagerForm_RemoveIcon_Confirm_Delete, MessageBoxButtons.YesNo, MessageBoxIcon.Question);

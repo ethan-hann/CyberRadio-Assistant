@@ -18,7 +18,6 @@ using AetherUtils.Core.Logging;
 using AetherUtils.Core.WinForms.Controls;
 using AetherUtils.Core.WinForms.CustomArgs;
 using RadioExt_Helper.custom_controls;
-using RadioExt_Helper.forms;
 using RadioExt_Helper.models;
 using RadioExt_Helper.Properties;
 using RadioExt_Helper.utility;
@@ -190,15 +189,25 @@ public sealed partial class StationEditor : UserControl, IEditor
         volumeSlider.Value = (int)(Station.TrackedObject.MetaData.Volume / 0.1f);
         lblSelectedVolume.Text = $@"{Station.TrackedObject.MetaData.Volume:F1}";
 
-        if (Station.TrackedObject.MetaData.CustomData.TryGetValue("Original Image Path", out object? value))
+        var stationIcon = Station.TrackedObject.GetActiveIcon();
+        if (stationIcon != null)
         {
-            var imagePath = value as string;
+            var imagePath = stationIcon.TrackedObject.ImagePath;
             if (Path.Exists(imagePath))
             {
-                picStationIcon.SetImage(imagePath);
-                Station.TrackedObject.GetActiveIcon()?.TrackedObject.EnsureImage();
+                picStationIcon.SetImage(stationIcon.TrackedObject.ImagePath);
             }
         }
+
+        //if (Station.TrackedObject.MetaData.CustomData.TryGetValue("Original Image Path", out object? value))
+        //{
+        //    var imagePath = value as string;
+        //    if (Path.Exists(imagePath))
+        //    {
+        //        picStationIcon.SetImage(imagePath);
+        //        Station.TrackedObject.GetActiveIcon()?.TrackedObject.EnsureImage();
+        //    }
+        //}
 
         UpdateCustomDataView();
     }
@@ -206,7 +215,7 @@ public sealed partial class StationEditor : UserControl, IEditor
     /// <summary>
     /// Reset the UI values to the defaults for the station.
     /// </summary>
-    public void ResetUI()
+    public void ResetUi()
     {
         SetDisplayTabValues();
         SetMusicTabValues();

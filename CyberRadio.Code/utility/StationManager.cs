@@ -205,7 +205,6 @@ public partial class StationManager : IDisposable
     /// <param name="stationId">The station ID to remove the icon from.</param>
     /// <param name="icon">The <see cref="Icon"/> to remove.</param>
     /// <param name="deleteFiles">Indicates whether to delete the Icon files from disk.</param>
-    /// <param name="isExistingArchive">Indicates whether the icon was added from an existing archive. In this case, we shouldn't delete the archive file.</param>
     /// <returns><c>true</c> if the icon was removed successfully; <c>false</c> otherwise.</returns>
     public bool RemoveStationIcon(Guid stationId, TrackableObject<WolvenIcon> icon, bool deleteFiles = false)
     {
@@ -224,6 +223,12 @@ public partial class StationManager : IDisposable
                     FileHelper.DeleteFile(icon.TrackedObject.ArchivePath);
                 if (icon.TrackedObject.ImagePath != null && FileHelper.DoesFileExist(icon.TrackedObject.ImagePath))
                     FileHelper.DeleteFile(icon.TrackedObject.ImagePath);
+
+                //Delete the icon's folder in the appdata directory.
+                var foldersInAppData = FileHelper.SafeEnumerateDirectories(FileHelper.ExpandPath("%appdata%\\Wolven Icon Generator\\tools")).ToList();
+                var foldersToDelete = foldersInAppData.Where(f => f.Contains(icon.Id.ToString())).ToList();
+                foreach (var folder in foldersToDelete.Where(Directory.Exists))
+                    Directory.Delete(folder, true);
             }
 
             StationUpdated?.Invoke(this, stationId);
