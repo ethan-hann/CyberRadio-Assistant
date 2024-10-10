@@ -1181,7 +1181,7 @@ public sealed partial class MainForm : Form
             UpdateStationIcon(icon);
     }
 
-    private void UpdateStationIcon(TrackableObject<WolvenIcon> icon)
+    private void UpdateStationIcon(TrackableObject<WolvenIcon>? icon)
     {
         try
         {
@@ -1189,9 +1189,16 @@ public sealed partial class MainForm : Form
 
             lbStations.BeginUpdate();
 
+            if (icon == null) //all icons were deleted
+            {
+                StationManager.Instance.GetStationEditor(station.Id)?.UpdateIcon(null);
+                lbStations.EndUpdate();
+                return;
+            }
+
             var activeIcon = StationManager.Instance.GetStationActiveIcon(station.Id);
             var editor = StationManager.Instance.GetStationEditor(station.Id);
-            icon.CheckPendingSaveStatus();
+            icon?.CheckPendingSaveStatus();
             editor?.UpdateIcon(activeIcon);
 
             lbStations.EndUpdate();

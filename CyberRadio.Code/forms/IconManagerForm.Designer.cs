@@ -37,7 +37,7 @@ namespace RadioExt_Helper.forms
             grpIcons = new GroupBox();
             lbIcons = new IconListBox();
             tableLayoutPanel1 = new TableLayoutPanel();
-            btnDeleteIcon = new Button();
+            btnDeleteIcon = new SplitButton();
             btnAddIcon = new SplitButton();
             newIconContextStrip = new ContextMenuStrip(components);
             fromArchiveFileToolStripMenuItem = new ToolStripMenuItem();
@@ -45,6 +45,8 @@ namespace RadioExt_Helper.forms
             btnDisableIcon = new Button();
             btnEnableIcon = new Button();
             fdlgOpenArchive = new OpenFileDialog();
+            deleteAllIconsContextStrip = new ContextMenuStrip(components);
+            btnDeleteAllIcons = new ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.SuspendLayout();
@@ -52,6 +54,7 @@ namespace RadioExt_Helper.forms
             tableLayoutPanel1.SuspendLayout();
             newIconContextStrip.SuspendLayout();
             tableLayoutPanel2.SuspendLayout();
+            deleteAllIconsContextStrip.SuspendLayout();
             SuspendLayout();
             // 
             // splitContainer1
@@ -122,8 +125,10 @@ namespace RadioExt_Helper.forms
             btnDeleteIcon.Image = Properties.Resources.delete__16x16;
             btnDeleteIcon.Location = new Point(168, 2);
             btnDeleteIcon.Margin = new Padding(3, 2, 3, 2);
+            btnDeleteIcon.Menu = deleteAllIconsContextStrip;
             btnDeleteIcon.Name = "btnDeleteIcon";
             btnDeleteIcon.Size = new Size(159, 33);
+            btnDeleteIcon.SplitWidth = 25;
             btnDeleteIcon.TabIndex = 1;
             btnDeleteIcon.Text = "Delete Icon";
             btnDeleteIcon.TextAlign = ContentAlignment.MiddleRight;
@@ -224,6 +229,20 @@ namespace RadioExt_Helper.forms
             // 
             fdlgOpenArchive.Filter = "Mod Archive (*.archive) | *.archive";
             // 
+            // deleteAllIconsContextStrip
+            // 
+            deleteAllIconsContextStrip.Items.AddRange(new ToolStripItem[] { btnDeleteAllIcons });
+            deleteAllIconsContextStrip.Name = "newIconContextStrip";
+            deleteAllIconsContextStrip.Size = new Size(181, 48);
+            // 
+            // btnDeleteAllIcons
+            // 
+            btnDeleteAllIcons.Image = Properties.Resources.warning__16x16;
+            btnDeleteAllIcons.Name = "btnDeleteAllIcons";
+            btnDeleteAllIcons.Size = new Size(180, 22);
+            btnDeleteAllIcons.Text = "Delete All Icons";
+            btnDeleteAllIcons.Click += btnDeleteAllIcons_Click;
+            // 
             // IconManagerForm
             // 
             AutoScaleDimensions = new SizeF(96F, 96F);
@@ -244,6 +263,7 @@ namespace RadioExt_Helper.forms
             tableLayoutPanel1.ResumeLayout(false);
             newIconContextStrip.ResumeLayout(false);
             tableLayoutPanel2.ResumeLayout(false);
+            deleteAllIconsContextStrip.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -251,7 +271,7 @@ namespace RadioExt_Helper.forms
         private SplitContainer splitContainer1;
         private GroupBox grpIcons;
         private TableLayoutPanel tableLayoutPanel1;
-        private Button btnDeleteIcon;
+        private SplitButton btnDeleteIcon;
         private SplitButton btnAddIcon;
         private TableLayoutPanel tableLayoutPanel2;
         private Button btnDisableIcon;
@@ -260,5 +280,7 @@ namespace RadioExt_Helper.forms
         private ContextMenuStrip newIconContextStrip;
         private ToolStripMenuItem fromArchiveFileToolStripMenuItem;
         private OpenFileDialog fdlgOpenArchive;
+        private ContextMenuStrip deleteAllIconsContextStrip;
+        private ToolStripMenuItem btnDeleteAllIcons;
     }
 }

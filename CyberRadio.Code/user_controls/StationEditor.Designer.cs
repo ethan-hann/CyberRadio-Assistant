@@ -36,9 +36,6 @@ namespace RadioExt_Helper.user_controls
             label3 = new Label();
             grpDisplay = new GroupBox();
             tlpDisplayTable = new TableLayoutPanel();
-            tableLayoutPanel2 = new TableLayoutPanel();
-            lblIcon = new Label();
-            picGameIcon = new PictureBox();
             tabControl = new TabControl();
             tabDisplayAndIcon = new TabPage();
             panel1 = new Panel();
@@ -84,10 +81,9 @@ namespace RadioExt_Helper.user_controls
             txtStreamURL = new TextBox();
             statusStrip1 = new StatusStrip();
             lblStatus = new ToolStripStatusLabel();
+            lblIcon = new Label();
             grpDisplay.SuspendLayout();
             tlpDisplayTable.SuspendLayout();
-            tableLayoutPanel2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)picGameIcon).BeginInit();
             tabControl.SuspendLayout();
             tabDisplayAndIcon.SuspendLayout();
             panel1.SuspendLayout();
@@ -164,9 +160,9 @@ namespace RadioExt_Helper.user_controls
             tlpDisplayTable.ColumnCount = 2;
             tlpDisplayTable.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 11.141304F));
             tlpDisplayTable.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 88.858696F));
+            tlpDisplayTable.Controls.Add(lblIcon, 0, 1);
             tlpDisplayTable.Controls.Add(lblName, 0, 0);
             tlpDisplayTable.Controls.Add(txtDisplayName, 1, 0);
-            tlpDisplayTable.Controls.Add(tableLayoutPanel2, 0, 1);
             tlpDisplayTable.Dock = DockStyle.Fill;
             tlpDisplayTable.Location = new Point(3, 21);
             tlpDisplayTable.Name = "tlpDisplayTable";
@@ -175,42 +171,6 @@ namespace RadioExt_Helper.user_controls
             tlpDisplayTable.RowStyles.Add(new RowStyle(SizeType.Percent, 55.6962F));
             tlpDisplayTable.Size = new Size(962, 92);
             tlpDisplayTable.TabIndex = 0;
-            // 
-            // tableLayoutPanel2
-            // 
-            tableLayoutPanel2.ColumnCount = 2;
-            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tableLayoutPanel2.Controls.Add(lblIcon, 1, 0);
-            tableLayoutPanel2.Controls.Add(picGameIcon, 0, 0);
-            tableLayoutPanel2.Location = new Point(3, 43);
-            tableLayoutPanel2.Name = "tableLayoutPanel2";
-            tableLayoutPanel2.RowCount = 1;
-            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel2.Size = new Size(101, 46);
-            tableLayoutPanel2.TabIndex = 2;
-            // 
-            // lblIcon
-            // 
-            lblIcon.Anchor = AnchorStyles.Right;
-            lblIcon.AutoSize = true;
-            lblIcon.Font = new Font("Segoe UI Variable Text", 9F);
-            lblIcon.Location = new Point(62, 15);
-            lblIcon.Name = "lblIcon";
-            lblIcon.Size = new Size(36, 16);
-            lblIcon.TabIndex = 3;
-            lblIcon.Text = "Icon: ";
-            // 
-            // picGameIcon
-            // 
-            picGameIcon.Dock = DockStyle.Fill;
-            picGameIcon.Image = Properties.Resources.add;
-            picGameIcon.Location = new Point(3, 3);
-            picGameIcon.Name = "picGameIcon";
-            picGameIcon.Size = new Size(44, 40);
-            picGameIcon.SizeMode = PictureBoxSizeMode.Zoom;
-            picGameIcon.TabIndex = 4;
-            picGameIcon.TabStop = false;
             // 
             // tabControl
             // 
@@ -469,9 +429,9 @@ namespace RadioExt_Helper.user_controls
             tlpCustomIcon.Location = new Point(3, 21);
             tlpCustomIcon.Name = "tlpCustomIcon";
             tlpCustomIcon.RowCount = 3;
-            tlpCustomIcon.RowStyles.Add(new RowStyle(SizeType.Percent, 32.9545441F));
-            tlpCustomIcon.RowStyles.Add(new RowStyle(SizeType.Percent, 30.681818F));
-            tlpCustomIcon.RowStyles.Add(new RowStyle(SizeType.Percent, 36.363636F));
+            tlpCustomIcon.RowStyles.Add(new RowStyle(SizeType.Percent, 38.18182F));
+            tlpCustomIcon.RowStyles.Add(new RowStyle(SizeType.Percent, 31.818182F));
+            tlpCustomIcon.RowStyles.Add(new RowStyle(SizeType.Percent, 30.90909F));
             tlpCustomIcon.RowStyles.Add(new RowStyle(SizeType.Absolute, 19F));
             tlpCustomIcon.Size = new Size(962, 110);
             tlpCustomIcon.TabIndex = 0;
@@ -480,7 +440,7 @@ namespace RadioExt_Helper.user_controls
             // 
             txtInkAtlasPart.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             txtInkAtlasPart.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            txtInkAtlasPart.Location = new Point(284, 78);
+            txtInkAtlasPart.Location = new Point(284, 81);
             txtInkAtlasPart.Name = "txtInkAtlasPart";
             txtInkAtlasPart.ReadOnly = true;
             txtInkAtlasPart.Size = new Size(675, 23);
@@ -491,7 +451,7 @@ namespace RadioExt_Helper.user_controls
             // 
             txtInkAtlasPath.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             txtInkAtlasPath.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            txtInkAtlasPath.Location = new Point(284, 41);
+            txtInkAtlasPath.Location = new Point(284, 46);
             txtInkAtlasPath.Name = "txtInkAtlasPath";
             txtInkAtlasPath.ReadOnly = true;
             txtInkAtlasPath.Size = new Size(675, 23);
@@ -504,7 +464,7 @@ namespace RadioExt_Helper.user_controls
             lblUsingCustomIcon.Anchor = AnchorStyles.Right;
             lblUsingCustomIcon.AutoSize = true;
             lblUsingCustomIcon.Font = new Font("Segoe UI Variable Text", 9F);
-            lblUsingCustomIcon.Location = new Point(236, 10);
+            lblUsingCustomIcon.Location = new Point(236, 12);
             lblUsingCustomIcon.Name = "lblUsingCustomIcon";
             lblUsingCustomIcon.Size = new Size(42, 16);
             lblUsingCustomIcon.TabIndex = 3;
@@ -520,7 +480,7 @@ namespace RadioExt_Helper.user_controls
             flowLayoutPanel1.Dock = DockStyle.Fill;
             flowLayoutPanel1.Location = new Point(284, 3);
             flowLayoutPanel1.Name = "flowLayoutPanel1";
-            flowLayoutPanel1.Size = new Size(675, 30);
+            flowLayoutPanel1.Size = new Size(675, 35);
             flowLayoutPanel1.TabIndex = 0;
             // 
             // radUseCustomYes
@@ -531,7 +491,7 @@ namespace RadioExt_Helper.user_controls
             radUseCustomYes.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             radUseCustomYes.Location = new Point(3, 3);
             radUseCustomYes.Name = "radUseCustomYes";
-            radUseCustomYes.Size = new Size(43, 27);
+            radUseCustomYes.Size = new Size(43, 26);
             radUseCustomYes.TabIndex = 5;
             radUseCustomYes.TabStop = true;
             radUseCustomYes.Text = "Yes";
@@ -545,7 +505,7 @@ namespace RadioExt_Helper.user_controls
             radUseCustomNo.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             radUseCustomNo.Location = new Point(52, 3);
             radUseCustomNo.Name = "radUseCustomNo";
-            radUseCustomNo.Size = new Size(41, 27);
+            radUseCustomNo.Size = new Size(41, 26);
             radUseCustomNo.TabIndex = 6;
             radUseCustomNo.TabStop = true;
             radUseCustomNo.Text = "No";
@@ -563,7 +523,7 @@ namespace RadioExt_Helper.user_controls
             btnOpenIconManager.Location = new Point(99, 2);
             btnOpenIconManager.Margin = new Padding(3, 2, 3, 2);
             btnOpenIconManager.Name = "btnOpenIconManager";
-            btnOpenIconManager.Size = new Size(189, 29);
+            btnOpenIconManager.Size = new Size(189, 28);
             btnOpenIconManager.TabIndex = 7;
             btnOpenIconManager.Text = "Icon Manager";
             btnOpenIconManager.TextAlign = ContentAlignment.MiddleRight;
@@ -576,7 +536,7 @@ namespace RadioExt_Helper.user_controls
             lblInkPart.Anchor = AnchorStyles.Right;
             lblInkPart.AutoSize = true;
             lblInkPart.Font = new Font("Segoe UI Variable Text", 9F);
-            lblInkPart.Location = new Point(196, 81);
+            lblInkPart.Location = new Point(196, 84);
             lblInkPart.Name = "lblInkPart";
             lblInkPart.Size = new Size(82, 16);
             lblInkPart.TabIndex = 1;
@@ -589,7 +549,7 @@ namespace RadioExt_Helper.user_controls
             lblInkPath.Anchor = AnchorStyles.Right;
             lblInkPath.AutoSize = true;
             lblInkPath.Font = new Font("Segoe UI Variable Text", 9F);
-            lblInkPath.Location = new Point(193, 44);
+            lblInkPath.Location = new Point(193, 50);
             lblInkPath.Name = "lblInkPath";
             lblInkPath.Size = new Size(85, 16);
             lblInkPath.TabIndex = 0;
@@ -627,7 +587,7 @@ namespace RadioExt_Helper.user_controls
             tabMusic.Location = new Point(4, 29);
             tabMusic.Name = "tabMusic";
             tabMusic.Padding = new Padding(3);
-            tabMusic.Size = new Size(976, 660);
+            tabMusic.Size = new Size(976, 658);
             tabMusic.TabIndex = 1;
             tabMusic.Text = "Music";
             tabMusic.ToolTipText = "Change the music this radio station will play.";
@@ -638,7 +598,7 @@ namespace RadioExt_Helper.user_controls
             grpSongs.Font = new Font("Segoe UI Variable Display", 9.75F, FontStyle.Bold);
             grpSongs.Location = new Point(3, 164);
             grpSongs.Name = "grpSongs";
-            grpSongs.Size = new Size(968, 491);
+            grpSongs.Size = new Size(968, 489);
             grpSongs.TabIndex = 1;
             grpSongs.TabStop = false;
             grpSongs.Text = "Songs";
@@ -825,6 +785,17 @@ namespace RadioExt_Helper.user_controls
             lblStatus.Size = new Size(59, 20);
             lblStatus.Text = "Ready";
             // 
+            // lblIcon
+            // 
+            lblIcon.Anchor = AnchorStyles.Right;
+            lblIcon.AutoSize = true;
+            lblIcon.Font = new Font("Segoe UI Variable Text", 9F);
+            lblIcon.Location = new Point(68, 58);
+            lblIcon.Name = "lblIcon";
+            lblIcon.Size = new Size(36, 16);
+            lblIcon.TabIndex = 4;
+            lblIcon.Text = "Icon: ";
+            // 
             // StationEditor
             // 
             AllowDrop = true;
@@ -840,9 +811,6 @@ namespace RadioExt_Helper.user_controls
             grpDisplay.ResumeLayout(false);
             tlpDisplayTable.ResumeLayout(false);
             tlpDisplayTable.PerformLayout();
-            tableLayoutPanel2.ResumeLayout(false);
-            tableLayoutPanel2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)picGameIcon).EndInit();
             tabControl.ResumeLayout(false);
             tabDisplayAndIcon.ResumeLayout(false);
             panel1.ResumeLayout(false);
@@ -929,8 +897,6 @@ namespace RadioExt_Helper.user_controls
         private DataGridView dgvMetadata;
         private CustomPictureBox picStationIcon;
         private Button btnOpenIconManager;
-        private TableLayoutPanel tableLayoutPanel2;
         private Label lblIcon;
-        private PictureBox picGameIcon;
     }
 }

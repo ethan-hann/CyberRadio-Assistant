@@ -162,6 +162,16 @@ public sealed class Station : INotifyPropertyChanged, ICloneable, IEquatable<Sta
     }
 
     /// <summary>
+    /// Remove all icons from the station.
+    /// </summary>
+    /// <returns></returns>
+    public void RemoveAllIcons()
+    {
+        Icons.Clear();
+        OnPropertyChanged(nameof(Icons));
+    }
+
+    /// <summary>
     /// Get the active <see cref="Icon"/> for the station.
     /// </summary>
     /// <returns>The active <see cref="Icon"/> or <c>null</c> if no active icons or there was more than 1 active icon.</returns>

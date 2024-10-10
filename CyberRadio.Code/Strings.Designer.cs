@@ -1110,6 +1110,28 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to remove ALL icons from this station? **This is a destructive operation!**
+        ///
+        ///Make sure you&apos;ve backed up your staging folder first ;).
+        /// </summary>
+        internal static string IconManagerForm_btnDeleteAllIcons_Click_Are_you_sure_you_want_to_remove_ALL_icons_from_this_station_ {
+            get {
+                return ResourceManager.GetString("IconManagerForm_btnDeleteAllIcons_Click_Are_you_sure_you_want_to_remove_ALL_icons" +
+                        "_from_this_station_", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do you want to also delete associated icon&apos;s files from staging? This will delete all the copied .archive file and the associated PNGs..
+        /// </summary>
+        internal static string IconManagerForm_btnDeleteAllIcons_Click_Do_you_want_to_also_delete_associated_icon_s_files_from_staging {
+            get {
+                return ResourceManager.GetString("IconManagerForm_btnDeleteAllIcons_Click_Do_you_want_to_also_delete_associated_ico" +
+                        "n_s_files_from_staging", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to delete this icon?.
         /// </summary>
         internal static string IconManagerForm_RemoveIcon_Are_you_sure_you_want_to_delete_this_icon_ {

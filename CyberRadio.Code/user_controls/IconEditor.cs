@@ -29,7 +29,7 @@ namespace RadioExt_Helper.user_controls
         public EditorType Type { get; set; } = EditorType.IconEditor;
         public IconEditorType IconEditorType { get; set; }
 
-        private BindingList<Pair<DateTime, string>> _commandOutputs = new();
+        private readonly BindingList<Pair<DateTime, string>> _commandOutputs = [];
 
         /// <summary>
         /// The station that the icon is associated with.
@@ -93,7 +93,6 @@ namespace RadioExt_Helper.user_controls
             dgvStatus.Columns[1].DataPropertyName = "Value";
 
             dgvStatus.DataSource = _commandOutputs;
-            //dgvStatus.Rows.Clear();
 
             if (IconEditorType == IconEditorType.FromArchive)
             {
@@ -463,6 +462,7 @@ namespace RadioExt_Helper.user_controls
                 txtIconPart.ReadOnly = true;
                 btnImportIcon.Enabled = false;
                 btnCancelImport.Enabled = _isImporting || _isExtracting;
+                picStationIcon.AllowDrop = false;
 
                 _isReadOnly = true;
             });
@@ -475,6 +475,7 @@ namespace RadioExt_Helper.user_controls
                 txtAtlasName.ReadOnly = false;
                 btnImportIcon.Enabled = true;
                 btnCancelImport.Enabled = _isImporting || _isExtracting;
+                picStationIcon.AllowDrop = true;
 
                 _isReadOnly = false;
             });

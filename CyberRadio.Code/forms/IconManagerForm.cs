@@ -3,6 +3,7 @@ using RadioExt_Helper.models;
 using RadioExt_Helper.Properties;
 using RadioExt_Helper.user_controls;
 using RadioExt_Helper.utility;
+using System.Drawing;
 using WIG.Lib.Models;
 
 namespace RadioExt_Helper.forms
@@ -11,7 +12,7 @@ namespace RadioExt_Helper.forms
     {
         public event EventHandler<TrackableObject<WolvenIcon>>? IconAdded;
         public event EventHandler<TrackableObject<WolvenIcon>>? IconUpdated;
-        public event EventHandler<TrackableObject<WolvenIcon>>? IconDeleted;
+        public event EventHandler<TrackableObject<WolvenIcon>?>? IconDeleted;
 
         private readonly ImageList _stationImageList = new();
         private bool _ignoreSelectedIndexChanged;
@@ -225,12 +226,12 @@ namespace RadioExt_Helper.forms
 
         private void RemoveIcon(TrackableObject<WolvenIcon> icon)
         {
-            var firstResult = MessageBox.Show(Strings.IconManagerForm_RemoveIcon_Are_you_sure_you_want_to_delete_this_icon_, 
+            var firstResult = MessageBox.Show(Strings.IconManagerForm_RemoveIcon_Are_you_sure_you_want_to_delete_this_icon_,
                 Strings.IconManagerForm_RemoveIcon_Confirm_Delete,
                 MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
             if (firstResult != DialogResult.Yes) return;
 
-            var secondResult = MessageBox.Show(Strings.IconManagerForm_RemoveIcon_Do_you_want_to_delete_associated_icon_files_from_staging__This_will_delete_the_copied__archive_file_and_the_associated_PNG_, 
+            var secondResult = MessageBox.Show(Strings.IconManagerForm_RemoveIcon_Do_you_want_to_delete_associated_icon_files_from_staging__This_will_delete_the_copied__archive_file_and_the_associated_PNG_,
                 Strings.IconManagerForm_RemoveIcon_Confirm_Delete, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
             if (secondResult == DialogResult.Yes)
@@ -286,6 +287,33 @@ namespace RadioExt_Helper.forms
         {
             if (lbIcons.SelectedItem is not TrackableObject<WolvenIcon> icon) return;
             RemoveIcon(icon);
+        }
+
+        private void btnDeleteAllIcons_Click(object sender, EventArgs e)
+        {
+            var firstResult = MessageBox.Show(Strings.IconManagerForm_btnDeleteAllIcons_Click_Are_you_sure_you_want_to_remove_ALL_icons_from_this_station_,
+                Strings.IconManagerForm_RemoveIcon_Confirm_Delete,
+                MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            if (firstResult != DialogResult.Yes) return;
+
+            var secondResult = MessageBox.Show(Strings.IconManagerForm_btnDeleteAllIcons_Click_Do_you_want_to_also_delete_associated_icon_s_files_from_staging,
+                Strings.IconManagerForm_RemoveIcon_Confirm_Delete, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            var isDeletingFiles = secondResult == DialogResult.Yes;
+
+            StationManager.Instance.RemoveAllStationIcons(_station.Id, isDeletingFiles);
+            IconDeleted?.Invoke(this, null);
+
+            ResetListBox();
+
+            if (lbIcons.Items.Count > 0)
+            {
+                lbIcons.SelectedIndex = 0;
+                SelectListBoxItem(0, false);
+            }
+            else
+            {
+                UpdateIconEditor(null);
+            }
         }
 
         private void btnEnableIcon_Click(object sender, EventArgs e)

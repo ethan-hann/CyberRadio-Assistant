@@ -893,4 +893,12 @@ Actual size may be different.</value>
   <data name="IconManagerForm_RemoveIcon_Do_you_want_to_delete_associated_icon_files_from_staging__This_will_delete_the_copied__archive_file_and_the_associated_PNG_" xml:space="preserve">
 	  <value>Do you want to delete associated icon files from staging? This will delete the copied .archive file and the associated PNG.</value>
   </data>
+  <data name="IconManagerForm_btnDeleteAllIcons_Click_Are_you_sure_you_want_to_remove_ALL_icons_from_this_station_" xml:space="preserve">
+	  <value>Are you sure you want to remove ALL icons from this station? **This is a destructive operation!**
+
+Make sure you've backed up your staging folder first ;)</value>
+  </data>
+  <data name="IconManagerForm_btnDeleteAllIcons_Click_Do_you_want_to_also_delete_associated_icon_s_files_from_staging" xml:space="preserve">
+	  <value>Do you want to also delete associated icon's files from staging? This will delete all the copied .archive file and the associated PNGs.</value>
+  </data>
 </root>

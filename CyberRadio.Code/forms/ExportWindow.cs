@@ -276,54 +276,94 @@ public partial class ExportWindow : Form
     /// <param name="e">The <see cref="DoWorkEventArgs" /> instance containing the event data.</param>
     private void BgWorkerExport_DoWork(object sender, DoWorkEventArgs e)
     {
-        ToggleButtons();
-
-        // Get the list of existing directories before exporting
-        var existingDirectories = FileHelper.SafeEnumerateDirectories(StagingPath).ToList();
-
-        // Remove protected directories from the list
-        existingDirectories.RemoveAll(dir => StationManager.Instance.IsProtectedFolder(dir));
-
-        var songDirectoryMap = MapSongsToDirectories(existingDirectories, _stationsToExport);
-
-        for (var i = 0; i < _stationsToExport.Count; i++)
+        try
         {
-            if (bgWorkerExport.CancellationPending)
+            ToggleButtons();
+
+            // Get the list of existing directories before exporting
+            var existingDirectories = FileHelper.SafeEnumerateDirectories(StagingPath).ToList();
+
+            // Remove protected directories from the list
+            existingDirectories.RemoveAll(dir => StationManager.Instance.IsProtectedFolder(dir));
+
+            var songDirectoryMap = MapSongsToDirectories(existingDirectories, _stationsToExport);
+
+            for (var i = 0; i < _stationsToExport.Count; i++)
             {
-                e.Cancel = true;
-                return;
+                if (bgWorkerExport.CancellationPending)
+                {
+                    e.Cancel = true;
+                    return;
+                }
+
+                var station = _stationsToExport[i];
+                try
+                {
+                    UpdateStatus(string.Format(_statusString, station.TrackedObject.MetaData.DisplayName));
+                    bgWorkerExport.ReportProgress((int)(i / (float)_stationsToExport.Count * 100));
+
+                    var newStationPath = CreateStationDirectory(station);
+                    if (string.IsNullOrEmpty(newStationPath)) continue;
+
+                    if (station.TrackedObject.Songs.Count >= 1)
+                    {
+                        // Copy song files from old directory to new directory
+                        CopySongFiles(songDirectoryMap, newStationPath, station);
+
+                        if (!CreateSongListJson(newStationPath, station))
+                            AuLogger.GetCurrentLogger<ExportWindow>("BG_ExportStaging")
+                                .Error(
+                                    "Couldn't save the songs.sgls file. This means that CRA won't know where your station's songs are located.");
+                    }
+                    else
+                    {
+                        //Remove the songs.sgls file(s) if it exists
+                        var songJsons = FileHelper
+                            .SafeEnumerateFiles(newStationPath, "*.sgls", SearchOption.AllDirectories)
+                            .ToList();
+                        foreach (var file in songJsons.Where(File.Exists))
+                            File.Delete(file);
+                    }
+
+                    if (station.TrackedObject.Icons.Count >= 1)
+                    {
+                        if (!CreateIconListJson(newStationPath, station))
+                            AuLogger.GetCurrentLogger<ExportWindow>("BG_ExportStaging")
+                                .Error(
+                                    "Couldn't save the icons.json file. This means that CRA won't know where your station's icons are located.");
+                    }
+                    else
+                    {
+                        //Remove the icons.icls file(s) if it exists
+                        var iconJsons = FileHelper
+                            .SafeEnumerateFiles(newStationPath, "*.icls", SearchOption.AllDirectories)
+                            .ToList();
+                        foreach (var file in iconJsons.Where(File.Exists))
+                            File.Delete(file);
+
+                        //Update the station's CustomIcon property if no icons are present
+                        station.TrackedObject.MetaData.CustomIcon = new CustomIcon();
+                    }
+
+                    if (!CreateMetaDataJson(newStationPath, station))
+                        AuLogger.GetCurrentLogger<ExportWindow>("BG_ExportStaging")
+                            .Error(
+                                "Couldn't save the metadata.json file. This means that RadioExt will not work with this station!");
+                }
+                catch (Exception ex)
+                {
+                    AuLogger.GetCurrentLogger<ExportWindow>("BG_ExportToStaging").Error(ex, $"Failed to export station: {station.TrackedObject.MetaData.DisplayName}");
+                }
             }
 
-            var station = _stationsToExport[i];
-            UpdateStatus(string.Format(_statusString, station.TrackedObject.MetaData.DisplayName));
-            bgWorkerExport.ReportProgress((int)(i / (float)_stationsToExport.Count * 100));
-
-            var newStationPath = CreateStationDirectory(station);
-            if (string.IsNullOrEmpty(newStationPath)) continue;
-
-            if (!CreateMetaDataJson(newStationPath, station)) continue;
-
-            if (station.TrackedObject.Songs.Count >= 1)
-            {
-                // Copy song files from old directory to new directory
-                CopySongFiles(songDirectoryMap, newStationPath, station);
-
-                if (!CreateSongListJson(newStationPath, station))
-                    AuLogger.GetCurrentLogger<ExportWindow>("BG_ExportStaging")
-                        .Error("Couldn't save the songs.sgls file. This means that CRA won't know where your station's songs are located.");
-            }
-
-            if (station.TrackedObject.Icons.Count >= 1)
-            {
-                if (!CreateIconListJson(newStationPath, station))
-                    AuLogger.GetCurrentLogger<ExportWindow>("BG_ExportStaging")
-                        .Error("Couldn't save the icons.json file. This means that CRA won't know where your station's icons are located.");
-            }
+            RemoveDeletedStations(existingDirectories);
+            AuLogger.GetCurrentLogger<ExportWindow>("BG_ExportToStaging")
+                .Info($"Exported {_stationsToExport.Count} stations to staging directory: {StagingPath}");
         }
-
-        RemoveDeletedStations(existingDirectories);
-        AuLogger.GetCurrentLogger<ExportWindow>("BG_ExportToStaging")
-            .Info($"Exported {_stationsToExport.Count} stations to staging directory: {StagingPath}");
+        catch (Exception ex)
+        {
+            AuLogger.GetCurrentLogger<ExportWindow>("BG_ExportToStaging").Error(ex, "Something went wrong while exporting the stations to staging!");
+        }
     }
 
     /// <summary>
@@ -676,14 +716,14 @@ public partial class ExportWindow : Form
             foreach (var station
                      in activeStations.Where(station => station.TrackedObject.CustomIcon.UseCustom))
             {
+                DeleteAllStationIconsFromGame(station.TrackedObject.Icons);
+
                 var activeIcon = station.TrackedObject.Icons.FirstOrDefault(i => i.TrackedObject.IsActive);
                 if (activeIcon == null)
                 {
                     AuLogger.GetCurrentLogger<ExportWindow>("CopyIconsToGame")
                         .Warn($"Station {station.TrackedObject.MetaData.DisplayName} does not have an active icon!" +
-                        $"All previous icons will be deleted. If this is expected, no action is required.");
-
-                    DeleteAllStationIconsFromGame(station.TrackedObject.Icons);
+                        $"All previous station icons have been deleted from the game. If this is expected, no action is required. Otherwise, mark an icon as active to restore it.");
                     continue;
                 }
 
@@ -788,8 +828,7 @@ public partial class ExportWindow : Form
                 {
                     AuLogger.GetCurrentLogger<ExportWindow>("DeleteInactiveIcons")
                         .Warn($"Station {station.TrackedObject.MetaData.DisplayName} does not have an active icon!" +
-                        $"All previous icons will be deleted. If this is expected, no action is required.");
-
+                              $"All previous station icons have been deleted from the game. If this is expected, no action is required. Otherwise, mark an icon as active to restore it.");
                     DeleteAllStationIconsFromGame(station.TrackedObject.Icons);
                     continue;
                 }

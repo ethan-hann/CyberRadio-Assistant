@@ -185,6 +185,8 @@ public partial class StationManager : IDisposable
             }
 
             pair.Key.TrackedObject.AddIcon(icon);
+            StationsAsBindingList.First(s => s.Id == pair.Key.Id).TrackedObject.AddIcon(icon);
+
             var iconEditor = new IconEditor(pair.Key, icon, isExistingIcon ? IconEditorType.FromArchive : IconEditorType.FromPNG);
             pair.Value.Add(iconEditor);
 
@@ -200,7 +202,7 @@ public partial class StationManager : IDisposable
     }
 
     /// <summary>
-    /// Remove an icon from a station.
+    /// Remove an icon from a station, including the associated IconEditor. Optionally, delete the icon files from disk.
     /// </summary>
     /// <param name="stationId">The station ID to remove the icon from.</param>
     /// <param name="icon">The <see cref="Icon"/> to remove.</param>
@@ -213,6 +215,8 @@ public partial class StationManager : IDisposable
             if (!_stations.TryGetValue(stationId, out var pair)) return false;
 
             pair.Key.TrackedObject.RemoveIcon(icon);
+            StationsAsBindingList.First(s => s.Id == pair.Key.Id).TrackedObject.RemoveIcon(icon);
+
             var iconEditor = GetStationIconEditor(stationId, icon.Id);
             if (iconEditor != null)
                 pair.Value.Remove(iconEditor);
@@ -239,6 +243,53 @@ public partial class StationManager : IDisposable
         catch (Exception ex)
         {
             AuLogger.GetCurrentLogger<StationManager>().Error(ex, "Error removing icon from station.");
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// Remove all icons from a station, including the associated IconEditors. Optionally, delete the icon files from disk.
+    /// </summary>
+    /// <param name="stationId">The station ID to remove all icons from.</param>
+    /// <param name="deleteFiles">Indicates whether to delete the Icon files from disk.</param>
+    /// <returns><c>true</c> if all icons were removed successfully; <c>false</c> otherwise.</returns>
+    public bool RemoveAllStationIcons(Guid stationId, bool deleteFiles = false)
+    {
+        try
+        {
+            if (!_stations.TryGetValue(stationId, out var pair)) return false;
+
+            var appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            var foldersInAppData = FileHelper.SafeEnumerateDirectories(Path.Combine(appData, "Wolven Icon Generator", "tools")).ToList();
+            foreach (var icon in pair.Key.TrackedObject.Icons)
+            {
+                var iconEditor = GetStationIconEditor(stationId, icon.Id);
+                if (iconEditor != null)
+                    pair.Value.Remove(iconEditor);
+
+                if (deleteFiles)
+                {
+                    if (icon.TrackedObject.ArchivePath != null && FileHelper.DoesFileExist(icon.TrackedObject.ArchivePath))
+                        FileHelper.DeleteFile(icon.TrackedObject.ArchivePath);
+                    if (icon.TrackedObject.ImagePath != null && FileHelper.DoesFileExist(icon.TrackedObject.ImagePath))
+                        FileHelper.DeleteFile(icon.TrackedObject.ImagePath);
+
+                    //Delete the icon's folder in the appdata directory.
+                    var foldersToDelete = foldersInAppData.Where(f => f.Contains(icon.Id.ToString())).ToList();
+                    foreach (var folder in foldersToDelete.Where(Directory.Exists))
+                        Directory.Delete(folder, true);
+                }
+            }
+
+            pair.Key.TrackedObject.RemoveAllIcons();
+            StationsAsBindingList.First(s => s.Id == pair.Key.Id).TrackedObject.RemoveAllIcons();
+
+            StationUpdated?.Invoke(this, stationId);
+
+            return pair.Key.TrackedObject.Icons.Count == 0;
+        } catch (Exception ex)
+        {
+            AuLogger.GetCurrentLogger<StationManager>().Error(ex, "Error removing all icons from station.");
             return false;
         }
     }
