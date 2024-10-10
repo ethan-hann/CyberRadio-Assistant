@@ -207,7 +207,7 @@ public partial class StationManager : IDisposable
     /// <param name="deleteFiles">Indicates whether to delete the Icon files from disk.</param>
     /// <param name="isExistingArchive">Indicates whether the icon was added from an existing archive. In this case, we shouldn't delete the archive file.</param>
     /// <returns><c>true</c> if the icon was removed successfully; <c>false</c> otherwise.</returns>
-    public bool RemoveStationIcon(Guid stationId, TrackableObject<WolvenIcon> icon, bool deleteFiles = false, bool isExistingArchive = false)
+    public bool RemoveStationIcon(Guid stationId, TrackableObject<WolvenIcon> icon, bool deleteFiles = false)
     {
         try
         {
@@ -220,7 +220,7 @@ public partial class StationManager : IDisposable
 
             if (deleteFiles)
             {
-                if (icon.TrackedObject.ArchivePath != null && FileHelper.DoesFileExist(icon.TrackedObject.ArchivePath) && !isExistingArchive)
+                if (icon.TrackedObject.ArchivePath != null && FileHelper.DoesFileExist(icon.TrackedObject.ArchivePath))
                     FileHelper.DeleteFile(icon.TrackedObject.ArchivePath);
                 if (icon.TrackedObject.ImagePath != null && FileHelper.DoesFileExist(icon.TrackedObject.ImagePath))
                     FileHelper.DeleteFile(icon.TrackedObject.ImagePath);

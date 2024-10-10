@@ -1038,6 +1038,24 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The extracted image could not be found..
+        /// </summary>
+        internal static string IconEditor_SetFieldsBasedOnImagePath_The_extracted_image_could_not_be_found_ {
+            get {
+                return ResourceManager.GetString("IconEditor_SetFieldsBasedOnImagePath_The_extracted_image_could_not_be_found_", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To be determined from archive....
+        /// </summary>
+        internal static string IconEditor_SetFieldsBasedOnImagePath_To_be_determined_from_archive___ {
+            get {
+                return ResourceManager.GetString("IconEditor_SetFieldsBasedOnImagePath_To_be_determined_from_archive___", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Color Mode: {0}.
         /// </summary>
         internal static string IconEditor_SetImagePreviewProperties_Color_Mode___0_ {
@@ -1088,6 +1106,34 @@ namespace RadioExt_Helper {
         internal static string IconHelp {
             get {
                 return ResourceManager.GetString("IconHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to delete this icon?.
+        /// </summary>
+        internal static string IconManagerForm_RemoveIcon_Are_you_sure_you_want_to_delete_this_icon_ {
+            get {
+                return ResourceManager.GetString("IconManagerForm_RemoveIcon_Are_you_sure_you_want_to_delete_this_icon_", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Confirm Delete.
+        /// </summary>
+        internal static string IconManagerForm_RemoveIcon_Confirm_Delete {
+            get {
+                return ResourceManager.GetString("IconManagerForm_RemoveIcon_Confirm_Delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do you want to delete associated icon files from staging? This will delete the copied .archive file and the associated PNG..
+        /// </summary>
+        internal static string IconManagerForm_RemoveIcon_Do_you_want_to_delete_associated_icon_files_from_staging__This_will_delete_the_copied__archive_file_and_the_associated_PNG_ {
+            get {
+                return ResourceManager.GetString("IconManagerForm_RemoveIcon_Do_you_want_to_delete_associated_icon_files_from_stagi" +
+                        "ng__This_will_delete_the_copied__archive_file_and_the_associated_PNG_", resourceCulture);
             }
         }
         

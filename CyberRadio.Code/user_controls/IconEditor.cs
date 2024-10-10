@@ -101,13 +101,52 @@ namespace RadioExt_Helper.user_controls
                 picStationIcon.AllowDrop = false;
                 btnImportIcon.Visible = false;
                 btnStartExtract.Enabled = true;
-                SetImagePreviewProperties(true);
+                SetImagePreviewProperties(Icon.TrackedObject.IsFromArchive);
             }
             else
             {
                 btnStartExtract.Visible = false;
                 btnStartExtract.Enabled = false;
                 SetImagePreviewProperties();
+            }
+
+            SetFieldsBasedOnIsFromArchive();
+        }
+
+        private void SetFieldsBasedOnIsFromArchive()
+        {
+            try
+            {
+                Invoke(() =>
+                {
+                    if (!Icon.TrackedObject.IsFromArchive)
+                    {
+                        if (Path.Exists(Icon.TrackedObject.ImagePath))
+                        {
+                            txtAtlasName.Enabled = false;
+                            btnStartExtract.Enabled = false;
+                        }
+                        else
+                        {
+                            txtAtlasName.Enabled = true;
+                            btnStartExtract.Enabled = true;
+                            lblImageStatus.Text = Strings.IconEditor_SetFieldsBasedOnImagePath_The_extracted_image_could_not_be_found_;
+                        }
+                    }
+                    else
+                    {
+                        txtAtlasName.Enabled = false;
+                        
+                        txtAtlasName.Text = !Icon.TrackedObject.CustomIcon.InkAtlasPath.Equals("path\\to\\custom\\atlas.inkatlas") ? 
+                            Icon.TrackedObject.AtlasName : 
+                            Strings.IconEditor_SetFieldsBasedOnImagePath_To_be_determined_from_archive___;
+
+                        btnStartExtract.Enabled = true;
+                    }
+                });
+            } catch (Exception ex)
+            {
+                AuLogger.GetCurrentLogger<IconEditor>("SetFieldsBasedOnIsFromArchive").Error(ex);
             }
         }
 
@@ -213,8 +252,9 @@ namespace RadioExt_Helper.user_controls
                     Icon.TrackedObject.ArchivePath = newPaths.archiveStagingPath;
                     Icon.TrackedObject.ImagePath = newPaths.pngStagingPath;
 
-                    SetIconFields();
                     SetImagePreviewProperties();
+                    SetFieldsBasedOnIsFromArchive();
+                    SetIconFields();
 
                     IconUpdated?.Invoke(this, Icon);
                 }
@@ -268,18 +308,19 @@ namespace RadioExt_Helper.user_controls
                 else
                 {
                     Icon.TrackedObject.AtlasName = icon.AtlasName;
-
+                    Icon.TrackedObject.ArchivePath = icon.ArchivePath;
                     Icon.TrackedObject.OriginalArchivePath = icon.OriginalArchivePath;
                     Icon.TrackedObject.Sha256HashOfArchiveFile = icon.Sha256HashOfArchiveFile;
                     Icon.TrackedObject.CustomIcon = icon.CustomIcon;
 
-                    var newPaths = CopyIconToStaging(Icon.TrackedObject.OriginalArchivePath, icon.ImagePath, stagingPath);
+                    var newPaths = CopyIconToStaging(Icon.TrackedObject.ArchivePath, icon.ImagePath, stagingPath);
 
                     Icon.TrackedObject.ArchivePath = newPaths.archiveStagingPath;
                     Icon.TrackedObject.ImagePath = newPaths.pngStagingPath;
 
                     SetIconFields();
                     SetImagePreviewProperties();
+                    SetFieldsBasedOnIsFromArchive();
 
                     IconUpdated?.Invoke(this, Icon);
                 }
@@ -556,6 +597,8 @@ namespace RadioExt_Helper.user_controls
         {
             editorTabs.TabPages[0].Text = string.Format(Strings.IconEditor_txtIconName_TextChanged_Editing_Tab___0_, txtIconName.Text);
             Icon.TrackedObject.IconName = txtIconName.Text;
+
+            if (Icon.TrackedObject.IsFromArchive && !_isExtracting) return;
 
             if (!_isReadOnly)
             {

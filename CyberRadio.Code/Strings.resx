@@ -878,4 +878,19 @@ Actual size may be different.</value>
   <data name="IconEditor_SetImagePreviewProperties_Img__Fmt____0_" xml:space="preserve">
 	  <value>Img. Fmt.: {0}</value>
   </data>
+  <data name="IconEditor_SetFieldsBasedOnImagePath_The_extracted_image_could_not_be_found_" xml:space="preserve">
+	  <value>The extracted image could not be found.</value>
+  </data>
+  <data name="IconEditor_SetFieldsBasedOnImagePath_To_be_determined_from_archive___" xml:space="preserve">
+	  <value>To be determined from archive...</value>
+  </data>
+  <data name="IconManagerForm_RemoveIcon_Are_you_sure_you_want_to_delete_this_icon_" xml:space="preserve">
+	  <value>Are you sure you want to delete this icon?</value>
+  </data>
+  <data name="IconManagerForm_RemoveIcon_Confirm_Delete" xml:space="preserve">
+	  <value>Confirm Delete</value>
+  </data>
+  <data name="IconManagerForm_RemoveIcon_Do_you_want_to_delete_associated_icon_files_from_staging__This_will_delete_the_copied__archive_file_and_the_associated_PNG_" xml:space="preserve">
+	  <value>Do you want to delete associated icon files from staging? This will delete the copied .archive file and the associated PNG.</value>
+  </data>
 </root>

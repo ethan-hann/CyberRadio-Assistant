@@ -219,14 +219,16 @@ namespace RadioExt_Helper.forms
 
         private void RemoveIcon(TrackableObject<WolvenIcon> icon)
         {
-            var text = GlobalData.Strings.GetString("ConfirmIconDelete") ?? "Do you want to delete associated icon files from disk?" +
-                "This will delete the generated .archive file from staging and the imported copy of the PNG from AppData.";
-            var caption = GlobalData.Strings.GetString("Confirm") ?? "Confirm Delete";
-            var result = MessageBox.Show(text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            
-            if (result == DialogResult.Yes)
-                StationManager.Instance.RemoveStationIcon(_station.Id, icon, true, 
-                    _currentEditor?.IconEditorType == IconEditorType.FromArchive);
+            var firstResult = MessageBox.Show(Strings.IconManagerForm_RemoveIcon_Are_you_sure_you_want_to_delete_this_icon_, 
+                Strings.IconManagerForm_RemoveIcon_Confirm_Delete,
+                MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            if (firstResult != DialogResult.OK) return;
+
+            var secondResult = MessageBox.Show(Strings.IconManagerForm_RemoveIcon_Do_you_want_to_delete_associated_icon_files_from_staging__This_will_delete_the_copied__archive_file_and_the_associated_PNG_, 
+                Strings.IconManagerForm_RemoveIcon_Confirm_Delete, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+            if (secondResult == DialogResult.Yes)
+                StationManager.Instance.RemoveStationIcon(_station.Id, icon, true);
             else
                 StationManager.Instance.RemoveStationIcon(_station.Id, icon);
 
@@ -256,7 +258,14 @@ namespace RadioExt_Helper.forms
         {
             if (fdlgOpenArchive.ShowDialog() == DialogResult.OK)
             {
-                var icon = new TrackableObject<WolvenIcon>(WolvenIcon.FromArchive(fdlgOpenArchive.FileName));
+                var icon = new TrackableObject<WolvenIcon>(WolvenIcon.FromArchive(fdlgOpenArchive.FileName))
+                {
+                    TrackedObject =
+                    {
+                        IsFromArchive = true
+                    }
+                };
+
                 AddNewIcon(icon, false, true);
             }
         }

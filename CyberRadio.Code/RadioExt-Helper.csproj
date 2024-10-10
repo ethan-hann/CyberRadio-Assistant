@@ -11,9 +11,9 @@
         <ApplicationIcon>resources\cyber-radio-assistant.ico</ApplicationIcon>
         <StartupObject>RadioExt_Helper.Program</StartupObject>
         <GenerateDocumentationFile>False</GenerateDocumentationFile>
-        <AssemblyVersion>2.0.338.0</AssemblyVersion>
-        <FileVersion>2.0.338.0</FileVersion>
-        <Version>2.0.338</Version>
+        <AssemblyVersion>2.0.346.0</AssemblyVersion>
+        <FileVersion>2.0.346.0</FileVersion>
+        <Version>2.0.346</Version>
         <Company>Ethan Hann</Company>
         <Product>Cyber Radio Assistant</Product>
         <NeutralLanguage>en</NeutralLanguage>
@@ -70,13 +70,12 @@
         <PackageReference Include="AetherUtils.Core" Version="1.0.8" />
         <PackageReference Include="NAudio" Version="2.2.1" />
         <PackageReference Include="Pathoschild.FluentNexus" Version="1.0.5" />
-        <PackageReference Include="pythonnet" Version="3.0.3" />
         <PackageReference Include="SharpCompress" Version="0.38.0" />
         <PackageReference Include="SharpZipLib" Version="1.4.2" />
         <PackageReference Include="SixLabors.ImageSharp" Version="3.1.5" />
         <PackageReference Include="System.Management" Version="8.0.0" />
         <PackageReference Include="System.Net.Http" Version="4.3.4" />
-        <PackageReference Include="System.Text.Json" Version="8.0.4" />
+        <PackageReference Include="System.Text.Json" Version="8.0.5" />
         <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
         <PackageReference Include="TagLibSharp" Version="2.3.0" />
     </ItemGroup>
