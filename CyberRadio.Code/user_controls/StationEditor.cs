@@ -43,6 +43,8 @@ public sealed partial class StationEditor : UserControl, IEditor
     public Guid Id { get; set; } = Guid.NewGuid();
     public EditorType Type { get; set; } = EditorType.StationEditor;
 
+    private readonly List<string?> _customDataKeys = ["Icon Name", "Image Path", "Archive Path", "SHA256 Archive Hash"];
+
     /// <summary>
     /// Initializes a new instance of the <see cref="StationEditor"/> class.
     /// </summary>
@@ -193,7 +195,7 @@ public sealed partial class StationEditor : UserControl, IEditor
         if (stationIcon != null)
         {
             var imagePath = stationIcon.TrackedObject.ImagePath;
-            if (Path.Exists(imagePath))
+            if (Path.Exists(imagePath)) //TODO: add missing image texture to display in picture box
             {
                 picStationIcon.SetImage(stationIcon.TrackedObject.ImagePath);
             }
@@ -229,7 +231,78 @@ public sealed partial class StationEditor : UserControl, IEditor
     {
         dgvMetadata.Rows.Clear();
         foreach (var (key, value) in Station.TrackedObject.MetaData.CustomData)
-            dgvMetadata.Rows.Add(key, value); //TODO: this is causing the station to have pending changes when it shouldn't
+            dgvMetadata.Rows.Add(key, value);
+
+        //Find the indices of the custom data rows that pertain to the custom icon
+        var indices = GetCustomIconDataRowIndices();
+
+        //Set the custom data rows to be read-only
+        SetReadOnlyDataViewRows(indices);
+    }
+
+    private void RemoveCustomIconDataRows()
+    {
+        try
+        {
+            var indices = GetCustomIconDataRowIndices();
+            foreach (var index in indices)
+            {
+                var row = dgvMetadata.Rows[index];
+                dgvMetadata.Rows.Remove(row);
+            }
+        }
+        catch (Exception ex)
+        {
+            AuLogger.GetCurrentLogger<StationEditor>("RemoveCustomIconDataRows").Error(ex, "Something went wrong while removing the custom icon data rows!");
+        }
+    }
+
+    /// <summary>
+    /// Get the array of indices in the data grid view pertaining to the icon's custom data. This data is always non-editable for the user.
+    /// </summary>
+    /// <returns>The array of indices or an empty array if an exception occured or no icon custom data.</returns>
+    private int[] GetCustomIconDataRowIndices()
+    {
+        try
+        {
+            return dgvMetadata.Rows.Cast<DataGridViewRow>()
+                .Select((row, index) => new { Row = row, Index = index })
+                .Where(x => _customDataKeys.Contains(x.Row.Cells[0].Value?.ToString()))
+                .Select(x => x.Index)
+                .ToArray();
+        }
+        catch (Exception ex)
+        {
+            AuLogger.GetCurrentLogger<StationEditor>("GetCustomIconDataRowIndices").Error(ex, "Something went wrong looking for the custom icon data rows!");
+        }
+
+        return [];
+    }
+
+    /// <summary>
+    /// Sets the custom data view rows to be readonly.
+    /// </summary>
+    /// <param name="rowIndices">The indices of the rows to set to read-only.</param>
+    private void SetReadOnlyDataViewRows(params int[] rowIndices)
+    {
+        foreach (var rowIndex in rowIndices)
+        {
+            dgvMetadata.Rows[rowIndex].ReadOnly = true;
+            dgvMetadata.Rows[rowIndex].DefaultCellStyle.BackColor = Color.LightGray;
+        }
+    }
+
+    /// <summary>
+    /// Sets the custom data view rows to be editable.
+    /// </summary>
+    /// <param name="rowIndices">The indices of the rows to set to editable.</param>
+    private void SetEditableDataViewRows(params int[] rowIndices)
+    {
+        foreach (var rowIndex in rowIndices)
+        {
+            dgvMetadata.Rows[rowIndex].ReadOnly = false;
+            dgvMetadata.Rows[rowIndex].DefaultCellStyle.BackColor = Color.White;
+        }
     }
 
     /// <summary>
@@ -248,11 +321,13 @@ public sealed partial class StationEditor : UserControl, IEditor
         {
             Station.TrackedObject.CustomIcon.UseCustom = false;
             picStationIcon.Image = Resources.drag_and_drop;
-            radUseCustomYes.Checked = false;
-            radUseCustomNo.Checked = true;
-            Station.TrackedObject.RemoveCustomData("Icon Name");
-            Station.TrackedObject.RemoveCustomData("SHA256 Archive Hash");
-            Station.TrackedObject.RemoveCustomData("Original Image Path");
+            //TODO: fix the back and forth between custom and non-custom icon when this is called from outside the control (i.e., the icon manager form).
+            //radUseCustomYes.Checked = false;
+            //radUseCustomNo.Checked = true;
+            Station.TrackedObject.RemoveCustomData(_customDataKeys[0]);
+            Station.TrackedObject.RemoveCustomData(_customDataKeys[1]);
+            Station.TrackedObject.RemoveCustomData(_customDataKeys[2]);
+            Station.TrackedObject.RemoveCustomData(_customDataKeys[3]);
             UpdateCustomDataView();
 
             Station.CheckPendingSaveStatus();
@@ -260,8 +335,8 @@ public sealed partial class StationEditor : UserControl, IEditor
             return;
         }
 
-        radUseCustomYes.Checked = true;
-        radUseCustomNo.Checked = false;
+        //radUseCustomYes.Checked = true;
+        //radUseCustomNo.Checked = false;
 
         Station.TrackedObject.CustomIcon = new CustomIcon
         {
@@ -278,10 +353,10 @@ public sealed partial class StationEditor : UserControl, IEditor
             : string.Empty);
 
         //Update custom data pertaining to the active icon
-        Station.TrackedObject.AddCustomData("Icon Name", icon.TrackedObject.IconName ?? string.Empty);
-        Station.TrackedObject.AddCustomData("SHA256 Archive Hash", icon.TrackedObject.Sha256HashOfArchiveFile ?? string.Empty);
-        Station.TrackedObject.AddCustomData("Original Image Path", icon.TrackedObject.ImagePath ?? string.Empty);
-
+        Station.TrackedObject.AddCustomData(_customDataKeys[0], icon.TrackedObject.IconName ?? string.Empty);
+        Station.TrackedObject.AddCustomData(_customDataKeys[1], icon.TrackedObject.ImagePath ?? string.Empty);
+        Station.TrackedObject.AddCustomData(_customDataKeys[2], icon.TrackedObject.ArchivePath ?? string.Empty);
+        Station.TrackedObject.AddCustomData(_customDataKeys[3], icon.TrackedObject.Sha256HashOfArchiveFile ?? string.Empty);
         UpdateCustomDataView();
 
         StationUpdated?.Invoke(this, EventArgs.Empty);
@@ -335,10 +410,14 @@ public sealed partial class StationEditor : UserControl, IEditor
         try
         {
             Station.TrackedObject.Icons.ForEach(i => i.TrackedObject.IsActive = false);
+
             //Find the matching wolven icon in the station's list of icons
             var matchingIcon = Station.TrackedObject.Icons.FirstOrDefault(i => i.TrackedObject.CustomIcon.InkAtlasPath.Equals(txtInkAtlasPath.Text));
             if (matchingIcon != null)
+            {
                 matchingIcon.TrackedObject.IsActive = true;
+                UpdateIcon(matchingIcon);
+            }
         }
         catch (Exception ex)
         {
@@ -366,6 +445,7 @@ public sealed partial class StationEditor : UserControl, IEditor
         _cmbUiIcons.SelectionLength = 0;
 
         Station.TrackedObject.Icons.ForEach(i => i.TrackedObject.IsActive = false);
+        UpdateIcon(null);
     }
 
     private void PicStationIcon_DragDrop(object sender, DragEventArgs e)
@@ -389,13 +469,13 @@ public sealed partial class StationEditor : UserControl, IEditor
         try
         {
             //Find the matching wolven icon in the station's list of icons
-            var matchingIcon = Station.TrackedObject.Icons.Where(i => i.TrackedObject.CustomIcon.InkAtlasPath.Equals(txtInkAtlasPath.Text)).FirstOrDefault();
-            if (matchingIcon != null)
-            {
-                matchingIcon.TrackedObject.IsActive = true;
-                txtInkAtlasPart.Text = matchingIcon.TrackedObject.CustomIcon.InkAtlasPart;
-                picStationIcon.SetImage(matchingIcon.TrackedObject.ImagePath);
-            }
+            var matchingIcon = Station.TrackedObject.Icons.FirstOrDefault(i => i.TrackedObject.CustomIcon.InkAtlasPath.Equals(txtInkAtlasPath.Text));
+            if (matchingIcon == null) return;
+
+            matchingIcon.TrackedObject.IsActive = true;
+            txtInkAtlasPart.Text = matchingIcon.TrackedObject.CustomIcon.InkAtlasPart;
+            picStationIcon.SetImage(matchingIcon.TrackedObject.ImagePath);
+            UpdateIcon(matchingIcon);
         }
         catch (Exception ex)
         {
@@ -528,11 +608,23 @@ public sealed partial class StationEditor : UserControl, IEditor
         }
     }
 
+    private void dgvMetadata_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
+    {
+        var readOnlyIndices = GetCustomIconDataRowIndices();
+
+        //Don't allow deleting custom icon data rows or null rows
+        if (e.Row == null) return;
+
+        if (readOnlyIndices.Contains(dgvMetadata.Rows.IndexOf(e.Row)))
+            e.Cancel = true;
+    }
+
     private void DgvMetadata_UserDeletedRow(object sender, DataGridViewRowEventArgs e)
     {
         // Row deleted by the user
         foreach (DataGridViewCell cell in e.Row.Cells)
         {
+
             var key = cell.Value?.ToString();
             if (key == null || !Station.TrackedObject.ContainsCustomData(key)) continue;
 

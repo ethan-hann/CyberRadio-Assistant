@@ -225,7 +225,8 @@ public partial class StationManager : IDisposable
                     FileHelper.DeleteFile(icon.TrackedObject.ImagePath);
 
                 //Delete the icon's folder in the appdata directory.
-                var foldersInAppData = FileHelper.SafeEnumerateDirectories(FileHelper.ExpandPath("%appdata%\\Wolven Icon Generator\\tools")).ToList();
+                var appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+                var foldersInAppData = FileHelper.SafeEnumerateDirectories(Path.Combine(appData, "Wolven Icon Generator", "tools")).ToList();
                 var foldersToDelete = foldersInAppData.Where(f => f.Contains(icon.Id.ToString())).ToList();
                 foreach (var folder in foldersToDelete.Where(Directory.Exists))
                     Directory.Delete(folder, true);

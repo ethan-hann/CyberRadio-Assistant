@@ -210,7 +210,7 @@ public sealed class Station : INotifyPropertyChanged, ICloneable, IEquatable<Sta
     /// </summary>
     /// <param name="key">The key of the data to add.</param>
     /// <param name="value">The data contents to add with the specified key.</param>
-    public void AddCustomData(string key, object value)
+    public void AddCustomData(string? key, object value)
     {
         try
         {
@@ -227,7 +227,7 @@ public sealed class Station : INotifyPropertyChanged, ICloneable, IEquatable<Sta
     /// Remove the custom data associated with the specified key.
     /// </summary>
     /// <param name="key">The key of the data to remove.</param>
-    public void RemoveCustomData(string key)
+    public void RemoveCustomData(string? key)
     {
         try
         {
