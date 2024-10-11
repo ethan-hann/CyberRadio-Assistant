@@ -912,16 +912,16 @@ public partial class StationManager : IDisposable
         FileHelper.CreateDirectories(targetDir);
 
         var copyTasks = (from file in files
-                         let targetFilePath = Path.Combine(targetDir, Path.GetFileName(file))
-                         select Task.Run(() =>
-                         {
-                             FileHelper.CreateDirectories(targetFilePath);
-                             File.Copy(file, targetFilePath, true);
-                         })).ToList();
+            let targetFilePath = Path.Combine(targetDir, Path.GetFileName(file))
+            select Task.Run(() =>
+            {
+                FileHelper.CreateDirectories(targetFilePath);
+                File.Copy(file, targetFilePath, true);
+            })).ToList();
 
         copyTasks.AddRange(from directory in directories
-                           let targetDirectoryPath = Path.Combine(targetDir, Path.GetFileName(directory))
-                           select Task.Run(() => CopyDirectoryAsync(directory, targetDirectoryPath)));
+            let targetDirectoryPath = Path.Combine(targetDir, Path.GetFileName(directory))
+            select Task.Run(() => CopyDirectoryAsync(directory, targetDirectoryPath)));
 
         await Task.WhenAll(copyTasks);
     }
