@@ -3,10 +3,8 @@ using AetherUtils.Core.Structs;
 using RadioExt_Helper.models;
 using RadioExt_Helper.Properties;
 using RadioExt_Helper.utility;
-using System;
 using System.ComponentModel;
 using System.Text.RegularExpressions;
-using System.Threading;
 using WIG.Lib.Models;
 using WIG.Lib.Utility;
 
@@ -29,7 +27,7 @@ namespace RadioExt_Helper.user_controls
         public EditorType Type { get; set; } = EditorType.IconEditor;
         public IconEditorType IconEditorType { get; set; }
 
-        private readonly BindingList<Pair<DateTime, string>> _commandOutputs = [];
+        private readonly BindingList<Pair<DateTime, string>> _commandOutputs;
 
         /// <summary>
         /// The station that the icon is associated with.
@@ -42,7 +40,7 @@ namespace RadioExt_Helper.user_controls
         public TrackableObject<WolvenIcon> Icon { get; }
 
         private string _iconPath = string.Empty;
-        private readonly ImageList _tabImages = new();
+        private readonly ImageList _tabImages;
 
         private bool _isImporting;
         private bool _isExtracting;
@@ -64,6 +62,14 @@ namespace RadioExt_Helper.user_controls
             Icon = icon;
             Dock = DockStyle.Fill;
             IconEditorType = type;
+
+            _cancellationTokenSource = new CancellationTokenSource();
+
+            _commandOutputs = new BindingList<Pair<DateTime, string>>();
+            dgvStatus.Columns[0].DataPropertyName = "Key";
+            dgvStatus.Columns[1].DataPropertyName = "Value";
+
+            _tabImages = new ImageList();
         }
 
         ~IconEditor()
@@ -89,9 +95,7 @@ namespace RadioExt_Helper.user_controls
 
             SetIconFields();
 
-            dgvStatus.Columns[0].DataPropertyName = "Key";
-            dgvStatus.Columns[1].DataPropertyName = "Value";
-
+            dgvStatus.DataSource = null;
             dgvStatus.DataSource = _commandOutputs;
 
             if (IconEditorType == IconEditorType.FromArchive)
@@ -140,7 +144,7 @@ namespace RadioExt_Helper.user_controls
                             Icon.TrackedObject.AtlasName : 
                             Strings.IconEditor_SetFieldsBasedOnImagePath_To_be_determined_from_archive___;
 
-                        btnStartExtract.Enabled = true;
+                        btnStartExtract.Enabled = !Icon.TrackedObject.CheckIconValid(); //TODO: disable this if the icon has already been extracted
                     }
                 });
             } catch (Exception ex)
@@ -377,6 +381,7 @@ namespace RadioExt_Helper.user_controls
                 UnmakeEditorReadOnly();
 
             _isImporting = false;
+            _isExtracting = false;
         }
 
         private void SetIconFields()
@@ -404,6 +409,18 @@ namespace RadioExt_Helper.user_controls
             {
                 // Dispose of the existing image in the PictureBox (if any) to avoid resource locking
                 picStationIcon.ClearImage();
+
+                //If the icon is valid, prevent changes to the fields, and set fromInitialArchive to false (indicating the icon is valid) so the image gets set.
+                if (Icon.TrackedObject.CheckIconValid())
+                {
+                    fromInitialArchive = false;
+                    MakeEditorReadOnly();
+                }
+                else
+                {
+                    UnmakeEditorReadOnly();
+                }
+
                 if (fromInitialArchive)
                 {
                     lblImageWidth.Text = @"W: TBD";
@@ -423,30 +440,23 @@ namespace RadioExt_Helper.user_controls
                     lblImageColorMode.Text = string.Format(Strings.IconEditor_SetImagePreviewProperties_Color_Mode___0_, picStationIcon.ImageProperties.PixelFormat);
                 }
 
-                if (picStationIcon.Image != null)
+                if (picStationIcon.Image == null) return;
+
+                if (picStationIcon.Image.Width != picStationIcon.Image.Height)
                 {
-                    if (picStationIcon.Image.Width != picStationIcon.Image.Height)
-                    {
-                        lblImageWidth.ForeColor = Color.OrangeRed;
-                        lblImageHeight.ForeColor = Color.OrangeRed;
+                    lblImageWidth.ForeColor = Color.OrangeRed;
+                    lblImageHeight.ForeColor = Color.OrangeRed;
 
-                        lblImageStatus.Text = Strings.IconEditor_ImageNotSquare;
-                        tblWarning.Visible = true;
-                    }
-                    else
-                    {
-                        lblImageWidth.ForeColor = Color.Black;
-                        lblImageHeight.ForeColor = Color.Black;
-                        lblImageStatus.Text = string.Empty;
-                        tblWarning.Visible = false;
-                    }
+                    lblImageStatus.Text = Strings.IconEditor_ImageNotSquare;
+                    tblWarning.Visible = true;
                 }
-
-                //If the icon is valid, prevent changes to the fields.
-                if (Icon.TrackedObject.CheckIconValid())
-                    MakeEditorReadOnly();
                 else
-                    UnmakeEditorReadOnly();
+                {
+                    lblImageWidth.ForeColor = Color.Black;
+                    lblImageHeight.ForeColor = Color.Black;
+                    lblImageStatus.Text = string.Empty;
+                    tblWarning.Visible = false;
+                }
             });
         }
 
@@ -581,7 +591,7 @@ namespace RadioExt_Helper.user_controls
             if (!_isReadOnly)
             {
                 // Store the current cursor position
-                int cursorPosition = txtAtlasName.SelectionStart;
+                var cursorPosition = txtAtlasName.SelectionStart;
 
                 // Update the text box content with the transformed text
                 txtAtlasName.Text = FormatAtlasName(txtAtlasName.Text);
@@ -613,14 +623,12 @@ namespace RadioExt_Helper.user_controls
 
         private string FormatAtlasName(string iconName)
         {
-            string lowerName = iconName.ToLower();
+            var lowerName = iconName.ToLower();
             // Replace spaces with underscores and remove all special characters except underscores.
             return NoSpecialCharactersRegEx().Replace(lowerName, "_");
         }
 
         [GeneratedRegex(@"[^a-z0-9_]+")]
         private static partial Regex NoSpecialCharactersRegEx();
-
-        private void btnResetPicView_Click(object sender, EventArgs e) => picStationIcon.ResetView();
     }
 }
