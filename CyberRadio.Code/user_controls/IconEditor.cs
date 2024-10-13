@@ -5,8 +5,10 @@ using RadioExt_Helper.Properties;
 using RadioExt_Helper.utility;
 using System.ComponentModel;
 using System.Text.RegularExpressions;
+using RadioExt_Helper.custom_controls;
 using WIG.Lib.Models;
 using WIG.Lib.Utility;
+using System.Drawing;
 
 namespace RadioExt_Helper.user_controls
 {//TODO: Translations
@@ -27,8 +29,6 @@ namespace RadioExt_Helper.user_controls
         public EditorType Type { get; set; } = EditorType.IconEditor;
         public IconEditorType IconEditorType { get; set; }
 
-        private readonly BindingList<Pair<DateTime, string>> _commandOutputs;
-
         /// <summary>
         /// The station that the icon is associated with.
         /// </summary>
@@ -47,6 +47,7 @@ namespace RadioExt_Helper.user_controls
         private bool _isReadOnly;
 
         private CancellationTokenSource _cancellationTokenSource;
+        private readonly LogViewerControl _logViewer;
 
         /// <summary>
         /// Create a new icon editor.
@@ -65,9 +66,20 @@ namespace RadioExt_Helper.user_controls
 
             _cancellationTokenSource = new CancellationTokenSource();
 
-            _commandOutputs = new BindingList<Pair<DateTime, string>>();
-            dgvStatus.Columns[0].DataPropertyName = "Key";
-            dgvStatus.Columns[1].DataPropertyName = "Value";
+            //Set up the log viewer control
+            _logViewer = new LogViewerControl
+            {
+                Dock = DockStyle.Fill
+            };
+
+            if (Icon.TrackedObject.CheckIconValid())
+            {
+                _logViewer.Identifier = Icon.TrackedObject.IsFromArchive
+                    ? Icon.TrackedObject.ArchivePath
+                    : Icon.TrackedObject.AtlasName;
+            }
+
+            panelLogControl.Controls.Add(_logViewer);
 
             _tabImages = new ImageList();
         }
@@ -81,6 +93,20 @@ namespace RadioExt_Helper.user_controls
         public void Translate()
         {
             //TODO: add translations
+
+            _logViewer.Translate();
+        }
+
+        /// <summary>
+        /// Set the log identifier for the log viewer based on whether the icon is valid and whether it is from an archive or a .png originally.
+        /// </summary>
+        public void SetLogIdentifier()
+        { 
+            var identifier = Icon.TrackedObject.CheckIconValid()
+            ? (Icon.TrackedObject.IsFromArchive ? Icon.TrackedObject.ArchivePath : Icon.TrackedObject.AtlasName) : null;
+            _logViewer.Identifier = identifier;
+            _logViewer.LoadRelevantLogEntries();
+            _logViewer.DisplayLastLines(50);
         }
 
         private void IconEditor_Load(object sender, EventArgs e)
@@ -95,8 +121,10 @@ namespace RadioExt_Helper.user_controls
 
             SetIconFields();
 
-            dgvStatus.DataSource = null;
-            dgvStatus.DataSource = _commandOutputs;
+            SetLogIdentifier();
+
+            //dgvStatus.DataSource = null;
+            //dgvStatus.DataSource = _commandOutputs;
 
             if (IconEditorType == IconEditorType.FromArchive)
             {
@@ -171,8 +199,11 @@ namespace RadioExt_Helper.user_controls
             this.SafeInvoke(() =>
             {
                 if (status == null) return;
-                _commandOutputs.Add(new Pair<DateTime, string>(DateTime.Now, status));
-                //dgvStatus.Rows.Add([DateTime.Now, status]);
+
+                //Pass the status to the log viewer
+                _logViewer.AddLogEntry(DateTime.Now, status);
+                //_commandOutputs.Add(new Pair<DateTime, string>(DateTime.Now, status));
+                ////dgvStatus.Rows.Add([DateTime.Now, status]);
             });
         }
 
@@ -202,6 +233,8 @@ namespace RadioExt_Helper.user_controls
 
             SetImagePreviewProperties();
 
+            SetLogIdentifier();
+
             IconUpdated?.Invoke(this, Icon);
         }
 
@@ -214,13 +247,15 @@ namespace RadioExt_Helper.user_controls
             btnImportIcon.Enabled = false;
             btnCancelImport.Enabled = true;
 
-            var maxValue = 250;
+            const int maxValue = 250;
             var progress = new Progress<int>(value =>
             {
                 // Scale progress to fit between 0 and 100
-                int scaledValue = (value * 100) / maxValue;
+                var scaledValue = (value * 100) / maxValue;
                 Invoke(() => pgProgress.Value = Math.Min(100, scaledValue));
             });
+
+            _logViewer.Identifier = txtAtlasName.Text;
 
             IconImportStarted?.Invoke(this, EventArgs.Empty);
             Task.Run(async () =>
@@ -280,13 +315,15 @@ namespace RadioExt_Helper.user_controls
             btnStartExtract.Enabled = false;
             btnCancelImport.Enabled = true;
 
-            var maxValue = 250;
+            const int maxValue = 250;
             var progress = new Progress<int>(value =>
             {
                 // Scale progress to fit between 0 and 100
-                int scaledValue = (value * 100) / maxValue;
+                var scaledValue = (value * 100) / maxValue;
                 Invoke(() => pgProgress.Value = Math.Min(100, scaledValue));
             });
+
+            _logViewer.Identifier = Icon.TrackedObject.ArchivePath;
 
             IconExtractStarted?.Invoke(this, EventArgs.Empty);
             Task.Run(async () =>
@@ -590,6 +627,10 @@ namespace RadioExt_Helper.user_controls
         {
             if (!_isReadOnly)
             {
+                //If the icon is from an existing archive, we don't want to format it as the atlas name comes from the archive file.
+                if (Icon.TrackedObject.IsFromArchive)
+                    return;
+
                 // Store the current cursor position
                 var cursorPosition = txtAtlasName.SelectionStart;
 

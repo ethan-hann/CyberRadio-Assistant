@@ -1295,6 +1295,24 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to display log lines: {0}.
+        /// </summary>
+        internal static string LogViewerControl_DisplayLastLines_Failed_to_display_log_lines___0_ {
+            get {
+                return ResourceManager.GetString("LogViewerControl_DisplayLastLines_Failed_to_display_log_lines___0_", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to load log data: {0}.
+        /// </summary>
+        internal static string LogViewerControl_LoadRelevantLogEntries_Failed_to_load_log_data___0_ {
+            get {
+                return ResourceManager.GetString("LogViewerControl_LoadRelevantLogEntries_Failed_to_load_log_data___0_", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Display Name.
         /// </summary>
         internal static string LVDisplayName {

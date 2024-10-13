@@ -326,6 +326,12 @@ public sealed partial class StationEditor : UserControl, IEditor
 
     private void AddCustomIconData(TrackableObject<WolvenIcon>? icon)
     {
+        if (icon == null)
+        {
+            RemoveCustomIconData();
+            return;
+        }
+
         Station.TrackedObject.AddCustomData(_customDataKeys[0], icon.TrackedObject.IconName ?? string.Empty);
         Station.TrackedObject.AddCustomData(_customDataKeys[1], icon.TrackedObject.ImagePath ?? string.Empty);
         Station.TrackedObject.AddCustomData(_customDataKeys[2], icon.TrackedObject.ArchivePath ?? string.Empty);

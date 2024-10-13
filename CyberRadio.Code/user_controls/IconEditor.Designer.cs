@@ -53,9 +53,6 @@ namespace RadioExt_Helper.user_controls
             btnCopyIconPath = new Button();
             txtIconPath = new TextBox();
             lblIconPart = new Label();
-            dgvStatus = new DataGridView();
-            colDateTime = new DataGridViewTextBoxColumn();
-            colOutput = new DataGridViewTextBoxColumn();
             btnCancelImport = new Button();
             btnImportIcon = new Button();
             tableLayoutPanel7 = new TableLayoutPanel();
@@ -81,17 +78,16 @@ namespace RadioExt_Helper.user_controls
             lblImageHeight = new Label();
             grpIconProperties = new GroupBox();
             tableLayoutPanel2 = new TableLayoutPanel();
-            grpOutput = new GroupBox();
             groupBox1 = new GroupBox();
             tableLayoutPanel11 = new TableLayoutPanel();
             btnStartExtract = new Button();
+            panelLogControl = new Panel();
             tableLayoutPanel3.SuspendLayout();
             tableLayoutPanel10.SuspendLayout();
             tableLayoutPanel6.SuspendLayout();
             tableLayoutPanel5.SuspendLayout();
             tableLayoutPanel4.SuspendLayout();
             tableLayoutPanel9.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)dgvStatus).BeginInit();
             tableLayoutPanel7.SuspendLayout();
             statusStrip1.SuspendLayout();
             editorTabs.SuspendLayout();
@@ -110,7 +106,6 @@ namespace RadioExt_Helper.user_controls
             tableLayoutPanel1.SuspendLayout();
             grpIconProperties.SuspendLayout();
             tableLayoutPanel2.SuspendLayout();
-            grpOutput.SuspendLayout();
             groupBox1.SuspendLayout();
             tableLayoutPanel11.SuspendLayout();
             SuspendLayout();
@@ -140,8 +135,8 @@ namespace RadioExt_Helper.user_controls
             tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 20F));
             tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 20F));
             tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 20F));
-            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 21F));
-            tableLayoutPanel3.Size = new Size(635, 240);
+            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel3.Size = new Size(635, 225);
             tableLayoutPanel3.TabIndex = 1;
             // 
             // tableLayoutPanel10
@@ -152,11 +147,11 @@ namespace RadioExt_Helper.user_controls
             tableLayoutPanel10.Controls.Add(btnCopyIconPart, 1, 0);
             tableLayoutPanel10.Controls.Add(txtIconPart, 0, 0);
             tableLayoutPanel10.Dock = DockStyle.Fill;
-            tableLayoutPanel10.Location = new Point(140, 195);
+            tableLayoutPanel10.Location = new Point(140, 183);
             tableLayoutPanel10.Name = "tableLayoutPanel10";
             tableLayoutPanel10.RowCount = 1;
             tableLayoutPanel10.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel10.Size = new Size(492, 42);
+            tableLayoutPanel10.Size = new Size(492, 39);
             tableLayoutPanel10.TabIndex = 10;
             // 
             // btnCopyIconPart
@@ -169,7 +164,7 @@ namespace RadioExt_Helper.user_controls
             btnCopyIconPart.Image = (Image)resources.GetObject("btnCopyIconPart.Image");
             btnCopyIconPart.Location = new Point(435, 3);
             btnCopyIconPart.Name = "btnCopyIconPart";
-            btnCopyIconPart.Size = new Size(54, 36);
+            btnCopyIconPart.Size = new Size(54, 33);
             btnCopyIconPart.TabIndex = 3;
             btnCopyIconPart.UseVisualStyleBackColor = false;
             btnCopyIconPart.Click += btnCopyIconPart_Click;
@@ -177,7 +172,7 @@ namespace RadioExt_Helper.user_controls
             // txtIconPart
             // 
             txtIconPart.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            txtIconPart.Location = new Point(3, 8);
+            txtIconPart.Location = new Point(3, 7);
             txtIconPart.Name = "txtIconPart";
             txtIconPart.ReadOnly = true;
             txtIconPart.Size = new Size(426, 25);
@@ -191,17 +186,17 @@ namespace RadioExt_Helper.user_controls
             tableLayoutPanel6.Controls.Add(txtSha256Hash, 0, 0);
             tableLayoutPanel6.Controls.Add(btnCopySha256Hash, 1, 0);
             tableLayoutPanel6.Dock = DockStyle.Fill;
-            tableLayoutPanel6.Location = new Point(140, 99);
+            tableLayoutPanel6.Location = new Point(140, 93);
             tableLayoutPanel6.Name = "tableLayoutPanel6";
             tableLayoutPanel6.RowCount = 1;
             tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel6.Size = new Size(492, 42);
+            tableLayoutPanel6.Size = new Size(492, 39);
             tableLayoutPanel6.TabIndex = 6;
             // 
             // txtSha256Hash
             // 
             txtSha256Hash.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            txtSha256Hash.Location = new Point(3, 8);
+            txtSha256Hash.Location = new Point(3, 7);
             txtSha256Hash.Name = "txtSha256Hash";
             txtSha256Hash.ReadOnly = true;
             txtSha256Hash.Size = new Size(428, 25);
@@ -217,7 +212,7 @@ namespace RadioExt_Helper.user_controls
             btnCopySha256Hash.Image = (Image)resources.GetObject("btnCopySha256Hash.Image");
             btnCopySha256Hash.Location = new Point(437, 3);
             btnCopySha256Hash.Name = "btnCopySha256Hash";
-            btnCopySha256Hash.Size = new Size(52, 36);
+            btnCopySha256Hash.Size = new Size(52, 33);
             btnCopySha256Hash.TabIndex = 2;
             btnCopySha256Hash.UseVisualStyleBackColor = false;
             btnCopySha256Hash.Click += btnCopySha256Hash_Click;
@@ -227,7 +222,7 @@ namespace RadioExt_Helper.user_controls
             lblSha256Hash.Anchor = AnchorStyles.Right;
             lblSha256Hash.AutoSize = true;
             lblSha256Hash.Font = new Font("Segoe UI Variable Text", 9F);
-            lblSha256Hash.Location = new Point(53, 112);
+            lblSha256Hash.Location = new Point(53, 104);
             lblSha256Hash.Name = "lblSha256Hash";
             lblSha256Hash.Size = new Size(81, 16);
             lblSha256Hash.TabIndex = 5;
@@ -243,17 +238,17 @@ namespace RadioExt_Helper.user_controls
             tableLayoutPanel5.Controls.Add(txtArchivePath, 0, 0);
             tableLayoutPanel5.Controls.Add(btnCopyArchivePath, 1, 0);
             tableLayoutPanel5.Dock = DockStyle.Fill;
-            tableLayoutPanel5.Location = new Point(140, 51);
+            tableLayoutPanel5.Location = new Point(140, 48);
             tableLayoutPanel5.Name = "tableLayoutPanel5";
             tableLayoutPanel5.RowCount = 1;
             tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel5.Size = new Size(492, 42);
+            tableLayoutPanel5.Size = new Size(492, 39);
             tableLayoutPanel5.TabIndex = 4;
             // 
             // txtArchivePath
             // 
             txtArchivePath.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            txtArchivePath.Location = new Point(3, 8);
+            txtArchivePath.Location = new Point(3, 7);
             txtArchivePath.Name = "txtArchivePath";
             txtArchivePath.ReadOnly = true;
             txtArchivePath.Size = new Size(428, 25);
@@ -269,7 +264,7 @@ namespace RadioExt_Helper.user_controls
             btnCopyArchivePath.Image = (Image)resources.GetObject("btnCopyArchivePath.Image");
             btnCopyArchivePath.Location = new Point(437, 3);
             btnCopyArchivePath.Name = "btnCopyArchivePath";
-            btnCopyArchivePath.Size = new Size(52, 36);
+            btnCopyArchivePath.Size = new Size(52, 33);
             btnCopyArchivePath.TabIndex = 2;
             btnCopyArchivePath.UseVisualStyleBackColor = false;
             btnCopyArchivePath.Click += btnCopyArchivePath_Click;
@@ -279,7 +274,7 @@ namespace RadioExt_Helper.user_controls
             lblArchivePath.Anchor = AnchorStyles.Right;
             lblArchivePath.AutoSize = true;
             lblArchivePath.Font = new Font("Segoe UI Variable Text", 9F);
-            lblArchivePath.Location = new Point(57, 64);
+            lblArchivePath.Location = new Point(57, 59);
             lblArchivePath.Name = "lblArchivePath";
             lblArchivePath.Size = new Size(77, 16);
             lblArchivePath.TabIndex = 3;
@@ -292,7 +287,7 @@ namespace RadioExt_Helper.user_controls
             lblImagePath.Anchor = AnchorStyles.Right;
             lblImagePath.AutoSize = true;
             lblImagePath.Font = new Font("Segoe UI Variable Text", 9F);
-            lblImagePath.Location = new Point(65, 16);
+            lblImagePath.Location = new Point(65, 14);
             lblImagePath.Name = "lblImagePath";
             lblImagePath.Size = new Size(69, 16);
             lblImagePath.TabIndex = 0;
@@ -312,13 +307,13 @@ namespace RadioExt_Helper.user_controls
             tableLayoutPanel4.Name = "tableLayoutPanel4";
             tableLayoutPanel4.RowCount = 1;
             tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel4.Size = new Size(492, 42);
+            tableLayoutPanel4.Size = new Size(492, 39);
             tableLayoutPanel4.TabIndex = 2;
             // 
             // txtImagePath
             // 
             txtImagePath.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            txtImagePath.Location = new Point(3, 8);
+            txtImagePath.Location = new Point(3, 7);
             txtImagePath.Name = "txtImagePath";
             txtImagePath.ReadOnly = true;
             txtImagePath.Size = new Size(428, 25);
@@ -334,7 +329,7 @@ namespace RadioExt_Helper.user_controls
             btnCopyImagePath.Image = (Image)resources.GetObject("btnCopyImagePath.Image");
             btnCopyImagePath.Location = new Point(437, 3);
             btnCopyImagePath.Name = "btnCopyImagePath";
-            btnCopyImagePath.Size = new Size(52, 36);
+            btnCopyImagePath.Size = new Size(52, 33);
             btnCopyImagePath.TabIndex = 2;
             btnCopyImagePath.UseVisualStyleBackColor = false;
             btnCopyImagePath.Click += btnCopyImagePath_Click;
@@ -344,7 +339,7 @@ namespace RadioExt_Helper.user_controls
             lblIconPath.Anchor = AnchorStyles.Right;
             lblIconPath.AutoSize = true;
             lblIconPath.Font = new Font("Segoe UI Variable Text", 9F);
-            lblIconPath.Location = new Point(74, 160);
+            lblIconPath.Location = new Point(74, 149);
             lblIconPath.Name = "lblIconPath";
             lblIconPath.Size = new Size(60, 16);
             lblIconPath.TabIndex = 7;
@@ -360,11 +355,11 @@ namespace RadioExt_Helper.user_controls
             tableLayoutPanel9.Controls.Add(btnCopyIconPath, 0, 0);
             tableLayoutPanel9.Controls.Add(txtIconPath, 0, 0);
             tableLayoutPanel9.Dock = DockStyle.Fill;
-            tableLayoutPanel9.Location = new Point(140, 147);
+            tableLayoutPanel9.Location = new Point(140, 138);
             tableLayoutPanel9.Name = "tableLayoutPanel9";
             tableLayoutPanel9.RowCount = 1;
             tableLayoutPanel9.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel9.Size = new Size(492, 42);
+            tableLayoutPanel9.Size = new Size(492, 39);
             tableLayoutPanel9.TabIndex = 9;
             // 
             // btnCopyIconPath
@@ -377,7 +372,7 @@ namespace RadioExt_Helper.user_controls
             btnCopyIconPath.Image = (Image)resources.GetObject("btnCopyIconPath.Image");
             btnCopyIconPath.Location = new Point(435, 3);
             btnCopyIconPath.Name = "btnCopyIconPath";
-            btnCopyIconPath.Size = new Size(54, 36);
+            btnCopyIconPath.Size = new Size(54, 33);
             btnCopyIconPath.TabIndex = 3;
             btnCopyIconPath.UseVisualStyleBackColor = false;
             btnCopyIconPath.Click += btnCopyIconPath_Click;
@@ -385,7 +380,7 @@ namespace RadioExt_Helper.user_controls
             // txtIconPath
             // 
             txtIconPath.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            txtIconPath.Location = new Point(3, 8);
+            txtIconPath.Location = new Point(3, 7);
             txtIconPath.Name = "txtIconPath";
             txtIconPath.ReadOnly = true;
             txtIconPath.Size = new Size(426, 25);
@@ -396,44 +391,13 @@ namespace RadioExt_Helper.user_controls
             lblIconPart.Anchor = AnchorStyles.Right;
             lblIconPart.AutoSize = true;
             lblIconPart.Font = new Font("Segoe UI Variable Text", 9F);
-            lblIconPart.Location = new Point(77, 208);
+            lblIconPart.Location = new Point(77, 194);
             lblIconPart.Name = "lblIconPart";
             lblIconPart.Size = new Size(57, 16);
             lblIconPart.TabIndex = 8;
             lblIconPart.Text = "Icon Part:";
             lblIconPart.MouseEnter += lblIconPart_MouseEnter;
             lblIconPart.MouseLeave += LblMouseLeave;
-            // 
-            // dgvStatus
-            // 
-            dgvStatus.AllowUserToAddRows = false;
-            dgvStatus.AllowUserToDeleteRows = false;
-            dgvStatus.BackgroundColor = Color.White;
-            dgvStatus.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvStatus.Columns.AddRange(new DataGridViewColumn[] { colDateTime, colOutput });
-            dgvStatus.Dock = DockStyle.Fill;
-            dgvStatus.EditMode = DataGridViewEditMode.EditProgrammatically;
-            dgvStatus.Location = new Point(3, 21);
-            dgvStatus.MultiSelect = false;
-            dgvStatus.Name = "dgvStatus";
-            dgvStatus.ReadOnly = true;
-            dgvStatus.Size = new Size(801, 310);
-            dgvStatus.TabIndex = 3;
-            // 
-            // colDateTime
-            // 
-            colDateTime.AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
-            colDateTime.HeaderText = "Timestamp";
-            colDateTime.Name = "colDateTime";
-            colDateTime.ReadOnly = true;
-            colDateTime.Width = 101;
-            // 
-            // colOutput
-            // 
-            colOutput.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            colOutput.HeaderText = "Output";
-            colOutput.Name = "colOutput";
-            colOutput.ReadOnly = true;
             // 
             // btnCancelImport
             // 
@@ -445,9 +409,9 @@ namespace RadioExt_Helper.user_controls
             btnCancelImport.FlatStyle = FlatStyle.Flat;
             btnCancelImport.Font = new Font("Segoe UI Variable Display Semib", 9.75F, FontStyle.Bold);
             btnCancelImport.Image = (Image)resources.GetObject("btnCancelImport.Image");
-            btnCancelImport.Location = new Point(3, 89);
+            btnCancelImport.Location = new Point(3, 85);
             btnCancelImport.Name = "btnCancelImport";
-            btnCancelImport.Size = new Size(193, 37);
+            btnCancelImport.Size = new Size(193, 35);
             btnCancelImport.TabIndex = 4;
             btnCancelImport.Text = "Cancel Action";
             btnCancelImport.TextAlign = ContentAlignment.MiddleRight;
@@ -466,7 +430,7 @@ namespace RadioExt_Helper.user_controls
             btnImportIcon.Image = (Image)resources.GetObject("btnImportIcon.Image");
             btnImportIcon.Location = new Point(3, 3);
             btnImportIcon.Name = "btnImportIcon";
-            btnImportIcon.Size = new Size(193, 37);
+            btnImportIcon.Size = new Size(193, 35);
             btnImportIcon.TabIndex = 3;
             btnImportIcon.Text = "Start Import";
             btnImportIcon.TextAlign = ContentAlignment.MiddleRight;
@@ -489,8 +453,8 @@ namespace RadioExt_Helper.user_controls
             tableLayoutPanel7.Name = "tableLayoutPanel7";
             tableLayoutPanel7.RowCount = 2;
             tableLayoutPanel7.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel7.RowStyles.Add(new RowStyle(SizeType.Absolute, 37F));
-            tableLayoutPanel7.Size = new Size(1024, 70);
+            tableLayoutPanel7.RowStyles.Add(new RowStyle(SizeType.Absolute, 35F));
+            tableLayoutPanel7.Size = new Size(1024, 68);
             tableLayoutPanel7.TabIndex = 0;
             // 
             // lblIconName
@@ -509,7 +473,7 @@ namespace RadioExt_Helper.user_controls
             lblAtlasName.Anchor = AnchorStyles.Right;
             lblAtlasName.AutoSize = true;
             lblAtlasName.Font = new Font("Segoe UI Variable Text", 9F);
-            lblAtlasName.Location = new Point(74, 43);
+            lblAtlasName.Location = new Point(74, 42);
             lblAtlasName.Name = "lblAtlasName";
             lblAtlasName.Size = new Size(70, 16);
             lblAtlasName.TabIndex = 6;
@@ -529,7 +493,7 @@ namespace RadioExt_Helper.user_controls
             // txtAtlasName
             // 
             txtAtlasName.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            txtAtlasName.Location = new Point(150, 38);
+            txtAtlasName.Location = new Point(150, 37);
             txtAtlasName.Name = "txtAtlasName";
             txtAtlasName.Size = new Size(871, 27);
             txtAtlasName.TabIndex = 7;
@@ -539,9 +503,9 @@ namespace RadioExt_Helper.user_controls
             // 
             statusStrip1.BackColor = Color.Transparent;
             statusStrip1.Items.AddRange(new ToolStripItem[] { lblStatus, pgProgress });
-            statusStrip1.Location = new Point(0, 736);
+            statusStrip1.Location = new Point(0, 690);
             statusStrip1.Name = "statusStrip1";
-            statusStrip1.Size = new Size(1038, 23);
+            statusStrip1.Size = new Size(1038, 22);
             statusStrip1.SizingGrip = false;
             statusStrip1.TabIndex = 2;
             statusStrip1.Text = "statusStrip1";
@@ -550,14 +514,14 @@ namespace RadioExt_Helper.user_controls
             // 
             lblStatus.Image = (Image)resources.GetObject("lblStatus.Image");
             lblStatus.Name = "lblStatus";
-            lblStatus.Size = new Size(55, 18);
+            lblStatus.Size = new Size(55, 17);
             lblStatus.Text = "Ready";
             lblStatus.TextAlign = ContentAlignment.MiddleRight;
             // 
             // pgProgress
             // 
             pgProgress.Name = "pgProgress";
-            pgProgress.Size = new Size(400, 17);
+            pgProgress.Size = new Size(400, 16);
             pgProgress.Visible = false;
             // 
             // editorTabs
@@ -568,7 +532,7 @@ namespace RadioExt_Helper.user_controls
             editorTabs.Location = new Point(0, 0);
             editorTabs.Name = "editorTabs";
             editorTabs.SelectedIndex = 0;
-            editorTabs.Size = new Size(1038, 736);
+            editorTabs.Size = new Size(1038, 690);
             editorTabs.TabIndex = 3;
             // 
             // tabPage1
@@ -578,7 +542,7 @@ namespace RadioExt_Helper.user_controls
             tabPage1.Location = new Point(4, 29);
             tabPage1.Name = "tabPage1";
             tabPage1.Padding = new Padding(3);
-            tabPage1.Size = new Size(1030, 703);
+            tabPage1.Size = new Size(1030, 657);
             tabPage1.TabIndex = 0;
             tabPage1.Text = "Editing Icon: {0}";
             // 
@@ -597,14 +561,14 @@ namespace RadioExt_Helper.user_controls
             // editorSplitContainer.Panel2
             // 
             editorSplitContainer.Panel2.Controls.Add(tableLayoutPanel2);
-            editorSplitContainer.Size = new Size(1024, 697);
-            editorSplitContainer.SplitterDistance = 353;
+            editorSplitContainer.Size = new Size(1024, 651);
+            editorSplitContainer.SplitterDistance = 329;
             editorSplitContainer.TabIndex = 2;
             // 
             // splitContainer1
             // 
             splitContainer1.Dock = DockStyle.Fill;
-            splitContainer1.Location = new Point(0, 70);
+            splitContainer1.Location = new Point(0, 68);
             splitContainer1.Name = "splitContainer1";
             // 
             // splitContainer1.Panel1
@@ -614,7 +578,7 @@ namespace RadioExt_Helper.user_controls
             // splitContainer1.Panel2
             // 
             splitContainer1.Panel2.Controls.Add(grpIconProperties);
-            splitContainer1.Size = new Size(1024, 283);
+            splitContainer1.Size = new Size(1024, 261);
             splitContainer1.SplitterDistance = 379;
             splitContainer1.TabIndex = 2;
             // 
@@ -627,7 +591,7 @@ namespace RadioExt_Helper.user_controls
             grpIconPreview.Font = new Font("Segoe UI Variable Display", 9.75F, FontStyle.Bold);
             grpIconPreview.Location = new Point(0, 0);
             grpIconPreview.Name = "grpIconPreview";
-            grpIconPreview.Size = new Size(379, 283);
+            grpIconPreview.Size = new Size(379, 261);
             grpIconPreview.TabIndex = 0;
             grpIconPreview.TabStop = false;
             grpIconPreview.Text = "Preview";
@@ -641,9 +605,9 @@ namespace RadioExt_Helper.user_controls
             imageProperties1.PixelFormat = System.Drawing.Imaging.PixelFormat.DontCare;
             imageProperties1.Width = 0;
             picStationIcon.ImageProperties = imageProperties1;
-            picStationIcon.Location = new Point(3, 42);
+            picStationIcon.Location = new Point(3, 41);
             picStationIcon.Name = "picStationIcon";
-            picStationIcon.Size = new Size(373, 189);
+            picStationIcon.Size = new Size(373, 171);
             picStationIcon.TabIndex = 4;
             picStationIcon.TabStop = false;
             picStationIcon.DragDrop += picStationIcon_DragDrop;
@@ -658,7 +622,7 @@ namespace RadioExt_Helper.user_controls
             tblWarning.Name = "tblWarning";
             tblWarning.RowCount = 1;
             tblWarning.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tblWarning.Size = new Size(373, 21);
+            tblWarning.Size = new Size(373, 20);
             tblWarning.TabIndex = 6;
             tblWarning.Visible = false;
             // 
@@ -686,12 +650,12 @@ namespace RadioExt_Helper.user_controls
             tableLayoutPanel1.Controls.Add(lblImageWidth, 0, 0);
             tableLayoutPanel1.Controls.Add(lblImageHeight, 1, 0);
             tableLayoutPanel1.Dock = DockStyle.Bottom;
-            tableLayoutPanel1.Location = new Point(3, 231);
+            tableLayoutPanel1.Location = new Point(3, 212);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 2;
             tableLayoutPanel1.RowStyles.Add(new RowStyle());
             tableLayoutPanel1.RowStyles.Add(new RowStyle());
-            tableLayoutPanel1.Size = new Size(373, 49);
+            tableLayoutPanel1.Size = new Size(373, 46);
             tableLayoutPanel1.TabIndex = 5;
             // 
             // lblImageColorMode
@@ -699,9 +663,9 @@ namespace RadioExt_Helper.user_controls
             lblImageColorMode.Anchor = AnchorStyles.Right;
             lblImageColorMode.AutoSize = true;
             lblImageColorMode.Font = new Font("Segoe UI", 9.75F, FontStyle.Italic);
-            lblImageColorMode.Location = new Point(275, 24);
+            lblImageColorMode.Location = new Point(275, 23);
             lblImageColorMode.Name = "lblImageColorMode";
-            lblImageColorMode.Size = new Size(95, 18);
+            lblImageColorMode.Size = new Size(95, 17);
             lblImageColorMode.TabIndex = 3;
             lblImageColorMode.Text = "Color Mode: {0}";
             lblImageColorMode.TextAlign = ContentAlignment.MiddleLeft;
@@ -711,9 +675,9 @@ namespace RadioExt_Helper.user_controls
             lblImageFormat.Anchor = AnchorStyles.Left;
             lblImageFormat.AutoSize = true;
             lblImageFormat.Font = new Font("Segoe UI", 9.75F, FontStyle.Italic);
-            lblImageFormat.Location = new Point(3, 24);
+            lblImageFormat.Location = new Point(3, 23);
             lblImageFormat.Name = "lblImageFormat";
-            lblImageFormat.Size = new Size(71, 18);
+            lblImageFormat.Size = new Size(70, 17);
             lblImageFormat.TabIndex = 2;
             lblImageFormat.Text = "Format: {0}";
             lblImageFormat.TextAlign = ContentAlignment.MiddleLeft;
@@ -725,7 +689,7 @@ namespace RadioExt_Helper.user_controls
             lblImageWidth.Font = new Font("Segoe UI", 9.75F, FontStyle.Italic);
             lblImageWidth.Location = new Point(3, 0);
             lblImageWidth.Name = "lblImageWidth";
-            lblImageWidth.Size = new Size(41, 18);
+            lblImageWidth.Size = new Size(42, 17);
             lblImageWidth.TabIndex = 0;
             lblImageWidth.Text = "W: {0}";
             lblImageWidth.TextAlign = ContentAlignment.MiddleLeft;
@@ -735,9 +699,9 @@ namespace RadioExt_Helper.user_controls
             lblImageHeight.Anchor = AnchorStyles.Right;
             lblImageHeight.AutoSize = true;
             lblImageHeight.Font = new Font("Segoe UI", 9.75F, FontStyle.Italic);
-            lblImageHeight.Location = new Point(332, 0);
+            lblImageHeight.Location = new Point(331, 0);
             lblImageHeight.Name = "lblImageHeight";
-            lblImageHeight.Size = new Size(38, 18);
+            lblImageHeight.Size = new Size(39, 17);
             lblImageHeight.TabIndex = 1;
             lblImageHeight.Text = "H: {0}";
             lblImageHeight.TextAlign = ContentAlignment.MiddleLeft;
@@ -749,7 +713,7 @@ namespace RadioExt_Helper.user_controls
             grpIconProperties.Font = new Font("Segoe UI Variable Display", 9.75F, FontStyle.Bold);
             grpIconProperties.Location = new Point(0, 0);
             grpIconProperties.Name = "grpIconProperties";
-            grpIconProperties.Size = new Size(641, 283);
+            grpIconProperties.Size = new Size(641, 261);
             grpIconProperties.TabIndex = 1;
             grpIconProperties.TabStop = false;
             grpIconProperties.Text = "Properties";
@@ -759,27 +723,15 @@ namespace RadioExt_Helper.user_controls
             tableLayoutPanel2.ColumnCount = 2;
             tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 79.44163F));
             tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20.5583763F));
-            tableLayoutPanel2.Controls.Add(grpOutput, 0, 0);
             tableLayoutPanel2.Controls.Add(groupBox1, 1, 0);
+            tableLayoutPanel2.Controls.Add(panelLogControl, 0, 0);
             tableLayoutPanel2.Dock = DockStyle.Fill;
             tableLayoutPanel2.Location = new Point(0, 0);
             tableLayoutPanel2.Name = "tableLayoutPanel2";
             tableLayoutPanel2.RowCount = 1;
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel2.Size = new Size(1024, 340);
+            tableLayoutPanel2.Size = new Size(1024, 318);
             tableLayoutPanel2.TabIndex = 0;
-            // 
-            // grpOutput
-            // 
-            grpOutput.Controls.Add(dgvStatus);
-            grpOutput.Dock = DockStyle.Fill;
-            grpOutput.Font = new Font("Segoe UI Variable Display", 9.75F, FontStyle.Bold);
-            grpOutput.Location = new Point(3, 3);
-            grpOutput.Name = "grpOutput";
-            grpOutput.Size = new Size(807, 334);
-            grpOutput.TabIndex = 0;
-            grpOutput.TabStop = false;
-            grpOutput.Text = "Command Output";
             // 
             // groupBox1
             // 
@@ -788,7 +740,7 @@ namespace RadioExt_Helper.user_controls
             groupBox1.Font = new Font("Segoe UI Variable Display", 9.75F, FontStyle.Bold);
             groupBox1.Location = new Point(816, 3);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(205, 334);
+            groupBox1.Size = new Size(205, 312);
             groupBox1.TabIndex = 1;
             groupBox1.TabStop = false;
             groupBox1.Text = "Actions";
@@ -808,7 +760,7 @@ namespace RadioExt_Helper.user_controls
             tableLayoutPanel11.RowStyles.Add(new RowStyle());
             tableLayoutPanel11.RowStyles.Add(new RowStyle());
             tableLayoutPanel11.RowStyles.Add(new RowStyle());
-            tableLayoutPanel11.Size = new Size(199, 129);
+            tableLayoutPanel11.Size = new Size(199, 123);
             tableLayoutPanel11.TabIndex = 0;
             // 
             // btnStartExtract
@@ -821,9 +773,9 @@ namespace RadioExt_Helper.user_controls
             btnStartExtract.FlatStyle = FlatStyle.Flat;
             btnStartExtract.Font = new Font("Segoe UI Variable Display Semib", 9.75F, FontStyle.Bold);
             btnStartExtract.Image = Properties.Resources.export__16x16;
-            btnStartExtract.Location = new Point(3, 46);
+            btnStartExtract.Location = new Point(3, 44);
             btnStartExtract.Name = "btnStartExtract";
-            btnStartExtract.Size = new Size(193, 37);
+            btnStartExtract.Size = new Size(193, 35);
             btnStartExtract.TabIndex = 5;
             btnStartExtract.Text = "Start Extraction";
             btnStartExtract.TextAlign = ContentAlignment.MiddleRight;
@@ -831,15 +783,23 @@ namespace RadioExt_Helper.user_controls
             btnStartExtract.UseVisualStyleBackColor = false;
             btnStartExtract.Click += btnStartExtract_Click;
             // 
+            // panelLogControl
+            // 
+            panelLogControl.Dock = DockStyle.Fill;
+            panelLogControl.Location = new Point(3, 3);
+            panelLogControl.Name = "panelLogControl";
+            panelLogControl.Size = new Size(807, 312);
+            panelLogControl.TabIndex = 2;
+            // 
             // IconEditor
             // 
-            AutoScaleDimensions = new SizeF(7F, 16F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;
             Controls.Add(editorTabs);
             Controls.Add(statusStrip1);
             Name = "IconEditor";
-            Size = new Size(1038, 759);
+            Size = new Size(1038, 712);
             Load += IconEditor_Load;
             tableLayoutPanel3.ResumeLayout(false);
             tableLayoutPanel3.PerformLayout();
@@ -853,7 +813,6 @@ namespace RadioExt_Helper.user_controls
             tableLayoutPanel4.PerformLayout();
             tableLayoutPanel9.ResumeLayout(false);
             tableLayoutPanel9.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)dgvStatus).EndInit();
             tableLayoutPanel7.ResumeLayout(false);
             tableLayoutPanel7.PerformLayout();
             statusStrip1.ResumeLayout(false);
@@ -878,7 +837,6 @@ namespace RadioExt_Helper.user_controls
             grpIconProperties.ResumeLayout(false);
             grpIconProperties.PerformLayout();
             tableLayoutPanel2.ResumeLayout(false);
-            grpOutput.ResumeLayout(false);
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
             tableLayoutPanel11.ResumeLayout(false);
@@ -906,9 +864,6 @@ namespace RadioExt_Helper.user_controls
         private TableLayoutPanel tblWarning;
         private Button btnCancelImport;
         private Button btnImportIcon;
-        private DataGridView dgvStatus;
-        private DataGridViewTextBoxColumn colDateTime;
-        private DataGridViewTextBoxColumn colOutput;
         private Label lblIconPart;
         private Label lblIconPath;
         private TableLayoutPanel tableLayoutPanel9;
@@ -929,7 +884,6 @@ namespace RadioExt_Helper.user_controls
         private GroupBox grpIconPreview;
         private GroupBox grpIconProperties;
         private TableLayoutPanel tableLayoutPanel2;
-        private GroupBox grpOutput;
         private GroupBox groupBox1;
         private TableLayoutPanel tableLayoutPanel11;
         private SplitContainer splitContainer1;
@@ -940,5 +894,6 @@ namespace RadioExt_Helper.user_controls
         private Label lblImageWidth;
         private Label lblImageHeight;
         private Button btnStartExtract;
+        private Panel panelLogControl;
     }
 }

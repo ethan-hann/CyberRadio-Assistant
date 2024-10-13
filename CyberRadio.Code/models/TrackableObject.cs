@@ -105,13 +105,10 @@ public sealed class TrackableObject<T> : INotifyPropertyChanged, ITrackable wher
     {
         if (_originalValuesInitialized) return; // Prevent multiple initializations
 
-        AuLogger.GetCurrentLogger<TrackableObject<T>>().Info($"Initializing original values for {typeof(T).Name}");
-
         foreach (var prop in typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance))
         {
             if (!prop.CanRead)
             {
-                AuLogger.GetCurrentLogger<TrackableObject<T>>().Warn($"Skipping property {prop.Name}: Cannot read.");
                 continue;
             }
 
@@ -138,7 +135,6 @@ public sealed class TrackableObject<T> : INotifyPropertyChanged, ITrackable wher
 
                 // Deep clone the current value and store it as the original value
                 _originalValues[prop.Name] = DeepClone(value);
-                AuLogger.GetCurrentLogger<TrackableObject<T>>().Info($"Cloning property {prop.Name}: {value}");
             }
             catch (Exception ex)
             {

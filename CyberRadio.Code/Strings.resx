@@ -409,9 +409,6 @@ If something doesn't look correct, exit out of this window and make changes in t
   <data name="StreamURLError" xml:space="preserve">
     <value>Please enter a valid stream URL.</value>
   </data>
-  <data name="Error" xml:space="preserve">
-    <value>Error</value>
-  </data>
   <data name="ErrorStreamingAudio" xml:space="preserve">
     <value>Error streaming audio: {0}</value>
   </data>
@@ -900,5 +897,14 @@ Make sure you've backed up your staging folder first ;)</value>
   </data>
   <data name="IconManagerForm_btnDeleteAllIcons_Click_Do_you_want_to_also_delete_associated_icon_s_files_from_staging" xml:space="preserve">
 	  <value>Do you want to also delete associated icon's files from staging? This will delete all the copied .archive file and the associated PNGs.</value>
+  </data>
+  <data name="LogViewerControl_LoadRelevantLogEntries_Failed_to_load_log_data___0_" xml:space="preserve">
+	  <value>Failed to load log data: {0}</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+	  <value>Error</value>
+  </data>
+  <data name="LogViewerControl_DisplayLastLines_Failed_to_display_log_lines___0_" xml:space="preserve">
+	  <value>Failed to display log lines: {0}</value>
   </data>
 </root>

@@ -98,15 +98,26 @@ public static class GlobalData
     }
 
     /// <summary>
-    ///     Retrieves the log file path.
+    ///     Retrieves the path to the containing log folder.
     /// </summary>
-    /// <returns>The log file path. If log file path is not found in the config, the default log file path is returned.</returns>
-    public static string GetLogPath()
+    /// <returns>The log folder path. If log folder path is not found in the config, the default log folder path is returned.</returns>
+    public static string GetLogFolderPath()
     {
         var options = ConfigManager.Get("logOptions") as LogOptions;
         return options?.LogFileDirectory ?? Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
             "RadioExt-Helper", "logs");
+    }
+
+    /// <summary>
+    /// Retrieves the full path to the log file.
+    /// </summary>
+    /// <returns>The full path to the most recent log file.</returns>
+    public static string GetLogFilePath()
+    {
+        var options = ConfigManager.Get("logOptions") as LogOptions;
+        var folderPath = GetLogFolderPath();
+        return Path.Combine(folderPath, $"{options?.AppName}.log");
     }
 
     /// <summary>
@@ -160,6 +171,11 @@ public static class GlobalData
         if (ConfigManager.Get("logOptions") is not LogOptions options) return;
 
         AuLogger.Initialize(options);
+
+        //Grant full access to the application to the log file and directory
+        PathHelper.GrantAccess(options.LogFileDirectory);
+        PathHelper.GrantAccess(GetLogFolderPath());
+
         AuLogger.GetCurrentLogger(nameof(GlobalData)).Info("Logging initialized!");
     }
 

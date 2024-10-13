@@ -318,7 +318,9 @@ public class BackupManager(CompressionLevel level)
                     var destinationPath = Path.Combine(restorePath, entryName);
 
                     // Ensure the directory exists
-                    Directory.CreateDirectory(Path.GetDirectoryName(destinationPath));
+                    var destinationDirectory = Path.GetDirectoryName(destinationPath);
+                    if (destinationDirectory != null && !Directory.Exists(destinationDirectory))
+                        Directory.CreateDirectory(destinationDirectory);
 
                     entry.ExtractToFile(destinationPath, true);
 
@@ -329,18 +331,17 @@ public class BackupManager(CompressionLevel level)
                 }
 
                 // Restore external songs
-                foreach (var kvp in externalSongMappings)
+                foreach (var (songFileName, originalPath) in externalSongMappings)
                 {
-                    var songFileName = kvp.Key;
-                    var originalPath = kvp.Value;
                     var entry = zipArchive.GetEntry(Path.Combine("external", songFileName));
 
-                    if (entry != null)
-                    {
-                        var destinationPath = Path.Combine(originalPath);
-                        Directory.CreateDirectory(Path.GetDirectoryName(destinationPath));
-                        entry.ExtractToFile(destinationPath, true);
-                    }
+                    if (entry == null) continue;
+
+                    var destinationPath = Path.Combine(originalPath);
+                    var destinationDirectory = Path.GetDirectoryName(destinationPath);
+                    if (destinationDirectory != null && !Directory.Exists(destinationDirectory))
+                        Directory.CreateDirectory(destinationDirectory);
+                    entry.ExtractToFile(destinationPath, true);
                 }
             });
 

@@ -26,7 +26,7 @@ namespace RadioExt_Helper.models;
 /// </summary>
 public sealed class MetaData : INotifyPropertyChanged, ICloneable, IEquatable<MetaData>
 {
-    private SerializableDictionary<string?, object> _customData = [];
+    private SerializableDictionary<string, object> _customData = [];
     private CustomIcon _customIcon = new();
     private string _displayName = "69.9 Your Station Name";
 
@@ -159,7 +159,7 @@ public sealed class MetaData : INotifyPropertyChanged, ICloneable, IEquatable<Me
     }
 
     [JsonProperty("custom_data")]
-    public SerializableDictionary<string?, object> CustomData
+    public SerializableDictionary<string, object> CustomData
     {
         get => _customData;
         set

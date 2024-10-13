@@ -231,17 +231,22 @@ public sealed partial class StationListBox : ListBox
 
     private void StationListBox_DragEnter(object? sender, DragEventArgs e)
     {
-        if (e.Data.GetDataPresent(DataFormats.FileDrop))
-        {
-            var files = (string[])e.Data.GetData(DataFormats.FileDrop);
-            if (files.Any(file => file.EndsWith(".zip") || file.EndsWith(".rar")))
-                e.Effect = DragDropEffects.Copy;
-        }
+        if (e.Data == null || !e.Data.GetDataPresent(DataFormats.FileDrop)) return;
+
+        var files = (string[]?)e.Data.GetData(DataFormats.FileDrop);
+        if (files is not { Length: > 0 }) return;
+
+        if (files.Any(file => file.EndsWith(".zip") || file.EndsWith(".rar")))
+            e.Effect = DragDropEffects.Copy;
     }
 
     private void StationListBox_DragDrop(object? sender, DragEventArgs e)
     {
-        var files = (string[])e.Data.GetData(DataFormats.FileDrop);
+        if (e.Data == null || !e.Data.GetDataPresent(DataFormats.FileDrop)) return;
+
+        var files = (string[]?)e.Data.GetData(DataFormats.FileDrop);
+        if (files is not { Length: > 0 }) return;
+
         foreach (var file in files)
             if (file.EndsWith(".zip") || file.EndsWith(".rar"))
                 // Handle file extraction and preview

@@ -734,7 +734,7 @@ public sealed partial class MainForm : Form
 
     private void OpenLogFolderToolStripMenuItem_Click(object sender, EventArgs e)
     {
-        Process.Start("explorer.exe", GlobalData.GetLogPath());
+        Process.Start("explorer.exe", GlobalData.GetLogFolderPath());
     }
 
     private void ExportToGameToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1174,7 +1174,7 @@ public sealed partial class MainForm : Form
         managerForm.ShowDialog(this);
     }
 
-    private void ManagerFormOnIconUpdated(object? sender, TrackableObject<WolvenIcon> icon)
+    private void ManagerFormOnIconUpdated(object? sender, TrackableObject<WolvenIcon>? icon)
     {
         if (InvokeRequired) { Invoke(() => UpdateStationIcon(icon)); }
         else

@@ -202,11 +202,64 @@ public partial class StationManager : IDisposable
     }
 
     /// <summary>
+    /// Copies an existing icon from a reference station to another station.
+    /// </summary>
+    /// <param name="stationId">The station ID to which the icon should be copied.</param>
+    /// <param name="referenceStationId">The station ID from which the icon is being copied.</param>
+    /// <param name="icon">The <see cref="WolvenIcon"/> to copy.</param>
+    /// <param name="makeActive">Whether to make this copied icon active for the current station.</param>
+    /// <returns>The id of the new copied icon; <c>null</c> if the icon couldn't be copied.</returns>
+    public Guid? CopyStationIcon(Guid stationId, Guid referenceStationId, TrackableObject<WolvenIcon> icon, bool makeActive = false)
+    {
+        try
+        {
+            // Verify both stations exist in the manager
+            if (!_stations.TryGetValue(stationId, out var currentStationPair) || 
+                !_stations.TryGetValue(referenceStationId, out var referenceStationPair))
+            {
+                return null;
+            }
+
+            // Create a deep copy of the WolvenIcon object and update paths
+            var copiedIcon = new TrackableObject<WolvenIcon>((WolvenIcon)icon.TrackedObject.Clone());
+
+            // Add the copied icon to the target station
+            var currentStation = currentStationPair.Key;
+            currentStation.TrackedObject.AddIcon(copiedIcon);
+            StationsAsBindingList.First(s => s.Id == currentStationPair.Key.Id).TrackedObject.AddIcon(icon);
+
+            if (makeActive)
+            {
+                // Deactivate all other icons for the current station
+                foreach (var i in currentStation.TrackedObject.Icons)
+                {
+                    i.TrackedObject.IsActive = false;
+                }
+                copiedIcon.TrackedObject.IsActive = true;
+            }
+
+            // Add an IconEditor for the copied icon
+            var copiedIconEditor = new IconEditor(currentStation, copiedIcon, IconEditorType.FromArchive);
+            currentStationPair.Value.Add(copiedIconEditor);
+
+            // Notify listeners that the station has been updated
+            StationUpdated?.Invoke(this, stationId);
+
+            return copiedIcon.Id;
+        }
+        catch (Exception ex)
+        {
+            AuLogger.GetCurrentLogger<StationManager>("CopyStationIcon").Error(ex, $"Error copying icon from station.");
+            return null;
+        }
+    }
+
+    /// <summary>
     /// Remove an icon from a station, including the associated IconEditor. Optionally, delete the icon files from disk.
     /// </summary>
     /// <param name="stationId">The station ID to remove the icon from.</param>
-    /// <param name="icon">The <see cref="Icon"/> to remove.</param>
-    /// <param name="deleteFiles">Indicates whether to delete the Icon files from disk.</param>
+    /// <param name="icon">The <see cref="WolvenIcon"/> to remove.</param>
+    /// <param name="deleteFiles">Indicates whether to delete the icon files from disk.</param>
     /// <returns><c>true</c> if the icon was removed successfully; <c>false</c> otherwise.</returns>
     public bool RemoveStationIcon(Guid stationId, TrackableObject<WolvenIcon> icon, bool deleteFiles = false)
     {
@@ -214,21 +267,24 @@ public partial class StationManager : IDisposable
         {
             if (!_stations.TryGetValue(stationId, out var pair)) return false;
 
+            // Remove the icon from the station
             pair.Key.TrackedObject.RemoveIcon(icon);
             StationsAsBindingList.First(s => s.Id == pair.Key.Id).TrackedObject.RemoveIcon(icon);
 
+            // Remove the associated IconEditor if it exists
             var iconEditor = GetStationIconEditor(stationId, icon.Id);
             if (iconEditor != null)
                 pair.Value.Remove(iconEditor);
 
-            if (deleteFiles)
+            // Only delete files if requested and the icon is not linked to any other stations
+            if (deleteFiles && !IsIconLinkedToOtherStations(icon.Id, stationId))
             {
                 if (icon.TrackedObject.ArchivePath != null && FileHelper.DoesFileExist(icon.TrackedObject.ArchivePath))
                     FileHelper.DeleteFile(icon.TrackedObject.ArchivePath);
                 if (icon.TrackedObject.ImagePath != null && FileHelper.DoesFileExist(icon.TrackedObject.ImagePath))
                     FileHelper.DeleteFile(icon.TrackedObject.ImagePath);
 
-                //Delete the icon's folder in the appdata directory.
+                // Delete the icon's folder in the appdata directory
                 var appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
                 var foldersInAppData = FileHelper.SafeEnumerateDirectories(Path.Combine(appData, "Wolven Icon Generator", "tools")).ToList();
                 var foldersToDelete = foldersInAppData.Where(f => f.Contains(icon.Id.ToString())).ToList();
@@ -236,6 +292,7 @@ public partial class StationManager : IDisposable
                     Directory.Delete(folder, true);
             }
 
+            // Notify listeners that the station has been updated
             StationUpdated?.Invoke(this, stationId);
 
             return pair.Key.TrackedObject.Icons.All(i => i.Id != icon.Id);
@@ -245,6 +302,30 @@ public partial class StationManager : IDisposable
             AuLogger.GetCurrentLogger<StationManager>().Error(ex, "Error removing icon from station.");
             return false;
         }
+    }
+
+    /// <summary>
+    /// Checks if an icon is linked to other stations.
+    /// </summary>
+    /// <param name="iconId">The ID of the icon to check.</param>
+    /// <param name="excludingStationId">The station ID to exclude from the check.</param>
+    /// <returns><c>true</c> if the icon is linked to other stations; <c>false</c> otherwise.</returns>
+    private bool IsIconLinkedToOtherStations(Guid iconId, Guid excludingStationId)
+    {
+        // Check if any other station references the icon (excluding the provided station ID)
+        return _stations.Values.Any(pair => pair.Key.Id != excludingStationId && 
+                                            pair.Key.TrackedObject.Icons.Any(icon => icon.Id == iconId));
+    }
+
+    /// <summary>
+    /// Get the icon associated with the station by id.
+    /// </summary>
+    /// <param name="stationId">The id of the station to get the icon of.</param>
+    /// <param name="iconId">The id of the icon to retrieve from the station.</param>
+    /// <returns>The <see cref="TrackableObject{WolvenIcon}"/> corresponding to the id or <c>null</c> if no icon existed with the id.</returns>
+    public TrackableObject<WolvenIcon>? GetStationIcon(Guid stationId, Guid iconId)
+    {
+        return !_stations.TryGetValue(stationId, out var pair) ? null : pair.Key.TrackedObject.Icons.FirstOrDefault(i => i.Id == iconId);
     }
 
     /// <summary>
@@ -843,7 +924,9 @@ public partial class StationManager : IDisposable
     private async Task SynchronizeFilesAsync(string sourceDir, string targetDir)
     {
         var sourceFiles = FileHelper.SafeEnumerateFiles(sourceDir);
-        var targetFiles = FileHelper.SafeEnumerateFiles(targetDir).ToDictionary(Path.GetFileName, f => f);
+        var targetFiles = FileHelper.SafeEnumerateFiles(targetDir)
+            .Where(f => Path.GetFileName(f) != null)
+            .ToDictionary(f => Path.GetFileName(f)!, f => f);
 
         var fileTasks = new List<Task>();
         var fileCount = 0;
@@ -870,7 +953,9 @@ public partial class StationManager : IDisposable
         await Task.WhenAll(fileTasks);
 
         var sourceDirectories = FileHelper.SafeEnumerateDirectories(sourceDir);
-        var targetDirectories = FileHelper.SafeEnumerateDirectories(targetDir).ToDictionary(Path.GetFileName, d => d);
+        var targetDirectories = FileHelper.SafeEnumerateDirectories(targetDir)
+            .Where(d => Path.GetFileName(d) != null)
+            .ToDictionary(d => Path.GetFileName(d)!, d => d);
 
         var dirTasks = new List<Task>();
         var dirCount = 0;
@@ -1041,6 +1126,12 @@ public partial class StationManager : IDisposable
             foreach (var entry in archive.Entries)
             {
                 if (entry.IsDirectory) continue;
+
+                if (entry.Key == null)
+                {
+                    AuLogger.GetCurrentLogger<StationManager>("ExtractStationArchive").Error("Entry key is null.");
+                    continue;
+                }
 
                 var entryFileName = PathHelper.SanitizePath(entry.Key);
 

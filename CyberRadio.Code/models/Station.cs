@@ -224,6 +224,8 @@ public sealed class Station : INotifyPropertyChanged, ICloneable, IEquatable<Sta
     {
         try
         {
+            if (key == null) throw new ArgumentNullException(nameof(key));
+
             MetaData.CustomData[key] = value;
             OnPropertyChanged(nameof(MetaData.CustomData));
         }
@@ -241,6 +243,8 @@ public sealed class Station : INotifyPropertyChanged, ICloneable, IEquatable<Sta
     {
         try
         {
+            if (key == null) throw new ArgumentNullException(nameof(key));
+
             MetaData.CustomData.Remove(key);
             OnPropertyChanged(nameof(MetaData.CustomData));
         }

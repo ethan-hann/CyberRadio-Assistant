@@ -14,6 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+using System.Security.AccessControl;
 using AetherUtils.Core.Files;
 using AetherUtils.Core.Logging;
 using RadioExt_Helper.Properties;
@@ -392,5 +393,24 @@ public static class PathHelper
         {
             AuLogger.GetCurrentLogger("PathHelper.ClearDirectory").Error(ex, "An error occured while clearing the directory.");
         }
+    }
+
+    /// <summary>
+    /// Grant's access to the path specified by the filepath. Used mainly for accessing the log folder and reading the log file.
+    /// </summary>
+    /// <param name="filePath">The path to grant access on.</param>
+    public static void GrantAccess(string filePath)
+    {
+        var fileInfo = new FileInfo(filePath);
+        var directoryInfo = fileInfo.Directory;
+
+        if (directoryInfo == null) return;
+
+        var security = directoryInfo.GetAccessControl();
+        security.AddAccessRule(new FileSystemAccessRule(
+            Environment.UserName,
+            FileSystemRights.FullControl,
+            AccessControlType.Allow));
+        directoryInfo.SetAccessControl(security);
     }
 }
