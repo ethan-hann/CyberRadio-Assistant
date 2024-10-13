@@ -940,4 +940,7 @@ Remarque: Toute modification de l'état d'activation ou d'autres propriétés sp
 
 Si une icône était incluse avec la station, elle a également été ajoutée. Cependant, vous devrez l'extraire manuellement pour obtenir l'aperçu dans l'ARC.</value>
   </data>
+  <data name="SearchStations" xml:space="preserve">
+    <value>Stations de recherche ...</value>
+  </data>
 </root>

@@ -940,4 +940,7 @@ Nota: Cualquier cambio en el estado de activación u otras propiedades específi
 
 Si se incluyó un icono con la estación, también se ha agregado. Sin embargo, tendrá que extraerlo manualmente para obtener la vista previa en CRA.</value>
   </data>
+  <data name="SearchStations" xml:space="preserve">
+    <value>Estaciones de búsqueda ...</value>
+  </data>
 </root>

@@ -940,4 +940,7 @@ If an icon was included with the station, it has been added as well. However, yo
   <data name="MainForm_fromzipFileToolStripMenuItem_Click_Import_Station" xml:space="preserve">
 	  <value>Import Station</value>
   </data>
+  <data name="SearchStations" xml:space="preserve">
+    <value>Search stations...</value>
+  </data>
 </root>

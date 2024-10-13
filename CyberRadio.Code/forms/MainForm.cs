@@ -112,15 +112,15 @@ public sealed partial class MainForm : Form
 
     private void OnStationImported(object? sender, List<Guid?> stationIds)
     {
-        var importedIconNames = string.Join(", ", stationIds.Select(stationId => 
+        var importedIconNames = string.Join(", ", stationIds.Select(stationId =>
             StationManager.Instance.GetStation(stationId)?.Key.TrackedObject.MetaData.DisplayName));
-            
+
         MessageBox.Show(
             string.Format(Strings.MainForm_fromzipFileToolStripMenuItem_Click_Imported__0__stations___1_, stationIds.Count, importedIconNames),
             Strings.MainForm_fromzipFileToolStripMenuItem_Click_Station_s__Imported,
             MessageBoxButtons.OK,
             MessageBoxIcon.Information);
-            
+
         //Select the first station imported in the listbox
         var firstStationId = stationIds.First();
         lbStations.SelectedItem = StationManager.Instance.GetStation(firstStationId)?.Key;
@@ -392,6 +392,8 @@ public sealed partial class MainForm : Form
         btnDisableAll.Text = GlobalData.Strings.GetString("DisableAllStations");
 
         lblBackupStatus.Text = GlobalData.Strings.GetString("BackupReady") ?? "Backup Ready";
+
+        txtStationFilter.PlaceholderText = GlobalData.Strings.GetString("SearchStations") ?? "Search stations...";
 
         UpdateEnabledStationCount();
     }
@@ -694,6 +696,29 @@ public sealed partial class MainForm : Form
             var path = StationManager.Instance.GetStationPath(stationId);
             Text = $"{GlobalData.Strings.GetString("MainTitle")} - {path}";
         });
+    }
+
+    private void txtStationFilter_TextChanged(object sender, EventArgs e)
+    {
+        var searchTerm = txtStationFilter.Text.ToLower();
+        FilterStations(searchTerm);
+    }
+
+    private void FilterStations(string searchTerm)
+    {
+        if (string.IsNullOrEmpty(searchTerm))
+        {
+            lbStations.DataSource = StationManager.Instance.StationsAsBindingList;
+            return;
+        }
+
+        var filteredStations = StationManager.Instance.StationsAsBindingList
+            .Where(s => s.TrackedObject.MetaData.DisplayName.ToLower().Contains(searchTerm)).ToList();
+
+        lbStations.BeginUpdate();
+        lbStations.DataSource = new BindingList<TrackableObject<Station>>(filteredStations);
+        lbStations.Invalidate();
+        lbStations.EndUpdate();
     }
 
     /// <summary>
