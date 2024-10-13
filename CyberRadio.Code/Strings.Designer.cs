@@ -1417,6 +1417,43 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Import Station.
+        /// </summary>
+        internal static string MainForm_fromzipFileToolStripMenuItem_Click_Import_Station {
+            get {
+                return ResourceManager.GetString("MainForm_fromzipFileToolStripMenuItem_Click_Import_Station", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Imported {0} stations: {1}.
+        /// </summary>
+        internal static string MainForm_fromzipFileToolStripMenuItem_Click_Imported__0__stations___1_ {
+            get {
+                return ResourceManager.GetString("MainForm_fromzipFileToolStripMenuItem_Click_Imported__0__stations___1_", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Radio Station Archives (*.zip;*.rar)|*.zip;*.rar.
+        /// </summary>
+        internal static string MainForm_fromzipFileToolStripMenuItem_Click_Radio_Station_Archives_valid_file_types {
+            get {
+                return ResourceManager.GetString("MainForm_fromzipFileToolStripMenuItem_Click_Radio_Station_Archives_valid_file_typ" +
+                        "es", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Station(s) Imported.
+        /// </summary>
+        internal static string MainForm_fromzipFileToolStripMenuItem_Click_Station_s__Imported {
+            get {
+                return ResourceManager.GetString("MainForm_fromzipFileToolStripMenuItem_Click_Station_s__Imported", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cyber Radio Assistant.
         /// </summary>
         internal static string MainTitle {

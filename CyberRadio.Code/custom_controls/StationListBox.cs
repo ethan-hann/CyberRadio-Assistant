@@ -227,7 +227,7 @@ public sealed partial class StationListBox : ListBox
     /// <summary>
     /// Occurs whenever the station is imported from a .zip or .rar file.
     /// </summary>
-    public event EventHandler<TrackableObject<Station>>? StationImported;
+    public event EventHandler<List<Guid?>>? StationsImported;
 
     private void StationListBox_DragEnter(object? sender, DragEventArgs e)
     {
@@ -247,25 +247,19 @@ public sealed partial class StationListBox : ListBox
         var files = (string[]?)e.Data.GetData(DataFormats.FileDrop);
         if (files is not { Length: > 0 }) return;
 
+        List<Guid?> importedStationIds = [];
+
         foreach (var file in files)
-            if (file.EndsWith(".zip") || file.EndsWith(".rar"))
-                // Handle file extraction and preview
-                HandleStationArchive(file);
-    }
-
-    private void HandleStationArchive(string filePath)
-    {
-        var directories = StationManager.ExtractStationArchive(filePath);
-        var stationId = StationManager.Instance.LoadStationFromDirectory(directories.tempDir, directories.songDir, true);
-        var station = StationManager.Instance.GetStation(stationId)?.Key;
-
-        if (station == null)
         {
-            AuLogger.GetCurrentLogger<StationListBox>("HandleStationArchive").Warn($"Station not found in directory: {directories.tempDir}");
-            return;
+            if (file.EndsWith(".zip") || file.EndsWith(".rar"))
+            {
+                var stationId = StationManager.Instance.ImportStationFromArchive(file);
+                if (stationId != null)
+                    importedStationIds.Add(stationId);
+            }
         }
 
-        StationImported?.Invoke(this, station);
+        StationsImported?.Invoke(this, importedStationIds);
     }
 
     /// <summary>

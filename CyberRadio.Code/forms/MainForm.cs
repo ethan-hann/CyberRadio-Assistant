@@ -102,30 +102,34 @@ public sealed partial class MainForm : Form
         StationManager.Instance.SyncProgressChanged += OnStationSyncProgressChanged;
         StationManager.Instance.SyncStatusChanged += OnStationSyncStatusChanged;
         StationManager.Instance.StationsSynchronized += OnStationsSynchronized;
+        StationManager.Instance.StationImported += OnStationImported;
 
-        lbStations.StationImported += LbStations_StationImported;
+        lbStations.StationsImported += OnStationImported;
 
         // Save the configuration when resizing has stopped
         _resizeTimer.Elapsed += (_, _) => { SaveWindowSize(); };
     }
 
-    private void LbStations_StationImported(object? sender, TrackableObject<Station> e)
+    private void OnStationImported(object? sender, List<Guid?> stationIds)
     {
-        MessageBox.Show(this, "Station imported: " + e.TrackedObject.MetaData.DisplayName);
-        //// Handle custom icon //TODO: handle custom icon from imported station .zip
-        //SaveCustomIcon(e.IconFilePath, e.IconFileName);
-        //AuLogger.GetCurrentLogger<MainForm>("StationImported")
-        //    .Info($"Station imported: {e.Station.TrackedObject.MetaData.DisplayName}");
+        var importedIconNames = string.Join(", ", stationIds.Select(stationId => 
+            StationManager.Instance.GetStation(stationId)?.Key.TrackedObject.MetaData.DisplayName));
+            
+        MessageBox.Show(
+            string.Format(Strings.MainForm_fromzipFileToolStripMenuItem_Click_Imported__0__stations___1_, stationIds.Count, importedIconNames),
+            Strings.MainForm_fromzipFileToolStripMenuItem_Click_Station_s__Imported,
+            MessageBoxButtons.OK,
+            MessageBoxIcon.Information);
+            
+        //Select the first station imported in the listbox
+        var firstStationId = stationIds.First();
+        lbStations.SelectedItem = StationManager.Instance.GetStation(firstStationId)?.Key;
+        SelectStationEditor(firstStationId);
+        UpdateEnabledStationCount();
+        HandleUserControlVisibility();
+
+        //TODO: handle custom icon from imported station .zip
     }
-
-    //private void SaveCustomIcon(string? iconFilePath, string? iconFileName)
-    //{
-    //    if (string.IsNullOrEmpty(iconFilePath) || string.IsNullOrEmpty(iconFileName)) return;
-
-    //    var archivePath = Path.Combine(StagingPath, "archive", iconFileName);
-    //    FileHelper.CreateDirectories(Path.GetDirectoryName(archivePath));
-    //    File.Copy(iconFilePath, archivePath, true);
-    //}
 
     /// <summary>
     /// Set the flag indicating whether the application is currently performing an export operation.
@@ -203,6 +207,7 @@ public sealed partial class MainForm : Form
         StationManager.Instance.SyncProgressChanged -= OnStationSyncProgressChanged;
         StationManager.Instance.SyncStatusChanged -= OnStationSyncStatusChanged;
         StationManager.Instance.StationsSynchronized -= OnStationsSynchronized;
+        StationManager.Instance.StationImported -= OnStationImported;
 
         _resizeTimer.Elapsed -= resizeTimerOnElapsed;
     }
@@ -529,9 +534,7 @@ public sealed partial class MainForm : Form
 
         if (StationManager.Instance.IsNewStation(station.Id)) return; //Don't allow reverting changes on new stations.
 
-        //StationManager.Instance.RemoveStation(station.Id); //Remove station from manager
         station.DeclineChanges(); // Revert the changes made to the station's properties since the last save.
-        //StationManager.Instance.AddStation(station, true); //Re-add the station to the manager after reverting changes.
 
         StationManager.Instance.GetStationEditor(station.Id)?.ResetUi();
 
@@ -627,6 +630,41 @@ public sealed partial class MainForm : Form
         SelectStationEditor(id);
         UpdateEnabledStationCount();
         HandleUserControlVisibility();
+    }
+
+    private void fromZipFileToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        if (GameBasePath.Equals(string.Empty) || StagingPath.Equals(string.Empty))
+            return;
+
+        var openFileDialog = new OpenFileDialog()
+        {
+            Filter = Strings.MainForm_fromzipFileToolStripMenuItem_Click_Radio_Station_Archives_valid_file_types,
+            Title = Strings.MainForm_fromzipFileToolStripMenuItem_Click_Import_Station,
+            Multiselect = true,
+            CheckFileExists = true,
+            CheckPathExists = true,
+            InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyComputer)
+        };
+
+        if (openFileDialog.ShowDialog() == DialogResult.OK)
+        {
+            //Unsubscribe from the import event to prevent spam. We'll show one dialog at the end with all the stations imported.
+            StationManager.Instance.StationImported -= OnStationImported;
+            List<Guid?> importedStationIds = [];
+
+            foreach (var file in openFileDialog.FileNames)
+            {
+                var stationId = StationManager.Instance.ImportStationFromArchive(file);
+                if (stationId != null)
+                    importedStationIds.Add(stationId);
+            }
+
+            OnStationImported(this, importedStationIds);
+
+            //Resubscribe to the station manager event
+            StationManager.Instance.StationImported += OnStationImported;
+        }
     }
 
     /// <summary>
@@ -1142,27 +1180,7 @@ public sealed partial class MainForm : Form
     private void IconGeneratorToolStripMenuItem_Click(object sender, EventArgs e)
     {
         if (lbStations.SelectedItem is not TrackableObject<Station> station) return;
-
         ShowIconManagerForm(station);
-        ////if (!station.TrackedObject.CustomIcon.UseCustom ||
-        ////    (station.TrackedObject.CustomIcon.InkAtlasPath.Equals(string.Empty)
-        ////     && station.TrackedObject.CustomIcon.InkAtlasPart.Equals(string.Empty))) return;
-
-        //var managerForm = new IconManagerForm(station);
-        //managerForm.IconAdded += ManagerFormOnIconUpdated;
-        //managerForm.IconDeleted += ManagerFormOnIconUpdated;
-        //managerForm.IconUpdated += ManagerFormOnIconUpdated;
-        //managerForm.ShowDialog(this);
-
-        //new IconGeneratorForm().ShowDialog(this);
-        //PythonEngine.Initialize();
-        //using (Py.GIL())
-        //{
-        //    dynamic pillow = Py.Import("pillow");
-        //    //TODO: Implement icon generator
-        //    //See https://wiki.redmodding.org/wolvenkit/wolvenkit-cli/usage/command-list#pack
-        //    //See https://github.com/DoctorPresto/Cyberpunk-Helper-Scripts/blob/main/generate_inkatlas.py
-        //}
     }
 
     public void ShowIconManagerForm(TrackableObject<Station> station, string newIconImagePath = "")

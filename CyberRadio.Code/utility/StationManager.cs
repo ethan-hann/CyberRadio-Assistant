@@ -17,6 +17,7 @@
 using AetherUtils.Core.Files;
 using AetherUtils.Core.Logging;
 using AetherUtils.Core.Structs;
+using RadioExt_Helper.custom_controls;
 using RadioExt_Helper.models;
 using RadioExt_Helper.user_controls;
 using SharpCompress.Archives;
@@ -199,6 +200,33 @@ public partial class StationManager : IDisposable
             AuLogger.GetCurrentLogger<StationManager>().Error(ex, "Error adding icon to station.");
             return false;
         }
+    }
+
+    /// <summary>
+    /// Import a station from an archive file. The station will be extracted and added to the manager.
+    /// </summary>
+    /// <param name="filePath">The path to the .zip file containing the radio station.</param>
+    /// <returns>The <see cref="Guid"/> of the imported station; <c>null</c> if the station couldn't be imported.</returns>
+    public Guid? ImportStationFromArchive(string filePath)
+    {
+        try
+        {
+            var directories = ExtractStationArchive(filePath);
+            var stationId = LoadStationFromDirectory(directories.tempDir, directories.songDir, true);
+            var station = GetStation(stationId)?.Key;
+
+            if (station == null)
+            {
+                AuLogger.GetCurrentLogger<StationManager>("HandleStationArchive").Warn($"Station not found in directory: {directories.tempDir}");
+                return null;
+            }
+
+            return station.Id;
+        } catch (Exception ex)
+        {
+            AuLogger.GetCurrentLogger<StationManager>().Error(ex, "Error importing station from archive.");
+        }
+        return null;
     }
 
     /// <summary>
@@ -1313,6 +1341,11 @@ public partial class StationManager : IDisposable
     /// Event that is raised when a station is updated in the manager. Event data is the station ID.
     /// </summary>
     public event EventHandler<Guid>? StationUpdated;
+
+    /// <summary>
+    /// Event that is raised when a station is imported into the manager. Event data is the station ID.
+    /// </summary>
+    public event EventHandler<List<Guid?>>? StationImported;
 
     /// <summary>
     /// Event that is raised when all stations are cleared from the manager.

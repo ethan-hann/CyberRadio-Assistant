@@ -926,4 +926,16 @@ Note: Any changes to the activation status or other station-specific properties 
   <data name="CreatedFromPng" xml:space="preserve">
     <value>Created from PNG</value>
   </data>
+  <data name="MainForm_fromzipFileToolStripMenuItem_Click_Imported__0__stations___1_" xml:space="preserve">
+	  <value>Imported {0} stations: {1}</value>
+  </data>
+  <data name="MainForm_fromzipFileToolStripMenuItem_Click_Station_s__Imported" xml:space="preserve">
+	  <value>Station(s) Imported</value>
+  </data>
+  <data name="MainForm_fromzipFileToolStripMenuItem_Click_Radio_Station_Archives_valid_file_types" xml:space="preserve">
+	  <value>Radio Station Archives (*.zip;*.rar)|*.zip;*.rar</value>
+  </data>
+  <data name="MainForm_fromzipFileToolStripMenuItem_Click_Import_Station" xml:space="preserve">
+	  <value>Import Station</value>
+  </data>
 </root>

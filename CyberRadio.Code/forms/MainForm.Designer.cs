@@ -1,4 +1,5 @@
-﻿using RadioExt_Helper.custom_controls;
+﻿using AetherUtils.Core.WinForms.Controls;
+using RadioExt_Helper.custom_controls;
 using RadioExt_Helper.user_controls;
 
 namespace RadioExt_Helper.forms
@@ -75,15 +76,17 @@ namespace RadioExt_Helper.forms
             lblStationCount = new ToolStripStatusLabel();
             toolStripStatusLabel3 = new ToolStripStatusLabel();
             tableLayoutPanel2 = new TableLayoutPanel();
-            btnDisableSelected = new AetherUtils.Core.WinForms.Controls.SplitButton();
+            btnDisableSelected = new SplitButton();
             cmsDisable = new ContextMenuStrip(components);
             btnDisableAll = new ToolStripMenuItem();
-            btnEnableSelected = new AetherUtils.Core.WinForms.Controls.SplitButton();
+            btnEnableSelected = new SplitButton();
             cmsEnable = new ContextMenuStrip(components);
             btnEnableAll = new ToolStripMenuItem();
             tableLayoutPanel1 = new TableLayoutPanel();
             btnDeleteStation = new Button();
-            btnAddStation = new Button();
+            btnAddStation = new SplitButton();
+            cmsNewStation = new ContextMenuStrip(components);
+            fromzipFileToolStripMenuItem = new ToolStripMenuItem();
             stationBindingSource = new BindingSource(components);
             cmsRevertStationChanges = new ContextMenuStrip(components);
             revertChangesToolStripMenuItem = new ToolStripMenuItem();
@@ -101,6 +104,7 @@ namespace RadioExt_Helper.forms
             cmsDisable.SuspendLayout();
             cmsEnable.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
+            cmsNewStation.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)stationBindingSource).BeginInit();
             cmsRevertStationChanges.SuspendLayout();
             statusStripBackup.SuspendLayout();
@@ -605,14 +609,30 @@ namespace RadioExt_Helper.forms
             btnAddStation.Image = Properties.Resources.add__16x16;
             btnAddStation.Location = new Point(3, 2);
             btnAddStation.Margin = new Padding(3, 2, 3, 2);
+            btnAddStation.Menu = cmsNewStation;
             btnAddStation.Name = "btnAddStation";
             btnAddStation.Size = new Size(151, 33);
+            btnAddStation.SplitWidth = 25;
             btnAddStation.TabIndex = 0;
             btnAddStation.Text = "New Station";
             btnAddStation.TextAlign = ContentAlignment.MiddleRight;
             btnAddStation.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnAddStation.UseVisualStyleBackColor = false;
             btnAddStation.Click += BtnAddStation_Click;
+            // 
+            // cmsNewStation
+            // 
+            cmsNewStation.Items.AddRange(new ToolStripItem[] { fromzipFileToolStripMenuItem });
+            cmsNewStation.Name = "cmsNewStation";
+            cmsNewStation.Size = new Size(181, 48);
+            // 
+            // fromzipFileToolStripMenuItem
+            // 
+            fromzipFileToolStripMenuItem.Image = Properties.Resources.zip_file_16x16;
+            fromzipFileToolStripMenuItem.Name = "fromzipFileToolStripMenuItem";
+            fromzipFileToolStripMenuItem.Size = new Size(180, 22);
+            fromzipFileToolStripMenuItem.Text = "From .zip file...";
+            fromzipFileToolStripMenuItem.Click += fromZipFileToolStripMenuItem_Click;
             // 
             // stationBindingSource
             // 
@@ -700,6 +720,7 @@ namespace RadioExt_Helper.forms
             cmsDisable.ResumeLayout(false);
             cmsEnable.ResumeLayout(false);
             tableLayoutPanel1.ResumeLayout(false);
+            cmsNewStation.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)stationBindingSource).EndInit();
             cmsRevertStationChanges.ResumeLayout(false);
             statusStripBackup.ResumeLayout(false);
@@ -720,7 +741,7 @@ namespace RadioExt_Helper.forms
         private TableLayoutPanel tableLayoutPanel1;
         private StationListBox lbStations;
         private Button btnDeleteStation;
-        private Button btnAddStation;
+        private SplitButton btnAddStation;
         private ToolStripMenuItem languageToolStripMenuItem;
         private ToolStripSeparator toolStripSeparator1;
         private ToolStripMenuItem radioExtOnNexusModsToolStripMenuItem;
@@ -768,5 +789,7 @@ namespace RadioExt_Helper.forms
         private ToolStripMenuItem toolsToolStripMenuItem;
         private ToolStripMenuItem iconGeneratorToolStripMenuItem;
         private ToolStripMenuItem extractarchiveIconToolStripMenuItem;
+        private ContextMenuStrip cmsNewStation;
+        private ToolStripMenuItem fromzipFileToolStripMenuItem;
     }
 }
