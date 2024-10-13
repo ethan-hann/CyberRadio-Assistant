@@ -208,7 +208,7 @@ public partial class StationManager : IDisposable
     /// <param name="referenceStationId">The station ID from which the icon is being copied.</param>
     /// <param name="icon">The <see cref="WolvenIcon"/> to copy.</param>
     /// <param name="makeActive">Whether to make this copied icon active for the current station.</param>
-    /// <returns>The id of the new copied icon; <c>null</c> if the icon couldn't be copied.</returns>
+    /// <returns>The internal id of the new copied icon; <c>null</c> if the icon couldn't be copied.</returns>
     public Guid? CopyStationIcon(Guid stationId, Guid referenceStationId, TrackableObject<WolvenIcon> icon, bool makeActive = false)
     {
         try
@@ -226,7 +226,7 @@ public partial class StationManager : IDisposable
             // Add the copied icon to the target station
             var currentStation = currentStationPair.Key;
             currentStation.TrackedObject.AddIcon(copiedIcon);
-            StationsAsBindingList.First(s => s.Id == currentStationPair.Key.Id).TrackedObject.AddIcon(icon);
+            StationsAsBindingList.First(s => s.Id == currentStationPair.Key.Id).TrackedObject.AddIcon(copiedIcon);
 
             if (makeActive)
             {
@@ -276,20 +276,27 @@ public partial class StationManager : IDisposable
             if (iconEditor != null)
                 pair.Value.Remove(iconEditor);
 
-            // Only delete files if requested and the icon is not linked to any other stations
-            if (deleteFiles && !IsIconLinkedToOtherStations(icon.Id, stationId))
+            switch (deleteFiles)
             {
-                if (icon.TrackedObject.ArchivePath != null && FileHelper.DoesFileExist(icon.TrackedObject.ArchivePath))
-                    FileHelper.DeleteFile(icon.TrackedObject.ArchivePath);
-                if (icon.TrackedObject.ImagePath != null && FileHelper.DoesFileExist(icon.TrackedObject.ImagePath))
-                    FileHelper.DeleteFile(icon.TrackedObject.ImagePath);
+                // Only delete files if requested and the icon is not linked to any other stations
+                case true when !IsIconLinkedToOtherStations(icon.TrackedObject.IconId, stationId):
+                {
+                    if (icon.TrackedObject.ArchivePath != null && FileHelper.DoesFileExist(icon.TrackedObject.ArchivePath))
+                        FileHelper.DeleteFile(icon.TrackedObject.ArchivePath);
+                    if (icon.TrackedObject.ImagePath != null && FileHelper.DoesFileExist(icon.TrackedObject.ImagePath))
+                        FileHelper.DeleteFile(icon.TrackedObject.ImagePath);
 
-                // Delete the icon's folder in the appdata directory
-                var appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-                var foldersInAppData = FileHelper.SafeEnumerateDirectories(Path.Combine(appData, "Wolven Icon Generator", "tools")).ToList();
-                var foldersToDelete = foldersInAppData.Where(f => f.Contains(icon.Id.ToString())).ToList();
-                foreach (var folder in foldersToDelete.Where(Directory.Exists))
-                    Directory.Delete(folder, true);
+                    // Delete the icon's folder in the appdata directory
+                    var appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+                    var foldersInAppData = FileHelper.SafeEnumerateDirectories(Path.Combine(appData, "Wolven Icon Generator", "tools")).ToList();
+                    var foldersToDelete = foldersInAppData.Where(f => f.Contains(icon.Id.ToString())).ToList();
+                    foreach (var folder in foldersToDelete.Where(Directory.Exists))
+                        Directory.Delete(folder, true);
+                    break;
+                }
+                case true:
+                    AuLogger.GetCurrentLogger<StationManager>("RemoveStationIcon").Warn("Could not delete files for the icon as they are linked to another station's icon.");
+                    break;
             }
 
             // Notify listeners that the station has been updated
@@ -299,7 +306,7 @@ public partial class StationManager : IDisposable
         }
         catch (Exception ex)
         {
-            AuLogger.GetCurrentLogger<StationManager>().Error(ex, "Error removing icon from station.");
+            AuLogger.GetCurrentLogger<StationManager>("RemoveStationIcon").Error(ex, "Error removing icon from station.");
             return false;
         }
     }
@@ -310,11 +317,11 @@ public partial class StationManager : IDisposable
     /// <param name="iconId">The ID of the icon to check.</param>
     /// <param name="excludingStationId">The station ID to exclude from the check.</param>
     /// <returns><c>true</c> if the icon is linked to other stations; <c>false</c> otherwise.</returns>
-    private bool IsIconLinkedToOtherStations(Guid iconId, Guid excludingStationId)
+    public bool IsIconLinkedToOtherStations(Guid? iconId, Guid excludingStationId)
     {
         // Check if any other station references the icon (excluding the provided station ID)
         return _stations.Values.Any(pair => pair.Key.Id != excludingStationId && 
-                                            pair.Key.TrackedObject.Icons.Any(icon => icon.Id == iconId));
+                                            pair.Key.TrackedObject.Icons.Any(icon => icon.TrackedObject.IconId == iconId));
     }
 
     /// <summary>
@@ -326,6 +333,55 @@ public partial class StationManager : IDisposable
     public TrackableObject<WolvenIcon>? GetStationIcon(Guid stationId, Guid iconId)
     {
         return !_stations.TryGetValue(stationId, out var pair) ? null : pair.Key.TrackedObject.Icons.FirstOrDefault(i => i.Id == iconId);
+    }
+
+    /// <summary>
+    /// Enable a specific icon for a station. An icon can only have one active icon at a time.
+    /// </summary>
+    /// <param name="stationId">The id of the station.</param>
+    /// <param name="iconId">The id of the icon to enable.</param>
+    public void EnableStationIcon(Guid stationId, Guid iconId)
+    {
+        try
+        {
+            if (!_stations.TryGetValue(stationId, out var pair)) return;
+
+            foreach (var icon in pair.Key.TrackedObject.Icons)
+            {
+                icon.TrackedObject.IsActive = icon.Id == iconId;
+            }
+
+            StationUpdated?.Invoke(this, stationId);
+        }
+        catch (Exception ex)
+        {
+            AuLogger.GetCurrentLogger<StationManager>().Error(ex, "Error enabling station icon.");
+        }
+    }
+
+    /// <summary>
+    /// Disable a specific icon for a station.
+    /// </summary>
+    /// <param name="stationId">The id of the station.</param>
+    /// <param name="iconId">The id of the icon to disable.</param>
+    public void DisableStationIcon(Guid stationId, Guid iconId)
+    {
+        try
+        {
+            if (!_stations.TryGetValue(stationId, out var pair)) return;
+
+            // Find the specific icon by ID and disable it.
+            var targetIcon = pair.Key.TrackedObject.Icons.FirstOrDefault(icon => icon.Id == iconId);
+            if (targetIcon == null) return;
+
+            targetIcon.TrackedObject.IsActive = false;
+
+            StationUpdated?.Invoke(this, stationId);
+        }
+        catch (Exception ex)
+        {
+            AuLogger.GetCurrentLogger<StationManager>().Error(ex, "Error disabling station icon.");
+        }
     }
 
     /// <summary>

@@ -9,6 +9,9 @@ namespace RadioExt_Helper.custom_controls
     {
         private string _disabledIconKey = "disabled";
         private string _enabledIconKey = "enabled";
+        private string _fromPngKey = "fromPng";
+        private string _fromArchiveKey = "fromArchive";
+
         private ImageList _imageList;
 
         [Browsable(true)]
@@ -50,6 +53,32 @@ namespace RadioExt_Helper.custom_controls
             }
         }
 
+        [Browsable(true)]
+        [Category("Icons")]
+        [Description("The key for an icon from a PNG.")]
+        public string FromPngKey
+        {
+            get => _fromPngKey;
+            set
+            {
+                _fromPngKey = value;
+                Invalidate();
+            }
+        }
+
+        [Browsable(true)]
+        [Category("Icons")]
+        [Description("The key for an icon from an archive.")]
+        public string FromArchiveKey
+        {
+            get => _fromArchiveKey;
+            set
+            {
+                _fromArchiveKey = value;
+                Invalidate();
+            }
+        }
+
         public IconListBox()
         {
             InitializeComponent();
@@ -83,6 +112,17 @@ namespace RadioExt_Helper.custom_controls
                         {
                             e.Graphics.DrawImage(primaryIcon, e.Bounds.Left, e.Bounds.Top, 16, 16);
                         }
+                    }
+
+                    //Determine the secondary icon (if from a PNG or an archive)
+                    var secondaryIcon = icon.TrackedObject.IsFromArchive ? _fromArchiveKey : _fromPngKey;
+                    var iconX = e.Bounds.Right - 16 - 4; //16 is the width of the icon, 4 is the padding from the edge
+
+                    if (_imageList.Images.ContainsKey(secondaryIcon))
+                    {
+                        var secondaryImage = _imageList.Images[secondaryIcon];
+                        if (secondaryImage != null)
+                            e.Graphics.DrawImage(secondaryImage, iconX, e.Bounds.Top, 16, 16);
                     }
 
                     // Draw the text

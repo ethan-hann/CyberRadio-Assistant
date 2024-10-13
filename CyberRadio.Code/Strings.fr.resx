@@ -907,4 +907,23 @@ Assurez-vous d'avoir soutenu votre dossier de mise en scène en premier;)</value
   <data name="LogViewerControl_DisplayLastLines_Failed_to_display_log_lines___0_" xml:space="preserve">
     <value>Échec de l'affichage des lignes de journal: {0}</value>
   </data>
+  <data name="IconManagerForm_CheckForCopy_" xml:space="preserve">
+    <value>L'icône existe déjà et est associée aux stations suivantes: {0}.
+
+Une nouvelle copie de l'icône sera créée, mais elle fera référence aux mêmes fichiers sous-jacents sur le disque.
+
+Remarque: Toute modification de l'état d'activation ou d'autres propriétés spécifiques à la station affectera seulement cette station.</value>
+  </data>
+  <data name="IconManagerForm_CheckForCopy_Duplicate_Icon_Detected" xml:space="preserve">
+    <value>Icône en double détectée</value>
+  </data>
+  <data name="IconManagerForm_CheckForCopy_This_icon_is_already_associated_with_the_current_station_" xml:space="preserve">
+    <value>Cette icône est déjà associée à la station actuelle.</value>
+  </data>
+  <data name="CreatedFromArchive" xml:space="preserve">
+    <value>Créé à partir d'archive</value>
+  </data>
+  <data name="CreatedFromPng" xml:space="preserve">
+    <value>Créé à partir de png</value>
+  </data>
 </root>

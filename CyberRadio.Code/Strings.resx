@@ -907,4 +907,23 @@ Make sure you've backed up your staging folder first ;)</value>
   <data name="LogViewerControl_DisplayLastLines_Failed_to_display_log_lines___0_" xml:space="preserve">
 	  <value>Failed to display log lines: {0}</value>
   </data>
+  <data name="IconManagerForm_CheckForCopy_" xml:space="preserve">
+	  <value>The icon already exists and is associated with the following stations: {0}.
+
+A new copy of the icon will be created, but it will reference the same underlying files on disk.
+
+Note: Any changes to the activation status or other station-specific properties will only affect this station.</value>
+  </data>
+  <data name="IconManagerForm_CheckForCopy_Duplicate_Icon_Detected" xml:space="preserve">
+	  <value>Duplicate Icon Detected</value>
+  </data>
+  <data name="IconManagerForm_CheckForCopy_This_icon_is_already_associated_with_the_current_station_" xml:space="preserve">
+	  <value>This icon is already associated with the current station.</value>
+  </data>
+  <data name="CreatedFromArchive" xml:space="preserve">
+    <value>Created from Archive</value>
+  </data>
+  <data name="CreatedFromPng" xml:space="preserve">
+    <value>Created from PNG</value>
+  </data>
 </root>

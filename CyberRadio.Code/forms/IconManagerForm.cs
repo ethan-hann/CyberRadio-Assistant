@@ -21,6 +21,7 @@ public partial class IconManagerForm : Form
     private readonly bool _addedFromImagePath;
     private bool _isImportingIcon;
     private bool _isExportingIcon;
+    private ToolTip _iconToolTip = new();
     private readonly TrackableObject<WolvenIcon>? _iconFromImagePath;
 
     public IconManagerForm(TrackableObject<Station> station)
@@ -60,6 +61,8 @@ public partial class IconManagerForm : Form
     {
         _stationImageList.Images.Add("disabled", Resources.disabled);
         _stationImageList.Images.Add("enabled", Resources.enabled);
+        _stationImageList.Images.Add("fromPng", Resources.png_file_16x16);
+        _stationImageList.Images.Add("fromArchive", Resources.box_16x16);
         _stationImageList.ImageSize = new Size(16, 16);
         lbIcons.ImageList = _stationImageList;
     }
@@ -91,14 +94,19 @@ public partial class IconManagerForm : Form
     }
 
     /// <summary>
-    /// Updates the UI with the correct icon editor based on the station's ID.
+    /// Gets the correct icon editor from the station manager based on the station's ID and the icon selected.
     /// </summary>
     /// <param name="icon">The icon associated with the editor.</param>
-    private void SelectIconEditor(TrackableObject<WolvenIcon> icon)
+    private void SelectIconEditor(TrackableObject<WolvenIcon>? icon)
     {
-        var editor = StationManager.Instance.GetStationIconEditor(_station.Id, icon.Id);
-        editor?.SetLogIdentifier();
-        UpdateIconEditor(editor);
+        if (icon == null)
+            UpdateIconEditor(null);
+        else
+        {
+            var editor = StationManager.Instance.GetStationIconEditor(_station.Id, icon.Id);
+            editor?.SetLogIdentifier();
+            UpdateIconEditor(editor);
+        }
     }
 
     /// <summary>
@@ -216,7 +224,6 @@ public partial class IconManagerForm : Form
         if (!added) return;
 
         ResetListBox();
-
         lbIcons.SelectedItem = icon;
         SelectIconEditor(icon);
 
@@ -243,13 +250,32 @@ public partial class IconManagerForm : Form
             MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
         if (firstResult != DialogResult.Yes) return;
 
-        var secondResult = MessageBox.Show(Strings.IconManagerForm_RemoveIcon_Do_you_want_to_delete_associated_icon_files_from_staging__This_will_delete_the_copied__archive_file_and_the_associated_PNG_,
-            Strings.IconManagerForm_RemoveIcon_Confirm_Delete, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+        var isLinkedToOtherStations =
+            StationManager.Instance.IsIconLinkedToOtherStations(icon.TrackedObject.IconId, _station.Id);
+        var isValidIcon = icon.TrackedObject.CheckIconValid(); //a valid icon would have files on disk; otherwise, no need to ask to delete non-existent files ;)
 
-        if (secondResult == DialogResult.Yes)
-            StationManager.Instance.RemoveStationIcon(_station.Id, icon, true);
+        if (isValidIcon)
+        {
+            if (!isLinkedToOtherStations)
+            {
+                var secondResult = MessageBox.Show(Strings.IconManagerForm_RemoveIcon_Do_you_want_to_delete_associated_icon_files_from_staging__This_will_delete_the_copied__archive_file_and_the_associated_PNG_,
+                    Strings.IconManagerForm_RemoveIcon_Confirm_Delete, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                if (secondResult == DialogResult.Yes)
+                    StationManager.Instance.RemoveStationIcon(_station.Id, icon, true);
+                else
+                    StationManager.Instance.RemoveStationIcon(_station.Id, icon);
+            }
+            else
+            {
+                StationManager.Instance.RemoveStationIcon(_station.Id, icon);
+                AuLogger.GetCurrentLogger<IconManagerForm>("RemoveIcon").Warn($"An icon was removed from the station '{_station.TrackedObject.MetaData.DisplayName}' but no files were deleted; they are in use by another station.");
+            }
+        }
         else
-            StationManager.Instance.RemoveStationIcon(_station.Id, icon);
+        {
+            StationManager.Instance.RemoveStationIcon(_station.Id, icon); //No files, no conflicts with other stations, and not a valid icon yet so simply remove the icon from the station.
+        }
 
         ResetListBox();
 
@@ -260,7 +286,7 @@ public partial class IconManagerForm : Form
         }
         else
         {
-            UpdateIconEditor(null);
+            SelectIconEditor(null);
         }
 
         IconDeleted?.Invoke(this, icon);
@@ -272,8 +298,36 @@ public partial class IconManagerForm : Form
         lbIcons.DataSource = null;
         lbIcons.DataSource = _station.TrackedObject.Icons.ToBindingList();
         lbIcons.DisplayMember = "TrackedObject.AtlasName";
+
+        // Set tooltips for each item when the mouse hovers over them.
+        lbIcons.MouseMove += lbIcons_MouseMove;
+
         lbIcons.Invalidate();
         lbIcons.EndUpdate();
+    }
+
+    private void lbIcons_MouseMove(object? sender, MouseEventArgs e)
+    {
+        // Get the index of the item under the mouse cursor
+        var index = lbIcons.IndexFromPoint(e.Location);
+
+        // Ensure index is within bounds and valid
+        if (index >= 0 && index < lbIcons.Items.Count)
+        {
+            if (lbIcons.Items[index] is TrackableObject<WolvenIcon> icon)
+            {
+                // Determine the tooltip text based on whether the icon is from an archive or PNG
+                var tooltipText = icon.TrackedObject.IsFromArchive ? Strings.CreatedFromArchive : Strings.CreatedFromPng;
+
+                // Show the tooltip for the specific item
+                _iconToolTip.SetToolTip(lbIcons, tooltipText);
+            }
+        }
+        else
+        {
+            // If the mouse is not over a valid item, clear the tooltip
+            _iconToolTip.SetToolTip(lbIcons, string.Empty);
+        }
     }
 
     private void fromArchiveFileToolStripMenuItem_Click(object sender, EventArgs e)
@@ -283,16 +337,14 @@ public partial class IconManagerForm : Form
             if (fdlgOpenArchive.ShowDialog() == DialogResult.OK)
             {
                 //Check if the archive file already exists in the staging folder. If it does, display option to copy it.
-                var copied = CheckForCopy(fdlgOpenArchive.FileName);
+                var result = CheckForCopy(fdlgOpenArchive.FileName);
 
-                //If the icon was copied successfully, display the editor for it and don't add a duplicate icon!
-                if (copied.performedCopy)
+                if (result.shouldBreak)
                     return;
 
-                if (copied is { icon: not null, performedCopy: true })
-                {
-                    AddNewIconFromCopy(copied.icon);
-                }
+                //If the icon was copied successfully, display the editor for it and don't add a duplicate icon!
+                if (result is { performedCopy: true, icon: not null })
+                    AddNewIconFromCopy(result.icon);
                 else //otherwise, proceed with adding the template icon from an archive
                 {
                     TrackableObject<WolvenIcon> icon = new(WolvenIcon.FromArchive(fdlgOpenArchive.FileName))
@@ -318,9 +370,9 @@ public partial class IconManagerForm : Form
     /// If it exists, prompts the user to either reuse the icon or create a new copy.
     /// </summary>
     /// <param name="path">The path to the icon to check.</param>
-    /// <returns>A reference to the newly copied or linked icon; or <c>null</c> if the user did not copy or link the icon or an error occurred.</returns>
+    /// <returns>A reference to the newly copied or linked icon, whether the copy was performed, and whether the caller should break their function flow; or <c>null</c> if the user did not copy or link the icon or an error occurred.</returns>
     /// <exception cref="InvalidOperationException"></exception>
-    private (TrackableObject<WolvenIcon>? icon, bool performedCopy) CheckForCopy(string path)
+    private (TrackableObject<WolvenIcon>? icon, bool performedCopy, bool shouldBreak) CheckForCopy(string path)
     {
         Guid? newIconId = null;
         var fileName = Path.GetFileName(path);
@@ -340,9 +392,9 @@ public partial class IconManagerForm : Form
 
         if (currentStationHasIcon)
         {
-            MessageBox.Show("This icon is already associated with the current station.", "Duplicate Icon Detected",
+            MessageBox.Show(Strings.IconManagerForm_CheckForCopy_This_icon_is_already_associated_with_the_current_station_, Strings.IconManagerForm_CheckForCopy_Duplicate_Icon_Detected,
                 MessageBoxButtons.OK, MessageBoxIcon.Information);
-            return (null, true); // Cancel the import since the icon is already present
+            return (null, false, true); // Cancel the import since the icon is already present
         }
 
         // Check if the archive is already associated with one or more other stations
@@ -356,16 +408,14 @@ public partial class IconManagerForm : Form
             // Inform the user that multiple associations were found
             var associatedStationNames = string.Join(", ", existingStations.Select(station => station.TrackedObject.MetaData.DisplayName));
             var dialogResult = MessageBox.Show(
-                $"The icon already exists and is associated with the following stations: {associatedStationNames}.\n\n" +
-                "Would you like to reuse the existing icon (link it) or create a new copy?\n\n" +
-                "Note: Linking means any changes made to the icon will affect all stations using it.",
-                "Duplicate Icon Detected",
-                MessageBoxButtons.YesNoCancel,
+                string.Format(Strings.IconManagerForm_CheckForCopy_, associatedStationNames),
+                Strings.IconManagerForm_CheckForCopy_Duplicate_Icon_Detected,
+                MessageBoxButtons.OKCancel,
                 MessageBoxIcon.Question);
 
             switch (dialogResult)
             {
-                case DialogResult.Yes:
+                case DialogResult.OK:
                 {
                     // Create a new copy of the existing icon for the current station
                     var existingIcon = existingStations
@@ -375,27 +425,19 @@ public partial class IconManagerForm : Form
                     // Copy the .archive and .png files and update paths
                     newIconId = StationManager.Instance.CopyStationIcon(_station.Id, existingStations.First().Id, existingIcon);
 
-                    if (newIconId != null)
-                    {
-                        MessageBox.Show("A copy of the existing icon has been created and added to this station. This icon references the same files as the existing icon.",
-                            "Icon Copied", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }
-                    else
-                    {
+                    if (newIconId == null)
                         throw new Exception($"Failed to copy existing icon to the station: {_station.TrackedObject.MetaData.DisplayName}");
-                    }
                     break;
                 }
-                case DialogResult.No:
                 case DialogResult.Cancel:
                 default:
                     // Cancel the import
-                    return (null, true);
+                    return (null, true, true);
             }
         }
 
-        // If no existing icon found or no conflict, return true to proceed with import
-        return newIconId != null ? ( StationManager.Instance.GetStationIcon(_station.Id, (Guid)newIconId), true) : (null, false);
+        // If the icon was copied successfully, return the icon and true. Otherwise, return null and false.
+        return newIconId != null ? ( StationManager.Instance.GetStationIcon(_station.Id, (Guid)newIconId), true, false) : (null, false, false);
     }
 
     private void btnAddIcon_Click(object sender, EventArgs e)
@@ -433,7 +475,7 @@ public partial class IconManagerForm : Form
         }
         else
         {
-            UpdateIconEditor(null);
+            SelectIconEditor(null);
         }
     }
 
@@ -452,11 +494,8 @@ public partial class IconManagerForm : Form
     private void EnableIcon(TrackableObject<WolvenIcon> icon)
     {
         lbIcons.BeginUpdate();
-        _station.TrackedObject.Icons.ForEach(i => i.TrackedObject.IsActive = false);
-        _station.TrackedObject.Icons.First(i => i.Id == icon.Id).TrackedObject.IsActive = true;
-        _station.CheckPendingSaveStatus();
-
-        icon.TrackedObject.IsActive = true;
+        StationManager.Instance.EnableStationIcon(_station.Id, icon.Id);
+        //_station.CheckPendingSaveStatus();
         lbIcons.Invalidate();
         lbIcons.EndUpdate();
 
@@ -466,11 +505,8 @@ public partial class IconManagerForm : Form
     private void DisableIcon(TrackableObject<WolvenIcon> icon)
     {
         lbIcons.BeginUpdate();
-
-        _station.TrackedObject.Icons.First(i => i.Id == icon.Id).TrackedObject.IsActive = false;
-        _station.CheckPendingSaveStatus();
-
-        icon.TrackedObject.IsActive = false;
+        StationManager.Instance.DisableStationIcon(_station.Id, icon.Id);
+        //_station.CheckPendingSaveStatus();
         lbIcons.Invalidate();
         lbIcons.EndUpdate();
 

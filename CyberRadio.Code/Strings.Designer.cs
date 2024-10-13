@@ -493,6 +493,24 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Created from Archive.
+        /// </summary>
+        internal static string CreatedFromArchive {
+            get {
+                return ResourceManager.GetString("CreatedFromArchive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Created from PNG.
+        /// </summary>
+        internal static string CreatedFromPng {
+            get {
+                return ResourceManager.GetString("CreatedFromPng", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Creating preview....
         /// </summary>
         internal static string CreatingPreview {
@@ -1128,6 +1146,38 @@ namespace RadioExt_Helper {
             get {
                 return ResourceManager.GetString("IconManagerForm_btnDeleteAllIcons_Click_Do_you_want_to_also_delete_associated_ico" +
                         "n_s_files_from_staging", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The icon already exists and is associated with the following stations: {0}.
+        ///
+        ///A new copy of the icon will be created, but it will reference the same underlying files on disk.
+        ///
+        ///Note: Any changes to the activation status or other station-specific properties will only affect this station..
+        /// </summary>
+        internal static string IconManagerForm_CheckForCopy_ {
+            get {
+                return ResourceManager.GetString("IconManagerForm_CheckForCopy_", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Duplicate Icon Detected.
+        /// </summary>
+        internal static string IconManagerForm_CheckForCopy_Duplicate_Icon_Detected {
+            get {
+                return ResourceManager.GetString("IconManagerForm_CheckForCopy_Duplicate_Icon_Detected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This icon is already associated with the current station..
+        /// </summary>
+        internal static string IconManagerForm_CheckForCopy_This_icon_is_already_associated_with_the_current_station_ {
+            get {
+                return ResourceManager.GetString("IconManagerForm_CheckForCopy_This_icon_is_already_associated_with_the_current_sta" +
+                        "tion_", resourceCulture);
             }
         }
         

@@ -201,16 +201,6 @@ public sealed partial class StationEditor : UserControl, IEditor
             }
         }
 
-        //if (Station.TrackedObject.MetaData.CustomData.TryGetValue("Original Image Path", out object? value))
-        //{
-        //    var imagePath = value as string;
-        //    if (Path.Exists(imagePath))
-        //    {
-        //        picStationIcon.SetImage(imagePath);
-        //        Station.TrackedObject.GetActiveIcon()?.TrackedObject.EnsureImage();
-        //    }
-        //}
-
         UpdateCustomDataView();
     }
 
@@ -360,7 +350,12 @@ public sealed partial class StationEditor : UserControl, IEditor
         if (icon == null)
         {
             Station.TrackedObject.CustomIcon.UseCustom = false;
-            picStationIcon.Image = Resources.drag_and_drop;
+            Station.TrackedObject.CustomIcon = new CustomIcon();
+            txtInkAtlasPath.Text = Station.TrackedObject.CustomIcon.InkAtlasPath;
+            txtInkAtlasPart.Text = Station.TrackedObject.CustomIcon.InkAtlasPart;
+
+            //picStationIcon.Image = Resources.drag_and_drop;
+            picStationIcon.SetImage(null);
             RemoveCustomIconData();
             Station.CheckPendingSaveStatus();
         }
@@ -442,7 +437,8 @@ public sealed partial class StationEditor : UserControl, IEditor
             {
                 matchingIcon.TrackedObject.IsActive = true;
                 UpdateIconPrivate(matchingIcon);
-            }
+            }else
+                UpdateIconPrivate(null);
         }
         catch (Exception ex)
         {

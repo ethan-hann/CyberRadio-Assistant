@@ -907,4 +907,23 @@ Asegúrese de que haya copiado su carpeta de puesta en escena primero;)</value>
   <data name="LogViewerControl_DisplayLastLines_Failed_to_display_log_lines___0_" xml:space="preserve">
     <value>No se pudo mostrar líneas de registro: {0}</value>
   </data>
+  <data name="IconManagerForm_CheckForCopy_" xml:space="preserve">
+    <value>El icono ya existe y está asociado con las siguientes estaciones: {0}.
+
+Se creará una nueva copia del icono, pero hará referencia a los mismos archivos subyacentes en el disco.
+
+Nota: Cualquier cambio en el estado de activación u otras propiedades específicas de la estación solo afectará esta estación.</value>
+  </data>
+  <data name="IconManagerForm_CheckForCopy_Duplicate_Icon_Detected" xml:space="preserve">
+    <value>Icono duplicado detectado</value>
+  </data>
+  <data name="IconManagerForm_CheckForCopy_This_icon_is_already_associated_with_the_current_station_" xml:space="preserve">
+    <value>Este icono ya está asociado con la estación actual.</value>
+  </data>
+  <data name="CreatedFromArchive" xml:space="preserve">
+    <value>Creado a partir del archivo</value>
+  </data>
+  <data name="CreatedFromPng" xml:space="preserve">
+    <value>Creado a partir de PNG</value>
+  </data>
 </root>
