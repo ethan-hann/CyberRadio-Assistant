@@ -926,4 +926,18 @@ Remarque: Toute modification de l'état d'activation ou d'autres propriétés sp
   <data name="CreatedFromPng" xml:space="preserve">
     <value>Créé à partir de png</value>
   </data>
+  <data name="MainForm_fromzipFileToolStripMenuItem_Click_Station_s__Imported" xml:space="preserve">
+    <value>Station (s) importée</value>
+  </data>
+  <data name="MainForm_fromzipFileToolStripMenuItem_Click_Radio_Station_Archives_valid_file_types" xml:space="preserve">
+    <value>Archives de la station de radio (* .zip; *.rar) | * .zip; *.rar</value>
+  </data>
+  <data name="MainForm_fromzipFileToolStripMenuItem_Click_Import_Station" xml:space="preserve">
+    <value>Station d'importation</value>
+  </data>
+  <data name="MainForm_fromzipFileToolStripMenuItem_Click_Imported__0__stations___1_" xml:space="preserve">
+    <value>Stations importées {0}: {1}
+
+Si une icône était incluse avec la station, elle a également été ajoutée. Cependant, vous devrez l'extraire manuellement pour obtenir l'aperçu dans l'ARC.</value>
+  </data>
 </root>

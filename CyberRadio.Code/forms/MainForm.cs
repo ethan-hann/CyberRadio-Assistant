@@ -127,8 +127,6 @@ public sealed partial class MainForm : Form
         SelectStationEditor(firstStationId);
         UpdateEnabledStationCount();
         HandleUserControlVisibility();
-
-        //TODO: handle custom icon from imported station .zip
     }
 
     /// <summary>

@@ -58,7 +58,6 @@ namespace RadioExt_Helper.forms
             downloadRadioModsToolStripMenuItem = new ToolStripMenuItem();
             toolsToolStripMenuItem = new ToolStripMenuItem();
             iconGeneratorToolStripMenuItem = new ToolStripMenuItem();
-            extractarchiveIconToolStripMenuItem = new ToolStripMenuItem();
             helpToolStripMenuItem = new ToolStripMenuItem();
             howToUseToolStripMenuItem = new ToolStripMenuItem();
             radioExtOnNexusModsToolStripMenuItem = new ToolStripMenuItem();
@@ -295,7 +294,7 @@ namespace RadioExt_Helper.forms
             // 
             // toolsToolStripMenuItem
             // 
-            toolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { iconGeneratorToolStripMenuItem, extractarchiveIconToolStripMenuItem });
+            toolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { iconGeneratorToolStripMenuItem });
             toolsToolStripMenuItem.Image = Properties.Resources.tools_16x16;
             toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             toolsToolStripMenuItem.Size = new Size(63, 20);
@@ -305,16 +304,10 @@ namespace RadioExt_Helper.forms
             // 
             iconGeneratorToolStripMenuItem.Image = Properties.Resources.magic_wand_16x16;
             iconGeneratorToolStripMenuItem.Name = "iconGeneratorToolStripMenuItem";
-            iconGeneratorToolStripMenuItem.Size = new Size(191, 22);
+            iconGeneratorToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.I;
+            iconGeneratorToolStripMenuItem.Size = new Size(231, 22);
             iconGeneratorToolStripMenuItem.Text = "Station Icon Manager";
             iconGeneratorToolStripMenuItem.Click += IconGeneratorToolStripMenuItem_Click;
-            // 
-            // extractarchiveIconToolStripMenuItem
-            // 
-            extractarchiveIconToolStripMenuItem.Image = Properties.Resources.zip_file_16x16;
-            extractarchiveIconToolStripMenuItem.Name = "extractarchiveIconToolStripMenuItem";
-            extractarchiveIconToolStripMenuItem.Size = new Size(191, 22);
-            extractarchiveIconToolStripMenuItem.Text = "Extract .archive Icon";
             // 
             // helpToolStripMenuItem
             // 
@@ -624,13 +617,13 @@ namespace RadioExt_Helper.forms
             // 
             cmsNewStation.Items.AddRange(new ToolStripItem[] { fromzipFileToolStripMenuItem });
             cmsNewStation.Name = "cmsNewStation";
-            cmsNewStation.Size = new Size(181, 48);
+            cmsNewStation.Size = new Size(152, 26);
             // 
             // fromzipFileToolStripMenuItem
             // 
             fromzipFileToolStripMenuItem.Image = Properties.Resources.zip_file_16x16;
             fromzipFileToolStripMenuItem.Name = "fromzipFileToolStripMenuItem";
-            fromzipFileToolStripMenuItem.Size = new Size(180, 22);
+            fromzipFileToolStripMenuItem.Size = new Size(151, 22);
             fromzipFileToolStripMenuItem.Text = "From .zip file...";
             fromzipFileToolStripMenuItem.Click += fromZipFileToolStripMenuItem_Click;
             // 
@@ -788,7 +781,6 @@ namespace RadioExt_Helper.forms
         private ToolStripMenuItem openLogFolderToolStripMenuItem;
         private ToolStripMenuItem toolsToolStripMenuItem;
         private ToolStripMenuItem iconGeneratorToolStripMenuItem;
-        private ToolStripMenuItem extractarchiveIconToolStripMenuItem;
         private ContextMenuStrip cmsNewStation;
         private ToolStripMenuItem fromzipFileToolStripMenuItem;
     }

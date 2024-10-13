@@ -927,7 +927,9 @@ Note: Any changes to the activation status or other station-specific properties 
     <value>Created from PNG</value>
   </data>
   <data name="MainForm_fromzipFileToolStripMenuItem_Click_Imported__0__stations___1_" xml:space="preserve">
-	  <value>Imported {0} stations: {1}</value>
+	  <value>Imported {0} stations: {1}
+
+If an icon was included with the station, it has been added as well. However, you will have to extract it manually to get the preview in CRA.</value>
   </data>
   <data name="MainForm_fromzipFileToolStripMenuItem_Click_Station_s__Imported" xml:space="preserve">
 	  <value>Station(s) Imported</value>
