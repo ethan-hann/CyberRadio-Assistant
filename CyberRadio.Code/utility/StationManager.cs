@@ -129,13 +129,14 @@ public partial class StationManager : IDisposable
 
                 StationsAsBindingList.Add(station);
 
+                var stagingPath = GlobalData.ConfigManager.Get("stagingPath") as string ?? string.Empty;
+
                 if (pathOnDisk.Equals("\\"))
                 {
                     StationPaths[station.Id] = Path.Combine(pathOnDisk, station.TrackedObject.MetaData.DisplayName);
                 }
                 else
                 {
-                    var stagingPath = GlobalData.ConfigManager.Get("stagingPath") as string ?? string.Empty;
                     var relativePath = PathHelper.GetRelativePath(pathOnDisk, stagingPath);
 
                     if (relativePath.Equals(pathOnDisk))
@@ -144,10 +145,28 @@ public partial class StationManager : IDisposable
                         StationPaths[station.Id] = relativePath;
                 }
 
+                //Make sure the .archive file(s) are copied to the staging directory icons folder and set the icon's archive path.
+                foreach (var icon in station.TrackedObject.Icons)
+                {
+                    if (icon.TrackedObject.ArchivePath == null) continue; //if no archive path, skip
+                    if (PathHelper.IsSubPath(stagingPath, icon.TrackedObject.ArchivePath)) //if the archive path is already in the staging directory, skip
+                        continue;
+
+                    //Otherwise, copy the archive file to the staging directory's icons folder and set the icon's archive path.
+                    if (icon.TrackedObject.ArchivePath != null && FileHelper.DoesFileExist(icon.TrackedObject.ArchivePath))
+                    {
+                        var filename = Path.GetFileName(icon.TrackedObject.ArchivePath);
+                        var iconArchivePath = Path.Combine(stagingPath, "icons", filename);
+                        File.Copy(icon.TrackedObject.ArchivePath, iconArchivePath, true);
+                        icon.TrackedObject.ArchivePath = iconArchivePath;
+                        icon.AcceptChanges();
+                    }
+                }
+
                 //Add the station's icon editors as well and find the active icon to display.
                 foreach (var icon in station.TrackedObject.Icons)
                 {
-                    AddStationIconEditor(station.Id, icon.Id, false);
+                    AddStationIconEditor(station.Id, icon.Id, icon.TrackedObject.IsFromArchive);
                 }
 
                 StationAdded?.Invoke(this, station.Id);
@@ -1139,13 +1158,11 @@ public partial class StationManager : IDisposable
                 .FirstOrDefault() ?? [];
             var iconList = files.Where(file => file.EndsWith("icons.icls")).Select(_iconListJson.LoadJson)
                 .FirstOrDefault() ?? [];
-
+            var iconFiles = files.Where(file => file.EndsWith(".archive")).ToList();
             var songFiles = songDirFiles.Where(file => ValidAudioExtensions.Contains(Path.GetExtension(file).ToLower()))
                 .ToList();
             //TODO: fix issue with songs.sgls where it is not being loaded correctly. The file is being created based on the song files in the directory but if all the stations have their songs in the same directory,
             // we are getting the same songs.sgls file for every station (even one's that don't have any songs). This is causing the station to have songs that it shouldn't have.
-
-
 
             if (metadata == null) return null;
 
@@ -1159,21 +1176,25 @@ public partial class StationManager : IDisposable
 
             var station = new Station { MetaData = metadata, Songs = songList };
 
-            if (iconList.Count > 0)
+            if (iconFiles.Count > 0)
+            {
+                foreach (var icon in iconFiles)
+                {
+                    var trackedIcon = new TrackableObject<WolvenIcon>(new WolvenIcon(string.Empty, icon));
+                    trackedIcon.TrackedObject.IsFromArchive = true;
+                    trackedIcon.AcceptChanges();
+                    station.AddIcon(trackedIcon);
+                }
+            }
+
+            if (iconList.Count > 0 && iconFiles.Count <= 0) //we only want to add the icons if there are no .archive files in the directory (indicating an imported station)
             {
                 foreach (var icon in iconList)
                 {
-                    if (icon == null)
-                    {
-                        AuLogger.GetCurrentLogger<StationManager>().Error($"Error processing icon for station: {station.MetaData.DisplayName}. The icon was null.");
-                        continue;
-                    }
                     var trackedIcon = new TrackableObject<WolvenIcon>(icon);
                     trackedIcon.AcceptChanges();
                     station.AddIcon(trackedIcon, icon.IsActive);
                 }
-
-                //IconManager.Instance.LoadIconFromFile(trackedStation, iconFiles.First());
             }
 
             var trackedStation = new TrackableObject<Station>(station);
