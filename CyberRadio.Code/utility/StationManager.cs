@@ -1182,6 +1182,7 @@ public partial class StationManager : IDisposable
                 {
                     var trackedIcon = new TrackableObject<WolvenIcon>(new WolvenIcon(string.Empty, icon));
                     trackedIcon.TrackedObject.IsFromArchive = true;
+                    trackedIcon.TrackedObject.IconId = Guid.NewGuid();
                     trackedIcon.AcceptChanges();
                     station.AddIcon(trackedIcon);
                 }
