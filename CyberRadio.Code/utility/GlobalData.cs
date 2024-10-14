@@ -14,15 +14,15 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+using System.ComponentModel;
+using System.Globalization;
+using System.Reflection;
+using System.Resources;
 using AetherUtils.Core.Configuration;
 using AetherUtils.Core.Logging;
 using AetherUtils.Core.Structs;
 using RadioExt_Helper.config;
 using RadioExt_Helper.forms;
-using System.ComponentModel;
-using System.Globalization;
-using System.Reflection;
-using System.Resources;
 
 namespace RadioExt_Helper.utility;
 

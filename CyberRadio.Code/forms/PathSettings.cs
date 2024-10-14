@@ -115,7 +115,8 @@ public partial class PathSettings : Form
 
         if (PathHelper.IsSubPath(stagingPath, basePath))
         {
-            MessageBox.Show(this, Strings.GamePathWithinStagingPath, Strings.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show(this, Strings.GamePathWithinStagingPath, Strings.Error, MessageBoxButtons.OK,
+                MessageBoxIcon.Error);
             AuLogger.GetCurrentLogger<PathSettings>("ChangeGameBasePath").Warn("Game path is within the staging path.");
             return;
         }
@@ -129,13 +130,15 @@ public partial class PathSettings : Form
             {
                 if (_gameFolderChanged)
                 {
-                    AuLogger.GetCurrentLogger<PathSettings>("ChangeGameBasePath").Info($"Updated game base path: {basePath}");
+                    AuLogger.GetCurrentLogger<PathSettings>("ChangeGameBasePath")
+                        .Info($"Updated game base path: {basePath}");
                     GameBasePathChanged?.Invoke(this, EventArgs.Empty);
                 }
             }
             else
             {
-                AuLogger.GetCurrentLogger<PathSettings>("ChangeGameBasePath").Warn("Couldn't save updated configuration after changing base path.");
+                AuLogger.GetCurrentLogger<PathSettings>("ChangeGameBasePath")
+                    .Warn("Couldn't save updated configuration after changing base path.");
             }
         }
 
@@ -155,7 +158,8 @@ public partial class PathSettings : Form
 
         if (PathHelper.IsSubPath(gamePath, stagingPath))
         {
-            MessageBox.Show(this, Strings.StagingPathWithinGamePath, Strings.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show(this, Strings.StagingPathWithinGamePath, Strings.Error, MessageBoxButtons.OK,
+                MessageBoxIcon.Error);
             AuLogger.GetCurrentLogger<PathSettings>("ChangeStagingPath").Warn("Staging path is within the game path.");
             return;
         }
@@ -169,13 +173,15 @@ public partial class PathSettings : Form
             {
                 if (_stageFolderChanged)
                 {
-                    AuLogger.GetCurrentLogger<PathSettings>("ChangeStagingPath").Info($"Updated staging path: {stagingPath}");
+                    AuLogger.GetCurrentLogger<PathSettings>("ChangeStagingPath")
+                        .Info($"Updated staging path: {stagingPath}");
                     StagingPathChanged?.Invoke(this, EventArgs.Empty);
                 }
             }
             else
             {
-                AuLogger.GetCurrentLogger<PathSettings>("ChangeStagingPath").Warn("Couldn't save updated configuration after changing staging path.");
+                AuLogger.GetCurrentLogger<PathSettings>("ChangeStagingPath")
+                    .Warn("Couldn't save updated configuration after changing staging path.");
             }
         }
 

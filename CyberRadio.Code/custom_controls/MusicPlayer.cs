@@ -17,7 +17,6 @@
 using AetherUtils.Core.Logging;
 using NAudio.Wave;
 using RadioExt_Helper.Properties;
-using RadioExt_Helper.utility;
 
 namespace RadioExt_Helper.custom_controls;
 
@@ -134,7 +133,8 @@ public sealed partial class MusicPlayer : UserControl
         }
         catch (Exception ex)
         {
-            MessageBox.Show(this, string.Format(Strings.ErrorStreamingAudio, ex.Message), Strings.Error, MessageBoxButtons.OK,
+            MessageBox.Show(this, string.Format(Strings.ErrorStreamingAudio, ex.Message), Strings.Error,
+                MessageBoxButtons.OK,
                 MessageBoxIcon.Error);
             AuLogger.GetCurrentLogger<MusicPlayer>("PlayStream").Error(ex, "Error streaming audio");
             btnPlayPause.ImageKey = "play";
@@ -153,7 +153,8 @@ public sealed partial class MusicPlayer : UserControl
         }
         catch (Exception ex)
         {
-            MessageBox.Show(this, string.Format(Strings.ErrorStreamingAudio, ex.Message), Strings.Error, MessageBoxButtons.OK,
+            MessageBox.Show(this, string.Format(Strings.ErrorStreamingAudio, ex.Message), Strings.Error,
+                MessageBoxButtons.OK,
                 MessageBoxIcon.Error);
             AuLogger.GetCurrentLogger<MusicPlayer>("ResumeStream").Error(ex, "Error streaming audio");
             btnPlayPause.ImageKey = "play";
@@ -172,7 +173,8 @@ public sealed partial class MusicPlayer : UserControl
         }
         catch (Exception ex)
         {
-            MessageBox.Show(this, string.Format(Strings.ErrorPausingStream, ex.Message), Strings.Error, MessageBoxButtons.OK,
+            MessageBox.Show(this, string.Format(Strings.ErrorPausingStream, ex.Message), Strings.Error,
+                MessageBoxButtons.OK,
                 MessageBoxIcon.Error);
             AuLogger.GetCurrentLogger<MusicPlayer>("PauseStream").Error(ex, "Error pausing stream");
             btnPlayPause.ImageKey = "pause";

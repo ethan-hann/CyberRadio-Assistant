@@ -37,7 +37,8 @@ public static class SystemInfo
         StringBuilder sb = new();
 
         // Program Info
-        sb.AppendLine($"Cyber Radio Assistant - Version: {CurrentVersion.Major}.{CurrentVersion.Minor}.{CurrentVersion.Build}");
+        sb.AppendLine(
+            $"Cyber Radio Assistant - Version: {CurrentVersion.Major}.{CurrentVersion.Minor}.{CurrentVersion.Build}");
 
         // Operating System Information
         sb.AppendLine($"OS Version: {Environment.OSVersion}");

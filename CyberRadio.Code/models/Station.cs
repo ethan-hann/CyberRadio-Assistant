@@ -14,9 +14,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+using System.ComponentModel;
 using AetherUtils.Core.Logging;
 using Newtonsoft.Json;
-using System.ComponentModel;
 using WIG.Lib.Models;
 
 namespace RadioExt_Helper.models;
@@ -26,9 +26,9 @@ namespace RadioExt_Helper.models;
 /// </summary>
 public sealed class Station : INotifyPropertyChanged, ICloneable, IEquatable<Station>
 {
+    private List<TrackableObject<WolvenIcon>> _icons = [];
     private MetaData _metaData = new();
     private List<Song> _songs = [];
-    private List<TrackableObject<WolvenIcon>> _icons = [];
 
     /// <summary>
     ///     The metadata associated with this station.
@@ -205,7 +205,8 @@ public sealed class Station : INotifyPropertyChanged, ICloneable, IEquatable<Sta
         try
         {
             if (Icons.Count == 0) return false;
-            if (Icons.Count(i => i.TrackedObject.IsActive) > 1) throw new InvalidOperationException("A station can only have one active icon.");
+            if (Icons.Count(i => i.TrackedObject.IsActive) > 1)
+                throw new InvalidOperationException("A station can only have one active icon.");
             var activeIcon = Icons.FirstOrDefault(i => i.TrackedObject.IsActive);
             return activeIcon != null && activeIcon.TrackedObject.CheckIconValid();
         }
@@ -233,7 +234,8 @@ public sealed class Station : INotifyPropertyChanged, ICloneable, IEquatable<Sta
         }
         catch (Exception ex)
         {
-            AuLogger.GetCurrentLogger<Station>("AddCustomData").Error(ex, $"An error occurred while adding custom data for the station: {MetaData.DisplayName}");
+            AuLogger.GetCurrentLogger<Station>("AddCustomData").Error(ex,
+                $"An error occurred while adding custom data for the station: {MetaData.DisplayName}");
         }
     }
 
@@ -252,7 +254,8 @@ public sealed class Station : INotifyPropertyChanged, ICloneable, IEquatable<Sta
         }
         catch (Exception ex)
         {
-            AuLogger.GetCurrentLogger<Station>("RemoveCustomData").Error(ex, $"An error occurred while removing custom data for the station: {MetaData.DisplayName}");
+            AuLogger.GetCurrentLogger<Station>("RemoveCustomData").Error(ex,
+                $"An error occurred while removing custom data for the station: {MetaData.DisplayName}");
         }
     }
 
@@ -269,8 +272,10 @@ public sealed class Station : INotifyPropertyChanged, ICloneable, IEquatable<Sta
         }
         catch (Exception ex)
         {
-            AuLogger.GetCurrentLogger<Station>("ContainsCustomData").Error(ex, $"An error occurred while checking the custom data with key ({key}) for the station: {MetaData.DisplayName}");
+            AuLogger.GetCurrentLogger<Station>("ContainsCustomData").Error(ex,
+                $"An error occurred while checking the custom data with key ({key}) for the station: {MetaData.DisplayName}");
         }
+
         return false;
     }
 
@@ -287,8 +292,10 @@ public sealed class Station : INotifyPropertyChanged, ICloneable, IEquatable<Sta
         }
         catch (Exception ex)
         {
-            AuLogger.GetCurrentLogger<Station>("ContainsCustomData").Error(ex, $"An error occurred while getting the custom data with key ({key}) for the station: {MetaData.DisplayName}");
+            AuLogger.GetCurrentLogger<Station>("ContainsCustomData").Error(ex,
+                $"An error occurred while getting the custom data with key ({key}) for the station: {MetaData.DisplayName}");
         }
+
         return new object();
     }
 

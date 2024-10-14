@@ -14,6 +14,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Timers;
 using AetherUtils.Core.Extensions;
 using AetherUtils.Core.Logging;
 using AetherUtils.Core.WinForms.Controls;
@@ -24,9 +27,6 @@ using RadioExt_Helper.nexus_api;
 using RadioExt_Helper.Properties;
 using RadioExt_Helper.user_controls;
 using RadioExt_Helper.utility;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Timers;
 using WIG.Lib.Models;
 using ApplicationContext = RadioExt_Helper.utility.ApplicationContext;
 using Timer = System.Timers.Timer;
@@ -115,7 +115,8 @@ public sealed partial class MainForm : Form
         var importedIconNames = string.Join(", ", stationIds.Select(stationId =>
             StationManager.Instance.GetStation(stationId)?.Key.TrackedObject.MetaData.DisplayName));
 
-        MessageBox.Show(string.Format(Strings.MainForm_FromZipImportDesc, stationIds.Count, importedIconNames), Strings.MainForm_FromZipStationsImportedTitle,
+        MessageBox.Show(string.Format(Strings.MainForm_FromZipImportDesc, stationIds.Count, importedIconNames),
+            Strings.MainForm_FromZipStationsImportedTitle,
             MessageBoxButtons.OK,
             MessageBoxIcon.Information);
 
@@ -182,7 +183,8 @@ public sealed partial class MainForm : Form
 
         this.SafeInvoke(() =>
         {
-            AuLogger.GetCurrentLogger<MainForm>("DirectoryWatcher").Info($"File renamed from {e.OldPath} to {e.NewPath}");
+            AuLogger.GetCurrentLogger<MainForm>("DirectoryWatcher")
+                .Info($"File renamed from {e.OldPath} to {e.NewPath}");
         });
     }
 
@@ -291,7 +293,8 @@ public sealed partial class MainForm : Form
         {
             var text = string.Format(Strings.MissingStations, missingStationsCount);
             var caption = Strings.MissingStationsCaption;
-            if (MessageBox.Show(this, text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+            if (MessageBox.Show(this, text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning) ==
+                DialogResult.Yes)
                 _ = SyncStationsAsync();
         }
         else
@@ -331,8 +334,9 @@ public sealed partial class MainForm : Form
     private void SelectLanguage()
     {
         var language = GlobalData.ConfigManager.Get("language") as string ?? string.Empty;
-        _languageComboBox.SelectedIndex = !language.Equals(string.Empty) ?
-            _languageComboBox.Items.IndexOf(_languages.Find(l => l.Text.Equals(language))) : 0;
+        _languageComboBox.SelectedIndex = !language.Equals(string.Empty)
+            ? _languageComboBox.Items.IndexOf(_languages.Find(l => l.Text.Equals(language)))
+            : 0;
 
         CmbLanguageSelect_SelectedIndexChanged(_languageComboBox, EventArgs.Empty);
     }
@@ -511,7 +515,8 @@ public sealed partial class MainForm : Form
         }
         catch (Exception ex)
         {
-            AuLogger.GetCurrentLogger<MainForm>("UpdateStationEditor").Error(ex, "An error occurred while updating the station editor.");
+            AuLogger.GetCurrentLogger<MainForm>("UpdateStationEditor")
+                .Error(ex, "An error occurred while updating the station editor.");
         }
     }
 
@@ -627,7 +632,7 @@ public sealed partial class MainForm : Form
         if (GameBasePath.Equals(string.Empty) || StagingPath.Equals(string.Empty))
             return;
 
-        var openFileDialog = new OpenFileDialog()
+        var openFileDialog = new OpenFileDialog
         {
             Filter = Strings.MainForm_FromZipImportFilter + @"|*.zip;*.rar",
             Title = Strings.MainForm_FromZipImportTitle,
@@ -792,7 +797,8 @@ public sealed partial class MainForm : Form
         //Don't allow exporting if we are currently synchronizing stations.
         if (_isSyncInProgress)
         {
-            MessageBox.Show(this, Strings.SyncInProgress, Strings.SyncAbbrev, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            MessageBox.Show(this, Strings.SyncInProgress, Strings.SyncAbbrev, MessageBoxButtons.OK,
+                MessageBoxIcon.Warning);
             return;
         }
 
@@ -803,7 +809,8 @@ public sealed partial class MainForm : Form
             var totalSongCount = missingSongs.Values.Where(p => p.Key).Sum(p => p.Value);
             var text = string.Format(Strings.ExportToGameMissingSongs, count, totalSongCount);
 
-            var result = MessageBox.Show(this, text, Strings.SongsMissingPaths, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            var result = MessageBox.Show(this, text, Strings.SongsMissingPaths, MessageBoxButtons.YesNo,
+                MessageBoxIcon.Warning);
             if (result == DialogResult.No)
                 return;
         }
@@ -903,12 +910,14 @@ public sealed partial class MainForm : Form
 
         if (userInitiated)
         {
-            var result = MessageBox.Show(this, Strings.ConfirmSyncStations, Strings.Confirm, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            var result = MessageBox.Show(this, Strings.ConfirmSyncStations, Strings.Confirm, MessageBoxButtons.YesNo,
+                MessageBoxIcon.Warning);
             if (result == DialogResult.No) return;
         }
         else if (GlobalData.ConfigManager.Get("watchForChanges") as bool? == true)
         {
-            var result = MessageBox.Show(this, Strings.ConfirmSyncStationsExternal, Strings.Confirm, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            var result = MessageBox.Show(this, Strings.ConfirmSyncStationsExternal, Strings.Confirm,
+                MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (result == DialogResult.No) return;
         }
 
@@ -934,7 +943,8 @@ public sealed partial class MainForm : Form
             var text = string.Format(Strings.SyncFailedException, ex.Message);
             MessageBox.Show(this, text, Strings.SyncAbbrev, MessageBoxButtons.OK, MessageBoxIcon.Error);
 
-            AuLogger.GetCurrentLogger<MainForm>("SyncStationsAsync").Error(ex, "An error occurred while synchronizing stations from game to staging.");
+            AuLogger.GetCurrentLogger<MainForm>("SyncStationsAsync").Error(ex,
+                "An error occurred while synchronizing stations from game to staging.");
         }
         finally
         {
@@ -955,13 +965,16 @@ public sealed partial class MainForm : Form
                 PopulateStations();
                 _isExportInProgress = false;
 
-                AuLogger.GetCurrentLogger<MainForm>("OnStationsSynchronized").Info("Stations synchronized from game to staging successfully.");
+                AuLogger.GetCurrentLogger<MainForm>("OnStationsSynchronized")
+                    .Info("Stations synchronized from game to staging successfully.");
             }
             else
             {
-                MessageBox.Show(this, Strings.SyncFailed, Strings.SyncAbbrev, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(this, Strings.SyncFailed, Strings.SyncAbbrev, MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
 
-                AuLogger.GetCurrentLogger<MainForm>("OnStationsSynchronized").Error("An unknown error occurred while synchronizing stations from game to staging.");
+                AuLogger.GetCurrentLogger<MainForm>("OnStationsSynchronized")
+                    .Error("An unknown error occurred while synchronizing stations from game to staging.");
             }
 
             // Clear the status message after a short delay
@@ -988,7 +1001,8 @@ public sealed partial class MainForm : Form
         //Check for sync in progress to prevent backup during sync
         if (_isSyncInProgress)
         {
-            MessageBox.Show(this, Strings.SyncInProgress, Strings.SyncAbbrev, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            MessageBox.Show(this, Strings.SyncInProgress, Strings.SyncAbbrev, MessageBoxButtons.OK,
+                MessageBoxIcon.Warning);
             return;
         }
 
@@ -1001,17 +1015,20 @@ public sealed partial class MainForm : Form
         //Check for sync in progress to prevent restore during sync
         if (_isSyncInProgress)
         {
-            MessageBox.Show(this, Strings.SyncInProgress, Strings.SyncAbbrev, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            MessageBox.Show(this, Strings.SyncInProgress, Strings.SyncAbbrev, MessageBoxButtons.OK,
+                MessageBoxIcon.Warning);
             return;
         }
 
         if (_isExportInProgress)
         {
-            MessageBox.Show(this, Strings.ExportInProgress, Strings.ExportCaption , MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            MessageBox.Show(this, Strings.ExportInProgress, Strings.ExportCaption, MessageBoxButtons.OK,
+                MessageBoxIcon.Warning);
             return;
         }
 
-        if (MessageBox.Show(this, Strings.ConfirmRestore, Strings.Confirm, MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
+        if (MessageBox.Show(this, Strings.ConfirmRestore, Strings.Confirm, MessageBoxButtons.YesNo,
+                MessageBoxIcon.Warning) == DialogResult.No)
             return;
 
         var fileBrowser = new OpenFileDialog
@@ -1024,7 +1041,10 @@ public sealed partial class MainForm : Form
         RestoreFromBackup(fileBrowser.FileName);
     }
 
-    private void OnRestoringFromBackup(object? sender, string backupFilePath) => RestoreFromBackup(backupFilePath);
+    private void OnRestoringFromBackup(object? sender, string backupFilePath)
+    {
+        RestoreFromBackup(backupFilePath);
+    }
 
     private void RestoreFromBackup(string backupFile)
     {
@@ -1044,17 +1064,20 @@ public sealed partial class MainForm : Form
         //Check for sync in progress to prevent restore during sync
         if (_isSyncInProgress)
         {
-            MessageBox.Show(this, Strings.SyncInProgress, Strings.SyncAbbrev, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            MessageBox.Show(this, Strings.SyncInProgress, Strings.SyncAbbrev, MessageBoxButtons.OK,
+                MessageBoxIcon.Warning);
             return;
         }
 
         if (_isExportInProgress)
         {
-            MessageBox.Show(this, Strings.ExportInProgress, Strings.ExportCaption, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            MessageBox.Show(this, Strings.ExportInProgress, Strings.ExportCaption, MessageBoxButtons.OK,
+                MessageBoxIcon.Warning);
             return;
         }
 
-        if (MessageBox.Show(this, Strings.ConfirmClearAllData, Strings.Confirm, MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
+        if (MessageBox.Show(this, Strings.ConfirmClearAllData, Strings.Confirm, MessageBoxButtons.YesNo,
+                MessageBoxIcon.Warning) == DialogResult.No)
             return;
 
         //Remove all stations and the folders from the staging directory.
@@ -1102,7 +1125,8 @@ public sealed partial class MainForm : Form
         }
         catch (Exception ex)
         {
-            AuLogger.GetCurrentLogger<MainForm>("ExitToolStripMenuItem_Click").Error(ex, "An error occurred while closing the application.");
+            AuLogger.GetCurrentLogger<MainForm>("ExitToolStripMenuItem_Click")
+                .Error(ex, "An error occurred while closing the application.");
         }
     }
 
@@ -1119,7 +1143,8 @@ public sealed partial class MainForm : Form
         var count = pendingSave.Count(p => p.Value);
         var text = string.Format(Strings.ConfirmExit, count);
 
-        return MessageBox.Show(this, text, Strings.Confirm, MessageBoxButtons.YesNo, MessageBoxIcon.Warning) != DialogResult.No;
+        return MessageBox.Show(this, text, Strings.Confirm, MessageBoxButtons.YesNo, MessageBoxIcon.Warning) !=
+               DialogResult.No;
     }
 
     private void MainForm_Resize(object sender, EventArgs e)
@@ -1149,7 +1174,9 @@ public sealed partial class MainForm : Form
 
     public void ShowIconManagerForm(TrackableObject<Station> station, string newIconImagePath = "")
     {
-        var managerForm = newIconImagePath == "" ? new IconManagerForm(station) : new IconManagerForm(station, newIconImagePath);
+        var managerForm = newIconImagePath == ""
+            ? new IconManagerForm(station)
+            : new IconManagerForm(station, newIconImagePath);
         managerForm.IconAdded += ManagerFormOnIconUpdated;
         managerForm.IconDeleted += ManagerFormOnIconUpdated;
         managerForm.IconUpdated += ManagerFormOnIconUpdated;
@@ -1158,7 +1185,8 @@ public sealed partial class MainForm : Form
 
     private void ManagerFormOnIconUpdated(object? sender, TrackableObject<WolvenIcon>? icon)
     {
-        if (InvokeRequired) { Invoke(() => UpdateStationIcon(icon)); }
+        if (InvokeRequired)
+            Invoke(() => UpdateStationIcon(icon));
         else
             UpdateStationIcon(icon);
     }
@@ -1187,7 +1215,8 @@ public sealed partial class MainForm : Form
         }
         catch (Exception ex)
         {
-            AuLogger.GetCurrentLogger<MainForm>("ManagerFormOnIconUpdated").Error(ex, "An error occurred while updating the station icon.");
+            AuLogger.GetCurrentLogger<MainForm>("ManagerFormOnIconUpdated")
+                .Error(ex, "An error occurred while updating the station icon.");
         }
     }
 }

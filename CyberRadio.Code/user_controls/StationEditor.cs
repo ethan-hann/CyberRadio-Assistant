@@ -14,15 +14,13 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+using System.Globalization;
 using AetherUtils.Core.Logging;
-using AetherUtils.Core.WinForms.Controls;
-using AetherUtils.Core.WinForms.CustomArgs;
 using RadioExt_Helper.custom_controls;
+using RadioExt_Helper.forms;
 using RadioExt_Helper.models;
 using RadioExt_Helper.Properties;
 using RadioExt_Helper.utility;
-using System.Globalization;
-using RadioExt_Helper.forms;
 using WIG.Lib.Models;
 using ApplicationContext = RadioExt_Helper.utility.ApplicationContext;
 
@@ -34,17 +32,10 @@ namespace RadioExt_Helper.user_controls;
 public sealed partial class StationEditor : UserControl, IEditor
 {
     private readonly ComboBox _cmbUiIcons;
-    private readonly CustomMusicCtl _musicCtl;
-    private readonly ImageList _tabImages = new();
-
-    /// <summary>
-    /// Gets the trackable station object.
-    /// </summary>
-    public TrackableObject<Station> Station { get; }
-    public Guid Id { get; set; } = Guid.NewGuid();
-    public EditorType Type { get; set; } = EditorType.StationEditor;
 
     private readonly List<string?> _customDataKeys = ["Icon Name", "Image Path", "Archive Path", "SHA256 Archive Hash"];
+    private readonly CustomMusicCtl _musicCtl;
+    private readonly ImageList _tabImages = new();
 
     /// <summary>
     /// Initializes a new instance of the <see cref="StationEditor"/> class.
@@ -69,6 +60,14 @@ public sealed partial class StationEditor : UserControl, IEditor
         // Initialize DataGridView columns
         InitializeDataGridViewColumns();
     }
+
+    /// <summary>
+    /// Gets the trackable station object.
+    /// </summary>
+    public TrackableObject<Station> Station { get; }
+
+    public Guid Id { get; set; } = Guid.NewGuid();
+    public EditorType Type { get; set; } = EditorType.StationEditor;
 
     /// <summary>
     /// Translates the user control to the current language.
@@ -255,7 +254,8 @@ public sealed partial class StationEditor : UserControl, IEditor
         }
         catch (Exception ex)
         {
-            AuLogger.GetCurrentLogger<StationEditor>("RemoveCustomIconDataRows").Error(ex, "Something went wrong while removing the custom icon data rows!");
+            AuLogger.GetCurrentLogger<StationEditor>("RemoveCustomIconDataRows").Error(ex,
+                "Something went wrong while removing the custom icon data rows!");
         }
     }
 
@@ -275,7 +275,8 @@ public sealed partial class StationEditor : UserControl, IEditor
         }
         catch (Exception ex)
         {
-            AuLogger.GetCurrentLogger<StationEditor>("GetCustomIconDataRowIndices").Error(ex, "Something went wrong looking for the custom icon data rows!");
+            AuLogger.GetCurrentLogger<StationEditor>("GetCustomIconDataRowIndices")
+                .Error(ex, "Something went wrong looking for the custom icon data rows!");
         }
 
         return [];
@@ -337,7 +338,8 @@ public sealed partial class StationEditor : UserControl, IEditor
         Station.TrackedObject.AddCustomData(_customDataKeys[0], icon.TrackedObject.IconName ?? string.Empty);
         Station.TrackedObject.AddCustomData(_customDataKeys[1], icon.TrackedObject.ImagePath ?? string.Empty);
         Station.TrackedObject.AddCustomData(_customDataKeys[2], icon.TrackedObject.ArchivePath ?? string.Empty);
-        Station.TrackedObject.AddCustomData(_customDataKeys[3], icon.TrackedObject.Sha256HashOfArchiveFile ?? string.Empty);
+        Station.TrackedObject.AddCustomData(_customDataKeys[3],
+            icon.TrackedObject.Sha256HashOfArchiveFile ?? string.Empty);
         UpdateCustomDataView();
     }
 
@@ -382,7 +384,9 @@ public sealed partial class StationEditor : UserControl, IEditor
             txtInkAtlasPath.Text = Station.TrackedObject.CustomIcon.InkAtlasPath;
             txtInkAtlasPart.Text = Station.TrackedObject.CustomIcon.InkAtlasPart;
 
-            picStationIcon.SetImage(Path.Exists(icon.TrackedObject.ImagePath) ? icon.TrackedObject.ImagePath : string.Empty);
+            picStationIcon.SetImage(Path.Exists(icon.TrackedObject.ImagePath)
+                ? icon.TrackedObject.ImagePath
+                : string.Empty);
 
             //Update custom data pertaining to the active icon
             AddCustomIconData(icon);
@@ -441,18 +445,22 @@ public sealed partial class StationEditor : UserControl, IEditor
             Station.TrackedObject.Icons.ForEach(i => i.TrackedObject.IsActive = false);
 
             //Find the matching wolven icon in the station's list of icons
-            var matchingIcon = Station.TrackedObject.Icons.FirstOrDefault(i => i.TrackedObject.CustomIcon.InkAtlasPath.Equals(txtInkAtlasPath.Text));
+            var matchingIcon = Station.TrackedObject.Icons.FirstOrDefault(i =>
+                i.TrackedObject.CustomIcon.InkAtlasPath.Equals(txtInkAtlasPath.Text));
             if (matchingIcon != null)
             {
                 matchingIcon.TrackedObject.IsActive = true;
                 UpdateIconPrivate(matchingIcon);
             }
             else
+            {
                 UpdateIconPrivate(null);
+            }
         }
         catch (Exception ex)
         {
-            AuLogger.GetCurrentLogger<StationEditor>("UseCustom_YesChanged").Error(ex, "An error occured while trying to set the active icon!");
+            AuLogger.GetCurrentLogger<StationEditor>("UseCustom_YesChanged")
+                .Error(ex, "An error occured while trying to set the active icon!");
         }
 
         StationUpdated?.Invoke(this, EventArgs.Empty);
@@ -500,7 +508,8 @@ public sealed partial class StationEditor : UserControl, IEditor
         try
         {
             //Find the matching wolven icon in the station's list of icons
-            var matchingIcon = Station.TrackedObject.Icons.FirstOrDefault(i => i.TrackedObject.CustomIcon.InkAtlasPath.Equals(txtInkAtlasPath.Text));
+            var matchingIcon = Station.TrackedObject.Icons.FirstOrDefault(i =>
+                i.TrackedObject.CustomIcon.InkAtlasPath.Equals(txtInkAtlasPath.Text));
             if (matchingIcon == null) return;
 
             matchingIcon.TrackedObject.IsActive = true;
@@ -510,7 +519,8 @@ public sealed partial class StationEditor : UserControl, IEditor
         }
         catch (Exception ex)
         {
-            AuLogger.GetCurrentLogger<StationEditor>("InkAtlasPath_Leave").Error(ex, "An error occured while trying to set the active icon!");
+            AuLogger.GetCurrentLogger<StationEditor>("InkAtlasPath_Leave")
+                .Error(ex, "An error occured while trying to set the active icon!");
         }
     }
 
@@ -936,5 +946,5 @@ public sealed partial class StationEditor : UserControl, IEditor
         lblStatus.Text = Strings.Ready;
     }
 
-#endregion
+    #endregion
 }

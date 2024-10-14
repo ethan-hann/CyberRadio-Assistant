@@ -38,6 +38,11 @@ public sealed partial class ModDetails : UserControl, IUserControl
         Dock = DockStyle.Fill;
     }
 
+    public void Translate()
+    {
+        //TODO: Translate the strings for the mod details control once API is implemented
+    }
+
     private void ModDetails_Load(object sender, EventArgs e)
     {
         _ = InitializeAsync();
@@ -60,10 +65,5 @@ public sealed partial class ModDetails : UserControl, IUserControl
         _mod = mod;
         _modDetailsInitialized = false;
         _ = InitializeAsync();
-    }
-
-    public void Translate()
-    {
-        //TODO: Translate the strings for the mod details control once API is implemented
     }
 }

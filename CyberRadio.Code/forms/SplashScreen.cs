@@ -14,10 +14,10 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+using System.Reflection;
 using AetherUtils.Core.Logging;
 using RadioExt_Helper.migration;
 using RadioExt_Helper.utility;
-using System.Reflection;
 using WIG.Lib.Utility;
 
 namespace RadioExt_Helper.forms;
@@ -111,7 +111,9 @@ public partial class SplashScreen : Form
         UpdateStatus(Strings.SplashScreen_SetupIconManager);
         await IconManager.Instance.InitializeAsync();
         await Task.Delay(200);
-        statusMessages.Add(IconManager.Instance.IsInitialized ? "Icon Manager initialized successfully." : "Icon Manager initialization failed.");
+        statusMessages.Add(IconManager.Instance.IsInitialized
+            ? "Icon Manager initialized successfully."
+            : "Icon Manager initialization failed.");
 
         //TODO: Add Nexus API key authentication when feature is implemented
         //var nexusApiKey = GlobalData.ConfigManager.Get("nexusApiKey") as string ?? string.Empty;
@@ -139,7 +141,7 @@ public partial class SplashScreen : Form
     public void UpdateStatus(string message)
     {
         if (InvokeRequired)
-            Invoke(new Action<string>(UpdateStatus), [message]);
+            Invoke(new Action<string>(UpdateStatus), message);
         else
             lblSplashStatus.Text = message;
     }
@@ -151,7 +153,7 @@ public partial class SplashScreen : Form
     private void SetVersionLabel(Version? version)
     {
         if (InvokeRequired)
-            Invoke(new Action<Version?>(SetVersionLabel), [version]);
+            Invoke(new Action<Version?>(SetVersionLabel), version);
         else
             lblVersion.Text =
                 version != null ? @$"{version.Major}.{version.Minor}.{version.Build}" : @"Version Unknown";

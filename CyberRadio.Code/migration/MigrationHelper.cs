@@ -14,12 +14,12 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+using System.Xml;
 using AetherUtils.Core.Files;
 using AetherUtils.Core.Logging;
 using Newtonsoft.Json.Linq;
 using RadioExt_Helper.config;
 using RadioExt_Helper.models;
-using System.Xml;
 
 namespace RadioExt_Helper.migration;
 
@@ -50,18 +50,21 @@ public static class MigrationHelper
 
         if (userConfigPaths.Count == 0) //No settings need to be migrated
         {
-            AuLogger.GetCurrentLogger("MigrationHelper.MigrateSettings").Info("No user.config files found. No migration necessary.");
+            AuLogger.GetCurrentLogger("MigrationHelper.MigrateSettings")
+                .Info("No user.config files found. No migration necessary.");
             return appConfig;
         }
 
-        AuLogger.GetCurrentLogger("MigrationHelper.FindAllUserConfigFiles").Info($"{userConfigPaths.Count} user.config files have been found.");
+        AuLogger.GetCurrentLogger("MigrationHelper.FindAllUserConfigFiles")
+            .Info($"{userConfigPaths.Count} user.config files have been found.");
 
         var mostRecentUserConfigPath = GetMostRecentUserConfigFile(userConfigPaths);
 
         if (!string.IsNullOrEmpty(mostRecentUserConfigPath))
         {
             appConfig = ParseUserConfig(mostRecentUserConfigPath);
-            AuLogger.GetCurrentLogger("MigrationHelper.MigrateSettings").Info("Old settings have been parsed and migrated.");
+            AuLogger.GetCurrentLogger("MigrationHelper.MigrateSettings")
+                .Info("Old settings have been parsed and migrated.");
         }
         else
         {
@@ -103,11 +106,13 @@ public static class MigrationHelper
     {
         try
         {
-            return userConfigPaths.MaxBy(path => Directory.GetLastWriteTime(Path.GetDirectoryName(path) ?? string.Empty));
+            return userConfigPaths.MaxBy(
+                path => Directory.GetLastWriteTime(Path.GetDirectoryName(path) ?? string.Empty));
         }
         catch (Exception e)
         {
-            AuLogger.GetCurrentLogger("MigrationHelper.GetMostRecentUserConfigFile").Error(e, "Error while getting the most recent user.config file.");
+            AuLogger.GetCurrentLogger("MigrationHelper.GetMostRecentUserConfigFile")
+                .Error(e, "Error while getting the most recent user.config file.");
             return null;
         }
     }
@@ -126,8 +131,10 @@ public static class MigrationHelper
 
             var config = new ApplicationConfig
             {
-                Language = xmlDoc.SelectSingleNode("//setting[@name='SelectedLanguage']/value")?.InnerText ?? "English (en)",
-                GameBasePath = xmlDoc.SelectSingleNode("//setting[@name='GameBasePath']/value")?.InnerText ?? string.Empty,
+                Language = xmlDoc.SelectSingleNode("//setting[@name='SelectedLanguage']/value")?.InnerText ??
+                           "English (en)",
+                GameBasePath = xmlDoc.SelectSingleNode("//setting[@name='GameBasePath']/value")?.InnerText ??
+                               string.Empty,
                 StagingPath = xmlDoc.SelectSingleNode("//setting[@name='StagingPath']/value")?.InnerText ?? string.Empty
             };
 
@@ -142,7 +149,8 @@ public static class MigrationHelper
         }
         catch (Exception ex)
         {
-            AuLogger.GetCurrentLogger("MigrationHelper.ParseUserConfig").Error(ex, "Error while parsing the user.config file.");
+            AuLogger.GetCurrentLogger("MigrationHelper.ParseUserConfig")
+                .Error(ex, "Error while parsing the user.config file.");
             return null;
         }
     }
@@ -152,7 +160,8 @@ public static class MigrationHelper
     /// </summary>
     private static void CleanOldSettings()
     {
-        var baseDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "RadioExt-Helper");
+        var baseDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+            "RadioExt-Helper");
 
         var configFilePath = Path.Combine(baseDirectory, "config.yml");
         var logsFolderPath = Path.Combine(baseDirectory, "logs");
@@ -172,7 +181,8 @@ public static class MigrationHelper
             Directory.Delete(directory, true);
         }
 
-        AuLogger.GetCurrentLogger("MigrationHelper.CleanOldSettings").Info("Old setting directories and files have been removed.");
+        AuLogger.GetCurrentLogger("MigrationHelper.CleanOldSettings")
+            .Info("Old setting directories and files have been removed.");
     }
 
     #endregion

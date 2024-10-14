@@ -15,6 +15,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 using System.Security.AccessControl;
+using System.Security.Cryptography;
 using AetherUtils.Core.Files;
 using AetherUtils.Core.Logging;
 using RadioExt_Helper.Properties;
@@ -23,7 +24,6 @@ using SharpCompress.Archives.Zip;
 using SharpCompress.Common;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
-using System.Security.Cryptography;
 using Image = SixLabors.ImageSharp.Image;
 
 namespace RadioExt_Helper.utility;
@@ -126,7 +126,8 @@ public static class PathHelper
         }
         catch (Exception ex)
         {
-            AuLogger.GetCurrentLogger("PathHelper.GetRadioExtPath").Error(ex, "Error retrieving path to radioExt mod's folder.");
+            AuLogger.GetCurrentLogger("PathHelper.GetRadioExtPath")
+                .Error(ex, "Error retrieving path to radioExt mod's folder.");
             return string.Empty;
         }
     }
@@ -157,7 +158,9 @@ public static class PathHelper
                 return false;
 
             // Get the full paths
-            var fullBasePath = Path.GetFullPath(basePath).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar) + Path.DirectorySeparatorChar;
+            var fullBasePath =
+                Path.GetFullPath(basePath).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar) +
+                Path.DirectorySeparatorChar;
             var fullSubPath = Path.GetFullPath(subPath);
 
             // Check if the fullSubPath starts with fullBasePath
@@ -165,7 +168,8 @@ public static class PathHelper
         }
         catch (Exception ex)
         {
-            AuLogger.GetCurrentLogger("PathHelper.IsSubPath").Error(ex, "An error occurred while checking if the path is a subpath.");
+            AuLogger.GetCurrentLogger("PathHelper.IsSubPath")
+                .Error(ex, "An error occurred while checking if the path is a subpath.");
             return false;
         }
     }
@@ -189,11 +193,14 @@ public static class PathHelper
             var relativeUri = stagingUri.MakeRelativeUri(fullUri);
             var relativePath = Uri.UnescapeDataString(relativeUri.ToString());
 
-            return string.IsNullOrEmpty(relativePath) ? fullPath : relativePath.Replace('/', '\\'); // Replace forward slashes with backslashes for Windows paths
+            return string.IsNullOrEmpty(relativePath)
+                ? fullPath
+                : relativePath.Replace('/', '\\'); // Replace forward slashes with backslashes for Windows paths
         }
         catch (Exception ex)
         {
-            AuLogger.GetCurrentLogger("PathHelper.GetRelativePath").Error(ex, "An error occurred while getting the relative path.");
+            AuLogger.GetCurrentLogger("PathHelper.GetRelativePath")
+                .Error(ex, "An error occurred while getting the relative path.");
             return fullPath;
         }
     }
@@ -369,7 +376,7 @@ public static class PathHelper
                 if (string.IsNullOrEmpty(destinationDir)) continue;
 
                 Directory.CreateDirectory(destinationDir);
-                entry.WriteToFile(destinationPath, new ExtractionOptions() { ExtractFullPath = true, Overwrite = true });
+                entry.WriteToFile(destinationPath, new ExtractionOptions { ExtractFullPath = true, Overwrite = true });
             }
         });
     }
@@ -391,21 +398,21 @@ public static class PathHelper
 
                 // Delete all subdirectories and their contents
                 foreach (var directory in FileHelper.SafeEnumerateDirectories(directoryPath))
-                {
                     if (StationManager.Instance.IsProtectedFolder(directory))
                         ClearDirectory(directory); //recurse down until we no longer have protected folders.
                     else
                         Directory.Delete(directory, true);
-                }
             }
             else
             {
-                AuLogger.GetCurrentLogger("PathHelper.ClearDirectory").Warn($"The directory to clear did not exist: {directoryPath}");
+                AuLogger.GetCurrentLogger("PathHelper.ClearDirectory")
+                    .Warn($"The directory to clear did not exist: {directoryPath}");
             }
         }
         catch (Exception ex)
         {
-            AuLogger.GetCurrentLogger("PathHelper.ClearDirectory").Error(ex, "An error occured while clearing the directory.");
+            AuLogger.GetCurrentLogger("PathHelper.ClearDirectory")
+                .Error(ex, "An error occured while clearing the directory.");
         }
     }
 

@@ -14,11 +14,11 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+using System.ComponentModel;
 using AetherUtils.Core.Files;
 using AetherUtils.Core.Logging;
 using RadioExt_Helper.models;
 using RadioExt_Helper.utility;
-using System.ComponentModel;
 
 namespace RadioExt_Helper.custom_controls;
 
@@ -36,15 +36,15 @@ public sealed partial class StationListBox : ListBox
     private string _enabledIconKey = "enabled";
 
     private ImageList _imageList;
+
+    private Color _newStationColor = Color.Green;
+
+    private Font _newStationFont = new(DefaultFont, FontStyle.Bold);
     private string _savedStationIconKey = "saved_station";
 
     private Color _songsMissingColor = Color.Orange;
 
-    private Color _newStationColor = Color.Green;
-
     private Font _songsMissingFont = new(DefaultFont, FontStyle.Bold);
-
-    private Font _newStationFont = new(DefaultFont, FontStyle.Bold);
 
     /// <summary>
     /// Initializes a new instance of the <see cref="StationListBox"/> class.
@@ -250,14 +250,12 @@ public sealed partial class StationListBox : ListBox
         List<Guid?> importedStationIds = [];
 
         foreach (var file in files)
-        {
             if (file.EndsWith(".zip") || file.EndsWith(".rar"))
             {
                 var stationId = StationManager.Instance.ImportStationFromArchive(file);
                 if (stationId != null)
                     importedStationIds.Add(stationId);
             }
-        }
 
         StationsImported?.Invoke(this, importedStationIds);
     }
@@ -360,7 +358,7 @@ public sealed partial class StationListBox : ListBox
             font = _songsMissingFont;
 
         else if (Items.OfType<TrackableObject<Station>>().Count(s =>
-                s.TrackedObject.MetaData.DisplayName.Equals(station.TrackedObject.MetaData.DisplayName)) > 1)
+                     s.TrackedObject.MetaData.DisplayName.Equals(station.TrackedObject.MetaData.DisplayName)) > 1)
             font = _duplicateStationsFont;
 
         else if (StationManager.Instance.IsNewStation(station.Id))

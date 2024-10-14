@@ -1,4 +1,20 @@
-﻿using AetherUtils.Core.Extensions;
+﻿// RestoreForm.cs : RadioExt-Helper
+// Copyright (C) 2024  Ethan Hann
+// 
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+// 
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// 
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+using AetherUtils.Core.Extensions;
 using AetherUtils.Core.Logging;
 using RadioExt_Helper.Properties;
 using RadioExt_Helper.utility;
@@ -7,16 +23,10 @@ namespace RadioExt_Helper.forms;
 
 public partial class RestoreForm : Form
 {
-    /// <summary>
-    /// Occurs when the restore operation is completed.
-    /// <para>Event data is a flag indicating success and the restored path.</para>
-    /// </summary>
-    public event EventHandler<(bool, string)>? RestoreCompleted;
+    private readonly string _backupFilePath;
 
     // Backup manager instance; used to restore backups.
     private readonly BackupManager _backupManager = new(CompressionLevel.Normal);
-
-    private readonly string _backupFilePath;
     private readonly string _restorePath;
     private bool _isRestoreInProgress;
     private List<FilePreview> _previews = [];
@@ -48,6 +58,12 @@ public partial class RestoreForm : Form
 
         Translate();
     }
+
+    /// <summary>
+    /// Occurs when the restore operation is completed.
+    /// <para>Event data is a flag indicating success and the restored path.</para>
+    /// </summary>
+    public event EventHandler<(bool, string)>? RestoreCompleted;
 
     ~RestoreForm()
     {
@@ -90,7 +106,8 @@ public partial class RestoreForm : Form
         }
         catch (Exception ex)
         {
-            AuLogger.GetCurrentLogger<RestoreForm>("StartPreviewLoading").Error(ex, "An error occured while trying to load the restore preview.");
+            AuLogger.GetCurrentLogger<RestoreForm>("StartPreviewLoading")
+                .Error(ex, "An error occured while trying to load the restore preview.");
             Close();
         }
         finally
@@ -133,7 +150,8 @@ public partial class RestoreForm : Form
         }
         catch (Exception ex)
         {
-            AuLogger.GetCurrentLogger<RestoreForm>("OnPreviewProgressChanged").Error(ex, "Error updating restore preview progress.");
+            AuLogger.GetCurrentLogger<RestoreForm>("OnPreviewProgressChanged")
+                .Error(ex, "Error updating restore preview progress.");
         }
     }
 
@@ -149,9 +167,9 @@ public partial class RestoreForm : Form
         }
         catch (Exception ex)
         {
-            AuLogger.GetCurrentLogger<RestoreForm>("OnPreviewStatusChanged").Error(ex, "An error occured while trying to update the preview status.");
+            AuLogger.GetCurrentLogger<RestoreForm>("OnPreviewStatusChanged")
+                .Error(ex, "An error occured while trying to update the preview status.");
         }
-
     }
 
     private void OnBackupRestoreCompleted(bool isSuccessful, string restorePath)
@@ -197,14 +215,16 @@ public partial class RestoreForm : Form
             pgProgress.Visible = false;
             btnStartRestore.Enabled = true;
             this.SafeInvoke(() => lblStatus.Text = Strings.RestoreForm_ErrorWhileRestoring);
-            AuLogger.GetCurrentLogger<RestoreForm>("StartRestoreAsync").Error(ex, "An error occured while trying to start the restore operation.");
+            AuLogger.GetCurrentLogger<RestoreForm>("StartRestoreAsync")
+                .Error(ex, "An error occured while trying to start the restore operation.");
         }
     }
 
     private void btnCancel_Click(object sender, EventArgs e)
     {
         _backupManager.CancelRestore();
-        MessageBox.Show(this, Strings.RestoreForm_RestoreCancelled, Strings.RestoreForm_RestoreCancelledCaption, MessageBoxButtons.OK, MessageBoxIcon.Information);
+        MessageBox.Show(this, Strings.RestoreForm_RestoreCancelled, Strings.RestoreForm_RestoreCancelledCaption,
+            MessageBoxButtons.OK, MessageBoxIcon.Information);
     }
 
     /// <summary>
@@ -297,7 +317,8 @@ public partial class RestoreForm : Form
     {
         this.SafeInvoke(() =>
         {
-            lblRestoreSize.Text = string.Format(Strings.EstimatedRestoreSizeFormat, ((ulong)_totalSize).FormatSize());
+            lblRestoreSize.Text =
+                string.Format(Strings.EstimatedRestoreSizeFormat, ((ulong)_totalSize).FormatSize());
         });
     }
 
@@ -349,7 +370,7 @@ public partial class RestoreForm : Form
 
     private void RestoreForm_FormClosing(object sender, FormClosingEventArgs e)
     {
-        if (_isRestoreInProgress) 
+        if (_isRestoreInProgress)
             _backupManager.CancelRestore();
     }
 }

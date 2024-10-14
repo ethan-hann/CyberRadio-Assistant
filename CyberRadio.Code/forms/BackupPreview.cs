@@ -14,11 +14,11 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+using System.Diagnostics;
 using AetherUtils.Core.Extensions;
 using AetherUtils.Core.Logging;
 using RadioExt_Helper.Properties;
 using RadioExt_Helper.utility;
-using System.Diagnostics;
 
 namespace RadioExt_Helper.forms;
 
@@ -120,7 +120,8 @@ public sealed partial class BackupPreview : Form
             AuLogger.GetCurrentLogger<BackupPreview>("StartPreviewLoading").Error(ex, "Error loading backup preview.");
             this.SafeInvoke(() =>
             {
-                MessageBox.Show(this, Strings.BackupPreviewError, Strings.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(this, Strings.BackupPreviewError, Strings.Error, MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
                 Close();
             });
         }
@@ -210,7 +211,8 @@ public sealed partial class BackupPreview : Form
 
         if (stagingPath == null || gameBasePath == null)
         {
-            AuLogger.GetCurrentLogger<BackupPreview>("BtnStartBackup_Click").Error("Staging path or game base path is null.");
+            AuLogger.GetCurrentLogger<BackupPreview>("BtnStartBackup_Click")
+                .Error("Staging path or game base path is null.");
             return;
         }
 
@@ -219,14 +221,16 @@ public sealed partial class BackupPreview : Form
         // Check if the backup path is a sub-path of the staging path (i.e., the backup path is within the staging path)
         if (PathHelper.IsSubPath(stagingPath, backupPath))
         {
-            MessageBox.Show(this, Strings.BackupPathIsSubpath, Strings.Backup, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show(this, Strings.BackupPathIsSubpath, Strings.Backup, MessageBoxButtons.OK,
+                MessageBoxIcon.Error);
             return;
         }
 
         //Check if the backup path is a sub-path of the game path (i.e., the backup path is within the game path)
         if (PathHelper.IsSubPath(gameBasePath, backupPath))
         {
-            MessageBox.Show(this, Strings.BackupPathIsSubpathGame, Strings.Backup, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show(this, Strings.BackupPathIsSubpathGame, Strings.Backup, MessageBoxButtons.OK,
+                MessageBoxIcon.Error);
             return;
         }
 
@@ -260,7 +264,8 @@ public sealed partial class BackupPreview : Form
             var text = string.Format(Strings.BackupFailedException, ex.Message);
             MessageBox.Show(this, text, Strings.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
 
-            AuLogger.GetCurrentLogger<MainForm>("StartBackupAsync").Error(ex, "An error occurred during staging folder backup.");
+            AuLogger.GetCurrentLogger<MainForm>("StartBackupAsync")
+                .Error(ex, "An error occurred during staging folder backup.");
 
             _isBackupInProgress = false;
             pgProgress.Value = 0;
@@ -282,7 +287,8 @@ public sealed partial class BackupPreview : Form
         }
         catch (Exception ex)
         {
-            AuLogger.GetCurrentLogger<BackupPreview>("OnBackupProgressChanged").Error(ex, "Error updating backup progress.");
+            AuLogger.GetCurrentLogger<BackupPreview>("OnBackupProgressChanged")
+                .Error(ex, "Error updating backup progress.");
         }
     }
 
@@ -298,7 +304,8 @@ public sealed partial class BackupPreview : Form
         }
         catch (Exception ex)
         {
-            AuLogger.GetCurrentLogger<BackupPreview>("OnBackupStatusChanged").Error(ex, "Error updating backup status.");
+            AuLogger.GetCurrentLogger<BackupPreview>("OnBackupStatusChanged")
+                .Error(ex, "Error updating backup status.");
         }
     }
 
@@ -316,20 +323,20 @@ public sealed partial class BackupPreview : Form
             {
                 _isBackupInProgress = false;
 
-                MessageBox.Show(this, Strings.BackupCompleted, Strings.Backup, MessageBoxButtons.OK, MessageBoxIcon.Information);
-                AuLogger.GetCurrentLogger<BackupPreview>("BackupManager_BackupCompleted").Info($"Backup completed successfully: {backupFileName}");
+                MessageBox.Show(this, Strings.BackupCompleted, Strings.Backup, MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+                AuLogger.GetCurrentLogger<BackupPreview>("BackupManager_BackupCompleted")
+                    .Info($"Backup completed successfully: {backupFileName}");
                 Process.Start("explorer.exe", backupPath);
             }
             else
             {
                 MessageBox.Show(this, Strings.BackupFailed, Strings.Backup, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                AuLogger.GetCurrentLogger<BackupPreview>("BackupManager_BackupCompleted").Error($"Backup failed: {backupFileName}");
+                AuLogger.GetCurrentLogger<BackupPreview>("BackupManager_BackupCompleted")
+                    .Error($"Backup failed: {backupFileName}");
             }
 
-            Task.Delay(2000).ContinueWith(_ =>
-            {
-                this.SafeInvoke(() => lblStatus.Text = Strings.BackupCompleted);
-            });
+            Task.Delay(2000).ContinueWith(_ => { this.SafeInvoke(() => lblStatus.Text = Strings.BackupCompleted); });
         });
     }
 
@@ -424,7 +431,7 @@ public sealed partial class BackupPreview : Form
                             displayFileName ?? string.Empty,
                             size
                         ])
-                    { Tag = preview });
+                        { Tag = preview });
                 }
 
             lvFilePreviews.ResizeColumns();
@@ -492,7 +499,7 @@ public sealed partial class BackupPreview : Form
 
     private void BackupPreview_FormClosing(object sender, FormClosingEventArgs e)
     {
-        if (_isBackupInProgress) 
+        if (_isBackupInProgress)
             _backupManager.CancelBackup();
     }
 }

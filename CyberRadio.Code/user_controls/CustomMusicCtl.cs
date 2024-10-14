@@ -14,12 +14,12 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+using System.Diagnostics;
 using AetherUtils.Core.Extensions;
 using AetherUtils.Core.Files;
 using RadioExt_Helper.models;
 using RadioExt_Helper.Properties;
 using RadioExt_Helper.utility;
-using System.Diagnostics;
 using ListView = System.Windows.Forms.ListView;
 
 namespace RadioExt_Helper.user_controls;
@@ -173,7 +173,7 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
                              song.FileSize.FormatSize(),
                              song.FilePath
                          ])
-                     { Tag = song }))
+                         { Tag = song }))
             lvSongs.Items.Add(lvItem);
 
         lvSongs.ResizeColumns();
@@ -244,7 +244,8 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
 
     private DialogResult ConfirmRemoveAllSongs()
     {
-        return MessageBox.Show(this, Strings.DeleteAllSongsConfirm, Strings.Confirm, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+        return MessageBox.Show(this, Strings.DeleteAllSongsConfirm, Strings.Confirm, MessageBoxButtons.YesNo,
+            MessageBoxIcon.Warning);
     }
 
     private void LocateToolStripMenuItem_Click(object sender, EventArgs e)
@@ -271,8 +272,10 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
             }
             else
             {
-                MessageBox.Show(Strings.InvalidFile, Strings.InvalidFileCaption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(Strings.InvalidFile, Strings.InvalidFileCaption, MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
             }
+
             lvSongs.EndUpdate();
         }
 
@@ -355,6 +358,46 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
 
         if (Directory.GetParent(song.FilePath) is { } parentDir)
             Process.Start("explorer.exe", parentDir.FullName);
+    }
+
+    private void btnAddSongs_MouseEnter(object sender, EventArgs e)
+    {
+        StatusChanged?.Invoke(this, Strings.AddSongsHelp);
+    }
+
+    private void btnRemoveFromOrder_MouseEnter(object sender, EventArgs e)
+    {
+        StatusChanged?.Invoke(this, Strings.RemoveFromOrderHelp);
+    }
+
+    private void btnAddToOrder_MouseEnter(object sender, EventArgs e)
+    {
+        StatusChanged?.Invoke(this, Strings.AddToOrderHelp);
+    }
+
+    private void btnRemoveSongs_MouseEnter(object sender, EventArgs e)
+    {
+        StatusChanged?.Invoke(this, Strings.RemoveSongsHelp);
+    }
+
+    private void btnRemoveAllSongs_MouseEnter(object sender, EventArgs e)
+    {
+        StatusChanged?.Invoke(this, Strings.RemoveAllSongsHelp);
+    }
+
+    private void lblTotalSongsVal_MouseEnter(object sender, EventArgs e)
+    {
+        StatusChanged?.Invoke(this, Strings.TotalSongsHelp);
+    }
+
+    private void lblStationSizeVal_MouseEnter(object sender, EventArgs e)
+    {
+        StatusChanged?.Invoke(this, Strings.TotalStationSizeHelp);
+    }
+
+    private void MouseLeaveControl(object sender, EventArgs e)
+    {
+        StatusReset?.Invoke(this, EventArgs.Empty);
     }
 
     #region Song Order
@@ -542,45 +585,4 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
     }
 
     #endregion
-
-    private void btnAddSongs_MouseEnter(object sender, EventArgs e)
-    {
-        StatusChanged?.Invoke(this, Strings.AddSongsHelp);
-    }
-
-    private void btnRemoveFromOrder_MouseEnter(object sender, EventArgs e)
-    {
-        StatusChanged?.Invoke(this, Strings.RemoveFromOrderHelp);
-    }
-
-    private void btnAddToOrder_MouseEnter(object sender, EventArgs e)
-    {
-        StatusChanged?.Invoke(this, Strings.AddToOrderHelp);
-    }
-
-    private void btnRemoveSongs_MouseEnter(object sender, EventArgs e)
-    {
-        StatusChanged?.Invoke(this, Strings.RemoveSongsHelp);
-       
-    }
-
-    private void btnRemoveAllSongs_MouseEnter(object sender, EventArgs e)
-    {
-        StatusChanged?.Invoke(this, Strings.RemoveAllSongsHelp);
-    }
-
-    private void lblTotalSongsVal_MouseEnter(object sender, EventArgs e)
-    {
-        StatusChanged?.Invoke(this, Strings.TotalSongsHelp);
-    }
-
-    private void lblStationSizeVal_MouseEnter(object sender, EventArgs e)
-    {
-        StatusChanged?.Invoke(this, Strings.TotalStationSizeHelp);
-    }
-
-    private void MouseLeaveControl(object sender, EventArgs e)
-    {
-        StatusReset?.Invoke(this, EventArgs.Empty);
-    }
 }

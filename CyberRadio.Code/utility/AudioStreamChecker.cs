@@ -80,7 +80,8 @@ public sealed class AudioStreamChecker
             // Check if the response is successful
             if (!response.IsSuccessStatusCode)
             {
-                AuLogger.GetCurrentLogger<AudioStreamChecker>("IsAudioStreamValidAsync").Error($"Request error: {response.StatusCode}");
+                AuLogger.GetCurrentLogger<AudioStreamChecker>("IsAudioStreamValidAsync")
+                    .Error($"Request error: {response.StatusCode}");
                 return false;
             }
 
@@ -88,7 +89,8 @@ public sealed class AudioStreamChecker
             var contentType = response.Content.Headers.ContentType?.MediaType;
             if (contentType != null && contentType.StartsWith("audio/")) return true;
 
-            AuLogger.GetCurrentLogger<AudioStreamChecker>("IsAudioStreamValidAsync").Warn("The content type is not an audio type.");
+            AuLogger.GetCurrentLogger<AudioStreamChecker>("IsAudioStreamValidAsync")
+                .Warn("The content type is not an audio type.");
             return false;
         }
         catch (TaskCanceledException)
