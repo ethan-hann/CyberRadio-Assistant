@@ -14,6 +14,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Timers;
 using AetherUtils.Core.Extensions;
 using AetherUtils.Core.Logging;
 using AetherUtils.Core.WinForms.Controls;
@@ -24,9 +27,6 @@ using RadioExt_Helper.nexus_api;
 using RadioExt_Helper.Properties;
 using RadioExt_Helper.user_controls;
 using RadioExt_Helper.utility;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Timers;
 using WIG.Lib.Models;
 using ApplicationContext = RadioExt_Helper.utility.ApplicationContext;
 using Timer = System.Timers.Timer;
@@ -115,9 +115,8 @@ public sealed partial class MainForm : Form
         var importedIconNames = string.Join(", ", stationIds.Select(stationId =>
             StationManager.Instance.GetStation(stationId)?.Key.TrackedObject.MetaData.DisplayName));
 
-        MessageBox.Show(
-            string.Format(Strings.MainForm_fromzipFileToolStripMenuItem_Click_Imported__0__stations___1_, stationIds.Count, importedIconNames),
-            Strings.MainForm_fromzipFileToolStripMenuItem_Click_Station_s__Imported,
+        MessageBox.Show(string.Format(Strings.MainForm_FromZipImportDesc, stationIds.Count, importedIconNames),
+            Strings.MainForm_FromZipStationsImportedTitle,
             MessageBoxButtons.OK,
             MessageBoxIcon.Information);
 
@@ -153,8 +152,7 @@ public sealed partial class MainForm : Form
         this.SafeInvoke(() =>
         {
             _ = StationManager.Instance.SynchronizeStationsAsync(StagingPath, GameBasePath);
-            AuLogger.GetCurrentLogger<MainForm>("DirectoryWatcher")
-                .Info($"File created: {path}");
+            AuLogger.GetCurrentLogger<MainForm>("DirectoryWatcher").Info($"File created: {path}");
         });
     }
 
@@ -165,8 +163,7 @@ public sealed partial class MainForm : Form
         this.SafeInvoke(() =>
         {
             _ = StationManager.Instance.SynchronizeStationsAsync(StagingPath, GameBasePath);
-            AuLogger.GetCurrentLogger<MainForm>("DirectoryWatcher")
-                .Info($"File changed: {path}");
+            AuLogger.GetCurrentLogger<MainForm>("DirectoryWatcher").Info($"File changed: {path}");
         });
     }
 
@@ -176,8 +173,7 @@ public sealed partial class MainForm : Form
 
         this.SafeInvoke(() =>
         {
-            AuLogger.GetCurrentLogger<MainForm>("DirectoryWatcher")
-                .Info($"File deleted: {path}");
+            AuLogger.GetCurrentLogger<MainForm>("DirectoryWatcher").Info($"File deleted: {path}");
         });
     }
 
@@ -196,11 +192,6 @@ public sealed partial class MainForm : Form
     {
         _languageComboBox.SelectedIndexChanged -= CmbLanguageSelect_SelectedIndexChanged;
 
-        //_backupManager.ProgressChanged -= OnBackupManagerProgressChanged;
-        //_backupManager.StatusChanged -= OnBackupManagerStatusChanged;
-        //_backupManager.BackupCompleted -= OnBackupManagerBackupCompleted;
-
-        //StationManager.Instance.StationNameDuplicate -= OnStationNameDuplicateEvent;
         StationManager.Instance.StationUpdated -= OnStationUpdated;
         StationManager.Instance.SyncProgressChanged -= OnStationSyncProgressChanged;
         StationManager.Instance.SyncStatusChanged -= OnStationSyncStatusChanged;
@@ -279,8 +270,7 @@ public sealed partial class MainForm : Form
         _noStationsCtrl.RestoringFromBackup += OnRestoringFromBackup;
         splitContainer1.Panel2.Controls.Add(_noStationsCtrl);
 
-        var windowSize = GlobalData.ConfigManager.Get("windowSize") as WindowSize
-                         ?? new WindowSize(0, 0);
+        var windowSize = GlobalData.ConfigManager.Get("windowSize") as WindowSize ?? new WindowSize(0, 0);
 
         if (!windowSize.IsEmpty())
             Size = new Size(windowSize.Width, windowSize.Height);
@@ -301,11 +291,8 @@ public sealed partial class MainForm : Form
         var missingStationsCount = StationManager.CheckGameForExistingStations(StagingPath, GameBasePath);
         if (missingStationsCount > 0)
         {
-            var text = string.Format(GlobalData.Strings.GetString("MissingStations") ??
-                                     "There are {0} station(s) in the game's folder missing from the staging folder. " +
-                                     "Would you like to synchronize the stations?",
-                missingStationsCount);
-            var caption = GlobalData.Strings.GetString("MissingStationsCaption") ?? "Missing Stations";
+            var text = string.Format(Strings.MissingStations, missingStationsCount);
+            var caption = Strings.MissingStationsCaption;
             if (MessageBox.Show(this, text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning) ==
                 DialogResult.Yes)
                 _ = SyncStationsAsync();
@@ -347,11 +334,9 @@ public sealed partial class MainForm : Form
     private void SelectLanguage()
     {
         var language = GlobalData.ConfigManager.Get("language") as string ?? string.Empty;
-        if (!language.Equals(string.Empty))
-            _languageComboBox.SelectedIndex = _languageComboBox.Items.IndexOf(
-                _languages.Find(l => l.Text.Equals(language)));
-        else
-            _languageComboBox.SelectedIndex = 0;
+        _languageComboBox.SelectedIndex = !language.Equals(string.Empty)
+            ? _languageComboBox.Items.IndexOf(_languages.Find(l => l.Text.Equals(language)))
+            : 0;
 
         CmbLanguageSelect_SelectedIndexChanged(_languageComboBox, EventArgs.Empty);
     }
@@ -361,39 +346,49 @@ public sealed partial class MainForm : Form
     /// </summary>
     private void Translate()
     {
-        Text = GlobalData.Strings.GetString("MainTitle");
-        fileToolStripMenuItem.Text = GlobalData.Strings.GetString("File");
-        backupStagingFolderToolStripMenuItem.Text = GlobalData.Strings.GetString("BackupStagingFolder");
-        openStagingPathToolStripMenuItem.Text = GlobalData.Strings.GetString("OpenStagingFolder");
-        openGamePathToolStripMenuItem.Text = GlobalData.Strings.GetString("OpenGameFolder");
-        openLogFolderToolStripMenuItem.Text = GlobalData.Strings.GetString("OpenLogFolder");
-        exportToGameToolStripMenuItem.Text = GlobalData.Strings.GetString("ExportStations");
-        synchronizeStationsToolStripMenuItem.Text = GlobalData.Strings.GetString("SynchronizeStations");
-        languageToolStripMenuItem.Text = GlobalData.Strings.GetString("Language");
-        helpToolStripMenuItem.Text = GlobalData.Strings.GetString("Help");
-        configurationToolStripMenuItem.Text = GlobalData.Strings.GetString("Configuration");
-        pathsToolStripMenuItem.Text = GlobalData.Strings.GetString("GamePaths");
-        refreshStationsToolStripMenuItem.Text = GlobalData.Strings.GetString("RefreshStations");
-        howToUseToolStripMenuItem.Text = GlobalData.Strings.GetString("HowToUse");
-        radioExtGitHubToolStripMenuItem.Text = GlobalData.Strings.GetString("RadioExtGithub");
-        radioExtOnNexusModsToolStripMenuItem.Text = GlobalData.Strings.GetString("RadioExtNexusMods");
-        aboutToolStripMenuItem.Text = GlobalData.Strings.GetString("About");
-        checkForUpdatesToolStripMenuItem.Text = GlobalData.Strings.GetString("CheckForUpdates");
-        revertChangesToolStripMenuItem.Text = GlobalData.Strings.GetString("RevertChanges");
+        Text = Strings.MainTitle;
+        fileToolStripMenuItem.Text = Strings.File;
+        openStagingPathToolStripMenuItem.Text = Strings.OpenStagingFolder;
+        openGamePathToolStripMenuItem.Text = Strings.OpenGameFolder;
+        openLogFolderToolStripMenuItem.Text = Strings.OpenLogFolder;
+        exportToGameToolStripMenuItem.Text = Strings.ExportStations;
+        synchronizeStationsToolStripMenuItem.Text = Strings.SynchronizeStations;
+        languageToolStripMenuItem.Text = Strings.Language;
+        helpToolStripMenuItem.Text = Strings.Help;
+        configurationToolStripMenuItem.Text = Strings.Configuration;
+        pathsToolStripMenuItem.Text = Strings.GamePaths;
+        refreshStationsToolStripMenuItem.Text = Strings.RefreshStations;
+        howToUseToolStripMenuItem.Text = Strings.HowToUse;
+        radioExtGitHubToolStripMenuItem.Text = Strings.RadioExtGithub;
+        radioExtOnNexusModsToolStripMenuItem.Text = Strings.RadioExtNexusMods;
+        aboutToolStripMenuItem.Text = Strings.About;
+        checkForUpdatesToolStripMenuItem.Text = Strings.CheckForUpdates;
+        revertChangesToolStripMenuItem.Text = Strings.RevertChanges;
+        toolsToolStripMenuItem.Text = Strings.Tools;
+        downloadRadioModsToolStripMenuItem.Text = Strings.DownloadRadioMods;
+        apiStatusToolStripMenuItem.Text = Strings.ApiStatus;
+        stationsToolStripMenuItem.Text = Strings.Stations;
+        iconGeneratorToolStripMenuItem.Text = Strings.IconManagerMenuOption;
+        lblBackupStatus.Text = Strings.BackupReady;
+        txtStationFilter.PlaceholderText = Strings.SearchStations;
+        fromzipFileToolStripMenuItem.Text = Strings.ImportFromZipFile;
+        exitToolStripMenuItem.Text = Strings.Exit;
+        clearAllDataToolStripMenuItem.Text = Strings.ClearAllData;
+        modsToolStripMenuItem.Text = Strings.Mods;
 
-        grpStations.Text = GlobalData.Strings.GetString("Stations");
+        backupToolStripMenuItem.Text = Strings.BackupRestoreMenuItem;
+        restoreStagingFolderToolStripMenuItem.Text = Strings.RestoreBackupMenuItem;
+        backupStagingFolderToolStripMenuItem.Text = Strings.BackupStagingFolder;
+
+        grpStations.Text = Strings.Stations;
 
         // Buttons
-        btnAddStation.Text = GlobalData.Strings.GetString("NewStation");
-        btnDeleteStation.Text = GlobalData.Strings.GetString("DeleteStation");
-        btnEnableSelected.Text = GlobalData.Strings.GetString("EnableSelectedStation");
-        btnEnableAll.Text = GlobalData.Strings.GetString("EnableAllStations");
-        btnDisableSelected.Text = GlobalData.Strings.GetString("DisableSelectedStation");
-        btnDisableAll.Text = GlobalData.Strings.GetString("DisableAllStations");
-
-        lblBackupStatus.Text = GlobalData.Strings.GetString("BackupReady") ?? "Backup Ready";
-
-        txtStationFilter.PlaceholderText = GlobalData.Strings.GetString("SearchStations") ?? "Search stations...";
+        btnAddStation.Text = Strings.NewStation;
+        btnDeleteStation.Text = Strings.DeleteStation;
+        btnEnableSelected.Text = Strings.EnableSelected;
+        btnEnableAll.Text = Strings.EnableAllStations;
+        btnDisableSelected.Text = Strings.DisableSelected;
+        btnDisableAll.Text = Strings.DisableAllStations;
 
         UpdateEnabledStationCount();
     }
@@ -637,34 +632,33 @@ public sealed partial class MainForm : Form
         if (GameBasePath.Equals(string.Empty) || StagingPath.Equals(string.Empty))
             return;
 
-        var openFileDialog = new OpenFileDialog()
+        var openFileDialog = new OpenFileDialog
         {
-            Filter = Strings.MainForm_fromzipFileToolStripMenuItem_Click_Radio_Station_Archives_valid_file_types,
-            Title = Strings.MainForm_fromzipFileToolStripMenuItem_Click_Import_Station,
+            Filter = Strings.MainForm_FromZipImportFilter + @"|*.zip;*.rar",
+            Title = Strings.MainForm_FromZipImportTitle,
             Multiselect = true,
             CheckFileExists = true,
             CheckPathExists = true,
             InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyComputer)
         };
 
-        if (openFileDialog.ShowDialog() == DialogResult.OK)
+        if (openFileDialog.ShowDialog() != DialogResult.OK) return;
+
+        //Unsubscribe from the import event to prevent spam. We'll show one dialog at the end with all the stations imported.
+        StationManager.Instance.StationImported -= OnStationImported;
+        List<Guid?> importedStationIds = [];
+
+        foreach (var file in openFileDialog.FileNames)
         {
-            //Unsubscribe from the import event to prevent spam. We'll show one dialog at the end with all the stations imported.
-            StationManager.Instance.StationImported -= OnStationImported;
-            List<Guid?> importedStationIds = [];
-
-            foreach (var file in openFileDialog.FileNames)
-            {
-                var stationId = StationManager.Instance.ImportStationFromArchive(file);
-                if (stationId != null)
-                    importedStationIds.Add(stationId);
-            }
-
-            OnStationImported(this, importedStationIds);
-
-            //Resubscribe to the station manager event
-            StationManager.Instance.StationImported += OnStationImported;
+            var stationId = StationManager.Instance.ImportStationFromArchive(file);
+            if (stationId != null)
+                importedStationIds.Add(stationId);
         }
+
+        OnStationImported(this, importedStationIds);
+
+        //Resubscribe to the station manager event
+        StationManager.Instance.StationImported += OnStationImported;
     }
 
     /// <summary>
@@ -689,12 +683,12 @@ public sealed partial class MainForm : Form
         {
             if (stationId == null)
             {
-                Text = GlobalData.Strings.GetString("MainTitle");
+                Text = Strings.MainTitle;
                 return;
             }
 
             var path = StationManager.Instance.GetStationPath(stationId);
-            Text = $"{GlobalData.Strings.GetString("MainTitle")} - {path}";
+            Text = string.Format(Strings.MainTitleFormated, path);
         });
     }
 
@@ -803,10 +797,8 @@ public sealed partial class MainForm : Form
         //Don't allow exporting if we are currently synchronizing stations.
         if (_isSyncInProgress)
         {
-            var text = GlobalData.Strings.GetString("SyncInProgress") ??
-                       "Synchronization is in progress. Please wait...";
-            var caption = GlobalData.Strings.GetString("SyncAbbrev") ?? "Sync";
-            MessageBox.Show(this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            MessageBox.Show(this, Strings.SyncInProgress, Strings.SyncAbbrev, MessageBoxButtons.OK,
+                MessageBoxIcon.Warning);
             return;
         }
 
@@ -815,13 +807,10 @@ public sealed partial class MainForm : Form
         {
             var count = missingSongs.Count(p => p.Value.Key);
             var totalSongCount = missingSongs.Values.Where(p => p.Key).Sum(p => p.Value);
+            var text = string.Format(Strings.ExportToGameMissingSongs, count, totalSongCount);
 
-            var text = string.Format(GlobalData.Strings.GetString("ExportToGameMissingSongs") ??
-                                     "There are {0} station(s) with a total of {1} invalid song path(s). Do you want to continue exporting?",
-                count, totalSongCount);
-            var caption = GlobalData.Strings.GetString("SongsMissingPaths") ?? "Songs Missing Paths";
-
-            var result = MessageBox.Show(this, text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            var result = MessageBox.Show(this, text, Strings.SongsMissingPaths, MessageBoxButtons.YesNo,
+                MessageBoxIcon.Warning);
             if (result == DialogResult.No)
                 return;
         }
@@ -852,7 +841,7 @@ public sealed partial class MainForm : Form
     //    {
     //        this.SafeInvoke(() =>
     //        {
-    //            apiStatusToolStripMenuItem.Text = GlobalData.Strings.GetString("ApiStatus") ?? "API Not Authenticated";
+    //            apiStatusToolStripMenuItem.Text = Strings.ApiStatus ?? "API Not Authenticated";
     //            apiStatusToolStripMenuItem.Image = null;
     //            modsToolStripMenuItem.Visible = false;
     //        });
@@ -899,8 +888,8 @@ public sealed partial class MainForm : Form
 
     private void RefreshStationsToolStripMenuItem_Click(object sender, EventArgs e)
     {
-        var text = GlobalData.Strings.GetString("ConfirmRefreshStations");
-        var caption = GlobalData.Strings.GetString("Confirm");
+        var text = Strings.ConfirmRefreshStations;
+        var caption = Strings.Confirm;
         if (MessageBox.Show(this, text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
             PopulateStations();
     }
@@ -921,20 +910,14 @@ public sealed partial class MainForm : Form
 
         if (userInitiated)
         {
-            var text = GlobalData.Strings.GetString("ConfirmSyncStations") ??
-                       "Are you sure you want to synchronize the stations?" +
-                       " This will overwrite any modifications to stations that haven't been exported.";
-            var caption = GlobalData.Strings.GetString("Confirm");
-            var result = MessageBox.Show(this, text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            var result = MessageBox.Show(this, Strings.ConfirmSyncStations, Strings.Confirm, MessageBoxButtons.YesNo,
+                MessageBoxIcon.Warning);
             if (result == DialogResult.No) return;
         }
         else if (GlobalData.ConfigManager.Get("watchForChanges") as bool? == true)
         {
-            var text = GlobalData.Strings.GetString("ConfirmSyncStations") ??
-                       "Changes were made to the game's radios directory." +
-                       " Do you want to synchronize your staging and game directories?";
-            var caption = GlobalData.Strings.GetString("Confirm");
-            var result = MessageBox.Show(this, text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            var result = MessageBox.Show(this, Strings.ConfirmSyncStationsExternal, Strings.Confirm,
+                MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (result == DialogResult.No) return;
         }
 
@@ -957,14 +940,11 @@ public sealed partial class MainForm : Form
         }
         catch (Exception ex)
         {
-            var text = string.Format(
-                GlobalData.Strings.GetString("SyncFailedException") ?? "Synchronization failed due to an error: {0}",
-                ex.Message);
-            var caption = GlobalData.Strings.GetString("SyncAbbrev") ?? "Sync";
-            MessageBox.Show(this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            var text = string.Format(Strings.SyncFailedException, ex.Message);
+            MessageBox.Show(this, text, Strings.SyncAbbrev, MessageBoxButtons.OK, MessageBoxIcon.Error);
 
-            AuLogger.GetCurrentLogger<MainForm>("SyncStationsAsync")
-                .Error(ex, "An error occurred while synchronizing stations from game to staging.");
+            AuLogger.GetCurrentLogger<MainForm>("SyncStationsAsync").Error(ex,
+                "An error occurred while synchronizing stations from game to staging.");
         }
         finally
         {
@@ -990,10 +970,8 @@ public sealed partial class MainForm : Form
             }
             else
             {
-                var text = string.Format(
-                    GlobalData.Strings.GetString("SyncFailed") ?? "Synchronization Failed!");
-                var caption = GlobalData.Strings.GetString("SyncAbbrev") ?? "Sync";
-                MessageBox.Show(this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(this, Strings.SyncFailed, Strings.SyncAbbrev, MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
 
                 AuLogger.GetCurrentLogger<MainForm>("OnStationsSynchronized")
                     .Error("An unknown error occurred while synchronizing stations from game to staging.");
@@ -1023,10 +1001,8 @@ public sealed partial class MainForm : Form
         //Check for sync in progress to prevent backup during sync
         if (_isSyncInProgress)
         {
-            var text = GlobalData.Strings.GetString("SyncInProgress") ??
-                       "Synchronization is in progress. Please wait...";
-            var caption = GlobalData.Strings.GetString("SyncAbbrev") ?? "Sync";
-            MessageBox.Show(this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            MessageBox.Show(this, Strings.SyncInProgress, Strings.SyncAbbrev, MessageBoxButtons.OK,
+                MessageBoxIcon.Warning);
             return;
         }
 
@@ -1039,39 +1015,36 @@ public sealed partial class MainForm : Form
         //Check for sync in progress to prevent restore during sync
         if (_isSyncInProgress)
         {
-            var text = GlobalData.Strings.GetString("SyncInProgress") ??
-                       "Synchronization is in progress. Please wait...";
-            var caption = GlobalData.Strings.GetString("SyncAbbrev") ?? "Sync";
-            MessageBox.Show(this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            return;
-        }
-        //TODO: translations
-        if (_isExportInProgress)
-        {
-            var text = GlobalData.Strings.GetString("ExportInProgress") ??
-                       "Export is in progress. Please wait...";
-            var caption = GlobalData.Strings.GetString("ExportAbbrev") ?? "Exporting";
-            MessageBox.Show(this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            MessageBox.Show(this, Strings.SyncInProgress, Strings.SyncAbbrev, MessageBoxButtons.OK,
+                MessageBoxIcon.Warning);
             return;
         }
 
-        var confirmText = GlobalData.Strings.GetString("ConfirmRestore") ??
-                   "Are you sure you want to restore the staging folder? This will overwrite your existing stations!";
-        var confirmCaption = GlobalData.Strings.GetString("Confirm");
-        if (MessageBox.Show(this, confirmText, confirmCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
+        if (_isExportInProgress)
+        {
+            MessageBox.Show(this, Strings.ExportInProgress, Strings.ExportCaption, MessageBoxButtons.OK,
+                MessageBoxIcon.Warning);
+            return;
+        }
+
+        if (MessageBox.Show(this, Strings.ConfirmRestore, Strings.Confirm, MessageBoxButtons.YesNo,
+                MessageBoxIcon.Warning) == DialogResult.No)
             return;
 
         var fileBrowser = new OpenFileDialog
         {
-            Filter = "Backup files (*.zip)|*.zip",
-            Title = GlobalData.Strings.GetString("SelectBackupFile") ?? "Select Backup File"
+            Filter = Strings.MainForm_RestoreFileBrowserFilter + @"|*.zip",
+            Title = Strings.MainForm_RestoreFileBrowserTitle
         };
 
         if (fileBrowser.ShowDialog(this) != DialogResult.OK) return;
         RestoreFromBackup(fileBrowser.FileName);
     }
 
-    private void OnRestoringFromBackup(object? sender, string backupFilePath) => RestoreFromBackup(backupFilePath);
+    private void OnRestoringFromBackup(object? sender, string backupFilePath)
+    {
+        RestoreFromBackup(backupFilePath);
+    }
 
     private void RestoreFromBackup(string backupFile)
     {
@@ -1091,26 +1064,20 @@ public sealed partial class MainForm : Form
         //Check for sync in progress to prevent restore during sync
         if (_isSyncInProgress)
         {
-            var text = GlobalData.Strings.GetString("SyncInProgress") ??
-                       "Synchronization is in progress. Please wait...";
-            var caption = GlobalData.Strings.GetString("SyncAbbrev") ?? "Sync";
-            MessageBox.Show(this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            return;
-        }
-        //TODO: translations
-        if (_isExportInProgress)
-        {
-            var text = GlobalData.Strings.GetString("ExportInProgress") ??
-                       "Export is in progress. Please wait...";
-            var caption = GlobalData.Strings.GetString("ExportAbbrev") ?? "Exporting";
-            MessageBox.Show(this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            MessageBox.Show(this, Strings.SyncInProgress, Strings.SyncAbbrev, MessageBoxButtons.OK,
+                MessageBoxIcon.Warning);
             return;
         }
 
-        var confirmText = GlobalData.Strings.GetString("ConfirmClearAllData") ??
-                   "**Destructive Operation**\nAre you sure you want to clear all data? This will remove all stations immediately from staging.";
-        var confirmCaption = GlobalData.Strings.GetString("Confirm");
-        if (MessageBox.Show(this, confirmText, confirmCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
+        if (_isExportInProgress)
+        {
+            MessageBox.Show(this, Strings.ExportInProgress, Strings.ExportCaption, MessageBoxButtons.OK,
+                MessageBoxIcon.Warning);
+            return;
+        }
+
+        if (MessageBox.Show(this, Strings.ConfirmClearAllData, Strings.Confirm, MessageBoxButtons.YesNo,
+                MessageBoxIcon.Warning) == DialogResult.No)
             return;
 
         //Remove all stations and the folders from the staging directory.
@@ -1174,11 +1141,10 @@ public sealed partial class MainForm : Form
         if (pendingSave.Values.All(p => p != true)) return true;
 
         var count = pendingSave.Count(p => p.Value);
-        var text = string.Format(GlobalData.Strings.GetString("ConfirmExit")
-                                 ?? "There are {0} stations pending export. Are you sure you want to quit?", count);
-        var caption = GlobalData.Strings.GetString("Confirm");
+        var text = string.Format(Strings.ConfirmExit, count);
 
-        return MessageBox.Show(this, text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning) != DialogResult.No;
+        return MessageBox.Show(this, text, Strings.Confirm, MessageBoxButtons.YesNo, MessageBoxIcon.Warning) !=
+               DialogResult.No;
     }
 
     private void MainForm_Resize(object sender, EventArgs e)
@@ -1208,7 +1174,9 @@ public sealed partial class MainForm : Form
 
     public void ShowIconManagerForm(TrackableObject<Station> station, string newIconImagePath = "")
     {
-        var managerForm = newIconImagePath == "" ? new IconManagerForm(station) : new IconManagerForm(station, newIconImagePath);
+        var managerForm = newIconImagePath == ""
+            ? new IconManagerForm(station)
+            : new IconManagerForm(station, newIconImagePath);
         managerForm.IconAdded += ManagerFormOnIconUpdated;
         managerForm.IconDeleted += ManagerFormOnIconUpdated;
         managerForm.IconUpdated += ManagerFormOnIconUpdated;
@@ -1217,7 +1185,8 @@ public sealed partial class MainForm : Form
 
     private void ManagerFormOnIconUpdated(object? sender, TrackableObject<WolvenIcon>? icon)
     {
-        if (InvokeRequired) { Invoke(() => UpdateStationIcon(icon)); }
+        if (InvokeRequired)
+            Invoke(() => UpdateStationIcon(icon));
         else
             UpdateStationIcon(icon);
     }

@@ -14,12 +14,12 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+using System.Diagnostics;
 using AetherUtils.Core.Extensions;
 using AetherUtils.Core.Files;
 using RadioExt_Helper.models;
 using RadioExt_Helper.Properties;
 using RadioExt_Helper.utility;
-using System.Diagnostics;
 using ListView = System.Windows.Forms.ListView;
 
 namespace RadioExt_Helper.user_controls;
@@ -59,34 +59,39 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
     /// </summary>
     public void Translate()
     {
-        btnAddSongs.Text = GlobalData.Strings.GetString("AddSongsToolStrip");
-        btnRemoveSongs.Text = GlobalData.Strings.GetString("RemoveSongsToolStrip");
-        btnRemoveAllSongs.Text = GlobalData.Strings.GetString("ClearAllSongs");
+        btnAddSongs.Text = Strings.AddSongsToolStrip;
+        btnRemoveSongs.Text = Strings.RemoveSongsToolStrip;
+        btnRemoveAllSongs.Text = Strings.ClearAllSongs;
 
-        lvSongs.Columns[0].Text = GlobalData.Strings.GetString("SongExistsHeader");
-        lvSongs.Columns[1].Text = GlobalData.Strings.GetString("SongNameHeader");
-        lvSongs.Columns[2].Text = GlobalData.Strings.GetString("SongArtistHeader");
-        lvSongs.Columns[3].Text = GlobalData.Strings.GetString("SongLengthHeader");
-        lvSongs.Columns[4].Text = GlobalData.Strings.GetString("SongFileSizeHeader");
-        lvSongs.Columns[5].Text = GlobalData.Strings.GetString("SongFilePathHeader");
+        lvSongs.Columns[0].Text = Strings.SongExistsHeader;
+        lvSongs.Columns[1].Text = Strings.SongNameHeader;
+        lvSongs.Columns[2].Text = Strings.SongArtistHeader;
+        lvSongs.Columns[3].Text = Strings.SongLengthHeader;
+        lvSongs.Columns[4].Text = Strings.SongFileSizeHeader;
+        lvSongs.Columns[5].Text = Strings.SongFilePathHeader;
 
-        lblTotalSongsLabel.Text = GlobalData.Strings.GetString("TotalSongsLabel");
-        lblStationSizeLabel.Text = GlobalData.Strings.GetString("TotalStationSizeLabel");
+        lblTotalSongsLabel.Text = Strings.TotalSongsLabel;
+        lblStationSizeLabel.Text = Strings.TotalStationSizeLabel;
 
-        fdlgOpenSongs.Title = GlobalData.Strings.GetString("AddSongs");
-        tabSongs.Text = GlobalData.Strings.GetString("SongListing");
-        tabSongOrder.Text = GlobalData.Strings.GetString("SongOrder");
+        fdlgOpenSongs.Title = Strings.AddSongsFileBrowserTitle;
+        fdlgOpenSongs.Filter = Strings.AddSongsFileBrowserFilter + @"|*.mp3;*.wav;*.ogg;*.flac;*.mp2;*.wax;*.wma";
+        tabSongs.Text = Strings.SongListing;
+        tabSongOrder.Text = Strings.SongOrder;
 
-        lvSongOrder.Columns[0].Text = GlobalData.Strings.GetString("Order");
-        lvSongOrder.Columns[1].Text = GlobalData.Strings.GetString("SongNameHeader");
+        lvSongOrder.Columns[0].Text = Strings.Order;
+        lvSongOrder.Columns[1].Text = Strings.SongNameHeader;
 
-        locateToolStripMenuItem.Text = GlobalData.Strings.GetString("LocateSong");
+        locateToolStripMenuItem.Text = Strings.LocateSong;
     }
 
     /// <summary>
     /// Event that is triggered when the station is updated.
     /// </summary>
     public event EventHandler? StationUpdated;
+
+    public event EventHandler<string>? StatusChanged;
+
+    public event EventHandler? StatusReset;
 
     private void CustomMusicCtl_Load(object sender, EventArgs e)
     {
@@ -104,7 +109,7 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
     /// <summary>
     /// Reset the UI values to the defaults for the station.
     /// </summary>
-    public void ResetUI()
+    public void ResetUi()
     {
         UpdateListsAndViews();
         SetOrderedList();
@@ -168,7 +173,7 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
                              song.FileSize.FormatSize(),
                              song.FilePath
                          ])
-                     { Tag = song }))
+                         { Tag = song }))
             lvSongs.Items.Add(lvItem);
 
         lvSongs.ResizeColumns();
@@ -239,8 +244,8 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
 
     private DialogResult ConfirmRemoveAllSongs()
     {
-        return MessageBox.Show(this, GlobalData.Strings.GetString("DeleteAllSongsConfirm"),
-            GlobalData.Strings.GetString("Confirm"), MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+        return MessageBox.Show(this, Strings.DeleteAllSongsConfirm, Strings.Confirm, MessageBoxButtons.YesNo,
+            MessageBoxIcon.Warning);
     }
 
     private void LocateToolStripMenuItem_Click(object sender, EventArgs e)
@@ -252,7 +257,7 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
 
         fdlgOpenSongs.Multiselect = false;
         fdlgOpenSongs.FileName = Directory.GetParent(song.FilePath)?.FullName;
-        fdlgOpenSongs.Title = GlobalData.Strings.GetString("LocateSong") ?? "Locate Missing Song";
+        fdlgOpenSongs.Title = Strings.LocateSong;
         fdlgOpenSongs.Filter = @$"{fileName}|{fileName}"; // Show only the specific file name
 
         if (fdlgOpenSongs.ShowDialog(this) == DialogResult.OK)
@@ -267,14 +272,18 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
             }
             else
             {
-                var text = GlobalData.Strings.GetString("InvalidFile") ?? "Please select the correct file.";
-                var caption = GlobalData.Strings.GetString("InvalidFileCaption") ?? "Invalid File";
-                MessageBox.Show(text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(Strings.InvalidFile, Strings.InvalidFileCaption, MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
             }
+
             lvSongs.EndUpdate();
         }
 
+        // Reset the file browser to its original state
         fdlgOpenSongs.Multiselect = true;
+        fdlgOpenSongs.Title = Strings.AddSongsFileBrowserTitle;
+        fdlgOpenSongs.Filter = Strings.AddSongsFileBrowserFilter + @"|*.mp3;*.wav;*.ogg;*.flac;*.mp2;*.wax;*.wma";
+        fdlgOpenSongs.FileName = string.Empty;
     }
 
     private void LvSongs_MouseDown(object sender, MouseEventArgs e)
@@ -349,6 +358,46 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
 
         if (Directory.GetParent(song.FilePath) is { } parentDir)
             Process.Start("explorer.exe", parentDir.FullName);
+    }
+
+    private void btnAddSongs_MouseEnter(object sender, EventArgs e)
+    {
+        StatusChanged?.Invoke(this, Strings.AddSongsHelp);
+    }
+
+    private void btnRemoveFromOrder_MouseEnter(object sender, EventArgs e)
+    {
+        StatusChanged?.Invoke(this, Strings.RemoveFromOrderHelp);
+    }
+
+    private void btnAddToOrder_MouseEnter(object sender, EventArgs e)
+    {
+        StatusChanged?.Invoke(this, Strings.AddToOrderHelp);
+    }
+
+    private void btnRemoveSongs_MouseEnter(object sender, EventArgs e)
+    {
+        StatusChanged?.Invoke(this, Strings.RemoveSongsHelp);
+    }
+
+    private void btnRemoveAllSongs_MouseEnter(object sender, EventArgs e)
+    {
+        StatusChanged?.Invoke(this, Strings.RemoveAllSongsHelp);
+    }
+
+    private void lblTotalSongsVal_MouseEnter(object sender, EventArgs e)
+    {
+        StatusChanged?.Invoke(this, Strings.TotalSongsHelp);
+    }
+
+    private void lblStationSizeVal_MouseEnter(object sender, EventArgs e)
+    {
+        StatusChanged?.Invoke(this, Strings.TotalStationSizeHelp);
+    }
+
+    private void MouseLeaveControl(object sender, EventArgs e)
+    {
+        StatusReset?.Invoke(this, EventArgs.Empty);
     }
 
     #region Song Order

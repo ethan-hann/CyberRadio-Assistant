@@ -71,16 +71,14 @@ public partial class PathSettings : Form
     /// </summary>
     private void Translate()
     {
-        Text = GlobalData.Strings.GetString("GamePaths");
+        Text = Strings.GamePaths;
 
-        label1.Text = GlobalData.Strings.GetString("GameBasePath");
-        label2.Text = GlobalData.Strings.GetString("RadioStationPath");
-        label4.Text = GlobalData.Strings.GetString("StagingPath");
+        label1.Text = Strings.GameBasePath;
+        label2.Text = Strings.RadioStationPath;
+        label4.Text = Strings.StagingPath;
 
-        btnChangeGameBasePath.Text = GlobalData.Strings.GetString("Change") +
-                                     GlobalData.Strings.GetString("DotDotDot");
-        btnChangeBackUpPath.Text = GlobalData.Strings.GetString("Change") +
-                                   GlobalData.Strings.GetString("DotDotDot");
+        btnChangeGameBasePath.Text = Strings.Change + @"...";
+        btnChangeBackUpPath.Text = Strings.Change + @"...";
 
         SetLabels();
     }
@@ -92,15 +90,15 @@ public partial class PathSettings : Form
     {
         lblGameBasePath.Text = !GameBasePath.Equals(string.Empty)
             ? GameBasePath
-            : GlobalData.Strings.GetString("GameBasePathPlaceholder");
+            : Strings.GameBasePathPlaceholder;
 
         lblBackupPath.Text = !StagingPath.Equals(string.Empty)
             ? StagingPath
-            : GlobalData.Strings.GetString("StagingPathPlaceholder");
+            : Strings.StagingPathPlaceholder;
 
         var radioPath = PathHelper.GetRadioExtPath(GameBasePath);
         lblRadioPath.Text = radioPath.Equals(string.Empty)
-            ? GlobalData.Strings.GetString("RadioExtPathPlaceholder")
+            ? Strings.RadioExtPathPlaceholder
             : radioPath;
     }
 
@@ -117,12 +115,9 @@ public partial class PathSettings : Form
 
         if (PathHelper.IsSubPath(stagingPath, basePath))
         {
-            var text = GlobalData.Strings.GetString("GamePathWithinStagingPath");
-            var caption = GlobalData.Strings.GetString("Error");
-            MessageBox.Show(this, text, caption, MessageBoxButtons.OK,
+            MessageBox.Show(this, Strings.GamePathWithinStagingPath, Strings.Error, MessageBoxButtons.OK,
                 MessageBoxIcon.Error);
-            AuLogger.GetCurrentLogger<PathSettings>("ChangeGameBasePath")
-                .Warn("Game path is within the staging path.");
+            AuLogger.GetCurrentLogger<PathSettings>("ChangeGameBasePath").Warn("Game path is within the staging path.");
             return;
         }
 
@@ -163,12 +158,9 @@ public partial class PathSettings : Form
 
         if (PathHelper.IsSubPath(gamePath, stagingPath))
         {
-            var text = GlobalData.Strings.GetString("StagingPathWithinGamePath");
-            var caption = GlobalData.Strings.GetString("Error");
-            MessageBox.Show(this, text, caption, MessageBoxButtons.OK,
+            MessageBox.Show(this, Strings.StagingPathWithinGamePath, Strings.Error, MessageBoxButtons.OK,
                 MessageBoxIcon.Error);
-            AuLogger.GetCurrentLogger<PathSettings>("ChangeStagingPath")
-                .Warn("Staging path is within the game path.");
+            AuLogger.GetCurrentLogger<PathSettings>("ChangeStagingPath").Warn("Staging path is within the game path.");
             return;
         }
 

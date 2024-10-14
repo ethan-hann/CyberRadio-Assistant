@@ -78,7 +78,7 @@ namespace RadioExt_Helper.user_controls
             lblImageHeight = new Label();
             grpIconProperties = new GroupBox();
             tableLayoutPanel2 = new TableLayoutPanel();
-            groupBox1 = new GroupBox();
+            grpActions = new GroupBox();
             tableLayoutPanel11 = new TableLayoutPanel();
             btnStartExtract = new Button();
             panelLogControl = new Panel();
@@ -106,7 +106,7 @@ namespace RadioExt_Helper.user_controls
             tableLayoutPanel1.SuspendLayout();
             grpIconProperties.SuspendLayout();
             tableLayoutPanel2.SuspendLayout();
-            groupBox1.SuspendLayout();
+            grpActions.SuspendLayout();
             tableLayoutPanel11.SuspendLayout();
             SuspendLayout();
             // 
@@ -168,6 +168,8 @@ namespace RadioExt_Helper.user_controls
             btnCopyIconPart.TabIndex = 3;
             btnCopyIconPart.UseVisualStyleBackColor = false;
             btnCopyIconPart.Click += btnCopyIconPart_Click;
+            btnCopyIconPart.MouseEnter += CopyBtnMouseEnter;
+            btnCopyIconPart.MouseLeave += LblMouseLeave;
             // 
             // txtIconPart
             // 
@@ -216,6 +218,8 @@ namespace RadioExt_Helper.user_controls
             btnCopySha256Hash.TabIndex = 2;
             btnCopySha256Hash.UseVisualStyleBackColor = false;
             btnCopySha256Hash.Click += btnCopySha256Hash_Click;
+            btnCopySha256Hash.MouseEnter += CopyBtnMouseEnter;
+            btnCopySha256Hash.MouseLeave += LblMouseLeave;
             // 
             // lblSha256Hash
             // 
@@ -268,6 +272,8 @@ namespace RadioExt_Helper.user_controls
             btnCopyArchivePath.TabIndex = 2;
             btnCopyArchivePath.UseVisualStyleBackColor = false;
             btnCopyArchivePath.Click += btnCopyArchivePath_Click;
+            btnCopyArchivePath.MouseEnter += CopyBtnMouseEnter;
+            btnCopyArchivePath.MouseLeave += LblMouseLeave;
             // 
             // lblArchivePath
             // 
@@ -333,6 +339,8 @@ namespace RadioExt_Helper.user_controls
             btnCopyImagePath.TabIndex = 2;
             btnCopyImagePath.UseVisualStyleBackColor = false;
             btnCopyImagePath.Click += btnCopyImagePath_Click;
+            btnCopyImagePath.MouseEnter += CopyBtnMouseEnter;
+            btnCopyImagePath.MouseLeave += LblMouseLeave;
             // 
             // lblIconPath
             // 
@@ -376,6 +384,8 @@ namespace RadioExt_Helper.user_controls
             btnCopyIconPath.TabIndex = 3;
             btnCopyIconPath.UseVisualStyleBackColor = false;
             btnCopyIconPath.Click += btnCopyIconPath_Click;
+            btnCopyIconPath.MouseEnter += CopyBtnMouseEnter;
+            btnCopyIconPath.MouseLeave += LblMouseLeave;
             // 
             // txtIconPath
             // 
@@ -418,6 +428,8 @@ namespace RadioExt_Helper.user_controls
             btnCancelImport.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnCancelImport.UseVisualStyleBackColor = false;
             btnCancelImport.Click += btnCancelImport_Click;
+            btnCancelImport.MouseEnter += btnCancelImport_MouseEnter;
+            btnCancelImport.MouseLeave += LblMouseLeave;
             // 
             // btnImportIcon
             // 
@@ -437,6 +449,8 @@ namespace RadioExt_Helper.user_controls
             btnImportIcon.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnImportIcon.UseVisualStyleBackColor = false;
             btnImportIcon.Click += btnImportIcon_Click;
+            btnImportIcon.MouseEnter += btnImportIcon_MouseEnter;
+            btnImportIcon.MouseLeave += LblMouseLeave;
             // 
             // tableLayoutPanel7
             // 
@@ -467,6 +481,8 @@ namespace RadioExt_Helper.user_controls
             lblIconName.Size = new Size(67, 16);
             lblIconName.TabIndex = 8;
             lblIconName.Text = "Icon Name:";
+            lblIconName.MouseEnter += lblIconName_MouseEnter;
+            lblIconName.MouseLeave += LblMouseLeave;
             // 
             // lblAtlasName
             // 
@@ -611,6 +627,8 @@ namespace RadioExt_Helper.user_controls
             picStationIcon.TabIndex = 4;
             picStationIcon.TabStop = false;
             picStationIcon.DragDrop += picStationIcon_DragDrop;
+            picStationIcon.MouseEnter += picStationIcon_MouseEnter;
+            picStationIcon.MouseLeave += LblMouseLeave;
             // 
             // tblWarning
             // 
@@ -723,7 +741,7 @@ namespace RadioExt_Helper.user_controls
             tableLayoutPanel2.ColumnCount = 2;
             tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 79.44163F));
             tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20.5583763F));
-            tableLayoutPanel2.Controls.Add(groupBox1, 1, 0);
+            tableLayoutPanel2.Controls.Add(grpActions, 1, 0);
             tableLayoutPanel2.Controls.Add(panelLogControl, 0, 0);
             tableLayoutPanel2.Dock = DockStyle.Fill;
             tableLayoutPanel2.Location = new Point(0, 0);
@@ -733,17 +751,17 @@ namespace RadioExt_Helper.user_controls
             tableLayoutPanel2.Size = new Size(1024, 318);
             tableLayoutPanel2.TabIndex = 0;
             // 
-            // groupBox1
+            // grpActions
             // 
-            groupBox1.Controls.Add(tableLayoutPanel11);
-            groupBox1.Dock = DockStyle.Fill;
-            groupBox1.Font = new Font("Segoe UI Variable Display", 9.75F, FontStyle.Bold);
-            groupBox1.Location = new Point(816, 3);
-            groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(205, 312);
-            groupBox1.TabIndex = 1;
-            groupBox1.TabStop = false;
-            groupBox1.Text = "Actions";
+            grpActions.Controls.Add(tableLayoutPanel11);
+            grpActions.Dock = DockStyle.Fill;
+            grpActions.Font = new Font("Segoe UI Variable Display", 9.75F, FontStyle.Bold);
+            grpActions.Location = new Point(816, 3);
+            grpActions.Name = "grpActions";
+            grpActions.Size = new Size(205, 312);
+            grpActions.TabIndex = 1;
+            grpActions.TabStop = false;
+            grpActions.Text = "Actions";
             // 
             // tableLayoutPanel11
             // 
@@ -782,6 +800,8 @@ namespace RadioExt_Helper.user_controls
             btnStartExtract.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnStartExtract.UseVisualStyleBackColor = false;
             btnStartExtract.Click += btnStartExtract_Click;
+            btnStartExtract.MouseEnter += btnStartExtract_MouseEnter;
+            btnStartExtract.MouseLeave += LblMouseLeave;
             // 
             // panelLogControl
             // 
@@ -837,8 +857,8 @@ namespace RadioExt_Helper.user_controls
             grpIconProperties.ResumeLayout(false);
             grpIconProperties.PerformLayout();
             tableLayoutPanel2.ResumeLayout(false);
-            groupBox1.ResumeLayout(false);
-            groupBox1.PerformLayout();
+            grpActions.ResumeLayout(false);
+            grpActions.PerformLayout();
             tableLayoutPanel11.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
@@ -884,7 +904,7 @@ namespace RadioExt_Helper.user_controls
         private GroupBox grpIconPreview;
         private GroupBox grpIconProperties;
         private TableLayoutPanel tableLayoutPanel2;
-        private GroupBox groupBox1;
+        private GroupBox grpActions;
         private TableLayoutPanel tableLayoutPanel11;
         private SplitContainer splitContainer1;
         private TableLayoutPanel tableLayoutPanel1;

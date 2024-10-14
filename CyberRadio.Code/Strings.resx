@@ -169,9 +169,6 @@ Please set it now.</value>
   <data name="GameBasePathPlaceholder" xml:space="preserve">
     <value>&lt;no path set; game executable missing&gt;</value>
   </data>
-  <data name="DotDotDot" xml:space="preserve">
-    <value>...</value>
-  </data>
   <data name="GamePaths" xml:space="preserve">
     <value>Game Paths</value>
   </data>
@@ -208,7 +205,7 @@ Please set it now.</value>
   <data name="Music" xml:space="preserve">
     <value>Music</value>
   </data>
-  <data name="Open" xml:space="preserve">
+  <data name="OpenGameExecutable" xml:space="preserve">
     <value>Open Game Executable</value>
   </data>
   <data name="DisplayName" xml:space="preserve">
@@ -226,7 +223,7 @@ Please set it now.</value>
   <data name="Icon" xml:space="preserve">
     <value>Icon:</value>
   </data>
-  <data name="Using?" xml:space="preserve">
+  <data name="UsingQuestion" xml:space="preserve">
     <value>Using?</value>
   </data>
   <data name="Yes" xml:space="preserve">
@@ -508,12 +505,12 @@ Can't export radio stations to game.</value>
     <value>Radio Garden URL</value>
   </data>
   <data name="RadioGardenInput" xml:space="preserve">
-    <value>Enter the radio.garden URL from the web:</value>
+    <value>Enter the radio.garden URL:</value>
   </data>
-  <data name="EnableSelectedStation" xml:space="preserve">
+  <data name="EnableSelected" xml:space="preserve">
     <value>Enable Selected</value>
   </data>
-  <data name="DisableSelectedStation" xml:space="preserve">
+  <data name="DisableSelected" xml:space="preserve">
     <value>Disable Selected</value>
   </data>
   <data name="EnableAllStations" xml:space="preserve">
@@ -592,7 +589,8 @@ Can't export radio stations to game.</value>
     <value>Open Log Folder</value>
   </data>
   <data name="ConfirmRefreshStations" xml:space="preserve">
-    <value>Are you sure you want to refresh your stations from disk? You will lose any pending changes.</value>
+    <value>Are you sure you want to refresh your stations from disk?
+You will lose any pending changes to stations.</value>
   </data>
   <data name="EditLogsPathOption" xml:space="preserve">
     <value>Edit Logs Path...</value>
@@ -613,7 +611,7 @@ Can't export radio stations to game.</value>
     <value>     Only Enabled stations are 
 exported to the game.</value>
   </data>
-  <data name="AddSongs" xml:space="preserve">
+  <data name="AddSongsFileBrowserTitle" xml:space="preserve">
     <value>Select song files to add</value>
   </data>
   <data name="RevertChanges" xml:space="preserve">
@@ -647,7 +645,8 @@ exported to the game.</value>
     <value>Finalizing...</value>
   </data>
   <data name="ConfirmExit" xml:space="preserve">
-    <value>There are {0} stations pending export. Are you sure you want to quit?</value>
+    <value>There are {0} stations pending export.
+Are you sure you want to quit?</value>
   </data>
   <data name="BackupProgressChanged" xml:space="preserve">
     <value>Backing up... {0}%</value>
@@ -722,7 +721,8 @@ exported to the game.</value>
     <value>Synchronize Stations</value>
   </data>
   <data name="ConfirmSyncStations" xml:space="preserve">
-    <value>Are you sure you want to synchronize the staging and game directories? You will lose any pending changes to stations.</value>
+    <value>Are you sure you want to synchronize the staging and game directories?
+You will lose any pending changes to stations.</value>
   </data>
   <data name="MissingStations" xml:space="preserve">
     <value>There are {0} station(s) in the game's folder missing from the staging folder. Would you like to synchronize the stations?</value>
@@ -793,7 +793,7 @@ exported to the game.</value>
   <data name="High" xml:space="preserve">
     <value>High</value>
   </data>
-  <data name="Maxium" xml:space="preserve">
+  <data name="Maximum" xml:space="preserve">
     <value>Maximum</value>
   </data>
   <data name="Ultra" xml:space="preserve">
@@ -840,7 +840,7 @@ Actual size may be different.</value>
     <value>Copy Song Files to Backup?</value>
   </data>
   <data name="DefaultSongLocationHelp" xml:space="preserve">
-    <value>Indicates the folder that imported station's song files should be saved to. Default's to the MyMusic folder.</value>
+    <value>Indicates the folder that imported station's song files should be saved to. Defaults to the MyMusic folder.</value>
   </data>
   <data name="IconManagerFormTitle" xml:space="preserve">
     <value>Icon Manager - {0}</value>
@@ -854,9 +854,6 @@ Actual size may be different.</value>
   <data name="IconEditorCopyIconToStagingNullEmpty" xml:space="preserve">
     <value>The icon archive path was null or empty.</value>
   </data>
-  <data name="IconEditor_txtIconName_TextChanged_Editing_Tab___0_" xml:space="preserve">
-    <value>Editing Icon: {0}</value>
-  </data>
   <data name="IconEditor_IconAlreadyCreated_DragDrop" xml:space="preserve">
     <value>This icon has already been created and marked as read-only. Please create a new icon if you want a different image.</value>
   </data>
@@ -868,12 +865,6 @@ Actual size may be different.</value>
   </data>
   <data name="IconEditorCopyIconToStagingImageNullEmpty" xml:space="preserve">
     <value>The icon .png path was null or empty.</value>
-  </data>
-  <data name="IconEditor_SetImagePreviewProperties_Color_Mode___0_" xml:space="preserve">
-	  <value>Color Mode: {0}</value>
-  </data>
-  <data name="IconEditor_SetImagePreviewProperties_Img__Fmt____0_" xml:space="preserve">
-	  <value>Img. Fmt.: {0}</value>
   </data>
   <data name="IconEditor_SetFieldsBasedOnImagePath_The_extracted_image_could_not_be_found_" xml:space="preserve">
 	  <value>The extracted image could not be found.</value>
@@ -926,21 +917,329 @@ Note: Any changes to the activation status or other station-specific properties 
   <data name="CreatedFromPng" xml:space="preserve">
     <value>Created from PNG</value>
   </data>
-  <data name="MainForm_fromzipFileToolStripMenuItem_Click_Imported__0__stations___1_" xml:space="preserve">
+  <data name="MainForm_FromZipImportDesc" xml:space="preserve">
 	  <value>Imported {0} stations: {1}
 
 If an icon was included with the station, it has been added as well. However, you will have to extract it manually to get the preview in CRA.</value>
   </data>
-  <data name="MainForm_fromzipFileToolStripMenuItem_Click_Station_s__Imported" xml:space="preserve">
+  <data name="MainForm_FromZipStationsImportedTitle" xml:space="preserve">
 	  <value>Station(s) Imported</value>
   </data>
-  <data name="MainForm_fromzipFileToolStripMenuItem_Click_Radio_Station_Archives_valid_file_types" xml:space="preserve">
-	  <value>Radio Station Archives (*.zip;*.rar)|*.zip;*.rar</value>
+  <data name="MainForm_FromZipImportFilter" xml:space="preserve">
+	  <value>Radio Station Archives (*.zip;*.rar)</value>
   </data>
-  <data name="MainForm_fromzipFileToolStripMenuItem_Click_Import_Station" xml:space="preserve">
+  <data name="MainForm_FromZipImportTitle" xml:space="preserve">
 	  <value>Import Station</value>
   </data>
   <data name="SearchStations" xml:space="preserve">
     <value>Search stations...</value>
+  </data>
+  <data name="SelectDefaultSongLocationDesc" xml:space="preserve">
+    <value>Select the default location to store song files</value>
+  </data>
+  <data name="NewIcon" xml:space="preserve">
+    <value>New Icon</value>
+  </data>
+  <data name="DeleteIcon" xml:space="preserve">
+    <value>Delete Icon</value>
+  </data>
+  <data name="DeleteAllIcons" xml:space="preserve">
+    <value>Delete All Icons</value>
+  </data>
+  <data name="FromArchiveFile" xml:space="preserve">
+    <value>From .archive file...</value>
+  </data>
+  <data name="Icons" xml:space="preserve">
+    <value>Icons</value>
+  </data>
+  <data name="OpenArchiveFile" xml:space="preserve">
+    <value>Select a .archive file to open</value>
+  </data>
+  <data name="ArchiveFiles" xml:space="preserve">
+    <value>Mod Archive (*.archive)</value>
+  </data>
+  <data name="IconImportInProgress" xml:space="preserve">
+    <value>An icon import is currently in progress. Please wait for the import to finish.</value>
+  </data>
+  <data name="IconImportInProgressCaption" xml:space="preserve">
+    <value>Icon Import In Progress</value>
+  </data>
+  <data name="IconExportInProgress" xml:space="preserve">
+    <value>An icon export is currently in progress. Please wait for the export to finish.</value>
+  </data>
+  <data name="IconExportInProgressCaption" xml:space="preserve">
+    <value>Icon Export In Progress</value>
+  </data>
+  <data name="MissingStationsCaption" xml:space="preserve">
+    <value>Missing Stations</value>
+  </data>
+  <data name="IconManagerMenuOption" xml:space="preserve">
+    <value>Station Icon Manager</value>
+  </data>
+  <data name="Tools" xml:space="preserve">
+    <value>Tools</value>
+  </data>
+  <data name="DownloadRadioMods" xml:space="preserve">
+    <value>Download Radio Mods</value>
+  </data>
+  <data name="ImportFromZipFile" xml:space="preserve">
+    <value>From .zip file...</value>
+  </data>
+  <data name="ClearAllData" xml:space="preserve">
+    <value>Clear All Data!</value>
+  </data>
+  <data name="BackupRestoreMenuItem" xml:space="preserve">
+    <value>Backup/Restore</value>
+  </data>
+  <data name="RestoreBackupMenuItem" xml:space="preserve">
+    <value>Restore Staging Folder</value>
+  </data>
+  <data name="Mods" xml:space="preserve">
+    <value>Mods</value>
+  </data>
+  <data name="MainTitleFormated" xml:space="preserve">
+    <value>Cyber Radio Assistant - {0}</value>
+  </data>
+  <data name="ConfirmSyncStationsExternal" xml:space="preserve">
+    <value>Changes were made to the game's radios directory.
+Do you want to synchronize your staging and game directories?</value>
+  </data>
+  <data name="ExportInProgress" xml:space="preserve">
+    <value>Export is in progress. Please wait...</value>
+  </data>
+  <data name="ExportCaption" xml:space="preserve">
+    <value>Exporting</value>
+  </data>
+  <data name="ConfirmRestore" xml:space="preserve">
+    <value>Are you sure you want to restore the staging folder?
+This will overwrite your existing stations!</value>
+  </data>
+  <data name="MainForm_RestoreFileBrowserFilter" xml:space="preserve">
+    <value>Backup Files (*.zip)</value>
+  </data>
+  <data name="MainForm_RestoreFileBrowserTitle" xml:space="preserve">
+    <value>Select backup file to restore</value>
+  </data>
+  <data name="ConfirmClearAllData" xml:space="preserve">
+    <value>**DESTRUCTIVE OPERATION**
+
+Ensure you create a backup of your stations before clearing data. This will remove all stations immediately from staging (the game is not touched).
+Are you sure you want to clear all station data?</value>
+  </data>
+  <data name="RestoreFormTitle" xml:space="preserve">
+    <value>Restore Backup - {0}</value>
+  </data>
+  <data name="StartRestore" xml:space="preserve">
+    <value>Start Restore</value>
+  </data>
+  <data name="RestoreDescription" xml:space="preserve">
+    <value>The following files will be restored to the staging folder.</value>
+  </data>
+  <data name="EstimatedRestoreSizeFormat" xml:space="preserve">
+    <value>Estimated Restore Size: {0}</value>
+  </data>
+  <data name="RestoreForm_PreviewCompleted" xml:space="preserve">
+    <value>Restore preview completed. Ready to start restore operation.</value>
+  </data>
+  <data name="RestoreForm_ErrorWhileRestoring" xml:space="preserve">
+    <value>An error occurred while trying to start the restore operation.</value>
+  </data>
+  <data name="RestoreForm_RestoreCancelled" xml:space="preserve">
+    <value>Restore operation has been cancelled.</value>
+  </data>
+  <data name="RestoreForm_RestoreCancelledCaption" xml:space="preserve">
+    <value>Restore Cancelled</value>
+  </data>
+  <data name="SplashScreen_SetupIconManager" xml:space="preserve">
+    <value>Initializing the Icon Manager...</value>
+  </data>
+  <data name="AddSongsFileBrowserFilter" xml:space="preserve">
+    <value>Music Files (*.mp3;*.wav;*.ogg;*.flac;*.mp2;*.wax;*.wma)</value>
+  </data>
+  <data name="IconEditor_Translate_Editing_Icon___0_" xml:space="preserve">
+	  <value>Editing Icon: {0}</value>
+  </data>
+  <data name="IconEditor_Translate_W___0_" xml:space="preserve">
+	  <value>W: {0}</value>
+  </data>
+  <data name="IconEditor_Translate_H___0_" xml:space="preserve">
+	  <value>H: {0}</value>
+  </data>
+  <data name="IconEditor_Translate_Format___0_" xml:space="preserve">
+	  <value>Format: {0}</value>
+  </data>
+  <data name="IconEditor_Translate_Archive_Path_" xml:space="preserve">
+	  <value>Archive Path:</value>
+  </data>
+  <data name="IconEditor_Translate_Atlas_Name_" xml:space="preserve">
+	  <value>Atlas Name:</value>
+  </data>
+  <data name="IconEditor_Translate_Icon_Name_" xml:space="preserve">
+	  <value>Icon Name:</value>
+  </data>
+  <data name="IconEditor_Translate_Icon_Path_" xml:space="preserve">
+	  <value>Icon Path:</value>
+  </data>
+  <data name="IconEditor_Translate_Icon_Part_" xml:space="preserve">
+	  <value>Icon Part:</value>
+  </data>
+  <data name="IconEditor_Translate_Image_Path_" xml:space="preserve">
+	  <value>Image Path:</value>
+  </data>
+  <data name="IconEditor_Translate_SHA256_Hash_" xml:space="preserve">
+	  <value>SHA256 Hash:</value>
+  </data>
+  <data name="IconEditor_Translate_Color_Mode___0_" xml:space="preserve">
+	  <value>Color Mode: {0}</value>
+  </data>
+  <data name="IconEditor_Translate_No_Image_Issues" xml:space="preserve">
+	  <value>No Image Issues</value>
+  </data>
+  <data name="IconEditor_Translate_Start_Import" xml:space="preserve">
+	  <value>Start Import</value>
+  </data>
+  <data name="IconEditor_Translate_Start_Extraction" xml:space="preserve">
+	  <value>Start Extraction</value>
+  </data>
+  <data name="IconEditor_Translate_Cancel_Action" xml:space="preserve">
+	  <value>Cancel Action</value>
+  </data>
+  <data name="IconEditor_Translate_Preview" xml:space="preserve">
+	  <value>Preview</value>
+  </data>
+  <data name="IconEditor_Translate_Properties" xml:space="preserve">
+	  <value>Properties</value>
+  </data>
+  <data name="IconEditor_Translate_Actions" xml:space="preserve">
+	  <value>Actions</value>
+  </data>
+  <data name="IconEditor_AtlasName_Hint" xml:space="preserve">
+    <value>The name of the atlas file that the icon is stored in.</value>
+  </data>
+  <data name="IconEditor_Sha256Hash_Hint" xml:space="preserve">
+    <value>The SHA256 hash of the archive file.</value>
+  </data>
+  <data name="IconEditor_ArchivePath_Hint" xml:space="preserve">
+    <value>The path to the archive file that contains the icon.</value>
+  </data>
+  <data name="IconEditor_ImagePath_Hint" xml:space="preserve">
+    <value>The path to the image file that created the icon or the extracted image.</value>
+  </data>
+  <data name="IconEditor_IconPath_Hint" xml:space="preserve">
+    <value>The path to the icon within the archive file. Autogenerated.</value>
+  </data>
+  <data name="IconEditor_IconPart_Hint" xml:space="preserve">
+    <value>The part of the icon within the icon path. Autogenerated.</value>
+  </data>
+  <data name="MetaDataKey" xml:space="preserve">
+    <value>Key</value>
+  </data>
+  <data name="MetaDataValue" xml:space="preserve">
+    <value>Value</value>
+  </data>
+  <data name="RadioGardenParse" xml:space="preserve">
+    <value>Parse</value>
+  </data>
+  <data name="IconManagerHelp" xml:space="preserve">
+    <value>Opens the icon manager dialog for this station to mange the icons.</value>
+  </data>
+  <data name="CustomIconPictureHelp" xml:space="preserve">
+    <value>Shows a preview of the active icon for this station. Drag-and-drop a .PNG here to quickly add it to the station.</value>
+  </data>
+  <data name="ParseFromRadioGardenHelp" xml:space="preserve">
+    <value>Opens a dialog to parse the API url from the web URL for a radio.garden web stream.</value>
+  </data>
+  <data name="StreamPlayerHelp" xml:space="preserve">
+    <value>Allows you to preview the audio from the stream specified.</value>
+  </data>
+  <data name="AddSongsHelp" xml:space="preserve">
+    <value>Opens a file selector to add valid audio files to this station's song list.</value>
+  </data>
+  <data name="RemoveFromOrderHelp" xml:space="preserve">
+    <value>Removes the song from the station's ordered song list. Does not remove the song from the station.</value>
+  </data>
+  <data name="AddToOrderHelp" xml:space="preserve">
+    <value>Adds the song to the station's ordered song list.</value>
+  </data>
+  <data name="RemoveSongsHelp" xml:space="preserve">
+    <value>Removes all selected songs from the station. Does not delete files on disk.</value>
+  </data>
+  <data name="RemoveAllSongsHelp" xml:space="preserve">
+    <value>Removes ALL songs from the station. Does not delete files on disk.</value>
+  </data>
+  <data name="TotalSongsHelp" xml:space="preserve">
+    <value>Shows the total number of song files associated with this station.</value>
+  </data>
+  <data name="TotalStationSizeHelp" xml:space="preserve">
+    <value>Shows the total file size of all song files in the station.</value>
+  </data>
+  <data name="RestoreBackupLoadingPreview" xml:space="preserve">
+    <value>Loading... {0}%</value>
+  </data>
+  <data name="RestoreProgressChanged" xml:space="preserve">
+    <value>Restoring file: {0}</value>
+  </data>
+  <data name="RestoreSongProgressChanged" xml:space="preserve">
+    <value>Restoring song: {0}</value>
+  </data>
+  <data name="RestoreCompleted" xml:space="preserve">
+    <value>Restore completed successfully.</value>
+  </data>
+  <data name="RestoreFailedException" xml:space="preserve">
+    <value>Restore failed due to an error: {0}</value>
+  </data>
+  <data name="DirectoryWatcher_DirectoryNotExists" xml:space="preserve">
+	  <value>Directory '{0}' does not exist</value>
+  </data>
+  <data name="GamePathFilter" xml:space="preserve">
+    <value>Game Executable (Cyberpunk2077.exe)</value>
+  </data>
+  <data name="SyncStatusComplete" xml:space="preserve">
+    <value>Synchronization complete.</value>
+  </data>
+  <data name="SyncStatusError" xml:space="preserve">
+    <value>Error synchronizing stations.</value>
+  </data>
+  <data name="SyncProgressChangedFormat" xml:space="preserve">
+    <value>Synchronizing Files... {0}%</value>
+  </data>
+  <data name="SyncProgressDirectoriesChangedFormat" xml:space="preserve">
+    <value>Synchronizing Directories... {0}%</value>
+  </data>
+  <data name="IconEditor_IconName_Hint" xml:space="preserve">
+    <value>The name of the icon within the station. Can be anything you want.</value>
+  </data>
+  <data name="IconEditor_CopyToClipboard" xml:space="preserve">
+    <value>Copies the corresponding text to the clipboard.</value>
+  </data>
+  <data name="IconEditor_ImportIcon" xml:space="preserve">
+    <value>Start's the import process for icon generation. This can take some time.</value>
+  </data>
+  <data name="IconEditor_ExtractIcon" xml:space="preserve">
+    <value>Starts the .archive extraction process for an icon. This can take some time.</value>
+  </data>
+  <data name="IconEditor_CancelAction" xml:space="preserve">
+    <value>Cancels the currently running operation.</value>
+  </data>
+  <data name="IconManager" xml:space="preserve">
+    <value>Icon Manager</value>
+  </data>
+  <data name="LogViewerControl_grpLogSearchHeader_Text" xml:space="preserve">
+    <value>Log File</value>
+  </data>
+  <data name="LogViewerControl_txtSearch_PlaceholderText" xml:space="preserve">
+    <value>Enter search filter...</value>
+  </data>
+  <data name="LogViewerControl_btnShowMore_Text" xml:space="preserve">
+    <value>Show More</value>
+  </data>
+  <data name="LogViewerControl_dgvLogs_Columns_0_HeaderText" xml:space="preserve">
+    <value>Timestamp</value>
+  </data>
+  <data name="LogViewerControl_dgvLogs_Columns_1_HeaderText" xml:space="preserve">
+    <value>Output</value>
+  </data>
+  <data name="IconEditor_CustomIconPictureHelp" xml:space="preserve">
+    <value>Shows a preview of this icon (if extracted or imported). If icon hasn't been created yet, drag-and-drop a .PNG here to create it.</value>
   </data>
 </root>

@@ -14,22 +14,21 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-using AetherUtils.Core.Files;
-using AetherUtils.Core.Logging;
-using AetherUtils.Core.Structs;
-using RadioExt_Helper.custom_controls;
-using RadioExt_Helper.models;
-using RadioExt_Helper.user_controls;
-using SharpCompress.Archives;
 using System.ComponentModel;
 using System.Globalization;
 using System.Text.RegularExpressions;
+using AetherUtils.Core.Files;
+using AetherUtils.Core.Logging;
+using AetherUtils.Core.Structs;
+using RadioExt_Helper.models;
+using RadioExt_Helper.user_controls;
+using SharpCompress.Archives;
 using WIG.Lib.Models;
 
 namespace RadioExt_Helper.utility;
 
 /// <summary>
-/// This class is responsible for managing the radio stations. It provides methods for adding and removing stations as well as their station editors.
+/// This class is responsible for managing the radio stations. It provides methods for adding and removing stations as well as their various editors and icons.
 /// Everything to do with stations is managed here.
 /// <para>This class cannot be instantiated. It is a singleton.</para>
 /// </summary>
@@ -79,7 +78,7 @@ public partial class StationManager : IDisposable
     /// <summary>
     /// Loads a station from the specified directory into the manager.
     /// This method will not clear existing stations, unlike <see cref="LoadStations"/> 
-    /// and is used to load a single station from a single directory, not necessarily from the staging directory.
+    /// and is used to load a single station from a single directory, not from the staging directory.
     /// </summary>
     /// <param name="directory">The directory to load the station from.</param>
     /// <param name="songDirectory">The song directory to load the station's songs from.</param>
@@ -149,11 +148,14 @@ public partial class StationManager : IDisposable
                 foreach (var icon in station.TrackedObject.Icons)
                 {
                     if (icon.TrackedObject.ArchivePath == null) continue; //if no archive path, skip
-                    if (PathHelper.IsSubPath(stagingPath, icon.TrackedObject.ArchivePath)) //if the archive path is already in the staging directory, skip
+                    if (PathHelper.IsSubPath(stagingPath,
+                            icon.TrackedObject
+                                .ArchivePath)) //if the archive path is already in the staging directory, skip
                         continue;
 
                     //Otherwise, copy the archive file to the staging directory's icons folder and set the icon's archive path.
-                    if (icon.TrackedObject.ArchivePath != null && FileHelper.DoesFileExist(icon.TrackedObject.ArchivePath))
+                    if (icon.TrackedObject.ArchivePath != null &&
+                        FileHelper.DoesFileExist(icon.TrackedObject.ArchivePath))
                     {
                         var filename = Path.GetFileName(icon.TrackedObject.ArchivePath);
                         var iconArchivePath = Path.Combine(stagingPath, "icons", filename);
@@ -165,9 +167,7 @@ public partial class StationManager : IDisposable
 
                 //Add the station's icon editors as well and find the active icon to display.
                 foreach (var icon in station.TrackedObject.Icons)
-                {
                     AddStationIconEditor(station.Id, icon.Id, icon.TrackedObject.IsFromArchive);
-                }
 
                 StationAdded?.Invoke(this, station.Id);
                 return station.Id;
@@ -188,7 +188,8 @@ public partial class StationManager : IDisposable
     /// <param name="makeActive">Whether to immediately make this icon the active one for the station, de-activating other icons.</param>
     /// <param name="isExistingIcon">Whether the icon editor should be initialized with an existing .archive file.</param>
     /// <returns><c>true</c> if the icon was added successfully; <c>false</c> otherwise.</returns>
-    public bool AddStationIcon(Guid stationId, TrackableObject<WolvenIcon> icon, bool makeActive = false, bool isExistingIcon = false)
+    public bool AddStationIcon(Guid stationId, TrackableObject<WolvenIcon> icon, bool makeActive = false,
+        bool isExistingIcon = false)
     {
         try
         {
@@ -207,7 +208,9 @@ public partial class StationManager : IDisposable
             pair.Key.TrackedObject.AddIcon(icon);
             StationsAsBindingList.First(s => s.Id == pair.Key.Id).TrackedObject.AddIcon(icon);
 
-            var iconEditor = new IconEditor(pair.Key, icon, isExistingIcon ? IconEditorType.FromArchive : IconEditorType.FromPNG);
+            var iconEditor = new IconEditor(pair.Key, icon,
+                isExistingIcon ? IconEditorType.FromArchive : IconEditorType.FromPng);
+            iconEditor.Translate();
             pair.Value.Add(iconEditor);
 
             StationUpdated?.Invoke(this, stationId);
@@ -236,15 +239,18 @@ public partial class StationManager : IDisposable
 
             if (station == null)
             {
-                AuLogger.GetCurrentLogger<StationManager>("HandleStationArchive").Warn($"Station not found in directory: {directories.tempDir}");
+                AuLogger.GetCurrentLogger<StationManager>("HandleStationArchive")
+                    .Warn($"Station not found in directory: {directories.tempDir}");
                 return null;
             }
 
             return station.Id;
-        } catch (Exception ex)
+        }
+        catch (Exception ex)
         {
             AuLogger.GetCurrentLogger<StationManager>().Error(ex, "Error importing station from archive.");
         }
+
         return null;
     }
 
@@ -256,16 +262,15 @@ public partial class StationManager : IDisposable
     /// <param name="icon">The <see cref="WolvenIcon"/> to copy.</param>
     /// <param name="makeActive">Whether to make this copied icon active for the current station.</param>
     /// <returns>The internal id of the new copied icon; <c>null</c> if the icon couldn't be copied.</returns>
-    public Guid? CopyStationIcon(Guid stationId, Guid referenceStationId, TrackableObject<WolvenIcon> icon, bool makeActive = false)
+    public Guid? CopyStationIcon(Guid stationId, Guid referenceStationId, TrackableObject<WolvenIcon> icon,
+        bool makeActive = false)
     {
         try
         {
             // Verify both stations exist in the manager
-            if (!_stations.TryGetValue(stationId, out var currentStationPair) || 
+            if (!_stations.TryGetValue(stationId, out var currentStationPair) ||
                 !_stations.TryGetValue(referenceStationId, out var referenceStationPair))
-            {
                 return null;
-            }
 
             // Create a deep copy of the WolvenIcon object and update paths
             var copiedIcon = new TrackableObject<WolvenIcon>((WolvenIcon)icon.TrackedObject.Clone());
@@ -278,15 +283,13 @@ public partial class StationManager : IDisposable
             if (makeActive)
             {
                 // Deactivate all other icons for the current station
-                foreach (var i in currentStation.TrackedObject.Icons)
-                {
-                    i.TrackedObject.IsActive = false;
-                }
+                foreach (var i in currentStation.TrackedObject.Icons) i.TrackedObject.IsActive = false;
                 copiedIcon.TrackedObject.IsActive = true;
             }
 
             // Add an IconEditor for the copied icon
             var copiedIconEditor = new IconEditor(currentStation, copiedIcon, IconEditorType.FromArchive);
+            copiedIconEditor.Translate();
             currentStationPair.Value.Add(copiedIconEditor);
 
             // Notify listeners that the station has been updated
@@ -296,7 +299,7 @@ public partial class StationManager : IDisposable
         }
         catch (Exception ex)
         {
-            AuLogger.GetCurrentLogger<StationManager>("CopyStationIcon").Error(ex, $"Error copying icon from station.");
+            AuLogger.GetCurrentLogger<StationManager>("CopyStationIcon").Error(ex, "Error copying icon from station.");
             return null;
         }
     }
@@ -328,21 +331,24 @@ public partial class StationManager : IDisposable
                 // Only delete files if requested and the icon is not linked to any other stations
                 case true when !IsIconLinkedToOtherStations(icon.TrackedObject.IconId, stationId):
                 {
-                    if (icon.TrackedObject.ArchivePath != null && FileHelper.DoesFileExist(icon.TrackedObject.ArchivePath))
+                    if (icon.TrackedObject.ArchivePath != null &&
+                        FileHelper.DoesFileExist(icon.TrackedObject.ArchivePath))
                         FileHelper.DeleteFile(icon.TrackedObject.ArchivePath);
                     if (icon.TrackedObject.ImagePath != null && FileHelper.DoesFileExist(icon.TrackedObject.ImagePath))
                         FileHelper.DeleteFile(icon.TrackedObject.ImagePath);
 
                     // Delete the icon's folder in the appdata directory
                     var appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-                    var foldersInAppData = FileHelper.SafeEnumerateDirectories(Path.Combine(appData, "Wolven Icon Generator", "tools")).ToList();
+                    var foldersInAppData = FileHelper
+                        .SafeEnumerateDirectories(Path.Combine(appData, "Wolven Icon Generator", "tools")).ToList();
                     var foldersToDelete = foldersInAppData.Where(f => f.Contains(icon.Id.ToString())).ToList();
                     foreach (var folder in foldersToDelete.Where(Directory.Exists))
                         Directory.Delete(folder, true);
                     break;
                 }
                 case true:
-                    AuLogger.GetCurrentLogger<StationManager>("RemoveStationIcon").Warn("Could not delete files for the icon as they are linked to another station's icon.");
+                    AuLogger.GetCurrentLogger<StationManager>("RemoveStationIcon").Warn(
+                        "Could not delete files for the icon as they are linked to another station's icon.");
                     break;
             }
 
@@ -353,7 +359,8 @@ public partial class StationManager : IDisposable
         }
         catch (Exception ex)
         {
-            AuLogger.GetCurrentLogger<StationManager>("RemoveStationIcon").Error(ex, "Error removing icon from station.");
+            AuLogger.GetCurrentLogger<StationManager>("RemoveStationIcon")
+                .Error(ex, "Error removing icon from station.");
             return false;
         }
     }
@@ -367,8 +374,9 @@ public partial class StationManager : IDisposable
     public bool IsIconLinkedToOtherStations(Guid? iconId, Guid excludingStationId)
     {
         // Check if any other station references the icon (excluding the provided station ID)
-        return _stations.Values.Any(pair => pair.Key.Id != excludingStationId && 
-                                            pair.Key.TrackedObject.Icons.Any(icon => icon.TrackedObject.IconId == iconId));
+        return _stations.Values.Any(pair => pair.Key.Id != excludingStationId &&
+                                            pair.Key.TrackedObject.Icons.Any(
+                                                icon => icon.TrackedObject.IconId == iconId));
     }
 
     /// <summary>
@@ -379,7 +387,9 @@ public partial class StationManager : IDisposable
     /// <returns>The <see cref="TrackableObject{WolvenIcon}"/> corresponding to the id or <c>null</c> if no icon existed with the id.</returns>
     public TrackableObject<WolvenIcon>? GetStationIcon(Guid stationId, Guid iconId)
     {
-        return !_stations.TryGetValue(stationId, out var pair) ? null : pair.Key.TrackedObject.Icons.FirstOrDefault(i => i.Id == iconId);
+        return !_stations.TryGetValue(stationId, out var pair)
+            ? null
+            : pair.Key.TrackedObject.Icons.FirstOrDefault(i => i.Id == iconId);
     }
 
     /// <summary>
@@ -393,10 +403,7 @@ public partial class StationManager : IDisposable
         {
             if (!_stations.TryGetValue(stationId, out var pair)) return;
 
-            foreach (var icon in pair.Key.TrackedObject.Icons)
-            {
-                icon.TrackedObject.IsActive = icon.Id == iconId;
-            }
+            foreach (var icon in pair.Key.TrackedObject.Icons) icon.TrackedObject.IsActive = icon.Id == iconId;
 
             StationUpdated?.Invoke(this, stationId);
         }
@@ -444,7 +451,8 @@ public partial class StationManager : IDisposable
             if (!_stations.TryGetValue(stationId, out var pair)) return false;
 
             var appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            var foldersInAppData = FileHelper.SafeEnumerateDirectories(Path.Combine(appData, "Wolven Icon Generator", "tools")).ToList();
+            var foldersInAppData = FileHelper
+                .SafeEnumerateDirectories(Path.Combine(appData, "Wolven Icon Generator", "tools")).ToList();
             foreach (var icon in pair.Key.TrackedObject.Icons)
             {
                 var iconEditor = GetStationIconEditor(stationId, icon.Id);
@@ -453,7 +461,8 @@ public partial class StationManager : IDisposable
 
                 if (deleteFiles)
                 {
-                    if (icon.TrackedObject.ArchivePath != null && FileHelper.DoesFileExist(icon.TrackedObject.ArchivePath))
+                    if (icon.TrackedObject.ArchivePath != null &&
+                        FileHelper.DoesFileExist(icon.TrackedObject.ArchivePath))
                         FileHelper.DeleteFile(icon.TrackedObject.ArchivePath);
                     if (icon.TrackedObject.ImagePath != null && FileHelper.DoesFileExist(icon.TrackedObject.ImagePath))
                         FileHelper.DeleteFile(icon.TrackedObject.ImagePath);
@@ -471,7 +480,8 @@ public partial class StationManager : IDisposable
             StationUpdated?.Invoke(this, stationId);
 
             return pair.Key.TrackedObject.Icons.Count == 0;
-        } catch (Exception ex)
+        }
+        catch (Exception ex)
         {
             AuLogger.GetCurrentLogger<StationManager>().Error(ex, "Error removing all icons from station.");
             return false;
@@ -571,9 +581,11 @@ public partial class StationManager : IDisposable
             {
                 if (stationId == null || iconId == null) return null;
 
-                return _stations.TryGetValue((Guid)stationId, out var pair) ?
-                    pair.Value.FirstOrDefault(e => e.Type == EditorType.IconEditor && ((IconEditor)e).Icon.Id.Equals(iconId))
-                        as IconEditor : null;
+                return _stations.TryGetValue((Guid)stationId, out var pair)
+                    ? pair.Value.FirstOrDefault(e =>
+                            e.Type == EditorType.IconEditor && ((IconEditor)e).Icon.Id.Equals(iconId))
+                        as IconEditor
+                    : null;
             }
         }
         catch (Exception ex)
@@ -602,7 +614,9 @@ public partial class StationManager : IDisposable
                 var wolvenIcon = pair.Key.TrackedObject.Icons.FirstOrDefault(i => i.Id.Equals(iconId));
                 if (wolvenIcon == null) return;
 
-                var editor = new IconEditor(pair.Key, wolvenIcon, isExistingArchive ? IconEditorType.FromArchive : IconEditorType.FromPNG);
+                var editor = new IconEditor(pair.Key, wolvenIcon,
+                    isExistingArchive ? IconEditorType.FromArchive : IconEditorType.FromPng);
+                editor.Translate();
                 pair.Value.Add(editor);
             }
         }
@@ -627,7 +641,8 @@ public partial class StationManager : IDisposable
 
                 if (!_stations.TryGetValue((Guid)stationId, out var pair)) return;
 
-                var editor = pair.Value.FirstOrDefault(e => e.Type == EditorType.IconEditor && ((IconEditor)e).Icon.Id.Equals(iconId));
+                var editor = pair.Value.FirstOrDefault(e =>
+                    e.Type == EditorType.IconEditor && ((IconEditor)e).Icon.Id.Equals(iconId));
                 if (editor == null) return;
 
                 pair.Value.Remove(editor);
@@ -650,11 +665,9 @@ public partial class StationManager : IDisposable
             lock (_stations)
             {
                 foreach (var editor in _stations.Values
-                    .SelectMany(p => p.Value.Where(e => e.Type == EditorType.StationEditor))
-                    .Cast<StationEditor>())
-                {
+                             .SelectMany(p => p.Value.Where(e => e.Type == EditorType.StationEditor))
+                             .Cast<StationEditor>())
                     editor.Dispose();
-                }
 
                 _stations.Clear();
                 StationsAsBindingList.Clear();
@@ -665,12 +678,11 @@ public partial class StationManager : IDisposable
                 {
                     var stagingPath = GlobalData.ConfigManager.Get("stagingPath") as string ?? string.Empty;
                     foreach (var folder in FileHelper.SafeEnumerateDirectories(stagingPath))
-                    {
                         if (IsProtectedFolder(folder))
-                            PathHelper.ClearDirectory(folder); //Don't remove protected folders; just remove their contents
+                            PathHelper.ClearDirectory(
+                                folder); //Don't remove protected folders; just remove their contents
                         else
                             Directory.Delete(folder, true);
-                    }
                 }
 
                 StationsCleared?.Invoke(this, EventArgs.Empty);
@@ -735,8 +747,9 @@ public partial class StationManager : IDisposable
                     var id = (Guid)stationId;
                     lock (_stations)
                     {
-                        return _stations.TryGetValue(id, out var pair) ?
-                            pair.Value.FirstOrDefault(e => e.Type == EditorType.StationEditor) as StationEditor : null;
+                        return _stations.TryGetValue(id, out var pair)
+                            ? pair.Value.FirstOrDefault(e => e.Type == EditorType.StationEditor) as StationEditor
+                            : null;
                     }
                 }
                 catch (Exception ex)
@@ -761,7 +774,7 @@ public partial class StationManager : IDisposable
         try
         {
             foreach (var editor in _stations.Values.SelectMany(pair => pair.Value
-            .Where(e => e.Type == EditorType.StationEditor)).Cast<StationEditor>())
+                         .Where(e => e.Type == EditorType.StationEditor)).Cast<StationEditor>())
                 editor.GetMusicPlayer().StopStream();
         }
         catch (Exception ex)
@@ -820,7 +833,8 @@ public partial class StationManager : IDisposable
         var newName = CheckForDuplicateStation(stationId);
         CheckStatus(stationId);
 
-        ((StationEditor)_stations[stationId].Value.First(e => e.Type == EditorType.StationEditor)).UpdateStationName(newName);
+        ((StationEditor)_stations[stationId].Value.First(e => e.Type == EditorType.StationEditor))
+            .UpdateStationName(newName);
     }
 
     /// <summary>
@@ -867,8 +881,8 @@ public partial class StationManager : IDisposable
         try
         {
             foreach (var editorList in _stations.Values.Select(pair => pair.Value))
-                foreach (var editor in editorList)
-                    editor.Translate();
+            foreach (var editor in editorList)
+                editor.Translate();
         }
         catch (Exception ex)
         {
@@ -992,23 +1006,21 @@ public partial class StationManager : IDisposable
 
             // Synchronize directories
             var tasks = (from gameDir in gameDirectories
-                         let dirName = Path.GetFileName(gameDir)
-                         let stagingDir = Path.Combine(stagingPath, dirName)
-                         select !stagingDirectories.Contains(stagingDir)
-                             ? Task.Run(() => CopyDirectoryAsync(gameDir, stagingDir))
-                             // Directory exists, synchronize files
-                             : Task.Run(() => SynchronizeFilesAsync(gameDir, stagingDir))).ToList();
+                let dirName = Path.GetFileName(gameDir)
+                let stagingDir = Path.Combine(stagingPath, dirName)
+                select !stagingDirectories.Contains(stagingDir)
+                    ? Task.Run(() => CopyDirectoryAsync(gameDir, stagingDir))
+                    // Directory exists, synchronize files
+                    : Task.Run(() => SynchronizeFilesAsync(gameDir, stagingDir))).ToList();
 
             await Task.WhenAll(tasks);
-            SyncStatusChanged?.Invoke(GlobalData.Strings.GetString("SyncStatusComplete") ??
-                                      "Synchronization complete.");
+            SyncStatusChanged?.Invoke(Strings.SyncStatusComplete);
             StationsSynchronized?.Invoke(true);
         }
         catch (Exception ex)
         {
             AuLogger.GetCurrentLogger<StationManager>().Error(ex, "Error synchronizing stations.");
-            SyncStatusChanged?.Invoke(
-                GlobalData.Strings.GetString("SyncStatusError") ?? "Error synchronizing stations.");
+            SyncStatusChanged?.Invoke(Strings.SyncStatusError);
             StationsSynchronized?.Invoke(false);
         }
     }
@@ -1049,8 +1061,7 @@ public partial class StationManager : IDisposable
 
             var progress = (int)((float)fileCount / files.Count * 100);
             SyncProgressChanged?.Invoke(progress);
-            SyncStatusChanged?.Invoke(string.Format(
-                GlobalData.Strings.GetString("SyncProgressChanged") ?? "Synchronizing Files... {0}%", progress));
+            SyncStatusChanged?.Invoke(string.Format(Strings.SyncProgressChangedFormat, progress));
         }
 
         await Task.WhenAll(fileTasks);
@@ -1085,8 +1096,7 @@ public partial class StationManager : IDisposable
 
             var progress = (int)((float)dirCount / sourceSubDirs.Count * 100);
             SyncProgressChanged?.Invoke(progress);
-            SyncStatusChanged?.Invoke(string.Format(
-                GlobalData.Strings.GetString("SyncProgressChanged") ?? "Synchronizing Directories... {0}%", progress));
+            SyncStatusChanged?.Invoke(string.Format(Strings.SyncProgressDirectoriesChangedFormat, progress));
         }
 
         await Task.WhenAll(dirTasks);
@@ -1131,7 +1141,7 @@ public partial class StationManager : IDisposable
         {
             MetaData =
             {
-                DisplayName = $"{GlobalData.Strings.GetString("NewStationListBoxEntry")}"
+                DisplayName = Strings.NewStationListBoxEntry
             }
         };
         var trackedStation = new TrackableObject<Station>(station);
@@ -1150,7 +1160,9 @@ public partial class StationManager : IDisposable
         try
         {
             var files = FileHelper.SafeEnumerateFiles(directory, "*.*", SearchOption.AllDirectories).ToList();
-            var songDirFiles = !directory.Equals(songDirectory) ? FileHelper.SafeEnumerateFiles(songDirectory, "*.*", SearchOption.AllDirectories).ToList() : files;
+            var songDirFiles = !directory.Equals(songDirectory)
+                ? FileHelper.SafeEnumerateFiles(songDirectory, "*.*", SearchOption.AllDirectories).ToList()
+                : files;
 
             var metadata = files.Where(file => file.EndsWith("metadata.json")).Select(_metaDataJson.LoadJson)
                 .FirstOrDefault();
@@ -1177,7 +1189,6 @@ public partial class StationManager : IDisposable
             var station = new Station { MetaData = metadata, Songs = songList };
 
             if (iconFiles.Count > 0)
-            {
                 foreach (var icon in iconFiles)
                 {
                     var trackedIcon = new TrackableObject<WolvenIcon>(new WolvenIcon(string.Empty, icon));
@@ -1186,17 +1197,16 @@ public partial class StationManager : IDisposable
                     trackedIcon.AcceptChanges();
                     station.AddIcon(trackedIcon);
                 }
-            }
 
-            if (iconList.Count > 0 && iconFiles.Count <= 0) //we only want to add the icons if there are no .archive files in the directory (indicating an imported station)
-            {
+            if (iconList.Count > 0 &&
+                iconFiles.Count <=
+                0) //we only want to add the icons if there are no .archive files in the directory (indicating an imported station)
                 foreach (var icon in iconList)
                 {
                     var trackedIcon = new TrackableObject<WolvenIcon>(icon);
                     trackedIcon.AcceptChanges();
                     station.AddIcon(trackedIcon, icon.IsActive);
                 }
-            }
 
             var trackedStation = new TrackableObject<Station>(station);
 
@@ -1222,7 +1232,8 @@ public partial class StationManager : IDisposable
         try
         {
             var tempDir = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
-            var songDir = GlobalData.ConfigManager.Get("defaultSongLocation") as string ?? Environment.GetFolderPath(Environment.SpecialFolder.MyMusic);
+            var songDir = GlobalData.ConfigManager.Get("defaultSongLocation") as string ??
+                          Environment.GetFolderPath(Environment.SpecialFolder.MyMusic);
             songDir = Path.Combine(songDir, Path.GetFileNameWithoutExtension(filePath));
 
             Directory.CreateDirectory(tempDir);
@@ -1244,19 +1255,24 @@ public partial class StationManager : IDisposable
                 if (string.IsNullOrEmpty(entryFileName)) continue;
 
                 //If the file is a song file, extract it to the song directory, otherwise extract it to the temp directory
-                var fullPath = Path.Combine(Instance.ValidAudioExtensions.Contains(Path.GetExtension(entryFileName)) ? songDir : tempDir, Path.GetFileName(entryFileName));
+                var fullPath =
+                    Path.Combine(
+                        Instance.ValidAudioExtensions.Contains(Path.GetExtension(entryFileName)) ? songDir : tempDir,
+                        Path.GetFileName(entryFileName));
 
                 var directoryName = Path.GetDirectoryName(fullPath);
 
                 if (directoryName?.Length > 0)
                 {
                     Directory.CreateDirectory(directoryName);
-                    AuLogger.GetCurrentLogger<StationManager>("ExtractStationArchive").Info($"Created directory: {directoryName}");
+                    AuLogger.GetCurrentLogger<StationManager>("ExtractStationArchive")
+                        .Info($"Created directory: {directoryName}");
                 }
 
                 if (!Directory.Exists(directoryName))
                 {
-                    AuLogger.GetCurrentLogger<StationManager>("ExtractStationArchive").Error($"Directory does not exist after creation: {directoryName}");
+                    AuLogger.GetCurrentLogger<StationManager>("ExtractStationArchive")
+                        .Error($"Directory does not exist after creation: {directoryName}");
                     continue;
                 }
 
@@ -1266,11 +1282,13 @@ public partial class StationManager : IDisposable
                     using var entryStream = entry.OpenEntryStream();
                     using var outputStream = File.Create(fullPath);
                     entryStream.CopyTo(outputStream);
-                    AuLogger.GetCurrentLogger<StationManager>("ExtractStationArchive").Info($"Extracted file: {fullPath}");
+                    AuLogger.GetCurrentLogger<StationManager>("ExtractStationArchive")
+                        .Info($"Extracted file: {fullPath}");
                 }
                 catch (Exception ex)
                 {
-                    AuLogger.GetCurrentLogger<StationManager>("ExtractStationArchive").Error(ex, $"Failed to extract file: {fullPath}");
+                    AuLogger.GetCurrentLogger<StationManager>("ExtractStationArchive")
+                        .Error(ex, $"Failed to extract file: {fullPath}");
                 }
             }
 
@@ -1278,7 +1296,8 @@ public partial class StationManager : IDisposable
         }
         catch (Exception ex)
         {
-            AuLogger.GetCurrentLogger<StationManager>("ExtractStationArchive").Error(ex, "Error extracting station archive.");
+            AuLogger.GetCurrentLogger<StationManager>("ExtractStationArchive")
+                .Error(ex, "Error extracting station archive.");
             return (string.Empty, string.Empty);
         }
     }
@@ -1337,14 +1356,20 @@ public partial class StationManager : IDisposable
     /// <summary>
     /// Clear all protected folders from the list of folders that should not be deleted during station synchronization.
     /// </summary>
-    public void ClearProtectedFolders() => ProtectedStagingFolders.Clear();
+    public void ClearProtectedFolders()
+    {
+        ProtectedStagingFolders.Clear();
+    }
 
     /// <summary>
     /// Get a value indicating if the specified folder is protected from deletion during station synchronization.
     /// </summary>
     /// <param name="folder">The path to a folder.</param>
     /// <returns><c>true</c> if the folder is protected. <c>false</c>, otherwise.</returns>
-    public bool IsProtectedFolder(string folder) => ProtectedStagingFolders.Contains(folder);
+    public bool IsProtectedFolder(string folder)
+    {
+        return ProtectedStagingFolders.Contains(folder);
+    }
 
 
     #region Events
@@ -1412,8 +1437,7 @@ public partial class StationManager : IDisposable
     /// <summary>
     /// The format string for the station count.
     /// </summary>
-    private static string StationCountFormat =>
-        GlobalData.Strings.GetString("EnabledStationsCount") ?? "Enabled Stations: {0} / {1}";
+    private static string StationCountFormat => Strings.EnabledStationsCount;
 
     #endregion
 
@@ -1478,8 +1502,9 @@ public partial class StationManager : IDisposable
     /// <summary>
     /// Get a list of valid archive file extensions for station icons.
     /// </summary>
-    public string?[] ValidArchiveExtensions { get; } = EnumHelper<ValidArchiveFiles>.GetEnumDescriptions() as string[] ??
-                                                       EnumHelper<ValidArchiveFiles>.GetEnumDescriptions().ToArray();
+    public string?[] ValidArchiveExtensions { get; } =
+        EnumHelper<ValidArchiveFiles>.GetEnumDescriptions() as string[] ??
+        EnumHelper<ValidArchiveFiles>.GetEnumDescriptions().ToArray();
 
     /// <summary>
     /// Get a list of valid image file extensions for station icons.
@@ -1490,8 +1515,7 @@ public partial class StationManager : IDisposable
     /// <summary>
     /// The current list of stations managed by the manager as a binding list. Auto-updates when stations are added or removed.
     /// </summary>
-    public BindingList<TrackableObject<Station>> StationsAsBindingList { get; } =
-        [];
+    public BindingList<TrackableObject<Station>> StationsAsBindingList { get; } = [];
 
     /// <summary>
     /// The current list of stations managed by the manager as a list.

@@ -14,8 +14,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-using AetherUtils.Core.Files;
 using System.Collections.Concurrent;
+using AetherUtils.Core.Files;
 
 namespace RadioExt_Helper.utility;
 
@@ -43,7 +43,8 @@ public class DirectoryWatcher
             throw new ArgumentNullException(nameof(watchPath));
 
         if (!FileHelper.DoesFolderExist(watchPath))
-            throw new ArgumentException($"Directory '{watchPath}' does not exist", nameof(watchPath));
+            throw new ArgumentException(string.Format(Strings.DirectoryWatcher_DirectoryNotExists, watchPath),
+                nameof(watchPath));
 
         _watcher = new FileSystemWatcher(watchPath)
         {

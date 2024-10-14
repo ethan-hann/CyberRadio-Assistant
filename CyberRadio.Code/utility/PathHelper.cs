@@ -15,6 +15,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 using System.Security.AccessControl;
+using System.Security.Cryptography;
 using AetherUtils.Core.Files;
 using AetherUtils.Core.Logging;
 using RadioExt_Helper.Properties;
@@ -23,13 +24,12 @@ using SharpCompress.Archives.Zip;
 using SharpCompress.Common;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
-using System.Security.Cryptography;
 using Image = SixLabors.ImageSharp.Image;
 
 namespace RadioExt_Helper.utility;
 
 /// <summary>
-///     Helper class to get the various paths associated with the game.
+///     Helper class to get the various paths associated with the game and provides some helper methods for working with paths.
 /// </summary>
 public static class PathHelper
 {
@@ -42,8 +42,8 @@ public static class PathHelper
     {
         OpenFileDialog dialog = new()
         {
-            Filter = @"Game Executable|Cyberpunk2077.exe",
-            Title = GlobalData.Strings.GetString("Open") ?? "Open Game Executable"
+            Filter = Strings.GamePathFilter + @"|Cyberpunk2077.exe",
+            Title = Strings.OpenGameExecutable
         };
 
         try
@@ -56,7 +56,7 @@ public static class PathHelper
                 if (dialog.FileName.Contains("Cyberpunk2077"))
                     gamePath = dialog.FileName;
                 else
-                    MessageBox.Show(GlobalData.Strings.GetString("NonCyberpunkExe"));
+                    MessageBox.Show(Strings.NonCyberpunkExe);
             } while (gamePath.Equals(string.Empty) && shouldLoop);
 
             var name = Directory.GetParent(gamePath)?.FullName;
@@ -89,7 +89,7 @@ public static class PathHelper
     {
         FolderBrowserDialog dialog = new()
         {
-            Description = GlobalData.Strings.GetString("StagingPathHelp") ?? "Select the radio station staging path.",
+            Description = Strings.StagingPathHelp,
             UseDescriptionForTitle = true
         };
 
@@ -158,7 +158,9 @@ public static class PathHelper
                 return false;
 
             // Get the full paths
-            var fullBasePath = Path.GetFullPath(basePath).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar) + Path.DirectorySeparatorChar;
+            var fullBasePath =
+                Path.GetFullPath(basePath).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar) +
+                Path.DirectorySeparatorChar;
             var fullSubPath = Path.GetFullPath(subPath);
 
             // Check if the fullSubPath starts with fullBasePath
@@ -191,11 +193,9 @@ public static class PathHelper
             var relativeUri = stagingUri.MakeRelativeUri(fullUri);
             var relativePath = Uri.UnescapeDataString(relativeUri.ToString());
 
-            if (string.IsNullOrEmpty(relativePath))
-                return fullPath;
-
-            // Replace forward slashes with backslashes for Windows paths
-            return relativePath.Replace('/', '\\');
+            return string.IsNullOrEmpty(relativePath)
+                ? fullPath
+                : relativePath.Replace('/', '\\'); // Replace forward slashes with backslashes for Windows paths
         }
         catch (Exception ex)
         {
@@ -247,7 +247,7 @@ public static class PathHelper
     {
         try
         {
-            foreach (var c in Path.GetInvalidPathChars()) path = path.Replace(c, '_');
+            path = Path.GetInvalidPathChars().Aggregate(path, (current, c) => current.Replace(c, '_'));
             path = path.Replace("'", "_"); // Replace specific characters causing issues
             return path;
         }
@@ -363,21 +363,20 @@ public static class PathHelper
 
         await Task.Run(() =>
         {
-            using (var archive = ZipArchive.Open(zipFilePath))
+            using var archive = ZipArchive.Open(zipFilePath);
+
+            foreach (var entry in archive.Entries.Where(entry => !entry.IsDirectory))
             {
-                foreach (var entry in archive.Entries.Where(entry => !entry.IsDirectory))
-                {
-                    var entryKey = entry.Key;
-                    if (string.IsNullOrEmpty(entryKey)) continue;
+                var entryKey = entry.Key;
+                if (string.IsNullOrEmpty(entryKey)) continue;
 
-                    var destinationPath = Path.Combine(destinationDirectory, entryKey);
-                    var destinationDir = Path.GetDirectoryName(destinationPath);
+                var destinationPath = Path.Combine(destinationDirectory, entryKey);
+                var destinationDir = Path.GetDirectoryName(destinationPath);
 
-                    if (string.IsNullOrEmpty(destinationDir)) continue;
+                if (string.IsNullOrEmpty(destinationDir)) continue;
 
-                    Directory.CreateDirectory(destinationDir);
-                    entry.WriteToFile(destinationPath, new ExtractionOptions() { ExtractFullPath = true, Overwrite = true });
-                }
+                Directory.CreateDirectory(destinationDir);
+                entry.WriteToFile(destinationPath, new ExtractionOptions { ExtractFullPath = true, Overwrite = true });
             }
         });
     }
@@ -399,21 +398,21 @@ public static class PathHelper
 
                 // Delete all subdirectories and their contents
                 foreach (var directory in FileHelper.SafeEnumerateDirectories(directoryPath))
-                {
                     if (StationManager.Instance.IsProtectedFolder(directory))
                         ClearDirectory(directory); //recurse down until we no longer have protected folders.
                     else
                         Directory.Delete(directory, true);
-                }
             }
             else
             {
-                AuLogger.GetCurrentLogger("PathHelper.ClearDirectory").Warn($"The directory to clear did not exist: {directoryPath}");
+                AuLogger.GetCurrentLogger("PathHelper.ClearDirectory")
+                    .Warn($"The directory to clear did not exist: {directoryPath}");
             }
         }
         catch (Exception ex)
         {
-            AuLogger.GetCurrentLogger("PathHelper.ClearDirectory").Error(ex, "An error occured while clearing the directory.");
+            AuLogger.GetCurrentLogger("PathHelper.ClearDirectory")
+                .Error(ex, "An error occured while clearing the directory.");
         }
     }
 

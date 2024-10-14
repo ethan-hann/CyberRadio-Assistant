@@ -47,17 +47,13 @@ public partial class AboutBox : Form
     /// </summary>
     private void Translate()
     {
-        Text = string.Concat(GlobalData.Strings.GetString("About") ?? "About", " - ",
-            string.Format(GlobalData.Strings.GetString("AboutVersion") ?? "Version {0}", GlobalData.AppVersion));
-
-        lblAppName.Text = GlobalData.Strings.GetString("MainTitle") ?? "Cyber Radio Assistant";
-        lblAboutInfo.Text = GlobalData.Strings.GetString("AboutInfo") ??
-                            "A tool to help create and manage custom radio stations " +
-                            "in Cyberpunk 2077 when using the radioExt Mod.";
-        lblSpecialThanks1.Text = GlobalData.Strings.GetString("AboutSpecialThanks1") ?? "Special thanks to";
-        lblSpecialThanks2.Text = GlobalData.Strings.GetString("AboutSpecialThanks2") ?? "for the awesome radioExt mod!";
-        lnkGithubRepo.Text = GlobalData.Strings.GetString("AboutGithubRepo") ?? "Github Repo";
-        lnkLicense.Text = GlobalData.Strings.GetString("AboutLicense") ?? "License";
+        Text = string.Concat(Strings.About, " - ", string.Format(Strings.AboutVersion, GlobalData.AppVersion));
+        lblAppName.Text = Strings.MainTitle;
+        lblAboutInfo.Text = Strings.AboutInfo;
+        lblSpecialThanks1.Text = Strings.AboutSpecialThanks1;
+        lblSpecialThanks2.Text = Strings.AboutSpecialThanks2;
+        lnkGithubRepo.Text = Strings.AboutGithubRepo;
+        lnkLicense.Text = Strings.AboutLicense;
     }
 
     private void LnkRadioExtDev_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

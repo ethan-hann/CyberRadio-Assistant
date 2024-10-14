@@ -14,10 +14,10 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+using System.Reflection;
 using AetherUtils.Core.Logging;
 using RadioExt_Helper.migration;
 using RadioExt_Helper.utility;
-using System.Reflection;
 using WIG.Lib.Utility;
 
 namespace RadioExt_Helper.forms;
@@ -46,7 +46,7 @@ public partial class SplashScreen : Form
     /// <param name="e">The event arguments.</param>
     private async void SplashScreen_Load(object sender, EventArgs e)
     {
-        UpdateStatus(GlobalData.Strings.GetString("SplashScreen_Starting") ?? "Starting...");
+        UpdateStatus(Strings.SplashScreen_Starting);
         var statusMessages = await PerformBackgroundTasks();
         statusMessages.ForEach(msg =>
         {
@@ -66,53 +66,51 @@ public partial class SplashScreen : Form
     {
         var statusMessages = new List<string>();
 
-        // Migrate settings
-        UpdateStatus(GlobalData.Strings.GetString("SplashScreen_CheckingSettings") ?? "Checking settings...");
+        // Migrate settings (if needed)
+        UpdateStatus(Strings.SplashScreen_CheckingSettings);
 
-        await Task.Delay(600); // Simulate delay
+        await Task.Delay(300);
         var config = MigrationHelper.MigrateSettings();
         if (config != null)
         {
             GlobalData.ConfigManager.SetConfig(config);
             await GlobalData.ConfigManager.SaveAsync();
 
-            UpdateStatus(GlobalData.Strings.GetString("SplashScreen_MigratedSettings") ??
-                         "Settings migrated successfully.");
-            await Task.Delay(600);
+            UpdateStatus(Strings.SplashScreen_MigratedSettings);
+            await Task.Delay(300);
             statusMessages.Add("Settings migrated successfully.");
         }
         else
         {
-            UpdateStatus(GlobalData.Strings.GetString("SplashScreen_MigratedSettingsNo") ??
-                         "Settings migration not needed.");
-            await Task.Delay(600);
+            UpdateStatus(Strings.SplashScreen_MigratedSettingsNo);
+            await Task.Delay(300);
             statusMessages.Add("Settings migration not needed.");
         }
 
-        // Simulate delay before starting song migration
-        UpdateStatus(GlobalData.Strings.GetString("SplashScreen_CheckingSongs") ?? "Checking song formats...");
-        await Task.Delay(600);
+        // Migrate songs (if needed)
+        UpdateStatus(Strings.SplashScreen_CheckingSongs);
+        await Task.Delay(300);
 
         var stagingPath = GlobalData.ConfigManager.Get("stagingPath") as string ?? string.Empty;
         var songMigrationStatus = MigrationHelper.MigrateSongs(stagingPath);
         statusMessages.AddRange(songMigrationStatus);
 
-        // Check for updates if needed
+        // Check for updates (if needed)
         if (GlobalData.ConfigManager.Get("autoCheckForUpdates") as bool? ?? true)
         {
-            UpdateStatus(GlobalData.Strings.GetString("SplashScreen_UpdateCheck") ?? "Checking for updates...");
+            UpdateStatus(Strings.SplashScreen_UpdateCheck);
             await Task.Run(Updater.CheckForUpdates);
         }
         else
         {
-            UpdateStatus(GlobalData.Strings.GetString("SplashScreen_UpdateCheckNo") ?? "Skipping check for updates...");
-            await Task.Delay(500); // Simulate delay
+            UpdateStatus(Strings.SplashScreen_UpdateCheckNo);
+            await Task.Delay(300);
         }
 
         //Setup Icon Manager
-        UpdateStatus(GlobalData.Strings.GetString("SplashScreen_SetupIconManager") ?? "Setting up Icon Manager...");
+        UpdateStatus(Strings.SplashScreen_SetupIconManager);
         await IconManager.Instance.InitializeAsync();
-        await Task.Delay(500); // Simulate delay
+        await Task.Delay(200);
         statusMessages.Add(IconManager.Instance.IsInitialized
             ? "Icon Manager initialized successfully."
             : "Icon Manager initialization failed.");
@@ -121,7 +119,7 @@ public partial class SplashScreen : Form
         //var nexusApiKey = GlobalData.ConfigManager.Get("nexusApiKey") as string ?? string.Empty;
         //if (!nexusApiKey.Equals(string.Empty))
         //{
-        //    UpdateStatus(GlobalData.Strings.GetString("SplashScreen_CheckApiAccess") ?? "Checking Nexus API Key...");
+        //    UpdateStatus(Strings.SplashScreen_CheckApiAccess ?? "Checking Nexus API Key...");
         //    await NexusApi.AuthenticateApiKey(nexusApiKey);
         //    statusMessages.Add(NexusApi.IsAuthenticated
         //        ? "Nexus API key authenticated successfully."
@@ -130,9 +128,8 @@ public partial class SplashScreen : Form
         //}
         //------------------------------------------------------------------------------------------------------------
 
-        // Simulate delay before finalizing
-        UpdateStatus(GlobalData.Strings.GetString("SplashScreen_Finalizing") ?? "Finalizing...");
-        await Task.Delay(1000);
+        UpdateStatus(Strings.SplashScreen_Finalizing ?? "Finalizing...");
+        await Task.Delay(500);
 
         return statusMessages;
     }
@@ -144,7 +141,7 @@ public partial class SplashScreen : Form
     public void UpdateStatus(string message)
     {
         if (InvokeRequired)
-            Invoke(new Action<string>(UpdateStatus), [message]);
+            Invoke(new Action<string>(UpdateStatus), message);
         else
             lblSplashStatus.Text = message;
     }
@@ -156,7 +153,7 @@ public partial class SplashScreen : Form
     private void SetVersionLabel(Version? version)
     {
         if (InvokeRequired)
-            Invoke(new Action<Version?>(SetVersionLabel), [version]);
+            Invoke(new Action<Version?>(SetVersionLabel), version);
         else
             lblVersion.Text =
                 version != null ? @$"{version.Major}.{version.Minor}.{version.Build}" : @"Version Unknown";

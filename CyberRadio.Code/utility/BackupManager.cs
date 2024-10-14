@@ -14,10 +14,10 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-using AetherUtils.Core.Files;
-using AetherUtils.Core.Logging;
 using System.IO.Compression;
 using System.Text;
+using AetherUtils.Core.Files;
+using AetherUtils.Core.Logging;
 
 namespace RadioExt_Helper.utility;
 
@@ -167,7 +167,7 @@ public class BackupManager(CompressionLevel level)
         if (stagingPath.Equals(backupPath))
             throw new ArgumentException("Backup path cannot be the same as the staging path.");
 
-        var backupFileName = Path.Combine(backupPath, $"radio_stations-{DateTime.Now:yy-MM-dd-hh-mm-ss}.zip");
+        var backupFileName = Path.Combine(backupPath, $"cra_stations-{DateTime.Now:yy-MM-dd-hh-mm-ss}.zip");
 
         if (_isCancelling) return;
 
@@ -195,7 +195,8 @@ public class BackupManager(CompressionLevel level)
                         if (file.EndsWith("metadata.json", StringComparison.OrdinalIgnoreCase) ||
                             file.EndsWith("songs.sgls", StringComparison.OrdinalIgnoreCase))
                         {
-                            var stationFolder = Path.GetDirectoryName(file)?.Replace(stagingPath, "").TrimStart(Path.DirectorySeparatorChar);
+                            var stationFolder = Path.GetDirectoryName(file)?.Replace(stagingPath, "")
+                                .TrimStart(Path.DirectorySeparatorChar);
                             entryName = Path.Combine(stationFolder ?? string.Empty, Path.GetFileName(file));
                         }
                         else if (file.EndsWith(".archive", StringComparison.OrdinalIgnoreCase))
@@ -214,23 +215,21 @@ public class BackupManager(CompressionLevel level)
                     }
 
                     entryName = PathHelper.SanitizePath(entryName);
-                    zipArchive.CreateEntryFromFile(file, entryName, System.IO.Compression.CompressionLevel.SmallestSize);
+                    zipArchive.CreateEntryFromFile(file, entryName,
+                        System.IO.Compression.CompressionLevel.SmallestSize);
 
                     fileCount++;
                     var progress = (int)((float)fileCount / files.Length * 100);
                     ProgressChanged?.Invoke(progress);
 
-                    var status = string.Format(GlobalData.Strings.GetString("BackupProgressChanged") ?? "Backing up... {0}%", progress);
+                    var status = string.Format(Strings.BackupProgressChanged, progress);
                     StatusChanged?.Invoke(status);
                 }
 
                 if (songPathMappings.Count > 0)
                 {
                     var songPathsContent = new StringBuilder();
-                    foreach (var kvp in songPathMappings)
-                    {
-                        songPathsContent.AppendLine($"{kvp.Key}|{kvp.Value}");
-                    }
+                    foreach (var kvp in songPathMappings) songPathsContent.AppendLine($"{kvp.Key}|{kvp.Value}");
 
                     var songPathsBytes = Encoding.UTF8.GetBytes(songPathsContent.ToString());
                     var songPathsEntry = zipArchive.CreateEntry("externalPaths.txt");
@@ -242,7 +241,7 @@ public class BackupManager(CompressionLevel level)
 
             if (File.Exists(backupFileName))
             {
-                var status = GlobalData.Strings.GetString("BackupCompleted") ?? "Backup completed successfully.";
+                var status = Strings.BackupCompleted;
                 if (_isCancelling) return;
                 StatusChanged?.Invoke(status);
 
@@ -251,7 +250,7 @@ public class BackupManager(CompressionLevel level)
             }
             else
             {
-                var status = GlobalData.Strings.GetString("BackupFailed") ?? "Backup failed.";
+                var status = Strings.BackupFailed;
                 if (_isCancelling) return;
                 StatusChanged?.Invoke(status);
 
@@ -261,7 +260,7 @@ public class BackupManager(CompressionLevel level)
         }
         catch (Exception ex)
         {
-            var status = string.Format(GlobalData.Strings.GetString("BackupFailedException") ?? "Backup failed due to an error: {0}", ex.Message);
+            var status = string.Format(Strings.BackupFailedException, ex.Message);
 
             if (_isCancelling) return;
             StatusChanged?.Invoke(status);
@@ -282,7 +281,8 @@ public class BackupManager(CompressionLevel level)
     public async Task GetRestorePreviewAsync(string backupFilePath)
     {
         if (string.IsNullOrEmpty(backupFilePath)) throw new ArgumentNullException(nameof(backupFilePath));
-        if (!File.Exists(backupFilePath)) throw new FileNotFoundException("Backup file not found.", backupFilePath);
+        if (!File.Exists(backupFilePath))
+            throw new FileNotFoundException("Backup file not found.", backupFilePath);
 
         var previews = new List<FilePreview>();
         var totalSize = 0L;
@@ -310,7 +310,7 @@ public class BackupManager(CompressionLevel level)
                 var progress = (int)((float)previews.Count / zipArchive.Entries.Count * 100);
                 PreviewProgressChanged?.Invoke(progress);
                 PreviewStatusChanged?.Invoke((preview, totalSize));
-                StatusChanged?.Invoke($"Loading... {progress}%");
+                StatusChanged?.Invoke(string.Format(Strings.RestoreBackupLoadingPreview, progress));
 
                 if (_isCancelling) return;
             }
@@ -326,7 +326,8 @@ public class BackupManager(CompressionLevel level)
     /// <param name="restorePath">The path to the directory the .zip file should be restored to.</param>
     /// <returns>A task representing the restore operation.</returns>
     public async Task RestoreBackupAsync(string backupFilePath, string restorePath)
-    { //TODO: translations
+    {
+        //TODO: translations
         if (string.IsNullOrEmpty(backupFilePath)) throw new ArgumentNullException(nameof(backupFilePath));
         if (string.IsNullOrEmpty(restorePath)) throw new ArgumentNullException(nameof(restorePath));
         if (!File.Exists(backupFilePath)) throw new FileNotFoundException("Backup file not found.", backupFilePath);
@@ -361,11 +362,9 @@ public class BackupManager(CompressionLevel level)
                             var line = reader.ReadLine();
                             if (line == null) continue;
                             var parts = line.Split('|');
-                            if (parts.Length == 2)
-                            {
-                                externalSongMappings[parts[0]] = parts[1];
-                            }
+                            if (parts.Length == 2) externalSongMappings[parts[0]] = parts[1];
                         }
+
                         continue;
                     }
 
@@ -378,7 +377,7 @@ public class BackupManager(CompressionLevel level)
 
                     var progress = (int)((float)zipArchive.Entries.Count / zipArchive.Entries.Count * 100);
                     ProgressChanged?.Invoke(progress);
-                    var status = string.Format(GlobalData.Strings.GetString("RestoreProgressChanged") ?? "Restoring file: {0}", entryName);
+                    var status = string.Format(Strings.RestoreProgressChanged, entryName);
                     StatusChanged?.Invoke(status);
 
                     entry.ExtractToFile(destinationPath, true);
@@ -398,14 +397,13 @@ public class BackupManager(CompressionLevel level)
 
                     var progress = (int)((float)externalSongMappings.Count / externalSongMappings.Count * 100);
                     ProgressChanged?.Invoke(progress);
-                    var status = $"Restoring song: {songFileName}...";
-                    StatusChanged?.Invoke(status);
+                    StatusChanged?.Invoke(string.Format(Strings.RestoreSongProgressChanged, songFileName));
 
                     entry.ExtractToFile(destinationPath, true);
                 }
             });
 
-            var status = GlobalData.Strings.GetString("RestoreCompleted") ?? "Restore completed successfully.";
+            var status = Strings.RestoreCompleted;
             if (_isCancelling) return;
             StatusChanged?.Invoke(status);
 
@@ -414,7 +412,7 @@ public class BackupManager(CompressionLevel level)
         }
         catch (Exception ex)
         {
-            var status = string.Format(GlobalData.Strings.GetString("RestoreFailedException") ?? "Restore failed due to an error: {0}", ex.Message);
+            var status = string.Format(Strings.RestoreFailedException, ex.Message);
 
             if (_isCancelling) return;
             StatusChanged?.Invoke(status);
@@ -432,7 +430,6 @@ public class BackupManager(CompressionLevel level)
         StationManager.Instance.StationsAsList.ForEach(station =>
         {
             if (station.TrackedObject.Songs.Count > 0)
-            {
                 station.TrackedObject.Songs.ForEach(song =>
                 {
                     if (string.IsNullOrEmpty(song.FilePath)) return;
@@ -440,7 +437,6 @@ public class BackupManager(CompressionLevel level)
                     if (File.Exists(song.FilePath))
                         files.Add(song.FilePath);
                 });
-            }
         });
 
         return [.. files];
@@ -456,11 +452,13 @@ public class BackupManager(CompressionLevel level)
         try
         {
             return FileHelper.SafeEnumerateFiles(stagingPath, "*.*", SearchOption.AllDirectories)
-                .Where(file => !StationManager.Instance.ValidAudioExtensions.Contains(Path.GetExtension(file))).ToArray();
+                .Where(file => !StationManager.Instance.ValidAudioExtensions.Contains(Path.GetExtension(file)))
+                .ToArray();
         }
         catch (Exception ex)
         {
-            AuLogger.GetCurrentLogger<BackupManager>("GetFilesOnly").Error(ex, "Failed to get files from staging folder.");
+            AuLogger.GetCurrentLogger<BackupManager>("GetFilesOnly")
+                .Error(ex, "Failed to get files from staging folder.");
             return [];
         }
     }

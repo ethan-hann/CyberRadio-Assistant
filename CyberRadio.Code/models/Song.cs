@@ -14,9 +14,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+using System.Diagnostics.CodeAnalysis;
 using AetherUtils.Core.Logging;
 using Newtonsoft.Json;
-using System.Diagnostics.CodeAnalysis;
 using File = TagLib.File;
 
 namespace RadioExt_Helper.models;
@@ -91,8 +91,7 @@ public sealed class Song : IEquatable<Song>, ICloneable
         }
         catch (Exception ex)
         {
-            AuLogger.GetCurrentLogger<Song>("FromFile")
-                .Error(ex, $"Couldn't read song file: {filePath}");
+            AuLogger.GetCurrentLogger<Song>("FromFile").Error(ex, $"Couldn't read song file: {filePath}");
             return null;
         }
     }

@@ -20,7 +20,7 @@ using RadioExt_Helper.nexus_api;
 namespace RadioExt_Helper.user_controls;
 
 //Eventual goal is to have this user control display the details of a mod
-public sealed partial class ModDetails : UserControl
+public sealed partial class ModDetails : UserControl, IUserControl
 {
     private Mod? _mod;
     private bool _modDetailsInitialized;
@@ -36,6 +36,11 @@ public sealed partial class ModDetails : UserControl
 
         InitializeComponent();
         Dock = DockStyle.Fill;
+    }
+
+    public void Translate()
+    {
+        //TODO: Translate the strings for the mod details control once API is implemented
     }
 
     private void ModDetails_Load(object sender, EventArgs e)

@@ -14,8 +14,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-using Newtonsoft.Json;
 using System.ComponentModel;
+using Newtonsoft.Json;
 
 namespace RadioExt_Helper.models;
 
@@ -25,9 +25,7 @@ namespace RadioExt_Helper.models;
 public sealed class CustomIcon : INotifyPropertyChanged, ICloneable, IEquatable<CustomIcon>
 {
     private string _inkAtlasPart = "custom_texture_part";
-
     private string _inkAtlasPath = "path\\to\\custom\\atlas.inkatlas";
-
     private bool _useCustom;
 
     /// <summary>

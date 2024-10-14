@@ -14,11 +14,11 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-using AetherUtils.Core.Logging;
-using RadioExt_Helper.utility;
 using System.Collections;
 using System.ComponentModel;
 using System.Reflection;
+using AetherUtils.Core.Logging;
+using RadioExt_Helper.utility;
 
 namespace RadioExt_Helper.models;
 
@@ -34,7 +34,8 @@ namespace RadioExt_Helper.models;
 ///     </para>
 /// </summary>
 /// <typeparam name="T">The type of the object being tracked.</typeparam>
-public sealed class TrackableObject<T> : INotifyPropertyChanged, ITrackable where T : class, INotifyPropertyChanged, new()
+public sealed class TrackableObject<T> : INotifyPropertyChanged, ITrackable
+    where T : class, INotifyPropertyChanged, new()
 {
     private readonly Dictionary<string, object?> _originalValues = [];
     private bool _isPendingSave;
@@ -58,21 +59,6 @@ public sealed class TrackableObject<T> : INotifyPropertyChanged, ITrackable wher
     public Guid Id { get; } = Guid.NewGuid();
 
     /// <summary>
-    ///     Gets a value indicating whether the object has pending changes.
-    /// </summary>
-    public bool IsPendingSave
-    {
-        get => _isPendingSave;
-        private set
-        {
-            if (_isPendingSave == value) return;
-
-            _isPendingSave = value;
-            OnPropertyChanged(nameof(IsPendingSave));
-        }
-    }
-
-    /// <summary>
     ///     Gets the tracked object.
     /// </summary>
     public T TrackedObject
@@ -90,108 +76,18 @@ public sealed class TrackableObject<T> : INotifyPropertyChanged, ITrackable wher
     public event PropertyChangedEventHandler? PropertyChanged;
 
     /// <summary>
-    ///     Raises the <see cref="PropertyChanged" /> event.
+    ///     Gets a value indicating whether the object has pending changes.
     /// </summary>
-    /// <param name="propertyName">The name of the property that changed.</param>
-    private void OnPropertyChanged(string propertyName)
+    public bool IsPendingSave
     {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-    }
-
-    /// <summary>
-    ///     Initializes the original values dictionary with the current property values of the tracked object.
-    /// </summary>
-    private void InitializeOriginalValues()
-    {
-        if (_originalValuesInitialized) return; // Prevent multiple initializations
-
-        foreach (var prop in typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance))
+        get => _isPendingSave;
+        private set
         {
-            if (!prop.CanRead)
-            {
-                continue;
-            }
+            if (_isPendingSave == value) return;
 
-            try
-            {
-                var value = prop.GetValue(_trackedObject);
-
-                // Handle collections of trackable objects (similar to DeepClone and DeepEquals)
-                if (value is IEnumerable enumerable)
-                {
-                    var isTrackable = enumerable.Cast<object>().Any(item => item is ITrackable);
-                    if (isTrackable)
-                    {
-                        // Ensure each trackable object in the collection is initialized
-                        foreach (var item in enumerable)
-                        {
-                            if (item is ITrackable trackableItem)
-                            {
-                                trackableItem.AcceptChanges(); // Initialize original values for trackable items
-                            }
-                        }
-                    }
-                }
-
-                // Deep clone the current value and store it as the original value
-                _originalValues[prop.Name] = DeepClone(value);
-            }
-            catch (Exception ex)
-            {
-                AuLogger.GetCurrentLogger<TrackableObject<T>>().Error(ex, $"Error initializing property {prop.Name}: {ex.Message}");
-            }
+            _isPendingSave = value;
+            OnPropertyChanged(nameof(IsPendingSave));
         }
-
-        IsPendingSave = false;
-        _originalValuesInitialized = true;
-    }
-
-    /// <summary>
-    /// Deep clones an object, handling collections and other types appropriately.
-    /// </summary>
-    /// <param name="obj">The object to clone.</param>
-    /// <returns>A deep clone of the object.</returns>
-    private static object? DeepClone(object? obj)
-    {
-        if (obj == null) return null;
-
-        switch (obj)
-        {
-            case ICloneable cloneable:
-                return cloneable.Clone();
-
-            case IEnumerable enumerable when obj.GetType().IsGenericType:
-                {
-                    var listType = typeof(List<>).MakeGenericType(obj.GetType().GetGenericArguments().First());
-                    var list = Activator.CreateInstance(listType) as IList;
-                    foreach (var item in enumerable)
-                    {
-                        // Deep clone each item, ensuring TrackableObjects are cloned correctly
-                        list?.Add(DeepClone(item));
-                    }
-                    return list;
-                }
-
-            default:
-                return obj;  // Return the object as-is if it's not cloneable or enumerable
-        }
-    }
-
-    /// <summary>
-    /// Deeply compares two objects, handling collections appropriately.
-    /// </summary>
-    /// <param name="obj1">First object.</param>
-    /// <param name="obj2">Second object.</param>
-    /// <returns>True if objects are equal, false otherwise.</returns>
-    private static bool DeepEquals(object? obj1, object? obj2)
-    {
-        if (ReferenceEquals(obj1, obj2)) return true;
-        if (obj1 == null || obj2 == null) return false;
-
-        if (obj1 is IEnumerable enumerable1 && obj2 is IEnumerable enumerable2)
-            return enumerable1.Cast<object>().SequenceEqual(enumerable2.Cast<object>());
-
-        return obj1.Equals(obj2);
     }
 
     /// <summary>
@@ -209,16 +105,13 @@ public sealed class TrackableObject<T> : INotifyPropertyChanged, ITrackable wher
             // Handle only TrackableObject lists of type ITrackable
             if (value is IEnumerable enumerable)
             {
-                var isTrackable = enumerable.Cast<object>().Any(item => item is ITrackable);
+                var items = enumerable.Cast<object>().ToList();
+                var isTrackable = items.Any(item => item is ITrackable);
                 if (isTrackable)
                 {
-                    foreach (var item in enumerable)
-                    {
+                    foreach (var item in items)
                         if (item is ITrackable trackableItem)
-                        {
-                            trackableItem.AcceptChanges();  // Accept changes for each TrackableObject
-                        }
-                    }
+                            trackableItem.AcceptChanges(); // Accept changes for each TrackableObject
                 }
                 else
                 {
@@ -241,26 +134,19 @@ public sealed class TrackableObject<T> : INotifyPropertyChanged, ITrackable wher
     /// </summary>
     public void DeclineChanges()
     {
-        foreach (var kvp in _originalValues)
+        foreach (var (key, originalValue) in _originalValues)
         {
-            var prop = typeof(T).GetProperty(kvp.Key);
+            var prop = typeof(T).GetProperty(key);
             if (prop == null || !prop.CanWrite) continue;
-
-            var originalValue = kvp.Value;
 
             if (originalValue is IEnumerable enumerable)
             {
-                var isTrackable = enumerable.Cast<object>().Any(item => item is ITrackable);
+                var items = enumerable.Cast<object>().ToList();
+                var isTrackable = items.Any(item => item is ITrackable);
                 if (isTrackable)
-                {
-                    foreach (var item in enumerable)
-                    {
+                    foreach (var item in items)
                         if (item is ITrackable trackableItem)
-                        {
-                            trackableItem.DeclineChanges();  // Revert changes for each TrackableObject
-                        }
-                    }
-                }
+                            trackableItem.DeclineChanges(); // Revert changes for each TrackableObject
 
                 // Restore the deep-cloned enumerable object (the original list of trackable objects)
                 prop.SetValue(TrackedObject, DeepClone(originalValue));
@@ -272,11 +158,6 @@ public sealed class TrackableObject<T> : INotifyPropertyChanged, ITrackable wher
         }
 
         IsPendingSave = false;
-        CheckPendingSaveStatus();
-    }
-
-    private void OnTrackedObjectPropertyChanged(object? sender, PropertyChangedEventArgs e)
-    {
         CheckPendingSaveStatus();
     }
 
@@ -295,45 +176,143 @@ public sealed class TrackableObject<T> : INotifyPropertyChanged, ITrackable wher
             // If the property is a collection, check if any items are trackable and have pending changes
             if (currentValue is IEnumerable enumerable)
             {
-                var isTrackable = enumerable.Cast<object>().Any(item => item is ITrackable);
+                var items = enumerable.Cast<object>().ToList();
+                var isTrackable = items.Any(item => item is ITrackable);
                 if (isTrackable)
                 {
-                    foreach (var item in enumerable)
+                    foreach (var item in items)
                     {
-                        if (item is ITrackable trackableItem)
-                        {
-                            //Recursive call to check pending save status on each TrackableObject in the list
-                            if (trackableItem.CheckPendingSaveStatus())
-                            {
-                                isPendingSave = true;
-                                break;
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    // Otherwise, compare the property value to the original value
-                    if (!DeepEquals(currentValue, kvp.Value))
-                    {
+                        if (item is not ITrackable trackableItem) continue;
+
+                        //Recursive call to check pending save status on each TrackableObject in the list
+                        if (!trackableItem.CheckPendingSaveStatus()) continue;
+
                         isPendingSave = true;
                         break;
                     }
                 }
-            }
-            else
-            {
-                // Otherwise, compare the property value to the original value
-                if (!DeepEquals(currentValue, kvp.Value))
+                else
                 {
+                    // If not a trackable object, compare the property value to the original value
+                    if (DeepEquals(currentValue, kvp.Value)) continue;
+
                     isPendingSave = true;
                     break;
                 }
+            }
+            else
+            {
+                // If not an enumerable, compare the property value to the original value
+                if (DeepEquals(currentValue, kvp.Value)) continue;
+
+                isPendingSave = true;
+                break;
             }
         }
 
         IsPendingSave = isPendingSave;
         return isPendingSave;
+    }
+
+    /// <summary>
+    ///     Raises the <see cref="PropertyChanged" /> event.
+    /// </summary>
+    /// <param name="propertyName">The name of the property that changed.</param>
+    private void OnPropertyChanged(string propertyName)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+
+    /// <summary>
+    ///     Initializes the original values dictionary with the current property values of the tracked object.
+    /// </summary>
+    private void InitializeOriginalValues()
+    {
+        if (_originalValuesInitialized) return; // Prevent multiple initializations of original values
+
+        foreach (var prop in typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance))
+        {
+            if (!prop.CanRead) continue;
+
+            try
+            {
+                var value = prop.GetValue(_trackedObject);
+
+                // Handle collections of trackable objects (similar to DeepClone and DeepEquals)
+                if (value is IEnumerable enumerable)
+                {
+                    var items = enumerable.Cast<object>().ToList();
+                    var isTrackable = items.Any(item => item is ITrackable);
+                    if (isTrackable)
+                        // Ensure each trackable object in the collection is initialized
+                        foreach (var item in items)
+                            if (item is ITrackable trackableItem)
+                                trackableItem.AcceptChanges(); // Initialize original values for trackable items
+                }
+
+                // Deep clone the current value and store it as the original value
+                _originalValues[prop.Name] = DeepClone(value);
+            }
+            catch (Exception ex)
+            {
+                AuLogger.GetCurrentLogger<TrackableObject<T>>()
+                    .Error(ex, $"Error initializing property {prop.Name}: {ex.Message}");
+            }
+        }
+
+        IsPendingSave = false;
+        _originalValuesInitialized = true;
+    }
+
+    /// <summary>
+    /// Deep clones an object, handling collections and other types appropriately.
+    /// </summary>
+    /// <param name="obj">The object to clone.</param>
+    /// <returns>A deep clone of the object.</returns>
+    private static object? DeepClone(object? obj)
+    {
+        if (obj == null) return null;
+
+        switch (obj)
+        {
+            case ICloneable cloneable:
+                return cloneable.Clone();
+
+            case IEnumerable enumerable when obj.GetType().IsGenericType:
+            {
+                var listType = typeof(List<>).MakeGenericType(obj.GetType().GetGenericArguments().First());
+                var list = Activator.CreateInstance(listType) as IList;
+                foreach (var item in enumerable)
+                    // Deep clone each item, ensuring TrackableObjects are cloned correctly
+                    list?.Add(DeepClone(item));
+                return list;
+            }
+
+            default:
+                return obj; // Return the object as-is if it's not cloneable or enumerable
+        }
+    }
+
+    /// <summary>
+    /// Deeply compares two objects, handling collections appropriately.
+    /// </summary>
+    /// <param name="obj1">First object.</param>
+    /// <param name="obj2">Second object.</param>
+    /// <returns>True if objects are equal, false otherwise.</returns>
+    private static bool DeepEquals(object? obj1, object? obj2)
+    {
+        if (ReferenceEquals(obj1, obj2)) return true;
+        if (obj1 == null || obj2 == null) return false;
+
+        if (obj1 is IEnumerable enumerable1 && obj2 is IEnumerable enumerable2)
+            return enumerable1.Cast<object>().SequenceEqual(enumerable2.Cast<object>());
+
+        return obj1.Equals(obj2);
+    }
+
+    private void OnTrackedObjectPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        CheckPendingSaveStatus();
     }
 
     /// <summary>

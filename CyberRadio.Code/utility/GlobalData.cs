@@ -14,15 +14,15 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+using System.ComponentModel;
+using System.Globalization;
+using System.Reflection;
+using System.Resources;
 using AetherUtils.Core.Configuration;
 using AetherUtils.Core.Logging;
 using AetherUtils.Core.Structs;
 using RadioExt_Helper.config;
 using RadioExt_Helper.forms;
-using System.ComponentModel;
-using System.Globalization;
-using System.Reflection;
-using System.Resources;
 
 namespace RadioExt_Helper.utility;
 
@@ -133,6 +133,11 @@ public static class GlobalData
                 //Set the log header everytime the application is launched to ensure the version is correct in the header
                 ConfigOption logOption = new("logHeader", SystemInfo.GetLogFileHeader());
                 ConfigManager.Set(logOption);
+                ConfigManager.Save();
+            }
+            else //Create the default config if the config file is corrupted or failed to load.
+            {
+                ConfigManager.CreateDefaultConfig();
                 ConfigManager.Save();
             }
         }

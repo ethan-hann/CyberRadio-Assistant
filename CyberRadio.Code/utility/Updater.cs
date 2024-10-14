@@ -14,10 +14,10 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+using System.Reflection;
 using AetherUtils.Core.Logging;
 using Newtonsoft.Json.Linq;
 using RadioExt_Helper.forms;
-using System.Reflection;
 
 namespace RadioExt_Helper.utility;
 
@@ -41,9 +41,8 @@ public static class Updater
 
             if (version.Equals(string.Empty) || url.Equals(string.Empty))
             {
-                var text = GlobalData.Strings.GetString("NoInternetMsg");
-                var caption = GlobalData.Strings.GetString("NoInternetCaption");
-                MessageBox.Show(text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(Strings.NoInternetMsg, Strings.NoInternetCaption, MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
                 return;
             }
 
@@ -57,9 +56,8 @@ public static class Updater
 
                 if (latestVersion > currentVersion)
                 {
-                    var text = GlobalData.Strings.GetString("UpdateAvailableNotice");
-                    var caption = GlobalData.Strings.GetString("UpdateAvailable");
-                    if (MessageBox.Show(text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) ==
+                    if (MessageBox.Show(Strings.UpdateAvailableNotice, Strings.UpdateAvailable, MessageBoxButtons.YesNo,
+                            MessageBoxIcon.Question) ==
                         DialogResult.Yes)
                     {
                         var vInfo = new VersionInfo(latestVersion, url);
@@ -68,9 +66,8 @@ public static class Updater
                 }
                 else
                 {
-                    var text = GlobalData.Strings.GetString("NoUpdateAvailable");
-                    var caption = GlobalData.Strings.GetString("NoUpdateCaption");
-                    MessageBox.Show(text, caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show(Strings.NoUpdateAvailable, Strings.NoUpdateCaption, MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
                 }
             }
             else
@@ -80,10 +77,8 @@ public static class Updater
         }
         catch (Exception ex)
         {
-            var text = string.Format(GlobalData.Strings.GetString("UpdateCheckError") ??
-                                     "Error checking for updates: {0}", ex.Message);
-            var caption = GlobalData.Strings.GetString("Error") ?? "Error";
-            MessageBox.Show(text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            var text = string.Format(Strings.UpdateCheckError, ex.Message);
+            MessageBox.Show(text, Strings.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
             AuLogger.GetCurrentLogger("Updater.CheckForUpdates").Error(ex, "Error checking for updates");
         }
     }

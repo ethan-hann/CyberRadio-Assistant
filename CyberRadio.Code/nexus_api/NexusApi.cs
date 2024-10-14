@@ -62,8 +62,7 @@ public static class NexusApi
     {
         if (string.IsNullOrWhiteSpace(apiKey))
         {
-            AuLogger.GetCurrentLogger("NexusApi.AuthenticateApiKey")
-                .Error("API key is empty or null.");
+            AuLogger.GetCurrentLogger("NexusApi.AuthenticateApiKey").Error("API key is empty or null.");
             IsAuthenticated = false;
             CurrentApiUser = null;
             return IsAuthenticated;

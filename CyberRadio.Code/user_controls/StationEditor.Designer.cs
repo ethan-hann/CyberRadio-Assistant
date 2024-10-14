@@ -30,16 +30,17 @@ namespace RadioExt_Helper.user_controls
         /// </summary>
         private void InitializeComponent()
         {
-            models.ImageProperties imageProperties1 = new models.ImageProperties();
+            models.ImageProperties imageProperties2 = new models.ImageProperties();
             txtDisplayName = new TextBox();
             lblName = new Label();
             label3 = new Label();
             grpDisplay = new GroupBox();
             tlpDisplayTable = new TableLayoutPanel();
+            lblIcon = new Label();
             tabControl = new TabControl();
             tabDisplayAndIcon = new TabPage();
             panel1 = new Panel();
-            grpNotes = new GroupBox();
+            grpCustomData = new GroupBox();
             dgvMetadata = new DataGridView();
             grpSettings = new GroupBox();
             tableLayoutPanel1 = new TableLayoutPanel();
@@ -81,13 +82,12 @@ namespace RadioExt_Helper.user_controls
             txtStreamURL = new TextBox();
             statusStrip1 = new StatusStrip();
             lblStatus = new ToolStripStatusLabel();
-            lblIcon = new Label();
             grpDisplay.SuspendLayout();
             tlpDisplayTable.SuspendLayout();
             tabControl.SuspendLayout();
             tabDisplayAndIcon.SuspendLayout();
             panel1.SuspendLayout();
-            grpNotes.SuspendLayout();
+            grpCustomData.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvMetadata).BeginInit();
             grpSettings.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
@@ -172,6 +172,19 @@ namespace RadioExt_Helper.user_controls
             tlpDisplayTable.Size = new Size(962, 92);
             tlpDisplayTable.TabIndex = 0;
             // 
+            // lblIcon
+            // 
+            lblIcon.Anchor = AnchorStyles.Right;
+            lblIcon.AutoSize = true;
+            lblIcon.Font = new Font("Segoe UI Variable Text", 9F);
+            lblIcon.Location = new Point(68, 58);
+            lblIcon.Name = "lblIcon";
+            lblIcon.Size = new Size(36, 16);
+            lblIcon.TabIndex = 4;
+            lblIcon.Text = "Icon: ";
+            lblIcon.MouseEnter += LblIcon_MouseEnter;
+            lblIcon.MouseLeave += Lbl_MouseLeave;
+            // 
             // tabControl
             // 
             tabControl.Controls.Add(tabDisplayAndIcon);
@@ -202,7 +215,7 @@ namespace RadioExt_Helper.user_controls
             // panel1
             // 
             panel1.BackColor = Color.White;
-            panel1.Controls.Add(grpNotes);
+            panel1.Controls.Add(grpCustomData);
             panel1.Controls.Add(grpSettings);
             panel1.Controls.Add(grpCustomIcon);
             panel1.Controls.Add(grpDisplay);
@@ -212,18 +225,18 @@ namespace RadioExt_Helper.user_controls
             panel1.Size = new Size(968, 650);
             panel1.TabIndex = 3;
             // 
-            // grpNotes
+            // grpCustomData
             // 
-            grpNotes.BackColor = Color.White;
-            grpNotes.Controls.Add(dgvMetadata);
-            grpNotes.Dock = DockStyle.Fill;
-            grpNotes.Font = new Font("Segoe UI Variable Display", 9.75F, FontStyle.Bold);
-            grpNotes.Location = new Point(0, 377);
-            grpNotes.Name = "grpNotes";
-            grpNotes.Size = new Size(968, 273);
-            grpNotes.TabIndex = 6;
-            grpNotes.TabStop = false;
-            grpNotes.Text = "Custom Data";
+            grpCustomData.BackColor = Color.White;
+            grpCustomData.Controls.Add(dgvMetadata);
+            grpCustomData.Dock = DockStyle.Fill;
+            grpCustomData.Font = new Font("Segoe UI Variable Display", 9.75F, FontStyle.Bold);
+            grpCustomData.Location = new Point(0, 377);
+            grpCustomData.Name = "grpCustomData";
+            grpCustomData.Size = new Size(968, 273);
+            grpCustomData.TabIndex = 6;
+            grpCustomData.TabStop = false;
+            grpCustomData.Text = "Custom Data";
             // 
             // dgvMetadata
             // 
@@ -530,6 +543,8 @@ namespace RadioExt_Helper.user_controls
             btnOpenIconManager.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnOpenIconManager.UseVisualStyleBackColor = false;
             btnOpenIconManager.Click += btnOpenIconManager_Click;
+            btnOpenIconManager.MouseEnter += btnOpenIconManager_Enter;
+            btnOpenIconManager.MouseLeave += Lbl_MouseLeave;
             // 
             // lblInkPart
             // 
@@ -562,11 +577,11 @@ namespace RadioExt_Helper.user_controls
             picStationIcon.AllowDrop = true;
             picStationIcon.Dock = DockStyle.Fill;
             picStationIcon.Image = Properties.Resources.drag_and_drop;
-            imageProperties1.Height = 0;
-            imageProperties1.ImageFormat = System.Drawing.Imaging.ImageFormat.Png;
-            imageProperties1.PixelFormat = System.Drawing.Imaging.PixelFormat.DontCare;
-            imageProperties1.Width = 0;
-            picStationIcon.ImageProperties = imageProperties1;
+            imageProperties2.Height = 0;
+            imageProperties2.ImageFormat = System.Drawing.Imaging.ImageFormat.Png;
+            imageProperties2.PixelFormat = System.Drawing.Imaging.PixelFormat.DontCare;
+            imageProperties2.Width = 0;
+            picStationIcon.ImageProperties = imageProperties2;
             picStationIcon.Location = new Point(3, 3);
             picStationIcon.Name = "picStationIcon";
             tlpCustomIcon.SetRowSpan(picStationIcon, 3);
@@ -576,6 +591,8 @@ namespace RadioExt_Helper.user_controls
             picStationIcon.TabStop = false;
             picStationIcon.Tag = "dropTarget";
             picStationIcon.DragDrop += PicStationIcon_DragDrop;
+            picStationIcon.MouseEnter += picStationIcon_MouseEnter;
+            picStationIcon.MouseLeave += Lbl_MouseLeave;
             // 
             // tabMusic
             // 
@@ -735,6 +752,8 @@ namespace RadioExt_Helper.user_controls
             mpStreamPlayer.Size = new Size(32, 32);
             mpStreamPlayer.StreamUrl = "";
             mpStreamPlayer.TabIndex = 4;
+            mpStreamPlayer.MouseEnter += mpStreamPlayer_MouseEnter;
+            mpStreamPlayer.MouseLeave += Lbl_MouseLeave;
             // 
             // btnGetFromRadioGarden
             // 
@@ -754,6 +773,8 @@ namespace RadioExt_Helper.user_controls
             btnGetFromRadioGarden.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnGetFromRadioGarden.UseVisualStyleBackColor = false;
             btnGetFromRadioGarden.Click += BtnGetFromRadioGarden_Click;
+            btnGetFromRadioGarden.MouseEnter += btnGetFromRadioGarden_MouseEnter;
+            btnGetFromRadioGarden.MouseLeave += Lbl_MouseLeave;
             // 
             // txtStreamURL
             // 
@@ -785,17 +806,6 @@ namespace RadioExt_Helper.user_controls
             lblStatus.Size = new Size(59, 20);
             lblStatus.Text = "Ready";
             // 
-            // lblIcon
-            // 
-            lblIcon.Anchor = AnchorStyles.Right;
-            lblIcon.AutoSize = true;
-            lblIcon.Font = new Font("Segoe UI Variable Text", 9F);
-            lblIcon.Location = new Point(68, 58);
-            lblIcon.Name = "lblIcon";
-            lblIcon.Size = new Size(36, 16);
-            lblIcon.TabIndex = 4;
-            lblIcon.Text = "Icon: ";
-            // 
             // StationEditor
             // 
             AllowDrop = true;
@@ -814,7 +824,7 @@ namespace RadioExt_Helper.user_controls
             tabControl.ResumeLayout(false);
             tabDisplayAndIcon.ResumeLayout(false);
             panel1.ResumeLayout(false);
-            grpNotes.ResumeLayout(false);
+            grpCustomData.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dgvMetadata).EndInit();
             grpSettings.ResumeLayout(false);
             tableLayoutPanel1.ResumeLayout(false);
@@ -893,7 +903,7 @@ namespace RadioExt_Helper.user_controls
         private GroupBox grpSongs;
         private Button btnGetFromRadioGarden;
         private MusicPlayer mpStreamPlayer;
-        private GroupBox grpNotes;
+        private GroupBox grpCustomData;
         private DataGridView dgvMetadata;
         private CustomPictureBox picStationIcon;
         private Button btnOpenIconManager;

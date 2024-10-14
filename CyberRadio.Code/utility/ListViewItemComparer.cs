@@ -14,8 +14,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-using RadioExt_Helper.models;
 using System.Collections;
+using RadioExt_Helper.models;
 
 namespace RadioExt_Helper.utility;
 
@@ -42,11 +42,11 @@ public class ListViewItemComparer(int column, SortOrder order) : IComparer
 
         if (x is ListViewItem item1 && y is ListViewItem item2)
         {
-            if (item1.Tag != null && item1.Tag.GetType() == typeof(Song))
+            if (item1.Tag is Song song)
             {
                 if (Column == 3) //compare file size
                     returnVal = item2.Tag != null
-                        ? ((Song)item1.Tag).FileSize.CompareTo(((Song)item2.Tag).FileSize)
+                        ? song.FileSize.CompareTo(((Song)item2.Tag).FileSize)
                         : DefaultStringCompare(item1, item2);
                 else
                     returnVal = DefaultStringCompare(item1, item2);

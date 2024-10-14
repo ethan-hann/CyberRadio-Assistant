@@ -44,12 +44,12 @@ public sealed partial class NoStationsCtl : UserControl, IUserControl
     /// </summary>
     public void Translate()
     {
-        lblNoStations.Text = GlobalData.Strings.GetString("NoStationsYet");
-        lblNoGamePath.Text = GlobalData.Strings.GetString("NoExeFound");
-        lblNoStagingPath.Text = GlobalData.Strings.GetString("NoStagingPathFound");
+        lblNoStations.Text = Strings.NoStationsYet;
+        lblNoGamePath.Text = Strings.NoExeFound;
+        lblNoStagingPath.Text = Strings.NoStagingPathFound;
 
-        btnPaths.Text = GlobalData.Strings.GetString("Paths");
-        btnPaths.Text = GlobalData.Strings.GetString("Paths");
+        btnPaths.Text = Strings.Paths;
+        btnPaths.Text = Strings.Paths;
     }
 
     /// <summary>
@@ -118,17 +118,17 @@ public sealed partial class NoStationsCtl : UserControl, IUserControl
     private void BtnPaths_Click(object sender, EventArgs e)
     {
         var pathDialog = new PathSettings();
-        pathDialog.GameBasePathChanged += (s, e) => CheckPaths();
-        pathDialog.StagingPathChanged += (s, e) => CheckPaths();
+        pathDialog.GameBasePathChanged += (_, _) => CheckPaths();
+        pathDialog.StagingPathChanged += (_, _) => CheckPaths();
         pathDialog.ShowDialog(this);
     }
 
     private void BtnRestoreFromBackup_Click(object sender, EventArgs e)
-    {//TODO: translations
+    {
         var fileBrowser = new OpenFileDialog
         {
-            Filter = "Backup files (*.zip)|*.zip",
-            Title = GlobalData.Strings.GetString("SelectBackupFile") ?? "Select Backup File"
+            Filter = Strings.MainForm_RestoreFileBrowserFilter + @"|*.zip",
+            Title = Strings.MainForm_RestoreFileBrowserTitle
         };
 
         if (fileBrowser.ShowDialog(this) != DialogResult.OK) return;

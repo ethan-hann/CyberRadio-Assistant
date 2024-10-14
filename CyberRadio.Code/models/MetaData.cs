@@ -14,10 +14,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-using AetherUtils.Core.Files;
+using System.ComponentModel;
 using AetherUtils.Core.Utility;
 using Newtonsoft.Json;
-using System.ComponentModel;
 
 namespace RadioExt_Helper.models;
 
@@ -29,17 +28,11 @@ public sealed class MetaData : INotifyPropertyChanged, ICloneable, IEquatable<Me
     private SerializableDictionary<string, object> _customData = [];
     private CustomIcon _customIcon = new();
     private string _displayName = "69.9 Your Station Name";
-
     private float _fm = 69.9f;
-
     private string _icon = "UIIcon.alcohol_absynth";
-
     private bool _isActive = true;
-
     private List<string> _songOrder = [];
-
     private StreamInfo _streamInfo = new();
-
     private float _volume = 1.0f;
 
     /// <summary>
@@ -158,6 +151,9 @@ public sealed class MetaData : INotifyPropertyChanged, ICloneable, IEquatable<Me
         }
     }
 
+    /// <summary>
+    /// A dictionary of custom data that can be used to store additional information about the station.
+    /// </summary>
     [JsonProperty("custom_data")]
     public SerializableDictionary<string, object> CustomData
     {

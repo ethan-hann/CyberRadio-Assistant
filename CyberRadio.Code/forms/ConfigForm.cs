@@ -88,31 +88,31 @@ public sealed partial class ConfigForm : Form
     /// </summary>
     private void Translate()
     {
-        Text = GlobalData.Strings.GetString("Configuration");
+        Text = Strings.Configuration;
 
         //Tabs
-        tabGeneral.Text = GlobalData.Strings.GetString("GeneralSettings");
-        tabLogging.Text = GlobalData.Strings.GetString("LogSettings");
+        tabGeneral.Text = Strings.GeneralSettings;
+        tabLogging.Text = Strings.LogSettings;
 
         //General Tab
-        chkCheckForUpdates.Text = GlobalData.Strings.GetString("CheckForUpdatesOption");
-        chkAutoExportToGame.Text = GlobalData.Strings.GetString("AutoExportOption");
-        btnEditPaths.Text = GlobalData.Strings.GetString("EditPathsOption");
-        chkWatchForChanges.Text = GlobalData.Strings.GetString("WatchForChangesOption");
-        lblBackupCompressionLvl.Text = GlobalData.Strings.GetString("BackupCompressionLevel");
-        chkCopySongFilesToBackup.Text = GlobalData.Strings.GetString("CopySongFilesToBackupOption");
+        chkCheckForUpdates.Text = Strings.CheckForUpdatesOption;
+        chkAutoExportToGame.Text = Strings.AutoExportOption;
+        btnEditPaths.Text = Strings.EditPathsOption;
+        chkWatchForChanges.Text = Strings.WatchForChangesOption;
+        lblBackupCompressionLvl.Text = Strings.BackupCompressionLevel;
+        chkCopySongFilesToBackup.Text = Strings.CopySongFilesToBackupOption;
         //TODO: add translations for new "Default Song Location" label when feature is implemented.
 
         //Logging Tab
-        lblLogPathLabel.Text = GlobalData.Strings.GetString("LogPathLabel");
-        lblCurrentLogPath.Text = GlobalData.Strings.GetString("NoLogPathSet");
-        chkNewFileEveryLaunch.Text = GlobalData.Strings.GetString("NewLogFileOption");
-        btnEditLogsPath.Text = GlobalData.Strings.GetString("EditLogsPathOption");
+        lblLogPathLabel.Text = Strings.LogPathLabel;
+        lblCurrentLogPath.Text = Strings.NoLogPathSet;
+        chkNewFileEveryLaunch.Text = Strings.NewLogFileOption;
+        btnEditLogsPath.Text = Strings.EditLogsPathOption;
 
         //Buttons
-        btnSaveAndClose.Text = GlobalData.Strings.GetString("SaveAndClose");
-        btnResetToDefault.Text = GlobalData.Strings.GetString("ResetToDefaults");
-        btnCancel.Text = GlobalData.Strings.GetString("Cancel");
+        btnSaveAndClose.Text = Strings.SaveAndClose;
+        btnResetToDefault.Text = Strings.ResetToDefaults;
+        btnCancel.Text = Strings.Cancel;
 
         //TODO: Add translations for new "Nexus API" tab when feature is fully implemented.
     }
@@ -170,7 +170,20 @@ public sealed partial class ConfigForm : Form
     /// <returns>A string localized into the current UI culture.</returns>
     private string GetLocalizedName(CompressionLevel level)
     {
-        return GlobalData.Strings.GetString(level.ToString()) ?? level.ToString();
+        return level switch
+        {
+            CompressionLevel.Normal => Strings.Normal,
+            CompressionLevel.None => Strings.None,
+            CompressionLevel.Fastest => Strings.Fastest,
+            CompressionLevel.Fast => Strings.Fast,
+            CompressionLevel.SuperFast => Strings.SuperFast,
+            CompressionLevel.High => Strings.High,
+            CompressionLevel.Maximum => Strings.Maximum,
+            CompressionLevel.Ultra => Strings.Ultra,
+            CompressionLevel.Extreme => Strings.Extreme,
+            CompressionLevel.Ultimate => Strings.Ultimate,
+            _ => Strings.Normal
+        };
     }
 
     //TODO: Uncomment the below when the API feature is implemented
@@ -183,8 +196,8 @@ public sealed partial class ConfigForm : Form
 
     //    var isSameKey = txtApiKey.Text.Equals(GlobalData.ConfigManager.Get("nexusApiKey") as string);
 
-    //    var authText = GlobalData.Strings.GetString("ApiAuthenticated") ?? "Authenticated";
-    //    var notAuthText = GlobalData.Strings.GetString("ApiNotAuthenticated") ?? "Not Authenticated";
+    //    var authText = Strings.ApiAuthenticated ?? "Authenticated";
+    //    var notAuthText = Strings.ApiNotAuthenticated ?? "Not Authenticated";
 
     //    lblAuthenticatedStatus.Text = isSameKey && !txtApiKey.Text.Equals(string.Empty) ? authText : notAuthText;
     //    picApiStatus.Image = isSameKey && !txtApiKey.Text.Equals(string.Empty)
@@ -253,7 +266,7 @@ public sealed partial class ConfigForm : Form
         else
             saved &= GlobalData.ConfigManager.Set("includeDateTime", true);
 
-        if (!lblCurrentLogPath.Text.Equals(GlobalData.Strings.GetString("NoLogPathSet")))
+        if (!lblCurrentLogPath.Text.Equals(Strings.NoLogPathSet))
             saved &= GlobalData.ConfigManager.Set("logFileDirectory", lblCurrentLogPath.Text);
 
         return saved && GlobalData.ConfigManager.Save();
@@ -266,8 +279,7 @@ public sealed partial class ConfigForm : Form
     /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
     private void BtnEditDefaultSongLocation_Click(object sender, EventArgs e)
     {
-        fldrOpenDefaultMusicPath.Description = GlobalData.Strings.GetString("SelectDefaultSongLocationDesc") ??
-                                             "Select the default location to store song files";
+        fldrOpenDefaultMusicPath.Description = Strings.SelectDefaultSongLocationDesc;
         fldrOpenDefaultMusicPath.SelectedPath = lblDefaultSongLocation.Text;
 
         if (fldrOpenDefaultMusicPath.ShowDialog(this) == DialogResult.OK)
@@ -294,8 +306,7 @@ public sealed partial class ConfigForm : Form
     /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
     private void BtnEditLogsPath_Click(object sender, EventArgs e)
     {
-        fldrOpenLogPath.Description = GlobalData.Strings.GetString("SelectLogPathDesc") ??
-                                      "Select the location to store log files";
+        fldrOpenLogPath.Description = Strings.SelectLogPathDesc;
         fldrOpenLogPath.SelectedPath = lblCurrentLogPath.Text;
 
         if (fldrOpenLogPath.ShowDialog() == DialogResult.OK)
@@ -314,14 +325,14 @@ public sealed partial class ConfigForm : Form
         if (NexusApi.IsAuthenticated)
         {
             picApiStatus.Image = Resources.enabled__16x16;
-            lblAuthenticatedStatus.Text = GlobalData.Strings.GetString("ApiAuthenticated") ?? "Authenticated";
+            lblAuthenticatedStatus.Text = Strings.ApiAuthenticated;
             lblAuthenticatedStatus.ForeColor = Color.DarkGreen;
             AuLogger.GetCurrentLogger<ConfigForm>("AuthenticateApi").Info("Successfully authenticated with NexusMods!");
         }
         else
         {
             picApiStatus.Image = Resources.disabled__16x16;
-            lblAuthenticatedStatus.Text = GlobalData.Strings.GetString("ApiNotAuthenticated") ?? "Not Authenticated";
+            lblAuthenticatedStatus.Text = Strings.ApiNotAuthenticated;
             lblAuthenticatedStatus.ForeColor = Color.Red;
             AuLogger.GetCurrentLogger<ConfigForm>("AuthenticateApi").Error("Could not authenticate API key.");
         }
@@ -346,15 +357,15 @@ public sealed partial class ConfigForm : Form
         if (SetConfig())
         {
             ConfigSaved?.Invoke(this, EventArgs.Empty);
-            var text = GlobalData.Strings.GetString("ConfigSaveSuccess");
-            var caption = GlobalData.Strings.GetString("Success");
+            var text = Strings.ConfigSaveSuccess;
+            var caption = Strings.Success;
             MessageBox.Show(this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
             Close();
         }
         else
         {
-            var text = GlobalData.Strings.GetString("ConfigSaveError");
-            var caption = GlobalData.Strings.GetString("Error");
+            var text = Strings.ConfigSaveError;
+            var caption = Strings.Error;
             MessageBox.Show(this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
             AuLogger.GetCurrentLogger<ConfigForm>("SaveAndClose").Error("Could not save configuration file.");
         }
@@ -367,8 +378,8 @@ public sealed partial class ConfigForm : Form
     /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
     private void BtnResetToDefault_Click(object sender, EventArgs e)
     {
-        var text = GlobalData.Strings.GetString("ConfigResetConfirm");
-        var caption = GlobalData.Strings.GetString("Confirm");
+        var text = Strings.ConfigResetConfirm;
+        var caption = Strings.Confirm;
 
         var result = MessageBox.Show(text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
         if (result != DialogResult.Yes) return;
@@ -386,9 +397,9 @@ public sealed partial class ConfigForm : Form
         //var isSameKey = txtApiKey.Text.Equals(GlobalData.ConfigManager.Get("nexusApiKey") as string);
         //if (isSameKey || !NexusApi.IsAuthenticated) return true;
 
-        //var text = GlobalData.Strings.GetString("ApiUnsavedChanges") 
+        //var text = Strings.ApiUnsavedChanges 
         //           ?? "You have unsaved changes to your API key. Please save or clear the key before closing.";
-        //var caption = GlobalData.Strings.GetString("UnsavedChanges") ?? "Unsaved Changes";
+        //var caption = Strings.UnsavedChanges ?? "Unsaved Changes";
         //MessageBox.Show(this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
         //return false;
@@ -427,17 +438,16 @@ public sealed partial class ConfigForm : Form
     {
         this.SafeInvoke(() =>
         {
-            if (sender is Control hoveredControl)
-            {
-                var helpKey = hoveredControl.Tag as string ?? string.Empty;
-                if (!string.IsNullOrEmpty(helpKey))
-                    lblHelpText.Text = GlobalData.Strings.GetString(helpKey);
-            }
+            if (sender is not Control hoveredControl) return;
+
+            var helpKey = hoveredControl.Tag as string ?? string.Empty;
+            if (!string.IsNullOrEmpty(helpKey))
+                lblHelpText.Text = GlobalData.Strings.GetString(helpKey);
         });
     }
 
     private void ControlMouseLeave(object sender, EventArgs e)
     {
-        this.SafeInvoke(() => lblHelpText.Text = GlobalData.Strings.GetString("Ready"));
+        this.SafeInvoke(() => lblHelpText.Text = Strings.Ready);
     }
 }

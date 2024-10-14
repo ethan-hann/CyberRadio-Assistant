@@ -17,7 +17,6 @@
 using AetherUtils.Core.Logging;
 using NAudio.Wave;
 using RadioExt_Helper.Properties;
-using RadioExt_Helper.utility;
 
 namespace RadioExt_Helper.custom_controls;
 
@@ -95,9 +94,7 @@ public sealed partial class MusicPlayer : UserControl
     {
         if (string.IsNullOrEmpty(StreamUrl))
         {
-            var message = GlobalData.Strings.GetString("StreamURLError") ?? "Please enter a valid stream URL.";
-            var error = GlobalData.Strings.GetString("Error") ?? "Error";
-            MessageBox.Show(this, message, error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show(this, Strings.StreamURLError, Strings.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
             AuLogger.GetCurrentLogger<MusicPlayer>("Btn_PlayPause").Error("Stream URL was invalid or empty.");
             return;
         }
@@ -136,9 +133,8 @@ public sealed partial class MusicPlayer : UserControl
         }
         catch (Exception ex)
         {
-            var message = GlobalData.Strings.GetString("ErrorStreamingAudio") ?? "Error streaming audio: {0}";
-            var error = GlobalData.Strings.GetString("Error") ?? "Error";
-            MessageBox.Show(this, string.Format(message, ex.Message), error, MessageBoxButtons.OK,
+            MessageBox.Show(this, string.Format(Strings.ErrorStreamingAudio, ex.Message), Strings.Error,
+                MessageBoxButtons.OK,
                 MessageBoxIcon.Error);
             AuLogger.GetCurrentLogger<MusicPlayer>("PlayStream").Error(ex, "Error streaming audio");
             btnPlayPause.ImageKey = "play";
@@ -157,9 +153,8 @@ public sealed partial class MusicPlayer : UserControl
         }
         catch (Exception ex)
         {
-            var message = GlobalData.Strings.GetString("ErrorStreamingAudio") ?? "Error streaming audio: {0}";
-            var error = GlobalData.Strings.GetString("Error") ?? "Error";
-            MessageBox.Show(this, string.Format(message, ex.Message), error, MessageBoxButtons.OK,
+            MessageBox.Show(this, string.Format(Strings.ErrorStreamingAudio, ex.Message), Strings.Error,
+                MessageBoxButtons.OK,
                 MessageBoxIcon.Error);
             AuLogger.GetCurrentLogger<MusicPlayer>("ResumeStream").Error(ex, "Error streaming audio");
             btnPlayPause.ImageKey = "play";
@@ -178,9 +173,8 @@ public sealed partial class MusicPlayer : UserControl
         }
         catch (Exception ex)
         {
-            var message = GlobalData.Strings.GetString("ErrorPausingStream") ?? "Error pausing stream: {0}";
-            var error = GlobalData.Strings.GetString("Error") ?? "Error";
-            MessageBox.Show(this, string.Format(message, ex.Message), error, MessageBoxButtons.OK,
+            MessageBox.Show(this, string.Format(Strings.ErrorPausingStream, ex.Message), Strings.Error,
+                MessageBoxButtons.OK,
                 MessageBoxIcon.Error);
             AuLogger.GetCurrentLogger<MusicPlayer>("PauseStream").Error(ex, "Error pausing stream");
             btnPlayPause.ImageKey = "pause";
