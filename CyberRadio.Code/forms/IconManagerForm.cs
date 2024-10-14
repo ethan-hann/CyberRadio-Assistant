@@ -21,7 +21,7 @@ public partial class IconManagerForm : Form
     private readonly bool _addedFromImagePath;
     private bool _isImportingIcon;
     private bool _isExportingIcon;
-    private ToolTip _iconToolTip = new();
+    private readonly ToolTip _iconToolTip = new();
     private readonly TrackableObject<WolvenIcon>? _iconFromImagePath;
 
     public IconManagerForm(TrackableObject<Station> station)
@@ -42,16 +42,34 @@ public partial class IconManagerForm : Form
 
     private void IconManagerForm_Load(object sender, EventArgs e)
     {
-        Text = string.Format(GlobalData.Strings.GetString("IconManagerFormTitle") ?? "Icon Manager: {0}", _station.TrackedObject.MetaData.DisplayName);
+        Translate();
 
         ResetListBox();
-
         SetImageList();
 
         if (_addedFromImagePath && _iconFromImagePath != null)
         {
             AddNewIcon(_iconFromImagePath, true, false);
         }
+    }
+
+    private void Translate()
+    {
+        Text = string.Format(Strings.IconManagerFormTitle, _station.TrackedObject.MetaData.DisplayName);
+
+        btnAddIcon.Text = Strings.NewIcon;
+        btnDeleteIcon.Text = Strings.DeleteIcon;
+        btnDeleteAllIcons.Text = Strings.DeleteAllIcons;
+        btnEnableIcon.Text = Strings.EnableSelected;
+        btnDisableIcon.Text = Strings.DisableSelected;
+        fromArchiveFileToolStripMenuItem.Text = Strings.FromArchiveFile;
+        grpIcons.Text = Strings.Icons;
+        fdlgOpenArchive.Title = Strings.OpenArchiveFile;
+        fdlgOpenArchive.Filter = Strings.ArchiveFiles + @"|*.archive";
+
+        ////Translate each editor for the icons in the station
+        //foreach (var icon in lbIcons.Items.Cast<TrackableObject<WolvenIcon>>())
+        //    StationManager.Instance.GetStationIconEditor(_station.Id, icon.Id)?.Translate();
     }
 
     /// <summary>
@@ -160,8 +178,7 @@ public partial class IconManagerForm : Form
         }
         catch (Exception ex)
         {
-            AuLogger.GetCurrentLogger<IconManagerForm>("UpdateIconEditor")
-                .Error(ex, "An error occurred while updating the icon editor.");
+            AuLogger.GetCurrentLogger<IconManagerForm>("UpdateIconEditor").Error(ex, "An error occurred while updating the icon editor.");
         }
     }
 
@@ -306,6 +323,10 @@ public partial class IconManagerForm : Form
         lbIcons.EndUpdate();
     }
 
+    //Need this to prevent constant tooltip flickering when the mouse is over the listbox.
+    private readonly string _createdFromArchiveString = Strings.CreatedFromArchive;
+    private readonly string _createdFromPngString = Strings.CreatedFromPng;
+
     private void lbIcons_MouseMove(object? sender, MouseEventArgs e)
     {
         // Get the index of the item under the mouse cursor
@@ -314,14 +335,13 @@ public partial class IconManagerForm : Form
         // Ensure index is within bounds and valid
         if (index >= 0 && index < lbIcons.Items.Count)
         {
-            if (lbIcons.Items[index] is TrackableObject<WolvenIcon> icon)
-            {
-                // Determine the tooltip text based on whether the icon is from an archive or PNG
-                var tooltipText = icon.TrackedObject.IsFromArchive ? Strings.CreatedFromArchive : Strings.CreatedFromPng;
+            if (lbIcons.Items[index] is not TrackableObject<WolvenIcon> icon) return;
 
-                // Show the tooltip for the specific item
-                _iconToolTip.SetToolTip(lbIcons, tooltipText);
-            }
+            // Determine the tooltip text based on whether the icon is from an archive or PNG
+            var tooltipText = icon.TrackedObject.IsFromArchive ? _createdFromArchiveString : _createdFromPngString;
+
+            // Show the tooltip for the specific item
+            _iconToolTip.SetToolTip(lbIcons, tooltipText);
         }
         else
         {
@@ -519,18 +539,14 @@ public partial class IconManagerForm : Form
 
         if (_isImportingIcon)
         {
-            var mText = GlobalData.Strings.GetString("IconImportInProgress") ?? "An icon import is currently in progress. Please wait for the import to finish.";
-            var mCaption = GlobalData.Strings.GetString("IconImportInProgressCaption") ?? "Icon Import In Progress";
-            MessageBox.Show(mText, mCaption, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show(Strings.IconImportInProgress, Strings.IconImportInProgressCaption, MessageBoxButtons.OK, MessageBoxIcon.Information);
             e.Cancel = true;
             return;
         }
 
         if (_isExportingIcon)
         {
-            var mText = GlobalData.Strings.GetString("IconExportInProgress") ?? "An icon export is currently in progress. Please wait for the export to finish.";
-            var mCaption = GlobalData.Strings.GetString("IconExportInProgressCaption") ?? "Icon Export In Progress";
-            MessageBox.Show(mText, mCaption, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show(Strings.IconExportInProgress, Strings.IconExportInProgressCaption, MessageBoxButtons.OK, MessageBoxIcon.Information);
             e.Cancel = true;
             return;
         }
@@ -547,10 +563,7 @@ public partial class IconManagerForm : Form
         if (_station.TrackedObject.GetActiveIcon() == null) return;
         if (_station.TrackedObject.CheckActiveIconValid()) return;
 
-        var text = GlobalData.Strings.GetString("InvalidActiveIcon") ??
-                   "The active icon is invalid. Please ensure the icon is imported and the .archive file is present.";
-        var caption = GlobalData.Strings.GetString("InvalidActiveIconCaption") ?? "Invalid Active Icon";
-        MessageBox.Show(text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Strings.InvalidActiveIcon, Strings.InvalidActiveIconCaption, MessageBoxButtons.OK, MessageBoxIcon.Error);
         e.Cancel = true;
     }
 }

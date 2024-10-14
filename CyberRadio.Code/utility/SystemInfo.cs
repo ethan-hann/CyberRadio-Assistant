@@ -37,16 +37,11 @@ public static class SystemInfo
         StringBuilder sb = new();
 
         // Program Info
-        sb.AppendLine(
-            $"Cyber Radio Assistant - Version: {CurrentVersion.Major}.{CurrentVersion.Minor}.{CurrentVersion.Build}");
+        sb.AppendLine($"Cyber Radio Assistant - Version: {CurrentVersion.Major}.{CurrentVersion.Minor}.{CurrentVersion.Build}");
 
         // Operating System Information
         sb.AppendLine($"OS Version: {Environment.OSVersion}");
         sb.AppendLine($"64-bit OS: {Environment.Is64BitOperatingSystem}");
-
-        // Machine Name and User
-        sb.AppendLine($"Machine Name: {Environment.MachineName}");
-        sb.AppendLine($"User Name: {Environment.UserName}");
 
         // Processor Information
         sb.AppendLine("Processor Information:");

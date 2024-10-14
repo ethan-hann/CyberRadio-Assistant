@@ -13,6 +13,7 @@ namespace RadioExt_Helper.models
     /// </summary>
     public enum ValidArchiveFiles
     {
-        [Description(".archive")] CDPR_Archive,
+        [Description(".archive")]
+        CdprArchive
     }
 }

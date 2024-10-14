@@ -62,8 +62,7 @@ public static class NexusApi
     {
         if (string.IsNullOrWhiteSpace(apiKey))
         {
-            AuLogger.GetCurrentLogger("NexusApi.AuthenticateApiKey")
-                .Error("API key is empty or null.");
+            AuLogger.GetCurrentLogger("NexusApi.AuthenticateApiKey").Error("API key is empty or null.");
             IsAuthenticated = false;
             CurrentApiUser = null;
             return IsAuthenticated;
@@ -78,8 +77,7 @@ public static class NexusApi
         }
         catch (Exception ex)
         {
-            AuLogger.GetCurrentLogger("NexusApi.AuthenticateApiKey")
-                .Error(ex, "Couldn't authenticate API key with Nexus API.");
+            AuLogger.GetCurrentLogger("NexusApi.AuthenticateApiKey").Error(ex, "Couldn't authenticate API key with Nexus API.");
             IsAuthenticated = false;
             CurrentApiUser = null;
         }
@@ -104,8 +102,7 @@ public static class NexusApi
         }
         catch (Exception ex)
         {
-            AuLogger.GetCurrentLogger("NexusApi.GetModImage")
-                .Error(ex, "Couldn't retrieve mod image. Using fall back image.");
+            AuLogger.GetCurrentLogger("NexusApi.GetModImage").Error(ex, "Couldn't retrieve mod image. Using fall back image.");
             return Resources.missing_16x16;
         }
     }
@@ -127,8 +124,7 @@ public static class NexusApi
         }
         catch (Exception ex)
         {
-            AuLogger.GetCurrentLogger("NexusApi.GetUserImage")
-                .Error(ex, "Couldn't retrieve user profile image. Using fall back image.");
+            AuLogger.GetCurrentLogger("NexusApi.GetUserImage").Error(ex, "Couldn't retrieve user profile image. Using fall back image.");
             return PathHelper.ConvertToBitmap(null);
         }
     }

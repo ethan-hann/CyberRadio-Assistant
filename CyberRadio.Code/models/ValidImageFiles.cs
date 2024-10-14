@@ -14,6 +14,6 @@ namespace RadioExt_Helper.models
     public enum ValidImageFiles
     {
         [Description(".png")]
-        PNG
+        Png
     }
 }

@@ -25,9 +25,7 @@ namespace RadioExt_Helper.models;
 public sealed class CustomIcon : INotifyPropertyChanged, ICloneable, IEquatable<CustomIcon>
 {
     private string _inkAtlasPart = "custom_texture_part";
-
     private string _inkAtlasPath = "path\\to\\custom\\atlas.inkatlas";
-
     private bool _useCustom;
 
     /// <summary>

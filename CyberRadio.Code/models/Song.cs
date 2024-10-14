@@ -91,8 +91,7 @@ public sealed class Song : IEquatable<Song>, ICloneable
         }
         catch (Exception ex)
         {
-            AuLogger.GetCurrentLogger<Song>("FromFile")
-                .Error(ex, $"Couldn't read song file: {filePath}");
+            AuLogger.GetCurrentLogger<Song>("FromFile").Error(ex, $"Couldn't read song file: {filePath}");
             return null;
         }
     }

@@ -43,7 +43,7 @@ public class DirectoryWatcher
             throw new ArgumentNullException(nameof(watchPath));
 
         if (!FileHelper.DoesFolderExist(watchPath))
-            throw new ArgumentException($"Directory '{watchPath}' does not exist", nameof(watchPath));
+            throw new ArgumentException(string.Format(Strings.DirectoryWatcher_DirectoryNotExists, watchPath), nameof(watchPath));
 
         _watcher = new FileSystemWatcher(watchPath)
         {

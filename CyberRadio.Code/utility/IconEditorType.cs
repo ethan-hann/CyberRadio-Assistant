@@ -11,7 +11,13 @@ namespace RadioExt_Helper.utility
     /// </summary>
     public enum IconEditorType
     {
-        FromPNG,
+        /// <summary>
+        /// Indicates that the icon editor was initialized from a PNG file.
+        /// </summary>
+        FromPng,
+        /// <summary>
+        /// Indicates that the icon editor was initialized from an archive file.
+        /// </summary>
         FromArchive
     }
 }

@@ -77,9 +77,7 @@ public sealed partial class BackupPreview : Form
     {
         pgProgress.Visible = true;
         btnStartBackup.Enabled = false;
-        lblCompressionLevel.Text =
-            string.Format(GlobalData.Strings.GetString("UsingCompressionLevel") ?? "Using compression level: {0}",
-                _backupManager.BackupCompressionLevel);
+        lblCompressionLevel.Text = string.Format(Strings.UsingCompressionLevel, _backupManager.BackupCompressionLevel);
 
         _ = StartPreviewLoading();
     }
@@ -89,15 +87,15 @@ public sealed partial class BackupPreview : Form
     /// </summary>
     private void Translate()
     {
-        Text = GlobalData.Strings.GetString("BackupStagingFolder");
-        lblStatus.Text = GlobalData.Strings.GetString("CreatingPreview");
-        lblTotalSizeLbl.Text = GlobalData.Strings.GetString("TotalFileSize");
-        lblEstimatedSizeLbl.Text = GlobalData.Strings.GetString("EstimatedBackupSize");
-        lblEstimatedDisclaimer.Text = GlobalData.Strings.GetString("EstimatedBackupSizeDisclaimer");
-        btnStartBackup.Text = GlobalData.Strings.GetString("StartBackup");
+        Text = Strings.BackupStagingFolder;
+        lblStatus.Text = Strings.CreatingPreview;
+        lblTotalSizeLbl.Text = Strings.TotalFileSize;
+        lblEstimatedSizeLbl.Text = Strings.EstimatedBackupSize;
+        lblEstimatedDisclaimer.Text = Strings.EstimatedBackupSizeDisclaimer;
+        btnStartBackup.Text = Strings.StartBackup;
 
-        lvFilePreviews.Columns[0].Text = GlobalData.Strings.GetString("FileName");
-        lvFilePreviews.Columns[1].Text = GlobalData.Strings.GetString("SongFileSizeHeader");
+        lvFilePreviews.Columns[0].Text = Strings.FileName;
+        lvFilePreviews.Columns[1].Text = Strings.SongFileSizeHeader;
     }
 
     /// <summary>
@@ -108,18 +106,21 @@ public sealed partial class BackupPreview : Form
     {
         try
         {
-            await _backupManager.GetBackupPreviewAsync(GlobalData.ConfigManager.Get("stagingPath") as string ??
-                                                       string.Empty);
+            var stagingPath = GlobalData.ConfigManager.Get("stagingPath") as string ?? string.Empty;
+            if (string.IsNullOrEmpty(stagingPath))
+            {
+                AuLogger.GetCurrentLogger<BackupPreview>("StartPreviewLoading").Error("Staging path is null or empty.");
+                Close();
+            }
+
+            await _backupManager.GetBackupPreviewAsync(stagingPath);
         }
         catch (Exception ex)
         {
             AuLogger.GetCurrentLogger<BackupPreview>("StartPreviewLoading").Error(ex, "Error loading backup preview.");
             this.SafeInvoke(() =>
             {
-                var text = GlobalData.Strings.GetString("BackupPreviewError") ??
-                           "An error occurred while loading the backup preview.";
-                var caption = GlobalData.Strings.GetString("Error") ?? "Error";
-                MessageBox.Show(this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(this, Strings.BackupPreviewError, Strings.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Close();
             });
         }
@@ -190,7 +191,7 @@ public sealed partial class BackupPreview : Form
         {
             pgProgress.Value = 0;
             pgProgress.Visible = false;
-            lblStatus.Text = GlobalData.Strings.GetString("BackupPreviewCompleted");
+            lblStatus.Text = Strings.BackupPreviewCompleted;
             btnStartBackup.Enabled = true;
             tvFiles.SelectedNode = tvFiles.Nodes[0];
         });
@@ -209,8 +210,7 @@ public sealed partial class BackupPreview : Form
 
         if (stagingPath == null || gameBasePath == null)
         {
-            AuLogger.GetCurrentLogger<BackupPreview>("BtnStartBackup_Click")
-                .Error("Staging path or game base path is null.");
+            AuLogger.GetCurrentLogger<BackupPreview>("BtnStartBackup_Click").Error("Staging path or game base path is null.");
             return;
         }
 
@@ -219,20 +219,14 @@ public sealed partial class BackupPreview : Form
         // Check if the backup path is a sub-path of the staging path (i.e., the backup path is within the staging path)
         if (PathHelper.IsSubPath(stagingPath, backupPath))
         {
-            var text = GlobalData.Strings.GetString("BackupPathIsSubpath") ??
-                       "Backup path cannot be within the staging path.";
-            var caption = GlobalData.Strings.GetString("Backup") ?? "Backup";
-            MessageBox.Show(this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show(this, Strings.BackupPathIsSubpath, Strings.Backup, MessageBoxButtons.OK, MessageBoxIcon.Error);
             return;
         }
 
         //Check if the backup path is a sub-path of the game path (i.e., the backup path is within the game path)
         if (PathHelper.IsSubPath(gameBasePath, backupPath))
         {
-            var text = GlobalData.Strings.GetString("BackupPathIsSubpathGame") ??
-                       "Backup path cannot be within the game path.";
-            var caption = GlobalData.Strings.GetString("Backup") ?? "Backup";
-            MessageBox.Show(this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show(this, Strings.BackupPathIsSubpathGame, Strings.Backup, MessageBoxButtons.OK, MessageBoxIcon.Error);
             return;
         }
 
@@ -263,14 +257,10 @@ public sealed partial class BackupPreview : Form
         }
         catch (Exception ex)
         {
-            var text = string.Format(
-                GlobalData.Strings.GetString("BackupFailedException") ?? "Backup failed due to an error: {0}",
-                ex.Message);
-            var caption = GlobalData.Strings.GetString("Backup") ?? "Backup";
-            MessageBox.Show(this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            var text = string.Format(Strings.BackupFailedException, ex.Message);
+            MessageBox.Show(this, text, Strings.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
 
-            AuLogger.GetCurrentLogger<MainForm>("StartBackupAsync")
-                .Error(ex, "An error occurred during staging folder backup.");
+            AuLogger.GetCurrentLogger<MainForm>("StartBackupAsync").Error(ex, "An error occurred during staging folder backup.");
 
             _isBackupInProgress = false;
             pgProgress.Value = 0;
@@ -292,8 +282,7 @@ public sealed partial class BackupPreview : Form
         }
         catch (Exception ex)
         {
-            AuLogger.GetCurrentLogger<BackupPreview>("OnBackupProgressChanged")
-                .Error(ex, "Error updating backup progress.");
+            AuLogger.GetCurrentLogger<BackupPreview>("OnBackupProgressChanged").Error(ex, "Error updating backup progress.");
         }
     }
 
@@ -309,8 +298,7 @@ public sealed partial class BackupPreview : Form
         }
         catch (Exception ex)
         {
-            AuLogger.GetCurrentLogger<BackupPreview>("OnBackupStatusChanged")
-                .Error(ex, "Error updating backup status.");
+            AuLogger.GetCurrentLogger<BackupPreview>("OnBackupStatusChanged").Error(ex, "Error updating backup status.");
         }
     }
 
@@ -328,27 +316,19 @@ public sealed partial class BackupPreview : Form
             {
                 _isBackupInProgress = false;
 
-                var text = GlobalData.Strings.GetString("BackupCompleted") ?? "Backup completed successfully.";
-                var caption = GlobalData.Strings.GetString("Backup") ?? "Backup";
-                MessageBox.Show(this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                AuLogger.GetCurrentLogger<BackupPreview>("BackupManager_BackupCompleted")
-                    .Info($"Backup completed successfully: {backupFileName}");
+                MessageBox.Show(this, Strings.BackupCompleted, Strings.Backup, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                AuLogger.GetCurrentLogger<BackupPreview>("BackupManager_BackupCompleted").Info($"Backup completed successfully: {backupFileName}");
                 Process.Start("explorer.exe", backupPath);
             }
             else
             {
-                var text = GlobalData.Strings.GetString("BackupFailed") ?? "Backup failed.";
-                var caption = GlobalData.Strings.GetString("Backup") ?? "Backup";
-                MessageBox.Show(this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-                AuLogger.GetCurrentLogger<BackupPreview>("BackupManager_BackupCompleted")
-                    .Error($"Backup failed: {backupFileName}");
+                MessageBox.Show(this, Strings.BackupFailed, Strings.Backup, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                AuLogger.GetCurrentLogger<BackupPreview>("BackupManager_BackupCompleted").Error($"Backup failed: {backupFileName}");
             }
 
             Task.Delay(2000).ContinueWith(_ =>
             {
-                this.SafeInvoke(() => lblStatus.Text = GlobalData.Strings.GetString("BackupCompleted"));
+                this.SafeInvoke(() => lblStatus.Text = Strings.BackupCompleted);
             });
         });
     }
@@ -361,7 +341,7 @@ public sealed partial class BackupPreview : Form
     {
         FolderBrowserDialog folderBrowserDialog = new()
         {
-            Description = GlobalData.Strings.GetString("BackupFolderDesc") ?? "Select a folder to save the backup to",
+            Description = Strings.BackupFolderDesc,
             ShowNewFolderButton = true,
             UseDescriptionForTitle = true
         };

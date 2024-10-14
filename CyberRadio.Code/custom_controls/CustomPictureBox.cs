@@ -223,6 +223,26 @@ namespace RadioExt_Helper.custom_controls
         }
 
         /// <summary>
+        /// Set the image to display in the picture box from the given bitmap resource using lazy loading (background thread).
+        /// </summary>
+        /// <param name="image">The image to load into the picture box.</param>
+        public void SetImageFromBitmap(Bitmap image)
+        {
+            try
+            {
+                Image = image;
+                ImagePath = string.Empty;
+                _downSampledImage = ImageUtils.DownsampleImage(Image, Width, Height);
+                UpdateImageProperties();
+                ResetView();
+            }
+            catch (Exception ex)
+            {
+                AuLogger.GetCurrentLogger<CustomPictureBox>().Error(ex.Message);
+            }
+        }
+
+        /// <summary>
         /// Set the size mode based on the aspect ratio of the image and the control.
         /// </summary>
         private void SetSizeMode()

@@ -141,7 +141,8 @@ public sealed class Station : INotifyPropertyChanged, ICloneable, IEquatable<Sta
         if (Icons.Contains(icon)) return false;
 
         Icons.Add(icon);
-        if (makeActive) icon.TrackedObject.IsActive = true;
+        if (makeActive)
+            icon.TrackedObject.IsActive = true;
 
         OnPropertyChanged(nameof(Icons));
         return true;
@@ -175,7 +176,7 @@ public sealed class Station : INotifyPropertyChanged, ICloneable, IEquatable<Sta
     /// Get the active <see cref="Icon"/> for the station.
     /// </summary>
     /// <returns>The active <see cref="Icon"/> or <c>null</c> if no active icons or there was more than 1 active icon.</returns>
-    /// <exception cref="InvalidOperationException">Occurs when there are more than 1 active icon in the station.</exception>
+    /// <exception cref="InvalidOperationException">Occurs when there is more than 1 active icon in the station.</exception>
     public TrackableObject<WolvenIcon>? GetActiveIcon()
     {
         try
@@ -198,6 +199,7 @@ public sealed class Station : INotifyPropertyChanged, ICloneable, IEquatable<Sta
     /// This should be the case when either the icon is generated from a PNG or imported from a .zip file containing a station.
     /// </summary>
     /// <returns><c>true</c> if the active icon is valid. <c>false</c> otherwise or there were no active icons.</returns>
+    /// <exception cref="InvalidOperationException">Occurs when there is more than 1 active icon in the station.</exception>
     public bool CheckActiveIconValid()
     {
         try

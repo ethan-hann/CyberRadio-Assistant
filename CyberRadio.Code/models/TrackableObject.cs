@@ -103,7 +103,7 @@ public sealed class TrackableObject<T> : INotifyPropertyChanged, ITrackable wher
     /// </summary>
     private void InitializeOriginalValues()
     {
-        if (_originalValuesInitialized) return; // Prevent multiple initializations
+        if (_originalValuesInitialized) return; // Prevent multiple initializations of original values
 
         foreach (var prop in typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance))
         {
@@ -119,11 +119,12 @@ public sealed class TrackableObject<T> : INotifyPropertyChanged, ITrackable wher
                 // Handle collections of trackable objects (similar to DeepClone and DeepEquals)
                 if (value is IEnumerable enumerable)
                 {
-                    var isTrackable = enumerable.Cast<object>().Any(item => item is ITrackable);
+                    var items = enumerable.Cast<object>().ToList();
+                    var isTrackable = items.Any(item => item is ITrackable);
                     if (isTrackable)
                     {
                         // Ensure each trackable object in the collection is initialized
-                        foreach (var item in enumerable)
+                        foreach (var item in items)
                         {
                             if (item is ITrackable trackableItem)
                             {
@@ -209,10 +210,11 @@ public sealed class TrackableObject<T> : INotifyPropertyChanged, ITrackable wher
             // Handle only TrackableObject lists of type ITrackable
             if (value is IEnumerable enumerable)
             {
-                var isTrackable = enumerable.Cast<object>().Any(item => item is ITrackable);
+                var items = enumerable.Cast<object>().ToList();
+                var isTrackable = items.Any(item => item is ITrackable);
                 if (isTrackable)
                 {
-                    foreach (var item in enumerable)
+                    foreach (var item in items)
                     {
                         if (item is ITrackable trackableItem)
                         {
@@ -241,19 +243,18 @@ public sealed class TrackableObject<T> : INotifyPropertyChanged, ITrackable wher
     /// </summary>
     public void DeclineChanges()
     {
-        foreach (var kvp in _originalValues)
+        foreach (var (key, originalValue) in _originalValues)
         {
-            var prop = typeof(T).GetProperty(kvp.Key);
+            var prop = typeof(T).GetProperty(key);
             if (prop == null || !prop.CanWrite) continue;
-
-            var originalValue = kvp.Value;
 
             if (originalValue is IEnumerable enumerable)
             {
-                var isTrackable = enumerable.Cast<object>().Any(item => item is ITrackable);
+                var items = enumerable.Cast<object>().ToList();
+                var isTrackable = items.Any(item => item is ITrackable);
                 if (isTrackable)
                 {
-                    foreach (var item in enumerable)
+                    foreach (var item in items)
                     {
                         if (item is ITrackable trackableItem)
                         {
@@ -295,40 +296,37 @@ public sealed class TrackableObject<T> : INotifyPropertyChanged, ITrackable wher
             // If the property is a collection, check if any items are trackable and have pending changes
             if (currentValue is IEnumerable enumerable)
             {
-                var isTrackable = enumerable.Cast<object>().Any(item => item is ITrackable);
+                var items = enumerable.Cast<object>().ToList();
+                var isTrackable = items.Any(item => item is ITrackable);
                 if (isTrackable)
                 {
-                    foreach (var item in enumerable)
+                    foreach (var item in items)
                     {
-                        if (item is ITrackable trackableItem)
-                        {
-                            //Recursive call to check pending save status on each TrackableObject in the list
-                            if (trackableItem.CheckPendingSaveStatus())
-                            {
-                                isPendingSave = true;
-                                break;
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    // Otherwise, compare the property value to the original value
-                    if (!DeepEquals(currentValue, kvp.Value))
-                    {
+                        if (item is not ITrackable trackableItem) continue;
+
+                        //Recursive call to check pending save status on each TrackableObject in the list
+                        if (!trackableItem.CheckPendingSaveStatus()) continue;
+
                         isPendingSave = true;
                         break;
                     }
                 }
-            }
-            else
-            {
-                // Otherwise, compare the property value to the original value
-                if (!DeepEquals(currentValue, kvp.Value))
+                else
                 {
+                    // If not a trackable object, compare the property value to the original value
+                    if (DeepEquals(currentValue, kvp.Value)) continue;
+
                     isPendingSave = true;
                     break;
                 }
+            }
+            else
+            {
+                // If not an enumerable, compare the property value to the original value
+                if (DeepEquals(currentValue, kvp.Value)) continue;
+
+                isPendingSave = true;
+                break;
             }
         }
 

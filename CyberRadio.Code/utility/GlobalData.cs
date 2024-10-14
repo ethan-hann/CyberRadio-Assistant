@@ -135,6 +135,11 @@ public static class GlobalData
                 ConfigManager.Set(logOption);
                 ConfigManager.Save();
             }
+            else //Create the default config if the config file is corrupted or failed to load.
+            {
+                ConfigManager.CreateDefaultConfig();
+                ConfigManager.Save();
+            }
         }
         else
         {

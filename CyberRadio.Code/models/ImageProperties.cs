@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace RadioExt_Helper.models
 {
+    /// <summary>
+    /// Represents the properties of an image. Used when displaying images in the Icon Manager.
+    /// </summary>
     public class ImageProperties
     {
         public int Width { get; set; } = 0;

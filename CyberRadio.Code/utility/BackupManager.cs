@@ -167,7 +167,7 @@ public class BackupManager(CompressionLevel level)
         if (stagingPath.Equals(backupPath))
             throw new ArgumentException("Backup path cannot be the same as the staging path.");
 
-        var backupFileName = Path.Combine(backupPath, $"radio_stations-{DateTime.Now:yy-MM-dd-hh-mm-ss}.zip");
+        var backupFileName = Path.Combine(backupPath, $"cra_stations-{DateTime.Now:yy-MM-dd-hh-mm-ss}.zip");
 
         if (_isCancelling) return;
 
@@ -220,7 +220,7 @@ public class BackupManager(CompressionLevel level)
                     var progress = (int)((float)fileCount / files.Length * 100);
                     ProgressChanged?.Invoke(progress);
 
-                    var status = string.Format(GlobalData.Strings.GetString("BackupProgressChanged") ?? "Backing up... {0}%", progress);
+                    var status = string.Format(Strings.BackupProgressChanged, progress);
                     StatusChanged?.Invoke(status);
                 }
 
@@ -242,7 +242,7 @@ public class BackupManager(CompressionLevel level)
 
             if (File.Exists(backupFileName))
             {
-                var status = GlobalData.Strings.GetString("BackupCompleted") ?? "Backup completed successfully.";
+                var status = Strings.BackupCompleted;
                 if (_isCancelling) return;
                 StatusChanged?.Invoke(status);
 
@@ -251,7 +251,7 @@ public class BackupManager(CompressionLevel level)
             }
             else
             {
-                var status = GlobalData.Strings.GetString("BackupFailed") ?? "Backup failed.";
+                var status = Strings.BackupFailed;
                 if (_isCancelling) return;
                 StatusChanged?.Invoke(status);
 
@@ -261,7 +261,7 @@ public class BackupManager(CompressionLevel level)
         }
         catch (Exception ex)
         {
-            var status = string.Format(GlobalData.Strings.GetString("BackupFailedException") ?? "Backup failed due to an error: {0}", ex.Message);
+            var status = string.Format(Strings.BackupFailedException, ex.Message);
 
             if (_isCancelling) return;
             StatusChanged?.Invoke(status);
@@ -282,7 +282,8 @@ public class BackupManager(CompressionLevel level)
     public async Task GetRestorePreviewAsync(string backupFilePath)
     {
         if (string.IsNullOrEmpty(backupFilePath)) throw new ArgumentNullException(nameof(backupFilePath));
-        if (!File.Exists(backupFilePath)) throw new FileNotFoundException("Backup file not found.", backupFilePath);
+        if (!File.Exists(backupFilePath))
+            throw new FileNotFoundException("Backup file not found.", backupFilePath);
 
         var previews = new List<FilePreview>();
         var totalSize = 0L;
@@ -310,7 +311,7 @@ public class BackupManager(CompressionLevel level)
                 var progress = (int)((float)previews.Count / zipArchive.Entries.Count * 100);
                 PreviewProgressChanged?.Invoke(progress);
                 PreviewStatusChanged?.Invoke((preview, totalSize));
-                StatusChanged?.Invoke($"Loading... {progress}%");
+                StatusChanged?.Invoke(string.Format(Strings.RestoreBackupLoadingPreview, progress));
 
                 if (_isCancelling) return;
             }
@@ -378,7 +379,7 @@ public class BackupManager(CompressionLevel level)
 
                     var progress = (int)((float)zipArchive.Entries.Count / zipArchive.Entries.Count * 100);
                     ProgressChanged?.Invoke(progress);
-                    var status = string.Format(GlobalData.Strings.GetString("RestoreProgressChanged") ?? "Restoring file: {0}", entryName);
+                    var status = string.Format(Strings.RestoreProgressChanged, entryName);
                     StatusChanged?.Invoke(status);
 
                     entry.ExtractToFile(destinationPath, true);
@@ -398,14 +399,13 @@ public class BackupManager(CompressionLevel level)
 
                     var progress = (int)((float)externalSongMappings.Count / externalSongMappings.Count * 100);
                     ProgressChanged?.Invoke(progress);
-                    var status = $"Restoring song: {songFileName}...";
-                    StatusChanged?.Invoke(status);
+                    StatusChanged?.Invoke(string.Format(Strings.RestoreSongProgressChanged, songFileName));
 
                     entry.ExtractToFile(destinationPath, true);
                 }
             });
 
-            var status = GlobalData.Strings.GetString("RestoreCompleted") ?? "Restore completed successfully.";
+            var status = Strings.RestoreCompleted;
             if (_isCancelling) return;
             StatusChanged?.Invoke(status);
 
@@ -414,7 +414,7 @@ public class BackupManager(CompressionLevel level)
         }
         catch (Exception ex)
         {
-            var status = string.Format(GlobalData.Strings.GetString("RestoreFailedException") ?? "Restore failed due to an error: {0}", ex.Message);
+            var status = string.Format(Strings.RestoreFailedException, ex.Message);
 
             if (_isCancelling) return;
             StatusChanged?.Invoke(status);

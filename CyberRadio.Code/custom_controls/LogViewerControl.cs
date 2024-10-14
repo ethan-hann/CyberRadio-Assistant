@@ -31,7 +31,12 @@ namespace RadioExt_Helper.custom_controls
 
         public void Translate()
         {
-            //TODO: translate the control
+            grpLogSearchHeader.Text = Strings.LogViewerControl_grpLogSearchHeader_Text;
+            txtSearch.PlaceholderText = Strings.LogViewerControl_txtSearch_PlaceholderText;
+            btnShowMore.Text = Strings.LogViewerControl_btnShowMore_Text;
+
+            dgvLogs.Columns[0].HeaderText = Strings.LogViewerControl_dgvLogs_Columns_0_HeaderText;
+            dgvLogs.Columns[1].HeaderText = Strings.LogViewerControl_dgvLogs_Columns_1_HeaderText;
         }
 
         public void AddLogEntry(DateTime timestamp, string message)

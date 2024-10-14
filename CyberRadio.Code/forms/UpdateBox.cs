@@ -46,7 +46,7 @@ public partial class UpdateBox : Form
     private void _progressReporter_ProgressChanged(object? sender, int e)
     {
         pgDownloadProgress.Value = e;
-        SetStatus(string.Format(GlobalData.Strings.GetString("UpdateDownloadPercent") ?? "Downloaded {0}%", e));
+        SetStatus(string.Format(Strings.UpdateDownloadPercent, e));
     }
 
     private void UpdateBox_Load(object sender, EventArgs e)
@@ -57,12 +57,12 @@ public partial class UpdateBox : Form
 
     private void Translate()
     {
-        Text = GlobalData.Strings.GetString("UpdateAvailable") ?? "Update Available";
-        lblCurrentVerText.Text = GlobalData.Strings.GetString("UpdateCurrentVersion") ?? "Current Version:";
-        lblNewVersionTxt.Text = GlobalData.Strings.GetString("UpdateNewVersion") ?? "New Version:";
-        lblChangelogTxt.Text = GlobalData.Strings.GetString("UpdateChangelog") ?? "Changelog:";
-        btnDownload.Text = GlobalData.Strings.GetString("UpdateDownloadButton") ?? "Download";
-        lblStatus.Text = GlobalData.Strings.GetString("Ready") ?? "Ready";
+        Text = Strings.UpdateAvailable;
+        lblCurrentVerText.Text = Strings.UpdateCurrentVersion;
+        lblNewVersionTxt.Text = Strings.UpdateNewVersion;
+        lblChangelogTxt.Text = Strings.UpdateChangelog;
+        btnDownload.Text = Strings.UpdateDownloadButton;
+        lblStatus.Text = Strings.Ready;
     }
 
     private void SetValues()
@@ -75,8 +75,7 @@ public partial class UpdateBox : Form
 
         lblCurrentVersion.Text = currentVersion?.ToString() ?? "Unknown";
         lblNewVersion.Text = _versionInfo.LatestVersion.ToString();
-        lnkChangelog.Text =
-            $@"https://github.com/ethan-hann/CyberRadio-Assistant/CHANGELOG.md#{_versionInfo.LatestVersion}";
+        lnkChangelog.Text = $@"https://github.com/ethan-hann/CyberRadio-Assistant/CHANGELOG.md#{_versionInfo.LatestVersion}";
     }
 
     private void btnDownload_Click(object sender, EventArgs e)
@@ -99,22 +98,15 @@ public partial class UpdateBox : Form
     {
         if (e.Error != null)
         {
-            MessageBox.Show(
-                string.Format(GlobalData.Strings.GetString("UpdateDownloadError") ?? "Download error: {0}",
-                    e.Error.Message),
-                GlobalData.Strings.GetString("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show(string.Format(Strings.UpdateDownloadError, e.Error.Message), Strings.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
             return;
         }
 
-        SetStatus(
-            GlobalData.Strings.GetString("UpdateDownloadComplete") ?? "Download completed! Starting the update...");
+        SetStatus(Strings.UpdateDownloadComplete);
         SaveSettingsBeforeExit();
         var newFilePath = CopyToOriginalLocation(Path.Combine(Path.GetTempPath(), _newFileName));
 
-        var text = GlobalData.Strings.GetString("UpdateFolderOpening") ??
-                   "Update complete. The containing folder will now be opened and the application will be closed.";
-        var caption = GlobalData.Strings.GetString("UpdateFolderOpeningCaption") ?? "Opening Folder";
-        MessageBox.Show(text, caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
+        MessageBox.Show(this, Strings.UpdateFolderOpening, Strings.UpdateFolderOpeningCaption, MessageBoxButtons.OK, MessageBoxIcon.Information);
 
         StartUpdatedApplication(newFilePath);
         Application.Exit();
@@ -131,8 +123,7 @@ public partial class UpdateBox : Form
         var canReportProgress = totalBytes != -1L;
 
         await using var contentStream = await response.Content.ReadAsStreamAsync();
-        await using var fileStream =
-            new FileStream(tempFilePath, FileMode.Create, FileAccess.Write, FileShare.None, 8192, true);
+        await using var fileStream = new FileStream(tempFilePath, FileMode.Create, FileAccess.Write, FileShare.None, 8192, true);
 
         var totalBytesRead = 0L;
         var buffer = new byte[8192];
@@ -150,11 +141,10 @@ public partial class UpdateBox : Form
             await fileStream.WriteAsync(buffer.AsMemory(0, bytesRead));
 
             totalBytesRead += bytesRead;
-            if (canReportProgress)
-            {
-                var percentComplete = (int)(totalBytesRead * 1.0 / totalBytes * 100);
-                progress?.Report(percentComplete);
-            }
+            if (!canReportProgress) continue;
+
+            var percentComplete = (int)(totalBytesRead * 1.0 / totalBytes * 100);
+            progress?.Report(percentComplete);
         }
     }
 
@@ -183,8 +173,7 @@ public partial class UpdateBox : Form
         }
         catch (Exception ex)
         {
-            AuLogger.GetCurrentLogger<UpdateBox>("CopyToOriginalLocation")
-                .Error(ex, "Couldn't copy the updated file to original .exe location.");
+            AuLogger.GetCurrentLogger<UpdateBox>("CopyToOriginalLocation").Error(ex, "Couldn't copy the updated file to original .exe location.");
             return tempFilePath;
         }
     }

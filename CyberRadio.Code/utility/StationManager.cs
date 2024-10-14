@@ -29,7 +29,7 @@ using WIG.Lib.Models;
 namespace RadioExt_Helper.utility;
 
 /// <summary>
-/// This class is responsible for managing the radio stations. It provides methods for adding and removing stations as well as their station editors.
+/// This class is responsible for managing the radio stations. It provides methods for adding and removing stations as well as their various editors and icons.
 /// Everything to do with stations is managed here.
 /// <para>This class cannot be instantiated. It is a singleton.</para>
 /// </summary>
@@ -38,9 +38,7 @@ public partial class StationManager : IDisposable
     /// <summary>
     /// Initializes a new instance of the <see cref="StationManager"/> class.
     /// </summary>
-    private StationManager()
-    {
-    }
+    private StationManager() {}
 
     /// <summary>
     /// Disposes of the station manager and clears all stations.
@@ -79,7 +77,7 @@ public partial class StationManager : IDisposable
     /// <summary>
     /// Loads a station from the specified directory into the manager.
     /// This method will not clear existing stations, unlike <see cref="LoadStations"/> 
-    /// and is used to load a single station from a single directory, not necessarily from the staging directory.
+    /// and is used to load a single station from a single directory, not from the staging directory.
     /// </summary>
     /// <param name="directory">The directory to load the station from.</param>
     /// <param name="songDirectory">The song directory to load the station's songs from.</param>
@@ -207,7 +205,8 @@ public partial class StationManager : IDisposable
             pair.Key.TrackedObject.AddIcon(icon);
             StationsAsBindingList.First(s => s.Id == pair.Key.Id).TrackedObject.AddIcon(icon);
 
-            var iconEditor = new IconEditor(pair.Key, icon, isExistingIcon ? IconEditorType.FromArchive : IconEditorType.FromPNG);
+            var iconEditor = new IconEditor(pair.Key, icon, isExistingIcon ? IconEditorType.FromArchive : IconEditorType.FromPng);
+            iconEditor.Translate();
             pair.Value.Add(iconEditor);
 
             StationUpdated?.Invoke(this, stationId);
@@ -287,6 +286,7 @@ public partial class StationManager : IDisposable
 
             // Add an IconEditor for the copied icon
             var copiedIconEditor = new IconEditor(currentStation, copiedIcon, IconEditorType.FromArchive);
+            copiedIconEditor.Translate();
             currentStationPair.Value.Add(copiedIconEditor);
 
             // Notify listeners that the station has been updated
@@ -602,7 +602,8 @@ public partial class StationManager : IDisposable
                 var wolvenIcon = pair.Key.TrackedObject.Icons.FirstOrDefault(i => i.Id.Equals(iconId));
                 if (wolvenIcon == null) return;
 
-                var editor = new IconEditor(pair.Key, wolvenIcon, isExistingArchive ? IconEditorType.FromArchive : IconEditorType.FromPNG);
+                var editor = new IconEditor(pair.Key, wolvenIcon, isExistingArchive ? IconEditorType.FromArchive : IconEditorType.FromPng);
+                editor.Translate();
                 pair.Value.Add(editor);
             }
         }
@@ -1000,15 +1001,13 @@ public partial class StationManager : IDisposable
                              : Task.Run(() => SynchronizeFilesAsync(gameDir, stagingDir))).ToList();
 
             await Task.WhenAll(tasks);
-            SyncStatusChanged?.Invoke(GlobalData.Strings.GetString("SyncStatusComplete") ??
-                                      "Synchronization complete.");
+            SyncStatusChanged?.Invoke(Strings.SyncStatusComplete);
             StationsSynchronized?.Invoke(true);
         }
         catch (Exception ex)
         {
             AuLogger.GetCurrentLogger<StationManager>().Error(ex, "Error synchronizing stations.");
-            SyncStatusChanged?.Invoke(
-                GlobalData.Strings.GetString("SyncStatusError") ?? "Error synchronizing stations.");
+            SyncStatusChanged?.Invoke(Strings.SyncStatusError);
             StationsSynchronized?.Invoke(false);
         }
     }
@@ -1049,8 +1048,7 @@ public partial class StationManager : IDisposable
 
             var progress = (int)((float)fileCount / files.Count * 100);
             SyncProgressChanged?.Invoke(progress);
-            SyncStatusChanged?.Invoke(string.Format(
-                GlobalData.Strings.GetString("SyncProgressChanged") ?? "Synchronizing Files... {0}%", progress));
+            SyncStatusChanged?.Invoke(string.Format(Strings.SyncProgressChangedFormat, progress));
         }
 
         await Task.WhenAll(fileTasks);
@@ -1085,8 +1083,7 @@ public partial class StationManager : IDisposable
 
             var progress = (int)((float)dirCount / sourceSubDirs.Count * 100);
             SyncProgressChanged?.Invoke(progress);
-            SyncStatusChanged?.Invoke(string.Format(
-                GlobalData.Strings.GetString("SyncProgressChanged") ?? "Synchronizing Directories... {0}%", progress));
+            SyncStatusChanged?.Invoke(string.Format(Strings.SyncProgressDirectoriesChangedFormat, progress));
         }
 
         await Task.WhenAll(dirTasks);
@@ -1131,7 +1128,7 @@ public partial class StationManager : IDisposable
         {
             MetaData =
             {
-                DisplayName = $"{GlobalData.Strings.GetString("NewStationListBoxEntry")}"
+                DisplayName = Strings.NewStationListBoxEntry
             }
         };
         var trackedStation = new TrackableObject<Station>(station);
@@ -1412,8 +1409,7 @@ public partial class StationManager : IDisposable
     /// <summary>
     /// The format string for the station count.
     /// </summary>
-    private static string StationCountFormat =>
-        GlobalData.Strings.GetString("EnabledStationsCount") ?? "Enabled Stations: {0} / {1}";
+    private static string StationCountFormat => Strings.EnabledStationsCount;
 
     #endregion
 
@@ -1490,8 +1486,7 @@ public partial class StationManager : IDisposable
     /// <summary>
     /// The current list of stations managed by the manager as a binding list. Auto-updates when stations are added or removed.
     /// </summary>
-    public BindingList<TrackableObject<Station>> StationsAsBindingList { get; } =
-        [];
+    public BindingList<TrackableObject<Station>> StationsAsBindingList { get; } = [];
 
     /// <summary>
     /// The current list of stations managed by the manager as a list.

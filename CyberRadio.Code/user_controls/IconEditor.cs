@@ -1,17 +1,14 @@
 ﻿using AetherUtils.Core.Logging;
-using AetherUtils.Core.Structs;
 using RadioExt_Helper.models;
 using RadioExt_Helper.Properties;
 using RadioExt_Helper.utility;
-using System.ComponentModel;
 using System.Text.RegularExpressions;
 using RadioExt_Helper.custom_controls;
 using WIG.Lib.Models;
 using WIG.Lib.Utility;
-using System.Drawing;
 
 namespace RadioExt_Helper.user_controls
-{//TODO: Translations
+{
     public sealed partial class IconEditor : UserControl, IEditor
     {
         /// <summary>
@@ -92,7 +89,28 @@ namespace RadioExt_Helper.user_controls
 
         public void Translate()
         {
-            //TODO: add translations
+            editorTabs.TabPages[0].Text = string.Format(Strings.IconEditor_Translate_Editing_Icon___0_, @"custom_icon");
+            lblArchivePath.Text = Strings.IconEditor_Translate_Archive_Path_;
+            lblAtlasName.Text = Strings.IconEditor_Translate_Atlas_Name_;
+            lblIconName.Text = Strings.IconEditor_Translate_Icon_Name_;
+            lblIconPath.Text = Strings.IconEditor_Translate_Icon_Path_;
+            lblIconPart.Text = Strings.IconEditor_Translate_Icon_Part_;
+            lblImagePath.Text = Strings.IconEditor_Translate_Image_Path_;
+            lblSha256Hash.Text = Strings.IconEditor_Translate_SHA256_Hash_;
+            lblImageWidth.Text = string.Format(Strings.IconEditor_Translate_W___0_, 0);
+            lblImageHeight.Text = string.Format(Strings.IconEditor_Translate_H___0_, 0);
+            lblImageFormat.Text = string.Format(Strings.IconEditor_Translate_Format___0_, "Undefined");
+            lblImageColorMode.Text = string.Format(Strings.IconEditor_Translate_Color_Mode___0_, "Undefined");
+            lblImageStatus.Text = Strings.IconEditor_Translate_No_Image_Issues;
+            btnImportIcon.Text = Strings.IconEditor_Translate_Start_Import;
+            btnStartExtract.Text = Strings.IconEditor_Translate_Start_Extraction;
+            btnCancelImport.Text = Strings.IconEditor_Translate_Cancel_Action;
+
+            grpIconPreview.Text = Strings.IconEditor_Translate_Preview;
+            grpIconProperties.Text = Strings.IconEditor_Translate_Properties;
+            grpActions.Text = Strings.IconEditor_Translate_Actions;
+
+            lblStatus.Text = Strings.Ready;
 
             _logViewer.Translate();
         }
@@ -101,7 +119,7 @@ namespace RadioExt_Helper.user_controls
         /// Set the log identifier for the log viewer based on whether the icon is valid and whether it is from an archive or a .png originally.
         /// </summary>
         public void SetLogIdentifier()
-        { 
+        {
             var identifier = Icon.TrackedObject.CheckIconValid()
             ? (Icon.TrackedObject.IsFromArchive ? Icon.TrackedObject.ArchivePath : Icon.TrackedObject.AtlasName) : null;
             _logViewer.Identifier = identifier;
@@ -120,11 +138,7 @@ namespace RadioExt_Helper.user_controls
             editorTabs.TabPages[0].ImageIndex = 0;
 
             SetIconFields();
-
             SetLogIdentifier();
-
-            //dgvStatus.DataSource = null;
-            //dgvStatus.DataSource = _commandOutputs;
 
             if (IconEditorType == IconEditorType.FromArchive)
             {
@@ -167,15 +181,17 @@ namespace RadioExt_Helper.user_controls
                     else
                     {
                         txtAtlasName.Enabled = false;
-                        
-                        txtAtlasName.Text = !Icon.TrackedObject.CustomIcon.InkAtlasPath.Equals("path\\to\\custom\\atlas.inkatlas") ? 
-                            Icon.TrackedObject.AtlasName : 
+
+                        txtAtlasName.Text = !Icon.TrackedObject.CustomIcon.InkAtlasPath.Equals("path\\to\\custom\\atlas.inkatlas") ?
+                            Icon.TrackedObject.AtlasName : string.Empty;
+                        txtAtlasName.PlaceholderText =
                             Strings.IconEditor_SetFieldsBasedOnImagePath_To_be_determined_from_archive___;
 
-                        btnStartExtract.Enabled = !Icon.TrackedObject.CheckIconValid(); //TODO: disable this if the icon has already been extracted
+                        btnStartExtract.Enabled = !Icon.TrackedObject.CheckIconValid(); //Disable the extract button if the icon is valid (no need to extract again).
                     }
                 });
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 AuLogger.GetCurrentLogger<IconEditor>("SetFieldsBasedOnIsFromArchive").Error(ex);
             }
@@ -191,7 +207,6 @@ namespace RadioExt_Helper.user_controls
         {
             this.SafeInvoke(() => pgProgress.Value = 0);
             AddStatusRow(e.Message);
-            //this.SafeInvoke(() => lblStatus.Text = e.Message);
         }
 
         private void AddStatusRow(string? status)
@@ -202,8 +217,6 @@ namespace RadioExt_Helper.user_controls
 
                 //Pass the status to the log viewer
                 _logViewer.AddLogEntry(DateTime.Now, status);
-                //_commandOutputs.Add(new Pair<DateTime, string>(DateTime.Now, status));
-                ////dgvStatus.Rows.Add([DateTime.Now, status]);
             });
         }
 
@@ -229,7 +242,7 @@ namespace RadioExt_Helper.user_controls
             txtImagePath.Text = _iconPath;
             txtIconName.Text = Icon.TrackedObject.IconName;
             txtAtlasName.Text = Icon.TrackedObject.IconName.ToLower();
-            editorTabs.TabPages[0].Text = string.Format(Strings.IconEditor_txtIconName_TextChanged_Editing_Tab___0_, Icon.TrackedObject.IconName);
+            editorTabs.TabPages[0].Text = string.Format(Strings.IconEditor_Translate_Editing_Icon___0_, Icon.TrackedObject.IconName);
 
             SetImagePreviewProperties();
 
@@ -318,7 +331,7 @@ namespace RadioExt_Helper.user_controls
             const int maxValue = 250;
             var progress = new Progress<int>(value =>
             {
-                // Scale progress to fit between 0 and 100
+                // Scale progress to fit between 0 and max value (250)
                 var scaledValue = (value * 100) / maxValue;
                 Invoke(() => pgProgress.Value = Math.Min(100, scaledValue));
             });
@@ -389,11 +402,10 @@ namespace RadioExt_Helper.user_controls
                     Directory.CreateDirectory(outputPath);
 
                 if (string.IsNullOrEmpty(iconArchivePath))
-                    throw new ArgumentNullException(nameof(iconArchivePath), GlobalData.Strings.GetString("IconEditorCopyIconToStagingNullEmpty"));
+                    throw new ArgumentNullException(nameof(iconArchivePath), Strings.IconEditorCopyIconToStagingNullEmpty);
 
                 if (string.IsNullOrEmpty(imagePath))
-                    throw new ArgumentNullException(nameof(imagePath),
-                        GlobalData.Strings.GetString("IconEditorCopyIconToStagingImageNullEmpty"));
+                    throw new ArgumentNullException(nameof(imagePath), Strings.IconEditorCopyIconToStagingImageNullEmpty);
 
                 var stagingIconPath = Path.Combine(outputPath, Path.GetFileName(iconArchivePath));
                 var stagingPngPath = Path.Combine(outputPath, Path.GetFileName(imagePath));
@@ -432,7 +444,7 @@ namespace RadioExt_Helper.user_controls
                 txtIconPart.Text = Icon.TrackedObject.CustomIcon.InkAtlasPart;
                 txtAtlasName.Text = Icon.TrackedObject.AtlasName;
                 txtIconName.Text = Icon.TrackedObject.IconName;
-                editorTabs.TabPages[0].Text = string.Format(Strings.IconEditor_txtIconName_TextChanged_Editing_Tab___0_, Icon.TrackedObject.IconName);
+                editorTabs.TabPages[0].Text = string.Format(Strings.IconEditor_Translate_Editing_Icon___0_, Icon.TrackedObject.IconName);
             });
         }
 
@@ -460,10 +472,10 @@ namespace RadioExt_Helper.user_controls
 
                 if (fromInitialArchive)
                 {
-                    lblImageWidth.Text = @"W: TBD";
-                    lblImageHeight.Text = @"H: TBD";
-                    lblImageFormat.Text = string.Format(Strings.IconEditor_SetImagePreviewProperties_Img__Fmt____0_, "TBD");
-                    lblImageColorMode.Text = string.Format(Strings.IconEditor_SetImagePreviewProperties_Color_Mode___0_, "TBD");
+                    lblImageWidth.Text = string.Format(Strings.IconEditor_Translate_W___0_, "TBD");
+                    lblImageHeight.Text = string.Format(Strings.IconEditor_Translate_H___0_, "TBD");
+                    lblImageFormat.Text = string.Format(Strings.IconEditor_Translate_Format___0_, "TBD");
+                    lblImageColorMode.Text = string.Format(Strings.IconEditor_Translate_Color_Mode___0_, "TBD");
                     picStationIcon.Image = Resources.pending_extraction_128x128;
                 }
                 else
@@ -471,10 +483,10 @@ namespace RadioExt_Helper.user_controls
                     Icon.TrackedObject.EnsureImage();
                     picStationIcon.SetImage(Icon.TrackedObject.ImagePath);
 
-                    lblImageWidth.Text = $@"W: {picStationIcon.ImageProperties.Width} px";
-                    lblImageHeight.Text = $@"H: {picStationIcon.ImageProperties.Height} px";
-                    lblImageFormat.Text = string.Format(Strings.IconEditor_SetImagePreviewProperties_Img__Fmt____0_, picStationIcon.ImageProperties.ImageFormat);
-                    lblImageColorMode.Text = string.Format(Strings.IconEditor_SetImagePreviewProperties_Color_Mode___0_, picStationIcon.ImageProperties.PixelFormat);
+                    lblImageWidth.Text = string.Format(Strings.IconEditor_Translate_W___0_, picStationIcon.ImageProperties.Width + " px");
+                    lblImageHeight.Text = string.Format(Strings.IconEditor_Translate_H___0_, picStationIcon.ImageProperties.Height + " px");
+                    lblImageFormat.Text = string.Format(Strings.IconEditor_Translate_Format___0_, picStationIcon.ImageProperties.ImageFormat);
+                    lblImageColorMode.Text = string.Format(Strings.IconEditor_Translate_Color_Mode___0_, picStationIcon.ImageProperties.PixelFormat);
                 }
 
                 if (picStationIcon.Image == null) return;
@@ -588,39 +600,44 @@ namespace RadioExt_Helper.user_controls
             }
         }
 
+        private void lblIconName_MouseEnter(object sender, EventArgs e)
+        {
+            lblStatus.Text = Strings.IconEditor_IconName_Hint;
+        }
+
         private void lblAtlasName_MouseEnter(object sender, EventArgs e)
         {
-            lblStatus.Text = GlobalData.Strings.GetString("IconEditor_AtlasName_Hint") ?? "The name of the atlas file that the icon is stored in.";
+            lblStatus.Text = Strings.IconEditor_AtlasName_Hint;
         }
 
         private void lblSha256Hash_MouseEnter(object sender, EventArgs e)
         {
-            lblStatus.Text = GlobalData.Strings.GetString("IconEditor_Sha256Hash_Hint") ?? "The SHA256 hash of the archive file.";
+            lblStatus.Text = Strings.IconEditor_Sha256Hash_Hint;
         }
 
         private void lblArchivePath_MouseEnter(object sender, EventArgs e)
         {
-            lblStatus.Text = GlobalData.Strings.GetString("IconEditor_ArchivePath_Hint") ?? "The path to the archive file that contains the icon.";
+            lblStatus.Text = Strings.IconEditor_ArchivePath_Hint;
         }
 
         private void lblImagePath_MouseEnter(object sender, EventArgs e)
         {
-            lblStatus.Text = GlobalData.Strings.GetString("IconEditor_ImagePath_Hint") ?? "The path to the image file that created the icon.";
+            lblStatus.Text = Strings.IconEditor_ImagePath_Hint;
         }
 
         private void lblIconPath_MouseEnter(object sender, EventArgs e)
         {
-            lblStatus.Text = GlobalData.Strings.GetString("IconEditor_IconPath_Hint") ?? "The path to the icon within the archive file. Autogenerated.";
+            lblStatus.Text = Strings.IconEditor_IconPath_Hint;
         }
 
         private void lblIconPart_MouseEnter(object sender, EventArgs e)
         {
-            lblStatus.Text = GlobalData.Strings.GetString("IconEditor_IconPart_Hint") ?? "The part of the icon within the icon path. Autogenerated.";
+            lblStatus.Text = Strings.IconEditor_IconPart_Hint;
         }
 
         private void LblMouseLeave(object sender, EventArgs e)
         {
-            lblStatus.Text = GlobalData.Strings.GetString("Ready") ?? "Ready";
+            lblStatus.Text = Strings.Ready;
         }
 
         private void txtAtlasName_TextChanged(object sender, EventArgs e)
@@ -648,7 +665,7 @@ namespace RadioExt_Helper.user_controls
 
         private void txtIconName_TextChanged(object sender, EventArgs e)
         {
-            editorTabs.TabPages[0].Text = string.Format(Strings.IconEditor_txtIconName_TextChanged_Editing_Tab___0_, txtIconName.Text);
+            editorTabs.TabPages[0].Text = string.Format(Strings.IconEditor_Translate_Editing_Icon___0_, txtIconName.Text);
             Icon.TrackedObject.IconName = txtIconName.Text;
 
             if (Icon.TrackedObject.IsFromArchive && !_isExtracting) return;
@@ -662,7 +679,7 @@ namespace RadioExt_Helper.user_controls
             IconUpdated?.Invoke(this, Icon);
         }
 
-        private string FormatAtlasName(string iconName)
+        private static string FormatAtlasName(string iconName)
         {
             var lowerName = iconName.ToLower();
             // Replace spaces with underscores and remove all special characters except underscores.
@@ -671,5 +688,30 @@ namespace RadioExt_Helper.user_controls
 
         [GeneratedRegex(@"[^a-z0-9_]+")]
         private static partial Regex NoSpecialCharactersRegEx();
+
+        private void picStationIcon_MouseEnter(object sender, EventArgs e)
+        {
+            lblStatus.Text = Strings.IconEditor_CustomIconPictureHelp;
+        }
+
+        private void btnImportIcon_MouseEnter(object sender, EventArgs e)
+        {
+            lblStatus.Text = Strings.IconEditor_ImportIcon;
+        }
+
+        private void btnStartExtract_MouseEnter(object sender, EventArgs e)
+        {
+            lblStatus.Text = Strings.IconEditor_ExtractIcon;
+        }
+
+        private void btnCancelImport_MouseEnter(object sender, EventArgs e)
+        {
+            lblStatus.Text = Strings.IconEditor_CancelAction;
+        }
+
+        private void CopyBtnMouseEnter(object sender, EventArgs e)
+        {
+            lblStatus.Text = Strings.IconEditor_CopyToClipboard;
+        }
     }
 }

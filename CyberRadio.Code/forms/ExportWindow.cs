@@ -38,8 +38,7 @@ public partial class ExportWindow : Form
     private readonly Json<List<WolvenIcon>> _iconListJson = new();
     private readonly List<TrackableObject<Station>> _stationsToExport;
 
-    private readonly string _statusString =
-        GlobalData.Strings.GetString("ExportingStationStatus") ?? "Exporting station: {0}";
+    private readonly string _statusString = Strings.ExportingStationStatus;
 
     private DirectoryCopier? _dirCopier;
     private bool _exportToGameComplete;
@@ -123,21 +122,21 @@ public partial class ExportWindow : Form
     /// </summary>
     private void Translate()
     {
-        Text = GlobalData.Strings.GetString("Export");
-        btnCancel.Text = GlobalData.Strings.GetString("Cancel");
-        btnExportToGame.Text = GlobalData.Strings.GetString("ExportToGame");
-        btnExportToStaging.Text = GlobalData.Strings.GetString("ExportToStaging");
-        btnOpenStagingFolder.Text = GlobalData.Strings.GetString("OpenStagingFolder");
-        btnOpenGameFolder.Text = GlobalData.Strings.GetString("OpenGameFolder");
-        lblStatus.Text = GlobalData.Strings.GetString("Ready");
-        lblTip.Text = GlobalData.Strings.GetString("ExportWindowTip");
+        Text = Strings.Export;
+        btnCancel.Text = Strings.Cancel;
+        btnExportToGame.Text = Strings.ExportToGame;
+        btnExportToStaging.Text = Strings.ExportToStaging;
+        btnOpenStagingFolder.Text = Strings.OpenStagingFolder;
+        btnOpenGameFolder.Text = Strings.OpenGameFolder;
+        lblStatus.Text = Strings.Ready;
+        lblTip.Text = Strings.ExportWindowTip;
 
-        lvStations.Columns[0].Text = GlobalData.Strings.GetString("LVStationStatus");
-        lvStations.Columns[1].Text = GlobalData.Strings.GetString("LVDisplayName");
-        lvStations.Columns[2].Text = GlobalData.Strings.GetString("LVStationIcon");
-        lvStations.Columns[3].Text = GlobalData.Strings.GetString("LVSongCount");
-        lvStations.Columns[4].Text = GlobalData.Strings.GetString("LVStreamURL");
-        lvStations.Columns[5].Text = GlobalData.Strings.GetString("LVProposedPath");
+        lvStations.Columns[0].Text = Strings.LVStationStatus;
+        lvStations.Columns[1].Text = Strings.LVDisplayName;
+        lvStations.Columns[2].Text = Strings.LVStationIcon;
+        lvStations.Columns[3].Text = Strings.LVSongCount;
+        lvStations.Columns[4].Text = Strings.LVStreamURL;
+        lvStations.Columns[5].Text = Strings.LVProposedPath;
     }
 
     /// <summary>
@@ -151,17 +150,17 @@ public partial class ExportWindow : Form
         foreach (var lvItem in from station in _stationsToExport
                                let isActive = station.TrackedObject.GetStatus()
                                let customIconString = station.TrackedObject.CustomIcon.UseCustom
-                                   ? GlobalData.Strings.GetString("CustomIcon")
+                                   ? Strings.CustomIcon
                                    : station.TrackedObject.MetaData.Icon
                                let songString = station.TrackedObject.MetaData.StreamInfo.IsStream
-                                   ? GlobalData.Strings.GetString("IsStream")
+                                   ? Strings.IsStream
                                    : station.TrackedObject.Songs.Count.ToString()
                                let streamString = station.TrackedObject.MetaData.StreamInfo.IsStream
                                    ? station.TrackedObject.MetaData.StreamInfo.StreamUrl
-                                   : GlobalData.Strings.GetString("UsingSongs")
+                                   : Strings.UsingSongs
                                let proposedPath = isActive
                                    ? Path.Combine(radioExtPath, station.TrackedObject.MetaData.DisplayName)
-                                   : GlobalData.Strings.GetString("DisabledStation")
+                                   : Strings.DisabledStation
                                select new ListViewItem([
                                    string.Empty, // Placeholder for the icon column
                      station.TrackedObject.MetaData.DisplayName,
@@ -245,9 +244,8 @@ public partial class ExportWindow : Form
     {
         if (!string.IsNullOrEmpty(PathHelper.GetRadioExtPath(GameBasePath))) return true;
 
-        MessageBox.Show(GlobalData.Strings.GetString("NoRadioExtMsg") ??
-                        "You do not have the radioExt mod installed. Can't export radio stations to game.",
-            GlobalData.Strings.GetString("NoModInstalled") ?? "No Mod Installed",
+        MessageBox.Show(Strings.NoRadioExtMsg,
+            Strings.NoModInstalled,
             MessageBoxButtons.OK, MessageBoxIcon.Error);
         return false;
     }
@@ -258,7 +256,7 @@ public partial class ExportWindow : Form
     private void Reset()
     {
         ToggleButtons();
-        UpdateStatus(GlobalData.Strings.GetString("ExportCanceled") ?? "Export Canceled");
+        UpdateStatus(Strings.ExportCanceled);
         pgExportProgress.Value = 0;
 
         _isCancelling = false;
@@ -312,8 +310,7 @@ public partial class ExportWindow : Form
 
                         if (!CreateSongListJson(newStationPath, station))
                             AuLogger.GetCurrentLogger<ExportWindow>("BG_ExportStaging")
-                                .Error(
-                                    "Couldn't save the songs.sgls file. This means that CRA won't know where your station's songs are located.");
+                                .Error("Couldn't save the songs.sgls file. This means that CRA won't know where your station's songs are located.");
                     }
                     else
                     {
@@ -329,8 +326,7 @@ public partial class ExportWindow : Form
                     {
                         if (!CreateIconListJson(newStationPath, station))
                             AuLogger.GetCurrentLogger<ExportWindow>("BG_ExportStaging")
-                                .Error(
-                                    "Couldn't save the icons.json file. This means that CRA won't know where your station's icons are located.");
+                                .Error("Couldn't save the icons.json file. This means that CRA won't know where your station's icons are located.");
                     }
                     else
                     {
@@ -347,8 +343,7 @@ public partial class ExportWindow : Form
 
                     if (!CreateMetaDataJson(newStationPath, station))
                         AuLogger.GetCurrentLogger<ExportWindow>("BG_ExportStaging")
-                            .Error(
-                                "Couldn't save the metadata.json file. This means that RadioExt will not work with this station!");
+                            .Error("Couldn't save the metadata.json file. This means that RadioExt will not work with this station!");
                 }
                 catch (Exception ex)
                 {
@@ -357,8 +352,7 @@ public partial class ExportWindow : Form
             }
 
             RemoveDeletedStations(existingDirectories);
-            AuLogger.GetCurrentLogger<ExportWindow>("BG_ExportToStaging")
-                .Info($"Exported {_stationsToExport.Count} stations to staging directory: {StagingPath}");
+            AuLogger.GetCurrentLogger<ExportWindow>("BG_ExportToStaging").Info($"Exported {_stationsToExport.Count} stations to staging directory: {StagingPath}");
         }
         catch (Exception ex)
         {
@@ -418,13 +412,11 @@ public partial class ExportWindow : Form
                 File.Copy(oldFilePath, newFilePath, true);
                 song.FilePath = newFilePath; //Update file path of the song to the new station's directory
 
-                AuLogger.GetCurrentLogger<ExportWindow>("CopySongFiles")
-                    .Info($"Copied song from old station folder: {oldFilePath} to new station folder: {newFilePath}.");
+                AuLogger.GetCurrentLogger<ExportWindow>("CopySongFiles").Info($"Copied song from old station folder: {oldFilePath} to new station folder: {newFilePath}.");
             }
             catch (Exception ex)
             {
-                AuLogger.GetCurrentLogger<ExportWindow>("CopySongFiles")
-                    .Error(ex, $"Failed to copy {oldFilePath} to {newFilePath}.");
+                AuLogger.GetCurrentLogger<ExportWindow>("CopySongFiles").Error(ex, $"Failed to copy {oldFilePath} to {newFilePath}.");
             }
         }
     }
@@ -556,7 +548,7 @@ public partial class ExportWindow : Form
             _exportToStagingComplete = true;
             pgExportProgress.Value = 100;
             ToggleButtons();
-            UpdateStatus(GlobalData.Strings.GetString("ExportCompleteStatus") ?? "Exported to Staging!");
+            UpdateStatus(Strings.ExportCompleteStatus);
             _stationsToExport.ForEach(s => s.AcceptChanges());
             StationManager.Instance.ResetNewStations();
 
@@ -607,8 +599,7 @@ public partial class ExportWindow : Form
         DeleteInactiveDirectories(inactiveStationPaths);
         DeleteInactiveStationIconsFromGame(inactiveStations);
 
-        AuLogger.GetCurrentLogger<ExportWindow>("BG_ExportToGame")
-            .Info($"Exported {activeStations.Count} stations to game radios directory: {radiosPath}");
+        AuLogger.GetCurrentLogger<ExportWindow>("BG_ExportToGame").Info($"Exported {activeStations.Count} stations to game radios directory: {radiosPath}");
     }
 
     /// <summary>
@@ -665,13 +656,11 @@ public partial class ExportWindow : Form
             try
             {
                 File.Delete(file);
-                AuLogger.GetCurrentLogger<ExportWindow>("CopySongsToGame")
-                    .Info($"Song: {file} is not present in the songs.sgls file. Deleting...");
+                AuLogger.GetCurrentLogger<ExportWindow>("CopySongsToGame").Info($"Song: {file} is not present in the songs.sgls file. Deleting...");
             }
             catch (Exception ex)
             {
-                AuLogger.GetCurrentLogger<ExportWindow>("CopySongsToGame")
-                    .Error(ex, $"Failed to delete {file}.");
+                AuLogger.GetCurrentLogger<ExportWindow>("CopySongsToGame").Error(ex, $"Failed to delete {file}.");
             }
         }
 
@@ -683,13 +672,11 @@ public partial class ExportWindow : Form
             try
             {
                 File.Copy(sourcePath, targetFilePath, true);
-                AuLogger.GetCurrentLogger<ExportWindow>("CopySongsToGame")
-                    .Info($"Copied song: {sourcePath} to {targetFilePath}");
+                AuLogger.GetCurrentLogger<ExportWindow>("CopySongsToGame").Info($"Copied song: {sourcePath} to {targetFilePath}");
             }
             catch (Exception ex)
             {
-                AuLogger.GetCurrentLogger<ExportWindow>("CopySongsToGame")
-                    .Error(ex, $"Failed to copy {sourcePath} to {targetFilePath}");
+                AuLogger.GetCurrentLogger<ExportWindow>("CopySongsToGame").Error(ex, $"Failed to copy {sourcePath} to {targetFilePath}");
                 return false;
             }
         }
@@ -726,8 +713,6 @@ public partial class ExportWindow : Form
                         $"All previous station icons have been deleted from the game. If this is expected, no action is required. Otherwise, mark an icon as active to restore it.");
                     continue;
                 }
-
-                //var inactiveIcons = station.TrackedObject.Icons.Except([activeIcon]);
 
                 var iconPath = activeIcon.TrackedObject.ArchivePath;
                 var iconHash = activeIcon.TrackedObject.Sha256HashOfArchiveFile;
@@ -974,7 +959,7 @@ public partial class ExportWindow : Form
             _exportToGameComplete = true;
             pgExportProgress.Value = 100;
             ToggleButtons();
-            UpdateStatus(GlobalData.Strings.GetString("ExportToGameComplete") ?? "Exported to Game!");
+            UpdateStatus(Strings.ExportToGameComplete);
 
             var mainForm = Owner as MainForm;
             mainForm?.SetExportInProgress(false);

@@ -29,7 +29,7 @@ using Image = SixLabors.ImageSharp.Image;
 namespace RadioExt_Helper.utility;
 
 /// <summary>
-///     Helper class to get the various paths associated with the game.
+///     Helper class to get the various paths associated with the game and provides some helper methods for working with paths.
 /// </summary>
 public static class PathHelper
 {
@@ -42,8 +42,8 @@ public static class PathHelper
     {
         OpenFileDialog dialog = new()
         {
-            Filter = @"Game Executable|Cyberpunk2077.exe",
-            Title = GlobalData.Strings.GetString("Open") ?? "Open Game Executable"
+            Filter = Strings.GamePathFilter + @"|Cyberpunk2077.exe",
+            Title = Strings.OpenGameExecutable
         };
 
         try
@@ -56,7 +56,7 @@ public static class PathHelper
                 if (dialog.FileName.Contains("Cyberpunk2077"))
                     gamePath = dialog.FileName;
                 else
-                    MessageBox.Show(GlobalData.Strings.GetString("NonCyberpunkExe"));
+                    MessageBox.Show(Strings.NonCyberpunkExe);
             } while (gamePath.Equals(string.Empty) && shouldLoop);
 
             var name = Directory.GetParent(gamePath)?.FullName;
@@ -89,7 +89,7 @@ public static class PathHelper
     {
         FolderBrowserDialog dialog = new()
         {
-            Description = GlobalData.Strings.GetString("StagingPathHelp") ?? "Select the radio station staging path.",
+            Description = Strings.StagingPathHelp,
             UseDescriptionForTitle = true
         };
 
@@ -126,8 +126,7 @@ public static class PathHelper
         }
         catch (Exception ex)
         {
-            AuLogger.GetCurrentLogger("PathHelper.GetRadioExtPath")
-                .Error(ex, "Error retrieving path to radioExt mod's folder.");
+            AuLogger.GetCurrentLogger("PathHelper.GetRadioExtPath").Error(ex, "Error retrieving path to radioExt mod's folder.");
             return string.Empty;
         }
     }
@@ -166,8 +165,7 @@ public static class PathHelper
         }
         catch (Exception ex)
         {
-            AuLogger.GetCurrentLogger("PathHelper.IsSubPath")
-                .Error(ex, "An error occurred while checking if the path is a subpath.");
+            AuLogger.GetCurrentLogger("PathHelper.IsSubPath").Error(ex, "An error occurred while checking if the path is a subpath.");
             return false;
         }
     }
@@ -191,16 +189,11 @@ public static class PathHelper
             var relativeUri = stagingUri.MakeRelativeUri(fullUri);
             var relativePath = Uri.UnescapeDataString(relativeUri.ToString());
 
-            if (string.IsNullOrEmpty(relativePath))
-                return fullPath;
-
-            // Replace forward slashes with backslashes for Windows paths
-            return relativePath.Replace('/', '\\');
+            return string.IsNullOrEmpty(relativePath) ? fullPath : relativePath.Replace('/', '\\'); // Replace forward slashes with backslashes for Windows paths
         }
         catch (Exception ex)
         {
-            AuLogger.GetCurrentLogger("PathHelper.GetRelativePath")
-                .Error(ex, "An error occurred while getting the relative path.");
+            AuLogger.GetCurrentLogger("PathHelper.GetRelativePath").Error(ex, "An error occurred while getting the relative path.");
             return fullPath;
         }
     }
@@ -247,7 +240,7 @@ public static class PathHelper
     {
         try
         {
-            foreach (var c in Path.GetInvalidPathChars()) path = path.Replace(c, '_');
+            path = Path.GetInvalidPathChars().Aggregate(path, (current, c) => current.Replace(c, '_'));
             path = path.Replace("'", "_"); // Replace specific characters causing issues
             return path;
         }
@@ -363,21 +356,20 @@ public static class PathHelper
 
         await Task.Run(() =>
         {
-            using (var archive = ZipArchive.Open(zipFilePath))
+            using var archive = ZipArchive.Open(zipFilePath);
+
+            foreach (var entry in archive.Entries.Where(entry => !entry.IsDirectory))
             {
-                foreach (var entry in archive.Entries.Where(entry => !entry.IsDirectory))
-                {
-                    var entryKey = entry.Key;
-                    if (string.IsNullOrEmpty(entryKey)) continue;
+                var entryKey = entry.Key;
+                if (string.IsNullOrEmpty(entryKey)) continue;
 
-                    var destinationPath = Path.Combine(destinationDirectory, entryKey);
-                    var destinationDir = Path.GetDirectoryName(destinationPath);
+                var destinationPath = Path.Combine(destinationDirectory, entryKey);
+                var destinationDir = Path.GetDirectoryName(destinationPath);
 
-                    if (string.IsNullOrEmpty(destinationDir)) continue;
+                if (string.IsNullOrEmpty(destinationDir)) continue;
 
-                    Directory.CreateDirectory(destinationDir);
-                    entry.WriteToFile(destinationPath, new ExtractionOptions() { ExtractFullPath = true, Overwrite = true });
-                }
+                Directory.CreateDirectory(destinationDir);
+                entry.WriteToFile(destinationPath, new ExtractionOptions() { ExtractFullPath = true, Overwrite = true });
             }
         });
     }

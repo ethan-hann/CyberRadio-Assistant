@@ -133,11 +133,29 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Music Files (*.mp3;*.wav;*.ogg;*.flac;*.mp2;*.wax;*.wma).
+        /// </summary>
+        internal static string AddSongsFileBrowserFilter {
+            get {
+                return ResourceManager.GetString("AddSongsFileBrowserFilter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select song files to add.
         /// </summary>
-        internal static string AddSongs {
+        internal static string AddSongsFileBrowserTitle {
             get {
-                return ResourceManager.GetString("AddSongs", resourceCulture);
+                return ResourceManager.GetString("AddSongsFileBrowserTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Opens a file selector to add valid audio files to this station&apos;s song list..
+        /// </summary>
+        internal static string AddSongsHelp {
+            get {
+                return ResourceManager.GetString("AddSongsHelp", resourceCulture);
             }
         }
         
@@ -147,6 +165,15 @@ namespace RadioExt_Helper {
         internal static string AddSongsToolStrip {
             get {
                 return ResourceManager.GetString("AddSongsToolStrip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Adds the song to the station&apos;s ordered song list..
+        /// </summary>
+        internal static string AddToOrderHelp {
+            get {
+                return ResourceManager.GetString("AddToOrderHelp", resourceCulture);
             }
         }
         
@@ -183,6 +210,15 @@ namespace RadioExt_Helper {
         internal static string ApiUnsavedChanges {
             get {
                 return ResourceManager.GetString("ApiUnsavedChanges", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mod Archive (*.archive).
+        /// </summary>
+        internal static string ArchiveFiles {
+            get {
+                return ResourceManager.GetString("ArchiveFiles", resourceCulture);
             }
         }
         
@@ -340,6 +376,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Backup/Restore.
+        /// </summary>
+        internal static string BackupRestoreMenuItem {
+            get {
+                return ResourceManager.GetString("BackupRestoreMenuItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Backup Staging Folder.
         /// </summary>
         internal static string BackupStagingFolder {
@@ -403,6 +448,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Clear All Data!.
+        /// </summary>
+        internal static string ClearAllData {
+            get {
+                return ResourceManager.GetString("ClearAllData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Clear All!.
         /// </summary>
         internal static string ClearAllSongs {
@@ -457,7 +511,20 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to There are {0} stations pending export. Are you sure you want to quit?.
+        ///   Looks up a localized string similar to **DESTRUCTIVE OPERATION**
+        ///
+        ///Ensure you create a backup of your stations before clearing data. This will remove all stations immediately from staging (the game is not touched).
+        ///Are you sure you want to clear all station data?.
+        /// </summary>
+        internal static string ConfirmClearAllData {
+            get {
+                return ResourceManager.GetString("ConfirmClearAllData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There are {0} stations pending export.
+        ///Are you sure you want to quit?.
         /// </summary>
         internal static string ConfirmExit {
             get {
@@ -466,7 +533,8 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you sure you want to refresh your stations from disk? You will lose any pending changes..
+        ///   Looks up a localized string similar to Are you sure you want to refresh your stations from disk?
+        ///You will lose any pending changes to stations..
         /// </summary>
         internal static string ConfirmRefreshStations {
             get {
@@ -475,11 +543,32 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you sure you want to synchronize the staging and game directories? You will lose any pending changes to stations..
+        ///   Looks up a localized string similar to Are you sure you want to restore the staging folder?
+        ///This will overwrite your existing stations!.
+        /// </summary>
+        internal static string ConfirmRestore {
+            get {
+                return ResourceManager.GetString("ConfirmRestore", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to synchronize the staging and game directories?
+        ///You will lose any pending changes to stations..
         /// </summary>
         internal static string ConfirmSyncStations {
             get {
                 return ResourceManager.GetString("ConfirmSyncStations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Changes were made to the game&apos;s radios directory.
+        ///Do you want to synchronize your staging and game directories?.
+        /// </summary>
+        internal static string ConfirmSyncStationsExternal {
+            get {
+                return ResourceManager.GetString("ConfirmSyncStationsExternal", resourceCulture);
             }
         }
         
@@ -565,11 +654,29 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Indicates the folder that imported station&apos;s song files should be saved to. Default&apos;s to the MyMusic folder..
+        ///   Looks up a localized string similar to Shows a preview of the active icon for this station. Drag-and-drop a .PNG here to quickly add it to the station..
+        /// </summary>
+        internal static string CustomIconPictureHelp {
+            get {
+                return ResourceManager.GetString("CustomIconPictureHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Indicates the folder that imported station&apos;s song files should be saved to. Defaults to the MyMusic folder..
         /// </summary>
         internal static string DefaultSongLocationHelp {
             get {
                 return ResourceManager.GetString("DefaultSongLocationHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete All Icons.
+        /// </summary>
+        internal static string DeleteAllIcons {
+            get {
+                return ResourceManager.GetString("DeleteAllIcons", resourceCulture);
             }
         }
         
@@ -583,11 +690,29 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Delete Icon.
+        /// </summary>
+        internal static string DeleteIcon {
+            get {
+                return ResourceManager.GetString("DeleteIcon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Delete Station.
         /// </summary>
         internal static string DeleteStation {
             get {
                 return ResourceManager.GetString("DeleteStation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Directory &apos;{0}&apos; does not exist.
+        /// </summary>
+        internal static string DirectoryWatcher_DirectoryNotExists {
+            get {
+                return ResourceManager.GetString("DirectoryWatcher_DirectoryNotExists", resourceCulture);
             }
         }
         
@@ -612,9 +737,9 @@ namespace RadioExt_Helper {
         /// <summary>
         ///   Looks up a localized string similar to Disable Selected.
         /// </summary>
-        internal static string DisableSelectedStation {
+        internal static string DisableSelected {
             get {
-                return ResourceManager.GetString("DisableSelectedStation", resourceCulture);
+                return ResourceManager.GetString("DisableSelected", resourceCulture);
             }
         }
         
@@ -646,11 +771,11 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ....
+        ///   Looks up a localized string similar to Download Radio Mods.
         /// </summary>
-        internal static string DotDotDot {
+        internal static string DownloadRadioMods {
             get {
-                return ResourceManager.GetString("DotDotDot", resourceCulture);
+                return ResourceManager.GetString("DownloadRadioMods", resourceCulture);
             }
         }
         
@@ -720,9 +845,9 @@ namespace RadioExt_Helper {
         /// <summary>
         ///   Looks up a localized string similar to Enable Selected.
         /// </summary>
-        internal static string EnableSelectedStation {
+        internal static string EnableSelected {
             get {
-                return ResourceManager.GetString("EnableSelectedStation", resourceCulture);
+                return ResourceManager.GetString("EnableSelected", resourceCulture);
             }
         }
         
@@ -773,6 +898,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Estimated Restore Size: {0}.
+        /// </summary>
+        internal static string EstimatedRestoreSizeFormat {
+            get {
+                return ResourceManager.GetString("EstimatedRestoreSizeFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Exit.
         /// </summary>
         internal static string Exit {
@@ -796,6 +930,15 @@ namespace RadioExt_Helper {
         internal static string ExportCanceled {
             get {
                 return ResourceManager.GetString("ExportCanceled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exporting.
+        /// </summary>
+        internal static string ExportCaption {
+            get {
+                return ResourceManager.GetString("ExportCaption", resourceCulture);
             }
         }
         
@@ -826,6 +969,15 @@ namespace RadioExt_Helper {
         internal static string ExportingStationStatus {
             get {
                 return ResourceManager.GetString("ExportingStationStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export is in progress. Please wait....
+        /// </summary>
+        internal static string ExportInProgress {
+            get {
+                return ResourceManager.GetString("ExportInProgress", resourceCulture);
             }
         }
         
@@ -948,6 +1100,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to From .archive file....
+        /// </summary>
+        internal static string FromArchiveFile {
+            get {
+                return ResourceManager.GetString("FromArchiveFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Game Base Path.
         /// </summary>
         internal static string GameBasePath {
@@ -962,6 +1123,15 @@ namespace RadioExt_Helper {
         internal static string GameBasePathPlaceholder {
             get {
                 return ResourceManager.GetString("GameBasePathPlaceholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Game Executable (Cyberpunk2077.exe).
+        /// </summary>
+        internal static string GamePathFilter {
+            get {
+                return ResourceManager.GetString("GamePathFilter", resourceCulture);
             }
         }
         
@@ -1029,6 +1199,60 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The path to the archive file that contains the icon..
+        /// </summary>
+        internal static string IconEditor_ArchivePath_Hint {
+            get {
+                return ResourceManager.GetString("IconEditor_ArchivePath_Hint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The name of the atlas file that the icon is stored in..
+        /// </summary>
+        internal static string IconEditor_AtlasName_Hint {
+            get {
+                return ResourceManager.GetString("IconEditor_AtlasName_Hint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cancels the currently running operation..
+        /// </summary>
+        internal static string IconEditor_CancelAction {
+            get {
+                return ResourceManager.GetString("IconEditor_CancelAction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Copies the corresponding text to the clipboard..
+        /// </summary>
+        internal static string IconEditor_CopyToClipboard {
+            get {
+                return ResourceManager.GetString("IconEditor_CopyToClipboard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shows a preview of this icon (if extracted or imported). If icon hasn&apos;t been created yet, drag-and-drop a .PNG here to create it..
+        /// </summary>
+        internal static string IconEditor_CustomIconPictureHelp {
+            get {
+                return ResourceManager.GetString("IconEditor_CustomIconPictureHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Starts the .archive extraction process for an icon. This can take some time..
+        /// </summary>
+        internal static string IconEditor_ExtractIcon {
+            get {
+                return ResourceManager.GetString("IconEditor_ExtractIcon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This icon has already been created and marked as read-only. Please create a new icon if you want a different image..
         /// </summary>
         internal static string IconEditor_IconAlreadyCreated_DragDrop {
@@ -1047,11 +1271,56 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The name of the icon within the station. Can be anything you want..
+        /// </summary>
+        internal static string IconEditor_IconName_Hint {
+            get {
+                return ResourceManager.GetString("IconEditor_IconName_Hint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The part of the icon within the icon path. Autogenerated..
+        /// </summary>
+        internal static string IconEditor_IconPart_Hint {
+            get {
+                return ResourceManager.GetString("IconEditor_IconPart_Hint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The path to the icon within the archive file. Autogenerated..
+        /// </summary>
+        internal static string IconEditor_IconPath_Hint {
+            get {
+                return ResourceManager.GetString("IconEditor_IconPath_Hint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The image is not square. Problems may occur in game..
         /// </summary>
         internal static string IconEditor_ImageNotSquare {
             get {
                 return ResourceManager.GetString("IconEditor_ImageNotSquare", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The path to the image file that created the icon or the extracted image..
+        /// </summary>
+        internal static string IconEditor_ImagePath_Hint {
+            get {
+                return ResourceManager.GetString("IconEditor_ImagePath_Hint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start&apos;s the import process for icon generation. This can take some time..
+        /// </summary>
+        internal static string IconEditor_ImportIcon {
+            get {
+                return ResourceManager.GetString("IconEditor_ImportIcon", resourceCulture);
             }
         }
         
@@ -1074,29 +1343,182 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Color Mode: {0}.
+        ///   Looks up a localized string similar to The SHA256 hash of the archive file..
         /// </summary>
-        internal static string IconEditor_SetImagePreviewProperties_Color_Mode___0_ {
+        internal static string IconEditor_Sha256Hash_Hint {
             get {
-                return ResourceManager.GetString("IconEditor_SetImagePreviewProperties_Color_Mode___0_", resourceCulture);
+                return ResourceManager.GetString("IconEditor_Sha256Hash_Hint", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Img. Fmt.: {0}.
+        ///   Looks up a localized string similar to Actions.
         /// </summary>
-        internal static string IconEditor_SetImagePreviewProperties_Img__Fmt____0_ {
+        internal static string IconEditor_Translate_Actions {
             get {
-                return ResourceManager.GetString("IconEditor_SetImagePreviewProperties_Img__Fmt____0_", resourceCulture);
+                return ResourceManager.GetString("IconEditor_Translate_Actions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Archive Path:.
+        /// </summary>
+        internal static string IconEditor_Translate_Archive_Path_ {
+            get {
+                return ResourceManager.GetString("IconEditor_Translate_Archive_Path_", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Atlas Name:.
+        /// </summary>
+        internal static string IconEditor_Translate_Atlas_Name_ {
+            get {
+                return ResourceManager.GetString("IconEditor_Translate_Atlas_Name_", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cancel Action.
+        /// </summary>
+        internal static string IconEditor_Translate_Cancel_Action {
+            get {
+                return ResourceManager.GetString("IconEditor_Translate_Cancel_Action", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Color Mode: {0}.
+        /// </summary>
+        internal static string IconEditor_Translate_Color_Mode___0_ {
+            get {
+                return ResourceManager.GetString("IconEditor_Translate_Color_Mode___0_", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Editing Icon: {0}.
         /// </summary>
-        internal static string IconEditor_txtIconName_TextChanged_Editing_Tab___0_ {
+        internal static string IconEditor_Translate_Editing_Icon___0_ {
             get {
-                return ResourceManager.GetString("IconEditor_txtIconName_TextChanged_Editing_Tab___0_", resourceCulture);
+                return ResourceManager.GetString("IconEditor_Translate_Editing_Icon___0_", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Format: {0}.
+        /// </summary>
+        internal static string IconEditor_Translate_Format___0_ {
+            get {
+                return ResourceManager.GetString("IconEditor_Translate_Format___0_", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to H: {0}.
+        /// </summary>
+        internal static string IconEditor_Translate_H___0_ {
+            get {
+                return ResourceManager.GetString("IconEditor_Translate_H___0_", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Icon Name:.
+        /// </summary>
+        internal static string IconEditor_Translate_Icon_Name_ {
+            get {
+                return ResourceManager.GetString("IconEditor_Translate_Icon_Name_", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Icon Part:.
+        /// </summary>
+        internal static string IconEditor_Translate_Icon_Part_ {
+            get {
+                return ResourceManager.GetString("IconEditor_Translate_Icon_Part_", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Icon Path:.
+        /// </summary>
+        internal static string IconEditor_Translate_Icon_Path_ {
+            get {
+                return ResourceManager.GetString("IconEditor_Translate_Icon_Path_", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Image Path:.
+        /// </summary>
+        internal static string IconEditor_Translate_Image_Path_ {
+            get {
+                return ResourceManager.GetString("IconEditor_Translate_Image_Path_", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No Image Issues.
+        /// </summary>
+        internal static string IconEditor_Translate_No_Image_Issues {
+            get {
+                return ResourceManager.GetString("IconEditor_Translate_No_Image_Issues", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Preview.
+        /// </summary>
+        internal static string IconEditor_Translate_Preview {
+            get {
+                return ResourceManager.GetString("IconEditor_Translate_Preview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Properties.
+        /// </summary>
+        internal static string IconEditor_Translate_Properties {
+            get {
+                return ResourceManager.GetString("IconEditor_Translate_Properties", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SHA256 Hash:.
+        /// </summary>
+        internal static string IconEditor_Translate_SHA256_Hash_ {
+            get {
+                return ResourceManager.GetString("IconEditor_Translate_SHA256_Hash_", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start Extraction.
+        /// </summary>
+        internal static string IconEditor_Translate_Start_Extraction {
+            get {
+                return ResourceManager.GetString("IconEditor_Translate_Start_Extraction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start Import.
+        /// </summary>
+        internal static string IconEditor_Translate_Start_Import {
+            get {
+                return ResourceManager.GetString("IconEditor_Translate_Start_Import", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to W: {0}.
+        /// </summary>
+        internal static string IconEditor_Translate_W___0_ {
+            get {
+                return ResourceManager.GetString("IconEditor_Translate_W___0_", resourceCulture);
             }
         }
         
@@ -1119,11 +1541,56 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to An icon export is currently in progress. Please wait for the export to finish..
+        /// </summary>
+        internal static string IconExportInProgress {
+            get {
+                return ResourceManager.GetString("IconExportInProgress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Icon Export In Progress.
+        /// </summary>
+        internal static string IconExportInProgressCaption {
+            get {
+                return ResourceManager.GetString("IconExportInProgressCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The icon for the station, if you don&apos;t use a custom one. It can be any UIIcon record..
         /// </summary>
         internal static string IconHelp {
             get {
                 return ResourceManager.GetString("IconHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An icon import is currently in progress. Please wait for the import to finish..
+        /// </summary>
+        internal static string IconImportInProgress {
+            get {
+                return ResourceManager.GetString("IconImportInProgress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Icon Import In Progress.
+        /// </summary>
+        internal static string IconImportInProgressCaption {
+            get {
+                return ResourceManager.GetString("IconImportInProgressCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Icon Manager.
+        /// </summary>
+        internal static string IconManager {
+            get {
+                return ResourceManager.GetString("IconManager", resourceCulture);
             }
         }
         
@@ -1215,6 +1682,42 @@ namespace RadioExt_Helper {
         internal static string IconManagerFormTitle {
             get {
                 return ResourceManager.GetString("IconManagerFormTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Opens the icon manager dialog for this station to mange the icons..
+        /// </summary>
+        internal static string IconManagerHelp {
+            get {
+                return ResourceManager.GetString("IconManagerHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Station Icon Manager.
+        /// </summary>
+        internal static string IconManagerMenuOption {
+            get {
+                return ResourceManager.GetString("IconManagerMenuOption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Icons.
+        /// </summary>
+        internal static string Icons {
+            get {
+                return ResourceManager.GetString("Icons", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to From .zip file....
+        /// </summary>
+        internal static string ImportFromZipFile {
+            get {
+                return ResourceManager.GetString("ImportFromZipFile", resourceCulture);
             }
         }
         
@@ -1345,6 +1848,33 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Show More.
+        /// </summary>
+        internal static string LogViewerControl_btnShowMore_Text {
+            get {
+                return ResourceManager.GetString("LogViewerControl_btnShowMore_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Timestamp.
+        /// </summary>
+        internal static string LogViewerControl_dgvLogs_Columns_0_HeaderText {
+            get {
+                return ResourceManager.GetString("LogViewerControl_dgvLogs_Columns_0_HeaderText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Output.
+        /// </summary>
+        internal static string LogViewerControl_dgvLogs_Columns_1_HeaderText {
+            get {
+                return ResourceManager.GetString("LogViewerControl_dgvLogs_Columns_1_HeaderText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Failed to display log lines: {0}.
         /// </summary>
         internal static string LogViewerControl_DisplayLastLines_Failed_to_display_log_lines___0_ {
@@ -1354,11 +1884,29 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Log File.
+        /// </summary>
+        internal static string LogViewerControl_grpLogSearchHeader_Text {
+            get {
+                return ResourceManager.GetString("LogViewerControl_grpLogSearchHeader_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Failed to load log data: {0}.
         /// </summary>
         internal static string LogViewerControl_LoadRelevantLogEntries_Failed_to_load_log_data___0_ {
             get {
                 return ResourceManager.GetString("LogViewerControl_LoadRelevantLogEntries_Failed_to_load_log_data___0_", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter search filter....
+        /// </summary>
+        internal static string LogViewerControl_txtSearch_PlaceholderText {
+            get {
+                return ResourceManager.GetString("LogViewerControl_txtSearch_PlaceholderText", resourceCulture);
             }
         }
         
@@ -1417,39 +1965,58 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Imported {0} stations: {1}
+        ///
+        ///If an icon was included with the station, it has been added as well. However, you will have to extract it manually to get the preview in CRA..
+        /// </summary>
+        internal static string MainForm_FromZipImportDesc {
+            get {
+                return ResourceManager.GetString("MainForm_FromZipImportDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Radio Station Archives (*.zip;*.rar).
+        /// </summary>
+        internal static string MainForm_FromZipImportFilter {
+            get {
+                return ResourceManager.GetString("MainForm_FromZipImportFilter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Import Station.
         /// </summary>
-        internal static string MainForm_fromzipFileToolStripMenuItem_Click_Import_Station {
+        internal static string MainForm_FromZipImportTitle {
             get {
-                return ResourceManager.GetString("MainForm_fromzipFileToolStripMenuItem_Click_Import_Station", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Imported {0} stations: {1}.
-        /// </summary>
-        internal static string MainForm_fromzipFileToolStripMenuItem_Click_Imported__0__stations___1_ {
-            get {
-                return ResourceManager.GetString("MainForm_fromzipFileToolStripMenuItem_Click_Imported__0__stations___1_", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Radio Station Archives (*.zip;*.rar)|*.zip;*.rar.
-        /// </summary>
-        internal static string MainForm_fromzipFileToolStripMenuItem_Click_Radio_Station_Archives_valid_file_types {
-            get {
-                return ResourceManager.GetString("MainForm_fromzipFileToolStripMenuItem_Click_Radio_Station_Archives_valid_file_typ" +
-                        "es", resourceCulture);
+                return ResourceManager.GetString("MainForm_FromZipImportTitle", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Station(s) Imported.
         /// </summary>
-        internal static string MainForm_fromzipFileToolStripMenuItem_Click_Station_s__Imported {
+        internal static string MainForm_FromZipStationsImportedTitle {
             get {
-                return ResourceManager.GetString("MainForm_fromzipFileToolStripMenuItem_Click_Station_s__Imported", resourceCulture);
+                return ResourceManager.GetString("MainForm_FromZipStationsImportedTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Backup Files (*.zip).
+        /// </summary>
+        internal static string MainForm_RestoreFileBrowserFilter {
+            get {
+                return ResourceManager.GetString("MainForm_RestoreFileBrowserFilter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select backup file to restore.
+        /// </summary>
+        internal static string MainForm_RestoreFileBrowserTitle {
+            get {
+                return ResourceManager.GetString("MainForm_RestoreFileBrowserTitle", resourceCulture);
             }
         }
         
@@ -1459,6 +2026,15 @@ namespace RadioExt_Helper {
         internal static string MainTitle {
             get {
                 return ResourceManager.GetString("MainTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cyber Radio Assistant - {0}.
+        /// </summary>
+        internal static string MainTitleFormated {
+            get {
+                return ResourceManager.GetString("MainTitleFormated", resourceCulture);
             }
         }
         
@@ -1474,9 +2050,27 @@ namespace RadioExt_Helper {
         /// <summary>
         ///   Looks up a localized string similar to Maximum.
         /// </summary>
-        internal static string Maxium {
+        internal static string Maximum {
             get {
-                return ResourceManager.GetString("Maxium", resourceCulture);
+                return ResourceManager.GetString("Maximum", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Key.
+        /// </summary>
+        internal static string MetaDataKey {
+            get {
+                return ResourceManager.GetString("MetaDataKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Value.
+        /// </summary>
+        internal static string MetaDataValue {
+            get {
+                return ResourceManager.GetString("MetaDataValue", resourceCulture);
             }
         }
         
@@ -1499,11 +2093,38 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Missing Stations.
+        /// </summary>
+        internal static string MissingStationsCaption {
+            get {
+                return ResourceManager.GetString("MissingStationsCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mods.
+        /// </summary>
+        internal static string Mods {
+            get {
+                return ResourceManager.GetString("Mods", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Music.
         /// </summary>
         internal static string Music {
             get {
                 return ResourceManager.GetString("Music", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New Icon.
+        /// </summary>
+        internal static string NewIcon {
+            get {
+                return ResourceManager.GetString("NewIcon", resourceCulture);
             }
         }
         
@@ -1691,11 +2312,20 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select a .archive file to open.
+        /// </summary>
+        internal static string OpenArchiveFile {
+            get {
+                return ResourceManager.GetString("OpenArchiveFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Open Game Executable.
         /// </summary>
-        internal static string Open {
+        internal static string OpenGameExecutable {
             get {
-                return ResourceManager.GetString("Open", resourceCulture);
+                return ResourceManager.GetString("OpenGameExecutable", resourceCulture);
             }
         }
         
@@ -1754,6 +2384,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Opens a dialog to parse the API url from the web URL for a radio.garden web stream..
+        /// </summary>
+        internal static string ParseFromRadioGardenHelp {
+            get {
+                return ResourceManager.GetString("ParseFromRadioGardenHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Paths....
         /// </summary>
         internal static string Paths {
@@ -1790,11 +2429,20 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter the radio.garden URL from the web:.
+        ///   Looks up a localized string similar to Enter the radio.garden URL:.
         /// </summary>
         internal static string RadioGardenInput {
             get {
                 return ResourceManager.GetString("RadioGardenInput", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parse.
+        /// </summary>
+        internal static string RadioGardenParse {
+            get {
+                return ResourceManager.GetString("RadioGardenParse", resourceCulture);
             }
         }
         
@@ -1835,11 +2483,38 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Removes ALL songs from the station. Does not delete files on disk..
+        /// </summary>
+        internal static string RemoveAllSongsHelp {
+            get {
+                return ResourceManager.GetString("RemoveAllSongsHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Removes the song from the station&apos;s ordered song list. Does not remove the song from the station..
+        /// </summary>
+        internal static string RemoveFromOrderHelp {
+            get {
+                return ResourceManager.GetString("RemoveFromOrderHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to   Remove Selected.
         /// </summary>
         internal static string RemoveSelected {
             get {
                 return ResourceManager.GetString("RemoveSelected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Removes all selected songs from the station. Does not delete files on disk..
+        /// </summary>
+        internal static string RemoveSongsHelp {
+            get {
+                return ResourceManager.GetString("RemoveSongsHelp", resourceCulture);
             }
         }
         
@@ -1862,6 +2537,114 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Loading... {0}%.
+        /// </summary>
+        internal static string RestoreBackupLoadingPreview {
+            get {
+                return ResourceManager.GetString("RestoreBackupLoadingPreview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Restore Staging Folder.
+        /// </summary>
+        internal static string RestoreBackupMenuItem {
+            get {
+                return ResourceManager.GetString("RestoreBackupMenuItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Restore completed successfully..
+        /// </summary>
+        internal static string RestoreCompleted {
+            get {
+                return ResourceManager.GetString("RestoreCompleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The following files will be restored to the staging folder..
+        /// </summary>
+        internal static string RestoreDescription {
+            get {
+                return ResourceManager.GetString("RestoreDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Restore failed due to an error: {0}.
+        /// </summary>
+        internal static string RestoreFailedException {
+            get {
+                return ResourceManager.GetString("RestoreFailedException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An error occurred while trying to start the restore operation..
+        /// </summary>
+        internal static string RestoreForm_ErrorWhileRestoring {
+            get {
+                return ResourceManager.GetString("RestoreForm_ErrorWhileRestoring", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Restore preview completed. Ready to start restore operation..
+        /// </summary>
+        internal static string RestoreForm_PreviewCompleted {
+            get {
+                return ResourceManager.GetString("RestoreForm_PreviewCompleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Restore operation has been cancelled..
+        /// </summary>
+        internal static string RestoreForm_RestoreCancelled {
+            get {
+                return ResourceManager.GetString("RestoreForm_RestoreCancelled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Restore Cancelled.
+        /// </summary>
+        internal static string RestoreForm_RestoreCancelledCaption {
+            get {
+                return ResourceManager.GetString("RestoreForm_RestoreCancelledCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Restore Backup - {0}.
+        /// </summary>
+        internal static string RestoreFormTitle {
+            get {
+                return ResourceManager.GetString("RestoreFormTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Restoring file: {0}.
+        /// </summary>
+        internal static string RestoreProgressChanged {
+            get {
+                return ResourceManager.GetString("RestoreProgressChanged", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Restoring song: {0}.
+        /// </summary>
+        internal static string RestoreSongProgressChanged {
+            get {
+                return ResourceManager.GetString("RestoreSongProgressChanged", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Revert Changes.
         /// </summary>
         internal static string RevertChanges {
@@ -1876,6 +2659,24 @@ namespace RadioExt_Helper {
         internal static string SaveAndClose {
             get {
                 return ResourceManager.GetString("SaveAndClose", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search stations....
+        /// </summary>
+        internal static string SearchStations {
+            get {
+                return ResourceManager.GetString("SearchStations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select the default location to store song files.
+        /// </summary>
+        internal static string SelectDefaultSongLocationDesc {
+            get {
+                return ResourceManager.GetString("SelectDefaultSongLocationDesc", resourceCulture);
             }
         }
         
@@ -2042,6 +2843,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Initializing the Icon Manager....
+        /// </summary>
+        internal static string SplashScreen_SetupIconManager {
+            get {
+                return ResourceManager.GetString("SplashScreen_SetupIconManager", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Starting....
         /// </summary>
         internal static string SplashScreen_Starting {
@@ -2114,6 +2924,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Start Restore.
+        /// </summary>
+        internal static string StartRestore {
+            get {
+                return ResourceManager.GetString("StartRestore", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Controls the name of your station that will be displayed in the game. Special characters are escaped properly..
         /// </summary>
         internal static string StationNameHelp {
@@ -2128,6 +2947,15 @@ namespace RadioExt_Helper {
         internal static string Stations {
             get {
                 return ResourceManager.GetString("Stations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Allows you to preview the audio from the stream specified..
+        /// </summary>
+        internal static string StreamPlayerHelp {
+            get {
+                return ResourceManager.GetString("StreamPlayerHelp", resourceCulture);
             }
         }
         
@@ -2231,6 +3059,51 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Synchronizing Files... {0}%.
+        /// </summary>
+        internal static string SyncProgressChangedFormat {
+            get {
+                return ResourceManager.GetString("SyncProgressChangedFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Synchronizing Directories... {0}%.
+        /// </summary>
+        internal static string SyncProgressDirectoriesChangedFormat {
+            get {
+                return ResourceManager.GetString("SyncProgressDirectoriesChangedFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Synchronization complete..
+        /// </summary>
+        internal static string SyncStatusComplete {
+            get {
+                return ResourceManager.GetString("SyncStatusComplete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error synchronizing stations..
+        /// </summary>
+        internal static string SyncStatusError {
+            get {
+                return ResourceManager.GetString("SyncStatusError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tools.
+        /// </summary>
+        internal static string Tools {
+            get {
+                return ResourceManager.GetString("Tools", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Total File Size:.
         /// </summary>
         internal static string TotalFileSize {
@@ -2240,11 +3113,29 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Shows the total number of song files associated with this station..
+        /// </summary>
+        internal static string TotalSongsHelp {
+            get {
+                return ResourceManager.GetString("TotalSongsHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Total Songs:.
         /// </summary>
         internal static string TotalSongsLabel {
             get {
                 return ResourceManager.GetString("TotalSongsLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shows the total file size of all song files in the station..
+        /// </summary>
+        internal static string TotalStationSizeHelp {
+            get {
+                return ResourceManager.GetString("TotalStationSizeHelp", resourceCulture);
             }
         }
         
@@ -2411,20 +3302,20 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Using?.
-        /// </summary>
-        internal static string Using_ {
-            get {
-                return ResourceManager.GetString("Using?", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Using compression level: {0}.
         /// </summary>
         internal static string UsingCompressionLevel {
             get {
                 return ResourceManager.GetString("UsingCompressionLevel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Using?.
+        /// </summary>
+        internal static string UsingQuestion {
+            get {
+                return ResourceManager.GetString("UsingQuestion", resourceCulture);
             }
         }
         

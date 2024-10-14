@@ -22,6 +22,7 @@ using RadioExt_Helper.models;
 using RadioExt_Helper.Properties;
 using RadioExt_Helper.utility;
 using System.Globalization;
+using RadioExt_Helper.forms;
 using WIG.Lib.Models;
 using ApplicationContext = RadioExt_Helper.utility.ApplicationContext;
 
@@ -59,6 +60,8 @@ public sealed partial class StationEditor : UserControl, IEditor
         Station = station;
         _musicCtl = new CustomMusicCtl(Station);
         _musicCtl.StationUpdated += (_, _) => StationUpdated?.Invoke(this, EventArgs.Empty);
+        _musicCtl.StatusChanged += (_, text) => SetStatusText(text);
+        _musicCtl.StatusReset += (_, _) => ResetStatusText();
 
         _cmbUiIcons = GlobalData.CloneTemplateComboBox();
         _cmbUiIcons.SelectedIndexChanged += CmbUIIcons_SelectedIndexChanged;
@@ -72,34 +75,36 @@ public sealed partial class StationEditor : UserControl, IEditor
     /// </summary>
     public void Translate()
     {
-        tabDisplayAndIcon.Text = GlobalData.Strings.GetString("DisplayAndIcon");
-        lblName.Text = GlobalData.Strings.GetString("DisplayName");
-        lblIcon.Text = GlobalData.Strings.GetString("Icon");
-        lblUsingCustomIcon.Text = GlobalData.Strings.GetString("Using?");
-        lblInkPath.Text = GlobalData.Strings.GetString("InkAtlasPath");
-        lblInkPart.Text = GlobalData.Strings.GetString("InkAtlasPart");
-        lblFM.Text = GlobalData.Strings.GetString("FM");
-        lblVolume.Text = GlobalData.Strings.GetString("Volume");
-        lblVolumeVal.Text = GlobalData.Strings.GetString("Value");
-        radUseCustomYes.Text = GlobalData.Strings.GetString("Yes");
-        radUseCustomNo.Text = GlobalData.Strings.GetString("No");
-        grpDisplay.Text = GlobalData.Strings.GetString("Display");
-        grpCustomIcon.Text = GlobalData.Strings.GetString("CustomIcon");
-        grpSettings.Text = GlobalData.Strings.GetString("Settings");
-        grpNotes.Text = GlobalData.Strings.GetString("CustomDataGroup");
-        dgvMetadata.Columns[0].HeaderText = GlobalData.Strings.GetString("CustomDataKey");
-        dgvMetadata.Columns[1].HeaderText = GlobalData.Strings.GetString("CustomDataValue");
+        tabDisplayAndIcon.Text = Strings.DisplayAndIcon;
+        lblName.Text = Strings.DisplayName;
+        lblIcon.Text = Strings.Icon;
+        lblUsingCustomIcon.Text = Strings.UsingQuestion;
+        lblInkPath.Text = Strings.InkAtlasPath;
+        lblInkPart.Text = Strings.InkAtlasPart;
+        lblFM.Text = Strings.FM;
+        lblVolume.Text = Strings.Volume;
+        lblVolumeVal.Text = Strings.Value;
+        radUseCustomYes.Text = Strings.Yes;
+        radUseCustomNo.Text = Strings.No;
+        grpDisplay.Text = Strings.Display;
+        grpCustomIcon.Text = Strings.CustomIcon;
+        grpSettings.Text = Strings.Settings;
+        grpCustomData.Text = Strings.CustomDataGroup;
+        dgvMetadata.Columns[0].HeaderText = Strings.CustomDataKey;
+        dgvMetadata.Columns[1].HeaderText = Strings.CustomDataValue;
 
-        tabMusic.Text = GlobalData.Strings.GetString("Music");
-        lblUseStream.Text = GlobalData.Strings.GetString("UseStream");
-        lblStreamURL.Text = GlobalData.Strings.GetString("StreamURL");
-        btnGetFromRadioGarden.Text = GlobalData.Strings.GetString("ParseFromRadioGarden");
-        grpStreamSettings.Text = GlobalData.Strings.GetString("StreamSettings");
-        grpSongs.Text = GlobalData.Strings.GetString("Songs");
-        radUseStreamYes.Text = GlobalData.Strings.GetString("Yes");
-        radUseStreamNo.Text = GlobalData.Strings.GetString("No");
+        tabMusic.Text = Strings.Music;
+        lblUseStream.Text = Strings.UseStream;
+        lblStreamURL.Text = Strings.StreamURL;
+        btnGetFromRadioGarden.Text = Strings.ParseFromRadioGarden;
+        grpStreamSettings.Text = Strings.StreamSettings;
+        grpSongs.Text = Strings.Songs;
+        radUseStreamYes.Text = Strings.Yes;
+        radUseStreamNo.Text = Strings.No;
 
-        lblStatus.Text = GlobalData.Strings.GetString("Ready");
+        btnOpenIconManager.Text = Strings.IconManager;
+
+        lblStatus.Text = Strings.Ready;
 
         _musicCtl.Translate();
     }
@@ -111,8 +116,8 @@ public sealed partial class StationEditor : UserControl, IEditor
 
     private void InitializeDataGridViewColumns()
     {
-        dgvMetadata.Columns.Add("colKey", GlobalData.Strings.GetString("MetaDataKey") ?? "Key");
-        dgvMetadata.Columns.Add("colValue", GlobalData.Strings.GetString("MetaDataValue") ?? "Value");
+        dgvMetadata.Columns.Add("colKey", Strings.MetaDataKey);
+        dgvMetadata.Columns.Add("colValue", Strings.MetaDataValue);
         dgvMetadata.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
         dgvMetadata.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
     }
@@ -195,9 +200,16 @@ public sealed partial class StationEditor : UserControl, IEditor
         if (stationIcon != null)
         {
             var imagePath = stationIcon.TrackedObject.ImagePath;
-            if (Path.Exists(imagePath)) //TODO: add missing image texture to display in picture box
+            if (Path.Exists(imagePath))
             {
                 picStationIcon.SetImage(stationIcon.TrackedObject.ImagePath);
+            }
+            else
+            {
+                if (stationIcon.TrackedObject.IsFromArchive)
+                    picStationIcon.SetImageFromBitmap(Resources.pending_extraction);
+                else
+                    picStationIcon.SetImage(null);
             }
         }
 
@@ -211,7 +223,7 @@ public sealed partial class StationEditor : UserControl, IEditor
     {
         SetDisplayTabValues();
         SetMusicTabValues();
-        _musicCtl.ResetUI();
+        _musicCtl.ResetUi();
     }
 
     /// <summary>
@@ -354,8 +366,7 @@ public sealed partial class StationEditor : UserControl, IEditor
             txtInkAtlasPath.Text = Station.TrackedObject.CustomIcon.InkAtlasPath;
             txtInkAtlasPart.Text = Station.TrackedObject.CustomIcon.InkAtlasPart;
 
-            //picStationIcon.Image = Resources.drag_and_drop;
-            picStationIcon.SetImage(null);
+            picStationIcon.SetImageFromBitmap(Resources.drag_and_drop);
             RemoveCustomIconData();
             Station.CheckPendingSaveStatus();
         }
@@ -371,9 +382,7 @@ public sealed partial class StationEditor : UserControl, IEditor
             txtInkAtlasPath.Text = Station.TrackedObject.CustomIcon.InkAtlasPath;
             txtInkAtlasPart.Text = Station.TrackedObject.CustomIcon.InkAtlasPart;
 
-            picStationIcon.SetImage(Path.Exists(icon.TrackedObject.ImagePath)
-                ? icon.TrackedObject.ImagePath
-                : string.Empty);
+            picStationIcon.SetImage(Path.Exists(icon.TrackedObject.ImagePath) ? icon.TrackedObject.ImagePath : string.Empty);
 
             //Update custom data pertaining to the active icon
             AddCustomIconData(icon);
@@ -437,7 +446,8 @@ public sealed partial class StationEditor : UserControl, IEditor
             {
                 matchingIcon.TrackedObject.IsActive = true;
                 UpdateIconPrivate(matchingIcon);
-            }else
+            }
+            else
                 UpdateIconPrivate(null);
         }
         catch (Exception ex)
@@ -622,11 +632,10 @@ public sealed partial class StationEditor : UserControl, IEditor
         var row = dgvMetadata.Rows[e.Row.Index - 1];
         var key = row.Cells[0].Value?.ToString();
         var value = row.Cells[1].Value?.ToString();
-        if (key != null && value != null)
-        {
-            Station.TrackedObject.AddCustomData(key, value);
-            StationUpdated?.Invoke(this, EventArgs.Empty);
-        }
+        if (key == null || value == null) return;
+
+        Station.TrackedObject.AddCustomData(key, value);
+        StationUpdated?.Invoke(this, EventArgs.Empty);
     }
 
     private void dgvMetadata_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
@@ -645,7 +654,6 @@ public sealed partial class StationEditor : UserControl, IEditor
         // Row deleted by the user
         foreach (DataGridViewCell cell in e.Row.Cells)
         {
-
             var key = cell.Value?.ToString();
             if (key == null || !Station.TrackedObject.ContainsCustomData(key)) continue;
 
@@ -728,12 +736,10 @@ public sealed partial class StationEditor : UserControl, IEditor
     /// <param name="e"></param>
     private void BtnGetFromRadioGarden_Click(object sender, EventArgs e)
     {
-        var text = GlobalData.Strings.GetString("RadioGardenInput") ??
-                   "Enter the radio.garden URL from the web: ";
-        var caption = GlobalData.Strings.GetString("RadioGardenURLCaption") ?? "Radio Garden URL";
-
-        InputBox input = new(caption, text, RetrieveUrlFromInputBox);
-        input.ShowDialog();
+        var radioGardenForm = new RadioGardenInput();
+        radioGardenForm.UrlParsed += RadioGardenFormOnUrlParsed;
+        radioGardenForm.ShowDialog();
+        radioGardenForm.UrlParsed -= RadioGardenFormOnUrlParsed;
     }
 
     /// <summary>
@@ -741,18 +747,14 @@ public sealed partial class StationEditor : UserControl, IEditor
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
-    private async void RetrieveUrlFromInputBox(object? sender, EventArgs e)
+    private async void RadioGardenFormOnUrlParsed(object? sender, string e)
     {
         var streamChecker = new AudioStreamChecker(TimeSpan.FromSeconds(5));
-        if (e is not InputBoxEventArgs args) return;
 
-        var streamUrl = AudioStreamChecker.ConvertRadioGardenUrl(args.InputText);
+        var streamUrl = AudioStreamChecker.ConvertRadioGardenUrl(e);
         var isValid = await streamChecker.IsAudioStreamValidAsync(streamUrl);
-        if (isValid)
-            txtStreamURL.Text = streamUrl;
-        else
-            txtStreamURL.Text = GlobalData.Strings.GetString("InvalidStream") ??
-                                "Invalid stream - Will not work in game";
+
+        txtStreamURL.Text = isValid ? streamUrl : Strings.InvalidStream;
         StationUpdated?.Invoke(this, EventArgs.Empty);
     }
 
@@ -784,7 +786,7 @@ public sealed partial class StationEditor : UserControl, IEditor
     /// <param name="e"></param>
     private void LblName_MouseEnter(object sender, EventArgs e)
     {
-        lblStatus.Text = GlobalData.Strings.GetString("StationNameHelp");
+        lblStatus.Text = Strings.StationNameHelp;
     }
 
     /// <summary>
@@ -794,7 +796,17 @@ public sealed partial class StationEditor : UserControl, IEditor
     /// <param name="e"></param>
     private void LblIcon_MouseEnter(object sender, EventArgs e)
     {
-        lblStatus.Text = GlobalData.Strings.GetString("IconHelp");
+        lblStatus.Text = Strings.IconHelp;
+    }
+
+    /// <summary>
+    /// Occurs when the mouse enters the custom picture box.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void picStationIcon_MouseEnter(object sender, EventArgs e)
+    {
+        lblStatus.Text = Strings.CustomIconPictureHelp;
     }
 
     /// <summary>
@@ -804,7 +816,17 @@ public sealed partial class StationEditor : UserControl, IEditor
     /// <param name="e"></param>
     private void LblUsingCustomIcon_MouseEnter(object sender, EventArgs e)
     {
-        lblStatus.Text = GlobalData.Strings.GetString("CustomIconHelp");
+        lblStatus.Text = Strings.CustomIconHelp;
+    }
+
+    /// <summary>
+    /// Occurs when the mouse enters the open icon manager button.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void btnOpenIconManager_Enter(object sender, EventArgs e)
+    {
+        lblStatus.Text = Strings.IconManagerHelp;
     }
 
     /// <summary>
@@ -814,7 +836,7 @@ public sealed partial class StationEditor : UserControl, IEditor
     /// <param name="e"></param>
     private void LblInkPath_MouseEnter(object sender, EventArgs e)
     {
-        lblStatus.Text = GlobalData.Strings.GetString("InkPathHelp");
+        lblStatus.Text = Strings.InkPathHelp;
     }
 
     /// <summary>
@@ -824,7 +846,7 @@ public sealed partial class StationEditor : UserControl, IEditor
     /// <param name="e"></param>
     private void LblInkPart_MouseEnter(object sender, EventArgs e)
     {
-        lblStatus.Text = GlobalData.Strings.GetString("InkPartHelp");
+        lblStatus.Text = Strings.InkPartHelp;
     }
 
     /// <summary>
@@ -834,7 +856,7 @@ public sealed partial class StationEditor : UserControl, IEditor
     /// <param name="e"></param>
     private void LblFM_MouseEnter(object sender, EventArgs e)
     {
-        lblStatus.Text = GlobalData.Strings.GetString("FMHelp");
+        lblStatus.Text = Strings.FMHelp;
     }
 
     /// <summary>
@@ -844,7 +866,7 @@ public sealed partial class StationEditor : UserControl, IEditor
     /// <param name="e"></param>
     private void LblVolume_MouseEnter(object sender, EventArgs e)
     {
-        lblStatus.Text = GlobalData.Strings.GetString("VolumeHelp");
+        lblStatus.Text = Strings.VolumeHelp;
     }
 
     /// <summary>
@@ -854,7 +876,7 @@ public sealed partial class StationEditor : UserControl, IEditor
     /// <param name="e"></param>
     private void LblVolumeVal_MouseEnter(object sender, EventArgs e)
     {
-        lblStatus.Text = GlobalData.Strings.GetString("VolumeValHelp");
+        lblStatus.Text = Strings.VolumeValHelp;
     }
 
     /// <summary>
@@ -864,7 +886,7 @@ public sealed partial class StationEditor : UserControl, IEditor
     /// <param name="e"></param>
     private void LblUseStream_MouseEnter(object sender, EventArgs e)
     {
-        lblStatus.Text = GlobalData.Strings.GetString("UseStreamHelp");
+        lblStatus.Text = Strings.UseStreamHelp;
     }
 
     /// <summary>
@@ -874,7 +896,34 @@ public sealed partial class StationEditor : UserControl, IEditor
     /// <param name="e"></param>
     private void LblStreamURL_MouseEnter(object sender, EventArgs e)
     {
-        lblStatus.Text = GlobalData.Strings.GetString("StreamURLHelp");
+        lblStatus.Text = Strings.StreamURLHelp;
+    }
+
+    private void btnGetFromRadioGarden_MouseEnter(object sender, EventArgs e)
+    {
+        lblStatus.Text = Strings.ParseFromRadioGardenHelp;
+    }
+
+    private void mpStreamPlayer_MouseEnter(object sender, EventArgs e)
+    {
+        lblStatus.Text = Strings.StreamPlayerHelp;
+    }
+
+    /// <summary>
+    /// Set the status text to the given text.
+    /// </summary>
+    /// <param name="text">The text to set.</param>
+    private void SetStatusText(string text)
+    {
+        lblStatus.Text = text;
+    }
+
+    /// <summary>
+    /// Set the status text to the default text.
+    /// </summary>
+    private void ResetStatusText()
+    {
+        lblStatus.Text = Strings.Ready;
     }
 
     /// <summary>
@@ -884,8 +933,8 @@ public sealed partial class StationEditor : UserControl, IEditor
     /// <param name="e"></param>
     private void Lbl_MouseLeave(object sender, EventArgs e)
     {
-        lblStatus.Text = GlobalData.Strings.GetString("Ready");
+        lblStatus.Text = Strings.Ready;
     }
 
-    #endregion
+#endregion
 }

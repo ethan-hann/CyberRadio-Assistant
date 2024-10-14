@@ -2,6 +2,9 @@
 
 namespace RadioExt_Helper.utility
 {
+    /// <summary>
+    /// Interface for all editors in the application.
+    /// </summary>
     public interface IEditor
     {
         /// <summary>
