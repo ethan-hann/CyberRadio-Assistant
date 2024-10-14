@@ -77,7 +77,7 @@ public class BackupManager(CompressionLevel level)
     public event Action<bool, string>? RestoreCompleted;
 
     /// <summary>
-    /// Occurs whenever the progress of the backup preview operation changes.
+    /// Occurs whenever the progress of the backup preview or restore preview operation changes.
     /// <para>Event data includes the current progress percentage.</para>
     /// </summary>
     public event Action<int>? PreviewProgressChanged;
@@ -87,6 +87,12 @@ public class BackupManager(CompressionLevel level)
     /// <para>Event data is a tuple containing the current <see cref="FilePreview"/> object and the current estimated backup size, in bytes.</para>
     /// </summary>
     public event Action<(FilePreview, long)>? PreviewStatusChanged;
+
+    /// <summary>
+    /// Occurs whenever the status of the restore preview operation changes.
+    /// <para>Event data is a tuple containing the current <see cref="FilePreview"/> object and the current estimated restore size, in bytes.</para>
+    /// </summary>
+    public event Action<(List<FilePreview>, long)>? RestorePreviewCompleted;
 
     /// <summary>
     /// Occurs whenever the backup preview operation is completed.
@@ -267,6 +273,53 @@ public class BackupManager(CompressionLevel level)
     }
 
     /// <summary>
+    /// Asynchronously get a preview of the files that will be restored to the staging folder.
+    /// <para>The preview includes a list of <see cref="FilePreview"/> objects and the total size of the files.</para>
+    /// </summary>
+    /// <param name="backupFilePath">The path of the backed up .zip to preview.</param>
+    /// <returns>A task representing the asynchronous operation.</returns>
+    /// <exception cref="ArgumentNullException">Occurs if the <paramref name="backupFilePath"/> is <c>null</c> or empty.</exception>
+    public async Task GetRestorePreviewAsync(string backupFilePath)
+    {
+        if (string.IsNullOrEmpty(backupFilePath)) throw new ArgumentNullException(nameof(backupFilePath));
+        if (!File.Exists(backupFilePath)) throw new FileNotFoundException("Backup file not found.", backupFilePath);
+
+        var previews = new List<FilePreview>();
+        var totalSize = 0L;
+
+        await Task.Run(() =>
+        {
+            using var zipArchive = ZipFile.OpenRead(backupFilePath);
+            foreach (var entry in zipArchive.Entries)
+            {
+                if (_isCancelling) return;
+
+                // Skip directories
+                if (string.IsNullOrEmpty(entry.Name)) continue;
+
+                var preview = new FilePreview
+                {
+                    FileName = entry.FullName,
+                    Size = entry.Length
+                };
+
+                previews.Add(preview);
+                totalSize += entry.Length;
+
+                // Notify UI of progress and status
+                var progress = (int)((float)previews.Count / zipArchive.Entries.Count * 100);
+                PreviewProgressChanged?.Invoke(progress);
+                PreviewStatusChanged?.Invoke((preview, totalSize));
+                StatusChanged?.Invoke($"Loading... {progress}%");
+
+                if (_isCancelling) return;
+            }
+        });
+
+        RestorePreviewCompleted?.Invoke((previews, totalSize));
+    }
+
+    /// <summary>
     /// Asynchronously restores the contents of a backup zip file to the specified restore path, handling external song files.
     /// </summary>
     /// <param name="backupFilePath">The path to the backup zip file.</param>
@@ -296,8 +349,9 @@ public class BackupManager(CompressionLevel level)
 
                     var entryName = entry.FullName;
 
-                    // Skip directories
+                    // Skip directories and external directory
                     if (string.IsNullOrEmpty(entry.Name)) continue;
+                    if (entryName.StartsWith("external\\")) continue;
 
                     if (entryName.StartsWith("externalPaths.txt"))
                     {
@@ -322,12 +376,12 @@ public class BackupManager(CompressionLevel level)
                     if (destinationDirectory != null && !Directory.Exists(destinationDirectory))
                         Directory.CreateDirectory(destinationDirectory);
 
-                    entry.ExtractToFile(destinationPath, true);
-
                     var progress = (int)((float)zipArchive.Entries.Count / zipArchive.Entries.Count * 100);
                     ProgressChanged?.Invoke(progress);
-                    var status = string.Format(GlobalData.Strings.GetString("RestoreProgressChanged") ?? "Restoring... {0}%", progress);
+                    var status = string.Format(GlobalData.Strings.GetString("RestoreProgressChanged") ?? "Restoring file: {0}", entryName);
                     StatusChanged?.Invoke(status);
+
+                    entry.ExtractToFile(destinationPath, true);
                 }
 
                 // Restore external songs
@@ -341,6 +395,12 @@ public class BackupManager(CompressionLevel level)
                     var destinationDirectory = Path.GetDirectoryName(destinationPath);
                     if (destinationDirectory != null && !Directory.Exists(destinationDirectory))
                         Directory.CreateDirectory(destinationDirectory);
+
+                    var progress = (int)((float)externalSongMappings.Count / externalSongMappings.Count * 100);
+                    ProgressChanged?.Invoke(progress);
+                    var status = $"Restoring song: {songFileName}...";
+                    StatusChanged?.Invoke(status);
+
                     entry.ExtractToFile(destinationPath, true);
                 }
             });

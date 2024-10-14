@@ -46,8 +46,10 @@ public sealed partial class BackupPreview : Form
 
         var treeImages = new ImageList();
         treeImages.Images.Add("folder", Resources.folder__16x16);
+        treeImages.Images.Add("png_file", Resources.png_file_16x16);
         treeImages.Images.Add("music_file", Resources.music_file_16x16);
         treeImages.Images.Add("file", Resources.file__16x16);
+        treeImages.Images.Add("archive_file", Resources.box_16x16);
         tvFiles.ImageList = treeImages;
 
         Translate();
@@ -473,7 +475,9 @@ public sealed partial class BackupPreview : Form
         if (isRoot)
             return "folder";
 
-        return PathHelper.IsValidAudioFile(fileName) ? "music_file" : "file";
+        return PathHelper.IsValidAudioFile(fileName) ? "music_file" :
+            PathHelper.IsValidArchiveFile(fileName) ? "archive_file" :
+            PathHelper.IsValidImageFile(fileName) ? "png_file" : "file";
     }
 
     /// <summary>
@@ -508,6 +512,7 @@ public sealed partial class BackupPreview : Form
 
     private void BackupPreview_FormClosing(object sender, FormClosingEventArgs e)
     {
-        if (_isBackupInProgress) _backupManager.CancelBackup();
+        if (_isBackupInProgress) 
+            _backupManager.CancelBackup();
     }
 }
