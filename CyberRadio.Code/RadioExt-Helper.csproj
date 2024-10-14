@@ -37,7 +37,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="AetherUtils.Core" Version="1.0.8" />
+        <PackageReference Include="AetherUtils.Core" Version="1.0.10" />
         <PackageReference Include="NAudio" Version="2.2.1" />
         <PackageReference Include="System.Management" Version="8.0.0" />
         <PackageReference Include="TagLibSharp" Version="2.3.0" />
