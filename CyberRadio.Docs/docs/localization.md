@@ -1,5 +1,8 @@
 # Localization
 
+**This page is outdated! Localization will be handled differently in version 2 of the application.**
+====================================================================================================
+
 Cyber Radio Assistant supports three languages currently:
 
 - :gb: - English
