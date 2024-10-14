@@ -1476,6 +1476,18 @@ public partial class StationManager : IDisposable
                                                      EnumHelper<ValidAudioFiles>.GetEnumDescriptions().ToArray();
 
     /// <summary>
+    /// Get a list of valid archive file extensions for station icons.
+    /// </summary>
+    public string?[] ValidArchiveExtensions { get; } = EnumHelper<ValidArchiveFiles>.GetEnumDescriptions() as string[] ??
+                                                       EnumHelper<ValidArchiveFiles>.GetEnumDescriptions().ToArray();
+
+    /// <summary>
+    /// Get a list of valid image file extensions for station icons.
+    /// </summary>
+    public string?[] ValidImageExtensions { get; } = EnumHelper<ValidImageFiles>.GetEnumDescriptions() as string[] ??
+                                                     EnumHelper<ValidImageFiles>.GetEnumDescriptions().ToArray();
+
+    /// <summary>
     /// The current list of stations managed by the manager as a binding list. Auto-updates when stations are added or removed.
     /// </summary>
     public BindingList<TrackableObject<Station>> StationsAsBindingList { get; } =

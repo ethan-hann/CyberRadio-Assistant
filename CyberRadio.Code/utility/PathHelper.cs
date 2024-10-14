@@ -217,6 +217,28 @@ public static class PathHelper
     }
 
     /// <summary>
+    /// Get a value indicating whether the specified file is a valid archive file based on the extension and <see cref="models.ValidArchiveFiles"/>.
+    /// </summary>
+    /// <param name="filePath">The path to the file to check.</param>
+    /// <returns><c>true</c> if the file is a valid archive file; <c>false</c> otherwise.</returns>
+    public static bool IsValidArchiveFile(string filePath)
+    {
+        var extension = FileHelper.GetExtension(filePath);
+        return StationManager.Instance.ValidArchiveExtensions.Contains(extension);
+    }
+
+    /// <summary>
+    /// Get a value indicating whether the specified file is a valid image file based on the extension and <see cref="models.ValidImageFiles"/>.
+    /// </summary>
+    /// <param name="filePath">The path to the file to check.</param>
+    /// <returns><c>true</c> if the file is a valid image file; <c>false</c> otherwise.</returns>
+    public static bool IsValidImageFile(string filePath)
+    {
+        var extension = FileHelper.GetExtension(filePath);
+        return StationManager.Instance.ValidImageExtensions.Contains(extension);
+    }
+
+    /// <summary>
     /// Replaces invalid path characters and specific characters (like the apostrophe (') which can causing issues with pathing.
     /// </summary>
     /// <param name="path">The path to sanitize.</param>
