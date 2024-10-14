@@ -23,6 +23,8 @@ using RadioExt_Helper.models;
 using RadioExt_Helper.Properties;
 using RadioExt_Helper.utility;
 using WIG.Lib.Models;
+using WIG.Lib.Utility;
+using PathHelper = RadioExt_Helper.utility.PathHelper;
 
 namespace RadioExt_Helper.forms;
 
@@ -732,8 +734,8 @@ public partial class ExportWindow : Form
 
                 if (!FileHelper.DoesFileExist(iconPath, false)) continue;
 
-                var fileHash = PathHelper.ComputeSha256Hash(iconPath, true);
-                if (!PathHelper.CompareSha256Hash(fileHash, iconHash))
+                var fileHash = HashUtils.ComputeSha256Hash(iconPath, true);
+                if (!HashUtils.CompareSha256Hash(fileHash, iconHash))
                 {
                     AuLogger.GetCurrentLogger<ExportWindow>("CopyIconsToGame")
                         .Warn($"Icon hash mismatch for station: {station.TrackedObject.MetaData.DisplayName}");
@@ -756,7 +758,7 @@ public partial class ExportWindow : Form
 
     /// <summary>
     /// Delete all icons in <paramref name="stationIcons"/> from the game directory. This is the case when no active icon
-    /// is selected for a station (i.e., <see cref="MetaData.CustomIcon.UseCustom"/> is false. This will NOT delete previously
+    /// is selected for a station (i.e., <see cref="CustomIcon.UseCustom"/> is false. This will NOT delete previously
     /// generated icons present in the staging directory.
     /// </summary>
     /// <param name="stationIcons"></param>
@@ -777,8 +779,8 @@ public partial class ExportWindow : Form
 
                 if (!FileHelper.DoesFileExist(expectedGamePath, false)) continue;
 
-                var fileHash = PathHelper.ComputeSha256Hash(expectedGamePath, true);
-                if (!PathHelper.CompareSha256Hash(fileHash, iconHash))
+                var fileHash = HashUtils.ComputeSha256Hash(expectedGamePath, true);
+                if (!HashUtils.CompareSha256Hash(fileHash, iconHash))
                 {
                     AuLogger.GetCurrentLogger<ExportWindow>("DeleteAllStationIconsFromGame")
                         .Warn($"Icon hash mismatch for: {icon.TrackedObject.IconName}");
@@ -842,8 +844,8 @@ public partial class ExportWindow : Form
 
                     if (!FileHelper.DoesFileExist(expectedGamePath, false)) continue;
 
-                    var fileHash = PathHelper.ComputeSha256Hash(expectedGamePath, true);
-                    if (!PathHelper.CompareSha256Hash(fileHash, iconHash))
+                    var fileHash = HashUtils.ComputeSha256Hash(expectedGamePath, true);
+                    if (!HashUtils.CompareSha256Hash(fileHash, iconHash))
                     {
                         AuLogger.GetCurrentLogger<ExportWindow>("DeleteInactiveIcons")
                             .Warn($"Icon hash mismatch for station: {station.TrackedObject.MetaData.DisplayName}");
@@ -891,8 +893,8 @@ public partial class ExportWindow : Form
                     var iconGamePath = Path.Combine(looseArchiveGamePath, Path.GetFileName(iconPath));
 
                     if (!FileHelper.DoesFileExist(iconGamePath, false)) continue;
-                    var fileHash = PathHelper.ComputeSha256Hash(iconGamePath, true);
-                    if (!PathHelper.CompareSha256Hash(fileHash, iconHash))
+                    var fileHash = HashUtils.ComputeSha256Hash(iconGamePath, true);
+                    if (!HashUtils.CompareSha256Hash(fileHash, iconHash))
                     {
                         AuLogger.GetCurrentLogger<ExportWindow>("DeleteInactiveIconsFromGame")
                             .Warn($"Icon hash mismatch for station: {station.TrackedObject.MetaData.DisplayName}");
