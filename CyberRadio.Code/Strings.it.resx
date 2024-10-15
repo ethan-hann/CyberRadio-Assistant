@@ -1,0 +1,1245 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="IconHelp" xml:space="preserve">
+    <value>L'icona per la stazione, se non ne usi una personalizzata. Può essere qualsiasi record UIICON.</value>
+  </data>
+  <data name="Ready" xml:space="preserve">
+    <value>Pronto</value>
+  </data>
+  <data name="StationNameHelp" xml:space="preserve">
+    <value>Controlla il nome della tua stazione che verrà visualizzato nel gioco. I personaggi speciali vengono sfuggiti correttamente.</value>
+  </data>
+  <data name="NoExeFound" xml:space="preserve">
+    <value>Il percorso per l'eseguibile Cyberpunk 2077 non è stato impostato.
+Per favore, impostalo ora.</value>
+  </data>
+  <data name="NoGamePath" xml:space="preserve">
+    <value>Nessun percorso di gioco</value>
+  </data>
+  <data name="RadioExtPathPlaceholder" xml:space="preserve">
+    <value>&lt;nessun percorso impostato; RadioExt non è installato&gt;</value>
+  </data>
+  <data name="StagingPathPlaceholder" xml:space="preserve">
+    <value>&lt;nessun percorso impostato; Le stazioni radio devono essere organizzate per prime&gt;</value>
+  </data>
+  <data name="AreYouSure" xml:space="preserve">
+    <value>Sei sicuro?</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Confermare</value>
+  </data>
+  <data name="NonCyberpunkExe" xml:space="preserve">
+    <value>Il file selezionato non sembrava cyberpunk 2077. Riprova.</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancellare</value>
+  </data>
+  <data name="GameBasePath" xml:space="preserve">
+    <value>Percorso base di gioco</value>
+  </data>
+  <data name="RadioStationPath" xml:space="preserve">
+    <value>Percorso delle stazioni radio</value>
+  </data>
+  <data name="StagingPath" xml:space="preserve">
+    <value>Percorso di stadiazione</value>
+  </data>
+  <data name="Change" xml:space="preserve">
+    <value>Modifica</value>
+  </data>
+  <data name="Clear" xml:space="preserve">
+    <value>Chiaro</value>
+  </data>
+  <data name="GameBasePathPlaceholder" xml:space="preserve">
+    <value>&lt;nessun percorso impostato; Game eseguibile mancante&gt;</value>
+  </data>
+  <data name="GamePaths" xml:space="preserve">
+    <value>Percorsi di gioco</value>
+  </data>
+  <data name="MainTitle" xml:space="preserve">
+    <value>Cyber ​​Radio Assistente</value>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>File</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Lingua</value>
+  </data>
+  <data name="Help" xml:space="preserve">
+    <value>Aiuto</value>
+  </data>
+  <data name="RefreshStations" xml:space="preserve">
+    <value>Ricarica dalla messa in scena</value>
+  </data>
+  <data name="HowToUse" xml:space="preserve">
+    <value>Come usare</value>
+  </data>
+  <data name="About" xml:space="preserve">
+    <value>Di</value>
+  </data>
+  <data name="NewStation" xml:space="preserve">
+    <value>Nuova stazione</value>
+  </data>
+  <data name="DeleteStation" xml:space="preserve">
+    <value>Elimina la stazione</value>
+  </data>
+  <data name="DisplayAndIcon" xml:space="preserve">
+    <value>Display e icona</value>
+  </data>
+  <data name="Music" xml:space="preserve">
+    <value>Musica</value>
+  </data>
+  <data name="OpenGameExecutable" xml:space="preserve">
+    <value>Apri Game eseguibile</value>
+  </data>
+  <data name="DisplayName" xml:space="preserve">
+    <value>Nome:</value>
+  </data>
+  <data name="Display" xml:space="preserve">
+    <value>Display</value>
+  </data>
+  <data name="CustomIcon" xml:space="preserve">
+    <value>Icona personalizzata</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Impostazioni</value>
+  </data>
+  <data name="Icon" xml:space="preserve">
+    <value>Icona:</value>
+  </data>
+  <data name="UsingQuestion" xml:space="preserve">
+    <value>Usando?</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>SÌ</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>NO</value>
+  </data>
+  <data name="InkAtlasPath" xml:space="preserve">
+    <value>Ink Atlas Path:</value>
+  </data>
+  <data name="InkAtlasPart" xml:space="preserve">
+    <value>Ink Atlas Parte:</value>
+  </data>
+  <data name="FM" xml:space="preserve">
+    <value>FM:</value>
+  </data>
+  <data name="Volume" xml:space="preserve">
+    <value>Volume:</value>
+  </data>
+  <data name="Value" xml:space="preserve">
+    <value>Valore:</value>
+  </data>
+  <data name="Min" xml:space="preserve">
+    <value>Min:</value>
+  </data>
+  <data name="Max" xml:space="preserve">
+    <value>Max:</value>
+  </data>
+  <data name="UseStream" xml:space="preserve">
+    <value>Usa il flusso?</value>
+  </data>
+  <data name="StreamURL" xml:space="preserve">
+    <value>URL di streaming:</value>
+  </data>
+  <data name="StreamSettings" xml:space="preserve">
+    <value>Impostazioni di streaming</value>
+  </data>
+  <data name="CustomIconHelp" xml:space="preserve">
+    <value>Specifica se si desidera utilizzare un'icona personalizzata per la stazione radio.</value>
+  </data>
+  <data name="InkPathHelp" xml:space="preserve">
+    <value>Punta al .inkatlas che contiene la trama dell'icona.</value>
+  </data>
+  <data name="InkPartHelp" xml:space="preserve">
+    <value>Specifica quale parte del .inkatlas dovrebbe essere utilizzata per l'icona, ad esempio Gryphon5</value>
+  </data>
+  <data name="FMHelp" xml:space="preserve">
+    <value>Utilizzato per posizionare la stazione nel posto giusto nell'elenco delle stazioni. Se il nome della stazione ha un numero FM, dovrebbe essere lo stesso.</value>
+  </data>
+  <data name="VolumeHelp" xml:space="preserve">
+    <value>Moltiplicatore di volume complessivo per la stazione. Assicurati che tutte le canzoni abbiano lo stesso volume, quindi regola il volume complessivo della stazione con questo valore per abbinare le stazioni alla vaniglia.</value>
+  </data>
+  <data name="VolumeValHelp" xml:space="preserve">
+    <value>Il volume attualmente selezionato. Utilizzare il valore del cursore o fare doppio clic per cambiare.</value>
+  </data>
+  <data name="UseStreamHelp" xml:space="preserve">
+    <value>Indica se questa stazione deve utilizzare un flusso web per la sua fonte audio.</value>
+  </data>
+  <data name="StreamURLHelp" xml:space="preserve">
+    <value>L'URL del flusso web da utilizzare.</value>
+  </data>
+  <data name="OpenURLErrorOccured" xml:space="preserve">
+    <value>Si è verificato un errore nel tentativo di aprire l'URL: </value>
+  </data>
+  <data name="RadioExtGithub" xml:space="preserve">
+    <value>radioext github</value>
+  </data>
+  <data name="RadioExtNexusMods" xml:space="preserve">
+    <value>radioext su nexusmods</value>
+  </data>
+  <data name="NoStationsYet" xml:space="preserve">
+    <value>Nessuna stazione ancora!</value>
+  </data>
+  <data name="NewStationListBoxEntry" xml:space="preserve">
+    <value>[Nuova stazione]</value>
+  </data>
+  <data name="AddSongsToolStrip" xml:space="preserve">
+    <value>Aggiungi canzoni</value>
+  </data>
+  <data name="RemoveSongsToolStrip" xml:space="preserve">
+    <value>Rimuovi le canzoni selezionate</value>
+  </data>
+  <data name="SongNameHeader" xml:space="preserve">
+    <value>Nome</value>
+  </data>
+  <data name="SongLengthHeader" xml:space="preserve">
+    <value>Lunghezza</value>
+  </data>
+  <data name="SongFileSizeHeader" xml:space="preserve">
+    <value>Dimensione del file</value>
+  </data>
+  <data name="EditSongOrder" xml:space="preserve">
+    <value>Modifica l'ordine della canzone</value>
+  </data>
+  <data name="SongArtistHeader" xml:space="preserve">
+    <value>Artista</value>
+  </data>
+  <data name="DeleteAllSongsConfirm" xml:space="preserve">
+    <value>Sei sicuro di voler rimuovere tutte le canzoni?</value>
+  </data>
+  <data name="Songs" xml:space="preserve">
+    <value>Canzoni</value>
+  </data>
+  <data name="Stations" xml:space="preserve">
+    <value>Stazioni</value>
+  </data>
+  <data name="SongListing" xml:space="preserve">
+    <value>Elenco di canzoni</value>
+  </data>
+  <data name="SongOrder" xml:space="preserve">
+    <value>Ordine della canzone</value>
+  </data>
+  <data name="AddSelected" xml:space="preserve">
+    <value>Aggiungi selezionato  </value>
+  </data>
+  <data name="RemoveSelected" xml:space="preserve">
+    <value>  Rimuovere selezionato</value>
+  </data>
+  <data name="Order" xml:space="preserve">
+    <value>Ordine</value>
+  </data>
+  <data name="ExportToGame" xml:space="preserve">
+    <value>Esportare in gioco</value>
+  </data>
+  <data name="ExportToStaging" xml:space="preserve">
+    <value>Esportazione alla messa in scena</value>
+  </data>
+  <data name="Export" xml:space="preserve">
+    <value>Esportare</value>
+  </data>
+  <data name="ExportHelp" xml:space="preserve">
+    <value>Fai clic su "Esporta su Staging" per esportare prima le stazioni sopra nella cartella Staging.
+Sarai in grado di rivedere le stazioni prima di copiare nella directory del gioco.
+
+Se qualcosa non sembra corretto, esci da questa finestra e apporta modifiche all'applicazione principale.</value>
+  </data>
+  <data name="LVDisplayName" xml:space="preserve">
+    <value>Nome da visualizzare</value>
+  </data>
+  <data name="LVStationIcon" xml:space="preserve">
+    <value>Icona</value>
+  </data>
+  <data name="LVSongCount" xml:space="preserve">
+    <value>Conteggio delle canzoni</value>
+  </data>
+  <data name="LVStreamURL" xml:space="preserve">
+    <value>URL di streaming</value>
+  </data>
+  <data name="LVProposedPath" xml:space="preserve">
+    <value>Percorso proposto</value>
+  </data>
+  <data name="ExportCompleteStatus" xml:space="preserve">
+    <value>Esportato in messa in scena!</value>
+  </data>
+  <data name="ExportCanceled" xml:space="preserve">
+    <value>Esportazione annullata</value>
+  </data>
+  <data name="ExportingStationStatus" xml:space="preserve">
+    <value>Stazione di esportazione: {0}</value>
+  </data>
+  <data name="IsStream" xml:space="preserve">
+    <value>È streaming</value>
+  </data>
+  <data name="UsingSongs" xml:space="preserve">
+    <value>Usando canzoni</value>
+  </data>
+  <data name="OpenStagingFolder" xml:space="preserve">
+    <value>Apri cartella di gestione temporanea</value>
+  </data>
+  <data name="OpenGameFolder" xml:space="preserve">
+    <value>Cartella delle radio del gioco aperto</value>
+  </data>
+  <data name="ExportToGameComplete" xml:space="preserve">
+    <value>Esportato in gioco!</value>
+  </data>
+  <data name="ExportStations" xml:space="preserve">
+    <value>Stazioni di esportazione</value>
+  </data>
+  <data name="StreamURLError" xml:space="preserve">
+    <value>Inserisci un URL di streaming valido.</value>
+  </data>
+  <data name="ErrorStreamingAudio" xml:space="preserve">
+    <value>Errore Streaming Audio: {0}</value>
+  </data>
+  <data name="ErrorPausingStream" xml:space="preserve">
+    <value>Errore in pausa flusso: {0}</value>
+  </data>
+  <data name="StagingPathHelp" xml:space="preserve">
+    <value>Seleziona il percorso di stadiazione della stazione radio.</value>
+  </data>
+  <data name="NoStagingPath" xml:space="preserve">
+    <value>Nessun percorso di stadiazione</value>
+  </data>
+  <data name="NoStagingPathFound" xml:space="preserve">
+    <value>La cartella di gestione temporanea per le stazioni radio non è ancora impostata.
+Per favore, impostalo ora.</value>
+  </data>
+  <data name="Paths" xml:space="preserve">
+    <value>Percorsi ...</value>
+  </data>
+  <data name="NoModInstalled" xml:space="preserve">
+    <value>Nessuna mod installata</value>
+  </data>
+  <data name="NoRadioExtMsg" xml:space="preserve">
+    <value>Non è installato la mod radioxt.
+Non riesco a esportare stazioni radio in gioco.</value>
+  </data>
+  <data name="AboutInfo" xml:space="preserve">
+    <value>Uno strumento per aiutare a creare e gestire le stazioni radio personalizzate in Cyberpunk 2077 quando si utilizza la mod di radioext.</value>
+  </data>
+  <data name="AboutSpecialThanks1" xml:space="preserve">
+    <value>Un ringraziamento speciale a</value>
+  </data>
+  <data name="AboutSpecialThanks2" xml:space="preserve">
+    <value>Per la fantastica mod radioext!</value>
+  </data>
+  <data name="AboutVersion" xml:space="preserve">
+    <value>Versione {0}</value>
+  </data>
+  <data name="AboutGithubRepo" xml:space="preserve">
+    <value>Github Repo</value>
+  </data>
+  <data name="AboutLicense" xml:space="preserve">
+    <value>Licenza</value>
+  </data>
+  <data name="CheckForUpdates" xml:space="preserve">
+    <value>Controlla gli aggiornamenti</value>
+  </data>
+  <data name="UpdateDownloadPercent" xml:space="preserve">
+    <value>Scaricato {0}%</value>
+  </data>
+  <data name="UpdateDownloadComplete" xml:space="preserve">
+    <value>Scarica completato! Avvio dell'aggiornamento ...</value>
+  </data>
+  <data name="UpdateDownloadError" xml:space="preserve">
+    <value>Scarica errore: {0}</value>
+  </data>
+  <data name="UpdateCheckError" xml:space="preserve">
+    <value>Errore controllando gli aggiornamenti: {0}</value>
+  </data>
+  <data name="UpdateCurrentVersion" xml:space="preserve">
+    <value>Versione corrente:</value>
+  </data>
+  <data name="UpdateNewVersion" xml:space="preserve">
+    <value>Nuova versione:</value>
+  </data>
+  <data name="UpdateChangelog" xml:space="preserve">
+    <value>Changelog:</value>
+  </data>
+  <data name="UpdateDownloadButton" xml:space="preserve">
+    <value>Scaricamento</value>
+  </data>
+  <data name="UpdateAvailable" xml:space="preserve">
+    <value>Aggiornamento disponibile</value>
+  </data>
+  <data name="UpdateAvailableNotice" xml:space="preserve">
+    <value>C'è un nuovo aggiornamento per CRA. Vuoi aprire il downloader ora?</value>
+  </data>
+  <data name="NoUpdateAvailable" xml:space="preserve">
+    <value>Sei nell'ultima versione. Nessun aggiornamento disponibile.</value>
+  </data>
+  <data name="NoUpdateCaption" xml:space="preserve">
+    <value>Aggiornato</value>
+  </data>
+  <data name="UpdateFolderOpening" xml:space="preserve">
+    <value>Aggiorna completo. La cartella contenente verrà ora aperta e l'applicazione verrà chiusa.</value>
+  </data>
+  <data name="UpdateFolderOpeningCaption" xml:space="preserve">
+    <value>Cartella di apertura</value>
+  </data>
+  <data name="ParseFromRadioGarden" xml:space="preserve">
+    <value>Analizzare da Radio.Garden</value>
+  </data>
+  <data name="InvalidStream" xml:space="preserve">
+    <value>Flusso non valido - non funzionerà nel gioco</value>
+  </data>
+  <data name="RadioGardenURLCaption" xml:space="preserve">
+    <value>URL del giardino radio</value>
+  </data>
+  <data name="RadioGardenInput" xml:space="preserve">
+    <value>Immettere l'URL di Radio.Garden:</value>
+  </data>
+  <data name="EnableSelected" xml:space="preserve">
+    <value>Abilita selezionata</value>
+  </data>
+  <data name="DisableSelected" xml:space="preserve">
+    <value>Disabilita selezionata</value>
+  </data>
+  <data name="EnableAllStations" xml:space="preserve">
+    <value>Abilita tutto</value>
+  </data>
+  <data name="DisableAllStations" xml:space="preserve">
+    <value>Disabilita tutto</value>
+  </data>
+  <data name="EnabledStationsCount" xml:space="preserve">
+    <value>Stazioni abilitate: {0} / {1}</value>
+  </data>
+  <data name="DisabledStation" xml:space="preserve">
+    <value>Stazione disabile</value>
+  </data>
+  <data name="LVStationStatus" xml:space="preserve">
+    <value>Abilitato?</value>
+  </data>
+  <data name="NoInternetCaption" xml:space="preserve">
+    <value>Nessuna connessione</value>
+  </data>
+  <data name="NoInternetMsg" xml:space="preserve">
+    <value>Impossibile verificare gli aggiornamenti. Si prega di controllare Internet e riprovare.</value>
+  </data>
+  <data name="Configuration" xml:space="preserve">
+    <value>Configurazione</value>
+  </data>
+  <data name="GeneralSettings" xml:space="preserve">
+    <value>Generale</value>
+  </data>
+  <data name="LogSettings" xml:space="preserve">
+    <value>Registrazione</value>
+  </data>
+  <data name="CheckForUpdatesOption" xml:space="preserve">
+    <value>Controllare gli aggiornamenti all'avvio?</value>
+  </data>
+  <data name="AutoExportOption" xml:space="preserve">
+    <value>Export automatico al gioco?</value>
+  </data>
+  <data name="EditPathsOption" xml:space="preserve">
+    <value>Modifica percorsi ...</value>
+  </data>
+  <data name="CheckForUpdatesOptionHelp" xml:space="preserve">
+    <value>Se verificato, consente l'applicazione di verificare gli aggiornamenti immediatamente dopo l'avvio.</value>
+  </data>
+  <data name="AutoExportOptionHelp" xml:space="preserve">
+    <value>Se controllate, le tue stazioni si esportano immediatamente nel gioco dopo aver esportato con successo in messa in scena.</value>
+  </data>
+  <data name="EditPathsOptionHelp" xml:space="preserve">
+    <value>Apre la finestra di dialogo del percorso per modificare il percorso di base e base di gioco.</value>
+  </data>
+  <data name="NewLogFileOption" xml:space="preserve">
+    <value>Nuovo file ogni lancio?</value>
+  </data>
+  <data name="NewLogFileOptionHelp" xml:space="preserve">
+    <value>Se verificato, specifica che verrà creato un nuovo file di registro in ogni esecuzione dell'app.</value>
+  </data>
+  <data name="SaveAndClose" xml:space="preserve">
+    <value>Salva e chiudi</value>
+  </data>
+  <data name="ResetToDefaults" xml:space="preserve">
+    <value>Ripristina le impostazioni predefinite</value>
+  </data>
+  <data name="ConfigResetConfirm" xml:space="preserve">
+    <value>Sei sicuro di voler ripristinare la configurazione ai valori predefiniti?</value>
+  </data>
+  <data name="ConfigSaveError" xml:space="preserve">
+    <value>Si è verificato un errore salvando la configurazione. Assicurati che esista il file config.yml.</value>
+  </data>
+  <data name="ConfigSaveSuccess" xml:space="preserve">
+    <value>Configurazione salvata!</value>
+  </data>
+  <data name="Success" xml:space="preserve">
+    <value>Successo</value>
+  </data>
+  <data name="OpenLogFolder" xml:space="preserve">
+    <value>Apri la cartella del registro</value>
+  </data>
+  <data name="ConfirmRefreshStations" xml:space="preserve">
+    <value>Sei sicuro di voler aggiornare le tue stazioni dal disco?
+Perderai eventuali modifiche in sospeso alle stazioni.</value>
+  </data>
+  <data name="EditLogsPathOption" xml:space="preserve">
+    <value>Modifica percorso dei registri ...</value>
+  </data>
+  <data name="EditLogsPathOptionHelp" xml:space="preserve">
+    <value>Apre una finestra di dialogo Cartella in cui è possibile scegliere un nuovo percorso per salvare i file di registro.</value>
+  </data>
+  <data name="LogPathLabel" xml:space="preserve">
+    <value>Percorso del registro:</value>
+  </data>
+  <data name="SelectLogPathDesc" xml:space="preserve">
+    <value>Seleziona la posizione per archiviare i file di registro</value>
+  </data>
+  <data name="NoLogPathSet" xml:space="preserve">
+    <value>&lt;Nessun percorso&gt;</value>
+  </data>
+  <data name="ExportWindowTip" xml:space="preserve">
+    <value>     Solo le stazioni abilitate lo sono 
+esportato al gioco.</value>
+  </data>
+  <data name="AddSongsFileBrowserTitle" xml:space="preserve">
+    <value>Seleziona i file della canzone da aggiungere</value>
+  </data>
+  <data name="RevertChanges" xml:space="preserve">
+    <value>Ripristina le modifiche</value>
+  </data>
+  <data name="ClearAllSongs" xml:space="preserve">
+    <value>Cancella tutto!</value>
+  </data>
+  <data name="SplashScreen_Starting" xml:space="preserve">
+    <value>Di partenza...</value>
+  </data>
+  <data name="SplashScreen_CheckingSettings" xml:space="preserve">
+    <value>Controllo delle impostazioni ...</value>
+  </data>
+  <data name="SplashScreen_MigratedSettings" xml:space="preserve">
+    <value>Le impostazioni migrate con successo.</value>
+  </data>
+  <data name="SplashScreen_MigratedSettingsNo" xml:space="preserve">
+    <value>Impostazioni Migrazione non necessaria.</value>
+  </data>
+  <data name="SplashScreen_CheckingSongs" xml:space="preserve">
+    <value>Controllo dei formati della canzone ...</value>
+  </data>
+  <data name="SplashScreen_UpdateCheck" xml:space="preserve">
+    <value>Controllare gli aggiornamenti ...</value>
+  </data>
+  <data name="SplashScreen_UpdateCheckNo" xml:space="preserve">
+    <value>Saltare il controllo per gli aggiornamenti ...</value>
+  </data>
+  <data name="SplashScreen_Finalizing" xml:space="preserve">
+    <value>Finalizzazione ...</value>
+  </data>
+  <data name="ConfirmExit" xml:space="preserve">
+    <value>Ci sono {0} stazioni in attesa di esportazione.
+Sei sicuro di voler smettere?</value>
+  </data>
+  <data name="BackupProgressChanged" xml:space="preserve">
+    <value>Eseguire il backup ... {0}%</value>
+  </data>
+  <data name="BackupCompleted" xml:space="preserve">
+    <value>Backup completato con successo.</value>
+  </data>
+  <data name="BackupFailed" xml:space="preserve">
+    <value>Il backup non è riuscito.</value>
+  </data>
+  <data name="BackupFailedException" xml:space="preserve">
+    <value>Backup non riuscito a causa di un errore: {0}</value>
+  </data>
+  <data name="LocateSong" xml:space="preserve">
+    <value>Individua la canzone mancante</value>
+  </data>
+  <data name="InvalidFile" xml:space="preserve">
+    <value>Seleziona il file corretto.</value>
+  </data>
+  <data name="InvalidFileCaption" xml:space="preserve">
+    <value>File non valido</value>
+  </data>
+  <data name="SongExistsHeader" xml:space="preserve">
+    <value>Il file esiste?</value>
+  </data>
+  <data name="SplashScreen_CheckApiAccess" xml:space="preserve">
+    <value>Controllo della chiave API Nexus ...</value>
+  </data>
+  <data name="Backup" xml:space="preserve">
+    <value>Backup</value>
+  </data>
+  <data name="BackupFolderDesc" xml:space="preserve">
+    <value>Seleziona una cartella per salvare il backup su</value>
+  </data>
+  <data name="BackupPathIsSubpath" xml:space="preserve">
+    <value>Il percorso di backup non può essere all'interno del percorso di stadiazione.</value>
+  </data>
+  <data name="ApiStatus" xml:space="preserve">
+    <value>API non autenticata</value>
+  </data>
+  <data name="ExportToGameMissingSongs" xml:space="preserve">
+    <value>Ci sono {0} stazioni (S) con un totale di {1} percorsi di canzoni non validi. Vuoi continuare a esportare?</value>
+  </data>
+  <data name="SongsMissingPaths" xml:space="preserve">
+    <value>Canzoni mancanti percorsi</value>
+  </data>
+  <data name="ApiUnsavedChanges" xml:space="preserve">
+    <value>Hai cambiato modifiche alla tua chiave API. Si prega di salvare o cancellare la chiave prima di chiudere.</value>
+  </data>
+  <data name="UnsavedChanges" xml:space="preserve">
+    <value>Cambiamenti non salvati</value>
+  </data>
+  <data name="ApiAuthenticated" xml:space="preserve">
+    <value>Autenticato</value>
+  </data>
+  <data name="ApiNotAuthenticated" xml:space="preserve">
+    <value>Non autenticato</value>
+  </data>
+  <data name="BackupStagingFolder" xml:space="preserve">
+    <value>Cartella di gestione temporanea di backup</value>
+  </data>
+  <data name="BackupReady" xml:space="preserve">
+    <value>Backup pronto</value>
+  </data>
+  <data name="StagingPathWithinGamePath" xml:space="preserve">
+    <value>Il percorso di stadiazione non può essere all'interno del percorso di gioco!</value>
+  </data>
+  <data name="GamePathWithinStagingPath" xml:space="preserve">
+    <value>Il percorso di gioco non può essere nel percorso di staging!</value>
+  </data>
+  <data name="SynchronizeStations" xml:space="preserve">
+    <value>Sincronizzare le stazioni</value>
+  </data>
+  <data name="ConfirmSyncStations" xml:space="preserve">
+    <value>Sei sicuro di voler sincronizzare la messa in scena e le directory di gioco?
+Perderai eventuali modifiche in sospeso alle stazioni.</value>
+  </data>
+  <data name="MissingStations" xml:space="preserve">
+    <value>Ci sono {0} stazioni nella cartella del gioco mancanti dalla cartella di stadiazione. Vorresti sincronizzare le stazioni?</value>
+  </data>
+  <data name="CustomDataGroup" xml:space="preserve">
+    <value>Dati personalizzati</value>
+  </data>
+  <data name="BackupInProgress" xml:space="preserve">
+    <value>Il backup è in corso. Attendere prego...</value>
+  </data>
+  <data name="SyncFailedException" xml:space="preserve">
+    <value>La sincronizzazione non è riuscita a causa di un errore: {0}</value>
+  </data>
+  <data name="SyncAbbrev" xml:space="preserve">
+    <value>Sincronizzazione</value>
+  </data>
+  <data name="SyncFailed" xml:space="preserve">
+    <value>La sincronizzazione non è riuscita!</value>
+  </data>
+  <data name="SyncInProgress" xml:space="preserve">
+    <value>La sincronizzazione è in corso. Attendere prego...</value>
+  </data>
+  <data name="CustomDataKey" xml:space="preserve">
+    <value>Chiave</value>
+  </data>
+  <data name="CustomDataValue" xml:space="preserve">
+    <value>Valore</value>
+  </data>
+  <data name="Exit" xml:space="preserve">
+    <value>Uscita</value>
+  </data>
+  <data name="SongFilePathHeader" xml:space="preserve">
+    <value>Percorso del file</value>
+  </data>
+  <data name="TotalSongsLabel" xml:space="preserve">
+    <value>Canzoni totali:</value>
+  </data>
+  <data name="TotalStationSizeLabel" xml:space="preserve">
+    <value>Dimensione della stazione:</value>
+  </data>
+  <data name="WatchForChangesOption" xml:space="preserve">
+    <value>Guarda le modifiche alla stazione?</value>
+  </data>
+  <data name="WatchForChangesHelp" xml:space="preserve">
+    <value>Se controllato, il percorso delle radio del gioco verrà osservata per le modifiche e sincronizza automaticamente nuove stazioni alla messa in scena.</value>
+  </data>
+  <data name="BackupCompressionLevelHelp" xml:space="preserve">
+    <value>Indica il livello di compressione utilizzato quando si esegue il backup della directory di stadiazione.</value>
+  </data>
+  <data name="BackupPathIsSubpathGame" xml:space="preserve">
+    <value>Il percorso di backup non può essere all'interno del percorso di gioco.</value>
+  </data>
+  <data name="None" xml:space="preserve">
+    <value>Nessuno</value>
+  </data>
+  <data name="SuperFast" xml:space="preserve">
+    <value>Super veloce</value>
+  </data>
+  <data name="Fast" xml:space="preserve">
+    <value>Veloce</value>
+  </data>
+  <data name="Fastest" xml:space="preserve">
+    <value>Più veloce</value>
+  </data>
+  <data name="Normal" xml:space="preserve">
+    <value>Normale</value>
+  </data>
+  <data name="High" xml:space="preserve">
+    <value>Alto</value>
+  </data>
+  <data name="Maximum" xml:space="preserve">
+    <value>Massimo</value>
+  </data>
+  <data name="Ultra" xml:space="preserve">
+    <value>Ultra</value>
+  </data>
+  <data name="Extreme" xml:space="preserve">
+    <value>Estremo</value>
+  </data>
+  <data name="Ultimate" xml:space="preserve">
+    <value>Ultimate</value>
+  </data>
+  <data name="BackupCompressionLevel" xml:space="preserve">
+    <value>Livello di compressione di backup:</value>
+  </data>
+  <data name="BackupPreviewCompleted" xml:space="preserve">
+    <value>Anteprima di backup completata.</value>
+  </data>
+  <data name="EstimatedBackupSizeDisclaimer" xml:space="preserve">
+    <value>* Questa è una stima basata sul livello di compressione selezionato nella configurazione.
+La dimensione effettiva può essere diversa.</value>
+  </data>
+  <data name="TotalFileSize" xml:space="preserve">
+    <value>Dimensione totale del file:</value>
+  </data>
+  <data name="EstimatedBackupSize" xml:space="preserve">
+    <value>Dimensione di backup stimata:</value>
+  </data>
+  <data name="CreatingPreview" xml:space="preserve">
+    <value>Creazione di anteprima ...</value>
+  </data>
+  <data name="StartBackup" xml:space="preserve">
+    <value>Inizia il backup</value>
+  </data>
+  <data name="BackupPreviewError" xml:space="preserve">
+    <value>Si è verificato un errore durante il caricamento dell'anteprima di backup.</value>
+  </data>
+  <data name="UsingCompressionLevel" xml:space="preserve">
+    <value>Utilizzando il livello di compressione: {0}</value>
+  </data>
+  <data name="FileName" xml:space="preserve">
+    <value>Nome file</value>
+  </data>
+  <data name="CopySongFilesToBackupOption" xml:space="preserve">
+    <value>Copia i file di brani su backup?</value>
+  </data>
+  <data name="DefaultSongLocationHelp" xml:space="preserve">
+    <value>Indica la cartella a cui i file di brani della stazione importati dovrebbero essere salvati. Il valore predefinito è nella cartella MyMusic.</value>
+  </data>
+  <data name="IconManagerFormTitle" xml:space="preserve">
+    <value>Icon manager - {0}</value>
+  </data>
+  <data name="InvalidActiveIcon" xml:space="preserve">
+    <value>L'icona attiva non è valida. Assicurati che l'icona sia importata e che sia presente il file di archivio.</value>
+  </data>
+  <data name="InvalidActiveIconCaption" xml:space="preserve">
+    <value>Icona attiva non valida</value>
+  </data>
+  <data name="IconEditorCopyIconToStagingNullEmpty" xml:space="preserve">
+    <value>Il percorso dell'archivio icona era nullo o vuoto.</value>
+  </data>
+  <data name="IconEditor_IconAlreadyCreated_DragDrop" xml:space="preserve">
+    <value>Questa icona è già stata creata e contrassegnata come di sola lettura. Crea una nuova icona se si desidera un'immagine diversa.</value>
+  </data>
+  <data name="IconEditor_IconAlreadyCreated_DragDrop_Caption" xml:space="preserve">
+    <value>Icona già creata</value>
+  </data>
+  <data name="IconEditor_ImageNotSquare" xml:space="preserve">
+    <value>L'immagine non è quadrata. Possono verificarsi problemi nel gioco.</value>
+  </data>
+  <data name="IconEditorCopyIconToStagingImageNullEmpty" xml:space="preserve">
+    <value>L'icona .PNG Path era nullo o vuoto.</value>
+  </data>
+  <data name="IconEditor_SetFieldsBasedOnImagePath_The_extracted_image_could_not_be_found_" xml:space="preserve">
+    <value>Non è stato possibile trovare l'immagine estratta.</value>
+  </data>
+  <data name="IconEditor_SetFieldsBasedOnImagePath_To_be_determined_from_archive___" xml:space="preserve">
+    <value>Essere determinato dall'archivio ...</value>
+  </data>
+  <data name="IconManagerForm_RemoveIcon_Are_you_sure_you_want_to_delete_this_icon_" xml:space="preserve">
+    <value>Sei sicuro di voler eliminare questa icona?</value>
+  </data>
+  <data name="IconManagerForm_RemoveIcon_Confirm_Delete" xml:space="preserve">
+    <value>Conferma Elimina</value>
+  </data>
+  <data name="IconManagerForm_RemoveIcon_Do_you_want_to_delete_associated_icon_files_from_staging__This_will_delete_the_copied__archive_file_and_the_associated_PNG_" xml:space="preserve">
+    <value>Vuoi eliminare i file di icona associati dalla messa in scena? Ciò eliminerà il file .Archive copiato e il PNG associato.</value>
+  </data>
+  <data name="IconManagerForm_btnDeleteAllIcons_Click_Are_you_sure_you_want_to_remove_ALL_icons_from_this_station_" xml:space="preserve">
+    <value>Sei sicuro di voler rimuovere tutte le icone da questa stazione? ** Questa è un'operazione distruttiva! **
+
+Assicurati di eseguire prima il backup della cartella di stadiazione;)</value>
+  </data>
+  <data name="IconManagerForm_btnDeleteAllIcons_Click_Do_you_want_to_also_delete_associated_icon_s_files_from_staging" xml:space="preserve">
+    <value>Vuoi anche eliminare i file dell'icona associati dalla messa in scena? Ciò eliminerà tutti i file .archive copiati e i PNG associati.</value>
+  </data>
+  <data name="LogViewerControl_LoadRelevantLogEntries_Failed_to_load_log_data___0_" xml:space="preserve">
+    <value>Impossibile caricare i dati di registro: {0}</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Errore</value>
+  </data>
+  <data name="LogViewerControl_DisplayLastLines_Failed_to_display_log_lines___0_" xml:space="preserve">
+    <value>Impossibile visualizzare le righe di registro: {0}</value>
+  </data>
+  <data name="IconManagerForm_CheckForCopy_" xml:space="preserve">
+    <value>L'icona esiste già ed è associata alle seguenti stazioni: {0}.
+
+Verrà creata una nuova copia dell'icona, ma farà riferimento agli stessi file sottostanti sul disco.
+
+Nota: eventuali modifiche allo stato di attivazione o ad altre proprietà specifiche della stazione influenzeranno solo questa stazione.</value>
+  </data>
+  <data name="IconManagerForm_CheckForCopy_Duplicate_Icon_Detected" xml:space="preserve">
+    <value>Icona duplicata rilevata</value>
+  </data>
+  <data name="IconManagerForm_CheckForCopy_This_icon_is_already_associated_with_the_current_station_" xml:space="preserve">
+    <value>Questa icona è già associata alla stazione corrente.</value>
+  </data>
+  <data name="CreatedFromArchive" xml:space="preserve">
+    <value>Creato dall'archivio</value>
+  </data>
+  <data name="CreatedFromPng" xml:space="preserve">
+    <value>Creato da PNG</value>
+  </data>
+  <data name="MainForm_FromZipImportDesc" xml:space="preserve">
+    <value>Stazioni importate {0}: {1}
+
+Se un'icona è stata inclusa nella stazione, è stata aggiunta anche. Tuttavia, dovrai estrarlo manualmente per ottenere l'anteprima in CRA.</value>
+  </data>
+  <data name="MainForm_FromZipStationsImportedTitle" xml:space="preserve">
+    <value>STAZIONI Importate</value>
+  </data>
+  <data name="MainForm_FromZipImportFilter" xml:space="preserve">
+    <value>Archivi della stazione radio (*.zip;*. Rar)</value>
+  </data>
+  <data name="MainForm_FromZipImportTitle" xml:space="preserve">
+    <value>Stazione di importazione</value>
+  </data>
+  <data name="SearchStations" xml:space="preserve">
+    <value>Stazioni di ricerca ...</value>
+  </data>
+  <data name="SelectDefaultSongLocationDesc" xml:space="preserve">
+    <value>Seleziona la posizione predefinita per archiviare i file della canzone</value>
+  </data>
+  <data name="NewIcon" xml:space="preserve">
+    <value>Nuova icona</value>
+  </data>
+  <data name="DeleteIcon" xml:space="preserve">
+    <value>Elimina icona</value>
+  </data>
+  <data name="DeleteAllIcons" xml:space="preserve">
+    <value>Elimina tutte le icone</value>
+  </data>
+  <data name="FromArchiveFile" xml:space="preserve">
+    <value>Dal file archivo ...</value>
+  </data>
+  <data name="Icons" xml:space="preserve">
+    <value>Icone</value>
+  </data>
+  <data name="OpenArchiveFile" xml:space="preserve">
+    <value>Seleziona un file archivo da aprire</value>
+  </data>
+  <data name="ArchiveFiles" xml:space="preserve">
+    <value>Archivio mod (*.archive)</value>
+  </data>
+  <data name="IconImportInProgress" xml:space="preserve">
+    <value>Un'importazione di icona è attualmente in corso. Si prega di attendere che l'importazione finisca.</value>
+  </data>
+  <data name="IconImportInProgressCaption" xml:space="preserve">
+    <value>Icon Importa in corso</value>
+  </data>
+  <data name="IconExportInProgress" xml:space="preserve">
+    <value>Un'esportazione di icona è attualmente in corso. Si prega di attendere che l'esportazione finisca.</value>
+  </data>
+  <data name="IconExportInProgressCaption" xml:space="preserve">
+    <value>Icona esportazione in corso</value>
+  </data>
+  <data name="MissingStationsCaption" xml:space="preserve">
+    <value>Stazioni mancanti</value>
+  </data>
+  <data name="IconManagerMenuOption" xml:space="preserve">
+    <value>Responsabile delle icone della stazione</value>
+  </data>
+  <data name="Tools" xml:space="preserve">
+    <value>Utensili</value>
+  </data>
+  <data name="DownloadRadioMods" xml:space="preserve">
+    <value>Scarica le modalità radio</value>
+  </data>
+  <data name="ImportFromZipFile" xml:space="preserve">
+    <value>Dal file .zip ...</value>
+  </data>
+  <data name="ClearAllData" xml:space="preserve">
+    <value>Cancella tutti i dati!</value>
+  </data>
+  <data name="BackupRestoreMenuItem" xml:space="preserve">
+    <value>Backup/Restore</value>
+  </data>
+  <data name="RestoreBackupMenuItem" xml:space="preserve">
+    <value>Ripristina la cartella Staging</value>
+  </data>
+  <data name="Mods" xml:space="preserve">
+    <value>Mod</value>
+  </data>
+  <data name="MainTitleFormated" xml:space="preserve">
+    <value>Cyber ​​Radio Assistant - {0}</value>
+  </data>
+  <data name="ConfirmSyncStationsExternal" xml:space="preserve">
+    <value>Sono state apportate modifiche alla directory delle radio del gioco.
+Vuoi sincronizzare la messa in scena e le directory di gioco?</value>
+  </data>
+  <data name="ExportInProgress" xml:space="preserve">
+    <value>L'esportazione è in corso. Attendere prego...</value>
+  </data>
+  <data name="ExportCaption" xml:space="preserve">
+    <value>Esportazione</value>
+  </data>
+  <data name="ConfirmRestore" xml:space="preserve">
+    <value>Sei sicuro di voler ripristinare la cartella di gestione temporanea?
+Questo sovrascriverà le tue stazioni esistenti!</value>
+  </data>
+  <data name="MainForm_RestoreFileBrowserFilter" xml:space="preserve">
+    <value>File di backup (*.zip)</value>
+  </data>
+  <data name="MainForm_RestoreFileBrowserTitle" xml:space="preserve">
+    <value>Seleziona il file di backup per ripristinare</value>
+  </data>
+  <data name="ConfirmClearAllData" xml:space="preserve">
+    <value>** Operazione distruttiva **
+
+Assicurati di creare un backup delle tue stazioni prima di cancellare i dati. Ciò rimuoverà immediatamente tutte le stazioni dalla messa in scena (il gioco non viene toccato).
+Sei sicuro di voler cancellare tutti i dati della stazione?</value>
+  </data>
+  <data name="RestoreFormTitle" xml:space="preserve">
+    <value>Ripristina il backup - {0}</value>
+  </data>
+  <data name="StartRestore" xml:space="preserve">
+    <value>Inizia a ripristinare</value>
+  </data>
+  <data name="RestoreDescription" xml:space="preserve">
+    <value>I seguenti file verranno ripristinati nella cartella Staging.</value>
+  </data>
+  <data name="EstimatedRestoreSizeFormat" xml:space="preserve">
+    <value>Dimensione del ripristino stimata: {0}</value>
+  </data>
+  <data name="RestoreForm_PreviewCompleted" xml:space="preserve">
+    <value>Ripristina l'anteprima completata. Pronto per iniziare l'operazione di ripristino.</value>
+  </data>
+  <data name="RestoreForm_ErrorWhileRestoring" xml:space="preserve">
+    <value>Si è verificato un errore durante il tentativo di avviare l'operazione di ripristino.</value>
+  </data>
+  <data name="RestoreForm_RestoreCancelled" xml:space="preserve">
+    <value>L'operazione di ripristino è stata annullata.</value>
+  </data>
+  <data name="RestoreForm_RestoreCancelledCaption" xml:space="preserve">
+    <value>Ripristina cancellato</value>
+  </data>
+  <data name="SplashScreen_SetupIconManager" xml:space="preserve">
+    <value>Inizializzazione del gestore delle icone ...</value>
+  </data>
+  <data name="AddSongsFileBrowserFilter" xml:space="preserve">
+    <value>File musicali (*.mp3;*. Wav;*. Ogg;*. Flac;*. Mp2;*. Cera;*. Wma)</value>
+  </data>
+  <data name="IconEditor_Translate_Editing_Icon___0_" xml:space="preserve">
+    <value>ICON di modifica: {0}</value>
+  </data>
+  <data name="IconEditor_Translate_W___0_" xml:space="preserve">
+    <value>W: {0}</value>
+  </data>
+  <data name="IconEditor_Translate_H___0_" xml:space="preserve">
+    <value>H: {0}</value>
+  </data>
+  <data name="IconEditor_Translate_Format___0_" xml:space="preserve">
+    <value>Formato: {0}</value>
+  </data>
+  <data name="IconEditor_Translate_Archive_Path_" xml:space="preserve">
+    <value>Percorso di archivio:</value>
+  </data>
+  <data name="IconEditor_Translate_Atlas_Name_" xml:space="preserve">
+    <value>Nome Atlas:</value>
+  </data>
+  <data name="IconEditor_Translate_Icon_Name_" xml:space="preserve">
+    <value>Nome dell'icona:</value>
+  </data>
+  <data name="IconEditor_Translate_Icon_Path_" xml:space="preserve">
+    <value>Icon Path:</value>
+  </data>
+  <data name="IconEditor_Translate_Icon_Part_" xml:space="preserve">
+    <value>Parte icona:</value>
+  </data>
+  <data name="IconEditor_Translate_Image_Path_" xml:space="preserve">
+    <value>Percorso dell'immagine:</value>
+  </data>
+  <data name="IconEditor_Translate_SHA256_Hash_" xml:space="preserve">
+    <value>SHA256 HASH:</value>
+  </data>
+  <data name="IconEditor_Translate_Color_Mode___0_" xml:space="preserve">
+    <value>Modalità colore: {0}</value>
+  </data>
+  <data name="IconEditor_Translate_No_Image_Issues" xml:space="preserve">
+    <value>Nessun problema di immagine</value>
+  </data>
+  <data name="IconEditor_Translate_Start_Import" xml:space="preserve">
+    <value>Avvia l'importazione</value>
+  </data>
+  <data name="IconEditor_Translate_Start_Extraction" xml:space="preserve">
+    <value>Inizia l'estrazione</value>
+  </data>
+  <data name="IconEditor_Translate_Cancel_Action" xml:space="preserve">
+    <value>Annulla l'azione</value>
+  </data>
+  <data name="IconEditor_Translate_Preview" xml:space="preserve">
+    <value>Anteprima</value>
+  </data>
+  <data name="IconEditor_Translate_Properties" xml:space="preserve">
+    <value>Proprietà</value>
+  </data>
+  <data name="IconEditor_Translate_Actions" xml:space="preserve">
+    <value>Azioni</value>
+  </data>
+  <data name="IconEditor_AtlasName_Hint" xml:space="preserve">
+    <value>Il nome del file Atlas in cui è archiviato l'icona.</value>
+  </data>
+  <data name="IconEditor_Sha256Hash_Hint" xml:space="preserve">
+    <value>L'hash sha256 del file di archivio.</value>
+  </data>
+  <data name="IconEditor_ArchivePath_Hint" xml:space="preserve">
+    <value>Il percorso verso il file di archivio che contiene l'icona.</value>
+  </data>
+  <data name="IconEditor_ImagePath_Hint" xml:space="preserve">
+    <value>Il percorso del file di immagine che ha creato l'icona o l'immagine estratta.</value>
+  </data>
+  <data name="IconEditor_IconPath_Hint" xml:space="preserve">
+    <value>Il percorso verso l'icona all'interno del file di archivio. Autogenerato.</value>
+  </data>
+  <data name="IconEditor_IconPart_Hint" xml:space="preserve">
+    <value>La parte dell'icona all'interno del percorso dell'icona. Autogenerato.</value>
+  </data>
+  <data name="MetaDataKey" xml:space="preserve">
+    <value>Chiave</value>
+  </data>
+  <data name="MetaDataValue" xml:space="preserve">
+    <value>Valore</value>
+  </data>
+  <data name="RadioGardenParse" xml:space="preserve">
+    <value>Analizzare</value>
+  </data>
+  <data name="IconManagerHelp" xml:space="preserve">
+    <value>Apre la finestra di dialogo Icon Manager per questa stazione per gestire le icone.</value>
+  </data>
+  <data name="CustomIconPictureHelp" xml:space="preserve">
+    <value>Mostra un'anteprima dell'icona attiva per questa stazione. Drag-and-drop A .png qui per aggiungerlo rapidamente alla stazione.</value>
+  </data>
+  <data name="ParseFromRadioGardenHelp" xml:space="preserve">
+    <value>Apre una finestra di dialogo per analizzare l'URL API dall'URL Web per un flusso web di Radio.Garden.</value>
+  </data>
+  <data name="StreamPlayerHelp" xml:space="preserve">
+    <value>Consente di visualizzare in anteprima l'audio dal flusso specificato.</value>
+  </data>
+  <data name="AddSongsHelp" xml:space="preserve">
+    <value>Apre un selettore di file per aggiungere file audio validi all'elenco dei brani di questa stazione.</value>
+  </data>
+  <data name="RemoveFromOrderHelp" xml:space="preserve">
+    <value>Rimuove la canzone dalla lista delle canzoni ordinata della stazione. Non rimuove la canzone dalla stazione.</value>
+  </data>
+  <data name="AddToOrderHelp" xml:space="preserve">
+    <value>Aggiunge la canzone alla lista delle canzoni ordinata della stazione.</value>
+  </data>
+  <data name="RemoveSongsHelp" xml:space="preserve">
+    <value>Rimuove tutte le canzoni selezionate dalla stazione. Non elimina i file sul disco.</value>
+  </data>
+  <data name="RemoveAllSongsHelp" xml:space="preserve">
+    <value>Rimuove tutte le canzoni dalla stazione. Non elimina i file sul disco.</value>
+  </data>
+  <data name="TotalSongsHelp" xml:space="preserve">
+    <value>Mostra il numero totale di file di brani associati a questa stazione.</value>
+  </data>
+  <data name="TotalStationSizeHelp" xml:space="preserve">
+    <value>Mostra la dimensione totale del file di tutti i file di brani nella stazione.</value>
+  </data>
+  <data name="RestoreBackupLoadingPreview" xml:space="preserve">
+    <value>Caricamento ... {0}%</value>
+  </data>
+  <data name="RestoreProgressChanged" xml:space="preserve">
+    <value>Ripristino file: {0}</value>
+  </data>
+  <data name="RestoreSongProgressChanged" xml:space="preserve">
+    <value>Restaurazione della canzone: {0}</value>
+  </data>
+  <data name="RestoreCompleted" xml:space="preserve">
+    <value>Restore completato con successo.</value>
+  </data>
+  <data name="RestoreFailedException" xml:space="preserve">
+    <value>Restore non riuscito a causa di un errore: {0}</value>
+  </data>
+  <data name="DirectoryWatcher_DirectoryNotExists" xml:space="preserve">
+    <value>Directory '{0}' non esiste</value>
+  </data>
+  <data name="GamePathFilter" xml:space="preserve">
+    <value>Game Executable (cyberpunk2077.exe)</value>
+  </data>
+  <data name="SyncStatusComplete" xml:space="preserve">
+    <value>Sincronizzazione completa.</value>
+  </data>
+  <data name="SyncStatusError" xml:space="preserve">
+    <value>Stazioni di sincronizzazione dell'errore.</value>
+  </data>
+  <data name="SyncProgressChangedFormat" xml:space="preserve">
+    <value>Sincronizzare i file ... {0}%</value>
+  </data>
+  <data name="SyncProgressDirectoriesChangedFormat" xml:space="preserve">
+    <value>Directory di sincronizzazione ... {0}%</value>
+  </data>
+  <data name="IconEditor_IconName_Hint" xml:space="preserve">
+    <value>Il nome dell'icona all'interno della stazione. Può essere tutto ciò che vuoi.</value>
+  </data>
+  <data name="IconEditor_CopyToClipboard" xml:space="preserve">
+    <value>Copia il testo corrispondente agli appunti.</value>
+  </data>
+  <data name="IconEditor_ImportIcon" xml:space="preserve">
+    <value>Avvia il processo di importazione per la generazione di icona. Questo può richiedere del tempo.</value>
+  </data>
+  <data name="IconEditor_ExtractIcon" xml:space="preserve">
+    <value>Avvia il processo di estrazione .Archive per un'icona. Questo può richiedere del tempo.</value>
+  </data>
+  <data name="IconEditor_CancelAction" xml:space="preserve">
+    <value>Annulla l'operazione attualmente in esecuzione.</value>
+  </data>
+  <data name="IconManager" xml:space="preserve">
+    <value>Icona manager</value>
+  </data>
+  <data name="LogViewerControl_grpLogSearchHeader_Text" xml:space="preserve">
+    <value>File di registro</value>
+  </data>
+  <data name="LogViewerControl_txtSearch_PlaceholderText" xml:space="preserve">
+    <value>Inserisci il filtro di ricerca ...</value>
+  </data>
+  <data name="LogViewerControl_btnShowMore_Text" xml:space="preserve">
+    <value>Mostra di più</value>
+  </data>
+  <data name="LogViewerControl_dgvLogs_Columns_0_HeaderText" xml:space="preserve">
+    <value>Timestamp</value>
+  </data>
+  <data name="LogViewerControl_dgvLogs_Columns_1_HeaderText" xml:space="preserve">
+    <value>Produzione</value>
+  </data>
+  <data name="IconEditor_CustomIconPictureHelp" xml:space="preserve">
+    <value>Mostra un'anteprima di questa icona (se estratta o importata). Se l'icona non è stata ancora creata, drag-and-drop a .png qui per crearlo.</value>
+  </data>
+</root>

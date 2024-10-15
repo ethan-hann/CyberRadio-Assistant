@@ -311,10 +311,15 @@ public sealed partial class MainForm : Form
     private void InitializeLanguageDropDown()
     {
         //TODO: Add [New Station] translations in the list box when the language is changed.
-        // Populate the language combo box
+        // Populate the language combo box with all supported languages
         _languages.Add(new ImageComboBoxItem("English (en)", Resources.united_kingdom));
         _languages.Add(new ImageComboBoxItem("Español (es)", Resources.spain));
         _languages.Add(new ImageComboBoxItem("Français (fr)", Resources.france));
+        _languages.Add(new ImageComboBoxItem("Deutsch (de)", Resources.germany));
+        _languages.Add(new ImageComboBoxItem("Italiano (it)", Resources.italy));
+        _languages.Add(new ImageComboBoxItem("Português (pt)", Resources.portugal));
+        _languages.Add(new ImageComboBoxItem("Русский (ru)", Resources.russia));
+        _languages.Add(new ImageComboBoxItem("中文 (zh)", Resources.china));
 
         foreach (var language in _languages)
             _languageComboBox.Items.Add(language);

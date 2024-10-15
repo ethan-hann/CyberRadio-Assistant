@@ -1,0 +1,1245 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="IconHelp" xml:space="preserve">
+    <value>车站的图标，如果您不使用自定义的图标。它可以是任何UIICON记录。</value>
+  </data>
+  <data name="Ready" xml:space="preserve">
+    <value>准备好</value>
+  </data>
+  <data name="StationNameHelp" xml:space="preserve">
+    <value>控制将在游戏中显示的车站的名称。特殊角色被正确逃脱了。</value>
+  </data>
+  <data name="NoExeFound" xml:space="preserve">
+    <value>尚未设置Cyber​​punk 2077可执行文件的路径。
+请立即设置。</value>
+  </data>
+  <data name="NoGamePath" xml:space="preserve">
+    <value>没有游戏路径</value>
+  </data>
+  <data name="RadioExtPathPlaceholder" xml:space="preserve">
+    <value>&lt;无路径集； RadioExt未安装&gt;</value>
+  </data>
+  <data name="StagingPathPlaceholder" xml:space="preserve">
+    <value>&lt;无路径集；广播电台需要首先上演&gt;</value>
+  </data>
+  <data name="AreYouSure" xml:space="preserve">
+    <value>你确定吗？</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>确认</value>
+  </data>
+  <data name="NonCyberpunkExe" xml:space="preserve">
+    <value>所选文件看起来不像Cyber​​punk 2077。请重试。</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="GameBasePath" xml:space="preserve">
+    <value>游戏基础路径</value>
+  </data>
+  <data name="RadioStationPath" xml:space="preserve">
+    <value>广播电台路径</value>
+  </data>
+  <data name="StagingPath" xml:space="preserve">
+    <value>舞台路径</value>
+  </data>
+  <data name="Change" xml:space="preserve">
+    <value>改变</value>
+  </data>
+  <data name="Clear" xml:space="preserve">
+    <value>清除</value>
+  </data>
+  <data name="GameBasePathPlaceholder" xml:space="preserve">
+    <value>&lt;无路径集；游戏可执行文件丢失&gt;</value>
+  </data>
+  <data name="GamePaths" xml:space="preserve">
+    <value>游戏路径</value>
+  </data>
+  <data name="MainTitle" xml:space="preserve">
+    <value>网络无线电助理</value>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>文件</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>语言</value>
+  </data>
+  <data name="Help" xml:space="preserve">
+    <value>帮助</value>
+  </data>
+  <data name="RefreshStations" xml:space="preserve">
+    <value>从舞台上重新加载</value>
+  </data>
+  <data name="HowToUse" xml:space="preserve">
+    <value>如何使用</value>
+  </data>
+  <data name="About" xml:space="preserve">
+    <value>关于</value>
+  </data>
+  <data name="NewStation" xml:space="preserve">
+    <value>新车站</value>
+  </data>
+  <data name="DeleteStation" xml:space="preserve">
+    <value>删除站</value>
+  </data>
+  <data name="DisplayAndIcon" xml:space="preserve">
+    <value>显示和图标</value>
+  </data>
+  <data name="Music" xml:space="preserve">
+    <value>音乐</value>
+  </data>
+  <data name="OpenGameExecutable" xml:space="preserve">
+    <value>打开游戏可执行</value>
+  </data>
+  <data name="DisplayName" xml:space="preserve">
+    <value>姓名：</value>
+  </data>
+  <data name="Display" xml:space="preserve">
+    <value>展示</value>
+  </data>
+  <data name="CustomIcon" xml:space="preserve">
+    <value>自定义图标</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>设置</value>
+  </data>
+  <data name="Icon" xml:space="preserve">
+    <value>图标：</value>
+  </data>
+  <data name="UsingQuestion" xml:space="preserve">
+    <value>使用？</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>是的</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>不</value>
+  </data>
+  <data name="InkAtlasPath" xml:space="preserve">
+    <value>墨水图集路径：</value>
+  </data>
+  <data name="InkAtlasPart" xml:space="preserve">
+    <value>墨水地图集部分：</value>
+  </data>
+  <data name="FM" xml:space="preserve">
+    <value>调频：</value>
+  </data>
+  <data name="Volume" xml:space="preserve">
+    <value>体积：</value>
+  </data>
+  <data name="Value" xml:space="preserve">
+    <value>价值：</value>
+  </data>
+  <data name="Min" xml:space="preserve">
+    <value>最小：</value>
+  </data>
+  <data name="Max" xml:space="preserve">
+    <value>最大限度：</value>
+  </data>
+  <data name="UseStream" xml:space="preserve">
+    <value>使用流？</value>
+  </data>
+  <data name="StreamURL" xml:space="preserve">
+    <value>流URL：</value>
+  </data>
+  <data name="StreamSettings" xml:space="preserve">
+    <value>流设置</value>
+  </data>
+  <data name="CustomIconHelp" xml:space="preserve">
+    <value>指定您是否要为广播电台使用自定义图标。</value>
+  </data>
+  <data name="InkPathHelp" xml:space="preserve">
+    <value>指向具有图标纹理的.inkatlas。</value>
+  </data>
+  <data name="InkPartHelp" xml:space="preserve">
+    <value>指定.inkatlas的哪个部分应用于图标，例如gryphon5</value>
+  </data>
+  <data name="FMHelp" xml:space="preserve">
+    <value>用于将电台放在站点列表中的正确位置。如果电台名称具有FM号，则应该相同。</value>
+  </data>
+  <data name="VolumeHelp" xml:space="preserve">
+    <value>车站的总体量乘数。确保所有歌曲具有相同的音量，然后使用此值调整电台的整体音量，以与Vanilla站相匹配。</value>
+  </data>
+  <data name="VolumeValHelp" xml:space="preserve">
+    <value>当前选择的卷。使用滑块或双击值更改。</value>
+  </data>
+  <data name="UseStreamHelp" xml:space="preserve">
+    <value>指示该站是否应将网络流用于音频源。</value>
+  </data>
+  <data name="StreamURLHelp" xml:space="preserve">
+    <value>要使用的网络流的URL。</value>
+  </data>
+  <data name="OpenURLErrorOccured" xml:space="preserve">
+    <value>试图打开URL时发生错误: </value>
+  </data>
+  <data name="RadioExtGithub" xml:space="preserve">
+    <value>Radioext Github</value>
+  </data>
+  <data name="RadioExtNexusMods" xml:space="preserve">
+    <value>NexusMods上的Radioext</value>
+  </data>
+  <data name="NoStationsYet" xml:space="preserve">
+    <value>还没有电台！</value>
+  </data>
+  <data name="NewStationListBoxEntry" xml:space="preserve">
+    <value>[新车站]</value>
+  </data>
+  <data name="AddSongsToolStrip" xml:space="preserve">
+    <value>添加歌曲</value>
+  </data>
+  <data name="RemoveSongsToolStrip" xml:space="preserve">
+    <value>删除选定的歌曲</value>
+  </data>
+  <data name="SongNameHeader" xml:space="preserve">
+    <value>姓名</value>
+  </data>
+  <data name="SongLengthHeader" xml:space="preserve">
+    <value>长度</value>
+  </data>
+  <data name="SongFileSizeHeader" xml:space="preserve">
+    <value>文件大小</value>
+  </data>
+  <data name="EditSongOrder" xml:space="preserve">
+    <value>编辑歌曲顺序</value>
+  </data>
+  <data name="SongArtistHeader" xml:space="preserve">
+    <value>艺术家</value>
+  </data>
+  <data name="DeleteAllSongsConfirm" xml:space="preserve">
+    <value>您确定要删除所有歌曲吗？</value>
+  </data>
+  <data name="Songs" xml:space="preserve">
+    <value>歌曲</value>
+  </data>
+  <data name="Stations" xml:space="preserve">
+    <value>车站</value>
+  </data>
+  <data name="SongListing" xml:space="preserve">
+    <value>歌曲列表</value>
+  </data>
+  <data name="SongOrder" xml:space="preserve">
+    <value>歌曲顺序</value>
+  </data>
+  <data name="AddSelected" xml:space="preserve">
+    <value>添加选定的  </value>
+  </data>
+  <data name="RemoveSelected" xml:space="preserve">
+    <value>  删除选定的</value>
+  </data>
+  <data name="Order" xml:space="preserve">
+    <value>命令</value>
+  </data>
+  <data name="ExportToGame" xml:space="preserve">
+    <value>导出到游戏</value>
+  </data>
+  <data name="ExportToStaging" xml:space="preserve">
+    <value>出口到分期</value>
+  </data>
+  <data name="Export" xml:space="preserve">
+    <value>出口</value>
+  </data>
+  <data name="ExportHelp" xml:space="preserve">
+    <value>单击“导出到分阶段”，首先将上述站点导出到登台文件夹。
+在复制到游戏目录之前，您将能够查看电台。
+
+如果某些东西看起来不正确，请退出此窗口并在主应用程序中进行更改。</value>
+  </data>
+  <data name="LVDisplayName" xml:space="preserve">
+    <value>显示名称</value>
+  </data>
+  <data name="LVStationIcon" xml:space="preserve">
+    <value>图标</value>
+  </data>
+  <data name="LVSongCount" xml:space="preserve">
+    <value>歌曲计数</value>
+  </data>
+  <data name="LVStreamURL" xml:space="preserve">
+    <value>流url</value>
+  </data>
+  <data name="LVProposedPath" xml:space="preserve">
+    <value>建议的路径</value>
+  </data>
+  <data name="ExportCompleteStatus" xml:space="preserve">
+    <value>出口到舞台！</value>
+  </data>
+  <data name="ExportCanceled" xml:space="preserve">
+    <value>导出取消</value>
+  </data>
+  <data name="ExportingStationStatus" xml:space="preserve">
+    <value>导出站：{0}</value>
+  </data>
+  <data name="IsStream" xml:space="preserve">
+    <value>正在流媒体</value>
+  </data>
+  <data name="UsingSongs" xml:space="preserve">
+    <value>使用歌曲</value>
+  </data>
+  <data name="OpenStagingFolder" xml:space="preserve">
+    <value>打开登台文件夹</value>
+  </data>
+  <data name="OpenGameFolder" xml:space="preserve">
+    <value>打开游戏收音机文件夹</value>
+  </data>
+  <data name="ExportToGameComplete" xml:space="preserve">
+    <value>出口到游戏！</value>
+  </data>
+  <data name="ExportStations" xml:space="preserve">
+    <value>出口站</value>
+  </data>
+  <data name="StreamURLError" xml:space="preserve">
+    <value>请输入有效的流URL。</value>
+  </data>
+  <data name="ErrorStreamingAudio" xml:space="preserve">
+    <value>错误流音频：{0}</value>
+  </data>
+  <data name="ErrorPausingStream" xml:space="preserve">
+    <value>错误暂停流：{0}</value>
+  </data>
+  <data name="StagingPathHelp" xml:space="preserve">
+    <value>选择广播电台登台路径。</value>
+  </data>
+  <data name="NoStagingPath" xml:space="preserve">
+    <value>没有舞台路径</value>
+  </data>
+  <data name="NoStagingPathFound" xml:space="preserve">
+    <value>尚未设置广播电台的登台文件夹。
+请立即设置。</value>
+  </data>
+  <data name="Paths" xml:space="preserve">
+    <value>路径...</value>
+  </data>
+  <data name="NoModInstalled" xml:space="preserve">
+    <value>没有安装mod</value>
+  </data>
+  <data name="NoRadioExtMsg" xml:space="preserve">
+    <value>您没有安装RadioExt mod。
+无法将广播电台导出到游戏中。</value>
+  </data>
+  <data name="AboutInfo" xml:space="preserve">
+    <value>使用RadioExt Mod时，可以帮助创建和管理Cyber​​punk 2077中的自定义广播电台的工具。</value>
+  </data>
+  <data name="AboutSpecialThanks1" xml:space="preserve">
+    <value>特别感谢</value>
+  </data>
+  <data name="AboutSpecialThanks2" xml:space="preserve">
+    <value>对于很棒的RadioExt mod！</value>
+  </data>
+  <data name="AboutVersion" xml:space="preserve">
+    <value>版本{0}</value>
+  </data>
+  <data name="AboutGithubRepo" xml:space="preserve">
+    <value>Github repo</value>
+  </data>
+  <data name="AboutLicense" xml:space="preserve">
+    <value>执照</value>
+  </data>
+  <data name="CheckForUpdates" xml:space="preserve">
+    <value>检查更新</value>
+  </data>
+  <data name="UpdateDownloadPercent" xml:space="preserve">
+    <value>下载{0}%</value>
+  </data>
+  <data name="UpdateDownloadComplete" xml:space="preserve">
+    <value>下载完成！开始更新...</value>
+  </data>
+  <data name="UpdateDownloadError" xml:space="preserve">
+    <value>下载错误：{0}</value>
+  </data>
+  <data name="UpdateCheckError" xml:space="preserve">
+    <value>错误检查更新：{0}</value>
+  </data>
+  <data name="UpdateCurrentVersion" xml:space="preserve">
+    <value>当前版本：</value>
+  </data>
+  <data name="UpdateNewVersion" xml:space="preserve">
+    <value>新版本：</value>
+  </data>
+  <data name="UpdateChangelog" xml:space="preserve">
+    <value>ChangElog：</value>
+  </data>
+  <data name="UpdateDownloadButton" xml:space="preserve">
+    <value>下载</value>
+  </data>
+  <data name="UpdateAvailable" xml:space="preserve">
+    <value>更新可用</value>
+  </data>
+  <data name="UpdateAvailableNotice" xml:space="preserve">
+    <value>CRA有一个新的更新。您现在要打开下载器吗？</value>
+  </data>
+  <data name="NoUpdateAvailable" xml:space="preserve">
+    <value>您是最新版本。没有可用的更新。</value>
+  </data>
+  <data name="NoUpdateCaption" xml:space="preserve">
+    <value>最新</value>
+  </data>
+  <data name="UpdateFolderOpening" xml:space="preserve">
+    <value>更新完成。现在将打开包含的文件夹，并将关闭应用程序。</value>
+  </data>
+  <data name="UpdateFolderOpeningCaption" xml:space="preserve">
+    <value>打开文件夹</value>
+  </data>
+  <data name="ParseFromRadioGarden" xml:space="preserve">
+    <value>从Radio.Garden解析</value>
+  </data>
+  <data name="InvalidStream" xml:space="preserve">
+    <value>无效的流 - 不会在游戏中起作用</value>
+  </data>
+  <data name="RadioGardenURLCaption" xml:space="preserve">
+    <value>广播花园网址</value>
+  </data>
+  <data name="RadioGardenInput" xml:space="preserve">
+    <value>输入Radio.garden URL：</value>
+  </data>
+  <data name="EnableSelected" xml:space="preserve">
+    <value>启用选择</value>
+  </data>
+  <data name="DisableSelected" xml:space="preserve">
+    <value>禁用选定</value>
+  </data>
+  <data name="EnableAllStations" xml:space="preserve">
+    <value>启用全部</value>
+  </data>
+  <data name="DisableAllStations" xml:space="preserve">
+    <value>禁用全部</value>
+  </data>
+  <data name="EnabledStationsCount" xml:space="preserve">
+    <value>启用站：{0} / {1}</value>
+  </data>
+  <data name="DisabledStation" xml:space="preserve">
+    <value>禁用站</value>
+  </data>
+  <data name="LVStationStatus" xml:space="preserve">
+    <value>启用了？</value>
+  </data>
+  <data name="NoInternetCaption" xml:space="preserve">
+    <value>没有连接</value>
+  </data>
+  <data name="NoInternetMsg" xml:space="preserve">
+    <value>无法检查更新。请检查您的互联网，然后重试。</value>
+  </data>
+  <data name="Configuration" xml:space="preserve">
+    <value>配置</value>
+  </data>
+  <data name="GeneralSettings" xml:space="preserve">
+    <value>一般的</value>
+  </data>
+  <data name="LogSettings" xml:space="preserve">
+    <value>记录</value>
+  </data>
+  <data name="CheckForUpdatesOption" xml:space="preserve">
+    <value>在启动时检查更新吗？</value>
+  </data>
+  <data name="AutoExportOption" xml:space="preserve">
+    <value>自动远期游戏？</value>
+  </data>
+  <data name="EditPathsOption" xml:space="preserve">
+    <value>编辑路径...</value>
+  </data>
+  <data name="CheckForUpdatesOptionHelp" xml:space="preserve">
+    <value>如果检查了，请启用该应用程序在开始后立即检查更新。</value>
+  </data>
+  <data name="AutoExportOptionHelp" xml:space="preserve">
+    <value>如果已检查，您的电台将在成功出口到登台后立即导出到游戏中。</value>
+  </data>
+  <data name="EditPathsOptionHelp" xml:space="preserve">
+    <value>打开“路径”对话框以编辑登台和游戏基础路径。</value>
+  </data>
+  <data name="NewLogFileOption" xml:space="preserve">
+    <value>每个启动的新文件？</value>
+  </data>
+  <data name="NewLogFileOptionHelp" xml:space="preserve">
+    <value>如果已检查，请指定在应用程序的每次运行中都会创建一个新的日志文件。</value>
+  </data>
+  <data name="SaveAndClose" xml:space="preserve">
+    <value>保存并关闭</value>
+  </data>
+  <data name="ResetToDefaults" xml:space="preserve">
+    <value>重置为默认值</value>
+  </data>
+  <data name="ConfigResetConfirm" xml:space="preserve">
+    <value>您确定要将配置重置为默认值吗？</value>
+  </data>
+  <data name="ConfigSaveError" xml:space="preserve">
+    <value>保存配置存在错误。请确保存在config.yml文件。</value>
+  </data>
+  <data name="ConfigSaveSuccess" xml:space="preserve">
+    <value>配置保存！</value>
+  </data>
+  <data name="Success" xml:space="preserve">
+    <value>成功</value>
+  </data>
+  <data name="OpenLogFolder" xml:space="preserve">
+    <value>打开日志文件夹</value>
+  </data>
+  <data name="ConfirmRefreshStations" xml:space="preserve">
+    <value>您确定要从磁盘刷新电台吗？
+您将失去对电台的任何待处理更改。</value>
+  </data>
+  <data name="EditLogsPathOption" xml:space="preserve">
+    <value>编辑日志路径...</value>
+  </data>
+  <data name="EditLogsPathOptionHelp" xml:space="preserve">
+    <value>打开一个文件夹对话框，您可以在其中选择一个新路径来保存日志文件。</value>
+  </data>
+  <data name="LogPathLabel" xml:space="preserve">
+    <value>日志路径：</value>
+  </data>
+  <data name="SelectLogPathDesc" xml:space="preserve">
+    <value>选择存储日志文件的位置</value>
+  </data>
+  <data name="NoLogPathSet" xml:space="preserve">
+    <value>&lt;无路径&gt;</value>
+  </data>
+  <data name="ExportWindowTip" xml:space="preserve">
+    <value>     只有启用的电台是 
+导出到游戏。</value>
+  </data>
+  <data name="AddSongsFileBrowserTitle" xml:space="preserve">
+    <value>选择要添加的歌曲文件</value>
+  </data>
+  <data name="RevertChanges" xml:space="preserve">
+    <value>恢复变化</value>
+  </data>
+  <data name="ClearAllSongs" xml:space="preserve">
+    <value>清除！</value>
+  </data>
+  <data name="SplashScreen_Starting" xml:space="preserve">
+    <value>开始...</value>
+  </data>
+  <data name="SplashScreen_CheckingSettings" xml:space="preserve">
+    <value>检查设置...</value>
+  </data>
+  <data name="SplashScreen_MigratedSettings" xml:space="preserve">
+    <value>设置成功地迁移。</value>
+  </data>
+  <data name="SplashScreen_MigratedSettingsNo" xml:space="preserve">
+    <value>设置不需要迁移。</value>
+  </data>
+  <data name="SplashScreen_CheckingSongs" xml:space="preserve">
+    <value>检查歌曲格式...</value>
+  </data>
+  <data name="SplashScreen_UpdateCheck" xml:space="preserve">
+    <value>检查更新...</value>
+  </data>
+  <data name="SplashScreen_UpdateCheckNo" xml:space="preserve">
+    <value>跳过检查更新...</value>
+  </data>
+  <data name="SplashScreen_Finalizing" xml:space="preserve">
+    <value>最终确定...</value>
+  </data>
+  <data name="ConfirmExit" xml:space="preserve">
+    <value>{0}电台待定导出。
+您确定要退出吗？</value>
+  </data>
+  <data name="BackupProgressChanged" xml:space="preserve">
+    <value>备份... {0}%</value>
+  </data>
+  <data name="BackupCompleted" xml:space="preserve">
+    <value>备份成功完成。</value>
+  </data>
+  <data name="BackupFailed" xml:space="preserve">
+    <value>备份失败。</value>
+  </data>
+  <data name="BackupFailedException" xml:space="preserve">
+    <value>备份由于错误而失败：{0}</value>
+  </data>
+  <data name="LocateSong" xml:space="preserve">
+    <value>找到缺少的歌曲</value>
+  </data>
+  <data name="InvalidFile" xml:space="preserve">
+    <value>请选择正确的文件。</value>
+  </data>
+  <data name="InvalidFileCaption" xml:space="preserve">
+    <value>无效的文件</value>
+  </data>
+  <data name="SongExistsHeader" xml:space="preserve">
+    <value>文件存在吗？</value>
+  </data>
+  <data name="SplashScreen_CheckApiAccess" xml:space="preserve">
+    <value>检查Nexus API密钥...</value>
+  </data>
+  <data name="Backup" xml:space="preserve">
+    <value>备份</value>
+  </data>
+  <data name="BackupFolderDesc" xml:space="preserve">
+    <value>选择一个文件夹以将备份保存到</value>
+  </data>
+  <data name="BackupPathIsSubpath" xml:space="preserve">
+    <value>备份路径不能在阶段路径内。</value>
+  </data>
+  <data name="ApiStatus" xml:space="preserve">
+    <value>API未经认证</value>
+  </data>
+  <data name="ExportToGameMissingSongs" xml:space="preserve">
+    <value>有{0}站，总共有{1}无效的歌曲路径。您想继续出口吗？</value>
+  </data>
+  <data name="SongsMissingPaths" xml:space="preserve">
+    <value>歌曲缺少路径</value>
+  </data>
+  <data name="ApiUnsavedChanges" xml:space="preserve">
+    <value>您对API密钥有未保存的更改。关闭之前，请保存或清除钥匙。</value>
+  </data>
+  <data name="UnsavedChanges" xml:space="preserve">
+    <value>未保存的更改</value>
+  </data>
+  <data name="ApiAuthenticated" xml:space="preserve">
+    <value>身份验证</value>
+  </data>
+  <data name="ApiNotAuthenticated" xml:space="preserve">
+    <value>未经认证</value>
+  </data>
+  <data name="BackupStagingFolder" xml:space="preserve">
+    <value>备份登台文件夹</value>
+  </data>
+  <data name="BackupReady" xml:space="preserve">
+    <value>备份准备了</value>
+  </data>
+  <data name="StagingPathWithinGamePath" xml:space="preserve">
+    <value>分期路径不能在游戏路径内！</value>
+  </data>
+  <data name="GamePathWithinStagingPath" xml:space="preserve">
+    <value>游戏路径不能在阶段路径中！</value>
+  </data>
+  <data name="SynchronizeStations" xml:space="preserve">
+    <value>同步站</value>
+  </data>
+  <data name="ConfirmSyncStations" xml:space="preserve">
+    <value>您确定要同步登台和游戏目录吗？
+您将失去对电台的任何待处理更改。</value>
+  </data>
+  <data name="MissingStations" xml:space="preserve">
+    <value>在登台文件夹中缺少游戏文件夹中的{0}站。您想同步车站吗？</value>
+  </data>
+  <data name="CustomDataGroup" xml:space="preserve">
+    <value>自定义数据</value>
+  </data>
+  <data name="BackupInProgress" xml:space="preserve">
+    <value>备份正在进行中。请稍等...</value>
+  </data>
+  <data name="SyncFailedException" xml:space="preserve">
+    <value>同步由于错误而失败：{0}</value>
+  </data>
+  <data name="SyncAbbrev" xml:space="preserve">
+    <value>同步</value>
+  </data>
+  <data name="SyncFailed" xml:space="preserve">
+    <value>同步失败！</value>
+  </data>
+  <data name="SyncInProgress" xml:space="preserve">
+    <value>同步正在进行中。请稍等...</value>
+  </data>
+  <data name="CustomDataKey" xml:space="preserve">
+    <value>钥匙</value>
+  </data>
+  <data name="CustomDataValue" xml:space="preserve">
+    <value>价值</value>
+  </data>
+  <data name="Exit" xml:space="preserve">
+    <value>出口</value>
+  </data>
+  <data name="SongFilePathHeader" xml:space="preserve">
+    <value>文件路径</value>
+  </data>
+  <data name="TotalSongsLabel" xml:space="preserve">
+    <value>总歌：</value>
+  </data>
+  <data name="TotalStationSizeLabel" xml:space="preserve">
+    <value>车站大小：</value>
+  </data>
+  <data name="WatchForChangesOption" xml:space="preserve">
+    <value>注意车站更改？</value>
+  </data>
+  <data name="WatchForChangesHelp" xml:space="preserve">
+    <value>如果已检查，将观看游戏的收音机路径，并自动将新站点同步到舞台上。</value>
+  </data>
+  <data name="BackupCompressionLevelHelp" xml:space="preserve">
+    <value>指示备份登台目录时使用的压缩水平。</value>
+  </data>
+  <data name="BackupPathIsSubpathGame" xml:space="preserve">
+    <value>备份路径不能在游戏路径内。</value>
+  </data>
+  <data name="None" xml:space="preserve">
+    <value>没有任何</value>
+  </data>
+  <data name="SuperFast" xml:space="preserve">
+    <value>超快</value>
+  </data>
+  <data name="Fast" xml:space="preserve">
+    <value>快速地</value>
+  </data>
+  <data name="Fastest" xml:space="preserve">
+    <value>最快</value>
+  </data>
+  <data name="Normal" xml:space="preserve">
+    <value>普通的</value>
+  </data>
+  <data name="High" xml:space="preserve">
+    <value>高的</value>
+  </data>
+  <data name="Maximum" xml:space="preserve">
+    <value>最大限度</value>
+  </data>
+  <data name="Ultra" xml:space="preserve">
+    <value>极端主义者</value>
+  </data>
+  <data name="Extreme" xml:space="preserve">
+    <value>极端</value>
+  </data>
+  <data name="Ultimate" xml:space="preserve">
+    <value>最终的</value>
+  </data>
+  <data name="BackupCompressionLevel" xml:space="preserve">
+    <value>备份压缩级别：</value>
+  </data>
+  <data name="BackupPreviewCompleted" xml:space="preserve">
+    <value>备份预览完成。</value>
+  </data>
+  <data name="EstimatedBackupSizeDisclaimer" xml:space="preserve">
+    <value>*这是基于配置中选定的压缩级别的估计值。
+实际尺寸可能不同。</value>
+  </data>
+  <data name="TotalFileSize" xml:space="preserve">
+    <value>总文件大小：</value>
+  </data>
+  <data name="EstimatedBackupSize" xml:space="preserve">
+    <value>估计备份尺寸：</value>
+  </data>
+  <data name="CreatingPreview" xml:space="preserve">
+    <value>创建预览...</value>
+  </data>
+  <data name="StartBackup" xml:space="preserve">
+    <value>开始备份</value>
+  </data>
+  <data name="BackupPreviewError" xml:space="preserve">
+    <value>加载备份预览时发生了错误。</value>
+  </data>
+  <data name="UsingCompressionLevel" xml:space="preserve">
+    <value>使用压缩级别：{0}</value>
+  </data>
+  <data name="FileName" xml:space="preserve">
+    <value>文件名</value>
+  </data>
+  <data name="CopySongFilesToBackupOption" xml:space="preserve">
+    <value>将歌曲文件复制到备份？</value>
+  </data>
+  <data name="DefaultSongLocationHelp" xml:space="preserve">
+    <value>指示应将导入站的歌曲文件保存到的文件夹。默认为mymusic文件夹。</value>
+  </data>
+  <data name="IconManagerFormTitle" xml:space="preserve">
+    <value>图标管理器 -  {0}</value>
+  </data>
+  <data name="InvalidActiveIcon" xml:space="preserve">
+    <value>活动图标无效。请确保导入图标并存在存档文件。</value>
+  </data>
+  <data name="InvalidActiveIconCaption" xml:space="preserve">
+    <value>无效的活动图标</value>
+  </data>
+  <data name="IconEditorCopyIconToStagingNullEmpty" xml:space="preserve">
+    <value>图标档案路径为空或空。</value>
+  </data>
+  <data name="IconEditor_IconAlreadyCreated_DragDrop" xml:space="preserve">
+    <value>该图标已经被创建并标记为仅阅读。如果您想要其他图像，请创建一个新图标。</value>
+  </data>
+  <data name="IconEditor_IconAlreadyCreated_DragDrop_Caption" xml:space="preserve">
+    <value>图标已经创建</value>
+  </data>
+  <data name="IconEditor_ImageNotSquare" xml:space="preserve">
+    <value>图像不是正方形。游戏可能会出现问题。</value>
+  </data>
+  <data name="IconEditorCopyIconToStagingImageNullEmpty" xml:space="preserve">
+    <value>图标.png路径为空或空。</value>
+  </data>
+  <data name="IconEditor_SetFieldsBasedOnImagePath_The_extracted_image_could_not_be_found_" xml:space="preserve">
+    <value>无法找到提取的图像。</value>
+  </data>
+  <data name="IconEditor_SetFieldsBasedOnImagePath_To_be_determined_from_archive___" xml:space="preserve">
+    <value>从档案中确定...</value>
+  </data>
+  <data name="IconManagerForm_RemoveIcon_Are_you_sure_you_want_to_delete_this_icon_" xml:space="preserve">
+    <value>您确定要删除此图标吗？</value>
+  </data>
+  <data name="IconManagerForm_RemoveIcon_Confirm_Delete" xml:space="preserve">
+    <value>确认删除</value>
+  </data>
+  <data name="IconManagerForm_RemoveIcon_Do_you_want_to_delete_associated_icon_files_from_staging__This_will_delete_the_copied__archive_file_and_the_associated_PNG_" xml:space="preserve">
+    <value>您要删除关联的图标文件从登录中删除吗？这将删除复制的.archive文件和关联的PNG。</value>
+  </data>
+  <data name="IconManagerForm_btnDeleteAllIcons_Click_Are_you_sure_you_want_to_remove_ALL_icons_from_this_station_" xml:space="preserve">
+    <value>您确定要从此电台删除所有图标吗？ **这是一个破坏性的操作！**
+
+确保您首先备份了登台文件夹;）</value>
+  </data>
+  <data name="IconManagerForm_btnDeleteAllIcons_Click_Do_you_want_to_also_delete_associated_icon_s_files_from_staging" xml:space="preserve">
+    <value>您是否还要从登录中删除关联的图标文件？这将删除所有复制的.Archive文件和关联的PNG。</value>
+  </data>
+  <data name="LogViewerControl_LoadRelevantLogEntries_Failed_to_load_log_data___0_" xml:space="preserve">
+    <value>无法加载日志数据：{0}</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>错误</value>
+  </data>
+  <data name="LogViewerControl_DisplayLastLines_Failed_to_display_log_lines___0_" xml:space="preserve">
+    <value>无法显示日志线：{0}</value>
+  </data>
+  <data name="IconManagerForm_CheckForCopy_" xml:space="preserve">
+    <value>图标已经存在并与以下站点关联：{0}。
+
+将创建图标的新副本，但它将在磁盘上引用相同的基础文件。
+
+注意：激活状态或其他特定电台属性的任何更改都只会影响该站。</value>
+  </data>
+  <data name="IconManagerForm_CheckForCopy_Duplicate_Icon_Detected" xml:space="preserve">
+    <value>检测到重复的图标</value>
+  </data>
+  <data name="IconManagerForm_CheckForCopy_This_icon_is_already_associated_with_the_current_station_" xml:space="preserve">
+    <value>该图标已经与当前站关联。</value>
+  </data>
+  <data name="CreatedFromArchive" xml:space="preserve">
+    <value>由档案创建</value>
+  </data>
+  <data name="CreatedFromPng" xml:space="preserve">
+    <value>由PNG创建</value>
+  </data>
+  <data name="MainForm_FromZipImportDesc" xml:space="preserve">
+    <value>导入{0}站：{1}
+
+如果车站中包括一个图标，也已添加。但是，您必须手动提取它才能在CRA中获得预览。</value>
+  </data>
+  <data name="MainForm_FromZipStationsImportedTitle" xml:space="preserve">
+    <value>进口站</value>
+  </data>
+  <data name="MainForm_FromZipImportFilter" xml:space="preserve">
+    <value>广播电台档案（*.zip;*。rar）</value>
+  </data>
+  <data name="MainForm_FromZipImportTitle" xml:space="preserve">
+    <value>进口站</value>
+  </data>
+  <data name="SearchStations" xml:space="preserve">
+    <value>搜索站...</value>
+  </data>
+  <data name="SelectDefaultSongLocationDesc" xml:space="preserve">
+    <value>选择默认位置以存储歌曲文件</value>
+  </data>
+  <data name="NewIcon" xml:space="preserve">
+    <value>新图标</value>
+  </data>
+  <data name="DeleteIcon" xml:space="preserve">
+    <value>删除图标</value>
+  </data>
+  <data name="DeleteAllIcons" xml:space="preserve">
+    <value>删除所有图标</value>
+  </data>
+  <data name="FromArchiveFile" xml:space="preserve">
+    <value>来自.archive文件...</value>
+  </data>
+  <data name="Icons" xml:space="preserve">
+    <value>图标</value>
+  </data>
+  <data name="OpenArchiveFile" xml:space="preserve">
+    <value>选择一个.artive文件打开</value>
+  </data>
+  <data name="ArchiveFiles" xml:space="preserve">
+    <value>mod存档（*.archive）</value>
+  </data>
+  <data name="IconImportInProgress" xml:space="preserve">
+    <value>当前正在进行图标导入。请等待进口完成。</value>
+  </data>
+  <data name="IconImportInProgressCaption" xml:space="preserve">
+    <value>图标正在进行</value>
+  </data>
+  <data name="IconExportInProgress" xml:space="preserve">
+    <value>当前正在进行图标导出。请等待出口完成。</value>
+  </data>
+  <data name="IconExportInProgressCaption" xml:space="preserve">
+    <value>图标导出正在进行</value>
+  </data>
+  <data name="MissingStationsCaption" xml:space="preserve">
+    <value>缺少电台</value>
+  </data>
+  <data name="IconManagerMenuOption" xml:space="preserve">
+    <value>电台图标经理</value>
+  </data>
+  <data name="Tools" xml:space="preserve">
+    <value>工具</value>
+  </data>
+  <data name="DownloadRadioMods" xml:space="preserve">
+    <value>下载无线电mod</value>
+  </data>
+  <data name="ImportFromZipFile" xml:space="preserve">
+    <value>来自.zip文件...</value>
+  </data>
+  <data name="ClearAllData" xml:space="preserve">
+    <value>清除所有数据！</value>
+  </data>
+  <data name="BackupRestoreMenuItem" xml:space="preserve">
+    <value>备份/还原</value>
+  </data>
+  <data name="RestoreBackupMenuItem" xml:space="preserve">
+    <value>还原分期文件夹</value>
+  </data>
+  <data name="Mods" xml:space="preserve">
+    <value>mods</value>
+  </data>
+  <data name="MainTitleFormated" xml:space="preserve">
+    <value>网络无线电助理 -  {0}</value>
+  </data>
+  <data name="ConfirmSyncStationsExternal" xml:space="preserve">
+    <value>对游戏的收音机目录进行了更改。
+您想同步您的舞台和游戏目录吗？</value>
+  </data>
+  <data name="ExportInProgress" xml:space="preserve">
+    <value>出口正在进行中。请稍等...</value>
+  </data>
+  <data name="ExportCaption" xml:space="preserve">
+    <value>出口</value>
+  </data>
+  <data name="ConfirmRestore" xml:space="preserve">
+    <value>您确定要还原登台文件夹吗？
+这将覆盖您现有的电台！</value>
+  </data>
+  <data name="MainForm_RestoreFileBrowserFilter" xml:space="preserve">
+    <value>备份文件（*.zip）</value>
+  </data>
+  <data name="MainForm_RestoreFileBrowserTitle" xml:space="preserve">
+    <value>选择要还原的备份文件</value>
+  </data>
+  <data name="ConfirmClearAllData" xml:space="preserve">
+    <value>**破坏性操作**
+
+在清除数据之前，请确保您创建电台的备份。这将立即删除所有站点（游戏没有触摸）。
+您确定要清除所有站数据吗？</value>
+  </data>
+  <data name="RestoreFormTitle" xml:space="preserve">
+    <value>还原备份 -  {0}</value>
+  </data>
+  <data name="StartRestore" xml:space="preserve">
+    <value>开始还原</value>
+  </data>
+  <data name="RestoreDescription" xml:space="preserve">
+    <value>以下文件将恢复到登台文件夹。</value>
+  </data>
+  <data name="EstimatedRestoreSizeFormat" xml:space="preserve">
+    <value>估计还原尺寸：{0}</value>
+  </data>
+  <data name="RestoreForm_PreviewCompleted" xml:space="preserve">
+    <value>还原预览完成。准备开始还原操作。</value>
+  </data>
+  <data name="RestoreForm_ErrorWhileRestoring" xml:space="preserve">
+    <value>试图启动还原操作时发生错误。</value>
+  </data>
+  <data name="RestoreForm_RestoreCancelled" xml:space="preserve">
+    <value>还原操作已被取消。</value>
+  </data>
+  <data name="RestoreForm_RestoreCancelledCaption" xml:space="preserve">
+    <value>还原取消</value>
+  </data>
+  <data name="SplashScreen_SetupIconManager" xml:space="preserve">
+    <value>初始化图标管理器...</value>
+  </data>
+  <data name="AddSongsFileBrowserFilter" xml:space="preserve">
+    <value>音乐文件(*.mp3;*. Wav;*. Ogg;*. Flac;*. Mp2;*. Wax;*. Wma)</value>
+  </data>
+  <data name="IconEditor_Translate_Editing_Icon___0_" xml:space="preserve">
+    <value>编辑图标：{0}</value>
+  </data>
+  <data name="IconEditor_Translate_W___0_" xml:space="preserve">
+    <value>W：{0}</value>
+  </data>
+  <data name="IconEditor_Translate_H___0_" xml:space="preserve">
+    <value>H：{0}</value>
+  </data>
+  <data name="IconEditor_Translate_Format___0_" xml:space="preserve">
+    <value>格式：{0}</value>
+  </data>
+  <data name="IconEditor_Translate_Archive_Path_" xml:space="preserve">
+    <value>存档路径：</value>
+  </data>
+  <data name="IconEditor_Translate_Atlas_Name_" xml:space="preserve">
+    <value>Atlas名称：</value>
+  </data>
+  <data name="IconEditor_Translate_Icon_Name_" xml:space="preserve">
+    <value>图标名称：</value>
+  </data>
+  <data name="IconEditor_Translate_Icon_Path_" xml:space="preserve">
+    <value>图标路径：</value>
+  </data>
+  <data name="IconEditor_Translate_Icon_Part_" xml:space="preserve">
+    <value>图标部分：</value>
+  </data>
+  <data name="IconEditor_Translate_Image_Path_" xml:space="preserve">
+    <value>图像路径：</value>
+  </data>
+  <data name="IconEditor_Translate_SHA256_Hash_" xml:space="preserve">
+    <value>SHA256哈希：</value>
+  </data>
+  <data name="IconEditor_Translate_Color_Mode___0_" xml:space="preserve">
+    <value>颜色模式：{0}</value>
+  </data>
+  <data name="IconEditor_Translate_No_Image_Issues" xml:space="preserve">
+    <value>没有图像问题</value>
+  </data>
+  <data name="IconEditor_Translate_Start_Import" xml:space="preserve">
+    <value>开始导入</value>
+  </data>
+  <data name="IconEditor_Translate_Start_Extraction" xml:space="preserve">
+    <value>开始提取</value>
+  </data>
+  <data name="IconEditor_Translate_Cancel_Action" xml:space="preserve">
+    <value>取消操作</value>
+  </data>
+  <data name="IconEditor_Translate_Preview" xml:space="preserve">
+    <value>预览</value>
+  </data>
+  <data name="IconEditor_Translate_Properties" xml:space="preserve">
+    <value>特性</value>
+  </data>
+  <data name="IconEditor_Translate_Actions" xml:space="preserve">
+    <value>动作</value>
+  </data>
+  <data name="IconEditor_AtlasName_Hint" xml:space="preserve">
+    <value>图标存储的地图集文件的名称。</value>
+  </data>
+  <data name="IconEditor_Sha256Hash_Hint" xml:space="preserve">
+    <value>存档文件的SHA256哈希。</value>
+  </data>
+  <data name="IconEditor_ArchivePath_Hint" xml:space="preserve">
+    <value>包含图标的存档文件的路径。</value>
+  </data>
+  <data name="IconEditor_ImagePath_Hint" xml:space="preserve">
+    <value>创建图标或提取图像的图像文件的路径。</value>
+  </data>
+  <data name="IconEditor_IconPath_Hint" xml:space="preserve">
+    <value>存档文件中图标的路径。自动化。</value>
+  </data>
+  <data name="IconEditor_IconPart_Hint" xml:space="preserve">
+    <value>图标路径内图标的一部分。自动化。</value>
+  </data>
+  <data name="MetaDataKey" xml:space="preserve">
+    <value>钥匙</value>
+  </data>
+  <data name="MetaDataValue" xml:space="preserve">
+    <value>价值</value>
+  </data>
+  <data name="RadioGardenParse" xml:space="preserve">
+    <value>解析</value>
+  </data>
+  <data name="IconManagerHelp" xml:space="preserve">
+    <value>打开该电台的图标管理器对话框，以管理图标。</value>
+  </data>
+  <data name="CustomIconPictureHelp" xml:space="preserve">
+    <value>显示此站的活动图标的预览。在此处拖动a .png以快速将其添加到车站。</value>
+  </data>
+  <data name="ParseFromRadioGardenHelp" xml:space="preserve">
+    <value>打开一个对话框，以从Web URL中解析无线电网络的API URL。</value>
+  </data>
+  <data name="StreamPlayerHelp" xml:space="preserve">
+    <value>允许您从指定的流中预览音频。</value>
+  </data>
+  <data name="AddSongsHelp" xml:space="preserve">
+    <value>打开文件选择器，将有效的音频文件添加到此站的歌曲列表中。</value>
+  </data>
+  <data name="RemoveFromOrderHelp" xml:space="preserve">
+    <value>从车站有序的歌曲列表中删除了这首歌。不会从车站删除歌曲。</value>
+  </data>
+  <data name="AddToOrderHelp" xml:space="preserve">
+    <value>将歌曲添加到车站有序的歌曲列表中。</value>
+  </data>
+  <data name="RemoveSongsHelp" xml:space="preserve">
+    <value>从车站删除所有选定的歌曲。不会在磁盘上删除文件。</value>
+  </data>
+  <data name="RemoveAllSongsHelp" xml:space="preserve">
+    <value>从车站删除所有歌曲。不会在磁盘上删除文件。</value>
+  </data>
+  <data name="TotalSongsHelp" xml:space="preserve">
+    <value>显示与此站关联的歌曲文件总数。</value>
+  </data>
+  <data name="TotalStationSizeHelp" xml:space="preserve">
+    <value>显示电台中所有歌曲文件的总文件大小。</value>
+  </data>
+  <data name="RestoreBackupLoadingPreview" xml:space="preserve">
+    <value>加载... {0}%</value>
+  </data>
+  <data name="RestoreProgressChanged" xml:space="preserve">
+    <value>还原文件：{0}</value>
+  </data>
+  <data name="RestoreSongProgressChanged" xml:space="preserve">
+    <value>恢复歌曲：{0}</value>
+  </data>
+  <data name="RestoreCompleted" xml:space="preserve">
+    <value>恢复成功完成。</value>
+  </data>
+  <data name="RestoreFailedException" xml:space="preserve">
+    <value>由于错误而导致的恢复失败：{0}</value>
+  </data>
+  <data name="DirectoryWatcher_DirectoryNotExists" xml:space="preserve">
+    <value>目录'{0}'不存在</value>
+  </data>
+  <data name="GamePathFilter" xml:space="preserve">
+    <value>游戏可执行文件（cyberpunk2077.exe）</value>
+  </data>
+  <data name="SyncStatusComplete" xml:space="preserve">
+    <value>同步完成。</value>
+  </data>
+  <data name="SyncStatusError" xml:space="preserve">
+    <value>误差同步站。</value>
+  </data>
+  <data name="SyncProgressChangedFormat" xml:space="preserve">
+    <value>同步文件... {0}%</value>
+  </data>
+  <data name="SyncProgressDirectoriesChangedFormat" xml:space="preserve">
+    <value>同步目录... {0}%</value>
+  </data>
+  <data name="IconEditor_IconName_Hint" xml:space="preserve">
+    <value>车站内图标的名称。可以是您想要的任何东西。</value>
+  </data>
+  <data name="IconEditor_CopyToClipboard" xml:space="preserve">
+    <value>将相应的文本复制到剪贴板。</value>
+  </data>
+  <data name="IconEditor_ImportIcon" xml:space="preserve">
+    <value>Start是图标生成的导入过程。这可能需要一些时间。</value>
+  </data>
+  <data name="IconEditor_ExtractIcon" xml:space="preserve">
+    <value>启动图标的.artive提取过程。这可能需要一些时间。</value>
+  </data>
+  <data name="IconEditor_CancelAction" xml:space="preserve">
+    <value>取消当前运行的操作。</value>
+  </data>
+  <data name="IconManager" xml:space="preserve">
+    <value>图标经理</value>
+  </data>
+  <data name="LogViewerControl_grpLogSearchHeader_Text" xml:space="preserve">
+    <value>日志档案</value>
+  </data>
+  <data name="LogViewerControl_txtSearch_PlaceholderText" xml:space="preserve">
+    <value>输入搜索过滤器...</value>
+  </data>
+  <data name="LogViewerControl_btnShowMore_Text" xml:space="preserve">
+    <value>显示更多</value>
+  </data>
+  <data name="LogViewerControl_dgvLogs_Columns_0_HeaderText" xml:space="preserve">
+    <value>时间戳</value>
+  </data>
+  <data name="LogViewerControl_dgvLogs_Columns_1_HeaderText" xml:space="preserve">
+    <value>输出</value>
+  </data>
+  <data name="IconEditor_CustomIconPictureHelp" xml:space="preserve">
+    <value>显示此图标的预览（如果提取或导入）。如果尚未创建图标，请在此处拖放A .png来创建它。</value>
+  </data>
+</root>
