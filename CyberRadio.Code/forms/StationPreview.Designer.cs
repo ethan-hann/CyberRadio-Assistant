@@ -42,6 +42,8 @@
             tableLayoutPanel1 = new TableLayoutPanel();
             btnNormalize = new Button();
             bgLoader = new System.ComponentModel.BackgroundWorker();
+            btnPlayStation = new Button();
+            btnResetStationPreview = new Button();
             ((System.ComponentModel.ISupportInitialize)picStationIcon).BeginInit();
             panStationPreview.SuspendLayout();
             tableLayoutPanel2.SuspendLayout();
@@ -92,22 +94,22 @@
             // lblNowPlaying
             // 
             lblNowPlaying.AutoSize = true;
-            lblNowPlaying.Font = new Font("Eco Sans Mono", 20.9999962F, FontStyle.Bold);
+            lblNowPlaying.Font = new Font("Microsoft Sans Serif", 20.9999962F, FontStyle.Bold);
             lblNowPlaying.ForeColor = Color.FromArgb(111, 230, 239);
             lblNowPlaying.Location = new Point(3, 0);
             lblNowPlaying.Name = "lblNowPlaying";
-            lblNowPlaying.Size = new Size(119, 32);
+            lblNowPlaying.Size = new Size(114, 32);
             lblNowPlaying.TabIndex = 0;
             lblNowPlaying.Text = "Track 1";
             // 
             // lblStationName
             // 
             lblStationName.AutoSize = true;
-            lblStationName.Font = new Font("Eco Sans Mono", 23.9999962F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblStationName.Font = new Font("Microsoft Sans Serif", 23.9999962F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblStationName.ForeColor = Color.FromArgb(111, 230, 239);
             lblStationName.Location = new Point(49, 426);
             lblStationName.Name = "lblStationName";
-            lblStationName.Size = new Size(357, 37);
+            lblStationName.Size = new Size(358, 37);
             lblStationName.TabIndex = 1;
             lblStationName.Text = "69.9 Awesome Station";
             // 
@@ -143,6 +145,7 @@
             lbTracks.Name = "lbTracks";
             lbTracks.Size = new Size(305, 486);
             lbTracks.TabIndex = 0;
+            lbTracks.SelectedIndexChanged += lbTracks_SelectedIndexChanged;
             // 
             // mediaPlayer
             // 
@@ -169,14 +172,17 @@
             // tableLayoutPanel1
             // 
             tableLayoutPanel1.ColumnCount = 1;
-            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tableLayoutPanel1.Controls.Add(btnNormalize, 0, 0);
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tableLayoutPanel1.Controls.Add(btnResetStationPreview, 0, 1);
+            tableLayoutPanel1.Controls.Add(btnPlayStation, 0, 0);
+            tableLayoutPanel1.Controls.Add(btnNormalize, 0, 2);
             tableLayoutPanel1.Dock = DockStyle.Fill;
             tableLayoutPanel1.Location = new Point(3, 21);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
-            tableLayoutPanel1.RowCount = 2;
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 26.5734272F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 73.4265747F));
+            tableLayoutPanel1.RowCount = 3;
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333321F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333321F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333321F));
             tableLayoutPanel1.Size = new Size(305, 143);
             tableLayoutPanel1.TabIndex = 0;
             // 
@@ -187,12 +193,13 @@
             btnNormalize.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
             btnNormalize.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
             btnNormalize.FlatStyle = FlatStyle.Flat;
-            btnNormalize.Location = new Point(3, 3);
+            btnNormalize.Location = new Point(3, 97);
             btnNormalize.Name = "btnNormalize";
-            btnNormalize.Size = new Size(299, 32);
+            btnNormalize.Size = new Size(299, 43);
             btnNormalize.TabIndex = 0;
             btnNormalize.Text = "Normalize Volumes";
             btnNormalize.UseVisualStyleBackColor = false;
+            btnNormalize.Click += btnNormalize_Click;
             // 
             // bgLoader
             // 
@@ -201,6 +208,36 @@
             bgLoader.DoWork += bgLoader_DoWork;
             bgLoader.ProgressChanged += bgLoader_ProgressChanged;
             bgLoader.RunWorkerCompleted += bgLoader_RunWorkerCompleted;
+            // 
+            // btnPlayStation
+            // 
+            btnPlayStation.BackColor = Color.Yellow;
+            btnPlayStation.Dock = DockStyle.Fill;
+            btnPlayStation.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
+            btnPlayStation.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
+            btnPlayStation.FlatStyle = FlatStyle.Flat;
+            btnPlayStation.Location = new Point(3, 3);
+            btnPlayStation.Name = "btnPlayStation";
+            btnPlayStation.Size = new Size(299, 41);
+            btnPlayStation.TabIndex = 1;
+            btnPlayStation.Text = "Play Station Preview";
+            btnPlayStation.UseVisualStyleBackColor = false;
+            btnPlayStation.Click += btnPlayStation_Click;
+            // 
+            // btnResetStationPreview
+            // 
+            btnResetStationPreview.BackColor = Color.Yellow;
+            btnResetStationPreview.Dock = DockStyle.Fill;
+            btnResetStationPreview.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
+            btnResetStationPreview.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
+            btnResetStationPreview.FlatStyle = FlatStyle.Flat;
+            btnResetStationPreview.Location = new Point(3, 50);
+            btnResetStationPreview.Name = "btnResetStationPreview";
+            btnResetStationPreview.Size = new Size(299, 41);
+            btnResetStationPreview.TabIndex = 2;
+            btnResetStationPreview.Text = "Reset Station Preview";
+            btnResetStationPreview.UseVisualStyleBackColor = false;
+            btnResetStationPreview.Click += btnResetStationPreview_Click;
             // 
             // StationPreview
             // 
@@ -252,5 +289,7 @@
         private System.ComponentModel.BackgroundWorker bgLoader;
         private TableLayoutPanel tableLayoutPanel2;
         private Label lblNowPlaying;
+        private Button btnResetStationPreview;
+        private Button btnPlayStation;
     }
 }
