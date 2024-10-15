@@ -2942,6 +2942,24 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to STREAMING STATION.
+        /// </summary>
+        internal static string StationPreviewListBoxStreaming {
+            get {
+                return ResourceManager.GetString("StationPreviewListBoxStreaming", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Station Preview: {0}.
+        /// </summary>
+        internal static string StationPreviewTitle {
+            get {
+                return ResourceManager.GetString("StationPreviewTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Stations.
         /// </summary>
         internal static string Stations {

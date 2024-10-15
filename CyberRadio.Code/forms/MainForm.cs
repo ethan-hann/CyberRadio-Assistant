@@ -733,6 +733,8 @@ public sealed partial class MainForm : Form
         lbStations.BeginUpdate();
         lbStations.Invalidate();
         lbStations.EndUpdate();
+
+        UpdateOpenStationPreview(station); //Update the icon and name in the current open station preview (if any).
     }
 
     private void BtnDeleteStation_Click(object sender, EventArgs e)
@@ -1196,6 +1198,25 @@ public sealed partial class MainForm : Form
             UpdateStationIcon(icon);
     }
 
+    private void UpdateOpenStationPreview(TrackableObject<Station> station)
+    {
+        //Update the station preview if its open
+        Application.OpenForms.OfType<StationPreview>().ToList().ForEach(f =>
+        {
+            if (f.Station.Id == station.Id)
+                f.UpdateStation(station);
+        });
+    }
+
+    /// <summary>
+    /// Get a value indicating if there are any station preview windows open.
+    /// </summary>
+    /// <returns><c>true</c> if a station preview is already open; <c>false</c> otherwise.</returns>
+    private bool IsStationPreviewOpen()
+    {
+        return Application.OpenForms.OfType<StationPreview>().Any();
+    }
+
     private void UpdateStationIcon(TrackableObject<WolvenIcon>? icon)
     {
         try
@@ -1216,6 +1237,8 @@ public sealed partial class MainForm : Form
             icon?.CheckPendingSaveStatus();
             editor?.UpdateIcon(activeIcon);
 
+            UpdateOpenStationPreview(station);
+
             lbStations.EndUpdate();
         }
         catch (Exception ex)
@@ -1223,5 +1246,19 @@ public sealed partial class MainForm : Form
             AuLogger.GetCurrentLogger<MainForm>("ManagerFormOnIconUpdated")
                 .Error(ex, "An error occurred while updating the station icon.");
         }
+    }
+
+    private void stationPreviewToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        if (IsStationPreviewOpen())
+        {
+            MessageBox.Show(this, "The station preview window is already open. Only one can be opened at a time.",
+                "Window Already Opened", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            return;
+        }
+        if (lbStations.SelectedItem is not TrackableObject<Station> station) return;
+
+        var stationPreviewForm = new StationPreview(station);
+        stationPreviewForm.Show(this);
     }
 }

@@ -1242,4 +1242,10 @@ Are you sure you want to clear all station data?</value>
   <data name="IconEditor_CustomIconPictureHelp" xml:space="preserve">
     <value>Shows a preview of this icon (if extracted or imported). If icon hasn't been created yet, drag-and-drop a .PNG here to create it.</value>
   </data>
+  <data name="StationPreviewTitle" xml:space="preserve">
+	  <value>Station Preview: {0}</value>
+  </data>
+  <data name="StationPreviewListBoxStreaming" xml:space="preserve">
+	  <value>STREAMING STATION</value>
+  </data>
 </root>

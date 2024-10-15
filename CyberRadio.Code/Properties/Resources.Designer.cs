@@ -383,6 +383,16 @@ namespace RadioExt_Helper.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap cra_radio_preview_bg {
+            get {
+                object obj = ResourceManager.GetObject("cra_radio_preview_bg", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap CRA_splash {
             get {
                 object obj = ResourceManager.GetObject("CRA_splash", resourceCulture);
@@ -1646,6 +1656,36 @@ namespace RadioExt_Helper.Properties {
         internal static System.Drawing.Bitmap portugal_32x32 {
             get {
                 object obj = ResourceManager.GetObject("portugal_32x32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap preview {
+            get {
+                object obj = ResourceManager.GetObject("preview", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap preview_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("preview_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap preview_32x32 {
+            get {
+                object obj = ResourceManager.GetObject("preview_32x32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
