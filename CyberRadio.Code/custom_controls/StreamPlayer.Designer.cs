@@ -1,6 +1,6 @@
 ﻿namespace RadioExt_Helper.custom_controls
 {
-    sealed partial class MusicPlayer
+    sealed partial class StreamPlayer
     {
         /// <summary> 
         /// Required designer variable.
@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MusicPlayer));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(StreamPlayer));
             btnPlayPause = new RoundedPictureBox();
             ((System.ComponentModel.ISupportInitialize)btnPlayPause).BeginInit();
             SuspendLayout();
@@ -62,7 +62,7 @@
             BackColor = Color.Transparent;
             Controls.Add(btnPlayPause);
             ForeColor = Color.Transparent;
-            Name = "MusicPlayer";
+            Name = "StreamPlayer";
             Size = new Size(32, 32);
             ((System.ComponentModel.ISupportInitialize)btnPlayPause).EndInit();
             ResumeLayout(false);

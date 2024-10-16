@@ -1248,4 +1248,7 @@ Are you sure you want to clear all station data?</value>
   <data name="StationPreviewListBoxStreaming" xml:space="preserve">
 	  <value>STREAMING STATION</value>
   </data>
+  <data name="AudioControllerCtl_VolumeSlider_VolumeChanged_Volume___0_F1_" xml:space="preserve">
+	  <value>Volume: {0:F1}</value>
+  </data>
 </root>

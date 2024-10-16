@@ -232,6 +232,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Volume: {0:F1}.
+        /// </summary>
+        internal static string AudioControllerCtl_VolumeSlider_VolumeChanged_Volume___0_F1_ {
+            get {
+                return ResourceManager.GetString("AudioControllerCtl_VolumeSlider_VolumeChanged_Volume___0_F1_", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Auto-Export to Game?.
         /// </summary>
         internal static string AutoExportOption {

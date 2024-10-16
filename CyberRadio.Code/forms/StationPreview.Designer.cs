@@ -28,6 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
+            ListViewGroup listViewGroup1 = new ListViewGroup("Unordered", HorizontalAlignment.Left);
+            ListViewGroup listViewGroup2 = new ListViewGroup("Ordered", HorizontalAlignment.Left);
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(StationPreview));
             picStationIcon = new PictureBox();
             panStationPreview = new Panel();
@@ -36,20 +38,21 @@
             lblStationName = new Label();
             grpGamePreview = new GroupBox();
             grpTrackList = new GroupBox();
-            lbTracks = new ListBox();
-            mediaPlayer = new AxWMPLib.AxWindowsMediaPlayer();
+            lvSongs = new ListView();
+            colTitle = new ColumnHeader();
+            colDuration = new ColumnHeader();
             groupBox1 = new GroupBox();
             tableLayoutPanel1 = new TableLayoutPanel();
-            btnNormalize = new Button();
-            bgLoader = new System.ComponentModel.BackgroundWorker();
-            btnPlayStation = new Button();
+            btnStopStation = new Button();
             btnResetStationPreview = new Button();
+            btnPlayStation = new Button();
+            btnNormalize = new Button();
+            audioController = new user_controls.AudioControllerCtl();
             ((System.ComponentModel.ISupportInitialize)picStationIcon).BeginInit();
             panStationPreview.SuspendLayout();
             tableLayoutPanel2.SuspendLayout();
             grpGamePreview.SuspendLayout();
             grpTrackList.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)mediaPlayer).BeginInit();
             groupBox1.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
             SuspendLayout();
@@ -117,7 +120,7 @@
             // 
             grpGamePreview.Controls.Add(panStationPreview);
             grpGamePreview.Font = new Font("Segoe UI Variable Display", 9.75F, FontStyle.Bold);
-            grpGamePreview.Location = new Point(12, 12);
+            grpGamePreview.Location = new Point(3, 0);
             grpGamePreview.Name = "grpGamePreview";
             grpGamePreview.Size = new Size(800, 510);
             grpGamePreview.TabIndex = 2;
@@ -127,44 +130,49 @@
             // grpTrackList
             // 
             grpTrackList.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            grpTrackList.Controls.Add(lbTracks);
+            grpTrackList.Controls.Add(lvSongs);
             grpTrackList.Font = new Font("Segoe UI Variable Display", 9.75F, FontStyle.Bold);
-            grpTrackList.Location = new Point(818, 12);
+            grpTrackList.Location = new Point(806, 0);
             grpTrackList.Name = "grpTrackList";
-            grpTrackList.Size = new Size(311, 510);
+            grpTrackList.Size = new Size(332, 510);
             grpTrackList.TabIndex = 3;
             grpTrackList.TabStop = false;
-            grpTrackList.Text = "Track List";
+            grpTrackList.Text = "Song List";
             // 
-            // lbTracks
+            // lvSongs
             // 
-            lbTracks.Dock = DockStyle.Fill;
-            lbTracks.FormattingEnabled = true;
-            lbTracks.ItemHeight = 17;
-            lbTracks.Location = new Point(3, 21);
-            lbTracks.Name = "lbTracks";
-            lbTracks.Size = new Size(305, 486);
-            lbTracks.TabIndex = 0;
-            lbTracks.SelectedIndexChanged += lbTracks_SelectedIndexChanged;
+            lvSongs.Columns.AddRange(new ColumnHeader[] { colTitle, colDuration });
+            lvSongs.Dock = DockStyle.Fill;
+            listViewGroup1.Header = "Unordered";
+            listViewGroup1.Name = "lvGrpUnordered";
+            listViewGroup1.Subtitle = "All of the songs in the station not present in the defined order.";
+            listViewGroup2.Header = "Ordered";
+            listViewGroup2.Name = "lvGrpOrdered";
+            listViewGroup2.Subtitle = "All of the ordered songs in the station in the order they will be played.";
+            lvSongs.Groups.AddRange(new ListViewGroup[] { listViewGroup1, listViewGroup2 });
+            lvSongs.Location = new Point(3, 21);
+            lvSongs.Name = "lvSongs";
+            lvSongs.Size = new Size(326, 486);
+            lvSongs.TabIndex = 1;
+            lvSongs.UseCompatibleStateImageBehavior = false;
+            lvSongs.View = View.Details;
             // 
-            // mediaPlayer
+            // colTitle
             // 
-            mediaPlayer.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            mediaPlayer.Enabled = true;
-            mediaPlayer.Location = new Point(15, 528);
-            mediaPlayer.Name = "mediaPlayer";
-            mediaPlayer.OcxState = (AxHost.State)resources.GetObject("mediaPlayer.OcxState");
-            mediaPlayer.Size = new Size(797, 167);
-            mediaPlayer.TabIndex = 4;
+            colTitle.Text = "Title";
+            // 
+            // colDuration
+            // 
+            colDuration.Text = "Duration";
             // 
             // groupBox1
             // 
             groupBox1.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             groupBox1.Controls.Add(tableLayoutPanel1);
             groupBox1.Font = new Font("Segoe UI Variable Display", 9.75F, FontStyle.Bold);
-            groupBox1.Location = new Point(818, 528);
+            groupBox1.Location = new Point(806, 513);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(311, 167);
+            groupBox1.Size = new Size(332, 191);
             groupBox1.TabIndex = 5;
             groupBox1.TabStop = false;
             groupBox1.Text = "Actions";
@@ -173,41 +181,50 @@
             // 
             tableLayoutPanel1.ColumnCount = 1;
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tableLayoutPanel1.Controls.Add(btnStopStation, 0, 3);
             tableLayoutPanel1.Controls.Add(btnResetStationPreview, 0, 1);
             tableLayoutPanel1.Controls.Add(btnPlayStation, 0, 0);
             tableLayoutPanel1.Controls.Add(btnNormalize, 0, 2);
             tableLayoutPanel1.Dock = DockStyle.Fill;
             tableLayoutPanel1.Location = new Point(3, 21);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
-            tableLayoutPanel1.RowCount = 3;
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333321F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333321F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333321F));
-            tableLayoutPanel1.Size = new Size(305, 143);
+            tableLayoutPanel1.RowCount = 4;
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 25F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 25F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 25F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 25F));
+            tableLayoutPanel1.Size = new Size(326, 167);
             tableLayoutPanel1.TabIndex = 0;
             // 
-            // btnNormalize
+            // btnStopStation
             // 
-            btnNormalize.BackColor = Color.Yellow;
-            btnNormalize.Dock = DockStyle.Fill;
-            btnNormalize.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
-            btnNormalize.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
-            btnNormalize.FlatStyle = FlatStyle.Flat;
-            btnNormalize.Location = new Point(3, 97);
-            btnNormalize.Name = "btnNormalize";
-            btnNormalize.Size = new Size(299, 43);
-            btnNormalize.TabIndex = 0;
-            btnNormalize.Text = "Normalize Volumes";
-            btnNormalize.UseVisualStyleBackColor = false;
-            btnNormalize.Click += btnNormalize_Click;
+            btnStopStation.BackColor = Color.FromArgb(255, 128, 128);
+            btnStopStation.Dock = DockStyle.Fill;
+            btnStopStation.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
+            btnStopStation.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
+            btnStopStation.FlatStyle = FlatStyle.Flat;
+            btnStopStation.Location = new Point(3, 126);
+            btnStopStation.Name = "btnStopStation";
+            btnStopStation.Size = new Size(320, 38);
+            btnStopStation.TabIndex = 3;
+            btnStopStation.Text = "Stop Station";
+            btnStopStation.UseVisualStyleBackColor = false;
+            btnStopStation.Click += btnStopStation_Click;
             // 
-            // bgLoader
+            // btnResetStationPreview
             // 
-            bgLoader.WorkerReportsProgress = true;
-            bgLoader.WorkerSupportsCancellation = true;
-            bgLoader.DoWork += bgLoader_DoWork;
-            bgLoader.ProgressChanged += bgLoader_ProgressChanged;
-            bgLoader.RunWorkerCompleted += bgLoader_RunWorkerCompleted;
+            btnResetStationPreview.BackColor = Color.Yellow;
+            btnResetStationPreview.Dock = DockStyle.Fill;
+            btnResetStationPreview.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
+            btnResetStationPreview.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
+            btnResetStationPreview.FlatStyle = FlatStyle.Flat;
+            btnResetStationPreview.Location = new Point(3, 44);
+            btnResetStationPreview.Name = "btnResetStationPreview";
+            btnResetStationPreview.Size = new Size(320, 35);
+            btnResetStationPreview.TabIndex = 2;
+            btnResetStationPreview.Text = "Re-shuffle Station";
+            btnResetStationPreview.UseVisualStyleBackColor = false;
+            btnResetStationPreview.Click += btnResetStationPreview_Click;
             // 
             // btnPlayStation
             // 
@@ -218,26 +235,36 @@
             btnPlayStation.FlatStyle = FlatStyle.Flat;
             btnPlayStation.Location = new Point(3, 3);
             btnPlayStation.Name = "btnPlayStation";
-            btnPlayStation.Size = new Size(299, 41);
+            btnPlayStation.Size = new Size(320, 35);
             btnPlayStation.TabIndex = 1;
-            btnPlayStation.Text = "Play Station Preview";
+            btnPlayStation.Text = "Play Station";
             btnPlayStation.UseVisualStyleBackColor = false;
             btnPlayStation.Click += btnPlayStation_Click;
             // 
-            // btnResetStationPreview
+            // btnNormalize
             // 
-            btnResetStationPreview.BackColor = Color.Yellow;
-            btnResetStationPreview.Dock = DockStyle.Fill;
-            btnResetStationPreview.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
-            btnResetStationPreview.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
-            btnResetStationPreview.FlatStyle = FlatStyle.Flat;
-            btnResetStationPreview.Location = new Point(3, 50);
-            btnResetStationPreview.Name = "btnResetStationPreview";
-            btnResetStationPreview.Size = new Size(299, 41);
-            btnResetStationPreview.TabIndex = 2;
-            btnResetStationPreview.Text = "Reset Station Preview";
-            btnResetStationPreview.UseVisualStyleBackColor = false;
-            btnResetStationPreview.Click += btnResetStationPreview_Click;
+            btnNormalize.BackColor = Color.Yellow;
+            btnNormalize.Dock = DockStyle.Fill;
+            btnNormalize.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
+            btnNormalize.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
+            btnNormalize.FlatStyle = FlatStyle.Flat;
+            btnNormalize.Location = new Point(3, 85);
+            btnNormalize.Name = "btnNormalize";
+            btnNormalize.Size = new Size(320, 35);
+            btnNormalize.TabIndex = 0;
+            btnNormalize.Text = "Normalize Song Volumes";
+            btnNormalize.UseVisualStyleBackColor = false;
+            btnNormalize.Click += btnNormalize_Click;
+            // 
+            // audioController
+            // 
+            audioController.BackColor = Color.Transparent;
+            audioController.Location = new Point(6, 513);
+            audioController.Name = "audioController";
+            audioController.Size = new Size(797, 191);
+            audioController.TabIndex = 6;
+            audioController.SongEnded += audioController_SongEnded;
+            audioController.PlaylistEnded += audioController_PlaylistEnded;
             // 
             // StationPreview
             // 
@@ -246,8 +273,8 @@
             BackColor = Color.White;
             BackgroundImageLayout = ImageLayout.Stretch;
             ClientSize = new Size(1141, 707);
+            Controls.Add(audioController);
             Controls.Add(groupBox1);
-            Controls.Add(mediaPlayer);
             Controls.Add(grpTrackList);
             Controls.Add(grpGamePreview);
             DoubleBuffered = true;
@@ -268,7 +295,6 @@
             tableLayoutPanel2.PerformLayout();
             grpGamePreview.ResumeLayout(false);
             grpTrackList.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)mediaPlayer).EndInit();
             groupBox1.ResumeLayout(false);
             tableLayoutPanel1.ResumeLayout(false);
             ResumeLayout(false);
@@ -281,15 +307,17 @@
         private Label lblStationName;
         private GroupBox grpGamePreview;
         private GroupBox grpTrackList;
-        private AxWMPLib.AxWindowsMediaPlayer mediaPlayer;
         private GroupBox groupBox1;
         private TableLayoutPanel tableLayoutPanel1;
         private Button btnNormalize;
-        private ListBox lbTracks;
-        private System.ComponentModel.BackgroundWorker bgLoader;
         private TableLayoutPanel tableLayoutPanel2;
         private Label lblNowPlaying;
         private Button btnResetStationPreview;
         private Button btnPlayStation;
+        private ListView lvSongs;
+        private ColumnHeader colTitle;
+        private ColumnHeader colDuration;
+        private user_controls.AudioControllerCtl audioController;
+        private Button btnStopStation;
     }
 }

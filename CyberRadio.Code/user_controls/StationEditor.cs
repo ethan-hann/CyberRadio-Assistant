@@ -125,7 +125,7 @@ public sealed partial class StationEditor : UserControl, IEditor
     /// Gets the music player associated with the station.
     /// </summary>
     /// <returns>The music player.</returns>
-    public MusicPlayer GetMusicPlayer()
+    public StreamPlayer GetMusicPlayer()
     {
         return mpStreamPlayer;
     }

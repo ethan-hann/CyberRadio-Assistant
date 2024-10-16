@@ -21,9 +21,9 @@ using RadioExt_Helper.Properties;
 namespace RadioExt_Helper.custom_controls;
 
 /// <summary>
-///     A simple music player control that allows streaming audio from a URL in real time.
+///     A simple music control that allows streaming audio from a URL in real time.
 /// </summary>
-public sealed partial class MusicPlayer : UserControl
+public sealed partial class StreamPlayer : UserControl
 {
     private readonly ImageList _stateImages = new();
 
@@ -32,9 +32,9 @@ public sealed partial class MusicPlayer : UserControl
     private WaveOutEvent? _waveOut;
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="MusicPlayer" /> class.
+    ///     Initializes a new instance of the <see cref="StreamPlayer" /> class.
     /// </summary>
-    public MusicPlayer()
+    public StreamPlayer()
     {
         InitializeComponent();
 
@@ -69,7 +69,7 @@ public sealed partial class MusicPlayer : UserControl
         }
     }
 
-    ~MusicPlayer()
+    ~StreamPlayer()
     {
         _waveOut?.Dispose();
         _mediaReader?.Dispose();
@@ -95,7 +95,7 @@ public sealed partial class MusicPlayer : UserControl
         if (string.IsNullOrEmpty(StreamUrl))
         {
             MessageBox.Show(this, Strings.StreamURLError, Strings.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
-            AuLogger.GetCurrentLogger<MusicPlayer>("Btn_PlayPause").Error("Stream URL was invalid or empty.");
+            AuLogger.GetCurrentLogger<StreamPlayer>("Btn_PlayPause").Error("Stream URL was invalid or empty.");
             return;
         }
 
@@ -113,7 +113,7 @@ public sealed partial class MusicPlayer : UserControl
                 PlayStream();
                 break;
             default:
-                AuLogger.GetCurrentLogger<MusicPlayer>("Btn_PlayPause")
+                AuLogger.GetCurrentLogger<StreamPlayer>("Btn_PlayPause")
                     .Error("Playback state was not valid for the audio player.");
                 break;
         }
@@ -136,7 +136,7 @@ public sealed partial class MusicPlayer : UserControl
             MessageBox.Show(this, string.Format(Strings.ErrorStreamingAudio, ex.Message), Strings.Error,
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Error);
-            AuLogger.GetCurrentLogger<MusicPlayer>("PlayStream").Error(ex, "Error streaming audio");
+            AuLogger.GetCurrentLogger<StreamPlayer>("PlayStream").Error(ex, "Error streaming audio");
             btnPlayPause.ImageKey = "play";
         }
     }
@@ -156,7 +156,7 @@ public sealed partial class MusicPlayer : UserControl
             MessageBox.Show(this, string.Format(Strings.ErrorStreamingAudio, ex.Message), Strings.Error,
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Error);
-            AuLogger.GetCurrentLogger<MusicPlayer>("ResumeStream").Error(ex, "Error streaming audio");
+            AuLogger.GetCurrentLogger<StreamPlayer>("ResumeStream").Error(ex, "Error streaming audio");
             btnPlayPause.ImageKey = "play";
         }
     }
@@ -176,7 +176,7 @@ public sealed partial class MusicPlayer : UserControl
             MessageBox.Show(this, string.Format(Strings.ErrorPausingStream, ex.Message), Strings.Error,
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Error);
-            AuLogger.GetCurrentLogger<MusicPlayer>("PauseStream").Error(ex, "Error pausing stream");
+            AuLogger.GetCurrentLogger<StreamPlayer>("PauseStream").Error(ex, "Error pausing stream");
             btnPlayPause.ImageKey = "pause";
         }
     }

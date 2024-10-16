@@ -15,10 +15,11 @@ namespace RadioExt_Helper.forms
         }
 
         private TrackableObject<Station> _station;
-        private readonly List<Song> _trackList = new List<Song>(); // The list of songs for the station (ordered and unordered)
-        private List<Song> _playlist = new List<Song>(); // The current playlist
-        private bool _manualMode = false;  // Indicates whether the user is in manual mode (selected a song manually)
-        private int _currentSongIndex = 0;  // Tracks the current song index
+        private readonly List<Song> _trackList = []; // The list of songs for the station (ordered and unordered)
+        private List<Song> _playlist = []; // The current playlist
+
+        private bool _userStoppedStation;
+        private bool _isClosing;
 
         public StationPreview()
         {
@@ -31,36 +32,78 @@ namespace RadioExt_Helper.forms
             _station = station;
         }
 
+        private void StationPreview_Load(object sender, EventArgs e)
+        {
+            Translate();
+            lblStationName.Text = _station?.TrackedObject.MetaData.DisplayName;
+            SetPicBoxIcon();
+            InitializePreview();
+        }
+
+        private void InitializePreview()
+        {
+            //If the station is currently playing, stop it and reset it.
+            if (audioController.CurrentState is StationState.Playing or StationState.Paused)
+            {
+                _userStoppedStation = true;
+                audioController.StopPlayback();
+            }
+
+            // Check if the station is a streaming station or song-based
+            RefreshPlaylistOrStream();
+            StartPlaylistOrStream();
+            //if (_station.TrackedObject.MetaData.StreamInfo.IsStream)
+            //{
+            //    _playlist.Clear();
+            //    audioController.SetStreamUrl(_station.TrackedObject.MetaData.StreamInfo.StreamUrl);
+            //    audioController.StartPlayback();
+            //    ToggleButtons();
+            //}
+            //else
+            //{
+            //    bgLoader.RunWorkerAsync();  // Load song playlist asynchronously
+            //}
+        }
+
+        private void ToggleButtons()
+        {
+            Invoke(() =>
+            {
+                switch (audioController.CurrentState)
+                {
+                    case StationState.Playing:
+                        btnPlayStation.Enabled = false;
+                        btnResetStationPreview.Enabled = !_station.TrackedObject.MetaData.StreamInfo.IsStream;
+                        btnStopStation.Enabled = true;
+                        break;
+                    case StationState.Paused:
+                        btnPlayStation.Enabled = true;
+                        btnResetStationPreview.Enabled = !_station.TrackedObject.MetaData.StreamInfo.IsStream;
+                        btnStopStation.Enabled = true;
+                        break;
+                    case StationState.Stopped:
+                        btnPlayStation.Enabled = true;
+                        btnResetStationPreview.Enabled = !_station.TrackedObject.MetaData.StreamInfo.IsStream;
+                        btnStopStation.Enabled = false;
+                        break;
+                }
+
+                btnNormalize.Enabled =
+                    !_station.TrackedObject.MetaData.StreamInfo
+                        .IsStream; // Disable normalize button for streaming stations
+            });
+        }
+
         public void UpdateStation(TrackableObject<Station> station)
         {
             _station = station;
 
             // Update the station name and icon
             lblStationName.Text = _station?.TrackedObject.MetaData.DisplayName;
-            Text = string.Format(Strings.StationPreviewTitle, station.TrackedObject.MetaData.DisplayName);
+            Text = string.Format(Strings.StationPreviewTitle, _station.TrackedObject.MetaData.DisplayName);
             SetPicBoxIcon();
-            SetPlayerVolume(station.TrackedObject.MetaData.Volume);
-        }
-
-        private void StationPreview_Load(object sender, EventArgs e)
-        {
-            Translate();
-            lblStationName.Text = _station?.TrackedObject.MetaData.DisplayName;
-            SetPicBoxIcon();
-
-            mediaPlayer.PlayStateChange += MediaPlayer_PlayStateChange;
-
-            // Check if the station is a streaming station or song-based
-            if (_station.TrackedObject.MetaData.StreamInfo.IsStream)
-            {
-                SetupTrackList();
-                btnNormalize.Enabled = false;
-                PlayStream(_station.TrackedObject.MetaData.StreamInfo.StreamUrl);
-            }
-            else
-            {
-                bgLoader.RunWorkerAsync();  // Load song playlist asynchronously
-            }
+            SetPlayerVolume(_station.TrackedObject.MetaData.Volume);
+            ToggleButtons();
         }
 
         private void SetPicBoxIcon()
@@ -80,53 +123,11 @@ namespace RadioExt_Helper.forms
         {
             try
             {
-                mediaPlayer.settings.volume = ScaleVolume(newVolume);
+                audioController.SetVolume(newVolume);
             }
             catch (Exception ex)
             {
                 AuLogger.GetCurrentLogger<StationPreview>("SetPlayerVolume").Error(ex, "Error while trying to set the new player volume.");
-            }
-        }
-
-        /// <summary>
-        /// Scales the station volume (0 - 25) to the media player's volume range (0 - 100),
-        /// while ensuring that a station volume of 1 maps to media player volume 16.
-        /// </summary>
-        private int ScaleVolume(float stationVolume)
-        {
-            stationVolume = Math.Max(0, Math.Min(25.0f, stationVolume));
-
-            var baseScale = 100.0f / 25.0f;
-            var bias = 16.0f - (baseScale * 1.0f);
-
-            var mediaPlayerVolume = (stationVolume * baseScale) + bias;
-            return (int)Math.Max(0, Math.Min(100.0f, mediaPlayerVolume));
-        }
-
-        private void MediaPlayer_PlayStateChange(object sender, AxWMPLib._WMPOCXEvents_PlayStateChangeEvent e)
-        {
-            try
-            {
-                var newState = (WMPPlayState)e.newState;
-
-                if (newState == WMPPlayState.wmppsStopped || newState == WMPPlayState.wmppsMediaEnded)
-                {
-                    if (!_manualMode && _currentSongIndex < _playlist.Count - 1)
-                    {
-                        _currentSongIndex++;
-                        PlayCurrentSong();  // Play the next song in the playlist
-                    }
-                    else if (!_manualMode)
-                    {
-                        // Restart the playlist when all songs are finished
-                        _currentSongIndex = 0;
-                        PlayCurrentSong();
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                AuLogger.GetCurrentLogger<StationPreview>("MediaPlayer_PlayStateChange").Error(ex, "Error handling media player state change.");
             }
         }
 
@@ -140,89 +141,34 @@ namespace RadioExt_Helper.forms
         /// </summary>
         private void SetupTrackList()
         {
-            lbTracks.BeginUpdate();
-            _trackList.Clear();
+
+        }
+
+        private void RefreshPlaylistOrStream()
+        {
+            lblNowPlaying.Text = "Loading preview...";
+            SetupTrackList();
+
+            audioController.SetVolume(_station.TrackedObject.MetaData.Volume);
 
             if (_station.TrackedObject.MetaData.StreamInfo.IsStream)
             {
-                lbTracks.Items.Add(Strings.StationPreviewListBoxStreaming);
-                lbTracks.EndUpdate();
-                return;
+                audioController.SetPlaylist([]);
+                audioController.SetStreamUrl(_station.TrackedObject.MetaData.StreamInfo.StreamUrl);
             }
-
-            foreach (var song in _station.TrackedObject.Songs)
+            else
             {
-                _trackList.Add((Song)song.Clone());
+                _playlist = GetShuffledPlaylist(_station.TrackedObject.Songs, _station.TrackedObject.MetaData.SongOrder);
+                audioController.SetPlaylist(_playlist);
             }
-
-            lbTracks.DataSource = _trackList;
-            lbTracks.DisplayMember = "Title";
-            lbTracks.EndUpdate();
         }
 
-        private void bgLoader_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+        private void StartPlaylistOrStream()
         {
-            Invoke(SetupTrackList);
-            _playlist = GetShuffledPlaylist(_station.TrackedObject.Songs, _station.TrackedObject.MetaData.SongOrder);
-        }
-
-        private void bgLoader_ProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-            //not used
-        }
-
-        private void bgLoader_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
-        {
-            SetPlayerVolume(ScaleVolume(_station.TrackedObject.MetaData.Volume));
-            PlayPlaylist();
-        }
-
-        private void PlayPlaylist()
-        {
-            _manualMode = false;  // Reset manual mode
-            mediaPlayer.currentPlaylist.clear();  // Clear any previous playlist
-
-            foreach (var song in _playlist)
-            {
-                var mediaItem = mediaPlayer.newMedia(song.FilePath);
-                mediaPlayer.currentPlaylist.appendItem(mediaItem);
-            }
-
-            _currentSongIndex = 0;  // Start from the first song
-            PlayCurrentSong();
-        }
-
-        private void PlayCurrentSong()
-        {
-            var currentSong = _playlist[_currentSongIndex];
-            mediaPlayer.Ctlcontrols.stop();  // Stop before playing new song
-            mediaPlayer.URL = currentSong.FilePath;
-
-            Task.Delay(200).Wait();  // Wait to ensure the media player loads the file
-
-            mediaPlayer.Ctlcontrols.play();  // Start playing the current song
-            lblNowPlaying.Text = mediaPlayer.currentMedia?.name ?? currentSong.Title;
-        }
-
-        private void PlaySong(Song song)
-        {
-            _manualMode = true;  // Enable manual mode
-            mediaPlayer.currentPlaylist.clear();  // Clear the playlist for manual song play
-            var mediaItem = mediaPlayer.newMedia(song.FilePath);
-            mediaPlayer.currentPlaylist.appendItem(mediaItem);
-
-            mediaPlayer.Ctlcontrols.play();  // Play the selected song
-            lblNowPlaying.Text = mediaPlayer.currentMedia?.name ?? song.Title;
-        }
-
-        private void PlayStream(string streamUrl)
-        {
-            if (!string.IsNullOrEmpty(streamUrl))
-            {
-                mediaPlayer.URL = streamUrl;  // Set the media player to play the stream
-                lblNowPlaying.Text = streamUrl;
-                mediaPlayer.Ctlcontrols.play();  // Start streaming
-            }
+            audioController.StartPlayback();
+            lblNowPlaying.Text = audioController.CurrentSongTitle;
+            ToggleButtons();
+            audioController.PlaylistEnded += audioController_PlaylistEnded; //resubscribe to playlist ended event.
         }
 
         private static List<Song> GetShuffledPlaylist(List<Song> allSongs, List<string> orderedTitles)
@@ -252,20 +198,6 @@ namespace RadioExt_Helper.forms
             return finalPlaylist;
         }
 
-        private void lbTracks_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (!_manualMode) return;  // Prevent triggering manual play during playlist mode
-
-            if (lbTracks.SelectedItem is Song selectedSong)
-                PlaySong(selectedSong);  // Manual play when a song is selected from the listbox
-        }
-
-        private void btnPlayStation_Click(object sender, EventArgs e)
-        {
-            _playlist = GetShuffledPlaylist(_station.TrackedObject.Songs, _station.TrackedObject.MetaData.SongOrder);
-            PlayPlaylist();  // Reset the playlist when Play Station Preview is clicked
-        }
-
         private void picStationIcon_Paint(object sender, PaintEventArgs e)
         {
             e.Graphics.CompositingMode = CompositingMode.SourceOver;
@@ -275,9 +207,11 @@ namespace RadioExt_Helper.forms
         {
             try
             {
-                mediaPlayer.Ctlcontrols.stop();
-                mediaPlayer.Dispose();
-                mediaPlayer = null;
+                _userStoppedStation = true;
+                audioController.StopPlayback();
+                audioController.Dispose();
+                audioController.PlaylistEnded -= audioController_PlaylistEnded;
+                _isClosing = true;
             }
             catch (Exception ex)
             {
@@ -285,16 +219,87 @@ namespace RadioExt_Helper.forms
             }
         }
 
+        private void btnPlayStation_Click(object sender, EventArgs e)
+        {
+            PlayStation();
+        }
+
+        private void PlayStation()
+        {
+            if (audioController.IsPlaying)
+            {
+                audioController.PlaylistEnded -= audioController_PlaylistEnded;
+                _userStoppedStation = true;
+                audioController.StopPlayback();
+            }
+
+            audioController.ResetPlaybackToBeginning();
+            StartPlaylistOrStream(); //Start playback from beginning of playlist; do not re-shuffle the playlist
+            ToggleButtons();
+        }
+
         private void btnResetStationPreview_Click(object sender, EventArgs e)
         {
-            _manualMode = false;
-            _playlist = GetShuffledPlaylist(_station.TrackedObject.Songs, _station.TrackedObject.MetaData.SongOrder);
-            PlayPlaylist();  // Reset and restart the playlist
+            ReshuffleStation();
+        }
+
+        private void ReshuffleStation()
+        {
+            if (audioController.IsPlaying)
+            {
+                audioController.PlaylistEnded -= audioController_PlaylistEnded;
+                _userStoppedStation = true;
+                audioController.StopPlayback();
+            }
+
+            audioController.ResetPlaybackToBeginning();
+            RefreshPlaylistOrStream(); //Clear the playlist and get a new shuffled playlist
+            StartPlaylistOrStream();
+            ToggleButtons();
         }
 
         private void btnNormalize_Click(object sender, EventArgs e)
         {
             // Normalize functionality (if applicable)
+        }
+
+        private void btnStopStation_Click(object sender, EventArgs e)
+        {
+            StopStation();
+        }
+
+        private void StopStation()
+        {
+            if (audioController.IsPlaying)
+            {
+                audioController.PlaylistEnded -= audioController_PlaylistEnded;
+                _userStoppedStation = true;
+                audioController.StopPlayback();
+            }
+
+            audioController.ResetPlaybackToBeginning();
+            ToggleButtons();
+        }
+
+        private void audioController_PlaylistEnded(object? sender, EventArgs e)
+        {
+            if (_isClosing)
+                return;
+
+            if (_userStoppedStation)
+            {
+                _userStoppedStation = false;
+                ToggleButtons();
+                return;
+            }
+
+            RefreshPlaylistOrStream();
+            StartPlaylistOrStream();
+        }
+
+        private void audioController_SongEnded(object sender, EventArgs e)
+        {
+            lblNowPlaying.Text = audioController.CurrentSongTitle;
         }
     }
 }

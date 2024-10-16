@@ -77,7 +77,7 @@ namespace RadioExt_Helper.user_controls
             radUseStreamNo = new RadioButton();
             tableLayoutPanel6 = new TableLayoutPanel();
             flpStreamUrlTesting = new FlowLayoutPanel();
-            mpStreamPlayer = new MusicPlayer();
+            mpStreamPlayer = new StreamPlayer();
             btnGetFromRadioGarden = new Button();
             txtStreamURL = new TextBox();
             statusStrip1 = new StatusStrip();
@@ -902,7 +902,7 @@ namespace RadioExt_Helper.user_controls
         private ToolStripStatusLabel lblStatus;
         private GroupBox grpSongs;
         private Button btnGetFromRadioGarden;
-        private MusicPlayer mpStreamPlayer;
+        private StreamPlayer mpStreamPlayer;
         private GroupBox grpCustomData;
         private DataGridView dgvMetadata;
         private CustomPictureBox picStationIcon;
