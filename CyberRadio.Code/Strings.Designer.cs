@@ -573,7 +573,7 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If checked, indicates that song files should be included in the backup .zip file for the stations..
+        ///   Looks up a localized string similar to If checked, indicates that song files (including external) should be included in the backup .zip file for the stations..
         /// </summary>
         internal static string CopySongFilesToBackupHelp {
             get {

@@ -1242,9 +1242,6 @@ Sei sicuro di voler cancellare tutti i dati della stazione?</value>
   <data name="IconEditor_CustomIconPictureHelp" xml:space="preserve">
     <value>Mostra un'anteprima di questa icona (se estratta o importata). Se l'icona non è stata ancora creata, drag-and-drop a .png qui per crearlo.</value>
   </data>
-  <data name="CopySongFilesToBackupHelp" xml:space="preserve">
-    <value>Se controllato, indica che i file di brani dovrebbero essere inclusi nel file .zip di backup per le stazioni.</value>
-  </data>
   <data name="DefaultSongLocationOption" xml:space="preserve">
     <value>Posizione predefinita della canzone</value>
   </data>
@@ -1256,5 +1253,8 @@ Sei sicuro di voler cancellare tutti i dati della stazione?</value>
   </data>
   <data name="LocateAllMissingSongsDesc" xml:space="preserve">
     <value>Seleziona la cartella contenente i file del brano mancanti</value>
+  </data>
+  <data name="CopySongFilesToBackupHelp" xml:space="preserve">
+    <value>Se verificati, indica che i file di brani (incluso esterno) dovrebbero essere inclusi nel file .zip di backup per le stazioni.</value>
   </data>
 </root>

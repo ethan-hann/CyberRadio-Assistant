@@ -1243,7 +1243,7 @@ Are you sure you want to clear all station data?</value>
     <value>Shows a preview of this icon (if extracted or imported). If icon hasn't been created yet, drag-and-drop a .PNG here to create it.</value>
   </data>
   <data name="CopySongFilesToBackupHelp" xml:space="preserve">
-    <value>If checked, indicates that song files should be included in the backup .zip file for the stations.</value>
+    <value>If checked, indicates that song files (including external) should be included in the backup .zip file for the stations.</value>
   </data>
   <data name="DefaultSongLocationOption" xml:space="preserve">
     <value>Default Song Location</value>

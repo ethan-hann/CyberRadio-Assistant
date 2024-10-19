@@ -1243,7 +1243,7 @@ Asegúrese de crear una copia de seguridad de sus estaciones antes de borrar los
     <value>Muestra una vista previa de este icono (si se extrae o importa). Si el icono aún no se ha creado, arrastre y reduzca un .png aquí para crearlo.</value>
   </data>
   <data name="CopySongFilesToBackupHelp" xml:space="preserve">
-    <value>Si se verifica, indica que los archivos de canciones deben incluirse en el archivo .zip de copia de seguridad de las estaciones.</value>
+    <value>Si se verifica, indica que los archivos de canciones (incluidos los externos) deben incluirse en el archivo .zip de copia de seguridad de las estaciones.</value>
   </data>
   <data name="DefaultSongLocationOption" xml:space="preserve">
     <value>Ubicación de la canción predeterminada</value>

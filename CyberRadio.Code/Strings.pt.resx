@@ -1242,9 +1242,6 @@ Tem certeza de que deseja limpar todos os dados da estação?</value>
   <data name="IconEditor_CustomIconPictureHelp" xml:space="preserve">
     <value>Mostra uma visualização deste ícone (se extraído ou importado). Se o ícone ainda não foi criado, arraste e solte um .png aqui para criá-lo.</value>
   </data>
-  <data name="CopySongFilesToBackupHelp" xml:space="preserve">
-    <value>Se verificado, indica que os arquivos de música devem ser incluídos no arquivo .zip de backup para as estações.</value>
-  </data>
   <data name="DefaultSongLocationOption" xml:space="preserve">
     <value>Localização da música padrão</value>
   </data>
@@ -1256,5 +1253,8 @@ Tem certeza de que deseja limpar todos os dados da estação?</value>
   </data>
   <data name="LocateAllMissingSongsDesc" xml:space="preserve">
     <value>Selecione a pasta que contém os arquivos de música ausente</value>
+  </data>
+  <data name="CopySongFilesToBackupHelp" xml:space="preserve">
+    <value>Se verificado, indica que os arquivos de músicas (incluindo externos) devem ser incluídos no arquivo .zip de backup para as estações.</value>
   </data>
 </root>

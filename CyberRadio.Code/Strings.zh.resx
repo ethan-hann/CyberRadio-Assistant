@@ -1242,9 +1242,6 @@
   <data name="IconEditor_CustomIconPictureHelp" xml:space="preserve">
     <value>显示此图标的预览（如果提取或导入）。如果尚未创建图标，请在此处拖放A .png来创建它。</value>
   </data>
-  <data name="CopySongFilesToBackupHelp" xml:space="preserve">
-    <value>如果已检查，请指示单曲文件应包含在备份中的.zip文件中。</value>
-  </data>
   <data name="DefaultSongLocationOption" xml:space="preserve">
     <value>默认的歌曲位置</value>
   </data>
@@ -1256,5 +1253,8 @@
   </data>
   <data name="LocateAllMissingSongsDesc" xml:space="preserve">
     <value>选择包含缺少歌曲文件的文件夹</value>
+  </data>
+  <data name="CopySongFilesToBackupHelp" xml:space="preserve">
+    <value>如果已检查，则指示应将歌曲文件（包括外部）包含在电台的备份.zip文件中。</value>
   </data>
 </root>

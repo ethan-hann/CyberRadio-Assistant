@@ -1242,9 +1242,6 @@ Sind Sie sicher, dass Sie alle Stationsdaten löschen möchten?</value>
   <data name="IconEditor_CustomIconPictureHelp" xml:space="preserve">
     <value>Zeigt eine Vorschau dieses Symbols an (falls extrahiert oder importiert). Wenn das Symbol noch nicht erstellt wurde, um es zu erstellen, um es zu erstellen.</value>
   </data>
-  <data name="CopySongFilesToBackupHelp" xml:space="preserve">
-    <value>Wenn man überprüft wird, gibt an, dass Songdateien für die Stationen in der Backup .zip -Datei enthalten sein sollten.</value>
-  </data>
   <data name="DefaultSongLocationOption" xml:space="preserve">
     <value>Standard -Song -Speicherort</value>
   </data>
@@ -1256,5 +1253,8 @@ Sind Sie sicher, dass Sie alle Stationsdaten löschen möchten?</value>
   </data>
   <data name="LocateAllMissingSongsDesc" xml:space="preserve">
     <value>Wählen Sie den Ordner mit den fehlenden Songdateien aus</value>
+  </data>
+  <data name="CopySongFilesToBackupHelp" xml:space="preserve">
+    <value>Wenn Sie überprüft werden, gibt an, dass Songdateien (einschließlich externer) in der Backup .zip -Datei für die Stationen aufgenommen werden sollten.</value>
   </data>
 </root>

@@ -131,9 +131,9 @@
             tableLayoutPanel7.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 56.6607475F));
             tableLayoutPanel7.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 43.3392525F));
             tableLayoutPanel7.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 209F));
-            tableLayoutPanel7.Controls.Add(chkCopySongFilesToBackup, 0, 0);
             tableLayoutPanel7.Controls.Add(lblBackupCompressionLvl, 1, 0);
             tableLayoutPanel7.Controls.Add(cmbCompressionLevels, 2, 0);
+            tableLayoutPanel7.Controls.Add(chkCopySongFilesToBackup, 0, 0);
             tableLayoutPanel7.Dock = DockStyle.Fill;
             tableLayoutPanel7.Location = new Point(3, 78);
             tableLayoutPanel7.Name = "tableLayoutPanel7";
@@ -144,8 +144,10 @@
             // 
             // chkCopySongFilesToBackup
             // 
+            chkCopySongFilesToBackup.Anchor = AnchorStyles.Left;
             chkCopySongFilesToBackup.AutoSize = true;
-            chkCopySongFilesToBackup.Location = new Point(3, 3);
+            chkCopySongFilesToBackup.Location = new Point(7, 7);
+            chkCopySongFilesToBackup.Margin = new Padding(7, 3, 3, 3);
             chkCopySongFilesToBackup.Name = "chkCopySongFilesToBackup";
             chkCopySongFilesToBackup.Size = new Size(171, 19);
             chkCopySongFilesToBackup.TabIndex = 3;

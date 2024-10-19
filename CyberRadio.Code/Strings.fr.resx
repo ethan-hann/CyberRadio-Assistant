@@ -1242,9 +1242,6 @@ Assurez-vous de créer une sauvegarde de vos stations avant de nettoyer les donn
   <data name="IconEditor_CustomIconPictureHelp" xml:space="preserve">
     <value>Affiche un aperçu de cette icône (s'il est extrait ou importé). Si l'icône n'a pas encore été créée, faites glisser un .png ici pour le créer.</value>
   </data>
-  <data name="CopySongFilesToBackupHelp" xml:space="preserve">
-    <value>S'il est vérifié, indique que les fichiers de chanson doivent être inclus dans le fichier de sauvegarde .zip pour les stations.</value>
-  </data>
   <data name="DefaultSongLocationOption" xml:space="preserve">
     <value>Emplacement de la chanson par défaut</value>
   </data>
@@ -1256,5 +1253,8 @@ Assurez-vous de créer une sauvegarde de vos stations avant de nettoyer les donn
   </data>
   <data name="LocateAllMissingSongsDesc" xml:space="preserve">
     <value>Sélectionnez le dossier contenant les fichiers de chanson manquants</value>
+  </data>
+  <data name="CopySongFilesToBackupHelp" xml:space="preserve">
+    <value>S'il est vérifié, indique que les fichiers de chansons (y compris externes) doivent être inclus dans le fichier de sauvegarde .zip pour les stations.</value>
   </data>
 </root>
