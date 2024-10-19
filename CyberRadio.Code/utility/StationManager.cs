@@ -369,10 +369,9 @@ public partial class StationManager : IDisposable
             if (iconEditor != null)
                 pair.Value.Remove(iconEditor);
 
-            switch (deleteFiles)
+            if (deleteFiles)
             {
-                // Only delete files if requested and the icon is not linked to any other stations
-                case true when !IsIconLinkedToOtherStations(icon.TrackedObject.IconId, stationId):
+                if (!IsIconLinkedToOtherStations(icon.TrackedObject.IconId, stationId))
                 {
                     if (icon.TrackedObject.ArchivePath != null &&
                         FileHelper.DoesFileExist(icon.TrackedObject.ArchivePath))
@@ -387,14 +386,12 @@ public partial class StationManager : IDisposable
                     var foldersToDelete = foldersInAppData.Where(f => f.Contains(icon.Id.ToString())).ToList();
                     foreach (var folder in foldersToDelete.Where(Directory.Exists))
                         Directory.Delete(folder, true);
-                    break;
                 }
-                case true:
-                    AuLogger.GetCurrentLogger<StationManager>("RemoveStationIcon").Warn(
-                        "Could not delete files for the icon as they are linked to another station's icon.");
-                    break;
-                case false:
-                    break;
+                else
+                {
+                    AuLogger.GetCurrentLogger<StationManager>("RemoveStationIcon")
+                        .Warn("Could not delete files for the icon as they are linked to another station's icon.");
+                }
             }
 
             // Notify listeners that the station has been updated
