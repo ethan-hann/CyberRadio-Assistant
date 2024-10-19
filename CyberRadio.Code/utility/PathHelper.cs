@@ -33,11 +33,20 @@ namespace RadioExt_Helper.utility;
 public static class PathHelper
 {
     /// <summary>
-    ///     Retrieves the base game path (the folder containing <c>bin</c>) from the Cyberpunk 2077 executable.
+    /// Retrieves the base game path (the folder containing <c>bin</c>) from the Cyberpunk 2077 executable by showing a file dialog.
+    /// </summary>
+    /// <returns>The base path of the game or <see cref="string.Empty" /> if path couldn't be determined.</returns>
+    public static string GetGamePath()
+    {
+        return GetGamePath(false);
+    }
+
+    /// <summary>
+    /// Retrieves the base game path (the folder containing <c>bin</c>) from the Cyberpunk 2077 executable. Optionally, indicate if the dialog should loop until a valid file is selected.
     /// </summary>
     /// <param name="shouldLoop">Indicates whether the file dialog should continue showing until a valid file is selected.</param>
     /// <returns>The base path of the game or <see cref="string.Empty" /> if path couldn't be determined.</returns>
-    public static string? GetGamePath(bool shouldLoop = false)
+    public static string GetGamePath(bool shouldLoop)
     {
         OpenFileDialog dialog = new()
         {
@@ -65,7 +74,7 @@ public static class PathHelper
                 if (fullName != null)
                 {
                     var basePath = Directory.GetParent(fullName)?.FullName;
-                    return basePath;
+                    return basePath ?? string.Empty;
                 }
             }
         }
@@ -80,11 +89,20 @@ public static class PathHelper
     }
 
     /// <summary>
-    ///     Retrieves the staging path (the folder containing radio stations before copied to the game).
+    /// Retrieves the staging path (the folder containing radio stations before copied to the game) by showing a folder dialog.
+    /// </summary>
+    /// <returns>The base path of the game or <see cref="string.Empty" /> if path couldn't be determined.</returns>
+    public static string GetStagingPath()
+    {
+        return GetStagingPath(false);
+    }
+
+    /// <summary>
+    ///     Retrieves the staging path (the folder containing radio stations before copied to the game). Optionally, indicate if the dialog should loop until a valid file is selected.
     /// </summary>
     /// <param name="shouldLoop">Indicates whether the file dialog should continue showing until a valid file is selected.</param>
     /// <returns>The base path of the game or <see cref="string.Empty" /> if path couldn't be determined.</returns>
-    public static string GetStagingPath(bool shouldLoop = false)
+    public static string GetStagingPath(bool shouldLoop)
     {
         FolderBrowserDialog dialog = new()
         {

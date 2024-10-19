@@ -550,7 +550,6 @@ public partial class IconManagerForm : Form
     {
         lbIcons.BeginUpdate();
         StationManager.Instance.EnableStationIcon(_station.Id, icon.Id);
-        //_station.CheckPendingSaveStatus();
         lbIcons.Invalidate();
         lbIcons.EndUpdate();
 
@@ -561,7 +560,6 @@ public partial class IconManagerForm : Form
     {
         lbIcons.BeginUpdate();
         StationManager.Instance.DisableStationIcon(_station.Id, icon.Id);
-        //_station.CheckPendingSaveStatus();
         lbIcons.Invalidate();
         lbIcons.EndUpdate();
 

@@ -23,8 +23,8 @@ namespace RadioExt_Helper.models;
 /// </summary>
 public class ImageProperties
 {
-    public int Width { get; set; } = 0;
-    public int Height { get; set; } = 0;
+    public int Width { get; set; }
+    public int Height { get; set; }
     public ImageFormat ImageFormat { get; set; } = ImageFormat.Png;
     public PixelFormat PixelFormat { get; set; } = PixelFormat.DontCare;
 }

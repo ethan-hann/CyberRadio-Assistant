@@ -14,6 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+using System.Globalization;
 using System.Text.RegularExpressions;
 using AetherUtils.Core.Logging;
 using RadioExt_Helper.custom_controls;
@@ -494,8 +495,16 @@ public sealed partial class IconEditor : UserControl, IEditor
     /// <summary>
     /// Set the initial properties of the picture box image based on the icon for the editor.
     /// </summary>
+    private void SetImagePreviewProperties()
+    {
+        SetImagePreviewProperties(false);
+    }
+
+    /// <summary>
+    /// Set the initial properties of the picture box image based on the icon for the editor. Optionally, set the properties differently if the editor was created from an .archive file.
+    /// </summary>
     /// <param name="fromInitialArchive">Indicates whether this editor was created from an .archive file. In this case, the initial properties are set differently.</param>
-    private void SetImagePreviewProperties(bool fromInitialArchive = false)
+    private void SetImagePreviewProperties(bool fromInitialArchive)
     {
         this.SafeInvoke(() =>
         {
@@ -728,7 +737,7 @@ public sealed partial class IconEditor : UserControl, IEditor
 
     private static string FormatAtlasName(string iconName)
     {
-        var lowerName = iconName.ToLower();
+        var lowerName = iconName.ToLower(CultureInfo.CurrentUICulture);
         // Replace spaces with underscores and remove all special characters except underscores.
         return NoSpecialCharactersRegEx().Replace(lowerName, "_");
     }

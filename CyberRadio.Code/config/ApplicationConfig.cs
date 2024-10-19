@@ -60,7 +60,7 @@ public sealed class ApplicationConfig
     /// </summary>
     [Config(AutoExportToGameKey)]
     [Description("AutoExportOptionHelp")]
-    public bool AutoExportToGame { get; set; } = false;
+    public bool AutoExportToGame { get; set; }
 
     /// <summary>
     ///     Specifies whether the application should automatically watch for changes in the game's radios directory.

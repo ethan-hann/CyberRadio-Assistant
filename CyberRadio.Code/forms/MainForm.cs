@@ -1192,7 +1192,21 @@ public sealed partial class MainForm : Form
         ShowIconManagerForm(station);
     }
 
-    public void ShowIconManagerForm(TrackableObject<Station> station, string newIconImagePath = "")
+    /// <summary>
+    /// Show the Icon Manager form for the selected station.
+    /// </summary>
+    /// <param name="station">The station to associate with the icon manager form.</param>
+    public void ShowIconManagerForm(TrackableObject<Station> station)
+    {
+        ShowIconManagerForm(station, string.Empty);
+    }
+
+    /// <summary>
+    /// Show the Icon Manager form for the selected station. If a new icon image path is provided, it will be used to create a new icon immediately.
+    /// </summary>
+    /// <param name="station">The station to associate with the icon manager form.</param>
+    /// <param name="newIconImagePath">The path to the .png icon used to create a new icon immediately.</param>
+    public void ShowIconManagerForm(TrackableObject<Station> station, string newIconImagePath)
     {
         var managerForm = newIconImagePath == ""
             ? new IconManagerForm(station)

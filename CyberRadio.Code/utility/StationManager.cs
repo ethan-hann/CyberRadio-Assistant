@@ -109,9 +109,20 @@ public partial class StationManager : IDisposable
     /// </summary>
     /// <param name="station">The station to add.</param>
     /// <param name="isOnDisk">Indicates whether the station is an in-memory addition or was added from .json files on disk.</param>
+    /// <returns>The <see cref="Guid"/> of the newly added station.</returns>
+    public Guid AddStation(TrackableObject<Station> station, bool isOnDisk)
+    {
+        return AddStation(station, isOnDisk, "\\");
+    }
+
+    /// <summary>
+    /// Adds a new station and editor to the manager. Optionally, specify the path to the station folder relative to the staging folder.
+    /// </summary>
+    /// <param name="station">The station to add.</param>
+    /// <param name="isOnDisk">Indicates whether the station is an in-memory addition or was added from .json files on disk.</param>
     /// <param name="pathOnDisk">Specifies the path to the station folder relative to the staging folder.</param>
     /// <returns>The <see cref="Guid"/> of the newly added station.</returns>
-    public Guid AddStation(TrackableObject<Station> station, bool isOnDisk, string pathOnDisk = "\\")
+    public Guid AddStation(TrackableObject<Station> station, bool isOnDisk, string pathOnDisk)
     {
         try
         {
@@ -185,11 +196,21 @@ public partial class StationManager : IDisposable
     /// </summary>
     /// <param name="stationId">The station ID to add the icon to.</param>
     /// <param name="icon">The <see cref="Icon"/> to add.</param>
+    /// <returns><c>true</c> if the icon was added successfully; <c>false</c> otherwise.</returns>
+    public bool AddStationIcon(Guid stationId, TrackableObject<WolvenIcon> icon)
+    {
+        return AddStationIcon(stationId, icon, false, false);
+    }
+
+    /// <summary>
+    /// Add an icon to a station. Also, adds an IconEditor the internal list of editors for the station. Optionally, make the icon active and specify whether the icon is an existing icon.
+    /// </summary>
+    /// <param name="stationId">The station ID to add the icon to.</param>
+    /// <param name="icon">The <see cref="Icon"/> to add.</param>
     /// <param name="makeActive">Whether to immediately make this icon the active one for the station, de-activating other icons.</param>
     /// <param name="isExistingIcon">Whether the icon editor should be initialized with an existing .archive file.</param>
     /// <returns><c>true</c> if the icon was added successfully; <c>false</c> otherwise.</returns>
-    public bool AddStationIcon(Guid stationId, TrackableObject<WolvenIcon> icon, bool makeActive = false,
-        bool isExistingIcon = false)
+    public bool AddStationIcon(Guid stationId, TrackableObject<WolvenIcon> icon, bool makeActive, bool isExistingIcon)
     {
         try
         {
@@ -255,15 +276,26 @@ public partial class StationManager : IDisposable
     }
 
     /// <summary>
-    /// Copies an existing icon from a reference station to another station.
+    /// Copy an existing icon from a reference station to another station.
+    /// </summary>
+    /// <param name="stationId">The station ID to which the icon should be copied.</param>
+    /// <param name="referenceStationId">The station ID from which the icon is being copied.</param>
+    /// <param name="icon">The <see cref="WolvenIcon"/> to copy.</param>
+    /// <returns>The internal id of the new copied icon; <c>null</c> if the icon couldn't be copied.</returns>
+    public Guid? CopyStationIcon(Guid stationId, Guid referenceStationId, TrackableObject<WolvenIcon> icon)
+    {
+        return CopyStationIcon(stationId, referenceStationId, icon, false);
+    }
+
+    /// <summary>
+    /// Copies an existing icon from a reference station to another station. Optionally, make the copied icon active.
     /// </summary>
     /// <param name="stationId">The station ID to which the icon should be copied.</param>
     /// <param name="referenceStationId">The station ID from which the icon is being copied.</param>
     /// <param name="icon">The <see cref="WolvenIcon"/> to copy.</param>
     /// <param name="makeActive">Whether to make this copied icon active for the current station.</param>
     /// <returns>The internal id of the new copied icon; <c>null</c> if the icon couldn't be copied.</returns>
-    public Guid? CopyStationIcon(Guid stationId, Guid referenceStationId, TrackableObject<WolvenIcon> icon,
-        bool makeActive = false)
+    public Guid? CopyStationIcon(Guid stationId, Guid referenceStationId, TrackableObject<WolvenIcon> icon, bool makeActive)
     {
         try
         {
@@ -305,13 +337,24 @@ public partial class StationManager : IDisposable
     }
 
     /// <summary>
+    /// Remove an icon from a station, including the associated IconEditor.
+    /// </summary>
+    /// <param name="stationId">The station ID to remove the icon from.</param>
+    /// <param name="icon">The <see cref="WolvenIcon"/> to remove.</param>
+    /// <returns><c>true</c> if the icon was removed successfully; <c>false</c> otherwise.</returns>
+    public bool RemoveStationIcon(Guid stationId, TrackableObject<WolvenIcon> icon)
+    {
+        return RemoveStationIcon(stationId, icon, false);
+    }
+
+    /// <summary>
     /// Remove an icon from a station, including the associated IconEditor. Optionally, delete the icon files from disk.
     /// </summary>
     /// <param name="stationId">The station ID to remove the icon from.</param>
     /// <param name="icon">The <see cref="WolvenIcon"/> to remove.</param>
     /// <param name="deleteFiles">Indicates whether to delete the icon files from disk.</param>
     /// <returns><c>true</c> if the icon was removed successfully; <c>false</c> otherwise.</returns>
-    public bool RemoveStationIcon(Guid stationId, TrackableObject<WolvenIcon> icon, bool deleteFiles = false)
+    public bool RemoveStationIcon(Guid stationId, TrackableObject<WolvenIcon> icon, bool deleteFiles)
     {
         try
         {
@@ -349,6 +392,8 @@ public partial class StationManager : IDisposable
                 case true:
                     AuLogger.GetCurrentLogger<StationManager>("RemoveStationIcon").Warn(
                         "Could not delete files for the icon as they are linked to another station's icon.");
+                    break;
+                case false:
                     break;
             }
 
@@ -439,12 +484,22 @@ public partial class StationManager : IDisposable
     }
 
     /// <summary>
+    /// Remove all icons from a station, including the associated IconEditors. Does not delete the icon files from disk.
+    /// </summary>
+    /// <param name="stationId">The station ID to remove all icons from.</param>
+    /// <returns><c>true</c> if all icons were removed successfully; <c>false</c> otherwise.</returns>
+    public bool RemoveAllStationIcons(Guid stationId)
+    {
+        return RemoveAllStationIcons(stationId, false);
+    }
+
+    /// <summary>
     /// Remove all icons from a station, including the associated IconEditors. Optionally, delete the icon files from disk.
     /// </summary>
     /// <param name="stationId">The station ID to remove all icons from.</param>
     /// <param name="deleteFiles">Indicates whether to delete the Icon files from disk.</param>
     /// <returns><c>true</c> if all icons were removed successfully; <c>false</c> otherwise.</returns>
-    public bool RemoveAllStationIcons(Guid stationId, bool deleteFiles = false)
+    public bool RemoveAllStationIcons(Guid stationId, bool deleteFiles)
     {
         try
         {
@@ -655,10 +710,18 @@ public partial class StationManager : IDisposable
     }
 
     /// <summary>
-    /// Clears all stations and their editors from the manager.
-    /// <param name="deleteFoldersFromStaging">Indicates if the folders in the staging directory should also be deleted.</param>
+    /// Clear all stations and their editors from the manager. Does not delete the folders in the staging directory.
     /// </summary>
-    public void ClearStations(bool deleteFoldersFromStaging = false)
+    public void ClearStations()
+    {
+        ClearStations(false);
+    }
+
+    /// <summary>
+    /// Clears all stations and their editors from the manager. Optionally, delete the folders in the staging directory.
+    /// </summary>
+    /// <param name="deleteFoldersFromStaging">Indicates if the folders in the staging directory should also be deleted.</param>
+    public void ClearStations(bool deleteFoldersFromStaging)
     {
         try
         {
@@ -1304,9 +1367,20 @@ public partial class StationManager : IDisposable
     /// <c>00.00 Station Name</c>
     /// </summary>
     /// <param name="station">The station to ensure the display name of.</param>
+    /// <returns>The parsed FM number from the original display name string; or, the original FM number if the same.</returns>
+    public float EnsureDisplayNameFormat(TrackableObject<Station> station)
+    {
+        return EnsureDisplayNameFormat(station, null);
+    }
+
+    /// <summary>
+    /// Ensures the display name contains the station's FM number at the beginning of its name like so:
+    /// <c>00.00 Station Name</c>
+    /// </summary>
+    /// <param name="station">The station to ensure the display name of.</param>
     /// <param name="optionalFmVal">The FM number to ensure is in front of the station name. If null, the default FM value will be used instead.</param>
     /// <returns>The parsed FM number from the original display name string; or, the original FM number if the same.</returns>
-    public float EnsureDisplayNameFormat(TrackableObject<Station> station, float? optionalFmVal = null)
+    public float EnsureDisplayNameFormat(TrackableObject<Station> station, float? optionalFmVal)
     {
         var currentName = station.TrackedObject.MetaData.DisplayName;
 
@@ -1317,8 +1391,7 @@ public partial class StationManager : IDisposable
         if (match.Success)
         {
             currentName = currentName[match.Length..].TrimStart();
-            if (float.TryParse(match.Value, CultureInfo.InvariantCulture, out var fmNumberParsed) &
-                (optionalFmVal == null))
+            if (float.TryParse(match.Value, CultureInfo.InvariantCulture, out var fmNumberParsed) && (optionalFmVal == null))
                 fmNumber = fmNumberParsed;
         }
 

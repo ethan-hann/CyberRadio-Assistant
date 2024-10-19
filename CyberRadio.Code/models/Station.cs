@@ -134,9 +134,20 @@ public sealed class Station : INotifyPropertyChanged, ICloneable, IEquatable<Sta
     /// Add an icon to this station if it is not already associated. A station can have any number of icons but only one can be active at a time.
     /// </summary>
     /// <param name="icon">The <see cref="Icon"/> to add to the station.</param>
+    /// <returns><c>true</c> if the icon was added successfully; <c>false</c> otherwise.</returns>
+    public bool AddIcon(TrackableObject<WolvenIcon> icon)
+    {
+        return AddIcon(icon, false);
+    }
+
+    /// <summary>
+    /// Add an icon to this station if it is not already associated. A station can have any number of icons but only one can be active at a time.
+    /// Optionally, make the icon active.
+    /// </summary>
+    /// <param name="icon">The <see cref="Icon"/> to add to the station.</param>
     /// <param name="makeActive">Indicates whether to make the newly added icon active for the station.</param>
     /// <returns><c>true</c> if the icon was added successfully; <c>false</c> otherwise.</returns>
-    public bool AddIcon(TrackableObject<WolvenIcon> icon, bool makeActive = false)
+    public bool AddIcon(TrackableObject<WolvenIcon> icon, bool makeActive)
     {
         if (Icons.Contains(icon)) return false;
 
