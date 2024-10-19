@@ -28,7 +28,9 @@ using RadioExt_Helper.Properties;
 using RadioExt_Helper.user_controls;
 using RadioExt_Helper.utility;
 using WIG.Lib.Models;
+using WIG.Lib.Utility;
 using ApplicationContext = RadioExt_Helper.utility.ApplicationContext;
+using PathHelper = RadioExt_Helper.utility.PathHelper;
 using Timer = System.Timers.Timer;
 
 namespace RadioExt_Helper.forms;
@@ -251,6 +253,9 @@ public sealed partial class MainForm : Form
 
         if (GlobalData.ConfigManager.Get("watchForGameChanges") as bool? != true) return;
 
+        if (GameBasePath.Equals(string.Empty))
+            return;
+
         _directoryWatcher = new DirectoryWatcher(PathHelper.GetRadiosPath(GameBasePath), TimeSpan.FromSeconds(5));
         _directoryWatcher.FileCreated += OnDirectoryWatcherFileCreated;
         _directoryWatcher.FileChanged += OnDirectoryWatcherFileChanged;
@@ -310,7 +315,6 @@ public sealed partial class MainForm : Form
     /// </summary>
     private void InitializeLanguageDropDown()
     {
-        //TODO: Add [New Station] translations in the list box when the language is changed.
         // Populate the language combo box with all supported languages
         _languages.Add(new ImageComboBoxItem("English (en)", Resources.united_kingdom));
         _languages.Add(new ImageComboBoxItem("Español (es)", Resources.spain));
@@ -799,6 +803,8 @@ public sealed partial class MainForm : Form
 
     private void ExportToGameToolStripMenuItem_Click(object sender, EventArgs e)
     {
+        if (lbStations.Items.Count <= 0) return;
+
         //Don't allow exporting if we are currently synchronizing stations.
         if (_isSyncInProgress)
         {
@@ -893,6 +899,8 @@ public sealed partial class MainForm : Form
 
     private void RefreshStationsToolStripMenuItem_Click(object sender, EventArgs e)
     {
+        if (lbStations.Items.Count <= 0) return;
+
         var text = Strings.ConfirmRefreshStations;
         var caption = Strings.Confirm;
         if (MessageBox.Show(this, text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
@@ -913,7 +921,7 @@ public sealed partial class MainForm : Form
         if (string.IsNullOrEmpty(StagingPath)) return;
         if (string.IsNullOrEmpty(GameBasePath)) return;
 
-        if (userInitiated)
+        if (userInitiated && lbStations.Items.Count > 0)
         {
             var result = MessageBox.Show(this, Strings.ConfirmSyncStations, Strings.Confirm, MessageBoxButtons.YesNo,
                 MessageBoxIcon.Warning);
@@ -1002,6 +1010,7 @@ public sealed partial class MainForm : Form
     private void BackupStagingFolderToolStripMenuItem_Click(object sender, EventArgs e)
     {
         if (string.IsNullOrEmpty(StagingPath)) return;
+        if (lbStations.Items.Count <= 0) return;
 
         //Check for sync in progress to prevent backup during sync
         if (_isSyncInProgress)
@@ -1017,6 +1026,8 @@ public sealed partial class MainForm : Form
 
     private void RestoreStagingFolderToolStripMenuItem_Click(object sender, EventArgs e)
     {
+        if (string.IsNullOrEmpty(StagingPath)) return;
+
         //Check for sync in progress to prevent restore during sync
         if (_isSyncInProgress)
         {
@@ -1032,9 +1043,12 @@ public sealed partial class MainForm : Form
             return;
         }
 
-        if (MessageBox.Show(this, Strings.ConfirmRestore, Strings.Confirm, MessageBoxButtons.YesNo,
-                MessageBoxIcon.Warning) == DialogResult.No)
-            return;
+        if (lbStations.Items.Count > 0)
+        {
+            if (MessageBox.Show(this, Strings.ConfirmRestore, Strings.Confirm, MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Warning) == DialogResult.No)
+                return;
+        }
 
         var fileBrowser = new OpenFileDialog
         {
@@ -1087,6 +1101,9 @@ public sealed partial class MainForm : Form
 
         //Remove all stations and the folders from the staging directory.
         StationManager.Instance.ClearStations(true);
+
+        //Clear data from Icon Manager and reset paths
+        IconManager.Instance.ClearTempData();
 
         //Populate the (what should be the empty) stations list.
         PopulateStations();

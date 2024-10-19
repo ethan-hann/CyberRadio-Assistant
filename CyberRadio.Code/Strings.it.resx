@@ -926,7 +926,7 @@ Se un'icona è stata inclusa nella stazione, è stata aggiunta anche. Tuttavia, 
     <value>STAZIONI Importate</value>
   </data>
   <data name="MainForm_FromZipImportFilter" xml:space="preserve">
-    <value>Archivi della stazione radio (*.zip;*. Rar)</value>
+    <value>Archivi della stazione radio (*.zip;*.rar)</value>
   </data>
   <data name="MainForm_FromZipImportTitle" xml:space="preserve">
     <value>Stazione di importazione</value>
@@ -1054,7 +1054,7 @@ Sei sicuro di voler cancellare tutti i dati della stazione?</value>
     <value>Inizializzazione del gestore delle icone ...</value>
   </data>
   <data name="AddSongsFileBrowserFilter" xml:space="preserve">
-    <value>File musicali (*.mp3;*. Wav;*. Ogg;*. Flac;*. Mp2;*. Cera;*. Wma)</value>
+    <value>File musicali (*.mp3;*.wav;*.ogg;*.flac;*.mp2;*.wax;*.wma)</value>
   </data>
   <data name="IconEditor_Translate_Editing_Icon___0_" xml:space="preserve">
     <value>ICON di modifica: {0}</value>
@@ -1192,7 +1192,7 @@ Sei sicuro di voler cancellare tutti i dati della stazione?</value>
     <value>Directory '{0}' non esiste</value>
   </data>
   <data name="GamePathFilter" xml:space="preserve">
-    <value>Game Executable (cyberpunk2077.exe)</value>
+    <value>Game Executable (Cyberpunk2077.exe)</value>
   </data>
   <data name="SyncStatusComplete" xml:space="preserve">
     <value>Sincronizzazione completa.</value>
@@ -1241,5 +1241,20 @@ Sei sicuro di voler cancellare tutti i dati della stazione?</value>
   </data>
   <data name="IconEditor_CustomIconPictureHelp" xml:space="preserve">
     <value>Mostra un'anteprima di questa icona (se estratta o importata). Se l'icona non è stata ancora creata, drag-and-drop a .png qui per crearlo.</value>
+  </data>
+  <data name="CopySongFilesToBackupHelp" xml:space="preserve">
+    <value>Se controllato, indica che i file di brani dovrebbero essere inclusi nel file .zip di backup per le stazioni.</value>
+  </data>
+  <data name="DefaultSongLocationOption" xml:space="preserve">
+    <value>Posizione predefinita della canzone</value>
+  </data>
+  <data name="RestoreFromBackupButton" xml:space="preserve">
+    <value>Ripristina dal backup</value>
+  </data>
+  <data name="LocateAllMissingSongs" xml:space="preserve">
+    <value>Individua tutte le canzoni mancanti ...</value>
+  </data>
+  <data name="LocateAllMissingSongsDesc" xml:space="preserve">
+    <value>Seleziona la cartella contenente i file del brano mancanti</value>
   </data>
 </root>

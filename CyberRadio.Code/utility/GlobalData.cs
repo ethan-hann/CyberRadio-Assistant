@@ -110,14 +110,25 @@ public static class GlobalData
     }
 
     /// <summary>
-    /// Retrieves the full path to the log file.
+    /// Retrieves the full path to the most recent log file.
     /// </summary>
-    /// <returns>The full path to the most recent log file.</returns>
+    /// <returns>The full path to the most recent log file, or null if no log files are found.</returns>
     public static string GetLogFilePath()
     {
         var options = ConfigManager.Get("logOptions") as LogOptions;
         var folderPath = GetLogFolderPath();
-        return Path.Combine(folderPath, $"{options?.AppName}.log");
+
+        // Get all log files in the directory
+        var logFiles = Directory.GetFiles(folderPath, $"{options?.AppName}_*.log", SearchOption.TopDirectoryOnly);
+
+        // Check if there are no log files
+        if (logFiles.Length == 0)
+            throw new Exception("No log file found in `logs` directory. There should be one at this point!");
+
+        // Return the file with the most recent last write time
+        var mostRecentLogFile = logFiles.OrderByDescending(File.GetLastWriteTime).FirstOrDefault();
+
+        return mostRecentLogFile ?? string.Empty;
     }
 
     /// <summary>

@@ -926,7 +926,7 @@
     <value>进口站</value>
   </data>
   <data name="MainForm_FromZipImportFilter" xml:space="preserve">
-    <value>广播电台档案（*.zip;*。rar）</value>
+    <value>广播电台档案 (*.zip;*.rar)</value>
   </data>
   <data name="MainForm_FromZipImportTitle" xml:space="preserve">
     <value>进口站</value>
@@ -1054,7 +1054,7 @@
     <value>初始化图标管理器...</value>
   </data>
   <data name="AddSongsFileBrowserFilter" xml:space="preserve">
-    <value>音乐文件(*.mp3;*. Wav;*. Ogg;*. Flac;*. Mp2;*. Wax;*. Wma)</value>
+    <value>音乐文件 (*.mp3;*.wav;*.ogg;*.flac;*.mp2;*.wax;*.wma)</value>
   </data>
   <data name="IconEditor_Translate_Editing_Icon___0_" xml:space="preserve">
     <value>编辑图标：{0}</value>
@@ -1192,7 +1192,7 @@
     <value>目录'{0}'不存在</value>
   </data>
   <data name="GamePathFilter" xml:space="preserve">
-    <value>游戏可执行文件（cyberpunk2077.exe）</value>
+    <value>游戏可执行文件 (Cyberpunk2077.exe)</value>
   </data>
   <data name="SyncStatusComplete" xml:space="preserve">
     <value>同步完成。</value>
@@ -1241,5 +1241,20 @@
   </data>
   <data name="IconEditor_CustomIconPictureHelp" xml:space="preserve">
     <value>显示此图标的预览（如果提取或导入）。如果尚未创建图标，请在此处拖放A .png来创建它。</value>
+  </data>
+  <data name="CopySongFilesToBackupHelp" xml:space="preserve">
+    <value>如果已检查，请指示单曲文件应包含在备份中的.zip文件中。</value>
+  </data>
+  <data name="DefaultSongLocationOption" xml:space="preserve">
+    <value>默认的歌曲位置</value>
+  </data>
+  <data name="RestoreFromBackupButton" xml:space="preserve">
+    <value>从备份还原</value>
+  </data>
+  <data name="LocateAllMissingSongs" xml:space="preserve">
+    <value>找到所有缺少的歌曲...</value>
+  </data>
+  <data name="LocateAllMissingSongsDesc" xml:space="preserve">
+    <value>选择包含缺少歌曲文件的文件夹</value>
   </data>
 </root>

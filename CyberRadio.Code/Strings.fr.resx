@@ -900,7 +900,7 @@ Remarque: Toute modification de l'état d'activation ou d'autres propriétés sp
     <value>Station (s) importée</value>
   </data>
   <data name="MainForm_FromZipImportFilter" xml:space="preserve">
-    <value>Archives de la station de radio (* .zip; *.rar)</value>
+    <value>Archives de la station de radio (*.zip;*.rar)</value>
   </data>
   <data name="MainForm_FromZipImportTitle" xml:space="preserve">
     <value>Station d'importation</value>
@@ -1054,7 +1054,7 @@ Assurez-vous de créer une sauvegarde de vos stations avant de nettoyer les donn
     <value>Initialisation du gestionnaire d'icônes ...</value>
   </data>
   <data name="AddSongsFileBrowserFilter" xml:space="preserve">
-    <value>Fichiers musicaux (* .mp3; *. Wav; *. Ogg; *. Flac; *. Mp2; *. Cire; *. Wma)</value>
+    <value>Fichiers musicaux (*.mp3;*.wav;*.ogg;*.flac;*.mp2;*.wax;*.wma)</value>
   </data>
   <data name="IconEditor_Translate_Editing_Icon___0_" xml:space="preserve">
     <value>Icône d'édition: {0}</value>
@@ -1192,7 +1192,7 @@ Assurez-vous de créer une sauvegarde de vos stations avant de nettoyer les donn
     <value>Le répertoire '{0}' n'existe pas</value>
   </data>
   <data name="GamePathFilter" xml:space="preserve">
-    <value>Exécutable de jeu (cyberpunk2077.exe)</value>
+    <value>Exécutable de jeu (Cyberpunk2077.exe)</value>
   </data>
   <data name="SyncStatusComplete" xml:space="preserve">
     <value>Synchronisation complète.</value>
@@ -1241,5 +1241,20 @@ Assurez-vous de créer une sauvegarde de vos stations avant de nettoyer les donn
   </data>
   <data name="IconEditor_CustomIconPictureHelp" xml:space="preserve">
     <value>Affiche un aperçu de cette icône (s'il est extrait ou importé). Si l'icône n'a pas encore été créée, faites glisser un .png ici pour le créer.</value>
+  </data>
+  <data name="CopySongFilesToBackupHelp" xml:space="preserve">
+    <value>S'il est vérifié, indique que les fichiers de chanson doivent être inclus dans le fichier de sauvegarde .zip pour les stations.</value>
+  </data>
+  <data name="DefaultSongLocationOption" xml:space="preserve">
+    <value>Emplacement de la chanson par défaut</value>
+  </data>
+  <data name="RestoreFromBackupButton" xml:space="preserve">
+    <value>Restaurer à partir de la sauvegarde</value>
+  </data>
+  <data name="LocateAllMissingSongs" xml:space="preserve">
+    <value>Localisez toutes les chansons manquantes ...</value>
+  </data>
+  <data name="LocateAllMissingSongsDesc" xml:space="preserve">
+    <value>Sélectionnez le dossier contenant les fichiers de chanson manquants</value>
   </data>
 </root>

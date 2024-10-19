@@ -50,6 +50,7 @@ public sealed partial class NoStationsCtl : UserControl, IUserControl
 
         btnPaths.Text = Strings.Paths;
         btnPaths.Text = Strings.Paths;
+        btnRestoreFromBackup.Text = Strings.RestoreFromBackupButton;
     }
 
     /// <summary>

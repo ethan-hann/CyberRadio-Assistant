@@ -926,7 +926,7 @@ Wenn ein Symbol in die Station enthalten war, wurde es auch hinzugefügt. Sie m�
     <value>Station (en) importiert</value>
   </data>
   <data name="MainForm_FromZipImportFilter" xml:space="preserve">
-    <value>Radiosenderarchive (*.zip;*. Rar)</value>
+    <value>Radiosenderarchive (*.zip;*.rar)</value>
   </data>
   <data name="MainForm_FromZipImportTitle" xml:space="preserve">
     <value>Importstation</value>
@@ -1054,7 +1054,7 @@ Sind Sie sicher, dass Sie alle Stationsdaten löschen möchten?</value>
     <value>Initialisieren des Icon Managers ...</value>
   </data>
   <data name="AddSongsFileBrowserFilter" xml:space="preserve">
-    <value>Musikdateien (*.mp3;*. Wav;*. Ogg;*. Flac;*. Mp2;*. Wax;*. WMA)</value>
+    <value>Musikdateien (*.mp3;*.wav;*.ogg;*.flac;*.mp2;*.wax;*.wma)</value>
   </data>
   <data name="IconEditor_Translate_Editing_Icon___0_" xml:space="preserve">
     <value>Bearbeitungssymbol: {0}</value>
@@ -1241,5 +1241,20 @@ Sind Sie sicher, dass Sie alle Stationsdaten löschen möchten?</value>
   </data>
   <data name="IconEditor_CustomIconPictureHelp" xml:space="preserve">
     <value>Zeigt eine Vorschau dieses Symbols an (falls extrahiert oder importiert). Wenn das Symbol noch nicht erstellt wurde, um es zu erstellen, um es zu erstellen.</value>
+  </data>
+  <data name="CopySongFilesToBackupHelp" xml:space="preserve">
+    <value>Wenn man überprüft wird, gibt an, dass Songdateien für die Stationen in der Backup .zip -Datei enthalten sein sollten.</value>
+  </data>
+  <data name="DefaultSongLocationOption" xml:space="preserve">
+    <value>Standard -Song -Speicherort</value>
+  </data>
+  <data name="RestoreFromBackupButton" xml:space="preserve">
+    <value>Vom Backup wiederherstellen</value>
+  </data>
+  <data name="LocateAllMissingSongs" xml:space="preserve">
+    <value>Suchen Sie alle fehlenden Songs ...</value>
+  </data>
+  <data name="LocateAllMissingSongsDesc" xml:space="preserve">
+    <value>Wählen Sie den Ordner mit den fehlenden Songdateien aus</value>
   </data>
 </root>

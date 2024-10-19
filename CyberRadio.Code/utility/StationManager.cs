@@ -1067,9 +1067,7 @@ public partial class StationManager : IDisposable
         await Task.WhenAll(fileTasks);
 
         var sourceDirectories = FileHelper.SafeEnumerateDirectories(sourceDir);
-        var targetDirectories = FileHelper.SafeEnumerateDirectories(targetDir)
-            .Where(d => Path.GetFileName(d) != null)
-            .ToDictionary(d => Path.GetFileName(d)!, d => d);
+        var targetDirectories = FileHelper.SafeEnumerateDirectories(targetDir).ToDictionary(d => Path.GetFileName(d)!, d => d);
 
         var dirTasks = new List<Task>();
         var dirCount = 0;
@@ -1173,8 +1171,6 @@ public partial class StationManager : IDisposable
             var iconFiles = files.Where(file => file.EndsWith(".archive")).ToList();
             var songFiles = songDirFiles.Where(file => ValidAudioExtensions.Contains(Path.GetExtension(file).ToLower()))
                 .ToList();
-            //TODO: fix issue with songs.sgls where it is not being loaded correctly. The file is being created based on the song files in the directory but if all the stations have their songs in the same directory,
-            // we are getting the same songs.sgls file for every station (even one's that don't have any songs). This is causing the station to have songs that it shouldn't have.
 
             if (metadata == null) return null;
 

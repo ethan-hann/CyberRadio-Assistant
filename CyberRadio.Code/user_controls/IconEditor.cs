@@ -221,14 +221,28 @@ public sealed partial class IconEditor : UserControl, IEditor
 
     private void Instance_OperationStatus(object? sender, StatusEventArgs e)
     {
-        this.SafeInvoke(() => pgProgress.Value = e.ProgressPercentage);
-        AddStatusRow(e.Message);
+        try
+        {
+            this.SafeInvoke(() => pgProgress.Value = e.ProgressPercentage);
+            AddStatusRow(e.Message);
+        }
+        catch (Exception ex)
+        {
+            AuLogger.GetCurrentLogger<IconEditor>("Instance_OperationStatus").Error(ex);
+        }
     }
 
     private void Instance_OperationStarted(object? sender, StatusEventArgs e)
     {
-        this.SafeInvoke(() => pgProgress.Value = 0);
-        AddStatusRow(e.Message);
+        try
+        {
+            this.SafeInvoke(() => pgProgress.Value = 0);
+            AddStatusRow(e.Message);
+        }
+        catch (Exception ex)
+        {
+            AuLogger.GetCurrentLogger<IconEditor>("Instance_OperationStarted").Error(ex);
+        }
     }
 
     private void AddStatusRow(string? status)

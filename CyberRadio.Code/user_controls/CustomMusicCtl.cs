@@ -82,6 +82,7 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
         lvSongOrder.Columns[1].Text = Strings.SongNameHeader;
 
         locateToolStripMenuItem.Text = Strings.LocateSong;
+        locateAllMissingSongsToolStripMenuItem.Text = Strings.LocateAllMissingSongs;
     }
 
     /// <summary>
@@ -173,7 +174,7 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
                              song.FileSize.FormatSize(),
                              song.FilePath
                          ])
-                         { Tag = song }))
+                     { Tag = song }))
             lvSongs.Items.Add(lvItem);
 
         lvSongs.ResizeColumns();
@@ -286,18 +287,85 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
         fdlgOpenSongs.FileName = string.Empty;
     }
 
+    private void locateAllMissingSongsToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        using var folderDialog = new FolderBrowserDialog();
+        folderDialog.Description = Strings.LocateAllMissingSongsDesc;
+        folderDialog.UseDescriptionForTitle = true;
+    
+        if (folderDialog.ShowDialog(this) != DialogResult.OK) return;
+        var selectedFolder = folderDialog.SelectedPath;
+
+        // Get the list of files in the selected folder
+        var filesInFolder = FileHelper.SafeEnumerateFiles(selectedFolder, "*.*", SearchOption.AllDirectories)
+            .Select(f => new FileInfo(f))
+            .ToList();
+
+        lvSongs.BeginUpdate();
+        foreach (ListViewItem item in lvSongs.SelectedItems)
+        {
+            if (item.Tag is not Song song) continue;
+
+            // Try to find a matching file in the selected folder
+            var matchingFile = filesInFolder.FirstOrDefault(f => 
+                Path.GetFileName(f.FullName).Equals(Path.GetFileName(song.FilePath), StringComparison.OrdinalIgnoreCase)
+                && (ulong)f.Length == song.FileSize);
+
+            // Skip to the next song if no matching file was found
+            if (matchingFile == null) continue;
+
+            // Update the song's file path
+            song.FilePath = matchingFile.FullName;
+            item.SubItems[5].Text = song.FilePath; // Update the file path in the ListView
+        }
+
+        lvSongs.EndUpdate();
+        lvSongs.Invalidate(); // Refresh the ListView to show updated paths
+    }
+
     private void LvSongs_MouseDown(object sender, MouseEventArgs e)
     {
         if (e.Button != MouseButtons.Right) return;
 
-        var hitTestInfo = lvSongs.HitTest(e.Location);
-        var item = hitTestInfo.Item;
+        var hasMissingSongs = false;
 
-        if (item?.Tag is not Song song) return;
+        if (lvSongs.SelectedItems.Count > 1)
+        {
+            // Multiple items selected, check if any of the selected songs are missing
+            foreach (ListViewItem item in lvSongs.SelectedItems)
+            {
+                if (item?.Tag is not Song song) continue;
 
-        // We only want to locate the song if its missing
-        if (!FileHelper.DoesFileExist(song.FilePath))
+                // If at least one song is missing, set hasMissingSongs to true
+                if (FileHelper.DoesFileExist(song.FilePath)) continue;
+
+                hasMissingSongs = true;
+                break;
+            }
+
+            // Show the "Locate All Missing Songs..." option only if any missing songs are found
+            locateAllMissingSongsToolStripMenuItem.Visible = hasMissingSongs;
+            locateToolStripMenuItem.Visible = false;
+        }
+        else
+        {
+            var hitTestInfo = lvSongs.HitTest(e.Location);
+            var item = hitTestInfo.Item;
+
+            if (item?.Tag is not Song song) return;
+
+            // Show the context menu only if the song is missing
+            hasMissingSongs = !FileHelper.DoesFileExist(song.FilePath);
+
+            locateToolStripMenuItem.Visible = hasMissingSongs;  // Show the single "Locate Missing Song..." option if the song is missing
+            locateAllMissingSongsToolStripMenuItem.Visible = false;
+        }
+
+        // Show the context menu only if there are missing songs
+        if (hasMissingSongs)
+        {
             cmsSongRightClick.Show(Cursor.Position);
+        }
     }
 
     /// <summary>

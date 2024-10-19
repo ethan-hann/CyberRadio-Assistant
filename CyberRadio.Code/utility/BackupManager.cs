@@ -21,8 +21,6 @@ using AetherUtils.Core.Logging;
 
 namespace RadioExt_Helper.utility;
 
-//TODO: refactor this to use the new SharpCompress library
-
 /// <summary>
 /// Represents a class for managing the backup of files and folders. Subscribe to the event handlers to track the backup operation.
 /// </summary>
@@ -327,7 +325,6 @@ public class BackupManager(CompressionLevel level)
     /// <returns>A task representing the restore operation.</returns>
     public async Task RestoreBackupAsync(string backupFilePath, string restorePath)
     {
-        //TODO: translations
         if (string.IsNullOrEmpty(backupFilePath)) throw new ArgumentNullException(nameof(backupFilePath));
         if (string.IsNullOrEmpty(restorePath)) throw new ArgumentNullException(nameof(restorePath));
         if (!File.Exists(backupFilePath)) throw new FileNotFoundException("Backup file not found.", backupFilePath);

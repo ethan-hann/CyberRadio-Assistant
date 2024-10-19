@@ -926,7 +926,7 @@
     <value>Станция (ы) импортирована</value>
   </data>
   <data name="MainForm_FromZipImportFilter" xml:space="preserve">
-    <value>Архив радиостанции (*.zip;*. Rar)</value>
+    <value>Архив радиостанции (*.zip;*.rar)</value>
   </data>
   <data name="MainForm_FromZipImportTitle" xml:space="preserve">
     <value>Станция импорта</value>
@@ -1054,7 +1054,7 @@
     <value>Инициализация менеджера значков ...</value>
   </data>
   <data name="AddSongsFileBrowserFilter" xml:space="preserve">
-    <value>Музыкальные файлы (*.mp3;*. Wav;*. Ogg;*. Flac;*. Mp2;*. Wax;*. Wma)</value>
+    <value>Музыкальные файлы (*.mp3;*.wav;*.ogg;*.flac;*.mp2;*.wax;*.wma)</value>
   </data>
   <data name="IconEditor_Translate_Editing_Icon___0_" xml:space="preserve">
     <value>Значок редактирования: {0}</value>
@@ -1192,7 +1192,7 @@
     <value>Каталог '{0}' не существует</value>
   </data>
   <data name="GamePathFilter" xml:space="preserve">
-    <value>Исполняемый файл игры (cyberpunk2077.exe)</value>
+    <value>Исполняемый файл игры (Cyberpunk2077.exe)</value>
   </data>
   <data name="SyncStatusComplete" xml:space="preserve">
     <value>Синхронизация завершена.</value>
@@ -1241,5 +1241,20 @@
   </data>
   <data name="IconEditor_CustomIconPictureHelp" xml:space="preserve">
     <value>Показывает предварительный просмотр этого значка (если извлечен или импортирован). Если значок еще не был создан, перетащите .png здесь, чтобы создать его.</value>
+  </data>
+  <data name="CopySongFilesToBackupHelp" xml:space="preserve">
+    <value>При проверке указывается, что файлы песни должны быть включены в файл резервного копирования .zip для станций.</value>
+  </data>
+  <data name="DefaultSongLocationOption" xml:space="preserve">
+    <value>Расположение песни по умолчанию</value>
+  </data>
+  <data name="RestoreFromBackupButton" xml:space="preserve">
+    <value>Восстановить из резервного копирования</value>
+  </data>
+  <data name="LocateAllMissingSongs" xml:space="preserve">
+    <value>Найдите все отсутствующие песни ...</value>
+  </data>
+  <data name="LocateAllMissingSongsDesc" xml:space="preserve">
+    <value>Выберите папку, содержащую отсутствующие файлы песни</value>
   </data>
 </root>

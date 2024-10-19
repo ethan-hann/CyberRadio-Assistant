@@ -1054,7 +1054,7 @@ Asegúrese de crear una copia de seguridad de sus estaciones antes de borrar los
     <value>Inicializando el gerente de iconos ...</value>
   </data>
   <data name="AddSongsFileBrowserFilter" xml:space="preserve">
-    <value>Archivos de música (*.mp3;*. Wav;*. Ogg;*. Flac;*. Mp2;*. Wax;*. WMA)</value>
+    <value>Archivos de música (*.mp3;*.wav;*.ogg;*.flac;*.mp2;*.wax;*.wma)</value>
   </data>
   <data name="IconEditor_Translate_Editing_Icon___0_" xml:space="preserve">
     <value>Icono de edición: {0}</value>
@@ -1192,7 +1192,7 @@ Asegúrese de crear una copia de seguridad de sus estaciones antes de borrar los
     <value>Directorio '{0}' no existe</value>
   </data>
   <data name="GamePathFilter" xml:space="preserve">
-    <value>Ejecutable del juego (cyberpunk2077.exe)</value>
+    <value>Ejecutable del juego (Cyberpunk2077.exe)</value>
   </data>
   <data name="SyncStatusComplete" xml:space="preserve">
     <value>Sincronización completa.</value>
@@ -1241,5 +1241,20 @@ Asegúrese de crear una copia de seguridad de sus estaciones antes de borrar los
   </data>
   <data name="IconEditor_CustomIconPictureHelp" xml:space="preserve">
     <value>Muestra una vista previa de este icono (si se extrae o importa). Si el icono aún no se ha creado, arrastre y reduzca un .png aquí para crearlo.</value>
+  </data>
+  <data name="CopySongFilesToBackupHelp" xml:space="preserve">
+    <value>Si se verifica, indica que los archivos de canciones deben incluirse en el archivo .zip de copia de seguridad de las estaciones.</value>
+  </data>
+  <data name="DefaultSongLocationOption" xml:space="preserve">
+    <value>Ubicación de la canción predeterminada</value>
+  </data>
+  <data name="RestoreFromBackupButton" xml:space="preserve">
+    <value>Restaurar desde la copia de seguridad</value>
+  </data>
+  <data name="LocateAllMissingSongs" xml:space="preserve">
+    <value>Localice todas las canciones faltantes ...</value>
+  </data>
+  <data name="LocateAllMissingSongsDesc" xml:space="preserve">
+    <value>Seleccione la carpeta que contiene los archivos de canciones faltantes</value>
   </data>
 </root>

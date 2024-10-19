@@ -1242,4 +1242,19 @@ Are you sure you want to clear all station data?</value>
   <data name="IconEditor_CustomIconPictureHelp" xml:space="preserve">
     <value>Shows a preview of this icon (if extracted or imported). If icon hasn't been created yet, drag-and-drop a .PNG here to create it.</value>
   </data>
+  <data name="CopySongFilesToBackupHelp" xml:space="preserve">
+    <value>If checked, indicates that song files should be included in the backup .zip file for the stations.</value>
+  </data>
+  <data name="DefaultSongLocationOption" xml:space="preserve">
+    <value>Default Song Location</value>
+  </data>
+  <data name="RestoreFromBackupButton" xml:space="preserve">
+    <value>Restore from Backup</value>
+  </data>
+  <data name="LocateAllMissingSongs" xml:space="preserve">
+    <value>Locate All Missing Songs...</value>
+  </data>
+  <data name="LocateAllMissingSongsDesc" xml:space="preserve">
+    <value>Select the folder containing the missing song files</value>
+  </data>
 </root>

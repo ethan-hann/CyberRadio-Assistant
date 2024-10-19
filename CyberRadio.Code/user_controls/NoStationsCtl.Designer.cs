@@ -152,6 +152,7 @@
             // 
             // pictureBox3
             // 
+            pictureBox3.Image = Properties.Resources.warning__16x16;
             pictureBox3.Location = new Point(3, 8);
             pictureBox3.Margin = new Padding(3, 8, 3, 3);
             pictureBox3.Name = "pictureBox3";
@@ -201,6 +202,7 @@
             // 
             // pictureBox2
             // 
+            pictureBox2.Image = Properties.Resources.warning__16x16;
             pictureBox2.Location = new Point(3, 6);
             pictureBox2.Margin = new Padding(3, 6, 3, 3);
             pictureBox2.Name = "pictureBox2";

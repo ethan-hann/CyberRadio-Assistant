@@ -573,6 +573,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to If checked, indicates that song files should be included in the backup .zip file for the stations..
+        /// </summary>
+        internal static string CopySongFilesToBackupHelp {
+            get {
+                return ResourceManager.GetString("CopySongFilesToBackupHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Copy Song Files to Backup?.
         /// </summary>
         internal static string CopySongFilesToBackupOption {
@@ -668,6 +677,15 @@ namespace RadioExt_Helper {
         internal static string DefaultSongLocationHelp {
             get {
                 return ResourceManager.GetString("DefaultSongLocationHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Default Song Location.
+        /// </summary>
+        internal static string DefaultSongLocationOption {
+            get {
+                return ResourceManager.GetString("DefaultSongLocationOption", resourceCulture);
             }
         }
         
@@ -1821,6 +1839,24 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Locate All Missing Songs....
+        /// </summary>
+        internal static string LocateAllMissingSongs {
+            get {
+                return ResourceManager.GetString("LocateAllMissingSongs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select the folder containing the missing song files.
+        /// </summary>
+        internal static string LocateAllMissingSongsDesc {
+            get {
+                return ResourceManager.GetString("LocateAllMissingSongsDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Locate Missing Song.
         /// </summary>
         internal static string LocateSong {
@@ -2623,6 +2659,15 @@ namespace RadioExt_Helper {
         internal static string RestoreFormTitle {
             get {
                 return ResourceManager.GetString("RestoreFormTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Restore from Backup.
+        /// </summary>
+        internal static string RestoreFromBackupButton {
+            get {
+                return ResourceManager.GetString("RestoreFromBackupButton", resourceCulture);
             }
         }
         

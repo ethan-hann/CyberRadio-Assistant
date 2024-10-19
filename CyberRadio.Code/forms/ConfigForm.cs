@@ -101,7 +101,7 @@ public sealed partial class ConfigForm : Form
         chkWatchForChanges.Text = Strings.WatchForChangesOption;
         lblBackupCompressionLvl.Text = Strings.BackupCompressionLevel;
         chkCopySongFilesToBackup.Text = Strings.CopySongFilesToBackupOption;
-        //TODO: add translations for new "Default Song Location" label when feature is implemented.
+        btnEditDefaultSongLocation.Text = Strings.DefaultSongLocationOption;
 
         //Logging Tab
         lblLogPathLabel.Text = Strings.LogPathLabel;

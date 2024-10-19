@@ -68,6 +68,7 @@
             label2 = new Label();
             cmsSongRightClick = new ContextMenuStrip(components);
             locateToolStripMenuItem = new ToolStripMenuItem();
+            locateAllMissingSongsToolStripMenuItem = new ToolStripMenuItem();
             tabControl.SuspendLayout();
             tabSongs.SuspendLayout();
             statusStrip1.SuspendLayout();
@@ -511,17 +512,25 @@
             // 
             // cmsSongRightClick
             // 
-            cmsSongRightClick.Items.AddRange(new ToolStripItem[] { locateToolStripMenuItem });
+            cmsSongRightClick.Items.AddRange(new ToolStripItem[] { locateToolStripMenuItem, locateAllMissingSongsToolStripMenuItem });
             cmsSongRightClick.Name = "cmsSongRightClick";
-            cmsSongRightClick.Size = new Size(193, 26);
+            cmsSongRightClick.Size = new Size(215, 70);
             // 
             // locateToolStripMenuItem
             // 
             locateToolStripMenuItem.Image = Properties.Resources.search_16x16;
             locateToolStripMenuItem.Name = "locateToolStripMenuItem";
-            locateToolStripMenuItem.Size = new Size(192, 22);
+            locateToolStripMenuItem.Size = new Size(214, 22);
             locateToolStripMenuItem.Text = "Locate Missing Song...";
             locateToolStripMenuItem.Click += LocateToolStripMenuItem_Click;
+            // 
+            // locateAllMissingSongsToolStripMenuItem
+            // 
+            locateAllMissingSongsToolStripMenuItem.Image = Properties.Resources.search_16x16;
+            locateAllMissingSongsToolStripMenuItem.Name = "locateAllMissingSongsToolStripMenuItem";
+            locateAllMissingSongsToolStripMenuItem.Size = new Size(214, 22);
+            locateAllMissingSongsToolStripMenuItem.Text = "Locate All Missing Songs...";
+            locateAllMissingSongsToolStripMenuItem.Click += locateAllMissingSongsToolStripMenuItem_Click;
             // 
             // CustomMusicCtl
             // 
@@ -592,5 +601,6 @@
         private ToolStripStatusLabel lblStationSizeLabel;
         private ToolStripStatusLabel lblStationSizeVal;
         private ToolStripStatusLabel toolStripStatusLabel6;
+        private ToolStripMenuItem locateAllMissingSongsToolStripMenuItem;
     }
 }
