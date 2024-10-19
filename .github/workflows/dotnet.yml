@@ -12,6 +12,7 @@ on:
     branches: [ "main" ]
     paths:
       - "CyberRadio.Code/**"
+    types: [opened, synchronize, reopened]
 
 jobs:
   build:
