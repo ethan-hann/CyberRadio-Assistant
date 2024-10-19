@@ -1044,11 +1044,9 @@ public sealed partial class MainForm : Form
         }
 
         if (lbStations.Items.Count > 0)
-        {
             if (MessageBox.Show(this, Strings.ConfirmRestore, Strings.Confirm, MessageBoxButtons.YesNo,
                     MessageBoxIcon.Warning) == DialogResult.No)
                 return;
-        }
 
         var fileBrowser = new OpenFileDialog
         {

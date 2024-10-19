@@ -1067,7 +1067,8 @@ public partial class StationManager : IDisposable
         await Task.WhenAll(fileTasks);
 
         var sourceDirectories = FileHelper.SafeEnumerateDirectories(sourceDir);
-        var targetDirectories = FileHelper.SafeEnumerateDirectories(targetDir).ToDictionary(d => Path.GetFileName(d)!, d => d);
+        var targetDirectories = FileHelper.SafeEnumerateDirectories(targetDir)
+            .ToDictionary(d => Path.GetFileName(d)!, d => d);
 
         var dirTasks = new List<Task>();
         var dirCount = 0;

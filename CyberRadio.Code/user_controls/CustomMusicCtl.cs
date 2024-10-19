@@ -174,7 +174,7 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
                              song.FileSize.FormatSize(),
                              song.FilePath
                          ])
-                     { Tag = song }))
+                         { Tag = song }))
             lvSongs.Items.Add(lvItem);
 
         lvSongs.ResizeColumns();
@@ -292,7 +292,7 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
         using var folderDialog = new FolderBrowserDialog();
         folderDialog.Description = Strings.LocateAllMissingSongsDesc;
         folderDialog.UseDescriptionForTitle = true;
-    
+
         if (folderDialog.ShowDialog(this) != DialogResult.OK) return;
         var selectedFolder = folderDialog.SelectedPath;
 
@@ -307,7 +307,7 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
             if (item.Tag is not Song song) continue;
 
             // Try to find a matching file in the selected folder
-            var matchingFile = filesInFolder.FirstOrDefault(f => 
+            var matchingFile = filesInFolder.FirstOrDefault(f =>
                 Path.GetFileName(f.FullName).Equals(Path.GetFileName(song.FilePath), StringComparison.OrdinalIgnoreCase)
                 && (ulong)f.Length == song.FileSize);
 
@@ -357,15 +357,13 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
             // Show the context menu only if the song is missing
             hasMissingSongs = !FileHelper.DoesFileExist(song.FilePath);
 
-            locateToolStripMenuItem.Visible = hasMissingSongs;  // Show the single "Locate Missing Song..." option if the song is missing
+            locateToolStripMenuItem.Visible =
+                hasMissingSongs; // Show the single "Locate Missing Song..." option if the song is missing
             locateAllMissingSongsToolStripMenuItem.Visible = false;
         }
 
         // Show the context menu only if there are missing songs
-        if (hasMissingSongs)
-        {
-            cmsSongRightClick.Show(Cursor.Position);
-        }
+        if (hasMissingSongs) cmsSongRightClick.Show(Cursor.Position);
     }
 
     /// <summary>
