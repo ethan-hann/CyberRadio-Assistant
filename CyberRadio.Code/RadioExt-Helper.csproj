@@ -78,12 +78,7 @@
         <PackageReference Include="System.Text.Json" Version="8.0.5" />
         <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
         <PackageReference Include="TagLibSharp" Version="2.3.0" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Reference Include="WIG.Lib">
-        <HintPath>..\..\WolvenIconGenerator\WIG.Lib\bin\Release\net8.0-windows\WIG.Lib.dll</HintPath>
-      </Reference>
+        <PackageReference Include="WIG.Lib" Version="1.0.44" />
     </ItemGroup>
 
     <ItemGroup>
