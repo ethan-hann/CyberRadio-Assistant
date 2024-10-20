@@ -15,11 +15,32 @@ jobs:
         # Ensure the main branch is checked out, not just the release state
         ref: main
         ssh-key: ${{ secrets.DEPLOY_KEY }}
+    
+    - name: Get Release Assets
+      id: get_release_assets
+      run: |
+        # Get the release data using GitHub API
+        curl -sL \
+        -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+        -H "Accept: application/vnd.github.v3+json" \
+        https://api.github.com/repos/ethan-hann/CyberRadio-Assistant/releases/tags/${{ github.event.release.tag_name }} > release_info.json
+
+        # Extract the URL of the asset that matches the .exe file
+        ASSET_URL=$(jq -r '.assets[] | select(.name == "CyberRadioAssistant.exe") | .browser_download_url' release_info.json)
+
+        # Fail the build if the asset URL isn't found
+        if [ -z "$ASSET_URL" ]; then
+          echo "No .exe asset found in the release."
+          exit 1
+        fi
+
+        # Store the asset URL as an output of this step
+        echo "::set-output name=exe_url::$ASSET_URL"
 
     - name: Update version.json
       env:
-        VERSION: ${{ github.event.release.tag_name }}
-        URL: ${{ github.event.release.html_url }}
+        version: ${{ github.event.release.tag_name }}
+        url: ${{ steps.get_release_assets.outputs.exe_url }}
       run: 'echo "{\"version\": \"${VERSION}\", \"url\": \"${URL}\"}" > version.json'
 
     - name: Commit and push changes
