@@ -193,7 +193,7 @@
             MinimizeBox = false;
             Name = "UpdateBox";
             ShowInTaskbar = false;
-            StartPosition = FormStartPosition.CenterParent;
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "Update Available";
             TopMost = true;
             Load += UpdateBox_Load;
