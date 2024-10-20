@@ -39,8 +39,8 @@ jobs:
 
     - name: Update version.json
       env:
-        version: ${{ github.event.release.tag_name }}
-        url: ${{ steps.get_release_assets.outputs.exe_url }}
+        VERSION: ${{ github.event.release.tag_name }}
+        URL: ${{ steps.get_release_assets.outputs.exe_url }}
       run: 'echo "{\"version\": \"${VERSION}\", \"url\": \"${URL}\"}" > version.json'
 
     - name: Commit and push changes
