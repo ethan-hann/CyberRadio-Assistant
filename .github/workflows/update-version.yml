@@ -10,15 +10,16 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4.2.1
+      with:
+        # Ensure the main branch is checked out, not just the release state
+        ref: main
 
     - name: Update version.json
-      run: |
-        VERSION=${{ github.event.release.tag_name }}
-        URL=${{ github.event.release.html_url }}
-        
-        # Update the version.json file
-        echo "{\"version\": \"${VERSION}\", \"url\": \"${URL}\"}" > version.json
+      env:
+        VERSION: ${{ github.event.release.tag_name }}
+        URL: ${{ github.event.release.html_url }}
+      run: 'echo "{\"version\": \"${VERSION}\", \"url\": \"${URL}\"}" > version.json'
 
     - name: Commit and push changes
       env:
@@ -28,4 +29,4 @@ jobs:
         git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
         git add version.json
         git commit -m "Update version.json for release ${{ github.event.release.tag_name }}"
-        git push
+        git push origin main
