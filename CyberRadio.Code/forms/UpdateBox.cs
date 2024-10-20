@@ -45,8 +45,11 @@ public partial class UpdateBox : Form
 
     private void _progressReporter_ProgressChanged(object? sender, int e)
     {
-        pgDownloadProgress.Value = e;
-        SetStatus(string.Format(Strings.UpdateDownloadPercent, e));
+        Invoke(() =>
+        {
+            pgDownloadProgress.Value = e;
+            SetStatus(string.Format(Strings.UpdateDownloadPercent, e));
+        });
     }
 
     private void UpdateBox_Load(object sender, EventArgs e)
