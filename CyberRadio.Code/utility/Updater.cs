@@ -46,7 +46,7 @@ public static class Updater
                 return;
             }
 
-            var latestVersion = new Version(version);
+            var latestVersion = new Version(version.Replace("v", "")); //Remove the leading 'v' from the version tag on Github
             var currentVersion = Assembly.GetExecutingAssembly().GetName().Version;
 
             if (currentVersion != null)
