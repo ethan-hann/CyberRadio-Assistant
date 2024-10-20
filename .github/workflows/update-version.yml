@@ -13,12 +13,10 @@ jobs:
       uses: actions/checkout@v3
 
     - name: Update version.json
-      run: |
-        VERSION=${{ github.event.release.tag_name }}
-        URL=${{ github.event.release.html_url }}
-        
-        # Update the version.json file
-        echo "{\"version\": \"${VERSION}\", \"url\": \"${URL}\"}" > version.json
+      env:
+        version: ${{ github.event.release.tag_name }}
+        url: ${{ github.event.release.html_url }}
+      run: 'echo "{\"version\": \"${VERSION}\", \"url\": \"${URL}\"}" > version.json'
 
     - name: Commit and push changes
       env:
