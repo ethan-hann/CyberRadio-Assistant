@@ -2,9 +2,22 @@
   href: introduction.md
 - name: Getting Started
   href: getting-started.md
-- name: Creating Stations
-  href: stations.md
-- name: Exporting
+  items:
+    - name: Creating Stations
+      href: stations.md
+      items:
+        - name: Display and Icon Tab
+          href: stations.md#display-and-icon-tab
+        - name: Music Tab
+          href: stations.md#music-tab
+          items:
+            - name: Songs
+              href: stations.md#songs
+            - name: Song Order
+              href: stations.md#song-order
+        - name: Removing Stations
+          href: stations.md#removing-stations
+- name: Exporting Stations
   href: export.md
 - name: How to Get the Stream URL from Radio Garden
   href: using-radio-garden-streams.md
