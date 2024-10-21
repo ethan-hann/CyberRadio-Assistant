@@ -30,6 +30,8 @@
         {
             tableLayoutPanel1 = new TableLayoutPanel();
             pictureBox1 = new PictureBox();
+            tableLayoutPanel2 = new TableLayoutPanel();
+            btnRestoreFromBackup = new Button();
             lblNoStations = new Label();
             tlpNoStagingPath = new TableLayoutPanel();
             flowLayoutPanel2 = new FlowLayoutPanel();
@@ -42,6 +44,7 @@
             tlpNoGamePath = new TableLayoutPanel();
             tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
+            tableLayoutPanel2.SuspendLayout();
             tlpNoStagingPath.SuspendLayout();
             flowLayoutPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox3).BeginInit();
@@ -55,7 +58,7 @@
             tableLayoutPanel1.ColumnCount = 1;
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
             tableLayoutPanel1.Controls.Add(pictureBox1, 0, 0);
-            tableLayoutPanel1.Controls.Add(lblNoStations, 0, 1);
+            tableLayoutPanel1.Controls.Add(tableLayoutPanel2, 0, 1);
             tableLayoutPanel1.Dock = DockStyle.Fill;
             tableLayoutPanel1.Location = new Point(0, 0);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -68,7 +71,7 @@
             // pictureBox1
             // 
             pictureBox1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
-            pictureBox1.Image = Properties.Resources.cyber_radio_assistant;
+            pictureBox1.Image = Properties.Resources.cyber_radio_assistant2;
             pictureBox1.Location = new Point(314, 3);
             pictureBox1.Name = "pictureBox1";
             pictureBox1.Size = new Size(256, 332);
@@ -76,14 +79,47 @@
             pictureBox1.TabIndex = 0;
             pictureBox1.TabStop = false;
             // 
+            // tableLayoutPanel2
+            // 
+            tableLayoutPanel2.ColumnCount = 1;
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tableLayoutPanel2.Controls.Add(btnRestoreFromBackup, 0, 1);
+            tableLayoutPanel2.Controls.Add(lblNoStations, 0, 0);
+            tableLayoutPanel2.Dock = DockStyle.Fill;
+            tableLayoutPanel2.Location = new Point(3, 341);
+            tableLayoutPanel2.Name = "tableLayoutPanel2";
+            tableLayoutPanel2.RowCount = 2;
+            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tableLayoutPanel2.Size = new Size(879, 195);
+            tableLayoutPanel2.TabIndex = 1;
+            // 
+            // btnRestoreFromBackup
+            // 
+            btnRestoreFromBackup.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            btnRestoreFromBackup.BackColor = Color.Yellow;
+            btnRestoreFromBackup.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
+            btnRestoreFromBackup.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
+            btnRestoreFromBackup.FlatStyle = FlatStyle.Flat;
+            btnRestoreFromBackup.Image = Properties.Resources.zip_file_16x16;
+            btnRestoreFromBackup.Location = new Point(3, 129);
+            btnRestoreFromBackup.Name = "btnRestoreFromBackup";
+            btnRestoreFromBackup.Size = new Size(873, 34);
+            btnRestoreFromBackup.TabIndex = 3;
+            btnRestoreFromBackup.Text = "Restore from Backup";
+            btnRestoreFromBackup.TextAlign = ContentAlignment.MiddleRight;
+            btnRestoreFromBackup.TextImageRelation = TextImageRelation.ImageBeforeText;
+            btnRestoreFromBackup.UseVisualStyleBackColor = false;
+            btnRestoreFromBackup.Visible = false;
+            btnRestoreFromBackup.Click += BtnRestoreFromBackup_Click;
+            // 
             // lblNoStations
             // 
-            lblNoStations.Dock = DockStyle.Fill;
+            lblNoStations.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             lblNoStations.Font = new Font("Segoe UI Variable Display", 27.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblNoStations.Location = new Point(3, 363);
-            lblNoStations.Margin = new Padding(3, 25, 3, 0);
+            lblNoStations.Location = new Point(3, 19);
             lblNoStations.Name = "lblNoStations";
-            lblNoStations.Size = new Size(879, 176);
+            lblNoStations.Size = new Size(873, 59);
             lblNoStations.TabIndex = 1;
             lblNoStations.Text = "No Stations Yet!";
             lblNoStations.TextAlign = ContentAlignment.MiddleCenter;
@@ -116,7 +152,7 @@
             // 
             // pictureBox3
             // 
-            pictureBox3.Image = Properties.Resources.warning;
+            pictureBox3.Image = Properties.Resources.warning__16x16;
             pictureBox3.Location = new Point(3, 8);
             pictureBox3.Margin = new Padding(3, 8, 3, 3);
             pictureBox3.Name = "pictureBox3";
@@ -143,7 +179,7 @@
             btnPaths.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
             btnPaths.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
             btnPaths.FlatStyle = FlatStyle.Flat;
-            btnPaths.Image = Properties.Resources.folder_16x16;
+            btnPaths.Image = Properties.Resources.folder__16x16;
             btnPaths.Location = new Point(755, 11);
             btnPaths.Name = "btnPaths";
             btnPaths.Size = new Size(127, 34);
@@ -152,7 +188,7 @@
             btnPaths.TextAlign = ContentAlignment.MiddleRight;
             btnPaths.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnPaths.UseVisualStyleBackColor = false;
-            btnPaths.Click += btnPaths_Click;
+            btnPaths.Click += BtnPaths_Click;
             // 
             // flowLayoutPanel1
             // 
@@ -166,7 +202,7 @@
             // 
             // pictureBox2
             // 
-            pictureBox2.Image = Properties.Resources.warning;
+            pictureBox2.Image = Properties.Resources.warning__16x16;
             pictureBox2.Location = new Point(3, 6);
             pictureBox2.Margin = new Padding(3, 6, 3, 3);
             pictureBox2.Name = "pictureBox2";
@@ -214,6 +250,7 @@
             Load += NoStationsCtl_Load;
             tableLayoutPanel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
+            tableLayoutPanel2.ResumeLayout(false);
             tlpNoStagingPath.ResumeLayout(false);
             flowLayoutPanel2.ResumeLayout(false);
             flowLayoutPanel2.PerformLayout();
@@ -239,5 +276,7 @@
         private Label lblNoStagingPath;
         private TableLayoutPanel tlpNoGamePath;
         private Button btnPaths;
+        private TableLayoutPanel tableLayoutPanel2;
+        private Button btnRestoreFromBackup;
     }
 }

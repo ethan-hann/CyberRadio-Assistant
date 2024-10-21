@@ -1,4 +1,6 @@
-﻿namespace RadioExt_Helper.user_controls
+﻿using RadioExt_Helper.custom_controls;
+
+namespace RadioExt_Helper.user_controls
 {
     sealed partial class StationEditor
     {
@@ -28,18 +30,18 @@
         /// </summary>
         private void InitializeComponent()
         {
-            components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(StationEditor));
-            lblIcon = new Label();
+            models.ImageProperties imageProperties2 = new models.ImageProperties();
             txtDisplayName = new TextBox();
             lblName = new Label();
             label3 = new Label();
             grpDisplay = new GroupBox();
             tlpDisplayTable = new TableLayoutPanel();
+            lblIcon = new Label();
             tabControl = new TabControl();
             tabDisplayAndIcon = new TabPage();
             panel1 = new Panel();
-            panel3 = new Panel();
+            grpCustomData = new GroupBox();
+            dgvMetadata = new DataGridView();
             grpSettings = new GroupBox();
             tableLayoutPanel1 = new TableLayoutPanel();
             lblVolume = new Label();
@@ -53,15 +55,17 @@
             lblSelectedVolume = new Label();
             lblVolumeMinMax = new Label();
             grpCustomIcon = new GroupBox();
-            tableLayoutPanel2 = new TableLayoutPanel();
+            tlpCustomIcon = new TableLayoutPanel();
             txtInkAtlasPart = new TextBox();
             txtInkAtlasPath = new TextBox();
             lblUsingCustomIcon = new Label();
             flowLayoutPanel1 = new FlowLayoutPanel();
             radUseCustomYes = new RadioButton();
             radUseCustomNo = new RadioButton();
+            btnOpenIconManager = new Button();
             lblInkPart = new Label();
             lblInkPath = new Label();
+            picStationIcon = new CustomPictureBox();
             tabMusic = new TabPage();
             grpSongs = new GroupBox();
             grpStreamSettings = new GroupBox();
@@ -72,11 +76,10 @@
             radUseStreamYes = new RadioButton();
             radUseStreamNo = new RadioButton();
             tableLayoutPanel6 = new TableLayoutPanel();
-            flowLayoutPanel3 = new FlowLayoutPanel();
+            flpStreamUrlTesting = new FlowLayoutPanel();
             mpStreamPlayer = new MusicPlayer();
             btnGetFromRadioGarden = new Button();
             txtStreamURL = new TextBox();
-            tabImages = new ImageList(components);
             statusStrip1 = new StatusStrip();
             lblStatus = new ToolStripStatusLabel();
             grpDisplay.SuspendLayout();
@@ -84,6 +87,8 @@
             tabControl.SuspendLayout();
             tabDisplayAndIcon.SuspendLayout();
             panel1.SuspendLayout();
+            grpCustomData.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvMetadata).BeginInit();
             grpSettings.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)nudFM).BeginInit();
@@ -91,29 +96,17 @@
             ((System.ComponentModel.ISupportInitialize)volumeSlider).BeginInit();
             panel2.SuspendLayout();
             grpCustomIcon.SuspendLayout();
-            tableLayoutPanel2.SuspendLayout();
+            tlpCustomIcon.SuspendLayout();
             flowLayoutPanel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)picStationIcon).BeginInit();
             tabMusic.SuspendLayout();
             grpStreamSettings.SuspendLayout();
             tableLayoutPanel5.SuspendLayout();
             flowLayoutPanel2.SuspendLayout();
             tableLayoutPanel6.SuspendLayout();
-            flowLayoutPanel3.SuspendLayout();
+            flpStreamUrlTesting.SuspendLayout();
             statusStrip1.SuspendLayout();
             SuspendLayout();
-            // 
-            // lblIcon
-            // 
-            lblIcon.Anchor = AnchorStyles.Right;
-            lblIcon.AutoSize = true;
-            lblIcon.Font = new Font("Segoe UI Variable Text", 9F);
-            lblIcon.Location = new Point(68, 58);
-            lblIcon.Name = "lblIcon";
-            lblIcon.Size = new Size(36, 16);
-            lblIcon.TabIndex = 2;
-            lblIcon.Text = "Icon: ";
-            lblIcon.MouseEnter += lblIcon_MouseEnter;
-            lblIcon.MouseLeave += lbl_MouseLeave;
             // 
             // txtDisplayName
             // 
@@ -123,7 +116,8 @@
             txtDisplayName.Name = "txtDisplayName";
             txtDisplayName.Size = new Size(849, 23);
             txtDisplayName.TabIndex = 1;
-            txtDisplayName.TextChanged += txtDisplayName_TextChanged;
+            txtDisplayName.TextChanged += TxtDisplayName_TextChanged;
+            txtDisplayName.Leave += TxtDisplayName_Leave;
             // 
             // lblName
             // 
@@ -135,8 +129,8 @@
             lblName.Size = new Size(44, 16);
             lblName.TabIndex = 0;
             lblName.Text = "Name: ";
-            lblName.MouseEnter += lblName_MouseEnter;
-            lblName.MouseLeave += lbl_MouseLeave;
+            lblName.MouseEnter += LblName_MouseEnter;
+            lblName.MouseLeave += Lbl_MouseLeave;
             // 
             // label3
             // 
@@ -166,8 +160,8 @@
             tlpDisplayTable.ColumnCount = 2;
             tlpDisplayTable.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 11.141304F));
             tlpDisplayTable.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 88.858696F));
-            tlpDisplayTable.Controls.Add(lblName, 0, 0);
             tlpDisplayTable.Controls.Add(lblIcon, 0, 1);
+            tlpDisplayTable.Controls.Add(lblName, 0, 0);
             tlpDisplayTable.Controls.Add(txtDisplayName, 1, 0);
             tlpDisplayTable.Dock = DockStyle.Fill;
             tlpDisplayTable.Location = new Point(3, 21);
@@ -178,13 +172,25 @@
             tlpDisplayTable.Size = new Size(962, 92);
             tlpDisplayTable.TabIndex = 0;
             // 
+            // lblIcon
+            // 
+            lblIcon.Anchor = AnchorStyles.Right;
+            lblIcon.AutoSize = true;
+            lblIcon.Font = new Font("Segoe UI Variable Text", 9F);
+            lblIcon.Location = new Point(68, 58);
+            lblIcon.Name = "lblIcon";
+            lblIcon.Size = new Size(36, 16);
+            lblIcon.TabIndex = 4;
+            lblIcon.Text = "Icon: ";
+            lblIcon.MouseEnter += LblIcon_MouseEnter;
+            lblIcon.MouseLeave += Lbl_MouseLeave;
+            // 
             // tabControl
             // 
             tabControl.Controls.Add(tabDisplayAndIcon);
             tabControl.Controls.Add(tabMusic);
             tabControl.Dock = DockStyle.Fill;
             tabControl.Font = new Font("Segoe UI", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            tabControl.ImageList = tabImages;
             tabControl.Location = new Point(0, 0);
             tabControl.Name = "tabControl";
             tabControl.SelectedIndex = 0;
@@ -195,7 +201,7 @@
             // 
             tabDisplayAndIcon.BorderStyle = BorderStyle.FixedSingle;
             tabDisplayAndIcon.Controls.Add(panel1);
-            tabDisplayAndIcon.Font = new Font("CF Notche Demo", 9.749999F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            tabDisplayAndIcon.Font = new Font("Microsoft Sans Serif", 9.749999F, FontStyle.Regular, GraphicsUnit.Point, 0);
             tabDisplayAndIcon.ImageIndex = 0;
             tabDisplayAndIcon.Location = new Point(4, 29);
             tabDisplayAndIcon.Name = "tabDisplayAndIcon";
@@ -209,7 +215,7 @@
             // panel1
             // 
             panel1.BackColor = Color.White;
-            panel1.Controls.Add(panel3);
+            panel1.Controls.Add(grpCustomData);
             panel1.Controls.Add(grpSettings);
             panel1.Controls.Add(grpCustomIcon);
             panel1.Controls.Add(grpDisplay);
@@ -219,14 +225,32 @@
             panel1.Size = new Size(968, 650);
             panel1.TabIndex = 3;
             // 
-            // panel3
+            // grpCustomData
             // 
-            panel3.BackColor = Color.White;
-            panel3.Dock = DockStyle.Fill;
-            panel3.Location = new Point(0, 377);
-            panel3.Name = "panel3";
-            panel3.Size = new Size(968, 273);
-            panel3.TabIndex = 5;
+            grpCustomData.BackColor = Color.White;
+            grpCustomData.Controls.Add(dgvMetadata);
+            grpCustomData.Dock = DockStyle.Fill;
+            grpCustomData.Font = new Font("Segoe UI Variable Display", 9.75F, FontStyle.Bold);
+            grpCustomData.Location = new Point(0, 377);
+            grpCustomData.Name = "grpCustomData";
+            grpCustomData.Size = new Size(968, 273);
+            grpCustomData.TabIndex = 6;
+            grpCustomData.TabStop = false;
+            grpCustomData.Text = "Custom Data";
+            // 
+            // dgvMetadata
+            // 
+            dgvMetadata.BackgroundColor = Color.WhiteSmoke;
+            dgvMetadata.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvMetadata.Dock = DockStyle.Fill;
+            dgvMetadata.Location = new Point(3, 21);
+            dgvMetadata.Name = "dgvMetadata";
+            dgvMetadata.Size = new Size(962, 249);
+            dgvMetadata.TabIndex = 0;
+            dgvMetadata.CellValueChanged += DgvMetadata_CellValueChanged;
+            dgvMetadata.UserAddedRow += DgvMetadata_UserAddedRow;
+            dgvMetadata.UserDeletedRow += DgvMetadata_UserDeletedRow;
+            dgvMetadata.UserDeletingRow += dgvMetadata_UserDeletingRow;
             // 
             // grpSettings
             // 
@@ -269,8 +293,8 @@
             lblVolume.Size = new Size(52, 16);
             lblVolume.TabIndex = 3;
             lblVolume.Text = "Volume: ";
-            lblVolume.MouseEnter += lblVolume_MouseEnter;
-            lblVolume.MouseLeave += lbl_MouseLeave;
+            lblVolume.MouseEnter += LblVolume_MouseEnter;
+            lblVolume.MouseLeave += Lbl_MouseLeave;
             // 
             // nudFM
             // 
@@ -283,7 +307,7 @@
             nudFM.Name = "nudFM";
             nudFM.Size = new Size(91, 23);
             nudFM.TabIndex = 7;
-            nudFM.ValueChanged += nudFM_ValueChanged;
+            nudFM.ValueChanged += NudFM_ValueChanged;
             // 
             // lblFM
             // 
@@ -295,8 +319,8 @@
             lblFM.Size = new Size(30, 16);
             lblFM.TabIndex = 2;
             lblFM.Text = "FM: ";
-            lblFM.MouseEnter += lblFM_MouseEnter;
-            lblFM.MouseLeave += lbl_MouseLeave;
+            lblFM.MouseEnter += LblFM_MouseEnter;
+            lblFM.MouseLeave += Lbl_MouseLeave;
             // 
             // flowLayoutPanel4
             // 
@@ -322,7 +346,7 @@
             volumeSlider.SmallChange = 10;
             volumeSlider.TabIndex = 6;
             volumeSlider.TickStyle = TickStyle.None;
-            volumeSlider.Scroll += volumeSlider_Scroll;
+            volumeSlider.Scroll += VolumeSlider_Scroll;
             // 
             // lblVolumeVal
             // 
@@ -336,9 +360,9 @@
             lblVolumeVal.TabIndex = 6;
             lblVolumeVal.Text = "Value:";
             lblVolumeVal.TextAlign = ContentAlignment.MiddleCenter;
-            lblVolumeVal.DoubleClick += lblVolumeVal_DoubleClick;
-            lblVolumeVal.MouseEnter += lblVolumeVal_MouseEnter;
-            lblVolumeVal.MouseLeave += lbl_MouseLeave;
+            lblVolumeVal.DoubleClick += LblVolumeVal_DoubleClick;
+            lblVolumeVal.MouseEnter += LblVolumeVal_MouseEnter;
+            lblVolumeVal.MouseLeave += Lbl_MouseLeave;
             // 
             // panel2
             // 
@@ -360,8 +384,8 @@
             txtVolumeEdit.TabIndex = 5;
             txtVolumeEdit.TabStop = false;
             txtVolumeEdit.Visible = false;
-            txtVolumeEdit.KeyDown += txtVolumeEdit_KeyDown;
-            txtVolumeEdit.KeyPress += txtVolumeEdit_KeyPress;
+            txtVolumeEdit.KeyDown += TxtVolumeEdit_KeyDown;
+            txtVolumeEdit.KeyPress += TxtVolumeEdit_KeyPress;
             // 
             // lblSelectedVolume
             // 
@@ -374,7 +398,7 @@
             lblSelectedVolume.TabIndex = 5;
             lblSelectedVolume.Text = "1.0";
             lblSelectedVolume.TextAlign = ContentAlignment.MiddleCenter;
-            lblSelectedVolume.DoubleClick += lblSelectedVolume_DoubleClick;
+            lblSelectedVolume.DoubleClick += LblSelectedVolume_DoubleClick;
             // 
             // lblVolumeMinMax
             // 
@@ -391,7 +415,7 @@
             // grpCustomIcon
             // 
             grpCustomIcon.BackColor = Color.White;
-            grpCustomIcon.Controls.Add(tableLayoutPanel2);
+            grpCustomIcon.Controls.Add(tlpCustomIcon);
             grpCustomIcon.Dock = DockStyle.Top;
             grpCustomIcon.Font = new Font("Segoe UI Variable Display", 9.75F, FontStyle.Bold);
             grpCustomIcon.Location = new Point(0, 116);
@@ -401,68 +425,75 @@
             grpCustomIcon.TabStop = false;
             grpCustomIcon.Text = "Custom Icon";
             // 
-            // tableLayoutPanel2
+            // tlpCustomIcon
             // 
-            tableLayoutPanel2.ColumnCount = 2;
-            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 16.440218F));
-            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 83.5597839F));
-            tableLayoutPanel2.Controls.Add(txtInkAtlasPart, 1, 2);
-            tableLayoutPanel2.Controls.Add(txtInkAtlasPath, 1, 1);
-            tableLayoutPanel2.Controls.Add(lblUsingCustomIcon, 0, 0);
-            tableLayoutPanel2.Controls.Add(flowLayoutPanel1, 1, 0);
-            tableLayoutPanel2.Controls.Add(lblInkPart, 0, 2);
-            tableLayoutPanel2.Controls.Add(lblInkPath, 0, 1);
-            tableLayoutPanel2.Dock = DockStyle.Fill;
-            tableLayoutPanel2.Location = new Point(3, 21);
-            tableLayoutPanel2.Name = "tableLayoutPanel2";
-            tableLayoutPanel2.RowCount = 3;
-            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 32.9545441F));
-            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 30.681818F));
-            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 36.363636F));
-            tableLayoutPanel2.Size = new Size(962, 110);
-            tableLayoutPanel2.TabIndex = 0;
+            tlpCustomIcon.ColumnCount = 3;
+            tlpCustomIcon.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 153F));
+            tlpCustomIcon.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 15.8220024F));
+            tlpCustomIcon.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 84.17799F));
+            tlpCustomIcon.Controls.Add(txtInkAtlasPart, 2, 2);
+            tlpCustomIcon.Controls.Add(txtInkAtlasPath, 2, 1);
+            tlpCustomIcon.Controls.Add(lblUsingCustomIcon, 1, 0);
+            tlpCustomIcon.Controls.Add(flowLayoutPanel1, 2, 0);
+            tlpCustomIcon.Controls.Add(lblInkPart, 1, 2);
+            tlpCustomIcon.Controls.Add(lblInkPath, 1, 1);
+            tlpCustomIcon.Controls.Add(picStationIcon, 0, 0);
+            tlpCustomIcon.Dock = DockStyle.Fill;
+            tlpCustomIcon.Location = new Point(3, 21);
+            tlpCustomIcon.Name = "tlpCustomIcon";
+            tlpCustomIcon.RowCount = 3;
+            tlpCustomIcon.RowStyles.Add(new RowStyle(SizeType.Percent, 38.18182F));
+            tlpCustomIcon.RowStyles.Add(new RowStyle(SizeType.Percent, 31.818182F));
+            tlpCustomIcon.RowStyles.Add(new RowStyle(SizeType.Percent, 30.90909F));
+            tlpCustomIcon.RowStyles.Add(new RowStyle(SizeType.Absolute, 19F));
+            tlpCustomIcon.Size = new Size(962, 110);
+            tlpCustomIcon.TabIndex = 0;
             // 
             // txtInkAtlasPart
             // 
             txtInkAtlasPart.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             txtInkAtlasPart.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            txtInkAtlasPart.Location = new Point(161, 78);
+            txtInkAtlasPart.Location = new Point(284, 81);
             txtInkAtlasPart.Name = "txtInkAtlasPart";
-            txtInkAtlasPart.Size = new Size(798, 23);
+            txtInkAtlasPart.ReadOnly = true;
+            txtInkAtlasPart.Size = new Size(675, 23);
             txtInkAtlasPart.TabIndex = 2;
-            txtInkAtlasPart.TextChanged += txtInkAtlasPart_TextChanged;
+            txtInkAtlasPart.TextChanged += TxtInkAtlasPart_TextChanged;
             // 
             // txtInkAtlasPath
             // 
             txtInkAtlasPath.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             txtInkAtlasPath.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            txtInkAtlasPath.Location = new Point(161, 41);
+            txtInkAtlasPath.Location = new Point(284, 46);
             txtInkAtlasPath.Name = "txtInkAtlasPath";
-            txtInkAtlasPath.Size = new Size(798, 23);
+            txtInkAtlasPath.ReadOnly = true;
+            txtInkAtlasPath.Size = new Size(675, 23);
             txtInkAtlasPath.TabIndex = 3;
-            txtInkAtlasPath.TextChanged += txtInkAtlasPath_TextChanged;
+            txtInkAtlasPath.TextChanged += TxtInkAtlasPath_TextChanged;
+            txtInkAtlasPath.Leave += txtInkAtlasPath_Leave;
             // 
             // lblUsingCustomIcon
             // 
             lblUsingCustomIcon.Anchor = AnchorStyles.Right;
             lblUsingCustomIcon.AutoSize = true;
             lblUsingCustomIcon.Font = new Font("Segoe UI Variable Text", 9F);
-            lblUsingCustomIcon.Location = new Point(113, 10);
+            lblUsingCustomIcon.Location = new Point(236, 12);
             lblUsingCustomIcon.Name = "lblUsingCustomIcon";
             lblUsingCustomIcon.Size = new Size(42, 16);
             lblUsingCustomIcon.TabIndex = 3;
             lblUsingCustomIcon.Text = "Using?";
-            lblUsingCustomIcon.MouseEnter += lblUsingCustomIcon_MouseEnter;
-            lblUsingCustomIcon.MouseLeave += lbl_MouseLeave;
+            lblUsingCustomIcon.MouseEnter += LblUsingCustomIcon_MouseEnter;
+            lblUsingCustomIcon.MouseLeave += Lbl_MouseLeave;
             // 
             // flowLayoutPanel1
             // 
             flowLayoutPanel1.Controls.Add(radUseCustomYes);
             flowLayoutPanel1.Controls.Add(radUseCustomNo);
+            flowLayoutPanel1.Controls.Add(btnOpenIconManager);
             flowLayoutPanel1.Dock = DockStyle.Fill;
-            flowLayoutPanel1.Location = new Point(161, 3);
+            flowLayoutPanel1.Location = new Point(284, 3);
             flowLayoutPanel1.Name = "flowLayoutPanel1";
-            flowLayoutPanel1.Size = new Size(798, 30);
+            flowLayoutPanel1.Size = new Size(675, 35);
             flowLayoutPanel1.TabIndex = 0;
             // 
             // radUseCustomYes
@@ -473,12 +504,12 @@
             radUseCustomYes.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             radUseCustomYes.Location = new Point(3, 3);
             radUseCustomYes.Name = "radUseCustomYes";
-            radUseCustomYes.Size = new Size(43, 19);
+            radUseCustomYes.Size = new Size(43, 26);
             radUseCustomYes.TabIndex = 5;
             radUseCustomYes.TabStop = true;
             radUseCustomYes.Text = "Yes";
             radUseCustomYes.UseVisualStyleBackColor = true;
-            radUseCustomYes.CheckedChanged += radUseCustomYes_CheckedChanged;
+            radUseCustomYes.CheckedChanged += RadUseCustomYes_CheckedChanged;
             // 
             // radUseCustomNo
             // 
@@ -487,38 +518,81 @@
             radUseCustomNo.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             radUseCustomNo.Location = new Point(52, 3);
             radUseCustomNo.Name = "radUseCustomNo";
-            radUseCustomNo.Size = new Size(41, 19);
+            radUseCustomNo.Size = new Size(41, 26);
             radUseCustomNo.TabIndex = 6;
             radUseCustomNo.TabStop = true;
             radUseCustomNo.Text = "No";
             radUseCustomNo.UseVisualStyleBackColor = true;
-            radUseCustomNo.CheckedChanged += radUseCustomNo_CheckedChanged;
+            radUseCustomNo.CheckedChanged += RadUseCustomNo_CheckedChanged;
+            // 
+            // btnOpenIconManager
+            // 
+            btnOpenIconManager.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            btnOpenIconManager.BackColor = Color.Yellow;
+            btnOpenIconManager.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
+            btnOpenIconManager.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
+            btnOpenIconManager.FlatStyle = FlatStyle.Flat;
+            btnOpenIconManager.Image = Properties.Resources.magic_wand_16x16;
+            btnOpenIconManager.Location = new Point(99, 2);
+            btnOpenIconManager.Margin = new Padding(3, 2, 3, 2);
+            btnOpenIconManager.Name = "btnOpenIconManager";
+            btnOpenIconManager.Size = new Size(189, 28);
+            btnOpenIconManager.TabIndex = 7;
+            btnOpenIconManager.Text = "Icon Manager";
+            btnOpenIconManager.TextAlign = ContentAlignment.MiddleRight;
+            btnOpenIconManager.TextImageRelation = TextImageRelation.ImageBeforeText;
+            btnOpenIconManager.UseVisualStyleBackColor = false;
+            btnOpenIconManager.Click += btnOpenIconManager_Click;
+            btnOpenIconManager.MouseEnter += btnOpenIconManager_Enter;
+            btnOpenIconManager.MouseLeave += Lbl_MouseLeave;
             // 
             // lblInkPart
             // 
             lblInkPart.Anchor = AnchorStyles.Right;
             lblInkPart.AutoSize = true;
             lblInkPart.Font = new Font("Segoe UI Variable Text", 9F);
-            lblInkPart.Location = new Point(73, 81);
+            lblInkPart.Location = new Point(196, 84);
             lblInkPart.Name = "lblInkPart";
             lblInkPart.Size = new Size(82, 16);
             lblInkPart.TabIndex = 1;
             lblInkPart.Text = "Ink Atlas Part: ";
-            lblInkPart.MouseEnter += lblInkPart_MouseEnter;
-            lblInkPart.MouseLeave += lbl_MouseLeave;
+            lblInkPart.MouseEnter += LblInkPart_MouseEnter;
+            lblInkPart.MouseLeave += Lbl_MouseLeave;
             // 
             // lblInkPath
             // 
             lblInkPath.Anchor = AnchorStyles.Right;
             lblInkPath.AutoSize = true;
             lblInkPath.Font = new Font("Segoe UI Variable Text", 9F);
-            lblInkPath.Location = new Point(70, 44);
+            lblInkPath.Location = new Point(193, 50);
             lblInkPath.Name = "lblInkPath";
             lblInkPath.Size = new Size(85, 16);
             lblInkPath.TabIndex = 0;
             lblInkPath.Text = "Ink Atlas Path: ";
-            lblInkPath.MouseEnter += lblInkPath_MouseEnter;
-            lblInkPath.MouseLeave += lbl_MouseLeave;
+            lblInkPath.MouseEnter += LblInkPath_MouseEnter;
+            lblInkPath.MouseLeave += Lbl_MouseLeave;
+            // 
+            // picStationIcon
+            // 
+            picStationIcon.AllowDrop = true;
+            picStationIcon.Dock = DockStyle.Fill;
+            picStationIcon.Image = Properties.Resources.drag_and_drop;
+            imageProperties2.Height = 0;
+            imageProperties2.ImageFormat = System.Drawing.Imaging.ImageFormat.Png;
+            imageProperties2.PixelFormat = System.Drawing.Imaging.PixelFormat.DontCare;
+            imageProperties2.Width = 0;
+            picStationIcon.ImageProperties = imageProperties2;
+            picStationIcon.Location = new Point(3, 3);
+            picStationIcon.Name = "picStationIcon";
+            tlpCustomIcon.SetRowSpan(picStationIcon, 3);
+            picStationIcon.Size = new Size(147, 104);
+            picStationIcon.SizeMode = PictureBoxSizeMode.Zoom;
+            picStationIcon.TabIndex = 4;
+            picStationIcon.TabStop = false;
+            picStationIcon.Tag = "dropTarget";
+            picStationIcon.DragDrop += PicStationIcon_DragDrop;
+            picStationIcon.MouseEnter += picStationIcon_MouseEnter;
+            picStationIcon.MouseLeave += Lbl_MouseLeave;
             // 
             // tabMusic
             // 
@@ -586,8 +660,8 @@
             lblStreamURL.Size = new Size(70, 16);
             lblStreamURL.TabIndex = 3;
             lblStreamURL.Text = "Stream URL:";
-            lblStreamURL.MouseEnter += lblStreamURL_MouseEnter;
-            lblStreamURL.MouseLeave += lbl_MouseLeave;
+            lblStreamURL.MouseEnter += LblStreamURL_MouseEnter;
+            lblStreamURL.MouseLeave += Lbl_MouseLeave;
             // 
             // lblUseStream
             // 
@@ -599,8 +673,8 @@
             lblUseStream.Size = new Size(70, 16);
             lblUseStream.TabIndex = 1;
             lblUseStream.Text = "Use Stream?";
-            lblUseStream.MouseEnter += lblUseStream_MouseEnter;
-            lblUseStream.MouseLeave += lbl_MouseLeave;
+            lblUseStream.MouseEnter += LblUseStream_MouseEnter;
+            lblUseStream.MouseLeave += Lbl_MouseLeave;
             // 
             // flowLayoutPanel2
             // 
@@ -625,7 +699,7 @@
             radUseStreamYes.TabStop = true;
             radUseStreamYes.Text = "Yes";
             radUseStreamYes.UseVisualStyleBackColor = true;
-            radUseStreamYes.CheckedChanged += radUseStreamYes_CheckedChanged;
+            radUseStreamYes.CheckedChanged += RadUseStreamYes_CheckedChanged;
             // 
             // radUseStreamNo
             // 
@@ -639,14 +713,14 @@
             radUseStreamNo.TabStop = true;
             radUseStreamNo.Text = "No";
             radUseStreamNo.UseVisualStyleBackColor = true;
-            radUseStreamNo.CheckedChanged += radUseStreamNo_CheckedChanged;
+            radUseStreamNo.CheckedChanged += RadUseStreamNo_CheckedChanged;
             // 
             // tableLayoutPanel6
             // 
             tableLayoutPanel6.ColumnCount = 2;
             tableLayoutPanel6.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 71.39334F));
             tableLayoutPanel6.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 28.6066589F));
-            tableLayoutPanel6.Controls.Add(flowLayoutPanel3, 0, 1);
+            tableLayoutPanel6.Controls.Add(flpStreamUrlTesting, 0, 1);
             tableLayoutPanel6.Controls.Add(btnGetFromRadioGarden, 1, 0);
             tableLayoutPanel6.Controls.Add(txtStreamURL, 0, 0);
             tableLayoutPanel6.Dock = DockStyle.Fill;
@@ -658,25 +732,28 @@
             tableLayoutPanel6.Size = new Size(811, 92);
             tableLayoutPanel6.TabIndex = 4;
             // 
-            // flowLayoutPanel3
+            // flpStreamUrlTesting
             // 
-            tableLayoutPanel6.SetColumnSpan(flowLayoutPanel3, 2);
-            flowLayoutPanel3.Controls.Add(mpStreamPlayer);
-            flowLayoutPanel3.Dock = DockStyle.Fill;
-            flowLayoutPanel3.Location = new Point(3, 49);
-            flowLayoutPanel3.Name = "flowLayoutPanel3";
-            flowLayoutPanel3.Size = new Size(805, 40);
-            flowLayoutPanel3.TabIndex = 1;
+            flpStreamUrlTesting.BackColor = Color.Transparent;
+            tableLayoutPanel6.SetColumnSpan(flpStreamUrlTesting, 2);
+            flpStreamUrlTesting.Controls.Add(mpStreamPlayer);
+            flpStreamUrlTesting.Dock = DockStyle.Fill;
+            flpStreamUrlTesting.Location = new Point(3, 49);
+            flpStreamUrlTesting.Name = "flpStreamUrlTesting";
+            flpStreamUrlTesting.Size = new Size(805, 40);
+            flpStreamUrlTesting.TabIndex = 1;
             // 
             // mpStreamPlayer
             // 
             mpStreamPlayer.BackColor = Color.Transparent;
-            mpStreamPlayer.Location = new Point(3, 2);
-            mpStreamPlayer.Margin = new Padding(3, 2, 3, 2);
+            mpStreamPlayer.ForeColor = Color.Transparent;
+            mpStreamPlayer.Location = new Point(3, 3);
             mpStreamPlayer.Name = "mpStreamPlayer";
-            mpStreamPlayer.Size = new Size(37, 36);
+            mpStreamPlayer.Size = new Size(32, 32);
             mpStreamPlayer.StreamUrl = "";
-            mpStreamPlayer.TabIndex = 3;
+            mpStreamPlayer.TabIndex = 4;
+            mpStreamPlayer.MouseEnter += mpStreamPlayer_MouseEnter;
+            mpStreamPlayer.MouseLeave += Lbl_MouseLeave;
             // 
             // btnGetFromRadioGarden
             // 
@@ -686,13 +763,18 @@
             btnGetFromRadioGarden.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
             btnGetFromRadioGarden.FlatStyle = FlatStyle.Flat;
             btnGetFromRadioGarden.Font = new Font("Segoe UI Variable Display", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnGetFromRadioGarden.Image = Properties.Resources.parse_16x16;
             btnGetFromRadioGarden.Location = new Point(582, 7);
             btnGetFromRadioGarden.Name = "btnGetFromRadioGarden";
             btnGetFromRadioGarden.Size = new Size(226, 32);
             btnGetFromRadioGarden.TabIndex = 4;
             btnGetFromRadioGarden.Text = "Parse From Radio.Garden";
+            btnGetFromRadioGarden.TextAlign = ContentAlignment.MiddleRight;
+            btnGetFromRadioGarden.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnGetFromRadioGarden.UseVisualStyleBackColor = false;
-            btnGetFromRadioGarden.Click += btnGetFromRadioGarden_Click;
+            btnGetFromRadioGarden.Click += BtnGetFromRadioGarden_Click;
+            btnGetFromRadioGarden.MouseEnter += btnGetFromRadioGarden_MouseEnter;
+            btnGetFromRadioGarden.MouseLeave += Lbl_MouseLeave;
             // 
             // txtStreamURL
             // 
@@ -702,15 +784,7 @@
             txtStreamURL.Name = "txtStreamURL";
             txtStreamURL.Size = new Size(573, 23);
             txtStreamURL.TabIndex = 0;
-            txtStreamURL.TextChanged += txtStreamURL_TextChanged;
-            // 
-            // tabImages
-            // 
-            tabImages.ColorDepth = ColorDepth.Depth32Bit;
-            tabImages.ImageStream = (ImageListStreamer)resources.GetObject("tabImages.ImageStream");
-            tabImages.TransparentColor = Color.Transparent;
-            tabImages.Images.SetKeyName(0, "display-frame.png");
-            tabImages.Images.SetKeyName(1, "sound-waves.png");
+            txtStreamURL.TextChanged += TxtStreamURL_TextChanged;
             // 
             // statusStrip1
             // 
@@ -725,7 +799,7 @@
             // 
             // lblStatus
             // 
-            lblStatus.Image = Properties.Resources.info;
+            lblStatus.Image = Properties.Resources.status__16x16;
             lblStatus.Margin = new Padding(5, 3, 0, 2);
             lblStatus.Name = "lblStatus";
             lblStatus.Padding = new Padding(2);
@@ -734,6 +808,7 @@
             // 
             // StationEditor
             // 
+            AllowDrop = true;
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;
@@ -749,6 +824,8 @@
             tabControl.ResumeLayout(false);
             tabDisplayAndIcon.ResumeLayout(false);
             panel1.ResumeLayout(false);
+            grpCustomData.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)dgvMetadata).EndInit();
             grpSettings.ResumeLayout(false);
             tableLayoutPanel1.ResumeLayout(false);
             tableLayoutPanel1.PerformLayout();
@@ -759,10 +836,11 @@
             panel2.ResumeLayout(false);
             panel2.PerformLayout();
             grpCustomIcon.ResumeLayout(false);
-            tableLayoutPanel2.ResumeLayout(false);
-            tableLayoutPanel2.PerformLayout();
+            tlpCustomIcon.ResumeLayout(false);
+            tlpCustomIcon.PerformLayout();
             flowLayoutPanel1.ResumeLayout(false);
             flowLayoutPanel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)picStationIcon).EndInit();
             tabMusic.ResumeLayout(false);
             grpStreamSettings.ResumeLayout(false);
             tableLayoutPanel5.ResumeLayout(false);
@@ -771,7 +849,7 @@
             flowLayoutPanel2.PerformLayout();
             tableLayoutPanel6.ResumeLayout(false);
             tableLayoutPanel6.PerformLayout();
-            flowLayoutPanel3.ResumeLayout(false);
+            flpStreamUrlTesting.ResumeLayout(false);
             statusStrip1.ResumeLayout(false);
             statusStrip1.PerformLayout();
             ResumeLayout(false);
@@ -781,16 +859,14 @@
         #endregion
         private Label lblName;
         private TextBox txtDisplayName;
-        private Label lblIcon;
         private Label label3;
         private GroupBox grpDisplay;
         private TableLayoutPanel tlpDisplayTable;
         private TabControl tabControl;
         private TabPage tabDisplayAndIcon;
         private TabPage tabMusic;
-        private ImageList tabImages;
         private GroupBox grpCustomIcon;
-        private TableLayoutPanel tableLayoutPanel2;
+        private TableLayoutPanel tlpCustomIcon;
         private TextBox txtInkAtlasPart;
         private TextBox txtInkAtlasPath;
         private Label lblUsingCustomIcon;
@@ -809,7 +885,6 @@
         private Label lblVolumeVal;
         private TextBox txtVolumeEdit;
         private Label lblVolumeMinMax;
-        private Panel panel3;
         private GroupBox grpStreamSettings;
         private TableLayoutPanel tableLayoutPanel5;
         private Label lblUseStream;
@@ -819,14 +894,19 @@
         private Label lblStreamURL;
         private TableLayoutPanel tableLayoutPanel6;
         private TextBox txtStreamURL;
-        private FlowLayoutPanel flowLayoutPanel3;
+        private FlowLayoutPanel flpStreamUrlTesting;
         private TrackBar volumeSlider;
         private FlowLayoutPanel flowLayoutPanel4;
         private Panel panel2;
         private StatusStrip statusStrip1;
         private ToolStripStatusLabel lblStatus;
         private GroupBox grpSongs;
-        private MusicPlayer mpStreamPlayer;
         private Button btnGetFromRadioGarden;
+        private MusicPlayer mpStreamPlayer;
+        private GroupBox grpCustomData;
+        private DataGridView dgvMetadata;
+        private CustomPictureBox picStationIcon;
+        private Button btnOpenIconManager;
+        private Label lblIcon;
     }
 }

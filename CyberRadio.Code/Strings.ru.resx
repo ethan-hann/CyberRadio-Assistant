@@ -1,0 +1,1260 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="IconHelp" xml:space="preserve">
+    <value>Значок для станции, если вы не используете пользовательский. Это может быть любая запись UIICON.</value>
+  </data>
+  <data name="Ready" xml:space="preserve">
+    <value>Готовый</value>
+  </data>
+  <data name="StationNameHelp" xml:space="preserve">
+    <value>Управляйте названием вашей станции, которая будет отображаться в игре. Специальные персонажи сбежаются должным образом.</value>
+  </data>
+  <data name="NoExeFound" xml:space="preserve">
+    <value>Путь к исполняемому файлу Cyberpunk 2077 не был установлен.
+Пожалуйста, установите это сейчас.</value>
+  </data>
+  <data name="NoGamePath" xml:space="preserve">
+    <value>Нет игрового пути</value>
+  </data>
+  <data name="RadioExtPathPlaceholder" xml:space="preserve">
+    <value>&lt;Нет пути пути; Radioext не установлен&gt;</value>
+  </data>
+  <data name="StagingPathPlaceholder" xml:space="preserve">
+    <value>&lt;Нет пути пути; Радиостанции должны быть организованы в первую очередь&gt;</value>
+  </data>
+  <data name="AreYouSure" xml:space="preserve">
+    <value>Вы уверены?</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Подтверждать</value>
+  </data>
+  <data name="NonCyberpunkExe" xml:space="preserve">
+    <value>Выбранный файл не выглядел как Cyberpunk 2077. Повторите попытку.</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Отмена</value>
+  </data>
+  <data name="GameBasePath" xml:space="preserve">
+    <value>Игровой базовый путь</value>
+  </data>
+  <data name="RadioStationPath" xml:space="preserve">
+    <value>Радиостанции Путь</value>
+  </data>
+  <data name="StagingPath" xml:space="preserve">
+    <value>Постановление пути</value>
+  </data>
+  <data name="Change" xml:space="preserve">
+    <value>Изменять</value>
+  </data>
+  <data name="Clear" xml:space="preserve">
+    <value>Прозрачный</value>
+  </data>
+  <data name="GameBasePathPlaceholder" xml:space="preserve">
+    <value>&lt;Нет пути пути; исполняемый файл игры пропал без вести&gt;</value>
+  </data>
+  <data name="GamePaths" xml:space="preserve">
+    <value>Игровые пути</value>
+  </data>
+  <data name="MainTitle" xml:space="preserve">
+    <value>Помощник кибер -радио</value>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>Файл</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Язык</value>
+  </data>
+  <data name="Help" xml:space="preserve">
+    <value>Помощь</value>
+  </data>
+  <data name="RefreshStations" xml:space="preserve">
+    <value>Перезагрузить с поста</value>
+  </data>
+  <data name="HowToUse" xml:space="preserve">
+    <value>Как использовать</value>
+  </data>
+  <data name="About" xml:space="preserve">
+    <value>О</value>
+  </data>
+  <data name="NewStation" xml:space="preserve">
+    <value>Новая станция</value>
+  </data>
+  <data name="DeleteStation" xml:space="preserve">
+    <value>Удалить станцию</value>
+  </data>
+  <data name="DisplayAndIcon" xml:space="preserve">
+    <value>Дисплей и значок</value>
+  </data>
+  <data name="Music" xml:space="preserve">
+    <value>Музыка</value>
+  </data>
+  <data name="OpenGameExecutable" xml:space="preserve">
+    <value>Открытая игра исполняется</value>
+  </data>
+  <data name="DisplayName" xml:space="preserve">
+    <value>Имя:</value>
+  </data>
+  <data name="Display" xml:space="preserve">
+    <value>Отображать</value>
+  </data>
+  <data name="CustomIcon" xml:space="preserve">
+    <value>Пользовательский значок</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Настройки</value>
+  </data>
+  <data name="Icon" xml:space="preserve">
+    <value>Икона:</value>
+  </data>
+  <data name="UsingQuestion" xml:space="preserve">
+    <value>С использованием?</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Да</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>Нет</value>
+  </data>
+  <data name="InkAtlasPath" xml:space="preserve">
+    <value>Чернильный путь Атласа:</value>
+  </data>
+  <data name="InkAtlasPart" xml:space="preserve">
+    <value>Чернильный атлас часть:</value>
+  </data>
+  <data name="FM" xml:space="preserve">
+    <value>FM:</value>
+  </data>
+  <data name="Volume" xml:space="preserve">
+    <value>Объем:</value>
+  </data>
+  <data name="Value" xml:space="preserve">
+    <value>Ценить:</value>
+  </data>
+  <data name="Min" xml:space="preserve">
+    <value>Мин:</value>
+  </data>
+  <data name="Max" xml:space="preserve">
+    <value>Макс:</value>
+  </data>
+  <data name="UseStream" xml:space="preserve">
+    <value>Использовать поток?</value>
+  </data>
+  <data name="StreamURL" xml:space="preserve">
+    <value>УРЛ потока:</value>
+  </data>
+  <data name="StreamSettings" xml:space="preserve">
+    <value>Настройки потока</value>
+  </data>
+  <data name="CustomIconHelp" xml:space="preserve">
+    <value>Указывает, хотите ли вы использовать пользовательский значок для радиостанции.</value>
+  </data>
+  <data name="InkPathHelp" xml:space="preserve">
+    <value>Указывает на.</value>
+  </data>
+  <data name="InkPartHelp" xml:space="preserve">
+    <value>Указывает, какая часть</value>
+  </data>
+  <data name="FMHelp" xml:space="preserve">
+    <value>Используется для размещения станции в нужном месте в списке станций. Если имя станции имеет номер FM, оно должно быть таким же.</value>
+  </data>
+  <data name="VolumeHelp" xml:space="preserve">
+    <value>Общий объемный мультипликатор для станции. Убедитесь, что все песни имеют одинаковый громкость, затем отрегулируйте общий объем станции с этим значением, чтобы соответствовать ванильным станциям.</value>
+  </data>
+  <data name="VolumeValHelp" xml:space="preserve">
+    <value>В настоящее время выбран том. Используйте слайдер или двойное значение, чтобы изменить.</value>
+  </data>
+  <data name="UseStreamHelp" xml:space="preserve">
+    <value>Указывает, должна ли эта станция использовать веб -поток для своего аудио -источника.</value>
+  </data>
+  <data name="StreamURLHelp" xml:space="preserve">
+    <value>URL -адрес веб -потока для использования.</value>
+  </data>
+  <data name="OpenURLErrorOccured" xml:space="preserve">
+    <value>Произошла ошибка при попытке открыть URL: </value>
+  </data>
+  <data name="RadioExtGithub" xml:space="preserve">
+    <value>Radioext Github</value>
+  </data>
+  <data name="RadioExtNexusMods" xml:space="preserve">
+    <value>Radioext на NexusMods</value>
+  </data>
+  <data name="NoStationsYet" xml:space="preserve">
+    <value>Пока нет станций!</value>
+  </data>
+  <data name="NewStationListBoxEntry" xml:space="preserve">
+    <value>[Новая станция]</value>
+  </data>
+  <data name="AddSongsToolStrip" xml:space="preserve">
+    <value>Добавить песню (ы)</value>
+  </data>
+  <data name="RemoveSongsToolStrip" xml:space="preserve">
+    <value>Удалить выбранную песню (ы)</value>
+  </data>
+  <data name="SongNameHeader" xml:space="preserve">
+    <value>Имя</value>
+  </data>
+  <data name="SongLengthHeader" xml:space="preserve">
+    <value>Длина</value>
+  </data>
+  <data name="SongFileSizeHeader" xml:space="preserve">
+    <value>Размер файла</value>
+  </data>
+  <data name="EditSongOrder" xml:space="preserve">
+    <value>Редактировать заказ песни</value>
+  </data>
+  <data name="SongArtistHeader" xml:space="preserve">
+    <value>Художник</value>
+  </data>
+  <data name="DeleteAllSongsConfirm" xml:space="preserve">
+    <value>Вы уверены, что хотите удалить все песни?</value>
+  </data>
+  <data name="Songs" xml:space="preserve">
+    <value>Песни</value>
+  </data>
+  <data name="Stations" xml:space="preserve">
+    <value>Станции</value>
+  </data>
+  <data name="SongListing" xml:space="preserve">
+    <value>Список песен</value>
+  </data>
+  <data name="SongOrder" xml:space="preserve">
+    <value>Порядок песни</value>
+  </data>
+  <data name="AddSelected" xml:space="preserve">
+    <value>Добавить выбранный  </value>
+  </data>
+  <data name="RemoveSelected" xml:space="preserve">
+    <value>  Удалить выбранные</value>
+  </data>
+  <data name="Order" xml:space="preserve">
+    <value>Заказ</value>
+  </data>
+  <data name="ExportToGame" xml:space="preserve">
+    <value>Экспорт в игру</value>
+  </data>
+  <data name="ExportToStaging" xml:space="preserve">
+    <value>Экспорт в постановку</value>
+  </data>
+  <data name="Export" xml:space="preserve">
+    <value>Экспорт</value>
+  </data>
+  <data name="ExportHelp" xml:space="preserve">
+    <value>Нажмите «Экспорт в постановку», чтобы сначала экспортировать станции выше в папку с постановкой.
+Вы сможете просмотреть станции перед копированием в каталог игры.
+
+Если что -то не выглядит правильно, выйдите из этого окна и внесите изменения в основное приложение.</value>
+  </data>
+  <data name="LVDisplayName" xml:space="preserve">
+    <value>Отображаемое имя</value>
+  </data>
+  <data name="LVStationIcon" xml:space="preserve">
+    <value>Икона</value>
+  </data>
+  <data name="LVSongCount" xml:space="preserve">
+    <value>Количество песен</value>
+  </data>
+  <data name="LVStreamURL" xml:space="preserve">
+    <value>Потоковой URL</value>
+  </data>
+  <data name="LVProposedPath" xml:space="preserve">
+    <value>Предлагаемый путь</value>
+  </data>
+  <data name="ExportCompleteStatus" xml:space="preserve">
+    <value>Экспортируется в постановку!</value>
+  </data>
+  <data name="ExportCanceled" xml:space="preserve">
+    <value>Экспорт отменен</value>
+  </data>
+  <data name="ExportingStationStatus" xml:space="preserve">
+    <value>Экспортная станция: {0}</value>
+  </data>
+  <data name="IsStream" xml:space="preserve">
+    <value>Потоковой</value>
+  </data>
+  <data name="UsingSongs" xml:space="preserve">
+    <value>Используя песни</value>
+  </data>
+  <data name="OpenStagingFolder" xml:space="preserve">
+    <value>Открытая папка</value>
+  </data>
+  <data name="OpenGameFolder" xml:space="preserve">
+    <value>Открыть папку Radios Game</value>
+  </data>
+  <data name="ExportToGameComplete" xml:space="preserve">
+    <value>Экспортируется в игру!</value>
+  </data>
+  <data name="ExportStations" xml:space="preserve">
+    <value>Экспортные станции</value>
+  </data>
+  <data name="StreamURLError" xml:space="preserve">
+    <value>Пожалуйста, введите действительный URL -адрес.</value>
+  </data>
+  <data name="ErrorStreamingAudio" xml:space="preserve">
+    <value>Аудио потоковой передачи ошибок: {0}</value>
+  </data>
+  <data name="ErrorPausingStream" xml:space="preserve">
+    <value>Ошибка приостановка потока: {0}</value>
+  </data>
+  <data name="StagingPathHelp" xml:space="preserve">
+    <value>Выберите промежуточный путь радиостанции.</value>
+  </data>
+  <data name="NoStagingPath" xml:space="preserve">
+    <value>Нет промежуточного пути</value>
+  </data>
+  <data name="NoStagingPathFound" xml:space="preserve">
+    <value>Папка для радиостанций еще не установлена.
+Пожалуйста, установите это сейчас.</value>
+  </data>
+  <data name="Paths" xml:space="preserve">
+    <value>Пути ...</value>
+  </data>
+  <data name="NoModInstalled" xml:space="preserve">
+    <value>Не установлен мод</value>
+  </data>
+  <data name="NoRadioExtMsg" xml:space="preserve">
+    <value>У вас нет установленного мода Radioxt.
+Не могу экспортировать радиостанции в игру.</value>
+  </data>
+  <data name="AboutInfo" xml:space="preserve">
+    <value>Инструмент, помогающий создавать и управлять пользовательскими радиостанциями в Cyberpunk 2077 при использовании мода Radioxt.</value>
+  </data>
+  <data name="AboutSpecialThanks1" xml:space="preserve">
+    <value>Особое спасибо</value>
+  </data>
+  <data name="AboutSpecialThanks2" xml:space="preserve">
+    <value>Для потрясающего мода Radioext!</value>
+  </data>
+  <data name="AboutVersion" xml:space="preserve">
+    <value>Версия {0}</value>
+  </data>
+  <data name="AboutGithubRepo" xml:space="preserve">
+    <value>GitHub Repo</value>
+  </data>
+  <data name="AboutLicense" xml:space="preserve">
+    <value>Лицензия</value>
+  </data>
+  <data name="CheckForUpdates" xml:space="preserve">
+    <value>Проверьте наличие обновлений</value>
+  </data>
+  <data name="UpdateDownloadPercent" xml:space="preserve">
+    <value>Загружен {0}%</value>
+  </data>
+  <data name="UpdateDownloadComplete" xml:space="preserve">
+    <value>Скачать закончен! Запуск обновления ...</value>
+  </data>
+  <data name="UpdateDownloadError" xml:space="preserve">
+    <value>Ошибка загрузки: {0}</value>
+  </data>
+  <data name="UpdateCheckError" xml:space="preserve">
+    <value>Проверка ошибок для обновлений: {0}</value>
+  </data>
+  <data name="UpdateCurrentVersion" xml:space="preserve">
+    <value>Текущая версия:</value>
+  </data>
+  <data name="UpdateNewVersion" xml:space="preserve">
+    <value>Новая версия:</value>
+  </data>
+  <data name="UpdateChangelog" xml:space="preserve">
+    <value>Изменение:</value>
+  </data>
+  <data name="UpdateDownloadButton" xml:space="preserve">
+    <value>Скачать</value>
+  </data>
+  <data name="UpdateAvailable" xml:space="preserve">
+    <value>Обновление доступно</value>
+  </data>
+  <data name="UpdateAvailableNotice" xml:space="preserve">
+    <value>Есть новое обновление для CRA. Вы хотите открыть загрузчик сейчас?</value>
+  </data>
+  <data name="NoUpdateAvailable" xml:space="preserve">
+    <value>Вы находитесь на последней версии. Нет обновления.</value>
+  </data>
+  <data name="NoUpdateCaption" xml:space="preserve">
+    <value>До настоящего времени</value>
+  </data>
+  <data name="UpdateFolderOpening" xml:space="preserve">
+    <value>Обновление завершено. Папка, содержащаяся теперь, будет открыта, а приложение будет закрыто.</value>
+  </data>
+  <data name="UpdateFolderOpeningCaption" xml:space="preserve">
+    <value>Открывающая папка</value>
+  </data>
+  <data name="ParseFromRadioGarden" xml:space="preserve">
+    <value>Parse From Radio.garden</value>
+  </data>
+  <data name="InvalidStream" xml:space="preserve">
+    <value>Неверный поток - не будет работать в игре</value>
+  </data>
+  <data name="RadioGardenURLCaption" xml:space="preserve">
+    <value>Радио -сад URL</value>
+  </data>
+  <data name="RadioGardenInput" xml:space="preserve">
+    <value>Введите URL Radio.garden:</value>
+  </data>
+  <data name="EnableSelected" xml:space="preserve">
+    <value>Включить выбранный</value>
+  </data>
+  <data name="DisableSelected" xml:space="preserve">
+    <value>Отключить избранные</value>
+  </data>
+  <data name="EnableAllStations" xml:space="preserve">
+    <value>Включить все</value>
+  </data>
+  <data name="DisableAllStations" xml:space="preserve">
+    <value>Отключить все</value>
+  </data>
+  <data name="EnabledStationsCount" xml:space="preserve">
+    <value>Включенные станции: {0} / {1}</value>
+  </data>
+  <data name="DisabledStation" xml:space="preserve">
+    <value>Станция инвалидов</value>
+  </data>
+  <data name="LVStationStatus" xml:space="preserve">
+    <value>Включено?</value>
+  </data>
+  <data name="NoInternetCaption" xml:space="preserve">
+    <value>Нет соединения</value>
+  </data>
+  <data name="NoInternetMsg" xml:space="preserve">
+    <value>Не удалось проверить обновления. Пожалуйста, проверьте свой интернет и попробуйте еще раз.</value>
+  </data>
+  <data name="Configuration" xml:space="preserve">
+    <value>Конфигурация</value>
+  </data>
+  <data name="GeneralSettings" xml:space="preserve">
+    <value>Общий</value>
+  </data>
+  <data name="LogSettings" xml:space="preserve">
+    <value>Регистрация</value>
+  </data>
+  <data name="CheckForUpdatesOption" xml:space="preserve">
+    <value>Проверить на наличие обновлений при запуске?</value>
+  </data>
+  <data name="AutoExportOption" xml:space="preserve">
+    <value>Автоэкспорт в игру?</value>
+  </data>
+  <data name="EditPathsOption" xml:space="preserve">
+    <value>Редактировать пути ...</value>
+  </data>
+  <data name="CheckForUpdatesOptionHelp" xml:space="preserve">
+    <value>Если проверено, позволяйте приложению проверить обновления сразу после запуска.</value>
+  </data>
+  <data name="AutoExportOptionHelp" xml:space="preserve">
+    <value>При проверке ваши станции немедленно экспортируют в игру после успешного экспорта в постановку.</value>
+  </data>
+  <data name="EditPathsOptionHelp" xml:space="preserve">
+    <value>Открывает диалоговое окно «Путь», чтобы редактировать базовый путь постановки и игры.</value>
+  </data>
+  <data name="NewLogFileOption" xml:space="preserve">
+    <value>Новый файл каждый запуск?</value>
+  </data>
+  <data name="NewLogFileOptionHelp" xml:space="preserve">
+    <value>При проверке указывается, что новый файл журнала будет создан при каждом заезде приложения.</value>
+  </data>
+  <data name="SaveAndClose" xml:space="preserve">
+    <value>Сохранить и закрыть</value>
+  </data>
+  <data name="ResetToDefaults" xml:space="preserve">
+    <value>Сбросить по умолчанию</value>
+  </data>
+  <data name="ConfigResetConfirm" xml:space="preserve">
+    <value>Вы уверены, что хотите сбросить конфигурацию до значений по умолчанию?</value>
+  </data>
+  <data name="ConfigSaveError" xml:space="preserve">
+    <value>Была ошибка сохранения конфигурации. Пожалуйста, убедитесь, что файл config.yml существует.</value>
+  </data>
+  <data name="ConfigSaveSuccess" xml:space="preserve">
+    <value>Конфигурация сохранена!</value>
+  </data>
+  <data name="Success" xml:space="preserve">
+    <value>Успех</value>
+  </data>
+  <data name="OpenLogFolder" xml:space="preserve">
+    <value>Откройте папку журнала</value>
+  </data>
+  <data name="ConfirmRefreshStations" xml:space="preserve">
+    <value>Вы уверены, что хотите обновить свои станции с диска?
+Вы потеряете любые ожидающие изменения на станциях.</value>
+  </data>
+  <data name="EditLogsPathOption" xml:space="preserve">
+    <value>Редактировать путь журналов ...</value>
+  </data>
+  <data name="EditLogsPathOptionHelp" xml:space="preserve">
+    <value>Открывает диалоговое окно папки, где вы можете выбрать новый путь для сохранения файлов журнала.</value>
+  </data>
+  <data name="LogPathLabel" xml:space="preserve">
+    <value>Путь журнала:</value>
+  </data>
+  <data name="SelectLogPathDesc" xml:space="preserve">
+    <value>Выберите место для хранения файлов журнала</value>
+  </data>
+  <data name="NoLogPathSet" xml:space="preserve">
+    <value>&lt;Нет пути&gt;</value>
+  </data>
+  <data name="ExportWindowTip" xml:space="preserve">
+    <value>     Только включенные станции 
+экспортируется в игру.</value>
+  </data>
+  <data name="AddSongsFileBrowserTitle" xml:space="preserve">
+    <value>Выберите файлы песни, чтобы добавить</value>
+  </data>
+  <data name="RevertChanges" xml:space="preserve">
+    <value>Вернуть изменения</value>
+  </data>
+  <data name="ClearAllSongs" xml:space="preserve">
+    <value>Ясно!</value>
+  </data>
+  <data name="SplashScreen_Starting" xml:space="preserve">
+    <value>Начало ...</value>
+  </data>
+  <data name="SplashScreen_CheckingSettings" xml:space="preserve">
+    <value>Проверка настроек ...</value>
+  </data>
+  <data name="SplashScreen_MigratedSettings" xml:space="preserve">
+    <value>Настройки успешно мигрировали.</value>
+  </data>
+  <data name="SplashScreen_MigratedSettingsNo" xml:space="preserve">
+    <value>Настройки миграции не нужны.</value>
+  </data>
+  <data name="SplashScreen_CheckingSongs" xml:space="preserve">
+    <value>Проверка форматов песен ...</value>
+  </data>
+  <data name="SplashScreen_UpdateCheck" xml:space="preserve">
+    <value>Проверка обновлений ...</value>
+  </data>
+  <data name="SplashScreen_UpdateCheckNo" xml:space="preserve">
+    <value>Пропустить проверку для обновлений ...</value>
+  </data>
+  <data name="SplashScreen_Finalizing" xml:space="preserve">
+    <value>Завершение ...</value>
+  </data>
+  <data name="ConfirmExit" xml:space="preserve">
+    <value>Есть {0} станции, ожидающие экспорта.
+Вы уверены, что хотите бросить?</value>
+  </data>
+  <data name="BackupProgressChanged" xml:space="preserve">
+    <value>Резервное копирование ... {0}%</value>
+  </data>
+  <data name="BackupCompleted" xml:space="preserve">
+    <value>Резервное копирование завершено успешно.</value>
+  </data>
+  <data name="BackupFailed" xml:space="preserve">
+    <value>Резервное копирование не удалось.</value>
+  </data>
+  <data name="BackupFailedException" xml:space="preserve">
+    <value>Резервное копирование не удалось из -за ошибки: {0}</value>
+  </data>
+  <data name="LocateSong" xml:space="preserve">
+    <value>Найдите пропавшую песню</value>
+  </data>
+  <data name="InvalidFile" xml:space="preserve">
+    <value>Пожалуйста, выберите правильный файл.</value>
+  </data>
+  <data name="InvalidFileCaption" xml:space="preserve">
+    <value>Неверный файл</value>
+  </data>
+  <data name="SongExistsHeader" xml:space="preserve">
+    <value>Файл существует?</value>
+  </data>
+  <data name="SplashScreen_CheckApiAccess" xml:space="preserve">
+    <value>Проверка ключа API Nexus ...</value>
+  </data>
+  <data name="Backup" xml:space="preserve">
+    <value>Резервная копия</value>
+  </data>
+  <data name="BackupFolderDesc" xml:space="preserve">
+    <value>Выберите папку, чтобы сохранить резервную копию на</value>
+  </data>
+  <data name="BackupPathIsSubpath" xml:space="preserve">
+    <value>Резервный путь не может быть в пределах промежуточного пути.</value>
+  </data>
+  <data name="ApiStatus" xml:space="preserve">
+    <value>API не аутентифицирован</value>
+  </data>
+  <data name="ExportToGameMissingSongs" xml:space="preserve">
+    <value>Есть {0} Станция (S) с общей {1} неверными пути песни. Вы хотите продолжить экспорт?</value>
+  </data>
+  <data name="SongsMissingPaths" xml:space="preserve">
+    <value>Песни отсутствуют пути</value>
+  </data>
+  <data name="ApiUnsavedChanges" xml:space="preserve">
+    <value>У вас есть неспасенные изменения в свой ключ API. Пожалуйста, сохраните или очистите ключ перед закрытием.</value>
+  </data>
+  <data name="UnsavedChanges" xml:space="preserve">
+    <value>Несавретые изменения</value>
+  </data>
+  <data name="ApiAuthenticated" xml:space="preserve">
+    <value>Аутентифицирован</value>
+  </data>
+  <data name="ApiNotAuthenticated" xml:space="preserve">
+    <value>Не аутентифицировано</value>
+  </data>
+  <data name="BackupStagingFolder" xml:space="preserve">
+    <value>Папка резервного копирования</value>
+  </data>
+  <data name="BackupReady" xml:space="preserve">
+    <value>Резервное копирование готово</value>
+  </data>
+  <data name="StagingPathWithinGamePath" xml:space="preserve">
+    <value>Постановление пути не может быть в игровом пути!</value>
+  </data>
+  <data name="GamePathWithinStagingPath" xml:space="preserve">
+    <value>Игровой путь не может быть в пределах постановки!</value>
+  </data>
+  <data name="SynchronizeStations" xml:space="preserve">
+    <value>Синхронизировать станции</value>
+  </data>
+  <data name="ConfirmSyncStations" xml:space="preserve">
+    <value>Вы уверены, что хотите синхронизировать каталоги постановки и игровых игроков?
+Вы потеряете любые ожидающие изменения на станциях.</value>
+  </data>
+  <data name="MissingStations" xml:space="preserve">
+    <value>В папке игры отсутствуют станция {0}. Хотели бы вы синхронизировать станции?</value>
+  </data>
+  <data name="CustomDataGroup" xml:space="preserve">
+    <value>Пользовательские данные</value>
+  </data>
+  <data name="BackupInProgress" xml:space="preserve">
+    <value>Резервное копирование в процессе. Пожалуйста, подождите...</value>
+  </data>
+  <data name="SyncFailedException" xml:space="preserve">
+    <value>Синхронизация не удалась из -за ошибки: {0}</value>
+  </data>
+  <data name="SyncAbbrev" xml:space="preserve">
+    <value>Синхронизированный</value>
+  </data>
+  <data name="SyncFailed" xml:space="preserve">
+    <value>Синхронизация не удалась!</value>
+  </data>
+  <data name="SyncInProgress" xml:space="preserve">
+    <value>Синхронизация находится в процессе. Пожалуйста, подождите...</value>
+  </data>
+  <data name="CustomDataKey" xml:space="preserve">
+    <value>Ключ</value>
+  </data>
+  <data name="CustomDataValue" xml:space="preserve">
+    <value>Ценить</value>
+  </data>
+  <data name="Exit" xml:space="preserve">
+    <value>Выход</value>
+  </data>
+  <data name="SongFilePathHeader" xml:space="preserve">
+    <value>Файл Путь</value>
+  </data>
+  <data name="TotalSongsLabel" xml:space="preserve">
+    <value>Всего песен:</value>
+  </data>
+  <data name="TotalStationSizeLabel" xml:space="preserve">
+    <value>Размер станции:</value>
+  </data>
+  <data name="WatchForChangesOption" xml:space="preserve">
+    <value>Следите за изменениями станции?</value>
+  </data>
+  <data name="WatchForChangesHelp" xml:space="preserve">
+    <value>При проверке, путь радиостанции будет следить за изменениями и автоматически синхронизировать новые станции с постановкой.</value>
+  </data>
+  <data name="BackupCompressionLevelHelp" xml:space="preserve">
+    <value>Указывает уровень сжатия, используемый при резервном резервном копировании каталога.</value>
+  </data>
+  <data name="BackupPathIsSubpathGame" xml:space="preserve">
+    <value>Резервный путь не может быть в игровом пути.</value>
+  </data>
+  <data name="None" xml:space="preserve">
+    <value>Никто</value>
+  </data>
+  <data name="SuperFast" xml:space="preserve">
+    <value>Супер быстро</value>
+  </data>
+  <data name="Fast" xml:space="preserve">
+    <value>Быстрый</value>
+  </data>
+  <data name="Fastest" xml:space="preserve">
+    <value>Самый быстрый</value>
+  </data>
+  <data name="Normal" xml:space="preserve">
+    <value>Нормальный</value>
+  </data>
+  <data name="High" xml:space="preserve">
+    <value>Высокий</value>
+  </data>
+  <data name="Maximum" xml:space="preserve">
+    <value>Максимум</value>
+  </data>
+  <data name="Ultra" xml:space="preserve">
+    <value>Ультра</value>
+  </data>
+  <data name="Extreme" xml:space="preserve">
+    <value>Крайний</value>
+  </data>
+  <data name="Ultimate" xml:space="preserve">
+    <value>Окончательный</value>
+  </data>
+  <data name="BackupCompressionLevel" xml:space="preserve">
+    <value>Уровень сжатия резервного копирования:</value>
+  </data>
+  <data name="BackupPreviewCompleted" xml:space="preserve">
+    <value>Резервный предварительный просмотр завершен.</value>
+  </data>
+  <data name="EstimatedBackupSizeDisclaimer" xml:space="preserve">
+    <value>* Это оценка, основанная на выбранном уровне сжатия в конфигурации.
+Фактический размер может быть другим.</value>
+  </data>
+  <data name="TotalFileSize" xml:space="preserve">
+    <value>Общий размер файла:</value>
+  </data>
+  <data name="EstimatedBackupSize" xml:space="preserve">
+    <value>Расчетный размер резервного копирования:</value>
+  </data>
+  <data name="CreatingPreview" xml:space="preserve">
+    <value>Создание предварительного просмотра ...</value>
+  </data>
+  <data name="StartBackup" xml:space="preserve">
+    <value>Начать резервную копию</value>
+  </data>
+  <data name="BackupPreviewError" xml:space="preserve">
+    <value>Произошла ошибка при загрузке предварительного просмотра резервного копирования.</value>
+  </data>
+  <data name="UsingCompressionLevel" xml:space="preserve">
+    <value>Использование уровня сжатия: {0}</value>
+  </data>
+  <data name="FileName" xml:space="preserve">
+    <value>Имя файла</value>
+  </data>
+  <data name="CopySongFilesToBackupOption" xml:space="preserve">
+    <value>Скопировать файлы песни в резервную копию?</value>
+  </data>
+  <data name="DefaultSongLocationHelp" xml:space="preserve">
+    <value>Указывает папку, в которой следует сохранить папку, в которой файлы песни импортированной станции. По умолчанию в папку Mymusic.</value>
+  </data>
+  <data name="IconManagerFormTitle" xml:space="preserve">
+    <value>Менеджер значков - {0}</value>
+  </data>
+  <data name="InvalidActiveIcon" xml:space="preserve">
+    <value>Активный значок недействителен. Пожалуйста, убедитесь, что значок импортирован, а архивный файл присутствует.</value>
+  </data>
+  <data name="InvalidActiveIconCaption" xml:space="preserve">
+    <value>Недействительный активный значок</value>
+  </data>
+  <data name="IconEditorCopyIconToStagingNullEmpty" xml:space="preserve">
+    <value>Архивный путь иконы был нулевым или пустым.</value>
+  </data>
+  <data name="IconEditor_IconAlreadyCreated_DragDrop" xml:space="preserve">
+    <value>Эта иконка уже была создана и помечен как только для чтения. Пожалуйста, создайте новый значок, если вы хотите другое изображение.</value>
+  </data>
+  <data name="IconEditor_IconAlreadyCreated_DragDrop_Caption" xml:space="preserve">
+    <value>Иконка уже создана</value>
+  </data>
+  <data name="IconEditor_ImageNotSquare" xml:space="preserve">
+    <value>Изображение не квадратное. Проблемы могут возникнуть в игре.</value>
+  </data>
+  <data name="IconEditorCopyIconToStagingImageNullEmpty" xml:space="preserve">
+    <value>Путь значка .png был нулевым или пустым.</value>
+  </data>
+  <data name="IconEditor_SetFieldsBasedOnImagePath_The_extracted_image_could_not_be_found_" xml:space="preserve">
+    <value>Извлеченное изображение не может быть найдено.</value>
+  </data>
+  <data name="IconEditor_SetFieldsBasedOnImagePath_To_be_determined_from_archive___" xml:space="preserve">
+    <value>Быть определенным из архива ...</value>
+  </data>
+  <data name="IconManagerForm_RemoveIcon_Are_you_sure_you_want_to_delete_this_icon_" xml:space="preserve">
+    <value>Вы уверены, что хотите удалить этот значок?</value>
+  </data>
+  <data name="IconManagerForm_RemoveIcon_Confirm_Delete" xml:space="preserve">
+    <value>Подтвердите удалить</value>
+  </data>
+  <data name="IconManagerForm_RemoveIcon_Do_you_want_to_delete_associated_icon_files_from_staging__This_will_delete_the_copied__archive_file_and_the_associated_PNG_" xml:space="preserve">
+    <value>Вы хотите удалить связанные файлы значков из постановки? Это удалит скопированный. Архивный файл и связанный PNG.</value>
+  </data>
+  <data name="IconManagerForm_btnDeleteAllIcons_Click_Are_you_sure_you_want_to_remove_ALL_icons_from_this_station_" xml:space="preserve">
+    <value>Вы уверены, что хотите удалить все значки с этой станции? ** Это разрушительная операция! **
+
+Убедитесь, что вы сначала резервировали свою постановку;)</value>
+  </data>
+  <data name="IconManagerForm_btnDeleteAllIcons_Click_Do_you_want_to_also_delete_associated_icon_s_files_from_staging" xml:space="preserve">
+    <value>Вы также хотите удалить файлы Associated Icon с постановки? Это удалит весь копированный. Архивный файл и связанные с ними PNG.</value>
+  </data>
+  <data name="LogViewerControl_LoadRelevantLogEntries_Failed_to_load_log_data___0_" xml:space="preserve">
+    <value>Не удалось загрузить данные журнала: {0}</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Ошибка</value>
+  </data>
+  <data name="LogViewerControl_DisplayLastLines_Failed_to_display_log_lines___0_" xml:space="preserve">
+    <value>Не удалось отобразить строки журнала: {0}</value>
+  </data>
+  <data name="IconManagerForm_CheckForCopy_" xml:space="preserve">
+    <value>Значок уже существует и связан со следующими станциями: {0}.
+
+Будет создана новая копия значка, но она будет ссылаться на те же базовые файлы на диске.
+
+ПРИМЕЧАНИЕ. Любые изменения в статусе активации или других специфических свойств станции будут влиять только на эту станцию.</value>
+  </data>
+  <data name="IconManagerForm_CheckForCopy_Duplicate_Icon_Detected" xml:space="preserve">
+    <value>Дубликат значок обнаружен</value>
+  </data>
+  <data name="IconManagerForm_CheckForCopy_This_icon_is_already_associated_with_the_current_station_" xml:space="preserve">
+    <value>Эта иконка уже связана с текущей станцией.</value>
+  </data>
+  <data name="CreatedFromArchive" xml:space="preserve">
+    <value>Создан из архива</value>
+  </data>
+  <data name="CreatedFromPng" xml:space="preserve">
+    <value>Создан из PNG</value>
+  </data>
+  <data name="MainForm_FromZipImportDesc" xml:space="preserve">
+    <value>Импортированные {0} станции: {1}
+
+Если значок был включен на станцию, он также был добавлен. Тем не менее, вам придется извлечь его вручную, чтобы получить предварительный просмотр в CRA.</value>
+  </data>
+  <data name="MainForm_FromZipStationsImportedTitle" xml:space="preserve">
+    <value>Станция (ы) импортирована</value>
+  </data>
+  <data name="MainForm_FromZipImportFilter" xml:space="preserve">
+    <value>Архив радиостанции (*.zip;*.rar)</value>
+  </data>
+  <data name="MainForm_FromZipImportTitle" xml:space="preserve">
+    <value>Станция импорта</value>
+  </data>
+  <data name="SearchStations" xml:space="preserve">
+    <value>Поисковые станции ...</value>
+  </data>
+  <data name="SelectDefaultSongLocationDesc" xml:space="preserve">
+    <value>Выберите местоположение по умолчанию для хранения файлов песен</value>
+  </data>
+  <data name="NewIcon" xml:space="preserve">
+    <value>Новая икона</value>
+  </data>
+  <data name="DeleteIcon" xml:space="preserve">
+    <value>Удалить значок</value>
+  </data>
+  <data name="DeleteAllIcons" xml:space="preserve">
+    <value>Удалить все значки</value>
+  </data>
+  <data name="FromArchiveFile" xml:space="preserve">
+    <value>От .archive file ...</value>
+  </data>
+  <data name="Icons" xml:space="preserve">
+    <value>Значки</value>
+  </data>
+  <data name="OpenArchiveFile" xml:space="preserve">
+    <value>Выберите файл .archive, чтобы открыть</value>
+  </data>
+  <data name="ArchiveFiles" xml:space="preserve">
+    <value>MOD Archive (*.archive)</value>
+  </data>
+  <data name="IconImportInProgress" xml:space="preserve">
+    <value>Импорт иконы в настоящее время находится в процессе. Пожалуйста, подождите, пока импорт закончится.</value>
+  </data>
+  <data name="IconImportInProgressCaption" xml:space="preserve">
+    <value>Импорт значков в процессе</value>
+  </data>
+  <data name="IconExportInProgress" xml:space="preserve">
+    <value>Экспорт иконы в настоящее время находится в стадии разработки. Пожалуйста, подождите, пока экспорт закончится.</value>
+  </data>
+  <data name="IconExportInProgressCaption" xml:space="preserve">
+    <value>Экспорт иконы в процессе</value>
+  </data>
+  <data name="MissingStationsCaption" xml:space="preserve">
+    <value>Пропавшие станции</value>
+  </data>
+  <data name="IconManagerMenuOption" xml:space="preserve">
+    <value>Менеджер иконы станции</value>
+  </data>
+  <data name="Tools" xml:space="preserve">
+    <value>Инструменты</value>
+  </data>
+  <data name="DownloadRadioMods" xml:space="preserve">
+    <value>Скачать радио моды</value>
+  </data>
+  <data name="ImportFromZipFile" xml:space="preserve">
+    <value>От .zip file ...</value>
+  </data>
+  <data name="ClearAllData" xml:space="preserve">
+    <value>Очистить все данные!</value>
+  </data>
+  <data name="BackupRestoreMenuItem" xml:space="preserve">
+    <value>Резервное копирование/восстановление</value>
+  </data>
+  <data name="RestoreBackupMenuItem" xml:space="preserve">
+    <value>Восстановите стабильную папку</value>
+  </data>
+  <data name="Mods" xml:space="preserve">
+    <value>Моды</value>
+  </data>
+  <data name="MainTitleFormated" xml:space="preserve">
+    <value>Помощник кибер -радио - {0}</value>
+  </data>
+  <data name="ConfirmSyncStationsExternal" xml:space="preserve">
+    <value>Изменения были внесены в каталог Radios игры.
+Вы хотите синхронизировать свои каталоги для постановки и игровых игроков?</value>
+  </data>
+  <data name="ExportInProgress" xml:space="preserve">
+    <value>Экспорт находится в процессе. Пожалуйста, подождите...</value>
+  </data>
+  <data name="ExportCaption" xml:space="preserve">
+    <value>Экспорт</value>
+  </data>
+  <data name="ConfirmRestore" xml:space="preserve">
+    <value>Вы уверены, что хотите восстановить постановку?
+Это будет перезаписать ваши существующие станции!</value>
+  </data>
+  <data name="MainForm_RestoreFileBrowserFilter" xml:space="preserve">
+    <value>Резервные файлы (*.zip)</value>
+  </data>
+  <data name="MainForm_RestoreFileBrowserTitle" xml:space="preserve">
+    <value>Выберите файл резервного копирования, чтобы восстановить</value>
+  </data>
+  <data name="ConfirmClearAllData" xml:space="preserve">
+    <value>** разрушительная операция **
+
+Убедитесь, что вы создаете резервную копию ваших станций перед очисткой данных. Это сразу же удалит все станции после постановки (игра не тронута).
+Вы уверены, что хотите очистить все данные станции?</value>
+  </data>
+  <data name="RestoreFormTitle" xml:space="preserve">
+    <value>Восстановить резервное копирование - {0}</value>
+  </data>
+  <data name="StartRestore" xml:space="preserve">
+    <value>Начните восстановить</value>
+  </data>
+  <data name="RestoreDescription" xml:space="preserve">
+    <value>Следующие файлы будут восстановлены в папке.</value>
+  </data>
+  <data name="EstimatedRestoreSizeFormat" xml:space="preserve">
+    <value>Расчетный размер восстановления: {0}</value>
+  </data>
+  <data name="RestoreForm_PreviewCompleted" xml:space="preserve">
+    <value>Восстановить предварительный просмотр завершен. Готовы начать восстановить операцию.</value>
+  </data>
+  <data name="RestoreForm_ErrorWhileRestoring" xml:space="preserve">
+    <value>Произошла ошибка при попытке начать операцию восстановления.</value>
+  </data>
+  <data name="RestoreForm_RestoreCancelled" xml:space="preserve">
+    <value>Операция восстановления была отменена.</value>
+  </data>
+  <data name="RestoreForm_RestoreCancelledCaption" xml:space="preserve">
+    <value>Восстановить отменен</value>
+  </data>
+  <data name="SplashScreen_SetupIconManager" xml:space="preserve">
+    <value>Инициализация менеджера значков ...</value>
+  </data>
+  <data name="AddSongsFileBrowserFilter" xml:space="preserve">
+    <value>Музыкальные файлы (*.mp3;*.wav;*.ogg;*.flac;*.mp2;*.wax;*.wma)</value>
+  </data>
+  <data name="IconEditor_Translate_Editing_Icon___0_" xml:space="preserve">
+    <value>Значок редактирования: {0}</value>
+  </data>
+  <data name="IconEditor_Translate_W___0_" xml:space="preserve">
+    <value>W: {0}</value>
+  </data>
+  <data name="IconEditor_Translate_H___0_" xml:space="preserve">
+    <value>H: {0}</value>
+  </data>
+  <data name="IconEditor_Translate_Format___0_" xml:space="preserve">
+    <value>Формат: {0}</value>
+  </data>
+  <data name="IconEditor_Translate_Archive_Path_" xml:space="preserve">
+    <value>Архивный путь:</value>
+  </data>
+  <data name="IconEditor_Translate_Atlas_Name_" xml:space="preserve">
+    <value>Имя атласа:</value>
+  </data>
+  <data name="IconEditor_Translate_Icon_Name_" xml:space="preserve">
+    <value>Название значка:</value>
+  </data>
+  <data name="IconEditor_Translate_Icon_Path_" xml:space="preserve">
+    <value>Переход иконы:</value>
+  </data>
+  <data name="IconEditor_Translate_Icon_Part_" xml:space="preserve">
+    <value>Икона часть:</value>
+  </data>
+  <data name="IconEditor_Translate_Image_Path_" xml:space="preserve">
+    <value>Путь изображения:</value>
+  </data>
+  <data name="IconEditor_Translate_SHA256_Hash_" xml:space="preserve">
+    <value>SHA256 HASH:</value>
+  </data>
+  <data name="IconEditor_Translate_Color_Mode___0_" xml:space="preserve">
+    <value>Цветовой режим: {0}</value>
+  </data>
+  <data name="IconEditor_Translate_No_Image_Issues" xml:space="preserve">
+    <value>Нет проблем с изображением</value>
+  </data>
+  <data name="IconEditor_Translate_Start_Import" xml:space="preserve">
+    <value>Начните импорт</value>
+  </data>
+  <data name="IconEditor_Translate_Start_Extraction" xml:space="preserve">
+    <value>Начните извлечение</value>
+  </data>
+  <data name="IconEditor_Translate_Cancel_Action" xml:space="preserve">
+    <value>Отменить действие</value>
+  </data>
+  <data name="IconEditor_Translate_Preview" xml:space="preserve">
+    <value>Предварительный просмотр</value>
+  </data>
+  <data name="IconEditor_Translate_Properties" xml:space="preserve">
+    <value>Характеристики</value>
+  </data>
+  <data name="IconEditor_Translate_Actions" xml:space="preserve">
+    <value>Действия</value>
+  </data>
+  <data name="IconEditor_AtlasName_Hint" xml:space="preserve">
+    <value>Имя файла Atlas, в котором хранится значок.</value>
+  </data>
+  <data name="IconEditor_Sha256Hash_Hint" xml:space="preserve">
+    <value>HASH SHA256 Архивного файла.</value>
+  </data>
+  <data name="IconEditor_ArchivePath_Hint" xml:space="preserve">
+    <value>Путь к архивному файлу, который содержит значок.</value>
+  </data>
+  <data name="IconEditor_ImagePath_Hint" xml:space="preserve">
+    <value>Путь к файлу изображения, который создал значок или извлеченное изображение.</value>
+  </data>
+  <data name="IconEditor_IconPath_Hint" xml:space="preserve">
+    <value>Путь к значке в архивном файле. Автогенерирован.</value>
+  </data>
+  <data name="IconEditor_IconPart_Hint" xml:space="preserve">
+    <value>Часть иконы в пути иконы. Автогенерирован.</value>
+  </data>
+  <data name="MetaDataKey" xml:space="preserve">
+    <value>Ключ</value>
+  </data>
+  <data name="MetaDataValue" xml:space="preserve">
+    <value>Ценить</value>
+  </data>
+  <data name="RadioGardenParse" xml:space="preserve">
+    <value>Разбор</value>
+  </data>
+  <data name="IconManagerHelp" xml:space="preserve">
+    <value>Открывает диалог менеджера значков для этой станции, чтобы поднять значки.</value>
+  </data>
+  <data name="CustomIconPictureHelp" xml:space="preserve">
+    <value>Показывает предварительный просмотр активного значка для этой станции. Перетащите .png здесь, чтобы быстро добавить его на станцию.</value>
+  </data>
+  <data name="ParseFromRadioGardenHelp" xml:space="preserve">
+    <value>Открывает диалог для анализа URL -адреса API с веб -URL для веб -потока Radio.garden.</value>
+  </data>
+  <data name="StreamPlayerHelp" xml:space="preserve">
+    <value>Позволяет просмотреть аудио из указанного потока.</value>
+  </data>
+  <data name="AddSongsHelp" xml:space="preserve">
+    <value>Открывает селектор файлов для добавления допустимых аудиофайлов в список песен этой станции.</value>
+  </data>
+  <data name="RemoveFromOrderHelp" xml:space="preserve">
+    <value>Удаляет песню из заказанного списка песен. Не удаляет песню с станции.</value>
+  </data>
+  <data name="AddToOrderHelp" xml:space="preserve">
+    <value>Добавляет песню в список песен на станции.</value>
+  </data>
+  <data name="RemoveSongsHelp" xml:space="preserve">
+    <value>Удаляет все выбранные песни со станции. Не удаляет файлы на диске.</value>
+  </data>
+  <data name="RemoveAllSongsHelp" xml:space="preserve">
+    <value>Удаляет все песни со станции. Не удаляет файлы на диске.</value>
+  </data>
+  <data name="TotalSongsHelp" xml:space="preserve">
+    <value>Показывает общее количество файлов песен, связанных с этой станцией.</value>
+  </data>
+  <data name="TotalStationSizeHelp" xml:space="preserve">
+    <value>Показывает общий размер файла всех файлов песен на станции.</value>
+  </data>
+  <data name="RestoreBackupLoadingPreview" xml:space="preserve">
+    <value>Загрузка ... {0}%</value>
+  </data>
+  <data name="RestoreProgressChanged" xml:space="preserve">
+    <value>Восстановление файла: {0}</value>
+  </data>
+  <data name="RestoreSongProgressChanged" xml:space="preserve">
+    <value>Восстановление песни: {0}</value>
+  </data>
+  <data name="RestoreCompleted" xml:space="preserve">
+    <value>Восстановить завершен успешно.</value>
+  </data>
+  <data name="RestoreFailedException" xml:space="preserve">
+    <value>Восстановление не удалось из -за ошибки: {0}</value>
+  </data>
+  <data name="DirectoryWatcher_DirectoryNotExists" xml:space="preserve">
+    <value>Каталог '{0}' не существует</value>
+  </data>
+  <data name="GamePathFilter" xml:space="preserve">
+    <value>Исполняемый файл игры (Cyberpunk2077.exe)</value>
+  </data>
+  <data name="SyncStatusComplete" xml:space="preserve">
+    <value>Синхронизация завершена.</value>
+  </data>
+  <data name="SyncStatusError" xml:space="preserve">
+    <value>Ошибка синхронизирующих станций.</value>
+  </data>
+  <data name="SyncProgressChangedFormat" xml:space="preserve">
+    <value>Синхронизация файлов ... {0}%</value>
+  </data>
+  <data name="SyncProgressDirectoriesChangedFormat" xml:space="preserve">
+    <value>Синхронизация каталогов ... {0}%</value>
+  </data>
+  <data name="IconEditor_IconName_Hint" xml:space="preserve">
+    <value>Название значка на станции. Может быть все, что вы хотите.</value>
+  </data>
+  <data name="IconEditor_CopyToClipboard" xml:space="preserve">
+    <value>Копирует соответствующий текст в буфер обмена.</value>
+  </data>
+  <data name="IconEditor_ImportIcon" xml:space="preserve">
+    <value>Start's The Process для генерации значков. Это может занять некоторое время.</value>
+  </data>
+  <data name="IconEditor_ExtractIcon" xml:space="preserve">
+    <value>Запускает процесс извлечения. Архив для иконки. Это может занять некоторое время.</value>
+  </data>
+  <data name="IconEditor_CancelAction" xml:space="preserve">
+    <value>Отменяет операцию в настоящее время.</value>
+  </data>
+  <data name="IconManager" xml:space="preserve">
+    <value>Менеджер значков</value>
+  </data>
+  <data name="LogViewerControl_grpLogSearchHeader_Text" xml:space="preserve">
+    <value>Файл журнала</value>
+  </data>
+  <data name="LogViewerControl_txtSearch_PlaceholderText" xml:space="preserve">
+    <value>Введите фильтр поиска ...</value>
+  </data>
+  <data name="LogViewerControl_btnShowMore_Text" xml:space="preserve">
+    <value>Показать больше</value>
+  </data>
+  <data name="LogViewerControl_dgvLogs_Columns_0_HeaderText" xml:space="preserve">
+    <value>Временная метка</value>
+  </data>
+  <data name="LogViewerControl_dgvLogs_Columns_1_HeaderText" xml:space="preserve">
+    <value>Выход</value>
+  </data>
+  <data name="IconEditor_CustomIconPictureHelp" xml:space="preserve">
+    <value>Показывает предварительный просмотр этого значка (если извлечен или импортирован). Если значок еще не был создан, перетащите .png здесь, чтобы создать его.</value>
+  </data>
+  <data name="CopySongFilesToBackupHelp" xml:space="preserve">
+    <value>При проверке указывается, что файлы песен (включая внешние) должны быть включены в файл .zip резервного копирования для станций.</value>
+  </data>
+  <data name="DefaultSongLocationOption" xml:space="preserve">
+    <value>Расположение песни по умолчанию</value>
+  </data>
+  <data name="RestoreFromBackupButton" xml:space="preserve">
+    <value>Восстановить из резервного копирования</value>
+  </data>
+  <data name="LocateAllMissingSongs" xml:space="preserve">
+    <value>Найдите все отсутствующие песни ...</value>
+  </data>
+  <data name="LocateAllMissingSongsDesc" xml:space="preserve">
+    <value>Выберите папку, содержащую отсутствующие файлы песни</value>
+  </data>
+</root>

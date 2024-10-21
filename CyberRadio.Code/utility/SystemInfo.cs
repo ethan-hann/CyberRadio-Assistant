@@ -21,10 +21,6 @@ public sealed class SystemInfo
         sb.AppendLine($"OS Version: {Environment.OSVersion}");
         sb.AppendLine($"64-bit OS: {Environment.Is64BitOperatingSystem}");
 
-        // Machine Name and User
-        sb.AppendLine($"Machine Name: {Environment.MachineName}");
-        sb.AppendLine($"User Name: {Environment.UserName}");
-
         // Processor Information
         sb.AppendLine("Processor Information:");
         sb.Append(GetProcessorInfo());

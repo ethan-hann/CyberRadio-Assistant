@@ -1,65 +1,156 @@
-﻿using System.ComponentModel;
+﻿// GlobalData.cs : RadioExt-Helper
+// Copyright (C) 2024  Ethan Hann
+// 
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+// 
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// 
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+using System.ComponentModel;
 using System.Globalization;
 using System.Reflection;
 using System.Resources;
 using AetherUtils.Core.Configuration;
 using AetherUtils.Core.Logging;
+using AetherUtils.Core.Structs;
 using RadioExt_Helper.config;
 using RadioExt_Helper.forms;
 
 namespace RadioExt_Helper.utility;
 
+/// <summary>
+///     The `GlobalData` class is a utility class that provides global data and functionality used throughout the
+///     application.
+///     It contains static properties and methods for managing resources, configuration, logging, and culture settings.
+/// </summary>
 public static class GlobalData
 {
+    private const string ConfigFileName = "config.yml";
+    private const string DefaultLanguage = "English (en)";
+
+    public static readonly Version AppVersion =
+        Assembly.GetExecutingAssembly().GetName().Version is { } v
+            ? new Version(v.Major, v.Minor, v.Build)
+            : new Version(0, 0, 0); //This should never happen, but just in case!
+
     /// <summary>
-    ///     The resource manager responsible for keeping translations of strings.
+    /// Get the resource manager for accessing string resources.
     /// </summary>
     public static readonly ResourceManager Strings = new("RadioExt_Helper.Strings", typeof(MainForm).Assembly);
 
-    private static bool _uiIconsInitialized;
+    private static readonly string ConfigFilePath = Path.Combine(
+        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+        "RadioExt-Helper", ConfigFileName);
+
+    /// <summary>
+    ///     Indicates whether the global data has been initialized.
+    /// </summary>
     private static bool _globalDataInitialized;
 
-    public static CyberConfigManager ConfigManager { get; private set; } = new("");
+    private static bool _uiIconsInitialized;
 
     /// <summary>
-    ///     A list of strings containing all UIIcon records in the game. This list is populated from an embedded text file.
+    /// Get the configuration manager responsible for managing the application configuration.
     /// </summary>
+    public static CyberConfigManager ConfigManager { get; private set; } = null!;
+
     private static BindingList<string> UiIcons { get; set; } = [];
-
-    private static ComboBox UiIconsComboTemplate { get; set; } = new();
-
-    private static Assembly ExecAssembly { get; } = Assembly.GetExecutingAssembly();
+    private static ComboBox? UiIconsComboTemplate { get; set; }
+    private static Assembly ExecutingAssembly => Assembly.GetExecutingAssembly();
 
     /// <summary>
-    ///     <para>
-    ///         Initializes the global data for the application. This includes getting all the embedded resources,
-    ///         setting the initial application culture, and creating the combo box template for the UIIcons.
-    ///     </para>
-    ///     <para>This method should only be called once. Subsequent calls will have no effect.</para>
+    ///     Initializes the global data. This method is responsible for initializing the global data used throughout the
+    ///     application.
+    ///     It performs the following tasks:
+    ///     <list type="bullet">
+    ///         <item>Loads UI icons</item>
+    ///         <item>Initializes the configuration</item>
+    ///         <item>Initializes logging</item>
+    ///         <item>Sets the culture based on the language configuration</item>
+    ///     </list>
     /// </summary>
     public static void Initialize()
     {
         if (_globalDataInitialized) return;
+        ConfigManager = CreateConfigManager();
 
-        GetUiIcons();
-        CreateComboBoxTemplate();
+        LoadUiIcons();
 
         InitializeConfig();
         InitializeLogging();
 
-        SetCulture(ConfigManager.Get("language") as string ?? "English (en)");
+        SetCulture(ConfigManager.Get("language") as string ?? DefaultLanguage);
 
         _globalDataInitialized = true;
     }
 
+    public static void InitializeComboBoxTemplate()
+    {
+        UiIconsComboTemplate = CreateComboBoxTemplate();
+    }
+
+    /// <summary>
+    ///     Retrieves the path to the containing log folder.
+    /// </summary>
+    /// <returns>The log folder path. If log folder path is not found in the config, the default log folder path is returned.</returns>
+    public static string GetLogFolderPath()
+    {
+        var options = ConfigManager.Get("logOptions") as LogOptions;
+        return options?.LogFileDirectory ?? Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+            "RadioExt-Helper", "logs");
+    }
+
+    /// <summary>
+    /// Retrieves the full path to the most recent log file.
+    /// </summary>
+    /// <returns>The full path to the most recent log file, or null if no log files are found.</returns>
+    public static string GetLogFilePath()
+    {
+        var options = ConfigManager.Get("logOptions") as LogOptions;
+        var folderPath = GetLogFolderPath();
+
+        // Get all log files in the directory
+        var logFiles = Directory.GetFiles(folderPath, $"{options?.AppName}_*.log", SearchOption.TopDirectoryOnly);
+
+        // Check if there are no log files
+        if (logFiles.Length == 0)
+            throw new Exception("No log file found in `logs` directory. There should be one at this point!");
+
+        // Return the file with the most recent last write time
+        var mostRecentLogFile = logFiles.OrderByDescending(File.GetLastWriteTime).FirstOrDefault();
+
+        return mostRecentLogFile ?? string.Empty;
+    }
+
+    /// <summary>
+    ///     Initializes the configuration manager and loads the application config.
+    ///     If the config file exists, it is loaded. Otherwise, a default config is created and saved.
+    /// </summary>
     private static void InitializeConfig()
     {
-        var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-            "RadioExt-Helper", "config.yml");
-        ConfigManager = new CyberConfigManager(path);
         if (ConfigManager.ConfigExists)
         {
-            ConfigManager.Load();
+            if (ConfigManager.Load())
+            {
+                //Set the log header everytime the application is launched to ensure the version is correct in the header
+                ConfigOption logOption = new("logHeader", SystemInfo.GetLogFileHeader());
+                ConfigManager.Set(logOption);
+                ConfigManager.Save();
+            }
+            else //Create the default config if the config file is corrupted or failed to load.
+            {
+                ConfigManager.CreateDefaultConfig();
+                ConfigManager.Save();
+            }
         }
         else
         {
@@ -68,22 +159,71 @@ public static class GlobalData
         }
     }
 
+    /// <summary>
+    ///     Creates an instance of the <see cref="CyberConfigManager" /> class.
+    /// </summary>
+    /// <remarks>
+    ///     This method is used to create and initialize a new instance of the <see cref="CyberConfigManager" /> class, which
+    ///     is a configuration manager
+    ///     for a YAML configuration file using <see cref="ApplicationConfig" /> as the base configuration.
+    /// </remarks>
+    /// <returns>A new instance of the <see cref="CyberConfigManager" /> class.</returns>
+    private static CyberConfigManager CreateConfigManager()
+    {
+        return new CyberConfigManager(ConfigFilePath);
+    }
+
+    /// <summary>
+    ///     Initializes the logging for the application. This method is responsible for configuring and initializing the
+    ///     logging system used throughout the application.
+    ///     It performs the following tasks:
+    ///     <list type="bullet">
+    ///         <item>Gets the log options from the configuration</item>
+    ///         <item>Initializes the logging system using the log options</item>
+    ///     </list>
+    /// </summary>
     private static void InitializeLogging()
     {
         if (ConfigManager.Get("logOptions") is not LogOptions options) return;
 
         AuLogger.Initialize(options);
-        AuLogger.GetCurrentLogger("GlobalData.InitializeLogging").Info("Logging initialized!");
+
+        //Grant full access to the application to the log file and directory
+        PathHelper.GrantAccess(options.LogFileDirectory);
+        PathHelper.GrantAccess(GetLogFolderPath());
+
+        AuLogger.GetCurrentLogger(nameof(GlobalData)).Info("Logging initialized!");
     }
 
-    private static void CreateComboBoxTemplate()
+    /// <summary>
+    /// Creates a ComboBox template with default properties. Data source is set to
+    /// <see cref="GlobalData.UiIcons" />
+    /// </summary>
+    /// <returns>
+    ///     A ComboBox instance with the following properties:
+    ///     <list type="bullet">
+    ///         <item>Font: Segoe UI, 9pt, Bold</item>
+    ///         <item>BackColor: White</item>
+    ///         <item>Font: Segoe UI, 9pt, Bold</item>
+    ///         <item>DropDownStyle: DropDown</item>
+    ///         <item>Name: UiIconsComboTemplate</item>
+    ///         <item>Anchor: Left | Right</item>
+    ///         <item>Dock: None</item>
+    ///         <item>AutoCompleteMode: Suggest</item>
+    ///         <item>AutoCompleteSource: ListItems</item>
+    ///         <item>DataSource: UiIcons</item>
+    ///         <item>DisplayMember: "Name"</item>
+    ///         <item>MaxDropDownItems: 24</item>
+    ///     </list>
+    /// </returns>
+    private static ComboBox CreateComboBoxTemplate()
     {
-        UiIconsComboTemplate = new ComboBox
+        return new ComboBox
         {
             Font = new Font("Segoe UI", 9, FontStyle.Bold),
             BackColor = Color.White,
             DropDownStyle = ComboBoxStyle.DropDown,
-            Name = "cmbUIIconsTemplate",
+            Name = "UiIconsComboTemplate",
             Anchor = AnchorStyles.Left | AnchorStyles.Right,
             Dock = DockStyle.None,
             AutoCompleteMode = AutoCompleteMode.Suggest,
@@ -95,15 +235,15 @@ public static class GlobalData
     }
 
     /// <summary>
-    ///     Get a clone of the combo box holding all the UIIcons. This is faster than creating new combo boxes and
-    ///     manually setting the data source.
+    ///     Creates a clone of the template ComboBox object.
     /// </summary>
-    /// <returns>A ComboBox that is a clone of the template combo box. The data source is already set.</returns>
+    /// <returns>A new instance of ComboBox with the same properties as the template ComboBox object.</returns>
     public static ComboBox CloneTemplateComboBox()
     {
-        var clone = new ComboBox
+        if (UiIconsComboTemplate == null) return new ComboBox();
+
+        return new ComboBox
         {
-            // Copy basic properties
             Location = UiIconsComboTemplate.Location,
             Size = UiIconsComboTemplate.Size,
             DropDownStyle = UiIconsComboTemplate.DropDownStyle,
@@ -137,39 +277,51 @@ public static class GlobalData
             AutoCompleteMode = UiIconsComboTemplate.AutoCompleteMode,
             AutoCompleteSource = UiIconsComboTemplate.AutoCompleteSource
         };
-
-        return clone;
     }
 
     /// <summary>
-    ///     Sets the UI culture to the value passed in. This method expects the culture to be formatted like so:
-    ///     <c>English (en)</c>, where the culture code is in parentheses at the end of the string.
+    ///     Sets the culture of the application user interface.
     /// </summary>
-    /// <param name="culture">The culture to change the UI to.</param>
+    /// <param name="culture">The culture to set, in the format "[Language] ([Culture])", e.g., "English (en)".</param>
     public static void SetCulture(string culture)
     {
-        var parsedCulture = culture.Substring(culture.IndexOf('(') + 1,
-            culture.Length - culture.LastIndexOf(')') + 1);
-        CultureInfo.CurrentUICulture = new CultureInfo(parsedCulture);
+        var cultureCode = ExtractCultureCode(culture);
+        CultureInfo.CurrentUICulture = new CultureInfo(cultureCode);
     }
 
-    private static void GetUiIcons()
+    /// <summary>
+    ///     Loads the list UI icons from an embedded text file resource.
+    /// </summary>
+    private static void LoadUiIcons()
     {
         if (_uiIconsInitialized) return;
+
         try
         {
-            List<string> strings = [];
+            var iconsText = ExecutingAssembly.ReadResource("RadioExt_Helper.resources.final_ui_icon_strings.txt");
+            var distinctUiIcons = iconsText.Split('\n')
+                .Select(line => line.Trim())
+                .Distinct()
+                .ToList();
 
-            var txtData = ExecAssembly.ReadResource("RadioExt_Helper.resources.final_ui_icon_strings.txt");
-            strings.AddRange(txtData.Split('\n').Select(line => line.TrimEnd().TrimStart()));
-            UiIcons = new BindingList<string>(strings.Distinct().ToList());
-
+            UiIcons = new BindingList<string>(distinctUiIcons);
             _uiIconsInitialized = true;
         }
         catch (Exception ex)
         {
-            AuLogger.GetCurrentLogger("GlobalData.GetUiIcons")
-                .Error(ex, "Couldn't initialize list of UIIcons.");
+            AuLogger.GetCurrentLogger(nameof(GlobalData)).Error(ex, "Error initializing UI Icons.");
         }
+    }
+
+    /// <summary>
+    ///     Extracts the .NET culture code from a language string.
+    /// </summary>
+    /// <param name="language">The language string to extract the language from.</param>
+    /// <returns></returns>
+    private static string ExtractCultureCode(string language)
+    {
+        var startIndex = language.IndexOf('(') + 1;
+        var length = language.LastIndexOf(')') - startIndex;
+        return language.Substring(startIndex, length);
     }
 }

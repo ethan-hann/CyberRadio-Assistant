@@ -2,6 +2,8 @@
 _layout: landing
 ---
 
+[![Static Badge](https://img.shields.io/badge/Cyber%20Radio%20Assistant-blue?logo=github&label=Github%20Repo&link=https%3A%2F%2Fgithub.com%2Fethan-hann%2FCyberRadio-Assistant)](https://github.com/ethan-hann/CyberRadio-Assistant)
+
 ![REPO-SIZE](https://img.shields.io/github/repo-size/ethan-hann/CyberRadio-Assistant)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/210b2b0ad9a748a6a35e3f7048acdf95)](https://app.codacy.com/gh/ethan-hann/CyberRadio-Assistant/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 [![GitHub Release](https://img.shields.io/github/v/release/ethan-hann/CyberRadio-Assistant?include_prereleases&display_name=release&style=flat)](https://github.com/ethan-hann/CyberRadio-Assistant/releases)
@@ -15,38 +17,43 @@ Cyber Radio Assistant is a standalone tool that helps you create and manage cust
 
 A brief list of features are below:
 
-- Create custom radio stations in a GUI application instead of by editing a `metadata.json` file.
-- Manipulate radio stations downloaded from [NexusMods](https://www.nexusmods.com/cyberpunk2077/).
-- Add/delete songs from the radio station (even ones downloaded from Nexus).
-- Export to a staging folder first so the game directory doesn't get messed up.
-- Add a web stream for the audio instead of songs and preview the audio directly from the application.
-- Localization for English, Spanish, and French. More localizations can be added by cloning the GitHub and submitting a pull request.
+- **Create custom radio stations** using a GUI application instead of editing a `metadata.json` file.
+- **Manage radio stations** downloaded from [NexusMods](https://www.nexusmods.com/cyberpunk2077/), with options to modify their metadata or playlist.
+- **Add and delete songs** from your station, including songs from NexusMods.
+- **Export stations to a staging folder** to avoid affecting your game directory directly.
+- **Add a web stream** as a radio station instead of local audio files, and preview the stream from within the app.
+- **Create and manage custom icons** for your stations, including integration with [Wolven Icon Generator (WIG)](https://github.com/ethan-hann/WolvenIconGenerator) for `.archive` file creation.
+- **Localization** support for multiple languages, including English, Español, Français, Deutsch, Italiano, Português, Русский, and 中文.
+- **Asynchronous task support** for background operations like icon generation, with progress tracking and cancellation.
+- **User-friendly interface** with a clean and intuitive UI with drag-and-drop functionality for adding songs and icons. Detailed tooltips and user guidance simplify station setup and management.
 
 This documentation has two parts:
-1) a [full guide](docs/introduction.md) that goes over how to use Cyber Radio Assistant 📃
-2) an [API reference](api/RadioExt_Helper.forms.yml) that is useful if you want to see the classes and methods behind the scenes 😄
+1) A [**full guide**](docs/quick-start/introduction.md) that goes over how to use Cyber Radio Assistant 📃
+2) An [**API reference**](api/RadioExt_Helper.forms.yml) that is useful if you want to see the classes and methods behind the scenes 😄
 
-# [Github Repo](https://github.com/ethan-hann/CyberRadio-Assistant)
+## Documentation Language Support
+Currently, `docfx` does not provide a nice way to generate multi-language documentation, so these docs only support English.
 
-# VirusTotal Report
+<details>
+  <summary><b>VirusTotal Report</b></summary>
 
 Since you should never run `.exe` files from people you don't trust, I urge you to verify the hash of the file you downloaded against the below.
 
-Also, check the VirusTotal report. There were 2 detections out of 71 but both are false positives. If you don't believe me, look through the [source code](https://github.com/ethan-hann/CyberRadio-Assistant) and tell me where the virus is.
+Also, check the VirusTotal report. There was 1 detection out of 70 but it is a false positive. If you don't believe me, look through the [source code](https://github.com/ethan-hann/CyberRadio-Assistant) and tell me where the virus is.
 
 ## Summary
 
 - **File Name:** `CyberRadioAssistant.exe`
 - **SHA-256:** 
-`a781f290fd4363fd01bf700defbd9e1bc8d13deebe48e2d5527a5d90119721fd`
-- **Detection Ratio:** 2/71
-- **Date:** 2024-06-23 06:35:57 UTC
+`52558740d1a906c2d7e4618b4b9fe2e33f344eafcc2c5c972961ca9cbfdd156d`
+- **Detection Ratio:** 1/70
+- **Date:** 2024-10-20 17:43:52 UTC
 
 ## Detailed Report
 
 For the full VirusTotal report, please visit the following link:
 
-[View VirusTotal Report](https://www.virustotal.com/gui/file/a781f290fd4363fd01bf700defbd9e1bc8d13deebe48e2d5527a5d90119721fd/detection)
+[View VirusTotal Report](https://www.virustotal.com/gui/file/52558740d1a906c2d7e4618b4b9fe2e33f344eafcc2c5c972961ca9cbfdd156d/detection)
 
 ## Key Findings
 
@@ -57,7 +64,7 @@ For the full VirusTotal report, please visit the following link:
   - Avast: **`Clean`**
   - BitDefender: **`Clean`**
   - Bkav Pro: `W64.AIDetectMalware` (**FALSE POSITIVE**)
-  - MaxSecure: `Win.MxResIcn.Heur.Gen` (**FALSE POSITIVE**)
+  - MaxSecure: **`Clean`**
 
 ## Screenshots
 
@@ -68,17 +75,19 @@ Here are some screenshots from the VirusTotal report:
 
 ### Detailed Analysis
 ![vt_detailed_overview](images/vt_detailed_overview.png)
----
-# To-Do List
 
-> [!TODO]
-> Ensure deleted stations are also deleted from the staging folder!
+</details>
 
-> [!TODO]
-> Fix the bug where a new station may not be selected automatically in the list box.
+<details>
+  <summary><b>TODO List</b></summary>
 
-> [!TODO]
-> Add a check for the FM number in the display name. Add it automatically if not present!
+> [!TODO]  
+> Implement editing of song's title within CRA.
 
-> [!TODO]
-> Synchronize display name and station name in listbox upon editing the display name in the station properties.
+> [!TODO]  
+> Add station preview that allows previewing what the station would look and sound like in game.
+
+> [!TODO]  
+> Add a way to normalize the audio levels of station's songs.
+
+</details>
