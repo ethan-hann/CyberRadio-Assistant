@@ -1,4 +1,4 @@
-﻿namespace RadioExt_Helper.user_controls
+﻿namespace RadioExt_Helper.custom_controls
 {
     sealed partial class StationListBox
     {

@@ -41,12 +41,15 @@
             btnDownload.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
             btnDownload.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
             btnDownload.FlatStyle = FlatStyle.Flat;
+            btnDownload.Image = Properties.Resources.download_16x16;
             btnDownload.Location = new Point(4, 129);
             btnDownload.Margin = new Padding(4, 3, 4, 3);
             btnDownload.Name = "btnDownload";
             btnDownload.Size = new Size(635, 36);
             btnDownload.TabIndex = 1;
             btnDownload.Text = "Download";
+            btnDownload.TextAlign = ContentAlignment.MiddleRight;
+            btnDownload.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnDownload.UseVisualStyleBackColor = false;
             btnDownload.Click += btnDownload_Click;
             // 
@@ -63,7 +66,7 @@
             // 
             // lblStatus
             // 
-            lblStatus.Image = Properties.Resources.info;
+            lblStatus.Image = Properties.Resources.status__16x16;
             lblStatus.Margin = new Padding(5, 3, 0, 2);
             lblStatus.Name = "lblStatus";
             lblStatus.Size = new Size(55, 17);
