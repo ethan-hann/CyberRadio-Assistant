@@ -4,8 +4,7 @@ name: Deploy static content to Pages
 on:
   # Runs on pushes targeting the default branch with changes in the CyberRadio.Docs folder
   push:
-    branches:
-      - [main]  # Target main branch only
+    branches: ["main"]  # Target main branch only
     paths:
       - "CyberRadio.Docs/**"
 
