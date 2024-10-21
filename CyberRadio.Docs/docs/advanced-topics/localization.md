@@ -40,7 +40,7 @@ If you can do that, great! Let's get started.
     >
     > For placeholders, this means lines like `Error pausing stream: {0}`. The `{0}` is a placeholder and should be present in the final translated string in the same logical place.
 
-4. After you've got the whole file translated, save it and create a new issue on GitHub using the template: [Translation Request](https://github.com/ethan-hann/CyberRadio-Assistant/issues/new?assignees=ethan-hann&labels=translation&projects=&template=translation-request.md&title=%5BTRANSLATION%5D+-+%5BLanguage%5D). You will upload your translated `.xlsx` file there for review.
+4. After you've got the whole file translated, save it and create a new issue on GitHub using the template: [Translation Request](https://github.com/ethan-hann/CyberRadio-Assistant/issues/new?assignees=ethan-hann&labels=translation&projects=&template=translation-request.yml&title=%5BTRANSLATION%5D+-+%5BLanguage%5D). You will upload your translated `.xlsx` file there for review.
 
 **After your translations are reviewed, they will be added to the next release of Cyber Radio Assistant!**
 
