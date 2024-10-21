@@ -5,7 +5,7 @@ on:
   # Runs on pushes targeting the default branch with changes in the CyberRadio.Docs folder
   push:
     branches:
-      - "release-**"  # Target branches that start with "release"
+      - [main]  # Target main branch only
     paths:
       - "CyberRadio.Docs/**"
 
