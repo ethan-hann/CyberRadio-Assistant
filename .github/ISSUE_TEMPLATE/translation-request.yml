@@ -22,7 +22,6 @@ body:
       label: Culture Tag (.NET)
       description: "Provide the appropriate culture tag for the language (e.g., it for Italian)."
       placeholder: "e.g., it-IT"
-      value: ""
     validations:
       required: true
   - type: markdown
