@@ -9,12 +9,15 @@ Cyber Radio Assistant is a standalone tool that helps you create and manage cust
 
 A brief list of features are below:
 
-- Create custom radio stations in a GUI application instead of by editing a `metadata.json` file.
-- Manipulate radio stations downloaded from [NexusMods](https://www.nexusmods.com/cyberpunk2077/).
-- Add/delete songs from the radio station (even ones downloaded from Nexus).
-- Export to a staging folder first so the game directory doesn't get messed up.
-- Add a web stream for the audio instead of songs and preview the audio directly from the application.
-- Localization for English, Spanish, and French. More localizations can be added by following the steps [here](https://ethan-hann.github.io/CyberRadio-Assistant/docs/localization.html).
+- **Create custom radio stations** using a GUI application instead of editing a `metadata.json` file.
+- **Manage radio stations** downloaded from [NexusMods](https://www.nexusmods.com/cyberpunk2077/), with options to modify their metadata or playlist.
+- **Add and delete songs** from your station, including songs from NexusMods.
+- **Export stations to a staging folder** to avoid affecting your game directory directly.
+- **Add a web stream** as a radio station instead of local audio files, and preview the stream from within the app.
+- **Create and manage custom icons** for your stations, including integration with [Wolven Icon Generator (WIG)](https://github.com/ethan-hann/WolvenIconGenerator) for `.archive` file creation.
+- **Localization** support for multiple languages, including English, Español, Français, Deutsch, Italiano, Português, Русский, and 中文. More localizations can be added by following the steps [here](https://ethan-hann.github.io/CyberRadio-Assistant/docs/advanced-topics/localization.html).
+- **Asynchronous task support** for background operations like icon generation, with progress tracking and cancellation.
+- **User-friendly interface** with a clean and intuitive UI with drag-and-drop functionality for adding songs and icons. Detailed tooltips and user guidance simplify station setup and management.
 
 Full documentation here: [Docs](https://ethan-hann.github.io/CyberRadio-Assistant/)
 
