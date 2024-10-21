@@ -1,4 +1,20 @@
-﻿using System.ComponentModel;
+﻿// DirectoryCopier.cs : RadioExt-Helper
+// Copyright (C) 2024  Ethan Hann
+// 
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+// 
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// 
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+using System.ComponentModel;
 using AetherUtils.Core.Files;
 
 namespace RadioExt_Helper.utility;
@@ -6,20 +22,14 @@ namespace RadioExt_Helper.utility;
 /// <summary>
 ///     Provides methods to copy all directories and files within a parent directory to a different directory.
 /// </summary>
-public class DirectoryCopier
+/// <remarks>
+///     Initializes the <see cref="DirectoryCopier"/> with a <see cref="BackgroundWorker"/> for progress reporting.
+/// </remarks>
+/// <param name="worker">The BackgroundWorker to use for progress reporting.</param>
+public class DirectoryCopier(BackgroundWorker worker)
 {
-    private readonly BackgroundWorker _worker;
     private int _copiedFiles;
     private int _totalFiles;
-
-    /// <summary>
-    ///     Initializes the DirectoryCopier with a BackgroundWorker for progress reporting.
-    /// </summary>
-    /// <param name="worker">The BackgroundWorker to use for progress reporting.</param>
-    public DirectoryCopier(BackgroundWorker worker)
-    {
-        _worker = worker;
-    }
 
     public string CurrentFile { get; private set; } = string.Empty;
 
@@ -49,7 +59,7 @@ public class DirectoryCopier
 
         foreach (var file in files)
         {
-            if (_worker.CancellationPending) return;
+            if (worker.CancellationPending) return;
 
             var destFile = Path.Combine(destDir, file.Name);
             CurrentFile = file.Name;
@@ -66,7 +76,7 @@ public class DirectoryCopier
 
         foreach (var subDir in subDirs)
         {
-            if (_worker.CancellationPending) return;
+            if (worker.CancellationPending) return;
 
             var destSubDir = Path.Combine(destDir, subDir.Name);
             CopyDirectory(subDir.FullName, destSubDir, copySubDirs);
@@ -76,6 +86,6 @@ public class DirectoryCopier
     private void ReportProgress()
     {
         var progressPercentage = (int)((double)_copiedFiles / _totalFiles * 100);
-        _worker.ReportProgress(progressPercentage);
+        worker.ReportProgress(progressPercentage);
     }
 }
