@@ -110,8 +110,4 @@ At any point, you can press `F1` on the keyboard or click the `Help > How To Use
 
 # Next Steps
 
-To understand the UI layout a bit more, see the [User Interface](../user-interface/user-interface.md) article
-
-**-or-**
-
-if you're feeling adventurous, how about [creating some stations](../stations/creating-stations.md)?
+To understand the UI layout a bit more, see the [User Interface](../user-interface/user-interface.md) article or if you're feeling adventurous, how about [creating some stations](../stations/creating-stations.md)?
