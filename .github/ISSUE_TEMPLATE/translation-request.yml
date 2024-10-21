@@ -1,8 +1,9 @@
 name: Translation Request
-about: Submit a request for new localizations or translations for the app.
+description: Submit a translation for CRA.
 title: "[TRANSLATION] - [Language]"
-labels: translation
-assignees: ethan-hann
+labels: ["translation"]
+assignees:
+  - ethan-hann
 body:
   - type: markdown
     attributes:
