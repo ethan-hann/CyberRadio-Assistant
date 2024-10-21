@@ -1,10 +1,12 @@
----
 name: Translation Request
 about: Submit a request for new localizations or translations for the app.
 title: "[TRANSLATION] - [Language]"
 labels: translation
 assignees: ethan-hann
 body:
+  - type: markdown
+    attributes:
+      value: "**For translation instructions, please refer to the [Localization Guide](https://ethan-hann.github.io/CyberRadio-Assistant/docs/advanced-topics/localization.html).**"
   - type: input
     id: language_name
     attributes:
@@ -17,7 +19,7 @@ body:
     id: culture_tag
     attributes:
       label: Culture Tag (.NET)
-      description: "Provide the appropriate culture tag for the language (e.g., it-IT for Italian)."
+      description: "Provide the appropriate culture tag for the language (e.g., it for Italian)."
       placeholder: "e.g., it-IT"
       value: ""
     validations:
@@ -25,18 +27,6 @@ body:
   - type: markdown
     attributes:
       value: "**Upload your `translations.xlsx` file** to this issue for review and verification."
----
 
-## Translation Request
-
-For translation instructions, please refer to the [Localization Guide](https://ethan-hann.github.io/CyberRadio-Assistant/docs/advanced-topics/localization.html).
-
-### 1. Language Information
-- **Language for Translation**: Specify the language you are providing translations for.
-- **Culture Tag (.NET)**: Please provide the appropriate culture tag.  
-  [List of Culture Tags](https://www.venea.net/web/culture_code)
-
-### 2. Translation File
-- **Upload your `translations.xlsx` file** to this issue for review and verification.
 
 
