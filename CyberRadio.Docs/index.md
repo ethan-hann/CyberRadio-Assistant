@@ -2,6 +2,8 @@
 _layout: landing
 ---
 
+[![Static Badge](https://img.shields.io/badge/Cyber%20Radio%20Assistant-blue?logo=github&label=Github%20Repo&link=https%3A%2F%2Fgithub.com%2Fethan-hann%2FCyberRadio-Assistant)](https://github.com/ethan-hann/CyberRadio-Assistant)
+
 ![REPO-SIZE](https://img.shields.io/github/repo-size/ethan-hann/CyberRadio-Assistant)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/210b2b0ad9a748a6a35e3f7048acdf95)](https://app.codacy.com/gh/ethan-hann/CyberRadio-Assistant/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 [![GitHub Release](https://img.shields.io/github/v/release/ethan-hann/CyberRadio-Assistant?include_prereleases&display_name=release&style=flat)](https://github.com/ethan-hann/CyberRadio-Assistant/releases)
@@ -26,12 +28,14 @@ A brief list of features are below:
 - **User-friendly interface** with a clean and intuitive UI with drag-and-drop functionality for adding songs and icons. Detailed tooltips and user guidance simplify station setup and management.
 
 This documentation has two parts:
-1) a [full guide](docs/introduction.md) that goes over how to use Cyber Radio Assistant 📃
-2) an [API reference](api/RadioExt_Helper.forms.yml) that is useful if you want to see the classes and methods behind the scenes 😄
+1) A [**full guide**](docs/quick-start/introduction.md) that goes over how to use Cyber Radio Assistant 📃
+2) An [**API reference**](api/RadioExt_Helper.forms.yml) that is useful if you want to see the classes and methods behind the scenes 😄
 
-# [Github Repo](https://github.com/ethan-hann/CyberRadio-Assistant)
+## Documentation Language Support
+Currently, `docfx` does not provide a nice way to generate multi-language documentation, so these docs only support English.
 
-# VirusTotal Report
+<details>
+  <summary><b>VirusTotal Report</b></summary>
 
 Since you should never run `.exe` files from people you don't trust, I urge you to verify the hash of the file you downloaded against the below.
 
@@ -71,14 +75,19 @@ Here are some screenshots from the VirusTotal report:
 
 ### Detailed Analysis
 ![vt_detailed_overview](images/vt_detailed_overview.png)
----
-# To-Do List
 
-> [!TODO]
+</details>
+
+<details>
+  <summary><b>TODO List</b></summary>
+
+> [!TODO]  
 > Implement editing of song's title within CRA.
 
-> [!TODO]
+> [!TODO]  
 > Add station preview that allows previewing what the station would look and sound like in game.
 
-> [!TODO]
+> [!TODO]  
 > Add a way to normalize the audio levels of station's songs.
+
+</details>

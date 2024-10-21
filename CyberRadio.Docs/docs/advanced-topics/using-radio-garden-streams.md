@@ -22,7 +22,7 @@ The service allows you to listen to radio stations from all over the world throu
    
    For example, suppose I want to stream Rice radio from Houston, TX:
 
-   ![radio_garden_1](../images/radio_garden_1.png)
+   ![radio_garden_1](../../images/radio_garden_1.png)
 
 3. In the browser's URL bar, copy the station ID at the end of the URL:
    
@@ -48,7 +48,7 @@ The service allows you to listen to radio stations from all over the world throu
 
    A valid URL will redirect to the underlying web stream and allow you to play the station in the browser:
 
-   ![radio_garden_2](../images/radio_garden_2.png)
+   ![radio_garden_2](../../images/radio_garden_2.png)
 
    **This means it is a valid web stream and can be used in game!**
 
@@ -56,7 +56,7 @@ The service allows you to listen to radio stations from all over the world throu
 
 Once you have a valid web stream, you can paste it into the `Stream URL` on the station's properties pane in the application:
 
-![radio_garden_3](../images/radio_garden_3.png)
+![radio_garden_3](../../images/radio_garden_3.png)
 
 > [!TIP]
 > Remember, you can also preview the stream from within CRA by clicking the yellow play button beneath the stream input.

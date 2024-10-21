@@ -16,6 +16,6 @@ The guide is broken up into small articles each covering a specific topic. The n
 
 Each page may also contain links to external supplemental resources that help with understanding the topics.
 
-The first thing you should view is the [getting started](quick-start/getting-started.md) guide. This guide will help get you set up with using CRA and cover some of the fundamentals.
+The first thing you should view is the [getting started](getting-started.md) guide. This guide will help get you set up with using CRA and cover some of the fundamentals.
 
 Of course, I'm not your boss and you can navigate these docs however you want 😁.

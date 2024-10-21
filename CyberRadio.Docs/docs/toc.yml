@@ -1,25 +1,54 @@
-- name: Introduction
-  href: introduction.md
-- name: Getting Started
-  href: getting-started.md
+# This is an automatically generated file
+items:
+- name: Quick start
+  href: quick-start/introduction.md
   items:
-    - name: Creating Stations
-      href: stations.md
-      items:
-        - name: Display and Icon Tab
-          href: stations.md#display-and-icon-tab
-        - name: Music Tab
-          href: stations.md#music-tab
-          items:
-            - name: Songs
-              href: stations.md#songs
-            - name: Song Order
-              href: stations.md#song-order
-        - name: Removing Stations
-          href: stations.md#removing-stations
-- name: Exporting Stations
-  href: export.md
-- name: How to Get the Stream URL from Radio Garden
-  href: using-radio-garden-streams.md
-- name: Localization
-  href: localization.md
+  - name: Introduction
+    href: quick-start/introduction.md
+  - name: Getting Started
+    href: quick-start/getting-started.md
+- name: User interface
+  href: user-interface/user-interface.md
+  items:
+  - name: User Interface
+    href: user-interface/user-interface.md
+- name: Configuration
+  href: configuration/configuration.md
+  items:
+  - name: Configuration
+    href: configuration/configuration.md
+- name: Stations
+  href: stations/creating-stations.md
+  items:
+  - name: Creating Stations
+    href: stations/creating-stations.md
+  - name: Display and Icon Tab
+    href: stations/display-and-icon-tab.md
+  - name: Music Tab
+    href: stations/music-tab.md
+  - name: Station Syncing
+    href: stations/syncing-stations.md
+  - name: Importing Stations
+    href: stations/importing-stations.md
+- name: Icons
+  href: icons/custom-icons.md
+  items:
+  - name: Custom Icon Management
+    href: icons/custom-icons.md
+- name: Backups
+  href: backups/restoring-from-backup.md
+  items:
+  - name: Restoring from a Backup
+    href: backups/restoring-from-backup.md
+- name: Exporting
+  href: exporting/export.md
+  items:
+  - name: Exporting Your Stations
+    href: exporting/export.md
+- name: Advanced topics
+  href: advanced-topics/using-radio-garden-streams.md
+  items:
+  - name: How to Get the Stream URL from Radio Garden
+    href: advanced-topics/using-radio-garden-streams.md
+  - name: Localization
+    href: advanced-topics/localization.md

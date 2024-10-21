@@ -98,6 +98,8 @@ This option defines the location that song files are stored at when you are impo
 
 This option will enable CRA to check for updates duing its startup (while still on the splash screen initialization). You may want to disable this option if you find the `No Updates Available` pop-up annoying everytime the app starts up. But, you will have to manually check for updates using `Help > Check For Updates` menu option from time to time.
 
+For more information on the options available, see [Configuration](../configuration/configuration.md).
+
 ## Getting Help
 
 Most of the labels and controls across various panes and windows provide help when hovered over them. For example, if you hover over `Name:`, the bottom status bar will display the help entry for the text box:
@@ -108,7 +110,7 @@ At any point, you can press `F1` on the keyboard or click the `Help > How To Use
 
 # Next Steps
 
-To understand the UI layout a bit more, see the [User Interface](user-interface.md) article
+To understand the UI layout a bit more, see the [User Interface](../user-interface/user-interface.md) article
 
 **-or-**
 
