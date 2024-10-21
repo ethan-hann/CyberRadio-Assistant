@@ -21,12 +21,17 @@ body:
     attributes:
       label: Culture Tag (.NET)
       description: "Provide the appropriate culture tag for the language (e.g., it for Italian)."
-      placeholder: "e.g., it-IT"
+      placeholder: "e.g., it"
     validations:
       required: true
-  - type: markdown
+  - type: textarea
+    id: file_upload
     attributes:
-      value: "**Upload your `translations.xlsx` file** to this issue for review and verification."
+      label: Upload Translations File
+      description: "Upload your 'translations.xlsx' file to this issue for review."
+      placeholder: "Please upload the file here. Do not enter the translations in this text area!"
+    validations:
+      required: true
 
 
 
