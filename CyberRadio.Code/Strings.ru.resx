@@ -1257,4 +1257,10 @@
   <data name="LocateAllMissingSongsDesc" xml:space="preserve">
     <value>Выберите папку, содержащую отсутствующие файлы песни</value>
   </data>
+  <data name="MainForm_NoStationsImported" xml:space="preserve">
+    <value>Станции не были импортированы. Проверьте файл .zip/.rar содержит действительную станцию.</value>
+  </data>
+  <data name="MainForm_NoStationsImportedTitle" xml:space="preserve">
+    <value>Ничего, чтобы импортировать</value>
+  </data>
 </root>

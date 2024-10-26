@@ -1257,4 +1257,10 @@
   <data name="CopySongFilesToBackupHelp" xml:space="preserve">
     <value>如果已检查，则指示应将歌曲文件（包括外部）包含在电台的备份.zip文件中。</value>
   </data>
+  <data name="MainForm_NoStationsImported" xml:space="preserve">
+    <value>没有进口车站。验证.zip/.rar文件包含一个有效的站。</value>
+  </data>
+  <data name="MainForm_NoStationsImportedTitle" xml:space="preserve">
+    <value>没什么可进口的</value>
+  </data>
 </root>

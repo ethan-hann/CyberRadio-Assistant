@@ -1257,4 +1257,10 @@ Asegúrese de crear una copia de seguridad de sus estaciones antes de borrar los
   <data name="LocateAllMissingSongsDesc" xml:space="preserve">
     <value>Seleccione la carpeta que contiene los archivos de canciones faltantes</value>
   </data>
+  <data name="MainForm_NoStationsImported" xml:space="preserve">
+    <value>No se importaron estaciones. Verifique que el archivo .zip/.Rar contiene una estación válida.</value>
+  </data>
+  <data name="MainForm_NoStationsImportedTitle" xml:space="preserve">
+    <value>Nada para importar</value>
+  </data>
 </root>

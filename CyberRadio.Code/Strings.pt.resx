@@ -1257,4 +1257,10 @@ Tem certeza de que deseja limpar todos os dados da estação?</value>
   <data name="CopySongFilesToBackupHelp" xml:space="preserve">
     <value>Se verificado, indica que os arquivos de músicas (incluindo externos) devem ser incluídos no arquivo .zip de backup para as estações.</value>
   </data>
+  <data name="MainForm_NoStationsImported" xml:space="preserve">
+    <value>Nenhuma posição foi importada. Verifique se o arquivo .zip/.ru contém uma estação válida.</value>
+  </data>
+  <data name="MainForm_NoStationsImportedTitle" xml:space="preserve">
+    <value>Nada para importar</value>
+  </data>
 </root>
