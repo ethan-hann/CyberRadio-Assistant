@@ -176,6 +176,16 @@ public partial class StationManager : IDisposable
                     }
                 }
 
+                //Add custom icon data to station if the active icon is not null
+                var activeIcon = station.TrackedObject.GetActiveIcon();
+                if (activeIcon != null)
+                {
+                    station.TrackedObject.AddCustomData(_customDataKeys[0], activeIcon.TrackedObject.IconName ?? string.Empty);
+                    station.TrackedObject.AddCustomData(_customDataKeys[1], activeIcon.TrackedObject.ImagePath ?? string.Empty);
+                    station.TrackedObject.AddCustomData(_customDataKeys[2], activeIcon.TrackedObject.ArchivePath ?? string.Empty);
+                    station.TrackedObject.AddCustomData(_customDataKeys[3], activeIcon.TrackedObject.Sha256HashOfArchiveFile ?? string.Empty);
+                }
+
                 //Add the station's icon editors as well and find the active icon to display.
                 foreach (var icon in station.TrackedObject.Icons)
                     AddStationIconEditor(station.Id, icon.Id, icon.TrackedObject.IsFromArchive);
@@ -666,8 +676,7 @@ public partial class StationManager : IDisposable
                 var wolvenIcon = pair.Key.TrackedObject.Icons.FirstOrDefault(i => i.Id.Equals(iconId));
                 if (wolvenIcon == null) return;
 
-                var editor = new IconEditor(pair.Key, wolvenIcon,
-                    isExistingArchive ? IconEditorType.FromArchive : IconEditorType.FromPng);
+                var editor = new IconEditor(pair.Key, wolvenIcon, isExistingArchive ? IconEditorType.FromArchive : IconEditorType.FromPng);
                 editor.Translate();
                 pair.Value.Add(editor);
             }
@@ -1246,18 +1255,31 @@ public partial class StationManager : IDisposable
             var station = new Station { MetaData = metadata, Songs = songList };
 
             if (iconFiles.Count > 0)
+            {
                 foreach (var icon in iconFiles)
                 {
-                    var trackedIcon = new TrackableObject<WolvenIcon>(new WolvenIcon(string.Empty, icon));
-                    trackedIcon.TrackedObject.IsFromArchive = true;
-                    trackedIcon.TrackedObject.IconId = Guid.NewGuid();
+                    var trackedIcon = new TrackableObject<WolvenIcon>(new WolvenIcon(string.Empty, icon))
+                    {
+                        TrackedObject =
+                        {
+                            IsFromArchive = true,
+                            IconId = Guid.NewGuid(),
+                            CustomIcon = new RadioExtCustomIcon()
+                            {
+                                InkAtlasPart = metadata.CustomIcon.InkAtlasPart,
+                                InkAtlasPath = metadata.CustomIcon.InkAtlasPath
+                            }
+                        }
+                    };
+
                     trackedIcon.AcceptChanges();
                     station.AddIcon(trackedIcon);
                 }
 
-            if (iconList.Count > 0 &&
-                iconFiles.Count <=
-                0) //we only want to add the icons if there are no .archive files in the directory (indicating an imported station)
+                station.Icons.First().TrackedObject.IsActive = true; //Set only the first icon as active
+            }
+
+            if (iconList.Count > 0 && iconFiles.Count <= 0) //we only want to add the icons if there are no .archive files in the directory (indicating an imported station)
                 foreach (var icon in iconList)
                 {
                     var trackedIcon = new TrackableObject<WolvenIcon>(icon);
@@ -1541,6 +1563,8 @@ public partial class StationManager : IDisposable
     /// Upon exporting, the station IDs in this list should be removed by <see cref="ResetNewStations"/>
     /// </summary>
     private readonly List<Guid> _newStations = [];
+
+    private readonly List<string?> _customDataKeys = ["Icon Name", "Image Path", "Archive Path", "SHA256 Archive Hash"];
 
     #endregion
 

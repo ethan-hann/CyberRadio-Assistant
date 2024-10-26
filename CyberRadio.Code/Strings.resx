@@ -1257,4 +1257,10 @@ Are you sure you want to clear all station data?</value>
   <data name="LocateAllMissingSongsDesc" xml:space="preserve">
     <value>Select the folder containing the missing song files</value>
   </data>
+  <data name="MainForm_NoStationsImported" xml:space="preserve">
+    <value>No stations were imported. Verify the .zip/.rar file contains a valid station.</value>
+  </data>
+  <data name="MainForm_NoStationsImportedTitle" xml:space="preserve">
+    <value>Nothing to Import</value>
+  </data>
 </root>

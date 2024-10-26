@@ -114,6 +114,13 @@ public sealed partial class MainForm : Form
 
     private void OnStationImported(object? sender, List<Guid?> stationIds)
     {
+        if (stationIds.Count <= 0) //No stations were imported, so we can show the user an error message.
+        {
+            MessageBox.Show(Strings.MainForm_NoStationsImported, Strings.MainForm_NoStationsImportedTitle,
+                MessageBoxButtons.OK, MessageBoxIcon.Error);
+            return;
+        } 
+
         var importedIconNames = string.Join(", ", stationIds.Select(stationId =>
             StationManager.Instance.GetStation(stationId)?.Key.TrackedObject.MetaData.DisplayName));
 

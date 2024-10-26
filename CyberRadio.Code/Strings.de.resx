@@ -1257,4 +1257,10 @@ Sind Sie sicher, dass Sie alle Stationsdaten löschen möchten?</value>
   <data name="CopySongFilesToBackupHelp" xml:space="preserve">
     <value>Wenn Sie überprüft werden, gibt an, dass Songdateien (einschließlich externer) in der Backup .zip -Datei für die Stationen aufgenommen werden sollten.</value>
   </data>
+  <data name="MainForm_NoStationsImported" xml:space="preserve">
+    <value>Es wurden keine Stationen importiert. Überprüfen Sie, ob die Datei .zip/.rar eine gültige Station enthält.</value>
+  </data>
+  <data name="MainForm_NoStationsImportedTitle" xml:space="preserve">
+    <value>Nichts zu importieren</value>
+  </data>
 </root>

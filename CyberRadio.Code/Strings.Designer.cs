@@ -2039,6 +2039,24 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No stations were imported. Verify the .zip/.rar file contains a valid station..
+        /// </summary>
+        internal static string MainForm_NoStationsImported {
+            get {
+                return ResourceManager.GetString("MainForm_NoStationsImported", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nothing to Import.
+        /// </summary>
+        internal static string MainForm_NoStationsImportedTitle {
+            get {
+                return ResourceManager.GetString("MainForm_NoStationsImportedTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Backup Files (*.zip).
         /// </summary>
         internal static string MainForm_RestoreFileBrowserFilter {

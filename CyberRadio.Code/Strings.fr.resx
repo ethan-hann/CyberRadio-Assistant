@@ -1257,4 +1257,10 @@ Assurez-vous de créer une sauvegarde de vos stations avant de nettoyer les donn
   <data name="CopySongFilesToBackupHelp" xml:space="preserve">
     <value>S'il est vérifié, indique que les fichiers de chansons (y compris externes) doivent être inclus dans le fichier de sauvegarde .zip pour les stations.</value>
   </data>
+  <data name="MainForm_NoStationsImported" xml:space="preserve">
+    <value>Aucune station n'a été importée. Vérifiez que le fichier .zip / .rar contient une station valide.</value>
+  </data>
+  <data name="MainForm_NoStationsImportedTitle" xml:space="preserve">
+    <value>Rien à importer</value>
+  </data>
 </root>
