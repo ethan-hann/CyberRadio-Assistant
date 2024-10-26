@@ -748,6 +748,9 @@ public sealed partial class MainForm : Form
         StationManager.Instance.RemoveStation(station.Id);
         UpdateEnabledStationCount();
         HandleUserControlVisibility();
+
+        if (lbStations.Items.Count <= 0)
+            UpdateTitleBar(null);
     }
 
     private void CmbLanguageSelect_SelectedIndexChanged(object? sender, EventArgs e)
