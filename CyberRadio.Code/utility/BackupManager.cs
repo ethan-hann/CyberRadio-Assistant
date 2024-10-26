@@ -394,7 +394,7 @@ public class BackupManager(CompressionLevel level)
 
                     var destinationPath = Path.GetFullPath(Path.Combine(originalPath));
                     var fullOriginalPath = Path.GetFullPath(originalPath + Path.DirectorySeparatorChar);
-                    if (!destinationPath.StartsWith(fullOriginalPath))
+                    if (!fullOriginalPath.StartsWith(destinationPath))
                     {
                         throw new InvalidOperationException("Entry is outside the target dir: " + destinationPath);
                     }
