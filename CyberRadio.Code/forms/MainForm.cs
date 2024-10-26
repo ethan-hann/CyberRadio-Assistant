@@ -902,12 +902,17 @@ public sealed partial class MainForm : Form
 
     private void RefreshStationsToolStripMenuItem_Click(object sender, EventArgs e)
     {
-        if (lbStations.Items.Count <= 0) return;
-
-        var text = Strings.ConfirmRefreshStations;
-        var caption = Strings.Confirm;
-        if (MessageBox.Show(this, text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+        if (lbStations.Items.Count <= 0)
+        {
             PopulateStations();
+        }
+        else
+        {
+            var text = Strings.ConfirmRefreshStations;
+            var caption = Strings.Confirm;
+            if (MessageBox.Show(this, text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+                PopulateStations();
+        }
     }
 
     private void SynchronizeStationsToolStripMenuItem_Click(object sender, EventArgs e)
