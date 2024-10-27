@@ -1263,4 +1263,34 @@ Are you sure you want to clear all station data?</value>
   <data name="MainForm_NoStationsImportedTitle" xml:space="preserve">
     <value>Nothing to Import</value>
   </data>
+  <data name="StagingPathForbidden" xml:space="preserve">
+    <value>Invalid Path: {0}</value>
+  </data>
+  <data name="ForbiddenPath_RootDirectory" xml:space="preserve">
+    <value>The staging path cannot be set to the root of a drive</value>
+  </data>
+  <data name="ForbiddenPath_SystemDirectory" xml:space="preserve">
+    <value>The staging path cannot be set to a reserved system directory.</value>
+  </data>
+  <data name="ForbiddenPath_ProgramFiles" xml:space="preserve">
+    <value>The staging path cannot be set to the Program Files directory.</value>
+  </data>
+  <data name="ForbiddenPath_UserAppData" xml:space="preserve">
+    <value>The staging path cannot be set to an application data directory.</value>
+  </data>
+  <data name="ForbiddenPath_VortexFolder" xml:space="preserve">
+    <value>The staging path cannot be set to a Vortex-managed folder.</value>
+  </data>
+  <data name="ForbiddenPath_KeywordMatch" xml:space="preserve">
+    <value>The staging path is related to a game or launcher directory and is not allowed.</value>
+  </data>
+  <data name="SplashScreen_CheckingStagingPath" xml:space="preserve">
+    <value>Checking staging path...</value>
+  </data>
+  <data name="SplashScreen_StagingPathForbidden" xml:space="preserve">
+    <value>Staging path was invalid. Reset to an empty string.</value>
+  </data>
+  <data name="SplashScreen_StagingPathValid" xml:space="preserve">
+    <value>Staging path is valid!</value>
+  </data>
 </root>

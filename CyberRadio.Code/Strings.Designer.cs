@@ -1118,6 +1118,60 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The staging path is related to a game or launcher directory and is not allowed..
+        /// </summary>
+        internal static string ForbiddenPath_KeywordMatch {
+            get {
+                return ResourceManager.GetString("ForbiddenPath_KeywordMatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The staging path cannot be set to the Program Files directory..
+        /// </summary>
+        internal static string ForbiddenPath_ProgramFiles {
+            get {
+                return ResourceManager.GetString("ForbiddenPath_ProgramFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The staging path cannot be set to the root of a drive.
+        /// </summary>
+        internal static string ForbiddenPath_RootDirectory {
+            get {
+                return ResourceManager.GetString("ForbiddenPath_RootDirectory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The staging path cannot be set to a reserved system directory..
+        /// </summary>
+        internal static string ForbiddenPath_SystemDirectory {
+            get {
+                return ResourceManager.GetString("ForbiddenPath_SystemDirectory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The staging path cannot be set to an application data directory..
+        /// </summary>
+        internal static string ForbiddenPath_UserAppData {
+            get {
+                return ResourceManager.GetString("ForbiddenPath_UserAppData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The staging path cannot be set to a Vortex-managed folder..
+        /// </summary>
+        internal static string ForbiddenPath_VortexFolder {
+            get {
+                return ResourceManager.GetString("ForbiddenPath_VortexFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to From .archive file....
         /// </summary>
         internal static string FromArchiveFile {
@@ -2879,6 +2933,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Checking staging path....
+        /// </summary>
+        internal static string SplashScreen_CheckingStagingPath {
+            get {
+                return ResourceManager.GetString("SplashScreen_CheckingStagingPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Finalizing....
         /// </summary>
         internal static string SplashScreen_Finalizing {
@@ -2915,6 +2978,24 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Staging path was invalid. Reset to an empty string..
+        /// </summary>
+        internal static string SplashScreen_StagingPathForbidden {
+            get {
+                return ResourceManager.GetString("SplashScreen_StagingPathForbidden", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Staging path is valid!.
+        /// </summary>
+        internal static string SplashScreen_StagingPathValid {
+            get {
+                return ResourceManager.GetString("SplashScreen_StagingPathValid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Starting....
         /// </summary>
         internal static string SplashScreen_Starting {
@@ -2947,6 +3028,15 @@ namespace RadioExt_Helper {
         internal static string StagingPath {
             get {
                 return ResourceManager.GetString("StagingPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid Path: {0}.
+        /// </summary>
+        internal static string StagingPathForbidden {
+            get {
+                return ResourceManager.GetString("StagingPathForbidden", resourceCulture);
             }
         }
         

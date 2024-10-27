@@ -35,6 +35,7 @@ public sealed class ApplicationConfig
 {
     // Constants for config keys
     private const string AutoCheckForUpdatesKey = "autoCheckForUpdates";
+    private const string IsFirstRunKey = "isFirstRun";
     private const string AutoExportToGameKey = "autoExportToGame";
     private const string WatchForGameChangesKey = "watchForGameChanges";
     private const string CopySongFilesToBackupKey = "copySongFilesToBackup";
@@ -53,6 +54,12 @@ public sealed class ApplicationConfig
     [Config(AutoCheckForUpdatesKey)]
     [Description("CheckForUpdatesOptionHelp")]
     public bool AutoCheckForUpdates { get; set; } = true;
+
+    /// <summary>
+    /// Specifies whether the application is running for the first time.
+    /// </summary>
+    [Config(IsFirstRunKey)]
+    public bool IsFirstRun { get; set; } = true;
 
     /// <summary>
     ///     Specifies whether the application should automatically export the stations to the game
@@ -76,6 +83,9 @@ public sealed class ApplicationConfig
     [Description("CopySongFilesToBackupHelp")]
     public bool CopySongFilesToBackup { get; set; } = true;
 
+    /// <summary>
+    /// Specifies the default location for song files that have been imported from a station .zip or .rar file.
+    /// </summary>
     [Config(DefaultSongLocationKey)]
     [Description("DefaultSongLocationHelp")]
     public string DefaultSongLocation { get; set; } = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic);

@@ -1263,4 +1263,34 @@ Sind Sie sicher, dass Sie alle Stationsdaten löschen möchten?</value>
   <data name="MainForm_NoStationsImportedTitle" xml:space="preserve">
     <value>Nichts zu importieren</value>
   </data>
+  <data name="StagingPathForbidden" xml:space="preserve">
+    <value>Ungültiger Pfad: {0}</value>
+  </data>
+  <data name="ForbiddenPath_RootDirectory" xml:space="preserve">
+    <value>Der Staging -Pfad kann nicht auf die Wurzel eines Laufwerks eingestellt werden</value>
+  </data>
+  <data name="ForbiddenPath_SystemDirectory" xml:space="preserve">
+    <value>Der Staging -Pfad kann nicht auf ein reserviertes Systemverzeichnis eingestellt werden.</value>
+  </data>
+  <data name="ForbiddenPath_ProgramFiles" xml:space="preserve">
+    <value>Der Staging -Pfad kann nicht auf das Verzeichnis der Programmdateien eingestellt werden.</value>
+  </data>
+  <data name="ForbiddenPath_UserAppData" xml:space="preserve">
+    <value>Der Staging -Pfad kann nicht auf ein Anwendungsdatenverzeichnis eingestellt werden.</value>
+  </data>
+  <data name="ForbiddenPath_VortexFolder" xml:space="preserve">
+    <value>Der Staging-Pfad kann nicht auf einen wirbelmännischen Ordner eingestellt werden.</value>
+  </data>
+  <data name="ForbiddenPath_KeywordMatch" xml:space="preserve">
+    <value>Der Staging -Pfad hängt mit einem Spiel- oder Launcher -Verzeichnis zusammen und ist nicht zulässig.</value>
+  </data>
+  <data name="SplashScreen_CheckingStagingPath" xml:space="preserve">
+    <value>Überprüfen Sie den Staging -Pfad ...</value>
+  </data>
+  <data name="SplashScreen_StagingPathForbidden" xml:space="preserve">
+    <value>Der Staging -Pfad war ungültig. Auf eine leere Zeichenfolge zurücksetzen.</value>
+  </data>
+  <data name="SplashScreen_StagingPathValid" xml:space="preserve">
+    <value>Der Staging -Pfad ist gültig!</value>
+  </data>
 </root>

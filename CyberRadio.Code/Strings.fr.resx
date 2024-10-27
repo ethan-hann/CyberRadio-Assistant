@@ -1263,4 +1263,34 @@ Assurez-vous de créer une sauvegarde de vos stations avant de nettoyer les donn
   <data name="MainForm_NoStationsImportedTitle" xml:space="preserve">
     <value>Rien à importer</value>
   </data>
+  <data name="StagingPathForbidden" xml:space="preserve">
+    <value>Chemin non valide: {0}</value>
+  </data>
+  <data name="ForbiddenPath_RootDirectory" xml:space="preserve">
+    <value>Le chemin de stadification ne peut pas être réglé sur la racine d'un lecteur</value>
+  </data>
+  <data name="ForbiddenPath_SystemDirectory" xml:space="preserve">
+    <value>Le chemin de stadification ne peut pas être défini sur un répertoire système réservé.</value>
+  </data>
+  <data name="ForbiddenPath_ProgramFiles" xml:space="preserve">
+    <value>Le chemin de stadification ne peut pas être défini sur le répertoire des fichiers du programme.</value>
+  </data>
+  <data name="ForbiddenPath_UserAppData" xml:space="preserve">
+    <value>Le chemin de stadification ne peut pas être défini sur un répertoire de données d'application.</value>
+  </data>
+  <data name="ForbiddenPath_VortexFolder" xml:space="preserve">
+    <value>Le chemin de stadification ne peut pas être défini sur un dossier géré par vortex.</value>
+  </data>
+  <data name="ForbiddenPath_KeywordMatch" xml:space="preserve">
+    <value>Le chemin de stadification est lié à un répertoire de jeu ou de lanceur et n'est pas autorisé.</value>
+  </data>
+  <data name="SplashScreen_CheckingStagingPath" xml:space="preserve">
+    <value>Vérification du chemin de stadification ...</value>
+  </data>
+  <data name="SplashScreen_StagingPathForbidden" xml:space="preserve">
+    <value>Le chemin de mise en scène n'était pas valide. Réinitialiser avec une chaîne vide.</value>
+  </data>
+  <data name="SplashScreen_StagingPathValid" xml:space="preserve">
+    <value>Le chemin de mise en scène est valide!</value>
+  </data>
 </root>

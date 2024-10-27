@@ -14,6 +14,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+using System.Text;
+using AetherUtils.Core.Extensions;
 using AetherUtils.Core.Logging;
 using RadioExt_Helper.utility;
 
@@ -110,7 +112,7 @@ public partial class PathSettings : Form
     private void BtnChangeGameBasePath_Click(object sender, EventArgs e)
     {
         var basePath = PathHelper.GetGamePath();
-        if (basePath == null || basePath.Equals(string.Empty)) return;
+        if (basePath.Equals(string.Empty)) return;
         var stagingPath = GlobalData.ConfigManager.Get("stagingPath") as string ?? string.Empty;
 
         if (PathHelper.IsSubPath(stagingPath, basePath))
@@ -161,6 +163,28 @@ public partial class PathSettings : Form
             MessageBox.Show(this, Strings.StagingPathWithinGamePath, Strings.Error, MessageBoxButtons.OK,
                 MessageBoxIcon.Error);
             AuLogger.GetCurrentLogger<PathSettings>("ChangeStagingPath").Warn("Staging path is within the game path.");
+            return;
+        }
+
+        // Check if the staging path is within any forbidden paths
+        var forbiddenPathResult = PathHelper.IsForbiddenPath(stagingPath);
+        if (forbiddenPathResult.IsForbidden)
+        {
+            var reason = Strings.ResourceManager.GetString(forbiddenPathResult.Reason.ToDescriptionString());
+            if (reason == null)
+            {
+                MessageBox.Show(this, string.Format(Strings.StagingPathForbidden, stagingPath), Strings.Error, MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                AuLogger.GetCurrentLogger<PathSettings>("ChangeStagingPath").Warn("Staging path is within a forbidden path.");
+                return;
+            }
+
+            var text = new StringBuilder();
+            text.AppendLine(string.Format(Strings.StagingPathForbidden, stagingPath));
+            text.AppendLine();
+            text.AppendLine(reason);
+            MessageBox.Show(this, text.ToString(), Strings.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            AuLogger.GetCurrentLogger<PathSettings>("ChangeStagingPath").Warn("Staging path is within a forbidden path.");
             return;
         }
 
