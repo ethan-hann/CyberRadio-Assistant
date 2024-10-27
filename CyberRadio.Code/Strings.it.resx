@@ -1263,4 +1263,34 @@ Sei sicuro di voler cancellare tutti i dati della stazione?</value>
   <data name="MainForm_NoStationsImportedTitle" xml:space="preserve">
     <value>Niente da importare</value>
   </data>
+  <data name="StagingPathForbidden" xml:space="preserve">
+    <value>Path non valido: {0}</value>
+  </data>
+  <data name="ForbiddenPath_RootDirectory" xml:space="preserve">
+    <value>Il percorso di stadiazione non può essere impostato sulla radice di un'unità</value>
+  </data>
+  <data name="ForbiddenPath_SystemDirectory" xml:space="preserve">
+    <value>Il percorso di stadiazione non può essere impostato su una directory di sistema riservata.</value>
+  </data>
+  <data name="ForbiddenPath_ProgramFiles" xml:space="preserve">
+    <value>Il percorso di stadiazione non può essere impostato sulla directory dei file del programma.</value>
+  </data>
+  <data name="ForbiddenPath_UserAppData" xml:space="preserve">
+    <value>Il percorso di stadiazione non può essere impostato su una directory dei dati dell'applicazione.</value>
+  </data>
+  <data name="ForbiddenPath_VortexFolder" xml:space="preserve">
+    <value>Il percorso di staging non può essere impostato su una cartella gestita da vortice.</value>
+  </data>
+  <data name="ForbiddenPath_KeywordMatch" xml:space="preserve">
+    <value>Il percorso di gestione temporanea è correlato a una directory di gioco o lanciatore e non è consentito.</value>
+  </data>
+  <data name="SplashScreen_CheckingStagingPath" xml:space="preserve">
+    <value>Controllo del percorso di stadiazione ...</value>
+  </data>
+  <data name="SplashScreen_StagingPathForbidden" xml:space="preserve">
+    <value>Il percorso di stadiazione non era valido. Ripristina una stringa vuota.</value>
+  </data>
+  <data name="SplashScreen_StagingPathValid" xml:space="preserve">
+    <value>Il percorso di stadiazione è valido!</value>
+  </data>
 </root>

@@ -1263,4 +1263,34 @@
   <data name="MainForm_NoStationsImportedTitle" xml:space="preserve">
     <value>没什么可进口的</value>
   </data>
+  <data name="StagingPathForbidden" xml:space="preserve">
+    <value>无效路径：{0}</value>
+  </data>
+  <data name="ForbiddenPath_RootDirectory" xml:space="preserve">
+    <value>无法将登台路径设置为驱动器的根部</value>
+  </data>
+  <data name="ForbiddenPath_SystemDirectory" xml:space="preserve">
+    <value>无法将分期路径设置为保留系统目录。</value>
+  </data>
+  <data name="ForbiddenPath_ProgramFiles" xml:space="preserve">
+    <value>登台路径不能设置为程序文件目录。</value>
+  </data>
+  <data name="ForbiddenPath_UserAppData" xml:space="preserve">
+    <value>登台路径不能设置为应用程序数据目录。</value>
+  </data>
+  <data name="ForbiddenPath_VortexFolder" xml:space="preserve">
+    <value>无法将登台路径设置为涡流管理的文件夹。</value>
+  </data>
+  <data name="ForbiddenPath_KeywordMatch" xml:space="preserve">
+    <value>登台路径与游戏或启动器目录有关，不允许。</value>
+  </data>
+  <data name="SplashScreen_CheckingStagingPath" xml:space="preserve">
+    <value>检查登台路径...</value>
+  </data>
+  <data name="SplashScreen_StagingPathForbidden" xml:space="preserve">
+    <value>分期路径无效。重置为空字符串。</value>
+  </data>
+  <data name="SplashScreen_StagingPathValid" xml:space="preserve">
+    <value>登台路径有效！</value>
+  </data>
 </root>

@@ -1263,4 +1263,34 @@ Asegúrese de crear una copia de seguridad de sus estaciones antes de borrar los
   <data name="MainForm_NoStationsImportedTitle" xml:space="preserve">
     <value>Nada para importar</value>
   </data>
+  <data name="StagingPathForbidden" xml:space="preserve">
+    <value>Ruta no válida: {0}</value>
+  </data>
+  <data name="ForbiddenPath_RootDirectory" xml:space="preserve">
+    <value>La ruta de puesta en escena no se puede establecer en la raíz de una unidad</value>
+  </data>
+  <data name="ForbiddenPath_SystemDirectory" xml:space="preserve">
+    <value>La ruta de puesta en escena no se puede establecer en un directorio de sistema reservado.</value>
+  </data>
+  <data name="ForbiddenPath_ProgramFiles" xml:space="preserve">
+    <value>La ruta de puesta en escena no se puede configurar en el directorio de archivos del programa.</value>
+  </data>
+  <data name="ForbiddenPath_UserAppData" xml:space="preserve">
+    <value>La ruta de puesta en escena no se puede establecer en un directorio de datos de aplicación.</value>
+  </data>
+  <data name="ForbiddenPath_VortexFolder" xml:space="preserve">
+    <value>La ruta de puesta en escena no se puede establecer en una carpeta administrada por vórtice.</value>
+  </data>
+  <data name="ForbiddenPath_KeywordMatch" xml:space="preserve">
+    <value>La ruta de puesta en escena está relacionada con un directorio de juego o lanzador y no está permitido.</value>
+  </data>
+  <data name="SplashScreen_CheckingStagingPath" xml:space="preserve">
+    <value>Verificación de la ruta de puesta en escena ...</value>
+  </data>
+  <data name="SplashScreen_StagingPathForbidden" xml:space="preserve">
+    <value>La ruta de puesta en escena no era válida. Reiniciar a una cadena vacía.</value>
+  </data>
+  <data name="SplashScreen_StagingPathValid" xml:space="preserve">
+    <value>¡La ruta de puesta en escena es válida!</value>
+  </data>
 </root>

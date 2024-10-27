@@ -1263,4 +1263,34 @@
   <data name="MainForm_NoStationsImportedTitle" xml:space="preserve">
     <value>Ничего, чтобы импортировать</value>
   </data>
+  <data name="StagingPathForbidden" xml:space="preserve">
+    <value>Неверный путь: {0}</value>
+  </data>
+  <data name="ForbiddenPath_RootDirectory" xml:space="preserve">
+    <value>Путь по постановке не может быть установлен на корень диска</value>
+  </data>
+  <data name="ForbiddenPath_SystemDirectory" xml:space="preserve">
+    <value>Путь по постановке не может быть установлен в резервный каталог системы.</value>
+  </data>
+  <data name="ForbiddenPath_ProgramFiles" xml:space="preserve">
+    <value>Путь постановки не может быть установлен в каталог файлов программы.</value>
+  </data>
+  <data name="ForbiddenPath_UserAppData" xml:space="preserve">
+    <value>Путь постановки не может быть установлен в каталог данных приложения.</value>
+  </data>
+  <data name="ForbiddenPath_VortexFolder" xml:space="preserve">
+    <value>Путь к постановке не может быть установлен в папку, управляемую вихрем.</value>
+  </data>
+  <data name="ForbiddenPath_KeywordMatch" xml:space="preserve">
+    <value>Переходный путь связан с каталогом игры или пусковой установки и не допускается.</value>
+  </data>
+  <data name="SplashScreen_CheckingStagingPath" xml:space="preserve">
+    <value>Проверка промежуточного пути ...</value>
+  </data>
+  <data name="SplashScreen_StagingPathForbidden" xml:space="preserve">
+    <value>Поставленный путь был недействительным. Сбросить на пустую строку.</value>
+  </data>
+  <data name="SplashScreen_StagingPathValid" xml:space="preserve">
+    <value>Постановка пути действителен!</value>
+  </data>
 </root>

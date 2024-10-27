@@ -14,11 +14,16 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+using System.Drawing;
 using System.Reflection;
+using System.Text;
+using AetherUtils.Core.Extensions;
 using AetherUtils.Core.Logging;
 using RadioExt_Helper.migration;
+using RadioExt_Helper.models;
 using RadioExt_Helper.utility;
 using WIG.Lib.Utility;
+using PathHelper = RadioExt_Helper.utility.PathHelper;
 
 namespace RadioExt_Helper.forms;
 
@@ -87,13 +92,46 @@ public partial class SplashScreen : Form
             statusMessages.Add("Settings migration not needed.");
         }
 
-        // Migrate songs (if needed)
-        UpdateStatus(Strings.SplashScreen_CheckingSongs);
+        //Check staging path for forbidden paths
+        bool isStagingPathValid;
+        UpdateStatus(Strings.SplashScreen_CheckingStagingPath);
         await Task.Delay(300);
 
         var stagingPath = GlobalData.ConfigManager.Get("stagingPath") as string ?? string.Empty;
-        var songMigrationStatus = MigrationHelper.MigrateSongs(stagingPath);
-        statusMessages.AddRange(songMigrationStatus);
+        var result = PathHelper.IsForbiddenPath(stagingPath);
+        if (result.IsForbidden) //If the staging path is a forbidden path, reset it to an empty string before continuing.
+        {
+            GlobalData.ConfigManager.Set("stagingPath", string.Empty);
+            await GlobalData.ConfigManager.SaveAsync();
+
+            UpdateStatus(Strings.SplashScreen_StagingPathForbidden);
+            var reason = Strings.ResourceManager.GetString(result.Reason.ToDescriptionString());
+            statusMessages.Add(reason ?? "Staging path was invalid. Reset it to an empty string.");
+            isStagingPathValid = false;
+
+            var text = new StringBuilder();
+            text.AppendLine(string.Format(Strings.StagingPathForbidden, stagingPath));
+            text.AppendLine();
+            text.AppendLine(reason);
+            Invoke(() => MessageBox.Show(this, text.ToString(), Strings.Error, MessageBoxButtons.OK, MessageBoxIcon.Error));
+        }
+        else
+        {
+            UpdateStatus(Strings.SplashScreen_StagingPathValid);
+            statusMessages.Add("Staging path is valid!");
+            isStagingPathValid = true;
+        }
+        await Task.Delay(300);
+
+        // Migrate songs (if needed)
+        if (isStagingPathValid)
+        {
+            UpdateStatus(Strings.SplashScreen_CheckingSongs);
+            await Task.Delay(300);
+
+            var songMigrationStatus = MigrationHelper.MigrateSongs(stagingPath);
+            statusMessages.AddRange(songMigrationStatus);
+        }
 
         // Check for updates (if needed)
         if (GlobalData.ConfigManager.Get("autoCheckForUpdates") as bool? ?? true)
@@ -128,7 +166,10 @@ public partial class SplashScreen : Form
         //}
         //------------------------------------------------------------------------------------------------------------
 
-        UpdateStatus(Strings.SplashScreen_Finalizing ?? "Finalizing...");
+        UpdateStatus(Strings.SplashScreen_Finalizing);
+        GlobalData.ConfigManager.Set("isFirstRun", false);
+        await GlobalData.ConfigManager.SaveAsync();
+
         await Task.Delay(500);
 
         return statusMessages;

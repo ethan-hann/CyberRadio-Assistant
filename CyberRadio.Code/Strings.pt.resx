@@ -1263,4 +1263,34 @@ Tem certeza de que deseja limpar todos os dados da estação?</value>
   <data name="MainForm_NoStationsImportedTitle" xml:space="preserve">
     <value>Nada para importar</value>
   </data>
+  <data name="StagingPathForbidden" xml:space="preserve">
+    <value>Caminho inválido: {0}</value>
+  </data>
+  <data name="ForbiddenPath_RootDirectory" xml:space="preserve">
+    <value>O caminho de estadiamento não pode ser definido para a raiz de uma unidade</value>
+  </data>
+  <data name="ForbiddenPath_SystemDirectory" xml:space="preserve">
+    <value>O caminho de estadiamento não pode ser definido como um diretório de sistema reservado.</value>
+  </data>
+  <data name="ForbiddenPath_ProgramFiles" xml:space="preserve">
+    <value>O caminho de estadiamento não pode ser definido como o diretório de arquivos do programa.</value>
+  </data>
+  <data name="ForbiddenPath_UserAppData" xml:space="preserve">
+    <value>O caminho de estadiamento não pode ser definido como um diretório de dados do aplicativo.</value>
+  </data>
+  <data name="ForbiddenPath_VortexFolder" xml:space="preserve">
+    <value>O caminho de encenação não pode ser definido como uma pasta gerenciada pelo vórtice.</value>
+  </data>
+  <data name="ForbiddenPath_KeywordMatch" xml:space="preserve">
+    <value>O caminho de preparação está relacionado a um diretório de jogo ou lançador e não é permitido.</value>
+  </data>
+  <data name="SplashScreen_CheckingStagingPath" xml:space="preserve">
+    <value>Verificando o caminho de estadiamento ...</value>
+  </data>
+  <data name="SplashScreen_StagingPathForbidden" xml:space="preserve">
+    <value>O caminho de estadiamento foi inválido. Redefinir para uma corda vazia.</value>
+  </data>
+  <data name="SplashScreen_StagingPathValid" xml:space="preserve">
+    <value>O caminho de encenação é válido!</value>
+  </data>
 </root>

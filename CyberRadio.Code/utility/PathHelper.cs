@@ -17,6 +17,7 @@
 using System.Security.AccessControl;
 using AetherUtils.Core.Files;
 using AetherUtils.Core.Logging;
+using RadioExt_Helper.models;
 using RadioExt_Helper.Properties;
 using SharpCompress.Archives;
 using SharpCompress.Archives.Zip;
@@ -421,5 +422,167 @@ public static class PathHelper
             FileSystemRights.FullControl,
             AccessControlType.Allow));
         directoryInfo.SetAccessControl(security);
+    }
+
+    /// <summary>
+    /// Checks if the specified path is a forbidden path and thus invalid for the staging folder (or other purposes).
+    /// </summary>
+    /// <param name="stagingPath">The proposed staging path.</param>
+    /// <returns>A <see cref="ForbiddenPathResult"/> specifying the reason why the path was forbidden or not.</returns>
+    public static ForbiddenPathResult IsForbiddenPath(string stagingPath)
+    {
+        // Check if the staging path is empty or null (not forbidden)
+        if (string.IsNullOrEmpty(stagingPath))
+            return new ForbiddenPathResult { IsForbidden = false, Reason = ForbiddenPathReason.None };
+
+        // Normalize the staging path for comparison
+        var normalizedStagingPath = Path.GetFullPath(stagingPath.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar))
+            .ToLowerInvariant();
+
+        // List of forbidden paths
+        var forbiddenPaths = new List<string>
+        {
+            Environment.GetFolderPath(Environment.SpecialFolder.Windows).ToLowerInvariant(),
+            Environment.GetFolderPath(Environment.SpecialFolder.System).ToLowerInvariant(),
+            Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles).ToLowerInvariant(),
+            Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86).ToLowerInvariant(),
+            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData).ToLowerInvariant(),
+            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData).ToLowerInvariant(),
+            Path.GetPathRoot(Environment.SystemDirectory)?.ToLowerInvariant() ?? string.Empty // e.g., C:\
+        };
+
+        // Additional checks for known paths related to mod managers (like Vortex) and game platforms
+        var forbiddenKeywords = new List<string>
+        {
+            // Game Launchers
+            "steam", "steamapps", "common", "userdata",
+            "gog", "gog galaxy", "galaxyclient",
+            "epic", "epic games", "epicgames",
+            "origin", "electronic arts", "ea games",
+            "ubisoft", "ubisoft connect", "uplay",
+            "battlenet", "blizzard", "warcraft", "starcraft", "overwatch",
+            "riot games", "league of legends", "valorant", "riotclient",
+            "rockstar games", "rockstar launcher",
+
+            // Mod Managers
+            "vortex", "nexusmods", "vortex staging",
+            "modorganizer", "mo2",
+
+            // Game and Windows related
+            "bethesda", "bethesda.net",
+            "windowsapps", "microsoft games", "xbox", "xbox games"
+        };
+
+        // Check if the staging path is at the root of any drive
+        if (IsRootDirectory(normalizedStagingPath))
+        {
+            return new ForbiddenPathResult { IsForbidden = true, Reason = ForbiddenPathReason.RootDirectory };
+        }
+
+        // Check if the staging path is within any forbidden path
+        foreach (var forbiddenPath in forbiddenPaths)
+        {
+            if (normalizedStagingPath.StartsWith(forbiddenPath))
+            {
+                return new ForbiddenPathResult { IsForbidden = true, Reason = ForbiddenPathReason.SystemDirectory };
+            }
+        }
+
+        // Check if any forbidden keyword is present in the path
+        if (forbiddenKeywords.Any(keyword => normalizedStagingPath.Contains(keyword)))
+        {
+            return new ForbiddenPathResult { IsForbidden = true, Reason = ForbiddenPathReason.KeywordMatch };
+        }
+
+        // Check if the staging path or any of its parent/child directories contains the __vortex_staging_folder marker
+        if (ContainsVortexMarker(normalizedStagingPath))
+        {
+            return new ForbiddenPathResult { IsForbidden = true, Reason = ForbiddenPathReason.VortexFolder };
+        }
+
+        // If none of the forbidden checks triggered, the path is valid
+        return new ForbiddenPathResult { IsForbidden = false, Reason = ForbiddenPathReason.None };
+    }
+
+    /// <summary>
+    /// Checks if the specified path is the root of any drive.
+    /// </summary>
+    /// <param name="path">The path to check.</param>
+    /// <returns>True if the path is a root directory, otherwise false.</returns>
+    private static bool IsRootDirectory(string path)
+    {
+        try
+        {
+            // Get the root directory of the given path
+            var rootPath = Path.GetPathRoot(path)?.ToLowerInvariant();
+        
+            // Normalize and compare to ensure the path itself is a root
+            return string.Equals(rootPath?.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar), path.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar), StringComparison.OrdinalIgnoreCase);
+            //return !string.IsNullOrEmpty(rootPath) && string.Equals(path.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar), rootPath, StringComparison.OrdinalIgnoreCase);
+        }
+        catch (Exception ex)
+        {
+            // Log exception or handle as needed
+            AuLogger.GetCurrentLogger("PathHelper.IsRootDirectory").Error(ex, "An error occured while checking path.");
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// Recursively checks if the specified path or any of its parent directories contains the Vortex marker file.
+    /// </summary>
+    /// <param name="path">The path to check.</param>
+    /// <returns>True if the Vortex marker file is found, otherwise false.</returns>
+    private static bool ContainsVortexMarker(string path)
+    {
+        const string vortexMarkerFile = "__vortex_staging_folder";
+        try
+        {
+            var directory = new DirectoryInfo(path);
+            while (directory != null)
+            {
+                // Check if the Vortex marker file exists in the current directory
+                if (File.Exists(Path.Combine(directory.FullName, vortexMarkerFile)))
+                    return true;
+
+                // Move to the parent directory
+                directory = directory.Parent;
+            }
+
+            // Check for the marker file in all child directories recursively
+            return ContainsVortexMarkerInChildren(new DirectoryInfo(path));
+        }
+        catch (Exception ex)
+        {
+            AuLogger.GetCurrentLogger("PathHelper.ContainsVortexMarker").Error(ex, "An error occurred while checking for the Vortex marker file.");
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// Recursively checks if the marker file exists in any child directories of the given directory.
+    /// </summary>
+    /// <param name="directory">The directory to search in.</param>
+    /// <returns>True if the marker file is found in any child directory, otherwise false.</returns>
+    private static bool ContainsVortexMarkerInChildren(DirectoryInfo directory)
+    {
+        try
+        {
+            // Check if the marker file exists in the current directory
+            if (File.Exists(Path.Combine(directory.FullName, "__vortex_staging_folder")))
+                return true;
+
+            // Recursively search in all subdirectories
+            if (directory.GetDirectories().Any(ContainsVortexMarkerInChildren))
+                return true;
+        }
+        catch (Exception ex)
+        {
+            AuLogger.GetCurrentLogger("PathHelper.ContainsVortexMarkerInChildren").Error(ex, "An error occured while checking for the Vortex marker file.");
+        }
+
+        return false;
     }
 }
