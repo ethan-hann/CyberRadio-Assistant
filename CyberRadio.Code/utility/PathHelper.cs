@@ -25,6 +25,7 @@ using SharpCompress.Common;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using System.Security.AccessControl;
+using System.Security.Principal;
 using Image = SixLabors.ImageSharp.Image;
 
 namespace RadioExt_Helper.utility;
@@ -438,8 +439,9 @@ public static class PathHelper
         if (directoryInfo == null) return;
 
         var security = directoryInfo.GetAccessControl();
+        var user = WindowsIdentity.GetCurrent().Name;
         security.AddAccessRule(new FileSystemAccessRule(
-            Environment.UserName,
+            user,
             FileSystemRights.FullControl,
             AccessControlType.Allow));
         directoryInfo.SetAccessControl(security);

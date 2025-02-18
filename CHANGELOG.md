@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### What's Changed
 - **Forbidden Path Support**: Added a way to detect paths that should be forbidden to be set as the staging folder. This is customizable via the configuration (except for obvious paths like system32 and Windows directories). By default, this is all paths relating to a game launcher or mod manager. This change was done to prevent user's from losing their stations in case of another program's shennanigans.
+- Fixed bug relating to access permissions on log file directory. [#75](https://github.com/ethan-hann/CyberRadio-Assistant/issues/75)
 
 ## [2.0.445] - 2024-10-20
 
