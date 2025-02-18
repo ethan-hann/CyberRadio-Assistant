@@ -433,18 +433,26 @@ public static class PathHelper
     /// <param name="filePath">The path to grant access on.</param>
     public static void GrantAccess(string filePath)
     {
-        var fileInfo = new FileInfo(filePath);
-        var directoryInfo = fileInfo.Directory;
+        try
+        {
+            var fileInfo = new FileInfo(filePath);
+            var directoryInfo = fileInfo.Directory;
 
-        if (directoryInfo == null) return;
+            if (directoryInfo == null) return;
 
-        var security = directoryInfo.GetAccessControl();
-        var user = WindowsIdentity.GetCurrent().Name;
-        security.AddAccessRule(new FileSystemAccessRule(
-            user,
-            FileSystemRights.FullControl,
-            AccessControlType.Allow));
-        directoryInfo.SetAccessControl(security);
+            var security = directoryInfo.GetAccessControl();
+            var user = WindowsIdentity.GetCurrent().Name;
+            security.AddAccessRule(new FileSystemAccessRule(
+                user,
+                FileSystemRights.FullControl,
+                AccessControlType.Allow));
+            directoryInfo.SetAccessControl(security);
+        }
+        catch (Exception ex)
+        {
+            AuLogger.GetCurrentLogger("PathHelper.GrantAccess")
+                .Error(ex, "An error occured while granting access to the path.");
+        }
     }
 
     /// <summary>
