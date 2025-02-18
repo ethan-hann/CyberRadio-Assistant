@@ -17,6 +17,7 @@
 using System.Security.AccessControl;
 using AetherUtils.Core.Files;
 using AetherUtils.Core.Logging;
+using RadioExt_Helper.config;
 using RadioExt_Helper.models;
 using RadioExt_Helper.Properties;
 using SharpCompress.Archives;
@@ -33,6 +34,20 @@ namespace RadioExt_Helper.utility;
 /// </summary>
 public static class PathHelper
 {
+    /// <summary>
+    ///    The list of paths that are always forbidden for use as the staging path.
+    /// </summary>
+    private static readonly List<string> AlwaysForbiddenPaths =
+    [
+        Environment.GetFolderPath(Environment.SpecialFolder.Windows).ToLowerInvariant(),
+        Environment.GetFolderPath(Environment.SpecialFolder.System).ToLowerInvariant(),
+        Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles).ToLowerInvariant(),
+        Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86).ToLowerInvariant(),
+        Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData).ToLowerInvariant(),
+        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData).ToLowerInvariant(),
+        Path.GetPathRoot(Environment.SystemDirectory)?.ToLowerInvariant() ?? string.Empty
+    ];
+
     /// <summary>
     /// Retrieves the base game path (the folder containing <c>bin</c>) from the Cyberpunk 2077 executable by showing a file dialog.
     /// </summary>
@@ -278,6 +293,12 @@ public static class PathHelper
     }
 
     /// <summary>
+    /// Get the list of always forbidden paths as a list of <see cref="ForbiddenKeyword"/> objects. These paths are the system directories and program files directories.
+    /// </summary>
+    /// <returns>A list of <see cref="ForbiddenKeyword"/> objects defining the path.</returns>
+    public static List<ForbiddenKeyword> GetAlwaysForbiddenPaths() => AlwaysForbiddenPaths.Select(path => new ForbiddenKeyword { Group = Strings.SystemPaths, Keyword = path, IsForbidden = true }).ToList();
+
+    /// <summary>
     /// Download a file from the specified URL to the specified destination file path.
     /// </summary>
     /// <param name="fileUrl">The URL of the file to download.</param>
@@ -439,40 +460,6 @@ public static class PathHelper
         var normalizedStagingPath = Path.GetFullPath(stagingPath.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar))
             .ToLowerInvariant();
 
-        // List of forbidden paths
-        var forbiddenPaths = new List<string>
-        {
-            Environment.GetFolderPath(Environment.SpecialFolder.Windows).ToLowerInvariant(),
-            Environment.GetFolderPath(Environment.SpecialFolder.System).ToLowerInvariant(),
-            Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles).ToLowerInvariant(),
-            Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86).ToLowerInvariant(),
-            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData).ToLowerInvariant(),
-            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData).ToLowerInvariant(),
-            Path.GetPathRoot(Environment.SystemDirectory)?.ToLowerInvariant() ?? string.Empty // e.g., C:\
-        };
-
-        // Additional checks for known paths related to mod managers (like Vortex) and game platforms
-        var forbiddenKeywords = new List<string>
-        {
-            // Game Launchers
-            "steam", "steamapps", "common", "userdata",
-            "gog", "gog galaxy", "galaxyclient",
-            "epic", "epic games", "epicgames",
-            "origin", "electronic arts", "ea games",
-            "ubisoft", "ubisoft connect", "uplay",
-            "battlenet", "blizzard", "warcraft", "starcraft", "overwatch",
-            "riot games", "league of legends", "valorant", "riotclient",
-            "rockstar games", "rockstar launcher",
-
-            // Mod Managers
-            "vortex", "nexusmods", "vortex staging",
-            "modorganizer", "mo2",
-
-            // Game and Windows related
-            "bethesda", "bethesda.net",
-            "windowsapps", "microsoft games", "xbox", "xbox games"
-        };
-
         // Check if the staging path is at the root of any drive
         if (IsRootDirectory(normalizedStagingPath))
         {
@@ -480,7 +467,7 @@ public static class PathHelper
         }
 
         // Check if the staging path is within any forbidden path
-        foreach (var forbiddenPath in forbiddenPaths)
+        foreach (var forbiddenPath in AlwaysForbiddenPaths)
         {
             if (normalizedStagingPath.StartsWith(forbiddenPath))
             {
@@ -489,9 +476,12 @@ public static class PathHelper
         }
 
         // Check if any forbidden keyword is present in the path
-        if (forbiddenKeywords.Any(keyword => normalizedStagingPath.Contains(keyword)))
+        if (GlobalData.ConfigManager.Get("forbiddenKeywords") is List<ForbiddenKeyword> forbiddenKeywords)
         {
-            return new ForbiddenPathResult { IsForbidden = true, Reason = ForbiddenPathReason.KeywordMatch };
+            if (forbiddenKeywords.Where(keyword => keyword.IsForbidden).Any(keyword => normalizedStagingPath.Contains(keyword.Keyword, StringComparison.CurrentCultureIgnoreCase)))
+            {
+                return new ForbiddenPathResult { IsForbidden = true, Reason = ForbiddenPathReason.KeywordMatch };
+            }
         }
 
         // Check if the staging path or any of its parent/child directories contains the __vortex_staging_folder marker

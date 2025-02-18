@@ -1281,9 +1281,6 @@ Tem certeza de que deseja limpar todos os dados da estação?</value>
   <data name="ForbiddenPath_VortexFolder" xml:space="preserve">
     <value>O caminho de encenação não pode ser definido como uma pasta gerenciada pelo vórtice.</value>
   </data>
-  <data name="ForbiddenPath_KeywordMatch" xml:space="preserve">
-    <value>O caminho de preparação está relacionado a um diretório de jogo ou lançador e não é permitido.</value>
-  </data>
   <data name="SplashScreen_CheckingStagingPath" xml:space="preserve">
     <value>Verificando o caminho de estadiamento ...</value>
   </data>
@@ -1292,5 +1289,56 @@ Tem certeza de que deseja limpar todos os dados da estação?</value>
   </data>
   <data name="SplashScreen_StagingPathValid" xml:space="preserve">
     <value>O caminho de encenação é válido!</value>
+  </data>
+  <data name="ForbiddenPathsHelp" xml:space="preserve">
+    <value>Define as palavras -chave que são pesquisadas ao definir o caminho de preparação para estações de rádio. Quaisquer caminhos que contenham palavras -chave aqui não são permitidos.</value>
+  </data>
+  <data name="ForbiddenKeywordListViewColumn" xml:space="preserve">
+    <value>Palavra -chave</value>
+  </data>
+  <data name="ForbiddenKeywordEmpty" xml:space="preserve">
+    <value>A palavra -chave não pode estar vazia!</value>
+  </data>
+  <data name="ForbiddenKeywordNoGroup" xml:space="preserve">
+    <value>Grupo não pode estar vazio!</value>
+  </data>
+  <data name="ForbiddenKeywordInput_Title" xml:space="preserve">
+    <value>Nova palavra -chave</value>
+  </data>
+  <data name="ForbiddenKeywordInput_Keyword" xml:space="preserve">
+    <value>Palavra -chave:</value>
+  </data>
+  <data name="ForbiddenKeywordInput_Group" xml:space="preserve">
+    <value>Grupo:</value>
+  </data>
+  <data name="ForbiddenKeywordInput_IsForbidden" xml:space="preserve">
+    <value>É proibido?</value>
+  </data>
+  <data name="ForbiddenKeywordInput_AddAndNew" xml:space="preserve">
+    <value>Adicione e novo</value>
+  </data>
+  <data name="ForbiddenKeywordInput_Add" xml:space="preserve">
+    <value>Adicione e feche</value>
+  </data>
+  <data name="ForbiddenPath_KeywordMatch" xml:space="preserve">
+    <value>O caminho de estadiamento contém palavras -chave proibidas. Você pode defini -los nas configurações.</value>
+  </data>
+  <data name="DeleteSelectedKeywords" xml:space="preserve">
+    <value>Excluir palavras -chave selecionadas</value>
+  </data>
+  <data name="PathSettings" xml:space="preserve">
+    <value>Configuração do caminho</value>
+  </data>
+  <data name="NewKeywordHelp" xml:space="preserve">
+    <value>Adicione uma nova palavra -chave à verificação do caminho proibido.</value>
+  </data>
+  <data name="DeleteSelectedKeywordHelp" xml:space="preserve">
+    <value>Exclua as palavras -chave selecionadas da lista. Geralmente é melhor desativar a palavra -chave com a caixa de seleção.</value>
+  </data>
+  <data name="SystemPaths" xml:space="preserve">
+    <value>Caminhos do sistema</value>
+  </data>
+  <data name="GroupNotAllowedToBeModified" xml:space="preserve">
+    <value>O grupo 'Caminhos do sistema' não pode ser modificado.</value>
   </data>
 </root>

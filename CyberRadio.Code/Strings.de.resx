@@ -1281,9 +1281,6 @@ Sind Sie sicher, dass Sie alle Stationsdaten löschen möchten?</value>
   <data name="ForbiddenPath_VortexFolder" xml:space="preserve">
     <value>Der Staging-Pfad kann nicht auf einen wirbelmännischen Ordner eingestellt werden.</value>
   </data>
-  <data name="ForbiddenPath_KeywordMatch" xml:space="preserve">
-    <value>Der Staging -Pfad hängt mit einem Spiel- oder Launcher -Verzeichnis zusammen und ist nicht zulässig.</value>
-  </data>
   <data name="SplashScreen_CheckingStagingPath" xml:space="preserve">
     <value>Überprüfen Sie den Staging -Pfad ...</value>
   </data>
@@ -1292,5 +1289,56 @@ Sind Sie sicher, dass Sie alle Stationsdaten löschen möchten?</value>
   </data>
   <data name="SplashScreen_StagingPathValid" xml:space="preserve">
     <value>Der Staging -Pfad ist gültig!</value>
+  </data>
+  <data name="ForbiddenPathsHelp" xml:space="preserve">
+    <value>Definiert die Schlüsselwörter, die beim Einstellen des Staging -Pfades für Radiosender durchsucht werden. Alle Pfade, die hier Schlüsselwörter enthalten, sind nicht zulässig.</value>
+  </data>
+  <data name="ForbiddenKeywordListViewColumn" xml:space="preserve">
+    <value>Stichwort</value>
+  </data>
+  <data name="ForbiddenKeywordEmpty" xml:space="preserve">
+    <value>Schlüsselwort kann nicht leer sein!</value>
+  </data>
+  <data name="ForbiddenKeywordNoGroup" xml:space="preserve">
+    <value>Gruppe kann nicht leer sein!</value>
+  </data>
+  <data name="ForbiddenKeywordInput_Title" xml:space="preserve">
+    <value>Neues Keyword</value>
+  </data>
+  <data name="ForbiddenKeywordInput_Keyword" xml:space="preserve">
+    <value>Stichwort:</value>
+  </data>
+  <data name="ForbiddenKeywordInput_Group" xml:space="preserve">
+    <value>Gruppe:</value>
+  </data>
+  <data name="ForbiddenKeywordInput_IsForbidden" xml:space="preserve">
+    <value>Ist verboten?</value>
+  </data>
+  <data name="ForbiddenKeywordInput_AddAndNew" xml:space="preserve">
+    <value>Hinzufügen und neu</value>
+  </data>
+  <data name="ForbiddenKeywordInput_Add" xml:space="preserve">
+    <value>Hinzufügen und schließen</value>
+  </data>
+  <data name="ForbiddenPath_KeywordMatch" xml:space="preserve">
+    <value>Der Staging -Pfad enthält verbotene Schlüsselwörter. Sie können diese in den Einstellungen definieren.</value>
+  </data>
+  <data name="DeleteSelectedKeywords" xml:space="preserve">
+    <value>Löschen Sie ausgewählte Schlüsselwörter</value>
+  </data>
+  <data name="PathSettings" xml:space="preserve">
+    <value>Pfadaufstellung</value>
+  </data>
+  <data name="NewKeywordHelp" xml:space="preserve">
+    <value>Fügen Sie der verbotenen Pfadprüfung ein neues Schlüsselwort hinzu.</value>
+  </data>
+  <data name="DeleteSelectedKeywordHelp" xml:space="preserve">
+    <value>Löschen Sie die ausgewählten Schlüsselwörter aus der Liste. Normalerweise ist es besser, das Schlüsselwort mit dem Kontrollkästchen einfach zu deaktivieren.</value>
+  </data>
+  <data name="SystemPaths" xml:space="preserve">
+    <value>Systempfade</value>
+  </data>
+  <data name="GroupNotAllowedToBeModified" xml:space="preserve">
+    <value>Die Gruppe "Systempfade" kann nicht geändert werden.</value>
   </data>
 </root>

@@ -1281,9 +1281,6 @@ Assurez-vous de créer une sauvegarde de vos stations avant de nettoyer les donn
   <data name="ForbiddenPath_VortexFolder" xml:space="preserve">
     <value>Le chemin de stadification ne peut pas être défini sur un dossier géré par vortex.</value>
   </data>
-  <data name="ForbiddenPath_KeywordMatch" xml:space="preserve">
-    <value>Le chemin de stadification est lié à un répertoire de jeu ou de lanceur et n'est pas autorisé.</value>
-  </data>
   <data name="SplashScreen_CheckingStagingPath" xml:space="preserve">
     <value>Vérification du chemin de stadification ...</value>
   </data>
@@ -1292,5 +1289,56 @@ Assurez-vous de créer une sauvegarde de vos stations avant de nettoyer les donn
   </data>
   <data name="SplashScreen_StagingPathValid" xml:space="preserve">
     <value>Le chemin de mise en scène est valide!</value>
+  </data>
+  <data name="ForbiddenPathsHelp" xml:space="preserve">
+    <value>Définit les mots clés qui sont recherchés lors de la définition du chemin de stadification des stations radio. Tous les chemins contenant des mots clés ici ne sont pas autorisés.</value>
+  </data>
+  <data name="ForbiddenKeywordListViewColumn" xml:space="preserve">
+    <value>Mot-clé</value>
+  </data>
+  <data name="ForbiddenKeywordEmpty" xml:space="preserve">
+    <value>Le mot-clé ne peut pas être vide!</value>
+  </data>
+  <data name="ForbiddenKeywordNoGroup" xml:space="preserve">
+    <value>Le groupe ne peut pas être vide!</value>
+  </data>
+  <data name="ForbiddenKeywordInput_Title" xml:space="preserve">
+    <value>Nouveau mot-clé</value>
+  </data>
+  <data name="ForbiddenKeywordInput_Keyword" xml:space="preserve">
+    <value>Mot-clé:</value>
+  </data>
+  <data name="ForbiddenKeywordInput_Group" xml:space="preserve">
+    <value>Groupe:</value>
+  </data>
+  <data name="ForbiddenKeywordInput_IsForbidden" xml:space="preserve">
+    <value>Est interdit?</value>
+  </data>
+  <data name="ForbiddenKeywordInput_AddAndNew" xml:space="preserve">
+    <value>Ajouter et nouveau</value>
+  </data>
+  <data name="ForbiddenKeywordInput_Add" xml:space="preserve">
+    <value>Ajouter et fermer</value>
+  </data>
+  <data name="ForbiddenPath_KeywordMatch" xml:space="preserve">
+    <value>Le chemin de stadification contient des mots clés interdits. Vous pouvez les définir dans les paramètres.</value>
+  </data>
+  <data name="DeleteSelectedKeywords" xml:space="preserve">
+    <value>Supprimer les mots clés sélectionnés</value>
+  </data>
+  <data name="PathSettings" xml:space="preserve">
+    <value>Configuration du chemin</value>
+  </data>
+  <data name="NewKeywordHelp" xml:space="preserve">
+    <value>Ajoutez un nouveau mot-clé à la vérification du chemin interdit.</value>
+  </data>
+  <data name="DeleteSelectedKeywordHelp" xml:space="preserve">
+    <value>Supprimez les mots clés sélectionnés de la liste. Il est généralement préférable de simplement désactiver le mot-clé avec la case à cocher.</value>
+  </data>
+  <data name="SystemPaths" xml:space="preserve">
+    <value>Chemins système</value>
+  </data>
+  <data name="GroupNotAllowedToBeModified" xml:space="preserve">
+    <value>Le groupe «Paths système» ne peut pas être modifié.</value>
   </data>
 </root>

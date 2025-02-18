@@ -1282,7 +1282,7 @@ Are you sure you want to clear all station data?</value>
     <value>The staging path cannot be set to a Vortex-managed folder.</value>
   </data>
   <data name="ForbiddenPath_KeywordMatch" xml:space="preserve">
-    <value>The staging path is related to a game or launcher directory and is not allowed.</value>
+	  <value>The staging path contains forbidden keywords. You can define these in the settings.</value>
   </data>
   <data name="SplashScreen_CheckingStagingPath" xml:space="preserve">
     <value>Checking staging path...</value>
@@ -1292,5 +1292,53 @@ Are you sure you want to clear all station data?</value>
   </data>
   <data name="SplashScreen_StagingPathValid" xml:space="preserve">
     <value>Staging path is valid!</value>
+  </data>
+  <data name="ForbiddenPathsHelp" xml:space="preserve">
+	  <value>Defines the keywords that are searched when setting the staging path for radio stations. Any paths that contain keywords here are not allowed.</value>
+  </data>
+  <data name="ForbiddenKeywordListViewColumn" xml:space="preserve">
+	  <value>Keyword</value>
+  </data>
+  <data name="ForbiddenKeywordEmpty" xml:space="preserve">
+	  <value>Keyword cannot be empty!</value>
+  </data>
+  <data name="ForbiddenKeywordNoGroup" xml:space="preserve">
+	  <value>Group cannot be empty!</value>
+  </data>
+  <data name="ForbiddenKeywordInput_Title" xml:space="preserve">
+	  <value>New Keyword</value>
+  </data>
+  <data name="ForbiddenKeywordInput_Keyword" xml:space="preserve">
+	  <value>Keyword:</value>
+  </data>
+  <data name="ForbiddenKeywordInput_Group" xml:space="preserve">
+	  <value>Group:</value>
+  </data>
+  <data name="ForbiddenKeywordInput_IsForbidden" xml:space="preserve">
+	  <value>Is Forbidden?</value>
+  </data>
+  <data name="ForbiddenKeywordInput_AddAndNew" xml:space="preserve">
+	  <value>Add and New</value>
+  </data>
+  <data name="ForbiddenKeywordInput_Add" xml:space="preserve">
+	  <value>Add and Close</value>
+  </data>
+  <data name="DeleteSelectedKeywords" xml:space="preserve">
+	  <value>Delete Selected Keywords</value>
+  </data>
+  <data name="PathSettings" xml:space="preserve">
+	  <value>Path Setup</value>
+  </data>
+  <data name="NewKeywordHelp" xml:space="preserve">
+    <value>Add a new keyword to the forbidden path check.</value>
+  </data>
+  <data name="DeleteSelectedKeywordHelp" xml:space="preserve">
+    <value>Delete the selected keywords from the list. It is usually better to just disable the keyword with the checkbox.</value>
+  </data>
+  <data name="SystemPaths" xml:space="preserve">
+    <value>System Paths</value>
+  </data>
+  <data name="GroupNotAllowedToBeModified" xml:space="preserve">
+    <value>The 'System Paths' group cannot be modified.</value>
   </data>
 </root>

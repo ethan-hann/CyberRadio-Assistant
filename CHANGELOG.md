@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.446] - TBD
+
+### What's Changed
+- **Forbidden Path Support**: Added a way to detect paths that should be forbidden to be set as the staging folder. This is customizable via the configuration (except for obvious paths like system32 and Windows directories). By default, this is all paths relating to a game launcher or mod manager. This change was done to prevent user's from losing their stations in case of another program's shennanigans.
+
 ## [2.0.445] - 2024-10-20
 
 ### What's Changed

@@ -1281,9 +1281,6 @@ Asegúrese de crear una copia de seguridad de sus estaciones antes de borrar los
   <data name="ForbiddenPath_VortexFolder" xml:space="preserve">
     <value>La ruta de puesta en escena no se puede establecer en una carpeta administrada por vórtice.</value>
   </data>
-  <data name="ForbiddenPath_KeywordMatch" xml:space="preserve">
-    <value>La ruta de puesta en escena está relacionada con un directorio de juego o lanzador y no está permitido.</value>
-  </data>
   <data name="SplashScreen_CheckingStagingPath" xml:space="preserve">
     <value>Verificación de la ruta de puesta en escena ...</value>
   </data>
@@ -1292,5 +1289,56 @@ Asegúrese de crear una copia de seguridad de sus estaciones antes de borrar los
   </data>
   <data name="SplashScreen_StagingPathValid" xml:space="preserve">
     <value>¡La ruta de puesta en escena es válida!</value>
+  </data>
+  <data name="ForbiddenPathsHelp" xml:space="preserve">
+    <value>Define las palabras clave que se buscan al configurar la ruta de puesta en escena para las estaciones de radio. No se permiten cualquier ruta que contenga palabras clave aquí.</value>
+  </data>
+  <data name="ForbiddenKeywordListViewColumn" xml:space="preserve">
+    <value>Palabra clave</value>
+  </data>
+  <data name="ForbiddenKeywordEmpty" xml:space="preserve">
+    <value>¡La palabra clave no puede estar vacía!</value>
+  </data>
+  <data name="ForbiddenKeywordNoGroup" xml:space="preserve">
+    <value>¡El grupo no puede estar vacío!</value>
+  </data>
+  <data name="ForbiddenKeywordInput_Title" xml:space="preserve">
+    <value>Nueva palabra clave</value>
+  </data>
+  <data name="ForbiddenKeywordInput_Keyword" xml:space="preserve">
+    <value>Palabra clave:</value>
+  </data>
+  <data name="ForbiddenKeywordInput_Group" xml:space="preserve">
+    <value>Grupo:</value>
+  </data>
+  <data name="ForbiddenKeywordInput_IsForbidden" xml:space="preserve">
+    <value>¿Está prohibido?</value>
+  </data>
+  <data name="ForbiddenKeywordInput_AddAndNew" xml:space="preserve">
+    <value>Agregar y nuevo</value>
+  </data>
+  <data name="ForbiddenKeywordInput_Add" xml:space="preserve">
+    <value>Agregar y cerrar</value>
+  </data>
+  <data name="ForbiddenPath_KeywordMatch" xml:space="preserve">
+    <value>La ruta de puesta en escena contiene palabras clave prohibidas. Puede definirlos en la configuración.</value>
+  </data>
+  <data name="DeleteSelectedKeywords" xml:space="preserve">
+    <value>Eliminar las palabras clave seleccionadas</value>
+  </data>
+  <data name="PathSettings" xml:space="preserve">
+    <value>Configuración de ruta</value>
+  </data>
+  <data name="NewKeywordHelp" xml:space="preserve">
+    <value>Agregue una nueva palabra clave a la verificación de ruta prohibida.</value>
+  </data>
+  <data name="DeleteSelectedKeywordHelp" xml:space="preserve">
+    <value>Elimine las palabras clave seleccionadas de la lista. Por lo general, es mejor deshabilitar la palabra clave con la casilla de verificación.</value>
+  </data>
+  <data name="SystemPaths" xml:space="preserve">
+    <value>Rutas del sistema</value>
+  </data>
+  <data name="GroupNotAllowedToBeModified" xml:space="preserve">
+    <value>El grupo de 'rutas del sistema' no se puede modificar.</value>
   </data>
 </root>

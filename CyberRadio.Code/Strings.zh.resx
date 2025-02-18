@@ -1281,9 +1281,6 @@
   <data name="ForbiddenPath_VortexFolder" xml:space="preserve">
     <value>无法将登台路径设置为涡流管理的文件夹。</value>
   </data>
-  <data name="ForbiddenPath_KeywordMatch" xml:space="preserve">
-    <value>登台路径与游戏或启动器目录有关，不允许。</value>
-  </data>
   <data name="SplashScreen_CheckingStagingPath" xml:space="preserve">
     <value>检查登台路径...</value>
   </data>
@@ -1292,5 +1289,56 @@
   </data>
   <data name="SplashScreen_StagingPathValid" xml:space="preserve">
     <value>登台路径有效！</value>
+  </data>
+  <data name="ForbiddenPathsHelp" xml:space="preserve">
+    <value>定义在设置无线电站的登台路径时搜索的关键字。不允许此处包含关键字的任何路径。</value>
+  </data>
+  <data name="ForbiddenKeywordListViewColumn" xml:space="preserve">
+    <value>关键词</value>
+  </data>
+  <data name="ForbiddenKeywordEmpty" xml:space="preserve">
+    <value>关键字不能为空！</value>
+  </data>
+  <data name="ForbiddenKeywordNoGroup" xml:space="preserve">
+    <value>小组不能为空！</value>
+  </data>
+  <data name="ForbiddenKeywordInput_Title" xml:space="preserve">
+    <value>新关键字</value>
+  </data>
+  <data name="ForbiddenKeywordInput_Keyword" xml:space="preserve">
+    <value>关键词：</value>
+  </data>
+  <data name="ForbiddenKeywordInput_Group" xml:space="preserve">
+    <value>团体：</value>
+  </data>
+  <data name="ForbiddenKeywordInput_IsForbidden" xml:space="preserve">
+    <value>被禁止吗？</value>
+  </data>
+  <data name="ForbiddenKeywordInput_AddAndNew" xml:space="preserve">
+    <value>添加和新</value>
+  </data>
+  <data name="ForbiddenKeywordInput_Add" xml:space="preserve">
+    <value>添加并关闭</value>
+  </data>
+  <data name="ForbiddenPath_KeywordMatch" xml:space="preserve">
+    <value>登台路径包含禁止的关键字。您可以在设置中定义这些定义。</value>
+  </data>
+  <data name="DeleteSelectedKeywords" xml:space="preserve">
+    <value>删除选定的关键字</value>
+  </data>
+  <data name="PathSettings" xml:space="preserve">
+    <value>路径设置</value>
+  </data>
+  <data name="NewKeywordHelp" xml:space="preserve">
+    <value>在禁止路径检查中添加一个新的关键字。</value>
+  </data>
+  <data name="DeleteSelectedKeywordHelp" xml:space="preserve">
+    <value>从列表中删除所选的关键字。通常最好只使用复选框禁用关键字。</value>
+  </data>
+  <data name="SystemPaths" xml:space="preserve">
+    <value>系统路径</value>
+  </data>
+  <data name="GroupNotAllowedToBeModified" xml:space="preserve">
+    <value>无法修改“系统路径”组。</value>
   </data>
 </root>

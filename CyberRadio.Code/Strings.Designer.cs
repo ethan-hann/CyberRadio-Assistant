@@ -717,6 +717,24 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Delete the selected keywords from the list. It is usually better to just disable the keyword with the checkbox..
+        /// </summary>
+        internal static string DeleteSelectedKeywordHelp {
+            get {
+                return ResourceManager.GetString("DeleteSelectedKeywordHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete Selected Keywords.
+        /// </summary>
+        internal static string DeleteSelectedKeywords {
+            get {
+                return ResourceManager.GetString("DeleteSelectedKeywords", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Delete Station.
         /// </summary>
         internal static string DeleteStation {
@@ -1118,7 +1136,88 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The staging path is related to a game or launcher directory and is not allowed..
+        ///   Looks up a localized string similar to Keyword cannot be empty!.
+        /// </summary>
+        internal static string ForbiddenKeywordEmpty {
+            get {
+                return ResourceManager.GetString("ForbiddenKeywordEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add and Close.
+        /// </summary>
+        internal static string ForbiddenKeywordInput_Add {
+            get {
+                return ResourceManager.GetString("ForbiddenKeywordInput_Add", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add and New.
+        /// </summary>
+        internal static string ForbiddenKeywordInput_AddAndNew {
+            get {
+                return ResourceManager.GetString("ForbiddenKeywordInput_AddAndNew", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Group:.
+        /// </summary>
+        internal static string ForbiddenKeywordInput_Group {
+            get {
+                return ResourceManager.GetString("ForbiddenKeywordInput_Group", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Is Forbidden?.
+        /// </summary>
+        internal static string ForbiddenKeywordInput_IsForbidden {
+            get {
+                return ResourceManager.GetString("ForbiddenKeywordInput_IsForbidden", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Keyword:.
+        /// </summary>
+        internal static string ForbiddenKeywordInput_Keyword {
+            get {
+                return ResourceManager.GetString("ForbiddenKeywordInput_Keyword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New Keyword.
+        /// </summary>
+        internal static string ForbiddenKeywordInput_Title {
+            get {
+                return ResourceManager.GetString("ForbiddenKeywordInput_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Keyword.
+        /// </summary>
+        internal static string ForbiddenKeywordListViewColumn {
+            get {
+                return ResourceManager.GetString("ForbiddenKeywordListViewColumn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Group cannot be empty!.
+        /// </summary>
+        internal static string ForbiddenKeywordNoGroup {
+            get {
+                return ResourceManager.GetString("ForbiddenKeywordNoGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The staging path contains forbidden keywords. You can define these in the settings..
         /// </summary>
         internal static string ForbiddenPath_KeywordMatch {
             get {
@@ -1168,6 +1267,15 @@ namespace RadioExt_Helper {
         internal static string ForbiddenPath_VortexFolder {
             get {
                 return ResourceManager.GetString("ForbiddenPath_VortexFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Defines the keywords that are searched when setting the staging path for radio stations. Any paths that contain keywords here are not allowed..
+        /// </summary>
+        internal static string ForbiddenPathsHelp {
+            get {
+                return ResourceManager.GetString("ForbiddenPathsHelp", resourceCulture);
             }
         }
         
@@ -1231,6 +1339,15 @@ namespace RadioExt_Helper {
         internal static string GeneralSettings {
             get {
                 return ResourceManager.GetString("GeneralSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The &apos;System Paths&apos; group cannot be modified..
+        /// </summary>
+        internal static string GroupNotAllowedToBeModified {
+            get {
+                return ResourceManager.GetString("GroupNotAllowedToBeModified", resourceCulture);
             }
         }
         
@@ -2237,6 +2354,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add a new keyword to the forbidden path check..
+        /// </summary>
+        internal static string NewKeywordHelp {
+            get {
+                return ResourceManager.GetString("NewKeywordHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to New File Every Launch?.
         /// </summary>
         internal static string NewLogFileOption {
@@ -2506,6 +2632,15 @@ namespace RadioExt_Helper {
         internal static string Paths {
             get {
                 return ResourceManager.GetString("Paths", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Path Setup.
+        /// </summary>
+        internal static string PathSettings {
+            get {
+                return ResourceManager.GetString("PathSettings", resourceCulture);
             }
         }
         
@@ -3244,6 +3379,15 @@ namespace RadioExt_Helper {
         internal static string SyncStatusError {
             get {
                 return ResourceManager.GetString("SyncStatusError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to System Paths.
+        /// </summary>
+        internal static string SystemPaths {
+            get {
+                return ResourceManager.GetString("SystemPaths", resourceCulture);
             }
         }
         

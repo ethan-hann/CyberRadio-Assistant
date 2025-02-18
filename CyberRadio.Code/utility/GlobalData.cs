@@ -15,6 +15,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Globalization;
 using System.Reflection;
 using System.Resources;
@@ -142,8 +143,7 @@ public static class GlobalData
             if (ConfigManager.Load())
             {
                 //Set the log header everytime the application is launched to ensure the version is correct in the header
-                ConfigOption logOption = new("logHeader", SystemInfo.GetLogFileHeader());
-                ConfigManager.Set(logOption);
+                ConfigManager.Set("logHeader", SystemInfo.GetLogFileHeader());
                 ConfigManager.Save();
             }
             else //Create the default config if the config file is corrupted or failed to load.

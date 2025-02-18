@@ -17,6 +17,8 @@
 using System.ComponentModel;
 using AetherUtils.Core.Attributes;
 using AetherUtils.Core.Configuration;
+using AetherUtils.Core.Structs;
+using AetherUtils.Core.Utility;
 using RadioExt_Helper.utility;
 
 namespace RadioExt_Helper.config;
@@ -46,6 +48,7 @@ public sealed class ApplicationConfig
     private const string LanguageKey = "language";
     private const string WindowSizeKey = "windowSize";
     private const string NexusApiKeyKey = "nexusApiKey";
+    private const string ForbiddenKeywordsKey = "forbiddenKeywords";
     private const string LogOptionsKey = "logOptions";
 
     /// <summary>
@@ -126,6 +129,29 @@ public sealed class ApplicationConfig
     /// </summary>
     [Config(NexusApiKeyKey)]
     public string NexusApiKey { get; set; } = string.Empty;
+
+    /// <summary>
+    /// The list of forbidden keywords and whether they are enabled or not.
+    /// </summary>
+    [Config(ForbiddenKeywordsKey)]
+    [Description("ForbiddenPathsHelp")]
+    public List<ForbiddenKeyword> ForbiddenKeywords { get; set; } =
+    [
+        new("Game Launchers", "steam", true), new("Game Launchers", "steamapps", true), new("Game Launchers","common", true), 
+        new("Game Launchers", "userdata", true), new("Game Launchers","gog", true), new("Game Launchers","gog galaxy", true), 
+        new("Game Launchers","galaxyclient", true), new("Game Launchers", "epic", true), new("Game Launchers", "epic games", true), 
+        new("Game Launchers","epicgames", true), new("Game Launchers","origin", true), new("Game Launchers","electronic arts", true), 
+        new("Game Launchers","ea games", true), new("Game Launchers", "ubisoft", true), new("Game Launchers","ubisoft connect", true), 
+        new("Game Launchers", "uplay", true), new("Game Launchers","battlenet", true), new("Game Launchers","blizzard", true), 
+        new("Game Launchers","warcraft", true), new("Game Launchers","starcraft", true), new("Game Launchers","overwatch", true), 
+        new("Game Launchers","riot games", true), new("Game Launchers","league of legends", true), new("Game Launchers","valorant", true), 
+        new("Game Launchers","riotclient", true), new("Game Launchers","rockstar games", true), new("Game Launchers","rockstar launcher", true), 
+        new("Game Launchers","bethesda", true), new("Game Launchers","bethesda.net", true),
+        new("Mod Managers", "vortex", true), new("Mod Managers","nexusmods", true), new("Mod Managers","vortex staging", true), 
+        new("Mod Managers","modorganizer", true), new("Mod Managers","mo2", true),
+        new("Windows Related", "windowsapps", true), new("Windows Related","microsoft games", true), new("Windows Related","xbox", true), 
+        new("Windows Related","xbox games", true)
+    ];
 
     /// <summary>
     ///     The log options for the application.
