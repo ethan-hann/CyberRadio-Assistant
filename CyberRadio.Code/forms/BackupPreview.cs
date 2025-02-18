@@ -14,11 +14,11 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-using System.Diagnostics;
 using AetherUtils.Core.Extensions;
 using AetherUtils.Core.Logging;
 using RadioExt_Helper.Properties;
 using RadioExt_Helper.utility;
+using System.Diagnostics;
 
 namespace RadioExt_Helper.forms;
 
@@ -431,7 +431,7 @@ public sealed partial class BackupPreview : Form
                             displayFileName ?? string.Empty,
                             size
                         ])
-                        { Tag = preview });
+                    { Tag = preview });
                 }
 
             lvFilePreviews.ResizeColumns();

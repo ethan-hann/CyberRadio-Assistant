@@ -14,15 +14,15 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-using System.ComponentModel;
-using System.Globalization;
-using System.Text.RegularExpressions;
 using AetherUtils.Core.Files;
 using AetherUtils.Core.Logging;
 using AetherUtils.Core.Structs;
 using RadioExt_Helper.models;
 using RadioExt_Helper.user_controls;
 using SharpCompress.Archives;
+using System.ComponentModel;
+using System.Globalization;
+using System.Text.RegularExpressions;
 using WIG.Lib.Models;
 
 namespace RadioExt_Helper.utility;
@@ -950,8 +950,8 @@ public partial class StationManager : IDisposable
         try
         {
             foreach (var editorList in _stations.Values.Select(pair => pair.Value))
-            foreach (var editor in editorList)
-                editor.Translate();
+                foreach (var editor in editorList)
+                    editor.Translate();
         }
         catch (Exception ex)
         {
@@ -1075,12 +1075,12 @@ public partial class StationManager : IDisposable
 
             // Synchronize directories
             var tasks = (from gameDir in gameDirectories
-                let dirName = Path.GetFileName(gameDir)
-                let stagingDir = Path.Combine(stagingPath, dirName)
-                select !stagingDirectories.Contains(stagingDir)
-                    ? Task.Run(() => CopyDirectoryAsync(gameDir, stagingDir))
-                    // Directory exists, synchronize files
-                    : Task.Run(() => SynchronizeFilesAsync(gameDir, stagingDir))).ToList();
+                         let dirName = Path.GetFileName(gameDir)
+                         let stagingDir = Path.Combine(stagingPath, dirName)
+                         select !stagingDirectories.Contains(stagingDir)
+                             ? Task.Run(() => CopyDirectoryAsync(gameDir, stagingDir))
+                             // Directory exists, synchronize files
+                             : Task.Run(() => SynchronizeFilesAsync(gameDir, stagingDir))).ToList();
 
             await Task.WhenAll(tasks);
             SyncStatusChanged?.Invoke(Strings.SyncStatusComplete);
@@ -1178,16 +1178,16 @@ public partial class StationManager : IDisposable
         FileHelper.CreateDirectories(targetDir);
 
         var copyTasks = (from file in files
-            let targetFilePath = Path.Combine(targetDir, Path.GetFileName(file))
-            select Task.Run(() =>
-            {
-                FileHelper.CreateDirectories(targetFilePath);
-                File.Copy(file, targetFilePath, true);
-            })).ToList();
+                         let targetFilePath = Path.Combine(targetDir, Path.GetFileName(file))
+                         select Task.Run(() =>
+                         {
+                             FileHelper.CreateDirectories(targetFilePath);
+                             File.Copy(file, targetFilePath, true);
+                         })).ToList();
 
         copyTasks.AddRange(from directory in directories
-            let targetDirectoryPath = Path.Combine(targetDir, Path.GetFileName(directory))
-            select Task.Run(() => CopyDirectoryAsync(directory, targetDirectoryPath)));
+                           let targetDirectoryPath = Path.Combine(targetDir, Path.GetFileName(directory))
+                           select Task.Run(() => CopyDirectoryAsync(directory, targetDirectoryPath)));
 
         await Task.WhenAll(copyTasks);
     }

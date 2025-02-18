@@ -14,9 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Timers;
 using AetherUtils.Core.Extensions;
 using AetherUtils.Core.Logging;
 using AetherUtils.Core.WinForms.Controls;
@@ -27,6 +24,9 @@ using RadioExt_Helper.nexus_api;
 using RadioExt_Helper.Properties;
 using RadioExt_Helper.user_controls;
 using RadioExt_Helper.utility;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Timers;
 using WIG.Lib.Models;
 using WIG.Lib.Utility;
 using ApplicationContext = RadioExt_Helper.utility.ApplicationContext;
@@ -119,7 +119,7 @@ public sealed partial class MainForm : Form
             MessageBox.Show(Strings.MainForm_NoStationsImported, Strings.MainForm_NoStationsImportedTitle,
                 MessageBoxButtons.OK, MessageBoxIcon.Error);
             return;
-        } 
+        }
 
         var importedIconNames = string.Join(", ", stationIds.Select(stationId =>
             StationManager.Instance.GetStation(stationId)?.Key.TrackedObject.MetaData.DisplayName));

@@ -14,7 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-using System.Security.AccessControl;
 using AetherUtils.Core.Files;
 using AetherUtils.Core.Logging;
 using RadioExt_Helper.config;
@@ -25,6 +24,7 @@ using SharpCompress.Archives.Zip;
 using SharpCompress.Common;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
+using System.Security.AccessControl;
 using Image = SixLabors.ImageSharp.Image;
 
 namespace RadioExt_Helper.utility;
@@ -505,7 +505,7 @@ public static class PathHelper
         {
             // Get the root directory of the given path
             var rootPath = Path.GetPathRoot(path)?.ToLowerInvariant();
-        
+
             // Normalize and compare to ensure the path itself is a root
             return string.Equals(rootPath?.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar), path.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar), StringComparison.OrdinalIgnoreCase);
             //return !string.IsNullOrEmpty(rootPath) && string.Equals(path.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar), rootPath, StringComparison.OrdinalIgnoreCase);

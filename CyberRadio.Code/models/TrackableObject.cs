@@ -14,11 +14,11 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+using AetherUtils.Core.Logging;
+using RadioExt_Helper.utility;
 using System.Collections;
 using System.ComponentModel;
 using System.Reflection;
-using AetherUtils.Core.Logging;
-using RadioExt_Helper.utility;
 
 namespace RadioExt_Helper.models;
 
@@ -279,14 +279,14 @@ public sealed class TrackableObject<T> : INotifyPropertyChanged, ITrackable
                 return cloneable.Clone();
 
             case IEnumerable enumerable when obj.GetType().IsGenericType:
-            {
-                var listType = typeof(List<>).MakeGenericType(obj.GetType().GetGenericArguments().First());
-                var list = Activator.CreateInstance(listType) as IList;
-                foreach (var item in enumerable)
-                    // Deep clone each item, ensuring TrackableObjects are cloned correctly
-                    list?.Add(DeepClone(item));
-                return list;
-            }
+                {
+                    var listType = typeof(List<>).MakeGenericType(obj.GetType().GetGenericArguments().First());
+                    var list = Activator.CreateInstance(listType) as IList;
+                    foreach (var item in enumerable)
+                        // Deep clone each item, ensuring TrackableObjects are cloned correctly
+                        list?.Add(DeepClone(item));
+                    return list;
+                }
 
             default:
                 return obj; // Return the object as-is if it's not cloneable or enumerable

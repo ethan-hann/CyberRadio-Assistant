@@ -155,10 +155,10 @@ public sealed partial class ConfigForm : Form
         cmbCompressionLevels.SelectedItem = GetLocalizedName(compressionLevel);
 
         //Set the forbidden keywords
-        SetupForbiddenPathsListView();
+        SetupForbiddenPathsListView(config);
     }
 
-    private void SetupForbiddenPathsListView()
+    private void SetupForbiddenPathsListView(ApplicationConfig? config)
     {
         lvForbiddenPaths.BeginUpdate();
         lvForbiddenPaths.Columns.Add(Strings.ForbiddenKeywordListViewColumn, 120, HorizontalAlignment.Left);
@@ -168,7 +168,7 @@ public sealed partial class ConfigForm : Form
         lvForbiddenPaths.Groups.Clear(); // Also clear existing groups to avoid duplicates
 
         // Retrieve the list from configuration
-        if (GlobalData.ConfigManager.Get("forbiddenKeywords") is not List<ForbiddenKeyword> keywords) return;
+        var keywords = config?.ForbiddenKeywords ?? [];
 
         foreach (var keyword in keywords)
         {

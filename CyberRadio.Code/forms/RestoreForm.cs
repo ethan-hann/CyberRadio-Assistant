@@ -302,7 +302,7 @@ public partial class RestoreForm : Form
                             displayFileName ?? string.Empty,
                             size
                         ])
-                        { Tag = preview });
+                    { Tag = preview });
                 }
 
             lvFilePreviews.ResizeColumns();

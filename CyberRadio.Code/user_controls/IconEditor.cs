@@ -14,13 +14,13 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-using System.Globalization;
-using System.Text.RegularExpressions;
 using AetherUtils.Core.Logging;
 using RadioExt_Helper.custom_controls;
 using RadioExt_Helper.models;
 using RadioExt_Helper.Properties;
 using RadioExt_Helper.utility;
+using System.Globalization;
+using System.Text.RegularExpressions;
 using WIG.Lib.Models;
 using WIG.Lib.Utility;
 
@@ -124,7 +124,7 @@ public sealed partial class IconEditor : UserControl, IEditor
     /// Event that occurs when an icon import has started.
     /// </summary>
     public event EventHandler? IconImportStarted;
-    
+
     /// <summary>
     /// Event that occurs when an icon import has finished.
     /// </summary>

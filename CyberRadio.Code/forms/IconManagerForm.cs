@@ -462,22 +462,22 @@ public partial class IconManagerForm : Form
             switch (dialogResult)
             {
                 case DialogResult.OK:
-                {
-                    // Create a new copy of the existing icon for the current station
-                    var existingIcon = existingStations
-                        .SelectMany(station => station.TrackedObject.Icons)
-                        .First(icon => string.Equals(icon.TrackedObject.ArchivePath, iconPath,
-                            StringComparison.OrdinalIgnoreCase));
+                    {
+                        // Create a new copy of the existing icon for the current station
+                        var existingIcon = existingStations
+                            .SelectMany(station => station.TrackedObject.Icons)
+                            .First(icon => string.Equals(icon.TrackedObject.ArchivePath, iconPath,
+                                StringComparison.OrdinalIgnoreCase));
 
-                    // Copy the .archive and .png files and update paths
-                    newIconId = StationManager.Instance.CopyStationIcon(_station.Id, existingStations.First().Id,
-                        existingIcon);
+                        // Copy the .archive and .png files and update paths
+                        newIconId = StationManager.Instance.CopyStationIcon(_station.Id, existingStations.First().Id,
+                            existingIcon);
 
-                    if (newIconId == null)
-                        throw new Exception(
-                            $"Failed to copy existing icon to the station: {_station.TrackedObject.MetaData.DisplayName}");
-                    break;
-                }
+                        if (newIconId == null)
+                            throw new Exception(
+                                $"Failed to copy existing icon to the station: {_station.TrackedObject.MetaData.DisplayName}");
+                        break;
+                    }
                 case DialogResult.Cancel:
                 default:
                     // Cancel the import
