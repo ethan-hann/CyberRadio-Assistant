@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <OutputType>WinExe</OutputType>
@@ -70,12 +70,12 @@
         <PackageReference Include="AetherUtils.Core" Version="1.0.10" />
         <PackageReference Include="NAudio" Version="2.2.1" />
         <PackageReference Include="Pathoschild.FluentNexus" Version="1.0.5" />
-        <PackageReference Include="SharpCompress" Version="0.38.0" />
+        <PackageReference Include="SharpCompress" Version="0.39.0" />
         <PackageReference Include="SharpZipLib" Version="1.4.2" />
         <PackageReference Include="SixLabors.ImageSharp" Version="3.1.6" />
-        <PackageReference Include="System.Management" Version="8.0.0" />
+        <PackageReference Include="System.Management" Version="9.0.1" />
         <PackageReference Include="System.Net.Http" Version="4.3.4" />
-        <PackageReference Include="System.Text.Json" Version="8.0.5" />
+        <PackageReference Include="System.Text.Json" Version="9.0.1" />
         <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
         <PackageReference Include="TagLibSharp" Version="2.3.0" />
         <PackageReference Include="WIG.Lib" Version="1.0.45" />
