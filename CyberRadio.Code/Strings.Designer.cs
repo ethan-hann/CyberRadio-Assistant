@@ -466,6 +466,33 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to reload the configuration from the file? All unsaved options will be lost..
+        /// </summary>
+        internal static string ConfigReloadConfirm {
+            get {
+                return ResourceManager.GetString("ConfigReloadConfirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An error occurred while reloading the configuration file..
+        /// </summary>
+        internal static string ConfigReloadError {
+            get {
+                return ResourceManager.GetString("ConfigReloadError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Successfully reloaded configuration from file..
+        /// </summary>
+        internal static string ConfigReloadSuccess {
+            get {
+                return ResourceManager.GetString("ConfigReloadSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to reset the configuration to default values?.
         /// </summary>
         internal static string ConfigResetConfirm {
@@ -2546,6 +2573,24 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Found {0} in the game files! You should not have issues with icons..
+        /// </summary>
+        internal static string OodleDllFound {
+            get {
+                return ResourceManager.GetString("OodleDllFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;oodle.dll&apos; was not found in the game&apos;s files. You may have issues creating and extracting station icons..
+        /// </summary>
+        internal static string OodleDllMissing {
+            get {
+                return ResourceManager.GetString("OodleDllMissing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select a .archive file to open.
         /// </summary>
         internal static string OpenArchiveFile {
@@ -2722,6 +2767,15 @@ namespace RadioExt_Helper {
         internal static string RefreshStations {
             get {
                 return ResourceManager.GetString("RefreshStations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reload From File.
+        /// </summary>
+        internal static string ReloadFromFile {
+            get {
+                return ResourceManager.GetString("ReloadFromFile", resourceCulture);
             }
         }
         

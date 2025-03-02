@@ -121,6 +121,7 @@ public sealed partial class ConfigForm : Form
 
         //Buttons
         btnSaveAndClose.Text = Strings.SaveAndClose;
+        btnReloadFromFile.Text = Strings.ReloadFromFile;
         btnResetToDefault.Text = Strings.ResetToDefaults;
         btnCancel.Text = Strings.Cancel;
 
@@ -525,6 +526,38 @@ public sealed partial class ConfigForm : Form
             var caption = Strings.Error;
             MessageBox.Show(this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
             AuLogger.GetCurrentLogger<ConfigForm>("SaveAndClose").Error("Could not save configuration file.");
+        }
+    }
+
+    private void BtnReloadFromFile_Click(object sender, EventArgs e)
+    {
+        var text = Strings.ConfigReloadConfirm;
+        var captionConfirm = Strings.Confirm;
+        if (MessageBox.Show(this, text, captionConfirm, MessageBoxButtons.YesNo, MessageBoxIcon.Warning) != DialogResult.Yes) return;
+
+        try
+        {
+            if (GlobalData.ConfigManager.Load())
+            {
+                SetValues();
+                var reloadSuccessText = Strings.ConfigReloadSuccess;
+                var captionSuccess = Strings.Success;
+                MessageBox.Show(this, reloadSuccessText, captionSuccess, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                var reloadErrorText = Strings.ConfigReloadError;
+                var captionError = Strings.Error;
+                MessageBox.Show(this, reloadErrorText, captionError, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                AuLogger.GetCurrentLogger<ConfigForm>("ReloadFromFile").Error("Could not reload configuration file. This could be due to an invalid option or the file not existing.");
+            }
+        }
+        catch (Exception ex)
+        {
+            var reloadErrorText = Strings.ConfigReloadError;
+            var captionError = Strings.Error;
+            MessageBox.Show(this, reloadErrorText, captionError, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            AuLogger.GetCurrentLogger<ConfigForm>("ReloadFromFile").Error(ex, "Could not reload configuration file. This could be due to an invalid option or the file not existing.");
         }
     }
 

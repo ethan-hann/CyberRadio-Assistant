@@ -1341,4 +1341,22 @@
   <data name="GroupNotAllowedToBeModified" xml:space="preserve">
     <value>Группа «Системные пути» не может быть изменена.</value>
   </data>
+  <data name="OodleDllMissing" xml:space="preserve">
+    <value>'Ooodle.dll' не был найден в файлах игры. У вас могут быть проблемы, создающие и извлечение значков станции.</value>
+  </data>
+  <data name="OodleDllFound" xml:space="preserve">
+    <value>Нашел {0} в файлах игры! У вас не должно быть проблем с значками.</value>
+  </data>
+  <data name="ConfigReloadConfirm" xml:space="preserve">
+    <value>Вы уверены, что хотите перезагрузить конфигурацию из файла? Все неспасенные варианты будут потеряны.</value>
+  </data>
+  <data name="ConfigReloadError" xml:space="preserve">
+    <value>Произошла ошибка при перезагрузке файла конфигурации.</value>
+  </data>
+  <data name="ReloadFromFile" xml:space="preserve">
+    <value>Перезагрузить из файла</value>
+  </data>
+  <data name="ConfigReloadSuccess" xml:space="preserve">
+    <value>Успешно перезагруженная конфигурация из файла.</value>
+  </data>
 </root>

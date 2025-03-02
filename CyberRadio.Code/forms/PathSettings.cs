@@ -18,6 +18,8 @@ using AetherUtils.Core.Extensions;
 using AetherUtils.Core.Logging;
 using RadioExt_Helper.utility;
 using System.Text;
+using WIG.Lib.Utility;
+using PathHelper = RadioExt_Helper.utility.PathHelper;
 
 namespace RadioExt_Helper.forms;
 
@@ -135,6 +137,28 @@ public partial class PathSettings : Form
                     AuLogger.GetCurrentLogger<PathSettings>("ChangeGameBasePath")
                         .Info($"Updated game base path: {basePath}");
                     GameBasePathChanged?.Invoke(this, EventArgs.Empty);
+
+                    // Check for Oodle DLL
+                    var oodleCheck = PathHelper.ContainsOodleDll(Path.Combine(GameBasePath, "bin", "x64"));
+                    if (!oodleCheck.exists)
+                    {
+                        MessageBox.Show(this, Strings.OodleDllMissing, Strings.Error, MessageBoxButtons.OK,
+                            MessageBoxIcon.Warning);
+                        AuLogger.GetCurrentLogger<PathSettings>("ChangeGameBasePath")
+                            .Warn("Oodle DLL is missing from the game path.");
+                    }
+                    else
+                    {
+                        //Copy to the icon manager
+                        if (IconManager.Instance.IsInitialized && oodleCheck.filePath != null)
+                        {
+                            IconManager.Instance.CopyOodleDllToWolvenKitPath(oodleCheck.filePath);
+                            
+                            MessageBox.Show(this, string.Format(Strings.OodleDllFound, Path.GetFileName(oodleCheck.filePath)), Strings.Success, MessageBoxButtons.OK,
+                                MessageBoxIcon.Information);
+                            AuLogger.GetCurrentLogger<PathSettings>("ChangeGameBasePath").Info($"Oodle DLL was found in game's base path: {Path.GetFileName(oodleCheck.filePath)}");
+                        }
+                    }
                 }
             }
             else

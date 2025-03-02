@@ -1341,4 +1341,22 @@ Asegúrese de crear una copia de seguridad de sus estaciones antes de borrar los
   <data name="GroupNotAllowedToBeModified" xml:space="preserve">
     <value>El grupo de 'rutas del sistema' no se puede modificar.</value>
   </data>
+  <data name="OodleDllMissing" xml:space="preserve">
+    <value>'oodle.dll' no se encontró en los archivos del juego. Es posible que tenga problemas para crear y extraer íconos de la estación.</value>
+  </data>
+  <data name="OodleDllFound" xml:space="preserve">
+    <value>Encontrado {0} en los archivos del juego! No debe tener problemas con los íconos.</value>
+  </data>
+  <data name="ConfigReloadConfirm" xml:space="preserve">
+    <value>¿Está seguro de que desea volver a cargar la configuración del archivo? Todas las opciones no salvadas se perderán.</value>
+  </data>
+  <data name="ConfigReloadError" xml:space="preserve">
+    <value>Se produjo un error al recargar el archivo de configuración.</value>
+  </data>
+  <data name="ReloadFromFile" xml:space="preserve">
+    <value>Recargar desde el archivo</value>
+  </data>
+  <data name="ConfigReloadSuccess" xml:space="preserve">
+    <value>Configuración recargada con éxito desde el archivo.</value>
+  </data>
 </root>

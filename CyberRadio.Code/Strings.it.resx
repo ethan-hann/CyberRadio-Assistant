@@ -1341,4 +1341,22 @@ Sei sicuro di voler cancellare tutti i dati della stazione?</value>
   <data name="GroupNotAllowedToBeModified" xml:space="preserve">
     <value>Il gruppo "percorsi di sistema" non può essere modificato.</value>
   </data>
+  <data name="OodleDllMissing" xml:space="preserve">
+    <value>'oodle.dll' non è stato trovato nei file del gioco. Potresti avere problemi di creare ed estrarre icone della stazione.</value>
+  </data>
+  <data name="OodleDllFound" xml:space="preserve">
+    <value>Trovato {0} nei file di gioco! Non dovresti avere problemi con le icone.</value>
+  </data>
+  <data name="ConfigReloadConfirm" xml:space="preserve">
+    <value>Sei sicuro di voler ricaricare la configurazione dal file? Tutte le opzioni non salvate andranno perse.</value>
+  </data>
+  <data name="ConfigReloadError" xml:space="preserve">
+    <value>Si è verificato un errore durante la ricarica del file di configurazione.</value>
+  </data>
+  <data name="ReloadFromFile" xml:space="preserve">
+    <value>Ricarica dal file</value>
+  </data>
+  <data name="ConfigReloadSuccess" xml:space="preserve">
+    <value>Configurazione ricaricata correttamente dal file.</value>
+  </data>
 </root>

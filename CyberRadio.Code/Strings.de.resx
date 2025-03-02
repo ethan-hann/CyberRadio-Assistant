@@ -1341,4 +1341,22 @@ Sind Sie sicher, dass Sie alle Stationsdaten löschen möchten?</value>
   <data name="GroupNotAllowedToBeModified" xml:space="preserve">
     <value>Die Gruppe "Systempfade" kann nicht geändert werden.</value>
   </data>
+  <data name="OodleDllMissing" xml:space="preserve">
+    <value>'oodle.dll' wurde nicht in den Dateien des Spiels gefunden. Möglicherweise haben Sie Probleme beim Erstellen und Extrahieren von Stationssymbolen.</value>
+  </data>
+  <data name="OodleDllFound" xml:space="preserve">
+    <value>In den Spieldateien gefunden {0}! Sie sollten keine Probleme mit Ikonen haben.</value>
+  </data>
+  <data name="ConfigReloadConfirm" xml:space="preserve">
+    <value>Sind Sie sicher, dass Sie die Konfiguration aus der Datei neu laden möchten? Alle ungeretteten Optionen gehen verloren.</value>
+  </data>
+  <data name="ConfigReloadError" xml:space="preserve">
+    <value>Beim Neuladen der Konfigurationsdatei trat ein Fehler auf.</value>
+  </data>
+  <data name="ReloadFromFile" xml:space="preserve">
+    <value>Aus der Datei neu laden</value>
+  </data>
+  <data name="ConfigReloadSuccess" xml:space="preserve">
+    <value>Die Konfiguration erfolgreich aus der Datei neu laden.</value>
+  </data>
 </root>

@@ -1341,4 +1341,22 @@
   <data name="GroupNotAllowedToBeModified" xml:space="preserve">
     <value>无法修改“系统路径”组。</value>
   </data>
+  <data name="OodleDllMissing" xml:space="preserve">
+    <value>游戏文件中未发现“ oodle.dll”。您可能会遇到创建和提取电台图标的问题。</value>
+  </data>
+  <data name="OodleDllFound" xml:space="preserve">
+    <value>在游戏文件中找到{0}！您不应该有图标问题。</value>
+  </data>
+  <data name="ConfigReloadConfirm" xml:space="preserve">
+    <value>您确定要从文件中重新加载配置吗？所有未保存的选项都将丢失。</value>
+  </data>
+  <data name="ConfigReloadError" xml:space="preserve">
+    <value>重新加载配置文件时发生了错误。</value>
+  </data>
+  <data name="ReloadFromFile" xml:space="preserve">
+    <value>从文件中重新加载</value>
+  </data>
+  <data name="ConfigReloadSuccess" xml:space="preserve">
+    <value>从文件中成功重新加载配置。</value>
+  </data>
 </root>

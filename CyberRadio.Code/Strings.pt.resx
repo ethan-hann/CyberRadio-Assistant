@@ -1341,4 +1341,22 @@ Tem certeza de que deseja limpar todos os dados da estação?</value>
   <data name="GroupNotAllowedToBeModified" xml:space="preserve">
     <value>O grupo 'Caminhos do sistema' não pode ser modificado.</value>
   </data>
+  <data name="OodleDllMissing" xml:space="preserve">
+    <value>'Oodle.dll' não foi encontrado nos arquivos do jogo. Você pode ter problemas para criar e extrair ícones da estação.</value>
+  </data>
+  <data name="OodleDllFound" xml:space="preserve">
+    <value>Encontrado {0} nos arquivos do jogo! Você não deve ter problemas com os ícones.</value>
+  </data>
+  <data name="ConfigReloadConfirm" xml:space="preserve">
+    <value>Tem certeza de que deseja recarregar a configuração do arquivo? Todas as opções não salvas serão perdidas.</value>
+  </data>
+  <data name="ConfigReloadError" xml:space="preserve">
+    <value>Ocorreu um erro ao recarregar o arquivo de configuração.</value>
+  </data>
+  <data name="ReloadFromFile" xml:space="preserve">
+    <value>Recarregue do arquivo</value>
+  </data>
+  <data name="ConfigReloadSuccess" xml:space="preserve">
+    <value>Configuração recarregada com sucesso do arquivo.</value>
+  </data>
 </root>

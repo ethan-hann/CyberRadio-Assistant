@@ -1341,4 +1341,22 @@ Are you sure you want to clear all station data?</value>
   <data name="GroupNotAllowedToBeModified" xml:space="preserve">
     <value>The 'System Paths' group cannot be modified.</value>
   </data>
+  <data name="OodleDllMissing" xml:space="preserve">
+    <value>'oodle.dll' was not found in the game's files. You may have issues creating and extracting station icons.</value>
+  </data>
+  <data name="OodleDllFound" xml:space="preserve">
+    <value>Found {0} in the game files! You should not have issues with icons.</value>
+  </data>
+  <data name="ConfigReloadConfirm" xml:space="preserve">
+    <value>Are you sure you want to reload the configuration from the file? All unsaved options will be lost.</value>
+  </data>
+  <data name="ConfigReloadError" xml:space="preserve">
+    <value>An error occurred while reloading the configuration file.</value>
+  </data>
+  <data name="ReloadFromFile" xml:space="preserve">
+    <value>Reload From File</value>
+  </data>
+  <data name="ConfigReloadSuccess" xml:space="preserve">
+    <value>Successfully reloaded configuration from file.</value>
+  </data>
 </root>

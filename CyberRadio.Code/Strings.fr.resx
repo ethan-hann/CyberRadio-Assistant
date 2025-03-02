@@ -1341,4 +1341,22 @@ Assurez-vous de créer une sauvegarde de vos stations avant de nettoyer les donn
   <data name="GroupNotAllowedToBeModified" xml:space="preserve">
     <value>Le groupe «Paths système» ne peut pas être modifié.</value>
   </data>
+  <data name="OodleDllMissing" xml:space="preserve">
+    <value>«Oodle.dll» n'a pas été trouvé dans les fichiers du jeu. Vous pouvez avoir des problèmes de création et d'extraction d'icônes de station.</value>
+  </data>
+  <data name="OodleDllFound" xml:space="preserve">
+    <value>Found {0} dans les fichiers de jeu! Vous ne devriez pas avoir de problèmes avec les icônes.</value>
+  </data>
+  <data name="ConfigReloadConfirm" xml:space="preserve">
+    <value>Êtes-vous sûr de vouloir recharger la configuration à partir du fichier? Toutes les options non sauvées seront perdues.</value>
+  </data>
+  <data name="ConfigReloadError" xml:space="preserve">
+    <value>Une erreur s'est produite lors du rechargement du fichier de configuration.</value>
+  </data>
+  <data name="ReloadFromFile" xml:space="preserve">
+    <value>Recharger à partir du fichier</value>
+  </data>
+  <data name="ConfigReloadSuccess" xml:space="preserve">
+    <value>Configuration rechargée avec succès à partir du fichier.</value>
+  </data>
 </root>

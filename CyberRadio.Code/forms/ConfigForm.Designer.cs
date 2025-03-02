@@ -28,9 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            ListViewGroup listViewGroup1 = new ListViewGroup("Game Launchers", HorizontalAlignment.Left);
-            ListViewGroup listViewGroup2 = new ListViewGroup("Mod Managers", HorizontalAlignment.Left);
-            ListViewGroup listViewGroup3 = new ListViewGroup("Windows Related", HorizontalAlignment.Left);
+            ListViewGroup listViewGroup4 = new ListViewGroup("Game Launchers", HorizontalAlignment.Left);
+            ListViewGroup listViewGroup5 = new ListViewGroup("Mod Managers", HorizontalAlignment.Left);
+            ListViewGroup listViewGroup6 = new ListViewGroup("Windows Related", HorizontalAlignment.Left);
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ConfigForm));
             tableLayoutPanel1 = new TableLayoutPanel();
             chkCheckForUpdates = new CheckBox();
@@ -81,6 +81,7 @@
             statusStrip1 = new StatusStrip();
             lblHelpText = new ToolStripStatusLabel();
             fldrOpenDefaultMusicPath = new FolderBrowserDialog();
+            btnReloadFromFile = new Button();
             tableLayoutPanel1.SuspendLayout();
             tableLayoutPanel7.SuspendLayout();
             tableLayoutPanel6.SuspendLayout();
@@ -426,13 +427,13 @@
             // 
             lvForbiddenPaths.CheckBoxes = true;
             lvForbiddenPaths.Dock = DockStyle.Fill;
-            listViewGroup1.Header = "Game Launchers";
-            listViewGroup1.Name = "lvgGameLaunchers";
-            listViewGroup2.Header = "Mod Managers";
-            listViewGroup2.Name = "lvgModManagers";
-            listViewGroup3.Header = "Windows Related";
-            listViewGroup3.Name = "lvgWindowsRelated";
-            lvForbiddenPaths.Groups.AddRange(new ListViewGroup[] { listViewGroup1, listViewGroup2, listViewGroup3 });
+            listViewGroup4.Header = "Game Launchers";
+            listViewGroup4.Name = "lvgGameLaunchers";
+            listViewGroup5.Header = "Mod Managers";
+            listViewGroup5.Name = "lvgModManagers";
+            listViewGroup6.Header = "Windows Related";
+            listViewGroup6.Name = "lvgWindowsRelated";
+            lvForbiddenPaths.Groups.AddRange(new ListViewGroup[] { listViewGroup4, listViewGroup5, listViewGroup6 });
             lvForbiddenPaths.Location = new Point(0, 0);
             lvForbiddenPaths.Name = "lvForbiddenPaths";
             lvForbiddenPaths.Size = new Size(562, 220);
@@ -714,18 +715,20 @@
             // 
             // tableLayoutPanel2
             // 
-            tableLayoutPanel2.ColumnCount = 3;
-            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 56.6153831F));
-            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 43.3846169F));
-            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 142F));
-            tableLayoutPanel2.Controls.Add(btnCancel, 0, 0);
-            tableLayoutPanel2.Controls.Add(btnResetToDefault, 0, 0);
+            tableLayoutPanel2.ColumnCount = 4;
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+            tableLayoutPanel2.Controls.Add(btnReloadFromFile, 1, 0);
             tableLayoutPanel2.Controls.Add(btnSaveAndClose, 0, 0);
+            tableLayoutPanel2.Controls.Add(btnCancel, 3, 0);
+            tableLayoutPanel2.Controls.Add(btnResetToDefault, 2, 0);
             tableLayoutPanel2.Dock = DockStyle.Bottom;
             tableLayoutPanel2.Location = new Point(0, 254);
             tableLayoutPanel2.Name = "tableLayoutPanel2";
             tableLayoutPanel2.RowCount = 1;
-            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             tableLayoutPanel2.Size = new Size(793, 41);
             tableLayoutPanel2.TabIndex = 2;
             // 
@@ -737,9 +740,9 @@
             btnCancel.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
             btnCancel.FlatStyle = FlatStyle.Flat;
             btnCancel.Image = Properties.Resources.cancel_16x16;
-            btnCancel.Location = new Point(653, 3);
+            btnCancel.Location = new Point(597, 3);
             btnCancel.Name = "btnCancel";
-            btnCancel.Size = new Size(137, 35);
+            btnCancel.Size = new Size(193, 35);
             btnCancel.TabIndex = 8;
             btnCancel.Text = "Cancel";
             btnCancel.TextAlign = ContentAlignment.MiddleRight;
@@ -750,14 +753,13 @@
             // btnResetToDefault
             // 
             btnResetToDefault.BackColor = Color.Yellow;
-            btnResetToDefault.Dock = DockStyle.Fill;
             btnResetToDefault.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
             btnResetToDefault.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
             btnResetToDefault.FlatStyle = FlatStyle.Flat;
             btnResetToDefault.Image = Properties.Resources.refresh__16x16;
-            btnResetToDefault.Location = new Point(371, 3);
+            btnResetToDefault.Location = new Point(399, 3);
             btnResetToDefault.Name = "btnResetToDefault";
-            btnResetToDefault.Size = new Size(276, 35);
+            btnResetToDefault.Size = new Size(192, 35);
             btnResetToDefault.TabIndex = 7;
             btnResetToDefault.Text = "Reset to Defaults";
             btnResetToDefault.TextAlign = ContentAlignment.MiddleRight;
@@ -775,7 +777,7 @@
             btnSaveAndClose.Image = Properties.Resources.disk__16x16;
             btnSaveAndClose.Location = new Point(3, 3);
             btnSaveAndClose.Name = "btnSaveAndClose";
-            btnSaveAndClose.Size = new Size(362, 35);
+            btnSaveAndClose.Size = new Size(192, 35);
             btnSaveAndClose.TabIndex = 6;
             btnSaveAndClose.Text = "Save and Close";
             btnSaveAndClose.TextAlign = ContentAlignment.MiddleRight;
@@ -810,6 +812,24 @@
             // 
             fldrOpenDefaultMusicPath.Description = "Select the default path for song files when importing stations";
             fldrOpenDefaultMusicPath.UseDescriptionForTitle = true;
+            // 
+            // btnReloadFromFile
+            // 
+            btnReloadFromFile.BackColor = Color.Yellow;
+            btnReloadFromFile.Dock = DockStyle.Fill;
+            btnReloadFromFile.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
+            btnReloadFromFile.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
+            btnReloadFromFile.FlatStyle = FlatStyle.Flat;
+            btnReloadFromFile.Image = Properties.Resources.file__16x16;
+            btnReloadFromFile.Location = new Point(201, 3);
+            btnReloadFromFile.Name = "btnReloadFromFile";
+            btnReloadFromFile.Size = new Size(192, 35);
+            btnReloadFromFile.TabIndex = 9;
+            btnReloadFromFile.Text = "Reload From File";
+            btnReloadFromFile.TextAlign = ContentAlignment.MiddleRight;
+            btnReloadFromFile.TextImageRelation = TextImageRelation.ImageBeforeText;
+            btnReloadFromFile.UseVisualStyleBackColor = false;
+            btnReloadFromFile.Click += BtnReloadFromFile_Click;
             // 
             // ConfigForm
             // 
@@ -915,5 +935,6 @@
         private Button btnDeleteSelectedKeyword;
         private Button btnEditPaths;
         private SplitContainer splitContainer1;
+        private Button btnReloadFromFile;
     }
 }

@@ -26,6 +26,7 @@ using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using System.Security.AccessControl;
 using System.Security.Principal;
+using System.Text.RegularExpressions;
 using Image = SixLabors.ImageSharp.Image;
 
 namespace RadioExt_Helper.utility;
@@ -33,8 +34,13 @@ namespace RadioExt_Helper.utility;
 /// <summary>
 ///     Helper class to get the various paths associated with the game and provides some helper methods for working with paths.
 /// </summary>
-public static class PathHelper
+public static partial class PathHelper
 {
+    [GeneratedRegex(@"oo\dext_\d+_win(?:32|64)\.dll", RegexOptions.IgnoreCase, "en-US")]
+    private static partial Regex OodleRegex();
+
+    private static Regex _oodlePattern = OodleRegex();
+
     /// <summary>
     ///    The list of paths that are always forbidden for use as the staging path.
     /// </summary>
@@ -584,5 +590,32 @@ public static class PathHelper
         }
 
         return false;
+    }
+
+    /// <summary>
+    /// Check if the specified base path contains the Oodle DLL used for compression of game files.
+    /// <para>This DLL is used by WolvenKit and may cause problems with icon generation if it's missing.</para>
+    /// </summary>
+    /// <param name="basePath">The base path to check.</param>
+    /// <returns>A tuple containing whether the DLL exists and the full path of the file that was found. If the DLL did not exist, the filePath is <c>null</c>.</returns>
+    public static (bool exists, string? filePath) ContainsOodleDll(string? basePath)
+    {
+        try
+        {
+            if (string.IsNullOrEmpty(basePath))
+                return (false, null);
+
+            var dllFiles = FileHelper.SafeEnumerateFiles(basePath, "*.dll", SearchOption.AllDirectories);
+
+            var oodleFile = dllFiles.FirstOrDefault(file => _oodlePattern.IsMatch(file));
+            var oodleExists = oodleFile != null;
+
+            return (oodleExists, oodleFile != null ? Path.Combine(basePath, oodleFile) : null);
+        }
+        catch (Exception ex)
+        {
+            AuLogger.GetCurrentLogger("PathHelper.ContainsOodleDll").Error(ex, "An error occurred while checking for the Oodle DLL.");
+            return (false, null);
+        }
     }
 }

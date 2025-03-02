@@ -315,6 +315,7 @@ public sealed partial class MainForm : Form
         }
 
         HandleUserControlVisibility();
+        CopyOodleToIconManager();
     }
 
     /// <summary>
@@ -423,6 +424,25 @@ public sealed partial class MainForm : Form
         splitContainer1.Panel2.Controls.Clear();
         splitContainer1.Panel2.Controls.Add(_noStationsCtrl);
         _noStationsCtrl.Visible = true;
+    }
+
+    private void CopyOodleToIconManager()
+    {
+        //Check for and Copy Oodle Dll to the icon manager
+        var oodleCheck = PathHelper.ContainsOodleDll(Path.Combine(GameBasePath, "bin", "x64"));
+
+        if (oodleCheck.exists)
+        {
+            if (!IconManager.Instance.IsInitialized || oodleCheck.filePath == null) return;
+
+            IconManager.Instance.CopyOodleDllToWolvenKitPath(oodleCheck.filePath);
+            AuLogger.GetCurrentLogger<MainForm>("CopyOodleToIconManager")
+                .Info($"Oodle DLL was found in game's base path and copied to WolvenKit directory: {Path.GetFileName(oodleCheck.filePath)}");
+        }
+        else
+        {
+            AuLogger.GetCurrentLogger<MainForm>("MainForm_Shown").Warn("Oodle DLL is missing from the game path.");
+        }
     }
 
     /// <summary>
