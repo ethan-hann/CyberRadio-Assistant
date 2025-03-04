@@ -14,6 +14,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+using AetherUtils.Core.Logging;
+
 namespace RadioExt_Helper.utility;
 
 /// <summary>
@@ -55,5 +57,39 @@ public static class ControlExtensions
     public static void SafeEndInvoke(this Control control, IAsyncResult result)
     {
         if (control.InvokeRequired) control.EndInvoke(result);
+    }
+
+    /// <summary>
+    ///  Safely sets a metadata key-value pair on the control.
+    /// </summary>
+    /// <param name="control">The control on which to set the metadata.</param>
+    /// <param name="key">The key of the metadata.</param>
+    /// <param name="value">The value of the metadata.</param>
+    public static void SetMetadata(this Control control, string key, string value)
+    {
+        try
+        {
+            if (control.Tag is not Dictionary<string, string> metadata)
+            {
+                metadata = new Dictionary<string, string>();
+                control.Tag = metadata;
+            }
+
+            metadata[key] = value;
+        }
+        catch (Exception ex)
+        {
+            AuLogger.GetCurrentLogger("ControlExtensions.SetMetadata").Error(ex);
+        }
+    }
+
+    /// <summary>
+    /// Retrieves the metadata key-value pair from the control's Tag property.
+    /// </summary>
+    /// <param name="control">The control on which to retrieve the metadata for.</param>
+    /// <returns>A dictionary containing the key-value metadata.</returns>
+    public static Dictionary<string, string> GetMetadata(this Control control)
+    {
+        return control.Tag as Dictionary<string, string> ?? new Dictionary<string, string>();
     }
 }

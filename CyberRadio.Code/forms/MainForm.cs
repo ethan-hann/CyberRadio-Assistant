@@ -291,9 +291,24 @@ public sealed partial class MainForm : Form
         Translate();
 
         //Apply theming
-        ThemeManager.Instance.LoadTheme(ThemeManager.Instance.GetSavedTheme(), true);
+        ApplyTheming();
 
         //SetApiStatus(this, EventArgs.Empty); //TODO: Re-enable this when the API feature is fully implemented
+    }
+
+    private void ApplyTheming()
+    {
+        //First set metadata for buttons and menu items
+        btnEnableSelected.SetMetadata("style", "primary");
+        //btnEnableSelected.SetMetadata("icon", "success");
+        btnDisableSelected.SetMetadata("style", "secondary");
+        btnAddStation.SetMetadata("style", "primary");
+        btnDeleteStation.SetMetadata("style", "danger");
+
+        //Tool strip item metadata
+
+
+        ThemeManager.Instance.LoadTheme(ThemeManager.Instance.GetSavedTheme());
     }
 
     /// <summary>

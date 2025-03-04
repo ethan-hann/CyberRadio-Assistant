@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing.Drawing2D;
-using System.Linq;
+﻿using System.Drawing.Drawing2D;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using AetherUtils.Core.Logging;
-using AetherUtils.Core.WinForms.Controls;
 using RadioExt_Helper.utility;
 using YamlDotNet.Serialization;
 
@@ -34,6 +27,7 @@ public class ThemeManager
 
     private readonly string _themeDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "RadioExt-Helper", "themes");
     private readonly Assembly _executingAssembly = Assembly.GetExecutingAssembly();
+    private readonly Dictionary<ToolStripItem, Dictionary<string, string>> _menuItemMetadata = new();
     private const string ResourcePrefix = "RadioExt_Helper.resources";
 
     /// <summary>
@@ -101,7 +95,10 @@ public class ThemeManager
             }
 
             var yaml = File.ReadAllText(themePath);
-            CurrentTheme = new Deserializer().Deserialize<Theme>(yaml);
+            CurrentTheme = new DeserializerBuilder()
+                .IgnoreUnmatchedProperties()
+                .Build()
+                .Deserialize<Theme>(yaml);
 
             if (applyTheme)
                 ApplyTheme();
@@ -189,24 +186,30 @@ public class ThemeManager
                 txt.BackColor = CurrentTheme.TextBoxBackground;
                 txt.ForeColor = CurrentTheme.TextBoxTextColor;
                 break;
-            case GroupBox grp:
-            case RadioButton radB:
-            case CheckBox chk:
-            case Label lbl:
+            case GroupBox gb:
+                gb.ForeColor = CurrentTheme.ForegroundColor;
+                gb.BackColor = CurrentTheme.BackgroundColor;
+                break;
+            case RadioButton:
+            case CheckBox:
+            case Label:
                 control.ForeColor = CurrentTheme.LabelTextColor;
                 break;
             case ListView lv:
                 lv.BackColor = CurrentTheme.ListViewBackground;
                 lv.ForeColor = CurrentTheme.ListViewTextColor;
                 break;
-            case MenuStrip ms:
-            case StatusStrip ss:
-            case ToolStrip ts:
+            case ListBox lb:
+                lb.BackColor = CurrentTheme.BackgroundColor;
+                lb.ForeColor = CurrentTheme.LabelTextColor;
+                break;
+            case MenuStrip:
+            case ToolStrip:
                 control.BackColor = CurrentTheme.MenuStripBackground;
                 control.ForeColor = CurrentTheme.MenuStripTextColor;
                 break;
-            case Panel pnl:
-            case TabControl tabCtrl:
+            case Panel:
+            case TabControl:
                 control.BackColor = CurrentTheme.BackgroundColor;
                 control.ForeColor = CurrentTheme.ForegroundColor;
                 break;
@@ -227,13 +230,20 @@ public class ThemeManager
     /// <param name="btn"></param>
     private void ApplyButtonStyle(Button btn)
     {
-        var style = btn.Tag switch
+        // Extract metadata
+        var metadata = btn.GetMetadata();
+    
+        // Determine button style based on metadata
+        var styleType = metadata.GetValueOrDefault("style", "primary");
+    
+        var style = styleType switch
         {
             "secondary" => CurrentTheme.SecondaryButton,
             "danger" => CurrentTheme.DangerButton,
             _ => CurrentTheme.PrimaryButton
         };
 
+        // Apply styles
         btn.BackColor = style.BackgroundColor;
         btn.ForeColor = style.TextColor;
         btn.FlatAppearance.BorderColor = style.BorderColor;
@@ -265,10 +275,15 @@ public class ThemeManager
     /// <param name="control"></param>
     private void ApplyIconTheme(Control control)
     {
-        if (control is Button { Tag: not null } btn)
+        if (control is Button btn)
         {
-            var iconName = $"{btn.Tag}_{CurrentTheme.IconSet}";
-            btn.Image = _executingAssembly.GetEmbeddedIcon($"{ResourcePrefix}.{iconName}");
+            var metadata = btn.GetMetadata();
+        
+            var iconName = metadata.GetValueOrDefault("icon", string.Empty);
+            if (string.IsNullOrEmpty(iconName)) return;
+
+            var fullIconName = $"{iconName}_{CurrentTheme.IconSet}";
+            btn.Image = _executingAssembly.GetEmbeddedIcon($"{ResourcePrefix}.{fullIconName}");
             btn.ImageAlign = ContentAlignment.MiddleLeft;
         }
         else if (control is MenuStrip ms)
@@ -283,14 +298,17 @@ public class ThemeManager
     /// <summary>
     /// Apply the current icon theme to the specified menu item and all of its children.
     /// </summary>
-    /// <param name="item"></param>
+    /// <param name="item">The <see cref="ToolStripMenuItem"/> to apply the icon theme to.</param>
     private void ApplyIconToMenuItem(ToolStripMenuItem item)
     {
-        if (item.Tag != null)
-        {
-            var iconName = $"{item.Tag}_{CurrentTheme.IconSet}";
-            item.Image = _executingAssembly.GetEmbeddedIcon($"{ResourcePrefix}.{iconName}");
-        }
+        var metadata = GetMenuItemMetadata(item);
+
+        var iconName = metadata.GetValueOrDefault("icon", string.Empty);
+
+        if (string.IsNullOrEmpty(iconName)) return;
+
+        var fullIconName = $"{iconName}_{CurrentTheme.IconSet}";
+        item.Image = _executingAssembly.GetEmbeddedIcon($"{ResourcePrefix}.{fullIconName}");
 
         foreach (ToolStripItem subItem in item.DropDownItems)
         {
@@ -319,6 +337,27 @@ public class ThemeManager
         path.CloseFigure();
 
         return path;
+    }
+
+    /// <summary>
+    /// Sets metadata for a ToolStripItem (like a ToolStripMenuItem).
+    /// </summary>
+    public void SetMenuItemMetadata(ToolStripItem item, string key, string value)
+    {
+        if (!_menuItemMetadata.ContainsKey(item))
+        {
+            _menuItemMetadata[item] = new Dictionary<string, string>();
+        }
+
+        _menuItemMetadata[item][key] = value;
+    }
+
+    /// <summary>
+    /// Retrieves metadata for a ToolStripItem.
+    /// </summary>
+    public Dictionary<string, string> GetMenuItemMetadata(ToolStripItem item)
+    {
+        return _menuItemMetadata.TryGetValue(item, out var metadata) ? metadata : new Dictionary<string, string>();
     }
 
     /// <summary>

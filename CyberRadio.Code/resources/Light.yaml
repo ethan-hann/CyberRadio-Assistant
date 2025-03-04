@@ -1,35 +1,43 @@
 BackgroundColor: "#ffffff"
-ForegroundColor: "#000000"
+ForegroundColor: "#202124"
 
 PrimaryButton:
-  BackgroundColor: "#f0f0f0"
-  TextColor: "#000000"
-  BorderColor: "#000000"
+  BackgroundColor: "#1a73e8"
+  TextColor: "#ffffff"
+  BorderColor: "#1a73e8"
   BorderThickness: 2
-  BorderRadius: 5
+  BorderRadius: 8
   UseShadow: true
 
 SecondaryButton:
-  BackgroundColor: "#e0e0e0"
-  TextColor: "#222222"
-  BorderColor: "#888888"
-  BorderThickness: 1
-  BorderRadius: 3
+  BackgroundColor: "#f1f3f4"
+  TextColor: "#202124"
+  BorderColor: "#dadce0"
+  BorderThickness: 2
+  BorderRadius: 8
   UseShadow: false
 
 DangerButton:
-  BackgroundColor: "#ffcccc"
-  TextColor: "#aa0000"
-  BorderColor: "#ff0000"
+  BackgroundColor: "#d93025"
+  TextColor: "#ffffff"
+  BorderColor: "#b71c1c"
   BorderThickness: 2
-  BorderRadius: 5
+  BorderRadius: 8
   UseShadow: true
 
-MenuStripBackground: "#cccccc"
-MenuStripTextColor: "#000000"
+TextBoxBackground: "#ffffff"
+TextBoxTextColor: "#202124"
 
-FontFamily: "Segoe UI"
-FontSize: 9.0
+LabelTextColor: "#5f6368"
+
+ListViewBackground: "#ffffff"
+ListViewTextColor: "#202124"
+
+MenuStripBackground: "#f8f9fa"
+MenuStripTextColor: "#202124"
+
+FontFamily: "Roboto"
+FontSize: 12.0
 
 IconSet: "light"
 

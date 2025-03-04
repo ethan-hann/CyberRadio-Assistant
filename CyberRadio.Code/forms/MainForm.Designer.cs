@@ -474,7 +474,7 @@ namespace RadioExt_Helper.forms
             btnDisableSelected.Name = "btnDisableSelected";
             btnDisableSelected.Size = new Size(154, 28);
             btnDisableSelected.TabIndex = 1;
-            btnDisableSelected.Tag = "primary";
+            btnDisableSelected.Tag = "";
             btnDisableSelected.Text = "Disable Selected";
             btnDisableSelected.UseVisualStyleBackColor = false;
             btnDisableSelected.Click += BtnDisableStation_Click;
@@ -509,7 +509,7 @@ namespace RadioExt_Helper.forms
             btnEnableSelected.Name = "btnEnableSelected";
             btnEnableSelected.Size = new Size(154, 28);
             btnEnableSelected.TabIndex = 0;
-            btnEnableSelected.Tag = "primary";
+            btnEnableSelected.Tag = "";
             btnEnableSelected.Text = "Enable Selected";
             btnEnableSelected.UseVisualStyleBackColor = false;
             btnEnableSelected.Click += BtnEnableStation_Click;
@@ -599,7 +599,7 @@ namespace RadioExt_Helper.forms
             btnDeleteStation.Name = "btnDeleteStation";
             btnDeleteStation.Size = new Size(157, 33);
             btnDeleteStation.TabIndex = 1;
-            btnDeleteStation.Tag = "danger";
+            btnDeleteStation.Tag = "";
             btnDeleteStation.Text = "Delete Station";
             btnDeleteStation.TextAlign = ContentAlignment.MiddleRight;
             btnDeleteStation.TextImageRelation = TextImageRelation.ImageBeforeText;
@@ -622,7 +622,7 @@ namespace RadioExt_Helper.forms
             btnAddStation.Size = new Size(157, 33);
             btnAddStation.SplitWidth = 25;
             btnAddStation.TabIndex = 0;
-            btnAddStation.Tag = "primary";
+            btnAddStation.Tag = "";
             btnAddStation.Text = "New Station";
             btnAddStation.TextAlign = ContentAlignment.MiddleRight;
             btnAddStation.TextImageRelation = TextImageRelation.ImageBeforeText;
