@@ -1,5 +1,5 @@
 ﻿// PathHelper.cs : RadioExt-Helper
-// Copyright (C) 2024  Ethan Hann
+// Copyright (C) 2025  Ethan Hann
 // 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -14,6 +14,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+using System.Security.AccessControl;
+using System.Security.Principal;
+using System.Text.RegularExpressions;
 using AetherUtils.Core.Files;
 using AetherUtils.Core.Logging;
 using RadioExt_Helper.config;
@@ -24,9 +27,6 @@ using SharpCompress.Archives.Zip;
 using SharpCompress.Common;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
-using System.Security.AccessControl;
-using System.Security.Principal;
-using System.Text.RegularExpressions;
 using Image = SixLabors.ImageSharp.Image;
 
 namespace RadioExt_Helper.utility;
@@ -36,10 +36,7 @@ namespace RadioExt_Helper.utility;
 /// </summary>
 public static partial class PathHelper
 {
-    [GeneratedRegex(@"oo\dext_\d+_win(?:32|64)\.dll", RegexOptions.IgnoreCase, "en-US")]
-    private static partial Regex OodleRegex();
-
-    private static Regex _oodlePattern = OodleRegex();
+    private static readonly Regex _oodlePattern = OodleRegex();
 
     /// <summary>
     ///    The list of paths that are always forbidden for use as the staging path.
@@ -54,6 +51,9 @@ public static partial class PathHelper
         Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData).ToLowerInvariant(),
         Path.GetPathRoot(Environment.SystemDirectory)?.ToLowerInvariant() ?? string.Empty
     ];
+
+    [GeneratedRegex(@"oo\dext_\d+_win(?:32|64)\.dll", RegexOptions.IgnoreCase, "en-US")]
+    private static partial Regex OodleRegex();
 
     /// <summary>
     /// Retrieves the base game path (the folder containing <c>bin</c>) from the Cyberpunk 2077 executable by showing a file dialog.
@@ -303,7 +303,11 @@ public static partial class PathHelper
     /// Get the list of always forbidden paths as a list of <see cref="ForbiddenKeyword"/> objects. These paths are the system directories and program files directories.
     /// </summary>
     /// <returns>A list of <see cref="ForbiddenKeyword"/> objects defining the path.</returns>
-    public static List<ForbiddenKeyword> GetAlwaysForbiddenPaths() => AlwaysForbiddenPaths.Select(path => new ForbiddenKeyword { Group = Strings.SystemPaths, Keyword = path, IsForbidden = true }).ToList();
+    public static List<ForbiddenKeyword> GetAlwaysForbiddenPaths()
+    {
+        return AlwaysForbiddenPaths.Select(path => new ForbiddenKeyword
+            { Group = Strings.SystemPaths, Keyword = path, IsForbidden = true }).ToList();
+    }
 
     /// <summary>
     /// Download a file from the specified URL to the specified destination file path.
@@ -473,38 +477,28 @@ public static partial class PathHelper
             return new ForbiddenPathResult { IsForbidden = false, Reason = ForbiddenPathReason.None };
 
         // Normalize the staging path for comparison
-        var normalizedStagingPath = Path.GetFullPath(stagingPath.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar))
+        var normalizedStagingPath = Path
+            .GetFullPath(stagingPath.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar))
             .ToLowerInvariant();
 
         // Check if the staging path is at the root of any drive
         if (IsRootDirectory(normalizedStagingPath))
-        {
             return new ForbiddenPathResult { IsForbidden = true, Reason = ForbiddenPathReason.RootDirectory };
-        }
 
         // Check if the staging path is within any forbidden path
         foreach (var forbiddenPath in AlwaysForbiddenPaths)
-        {
             if (normalizedStagingPath.StartsWith(forbiddenPath))
-            {
                 return new ForbiddenPathResult { IsForbidden = true, Reason = ForbiddenPathReason.SystemDirectory };
-            }
-        }
 
         // Check if any forbidden keyword is present in the path
         if (GlobalData.ConfigManager.Get("forbiddenKeywords") is List<ForbiddenKeyword> forbiddenKeywords)
-        {
-            if (forbiddenKeywords.Where(keyword => keyword.IsForbidden).Any(keyword => normalizedStagingPath.Contains(keyword.Keyword, StringComparison.CurrentCultureIgnoreCase)))
-            {
+            if (forbiddenKeywords.Where(keyword => keyword.IsForbidden).Any(keyword =>
+                    normalizedStagingPath.Contains(keyword.Keyword, StringComparison.CurrentCultureIgnoreCase)))
                 return new ForbiddenPathResult { IsForbidden = true, Reason = ForbiddenPathReason.KeywordMatch };
-            }
-        }
 
         // Check if the staging path or any of its parent/child directories contains the __vortex_staging_folder marker
         if (ContainsVortexMarker(normalizedStagingPath))
-        {
             return new ForbiddenPathResult { IsForbidden = true, Reason = ForbiddenPathReason.VortexFolder };
-        }
 
         // If none of the forbidden checks triggered, the path is valid
         return new ForbiddenPathResult { IsForbidden = false, Reason = ForbiddenPathReason.None };
@@ -523,7 +517,9 @@ public static partial class PathHelper
             var rootPath = Path.GetPathRoot(path)?.ToLowerInvariant();
 
             // Normalize and compare to ensure the path itself is a root
-            return string.Equals(rootPath?.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar), path.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar), StringComparison.OrdinalIgnoreCase);
+            return string.Equals(rootPath?.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar),
+                path.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar),
+                StringComparison.OrdinalIgnoreCase);
             //return !string.IsNullOrEmpty(rootPath) && string.Equals(path.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar), rootPath, StringComparison.OrdinalIgnoreCase);
         }
         catch (Exception ex)
@@ -561,7 +557,8 @@ public static partial class PathHelper
         }
         catch (Exception ex)
         {
-            AuLogger.GetCurrentLogger("PathHelper.ContainsVortexMarker").Error(ex, "An error occurred while checking for the Vortex marker file.");
+            AuLogger.GetCurrentLogger("PathHelper.ContainsVortexMarker")
+                .Error(ex, "An error occurred while checking for the Vortex marker file.");
         }
 
         return false;
@@ -586,7 +583,8 @@ public static partial class PathHelper
         }
         catch (Exception ex)
         {
-            AuLogger.GetCurrentLogger("PathHelper.ContainsVortexMarkerInChildren").Error(ex, "An error occured while checking for the Vortex marker file.");
+            AuLogger.GetCurrentLogger("PathHelper.ContainsVortexMarkerInChildren")
+                .Error(ex, "An error occured while checking for the Vortex marker file.");
         }
 
         return false;
@@ -614,7 +612,8 @@ public static partial class PathHelper
         }
         catch (Exception ex)
         {
-            AuLogger.GetCurrentLogger("PathHelper.ContainsOodleDll").Error(ex, "An error occurred while checking for the Oodle DLL.");
+            AuLogger.GetCurrentLogger("PathHelper.ContainsOodleDll")
+                .Error(ex, "An error occurred while checking for the Oodle DLL.");
             return (false, null);
         }
     }

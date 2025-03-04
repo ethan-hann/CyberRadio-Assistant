@@ -1,5 +1,5 @@
 ﻿// PathSettings.cs : RadioExt-Helper
-// Copyright (C) 2024  Ethan Hann
+// Copyright (C) 2025  Ethan Hann
 // 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -14,10 +14,10 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+using System.Text;
 using AetherUtils.Core.Extensions;
 using AetherUtils.Core.Logging;
 using RadioExt_Helper.utility;
-using System.Text;
 using WIG.Lib.Utility;
 using PathHelper = RadioExt_Helper.utility.PathHelper;
 
@@ -143,7 +143,8 @@ public partial class PathSettings : Form
                     if (oodleCheck.exists && IconManager.Instance.IsInitialized && oodleCheck.filePath != null)
                     {
                         IconManager.Instance.CopyOodleDllToWolvenKitPath(oodleCheck.filePath);
-                        AuLogger.GetCurrentLogger<PathSettings>("ChangeGameBasePath").Info($"Oodle DLL was found in game's base path: {Path.GetFileName(oodleCheck.filePath)}. It was copied to the WolvenKit temporary directory.");
+                        AuLogger.GetCurrentLogger<PathSettings>("ChangeGameBasePath").Info(
+                            $"Oodle DLL was found in game's base path: {Path.GetFileName(oodleCheck.filePath)}. It was copied to the WolvenKit temporary directory.");
                     }
                     else
                     {
@@ -190,9 +191,11 @@ public partial class PathSettings : Form
             var reason = Strings.ResourceManager.GetString(forbiddenPathResult.Reason.ToDescriptionString());
             if (reason == null)
             {
-                MessageBox.Show(this, string.Format(Strings.StagingPathForbidden, stagingPath), Strings.Error, MessageBoxButtons.OK,
+                MessageBox.Show(this, string.Format(Strings.StagingPathForbidden, stagingPath), Strings.Error,
+                    MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
-                AuLogger.GetCurrentLogger<PathSettings>("ChangeStagingPath").Warn("Staging path is within a forbidden path.");
+                AuLogger.GetCurrentLogger<PathSettings>("ChangeStagingPath")
+                    .Warn("Staging path is within a forbidden path.");
                 return;
             }
 
@@ -201,7 +204,8 @@ public partial class PathSettings : Form
             text.AppendLine();
             text.AppendLine(reason);
             MessageBox.Show(this, text.ToString(), Strings.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
-            AuLogger.GetCurrentLogger<PathSettings>("ChangeStagingPath").Warn("Staging path is within a forbidden path.");
+            AuLogger.GetCurrentLogger<PathSettings>("ChangeStagingPath")
+                .Warn("Staging path is within a forbidden path.");
             return;
         }
 

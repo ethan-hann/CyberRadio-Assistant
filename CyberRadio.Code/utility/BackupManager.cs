@@ -1,5 +1,5 @@
 ﻿// BackupManager.cs : RadioExt-Helper
-// Copyright (C) 2024  Ethan Hann
+// Copyright (C) 2025  Ethan Hann
 // 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -14,10 +14,10 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-using AetherUtils.Core.Files;
-using AetherUtils.Core.Logging;
 using System.IO.Compression;
 using System.Text;
+using AetherUtils.Core.Files;
+using AetherUtils.Core.Logging;
 
 namespace RadioExt_Helper.utility;
 
@@ -368,9 +368,7 @@ public class BackupManager(CompressionLevel level)
                     var destinationPath = Path.GetFullPath(Path.Combine(restorePath, entryName));
                     var fullRestorePath = Path.GetFullPath(restorePath + Path.DirectorySeparatorChar);
                     if (!destinationPath.StartsWith(fullRestorePath))
-                    {
                         throw new InvalidOperationException("Entry is outside the target dir: " + destinationPath);
-                    }
 
                     // Ensure the directory exists
                     var destinationDirectory = Path.GetDirectoryName(destinationPath);
@@ -395,9 +393,7 @@ public class BackupManager(CompressionLevel level)
                     var destinationPath = Path.GetFullPath(Path.Combine(originalPath));
                     var fullOriginalPath = Path.GetFullPath(originalPath + Path.DirectorySeparatorChar);
                     if (!fullOriginalPath.StartsWith(destinationPath))
-                    {
                         throw new InvalidOperationException("Entry is outside the target dir: " + destinationPath);
-                    }
 
                     var destinationDirectory = Path.GetDirectoryName(destinationPath);
                     if (destinationDirectory != null && !Directory.Exists(destinationDirectory))

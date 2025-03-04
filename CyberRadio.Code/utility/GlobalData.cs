@@ -1,5 +1,5 @@
 ﻿// GlobalData.cs : RadioExt-Helper
-// Copyright (C) 2024  Ethan Hann
+// Copyright (C) 2025  Ethan Hann
 // 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -14,14 +14,14 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-using AetherUtils.Core.Configuration;
-using AetherUtils.Core.Logging;
-using RadioExt_Helper.config;
-using RadioExt_Helper.forms;
 using System.ComponentModel;
 using System.Globalization;
 using System.Reflection;
 using System.Resources;
+using AetherUtils.Core.Configuration;
+using AetherUtils.Core.Logging;
+using RadioExt_Helper.config;
+using RadioExt_Helper.forms;
 
 namespace RadioExt_Helper.utility;
 

@@ -1,5 +1,5 @@
 ﻿// CustomMusicCtl.cs : RadioExt-Helper
-// Copyright (C) 2024  Ethan Hann
+// Copyright (C) 2025  Ethan Hann
 // 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -14,12 +14,12 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+using System.Diagnostics;
 using AetherUtils.Core.Extensions;
 using AetherUtils.Core.Files;
 using RadioExt_Helper.models;
 using RadioExt_Helper.Properties;
 using RadioExt_Helper.utility;
-using System.Diagnostics;
 using ListView = System.Windows.Forms.ListView;
 
 namespace RadioExt_Helper.user_controls;
@@ -174,7 +174,7 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
                              song.FileSize.FormatSize(),
                              song.FilePath
                          ])
-                     { Tag = song }))
+                         { Tag = song }))
             lvSongs.Items.Add(lvItem);
 
         lvSongs.ResizeColumns();

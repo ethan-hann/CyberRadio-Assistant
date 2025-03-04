@@ -1,5 +1,5 @@
 ﻿// RestoreForm.cs : RadioExt-Helper
-// Copyright (C) 2024  Ethan Hann
+// Copyright (C) 2025  Ethan Hann
 // 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -302,7 +302,7 @@ public partial class RestoreForm : Form
                             displayFileName ?? string.Empty,
                             size
                         ])
-                    { Tag = preview });
+                        { Tag = preview });
                 }
 
             lvFilePreviews.ResizeColumns();

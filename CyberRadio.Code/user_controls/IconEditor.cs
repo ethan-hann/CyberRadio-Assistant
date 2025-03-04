@@ -1,5 +1,5 @@
 ﻿// IconEditor.cs : RadioExt-Helper
-// Copyright (C) 2024  Ethan Hann
+// Copyright (C) 2025  Ethan Hann
 // 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -14,13 +14,13 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+using System.Globalization;
+using System.Text.RegularExpressions;
 using AetherUtils.Core.Logging;
 using RadioExt_Helper.custom_controls;
 using RadioExt_Helper.models;
 using RadioExt_Helper.Properties;
 using RadioExt_Helper.utility;
-using System.Globalization;
-using System.Text.RegularExpressions;
 using WIG.Lib.Models;
 using WIG.Lib.Utility;
 
@@ -222,8 +222,10 @@ public sealed partial class IconEditor : UserControl, IEditor
                     else
                     {
                         txtAtlasName.Text = string.Empty;
-                        txtAtlasName.PlaceholderText = Strings.IconEditor_SetFieldsBasedOnImagePath_To_be_determined_from_archive___;
-                        lblImageStatus.Text = Strings.IconEditor_SetFieldsBasedOnImagePath_The_extracted_image_could_not_be_found_;
+                        txtAtlasName.PlaceholderText =
+                            Strings.IconEditor_SetFieldsBasedOnImagePath_To_be_determined_from_archive___;
+                        lblImageStatus.Text = Strings
+                            .IconEditor_SetFieldsBasedOnImagePath_The_extracted_image_could_not_be_found_;
                     }
 
                     // We only want to disable the import/extract button if the icon is already created. No need to extract again.

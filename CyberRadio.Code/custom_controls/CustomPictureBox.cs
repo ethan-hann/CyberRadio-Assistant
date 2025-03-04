@@ -1,5 +1,5 @@
 ﻿// CustomPictureBox.cs : RadioExt-Helper
-// Copyright (C) 2024  Ethan Hann
+// Copyright (C) 2025  Ethan Hann
 // 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -72,11 +72,11 @@ internal class CustomPictureBox : PictureBox
         using var lightBrush = new SolidBrush(lightColor);
         using var darkBrush = new SolidBrush(darkColor);
         for (var y = 0; y < Height; y += tileSize)
-            for (var x = 0; x < Width; x += tileSize)
-            {
-                var isLightTile = (x / tileSize + y / tileSize) % 2 == 0;
-                pevent.Graphics.FillRectangle(isLightTile ? lightBrush : darkBrush, x, y, tileSize, tileSize);
-            }
+        for (var x = 0; x < Width; x += tileSize)
+        {
+            var isLightTile = (x / tileSize + y / tileSize) % 2 == 0;
+            pevent.Graphics.FillRectangle(isLightTile ? lightBrush : darkBrush, x, y, tileSize, tileSize);
+        }
     }
 
     protected override void OnPaint(PaintEventArgs pe)
@@ -133,23 +133,23 @@ internal class CustomPictureBox : PictureBox
         var pixelCount = 0;
 
         for (var y = 0; y < bmp.Height; y++)
-            for (var x = 0; x < bmp.Width; x++)
-            {
-                var pixelColor = bmp.GetPixel(x, y);
+        for (var x = 0; x < bmp.Width; x++)
+        {
+            var pixelColor = bmp.GetPixel(x, y);
 
-                // Skip transparent pixels
-                if (pixelColor.A < 128) continue;
+            // Skip transparent pixels
+            if (pixelColor.A < 128) continue;
 
-                // Calculate the brightness (lightness) of the pixel
-                var brightness =
-                    (int)(0.299 * pixelColor.R + 0.587 * pixelColor.G + 0.114 * pixelColor.B); // Standard luminance formula
+            // Calculate the brightness (lightness) of the pixel
+            var brightness =
+                (int)(0.299 * pixelColor.R + 0.587 * pixelColor.G + 0.114 * pixelColor.B); // Standard luminance formula
 
-                // Count as light if brightness is higher than a threshold (e.g., 180)
-                if (brightness > 180)
-                    lightPixelCount++;
+            // Count as light if brightness is higher than a threshold (e.g., 180)
+            if (brightness > 180)
+                lightPixelCount++;
 
-                pixelCount++;
-            }
+            pixelCount++;
+        }
 
         // Determine if the image is predominantly light (> 60% light pixels)
         return pixelCount > 0 && (double)lightPixelCount / pixelCount > 0.6;

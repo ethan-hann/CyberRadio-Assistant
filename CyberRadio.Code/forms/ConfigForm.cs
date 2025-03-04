@@ -1,5 +1,5 @@
 ﻿// ConfigForm.cs : RadioExt-Helper
-// Copyright (C) 2024  Ethan Hann
+// Copyright (C) 2025  Ethan Hann
 // 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -31,7 +31,7 @@ public sealed partial class ConfigForm : Form
     private readonly Dictionary<string, CompressionLevel> _localizedCompressionLevels = new();
     private readonly ImageList _tabImages = new();
 
-    private Dictionary<string, ListViewGroup> _forbiddenGroups = new();
+    private readonly Dictionary<string, ListViewGroup> _forbiddenGroups = new();
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="ConfigForm" /> class.
@@ -203,6 +203,7 @@ public sealed partial class ConfigForm : Form
                 lvForbiddenPaths.Groups.Add(group);
                 _forbiddenGroups[keyword.Group] = group;
             }
+
             // Create and add item to the ListView (don't add tag as it's not a config item)
             var item = new ListViewItem(keyword.Keyword)
             {
@@ -263,17 +264,16 @@ public sealed partial class ConfigForm : Form
 
         // Remove each selected item from the ListView
         foreach (var item in selectedItems)
-        {
             if (item.Tag is ForbiddenKeyword) // Don't remove always forbidden items. We can just check if the item has a tag to determine if it's a config item.
                 lvForbiddenPaths.Items.Remove(item);
-        }
 
         // Cleanup any empty groups
         var groupsToRemove = lvForbiddenPaths.Groups.Cast<ListViewGroup>()
             .Where(group => lvForbiddenPaths.Items.Cast<ListViewItem>().All(item => item.Group != group))
             .ToList();
 
-        foreach (var group in groupsToRemove.Where(group => !group.Header.Equals(Strings.SystemPaths, StringComparison.CurrentCulture)))
+        foreach (var group in groupsToRemove.Where(group =>
+                     !group.Header.Equals(Strings.SystemPaths, StringComparison.CurrentCulture)))
         {
             _forbiddenGroups.Remove(group.Header);
             lvForbiddenPaths.Groups.Remove(group);
@@ -420,10 +420,8 @@ public sealed partial class ConfigForm : Form
         //TODO: set the values for the forbidden keywords
         List<ForbiddenKeyword> updatedKeywords = [];
         foreach (ListViewItem item in lvForbiddenPaths.Items)
-        {
             if (item.Tag is ForbiddenKeyword keyword)
                 updatedKeywords.Add(keyword);
-        }
 
         saved &= GlobalData.ConfigManager.Set("forbiddenKeywords", updatedKeywords);
 
@@ -533,7 +531,8 @@ public sealed partial class ConfigForm : Form
     {
         var text = Strings.ConfigReloadConfirm;
         var captionConfirm = Strings.Confirm;
-        if (MessageBox.Show(this, text, captionConfirm, MessageBoxButtons.YesNo, MessageBoxIcon.Warning) != DialogResult.Yes) return;
+        if (MessageBox.Show(this, text, captionConfirm, MessageBoxButtons.YesNo, MessageBoxIcon.Warning) !=
+            DialogResult.Yes) return;
 
         try
         {
@@ -542,14 +541,16 @@ public sealed partial class ConfigForm : Form
                 SetValues();
                 var reloadSuccessText = Strings.ConfigReloadSuccess;
                 var captionSuccess = Strings.Success;
-                MessageBox.Show(this, reloadSuccessText, captionSuccess, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(this, reloadSuccessText, captionSuccess, MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
             }
             else
             {
                 var reloadErrorText = Strings.ConfigReloadError;
                 var captionError = Strings.Error;
                 MessageBox.Show(this, reloadErrorText, captionError, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                AuLogger.GetCurrentLogger<ConfigForm>("ReloadFromFile").Error("Could not reload configuration file. This could be due to an invalid option or the file not existing.");
+                AuLogger.GetCurrentLogger<ConfigForm>("ReloadFromFile").Error(
+                    "Could not reload configuration file. This could be due to an invalid option or the file not existing.");
             }
         }
         catch (Exception ex)
@@ -557,7 +558,8 @@ public sealed partial class ConfigForm : Form
             var reloadErrorText = Strings.ConfigReloadError;
             var captionError = Strings.Error;
             MessageBox.Show(this, reloadErrorText, captionError, MessageBoxButtons.OK, MessageBoxIcon.Error);
-            AuLogger.GetCurrentLogger<ConfigForm>("ReloadFromFile").Error(ex, "Could not reload configuration file. This could be due to an invalid option or the file not existing.");
+            AuLogger.GetCurrentLogger<ConfigForm>("ReloadFromFile").Error(ex,
+                "Could not reload configuration file. This could be due to an invalid option or the file not existing.");
         }
     }
 

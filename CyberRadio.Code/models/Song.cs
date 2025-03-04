@@ -1,5 +1,5 @@
 ﻿// Song.cs : RadioExt-Helper
-// Copyright (C) 2024  Ethan Hann
+// Copyright (C) 2025  Ethan Hann
 // 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -14,9 +14,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+using System.Diagnostics.CodeAnalysis;
 using AetherUtils.Core.Logging;
 using Newtonsoft.Json;
-using System.Diagnostics.CodeAnalysis;
 using File = TagLib.File;
 
 namespace RadioExt_Helper.models;

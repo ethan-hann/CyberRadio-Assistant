@@ -1,5 +1,5 @@
 ﻿// StationManager.cs : RadioExt-Helper
-// Copyright (C) 2024  Ethan Hann
+// Copyright (C) 2025  Ethan Hann
 // 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -14,15 +14,15 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+using System.ComponentModel;
+using System.Globalization;
+using System.Text.RegularExpressions;
 using AetherUtils.Core.Files;
 using AetherUtils.Core.Logging;
 using AetherUtils.Core.Structs;
 using RadioExt_Helper.models;
 using RadioExt_Helper.user_controls;
 using SharpCompress.Archives;
-using System.ComponentModel;
-using System.Globalization;
-using System.Text.RegularExpressions;
 using WIG.Lib.Models;
 
 namespace RadioExt_Helper.utility;
@@ -180,10 +180,14 @@ public partial class StationManager : IDisposable
                 var activeIcon = station.TrackedObject.GetActiveIcon();
                 if (activeIcon != null)
                 {
-                    station.TrackedObject.AddCustomData(_customDataKeys[0], activeIcon.TrackedObject.IconName ?? string.Empty);
-                    station.TrackedObject.AddCustomData(_customDataKeys[1], activeIcon.TrackedObject.ImagePath ?? string.Empty);
-                    station.TrackedObject.AddCustomData(_customDataKeys[2], activeIcon.TrackedObject.ArchivePath ?? string.Empty);
-                    station.TrackedObject.AddCustomData(_customDataKeys[3], activeIcon.TrackedObject.Sha256HashOfArchiveFile ?? string.Empty);
+                    station.TrackedObject.AddCustomData(_customDataKeys[0],
+                        activeIcon.TrackedObject.IconName ?? string.Empty);
+                    station.TrackedObject.AddCustomData(_customDataKeys[1],
+                        activeIcon.TrackedObject.ImagePath ?? string.Empty);
+                    station.TrackedObject.AddCustomData(_customDataKeys[2],
+                        activeIcon.TrackedObject.ArchivePath ?? string.Empty);
+                    station.TrackedObject.AddCustomData(_customDataKeys[3],
+                        activeIcon.TrackedObject.Sha256HashOfArchiveFile ?? string.Empty);
                 }
 
                 //Add the station's icon editors as well and find the active icon to display.
@@ -305,7 +309,8 @@ public partial class StationManager : IDisposable
     /// <param name="icon">The <see cref="WolvenIcon"/> to copy.</param>
     /// <param name="makeActive">Whether to make this copied icon active for the current station.</param>
     /// <returns>The internal id of the new copied icon; <c>null</c> if the icon couldn't be copied.</returns>
-    public Guid? CopyStationIcon(Guid stationId, Guid referenceStationId, TrackableObject<WolvenIcon> icon, bool makeActive)
+    public Guid? CopyStationIcon(Guid stationId, Guid referenceStationId, TrackableObject<WolvenIcon> icon,
+        bool makeActive)
     {
         try
         {
@@ -676,7 +681,8 @@ public partial class StationManager : IDisposable
                 var wolvenIcon = pair.Key.TrackedObject.Icons.FirstOrDefault(i => i.Id.Equals(iconId));
                 if (wolvenIcon == null) return;
 
-                var editor = new IconEditor(pair.Key, wolvenIcon, isExistingArchive ? IconEditorType.FromArchive : IconEditorType.FromPng);
+                var editor = new IconEditor(pair.Key, wolvenIcon,
+                    isExistingArchive ? IconEditorType.FromArchive : IconEditorType.FromPng);
                 editor.Translate();
                 pair.Value.Add(editor);
             }
@@ -950,8 +956,8 @@ public partial class StationManager : IDisposable
         try
         {
             foreach (var editorList in _stations.Values.Select(pair => pair.Value))
-                foreach (var editor in editorList)
-                    editor.Translate();
+            foreach (var editor in editorList)
+                editor.Translate();
         }
         catch (Exception ex)
         {
@@ -1075,12 +1081,12 @@ public partial class StationManager : IDisposable
 
             // Synchronize directories
             var tasks = (from gameDir in gameDirectories
-                         let dirName = Path.GetFileName(gameDir)
-                         let stagingDir = Path.Combine(stagingPath, dirName)
-                         select !stagingDirectories.Contains(stagingDir)
-                             ? Task.Run(() => CopyDirectoryAsync(gameDir, stagingDir))
-                             // Directory exists, synchronize files
-                             : Task.Run(() => SynchronizeFilesAsync(gameDir, stagingDir))).ToList();
+                let dirName = Path.GetFileName(gameDir)
+                let stagingDir = Path.Combine(stagingPath, dirName)
+                select !stagingDirectories.Contains(stagingDir)
+                    ? Task.Run(() => CopyDirectoryAsync(gameDir, stagingDir))
+                    // Directory exists, synchronize files
+                    : Task.Run(() => SynchronizeFilesAsync(gameDir, stagingDir))).ToList();
 
             await Task.WhenAll(tasks);
             SyncStatusChanged?.Invoke(Strings.SyncStatusComplete);
@@ -1178,16 +1184,16 @@ public partial class StationManager : IDisposable
         FileHelper.CreateDirectories(targetDir);
 
         var copyTasks = (from file in files
-                         let targetFilePath = Path.Combine(targetDir, Path.GetFileName(file))
-                         select Task.Run(() =>
-                         {
-                             FileHelper.CreateDirectories(targetFilePath);
-                             File.Copy(file, targetFilePath, true);
-                         })).ToList();
+            let targetFilePath = Path.Combine(targetDir, Path.GetFileName(file))
+            select Task.Run(() =>
+            {
+                FileHelper.CreateDirectories(targetFilePath);
+                File.Copy(file, targetFilePath, true);
+            })).ToList();
 
         copyTasks.AddRange(from directory in directories
-                           let targetDirectoryPath = Path.Combine(targetDir, Path.GetFileName(directory))
-                           select Task.Run(() => CopyDirectoryAsync(directory, targetDirectoryPath)));
+            let targetDirectoryPath = Path.Combine(targetDir, Path.GetFileName(directory))
+            select Task.Run(() => CopyDirectoryAsync(directory, targetDirectoryPath)));
 
         await Task.WhenAll(copyTasks);
     }
@@ -1264,7 +1270,7 @@ public partial class StationManager : IDisposable
                         {
                             IsFromArchive = true,
                             IconId = Guid.NewGuid(),
-                            CustomIcon = new RadioExtCustomIcon()
+                            CustomIcon = new RadioExtCustomIcon
                             {
                                 InkAtlasPart = metadata.CustomIcon.InkAtlasPart,
                                 InkAtlasPath = metadata.CustomIcon.InkAtlasPath
@@ -1279,7 +1285,9 @@ public partial class StationManager : IDisposable
                 station.Icons.First().TrackedObject.IsActive = true; //Set only the first icon as active
             }
 
-            if (iconList.Count > 0 && iconFiles.Count <= 0) //we only want to add the icons if there are no .archive files in the directory (indicating an imported station)
+            if (iconList.Count > 0 &&
+                iconFiles.Count <=
+                0) //we only want to add the icons if there are no .archive files in the directory (indicating an imported station)
                 foreach (var icon in iconList)
                 {
                     var trackedIcon = new TrackableObject<WolvenIcon>(icon);
@@ -1410,7 +1418,8 @@ public partial class StationManager : IDisposable
         if (match.Success)
         {
             currentName = currentName[match.Length..].TrimStart();
-            if (float.TryParse(match.Value, CultureInfo.InvariantCulture, out var fmNumberParsed) && (optionalFmVal == null))
+            if (float.TryParse(match.Value, CultureInfo.InvariantCulture, out var fmNumberParsed) &&
+                optionalFmVal == null)
                 fmNumber = fmNumberParsed;
         }
 

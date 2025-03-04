@@ -1,5 +1,5 @@
 // MainForm.cs : RadioExt-Helper
-// Copyright (C) 2024  Ethan Hann
+// Copyright (C) 2025  Ethan Hann
 // 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -14,6 +14,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Timers;
 using AetherUtils.Core.Extensions;
 using AetherUtils.Core.Logging;
 using AetherUtils.Core.WinForms.Controls;
@@ -24,9 +27,6 @@ using RadioExt_Helper.nexus_api;
 using RadioExt_Helper.Properties;
 using RadioExt_Helper.user_controls;
 using RadioExt_Helper.utility;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Timers;
 using WIG.Lib.Models;
 using WIG.Lib.Utility;
 using ApplicationContext = RadioExt_Helper.utility.ApplicationContext;
@@ -437,7 +437,8 @@ public sealed partial class MainForm : Form
 
             IconManager.Instance.CopyOodleDllToWolvenKitPath(oodleCheck.filePath);
             AuLogger.GetCurrentLogger<MainForm>("CopyOodleToIconManager")
-                .Info($"Oodle DLL was found in game's base path and copied to WolvenKit directory: {Path.GetFileName(oodleCheck.filePath)}");
+                .Info(
+                    $"Oodle DLL was found in game's base path and copied to WolvenKit directory: {Path.GetFileName(oodleCheck.filePath)}");
         }
         else
         {
@@ -937,7 +938,8 @@ public sealed partial class MainForm : Form
         {
             var text = Strings.ConfirmRefreshStations;
             var caption = Strings.Confirm;
-            if (MessageBox.Show(this, text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+            if (MessageBox.Show(this, text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning) ==
+                DialogResult.Yes)
                 PopulateStations();
         }
     }

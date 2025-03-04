@@ -1,5 +1,5 @@
 ﻿// StationListBox.cs : RadioExt-Helper
-// Copyright (C) 2024  Ethan Hann
+// Copyright (C) 2025  Ethan Hann
 // 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -14,11 +14,11 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+using System.ComponentModel;
 using AetherUtils.Core.Files;
 using AetherUtils.Core.Logging;
 using RadioExt_Helper.models;
 using RadioExt_Helper.utility;
-using System.ComponentModel;
 
 namespace RadioExt_Helper.custom_controls;
 

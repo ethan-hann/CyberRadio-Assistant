@@ -1,5 +1,5 @@
 ﻿// SplashScreen.cs : RadioExt-Helper
-// Copyright (C) 2024  Ethan Hann
+// Copyright (C) 2025  Ethan Hann
 // 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -14,12 +14,12 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+using System.Reflection;
+using System.Text;
 using AetherUtils.Core.Extensions;
 using AetherUtils.Core.Logging;
 using RadioExt_Helper.migration;
 using RadioExt_Helper.utility;
-using System.Reflection;
-using System.Text;
 using WIG.Lib.Utility;
 using PathHelper = RadioExt_Helper.utility.PathHelper;
 
@@ -111,7 +111,8 @@ public partial class SplashScreen : Form
             text.AppendLine(string.Format(Strings.StagingPathForbidden, stagingPath));
             text.AppendLine();
             text.AppendLine(reason);
-            Invoke(() => MessageBox.Show(this, text.ToString(), Strings.Error, MessageBoxButtons.OK, MessageBoxIcon.Error));
+            Invoke(() =>
+                MessageBox.Show(this, text.ToString(), Strings.Error, MessageBoxButtons.OK, MessageBoxIcon.Error));
         }
         else
         {
@@ -119,6 +120,7 @@ public partial class SplashScreen : Form
             statusMessages.Add("Staging path is valid!");
             isStagingPathValid = true;
         }
+
         await Task.Delay(300);
 
         // Migrate songs (if needed)

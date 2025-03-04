@@ -1,5 +1,5 @@
 ﻿// BackupPreview.cs : RadioExt-Helper
-// Copyright (C) 2024  Ethan Hann
+// Copyright (C) 2025  Ethan Hann
 // 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -14,11 +14,11 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+using System.Diagnostics;
 using AetherUtils.Core.Extensions;
 using AetherUtils.Core.Logging;
 using RadioExt_Helper.Properties;
 using RadioExt_Helper.utility;
-using System.Diagnostics;
 
 namespace RadioExt_Helper.forms;
 
@@ -431,7 +431,7 @@ public sealed partial class BackupPreview : Form
                             displayFileName ?? string.Empty,
                             size
                         ])
-                    { Tag = preview });
+                        { Tag = preview });
                 }
 
             lvFilePreviews.ResizeColumns();
