@@ -21,6 +21,7 @@ using AetherUtils.Core.Files;
 using AetherUtils.Core.Logging;
 using AetherUtils.Core.Structs;
 using RadioExt_Helper.models;
+using RadioExt_Helper.theming;
 using RadioExt_Helper.user_controls;
 using SharpCompress.Archives;
 using WIG.Lib.Models;
@@ -136,6 +137,9 @@ public partial class StationManager : IDisposable
                 var editor = new StationEditor(station);
                 _stations[station.Id] = new Pair<TrackableObject<Station>, List<IEditor>>(station, [editor]);
                 editor.StationUpdated += Editor_StationUpdated;
+
+                //Apply theme to the editor
+                ThemeManager.Instance.ApplyThemeToUserControl(editor);
 
                 StationsAsBindingList.Add(station);
 
@@ -684,6 +688,10 @@ public partial class StationManager : IDisposable
                 var editor = new IconEditor(pair.Key, wolvenIcon,
                     isExistingArchive ? IconEditorType.FromArchive : IconEditorType.FromPng);
                 editor.Translate();
+
+                //Apply theme
+                ThemeManager.Instance.ApplyThemeToUserControl(editor);
+
                 pair.Value.Add(editor);
             }
         }

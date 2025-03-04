@@ -18,6 +18,7 @@ using System.Reflection;
 using AetherUtils.Core.Logging;
 using Newtonsoft.Json.Linq;
 using RadioExt_Helper.forms;
+using RadioExt_Helper.theming;
 
 namespace RadioExt_Helper.utility;
 
@@ -62,7 +63,10 @@ public static class Updater
                         DialogResult.Yes)
                     {
                         var vInfo = new VersionInfo(latestVersion, url);
-                        new UpdateBox(vInfo).ShowDialog();
+                        var updateBox = new UpdateBox(vInfo);
+
+                        ThemeManager.Instance.ApplyThemeToControl(updateBox);
+                        updateBox.ShowDialog();
                     }
                 }
                 else

@@ -46,6 +46,7 @@ public sealed class ApplicationConfig
     private const string LanguageKey = "language";
     private const string WindowSizeKey = "windowSize";
     private const string NexusApiKeyKey = "nexusApiKey";
+    private const string ThemeNameKey = "themeName";
     private const string ForbiddenKeywordsKey = "forbiddenKeywords";
     private const string LogOptionsKey = "logOptions";
 
@@ -127,6 +128,13 @@ public sealed class ApplicationConfig
     /// </summary>
     [Config(NexusApiKeyKey)]
     public string NexusApiKey { get; set; } = string.Empty;
+
+    /// <summary>
+    /// The name of the theme to use for the application.
+    /// </summary>
+    [Config(ThemeNameKey)]
+    [Description("ThemeNameHelp")]
+    public string ThemeName { get; set; } = "Light";
 
     /// <summary>
     /// The list of forbidden keywords and whether they are enabled or not.

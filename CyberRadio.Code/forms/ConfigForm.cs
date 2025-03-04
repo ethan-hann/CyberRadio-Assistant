@@ -19,6 +19,7 @@ using AetherUtils.Core.Logging;
 using RadioExt_Helper.config;
 using RadioExt_Helper.nexus_api;
 using RadioExt_Helper.Properties;
+using RadioExt_Helper.theming;
 using RadioExt_Helper.utility;
 
 namespace RadioExt_Helper.forms;
@@ -86,6 +87,8 @@ public sealed partial class ConfigForm : Form
         Translate();
         AddCompressionOptions();
         SetValues();
+
+        ThemeManager.Instance.ApplyThemeToControl(this);
     }
 
     /// <summary>
@@ -417,7 +420,6 @@ public sealed partial class ConfigForm : Form
         if (!lblCurrentLogPath.Text.Equals(Strings.NoLogPathSet))
             saved &= GlobalData.ConfigManager.Set("logFileDirectory", lblCurrentLogPath.Text);
 
-        //TODO: set the values for the forbidden keywords
         List<ForbiddenKeyword> updatedKeywords = [];
         foreach (ListViewItem item in lvForbiddenPaths.Items)
             if (item.Tag is ForbiddenKeyword keyword)

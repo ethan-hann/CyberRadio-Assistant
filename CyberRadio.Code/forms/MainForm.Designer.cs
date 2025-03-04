@@ -70,10 +70,6 @@ namespace RadioExt_Helper.forms
             splitContainer1 = new SplitContainer();
             grpStations = new GroupBox();
             lbStations = new StationListBox();
-            statusStrip1 = new StatusStrip();
-            toolStripStatusLabel1 = new ToolStripStatusLabel();
-            lblStationCount = new ToolStripStatusLabel();
-            toolStripStatusLabel3 = new ToolStripStatusLabel();
             tableLayoutPanel2 = new TableLayoutPanel();
             btnDisableSelected = new SplitButton();
             cmsDisable = new ContextMenuStrip(components);
@@ -81,6 +77,11 @@ namespace RadioExt_Helper.forms
             btnEnableSelected = new SplitButton();
             cmsEnable = new ContextMenuStrip(components);
             btnEnableAll = new ToolStripMenuItem();
+            txtStationFilter = new TextBox();
+            statusStrip1 = new StatusStrip();
+            toolStripStatusLabel1 = new ToolStripStatusLabel();
+            lblStationCount = new ToolStripStatusLabel();
+            toolStripStatusLabel3 = new ToolStripStatusLabel();
             tableLayoutPanel1 = new TableLayoutPanel();
             btnDeleteStation = new Button();
             btnAddStation = new SplitButton();
@@ -93,16 +94,15 @@ namespace RadioExt_Helper.forms
             pgBackupProgress = new ToolStripProgressBar();
             lblSpring2 = new ToolStripStatusLabel();
             statusStripBackup = new StatusStrip();
-            txtStationFilter = new TextBox();
             menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.SuspendLayout();
             grpStations.SuspendLayout();
-            statusStrip1.SuspendLayout();
             tableLayoutPanel2.SuspendLayout();
             cmsDisable.SuspendLayout();
             cmsEnable.SuspendLayout();
+            statusStrip1.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
             cmsNewStation.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)stationBindingSource).BeginInit();
@@ -445,36 +445,6 @@ namespace RadioExt_Helper.forms
             lbStations.SelectedIndexChanged += LbStations_SelectedIndexChanged;
             lbStations.MouseDown += LbStations_MouseDown;
             // 
-            // statusStrip1
-            // 
-            statusStrip1.BackColor = Color.White;
-            statusStrip1.Items.AddRange(new ToolStripItem[] { toolStripStatusLabel1, lblStationCount, toolStripStatusLabel3 });
-            statusStrip1.Location = new Point(3, 771);
-            statusStrip1.Name = "statusStrip1";
-            statusStrip1.Size = new Size(320, 22);
-            statusStrip1.SizingGrip = false;
-            statusStrip1.TabIndex = 2;
-            statusStrip1.Text = "statusStrip1";
-            // 
-            // toolStripStatusLabel1
-            // 
-            toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            toolStripStatusLabel1.Size = new Size(69, 17);
-            toolStripStatusLabel1.Spring = true;
-            // 
-            // lblStationCount
-            // 
-            lblStationCount.Font = new Font("Segoe UI Variable Small", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblStationCount.Name = "lblStationCount";
-            lblStationCount.Size = new Size(167, 17);
-            lblStationCount.Text = "Enabled Stations: {0} / {1}";
-            // 
-            // toolStripStatusLabel3
-            // 
-            toolStripStatusLabel3.Name = "toolStripStatusLabel3";
-            toolStripStatusLabel3.Size = new Size(69, 17);
-            toolStripStatusLabel3.Spring = true;
-            // 
             // tableLayoutPanel2
             // 
             tableLayoutPanel2.ColumnCount = 2;
@@ -504,6 +474,7 @@ namespace RadioExt_Helper.forms
             btnDisableSelected.Name = "btnDisableSelected";
             btnDisableSelected.Size = new Size(154, 28);
             btnDisableSelected.TabIndex = 1;
+            btnDisableSelected.Tag = "primary";
             btnDisableSelected.Text = "Disable Selected";
             btnDisableSelected.UseVisualStyleBackColor = false;
             btnDisableSelected.Click += BtnDisableStation_Click;
@@ -538,6 +509,7 @@ namespace RadioExt_Helper.forms
             btnEnableSelected.Name = "btnEnableSelected";
             btnEnableSelected.Size = new Size(154, 28);
             btnEnableSelected.TabIndex = 0;
+            btnEnableSelected.Tag = "primary";
             btnEnableSelected.Text = "Enable Selected";
             btnEnableSelected.UseVisualStyleBackColor = false;
             btnEnableSelected.Click += BtnEnableStation_Click;
@@ -556,6 +528,46 @@ namespace RadioExt_Helper.forms
             btnEnableAll.Size = new Size(126, 22);
             btnEnableAll.Text = "Enable All";
             btnEnableAll.Click += BtnEnableAll_Click;
+            // 
+            // txtStationFilter
+            // 
+            txtStationFilter.Dock = DockStyle.Top;
+            txtStationFilter.Location = new Point(3, 19);
+            txtStationFilter.Name = "txtStationFilter";
+            txtStationFilter.PlaceholderText = "Enter filter here...";
+            txtStationFilter.Size = new Size(320, 23);
+            txtStationFilter.TabIndex = 3;
+            txtStationFilter.TextChanged += txtStationFilter_TextChanged;
+            // 
+            // statusStrip1
+            // 
+            statusStrip1.BackColor = Color.White;
+            statusStrip1.Items.AddRange(new ToolStripItem[] { toolStripStatusLabel1, lblStationCount, toolStripStatusLabel3 });
+            statusStrip1.Location = new Point(3, 771);
+            statusStrip1.Name = "statusStrip1";
+            statusStrip1.Size = new Size(320, 22);
+            statusStrip1.SizingGrip = false;
+            statusStrip1.TabIndex = 2;
+            statusStrip1.Text = "statusStrip1";
+            // 
+            // toolStripStatusLabel1
+            // 
+            toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+            toolStripStatusLabel1.Size = new Size(69, 17);
+            toolStripStatusLabel1.Spring = true;
+            // 
+            // lblStationCount
+            // 
+            lblStationCount.Font = new Font("Segoe UI Variable Small", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblStationCount.Name = "lblStationCount";
+            lblStationCount.Size = new Size(167, 17);
+            lblStationCount.Text = "Enabled Stations: {0} / {1}";
+            // 
+            // toolStripStatusLabel3
+            // 
+            toolStripStatusLabel3.Name = "toolStripStatusLabel3";
+            toolStripStatusLabel3.Size = new Size(69, 17);
+            toolStripStatusLabel3.Spring = true;
             // 
             // tableLayoutPanel1
             // 
@@ -587,6 +599,7 @@ namespace RadioExt_Helper.forms
             btnDeleteStation.Name = "btnDeleteStation";
             btnDeleteStation.Size = new Size(157, 33);
             btnDeleteStation.TabIndex = 1;
+            btnDeleteStation.Tag = "danger";
             btnDeleteStation.Text = "Delete Station";
             btnDeleteStation.TextAlign = ContentAlignment.MiddleRight;
             btnDeleteStation.TextImageRelation = TextImageRelation.ImageBeforeText;
@@ -609,6 +622,7 @@ namespace RadioExt_Helper.forms
             btnAddStation.Size = new Size(157, 33);
             btnAddStation.SplitWidth = 25;
             btnAddStation.TabIndex = 0;
+            btnAddStation.Tag = "primary";
             btnAddStation.Text = "New Station";
             btnAddStation.TextAlign = ContentAlignment.MiddleRight;
             btnAddStation.TextImageRelation = TextImageRelation.ImageBeforeText;
@@ -678,16 +692,6 @@ namespace RadioExt_Helper.forms
             statusStripBackup.Text = "statusStrip2";
             statusStripBackup.Visible = false;
             // 
-            // txtStationFilter
-            // 
-            txtStationFilter.Dock = DockStyle.Top;
-            txtStationFilter.Location = new Point(3, 19);
-            txtStationFilter.Name = "txtStationFilter";
-            txtStationFilter.PlaceholderText = "Enter filter here...";
-            txtStationFilter.Size = new Size(320, 23);
-            txtStationFilter.TabIndex = 3;
-            txtStationFilter.TextChanged += txtStationFilter_TextChanged;
-            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(96F, 96F);
@@ -719,11 +723,11 @@ namespace RadioExt_Helper.forms
             splitContainer1.ResumeLayout(false);
             grpStations.ResumeLayout(false);
             grpStations.PerformLayout();
-            statusStrip1.ResumeLayout(false);
-            statusStrip1.PerformLayout();
             tableLayoutPanel2.ResumeLayout(false);
             cmsDisable.ResumeLayout(false);
             cmsEnable.ResumeLayout(false);
+            statusStrip1.ResumeLayout(false);
+            statusStrip1.PerformLayout();
             tableLayoutPanel1.ResumeLayout(false);
             cmsNewStation.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)stationBindingSource).EndInit();

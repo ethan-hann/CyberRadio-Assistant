@@ -17,6 +17,7 @@
 using System.Text;
 using AetherUtils.Core.Extensions;
 using AetherUtils.Core.Logging;
+using RadioExt_Helper.theming;
 using RadioExt_Helper.utility;
 using WIG.Lib.Utility;
 using PathHelper = RadioExt_Helper.utility.PathHelper;
@@ -68,6 +69,8 @@ public partial class PathSettings : Form
     {
         SetLabels();
         Translate();
+
+        ThemeManager.Instance.ApplyThemeToControl(this);
     }
 
     /// <summary>

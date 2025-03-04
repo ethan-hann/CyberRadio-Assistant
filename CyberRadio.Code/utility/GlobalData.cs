@@ -22,6 +22,7 @@ using AetherUtils.Core.Configuration;
 using AetherUtils.Core.Logging;
 using RadioExt_Helper.config;
 using RadioExt_Helper.forms;
+using RadioExt_Helper.theming;
 
 namespace RadioExt_Helper.utility;
 
@@ -48,6 +49,9 @@ public static class GlobalData
     private static readonly string ConfigFilePath = Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
         "RadioExt-Helper", ConfigFileName);
+
+    private static readonly string ThemeFolder = Path.Combine(
+        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "RadioExt-Helper", "themes");
 
     /// <summary>
     ///     Indicates whether the global data has been initialized.
@@ -91,6 +95,9 @@ public static class GlobalData
         _globalDataInitialized = true;
     }
 
+    /// <summary>
+    /// Initializes the ComboBox template used for displaying the UIcon options.
+    /// </summary>
     public static void InitializeComboBoxTemplate()
     {
         UiIconsComboTemplate = CreateComboBoxTemplate();
@@ -195,7 +202,7 @@ public static class GlobalData
 
     /// <summary>
     /// Creates a ComboBox template with default properties. Data source is set to
-    /// <see cref="GlobalData.UiIcons" />
+    /// <see cref="UiIcons" />
     /// </summary>
     /// <returns>
     ///     A ComboBox instance with the following properties:

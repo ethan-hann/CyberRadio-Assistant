@@ -3167,6 +3167,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Initializing the Theme Manager....
+        /// </summary>
+        internal static string SplashScreen_SetupThemeManager {
+            get {
+                return ResourceManager.GetString("SplashScreen_SetupThemeManager", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Staging path was invalid. Reset to an empty string..
         /// </summary>
         internal static string SplashScreen_StagingPathForbidden {
@@ -3442,6 +3451,15 @@ namespace RadioExt_Helper {
         internal static string SystemPaths {
             get {
                 return ResourceManager.GetString("SystemPaths", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Specifies the name of the theme to use for CRA. The name should match a file in &apos;themes&apos;..
+        /// </summary>
+        internal static string ThemeNameHelp {
+            get {
+                return ResourceManager.GetString("ThemeNameHelp", resourceCulture);
             }
         }
         

@@ -17,6 +17,7 @@
 using AetherUtils.Core.Extensions;
 using AetherUtils.Core.Logging;
 using RadioExt_Helper.Properties;
+using RadioExt_Helper.theming;
 using RadioExt_Helper.utility;
 
 namespace RadioExt_Helper.forms;
@@ -94,6 +95,8 @@ public partial class RestoreForm : Form
         pgProgress.Visible = false;
         btnCancel.Visible = false;
         btnStartRestore.Visible = false;
+
+        ThemeManager.Instance.ApplyThemeToControl(this);
 
         _ = StartPreviewLoading();
     }

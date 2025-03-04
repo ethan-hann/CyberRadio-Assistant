@@ -19,6 +19,7 @@ using System.Text;
 using AetherUtils.Core.Extensions;
 using AetherUtils.Core.Logging;
 using RadioExt_Helper.migration;
+using RadioExt_Helper.theming;
 using RadioExt_Helper.utility;
 using WIG.Lib.Utility;
 using PathHelper = RadioExt_Helper.utility.PathHelper;
@@ -165,6 +166,13 @@ public partial class SplashScreen : Form
         //    await Task.Delay(500); // Simulate delay
         //}
         //------------------------------------------------------------------------------------------------------------
+
+        UpdateStatus(Strings.SplashScreen_SetupThemeManager);
+        ThemeManager.Instance.Initialize();
+        await Task.Delay(200);
+        statusMessages.Add(ThemeManager.Instance.IsInitialized
+            ? "Theme Manager initialized successfully."
+            : "Theme Manager initialization failed.");
 
         UpdateStatus(Strings.SplashScreen_Finalizing);
         GlobalData.ConfigManager.Set("isFirstRun", false);

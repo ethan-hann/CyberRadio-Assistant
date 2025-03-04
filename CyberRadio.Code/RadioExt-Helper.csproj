@@ -55,15 +55,19 @@
     </ItemGroup>
 
     <ItemGroup>
+        <None Remove="resources\Dark.yaml" />
         <None Remove="resources\final_ui_icon_strings.txt" />
+        <None Remove="resources\Light.yaml" />
     </ItemGroup>
 
     <ItemGroup>
         <EmbeddedResource Include="resources\cyber-radio-assistant.ico" />
+        <EmbeddedResource Include="resources\Dark.yaml" />
     </ItemGroup>
 
     <ItemGroup>
         <EmbeddedResource Include="resources\final_ui_icon_strings.txt" />
+        <EmbeddedResource Include="resources\Light.yaml" />
     </ItemGroup>
 
     <ItemGroup>

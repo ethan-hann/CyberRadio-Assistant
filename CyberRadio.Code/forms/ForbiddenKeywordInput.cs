@@ -15,6 +15,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 using RadioExt_Helper.config;
+using RadioExt_Helper.theming;
 
 namespace RadioExt_Helper.forms;
 
@@ -64,6 +65,8 @@ public partial class ForbiddenKeywordInput : Form
         cmbGroups.SelectedIndex = 0;
 
         Translate();
+
+        ThemeManager.Instance.ApplyThemeToControl(this);
     }
 
     private void Translate()

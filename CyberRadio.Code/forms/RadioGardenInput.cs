@@ -14,6 +14,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+using RadioExt_Helper.theming;
+
 namespace RadioExt_Helper.forms;
 
 public partial class RadioGardenInput : Form
@@ -28,6 +30,8 @@ public partial class RadioGardenInput : Form
     private void RadioGardenInput_Load(object sender, EventArgs e)
     {
         Translate();
+
+        ThemeManager.Instance.ApplyThemeToControl(this);
     }
 
     private void Translate()

@@ -18,6 +18,7 @@ using System.Diagnostics;
 using AetherUtils.Core.Extensions;
 using AetherUtils.Core.Logging;
 using RadioExt_Helper.Properties;
+using RadioExt_Helper.theming;
 using RadioExt_Helper.utility;
 
 namespace RadioExt_Helper.forms;
@@ -78,6 +79,8 @@ public sealed partial class BackupPreview : Form
         pgProgress.Visible = true;
         btnStartBackup.Enabled = false;
         lblCompressionLevel.Text = string.Format(Strings.UsingCompressionLevel, _backupManager.BackupCompressionLevel);
+
+        ThemeManager.Instance.ApplyThemeToControl(this);
 
         _ = StartPreviewLoading();
     }

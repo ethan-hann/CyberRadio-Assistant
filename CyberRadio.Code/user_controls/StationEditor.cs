@@ -20,6 +20,7 @@ using RadioExt_Helper.custom_controls;
 using RadioExt_Helper.forms;
 using RadioExt_Helper.models;
 using RadioExt_Helper.Properties;
+using RadioExt_Helper.theming;
 using RadioExt_Helper.utility;
 using WIG.Lib.Models;
 using ApplicationContext = RadioExt_Helper.utility.ApplicationContext;
@@ -146,6 +147,8 @@ public sealed partial class StationEditor : UserControl, IEditor
         Translate();
 
         ResumeLayout();
+
+        ThemeManager.Instance.ApplyThemeToUserControl(this);
     }
 
     /// <summary>

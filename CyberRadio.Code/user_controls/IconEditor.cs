@@ -20,6 +20,7 @@ using AetherUtils.Core.Logging;
 using RadioExt_Helper.custom_controls;
 using RadioExt_Helper.models;
 using RadioExt_Helper.Properties;
+using RadioExt_Helper.theming;
 using RadioExt_Helper.utility;
 using WIG.Lib.Models;
 using WIG.Lib.Utility;
@@ -188,6 +189,8 @@ public sealed partial class IconEditor : UserControl, IEditor
         }
 
         SetFieldsBasedOnIsFromArchive();
+
+        ThemeManager.Instance.ApplyThemeToUserControl(this);
     }
 
     private void SetFieldsBasedOnIsFromArchive()

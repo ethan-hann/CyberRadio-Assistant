@@ -14,6 +14,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+using RadioExt_Helper.theming;
+
 namespace RadioExt_Helper.forms;
 
 //Eventual implementation of a mod downloader form
@@ -32,6 +34,7 @@ public partial class ModDownloader : Form
     {
         InitializeComponent();
 
+        ThemeManager.Instance.ApplyThemeToControl(this);
         //_nexusBaseUrl = $"https://www.nexusmods.com/{_gameId}";
     }
 }

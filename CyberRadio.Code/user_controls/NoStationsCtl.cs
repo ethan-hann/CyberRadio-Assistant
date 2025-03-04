@@ -16,6 +16,7 @@
 
 using RadioExt_Helper.forms;
 using RadioExt_Helper.models;
+using RadioExt_Helper.theming;
 using RadioExt_Helper.utility;
 
 namespace RadioExt_Helper.user_controls;
@@ -72,6 +73,8 @@ public sealed partial class NoStationsCtl : UserControl, IUserControl
     {
         Translate();
         CheckPaths();
+
+        ThemeManager.Instance.ApplyThemeToUserControl(this);
     }
 
     /// <summary>

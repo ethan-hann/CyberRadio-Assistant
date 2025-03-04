@@ -21,6 +21,7 @@ using AetherUtils.Core.Files;
 using AetherUtils.Core.Logging;
 using RadioExt_Helper.models;
 using RadioExt_Helper.Properties;
+using RadioExt_Helper.theming;
 using RadioExt_Helper.utility;
 using WIG.Lib.Models;
 using WIG.Lib.Utility;
@@ -83,6 +84,8 @@ public partial class ExportWindow : Form
 
         PopulateListView();
         ConfigureButtons();
+
+        ThemeManager.Instance.ApplyThemeToControl(this);
     }
 
     private void SetImageList()

@@ -20,6 +20,7 @@ using System.Reflection;
 using AetherUtils.Core.Extensions;
 using AetherUtils.Core.Files;
 using AetherUtils.Core.Logging;
+using RadioExt_Helper.theming;
 using RadioExt_Helper.utility;
 
 namespace RadioExt_Helper.forms;
@@ -56,6 +57,8 @@ public partial class UpdateBox : Form
     {
         Translate();
         SetValues();
+
+        ThemeManager.Instance.ApplyThemeToControl(this);
     }
 
     private void Translate()

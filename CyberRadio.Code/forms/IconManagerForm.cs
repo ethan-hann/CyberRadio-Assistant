@@ -17,6 +17,7 @@
 using AetherUtils.Core.Logging;
 using RadioExt_Helper.models;
 using RadioExt_Helper.Properties;
+using RadioExt_Helper.theming;
 using RadioExt_Helper.user_controls;
 using RadioExt_Helper.utility;
 using WIG.Lib.Models;
@@ -68,6 +69,8 @@ public partial class IconManagerForm : Form
         SetImageList();
 
         if (_addedFromImagePath && _iconFromImagePath != null) AddNewIcon(_iconFromImagePath, true, false);
+
+        ThemeManager.Instance.ApplyThemeToControl(this);
     }
 
     private void Translate()

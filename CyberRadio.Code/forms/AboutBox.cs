@@ -15,6 +15,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 using AetherUtils.Core.Extensions;
+using RadioExt_Helper.theming;
 using RadioExt_Helper.utility;
 
 namespace RadioExt_Helper.forms;
@@ -40,6 +41,7 @@ public partial class AboutBox : Form
     private void AboutBox_Load(object sender, EventArgs e)
     {
         Translate();
+        ThemeManager.Instance.ApplyThemeToControl(this);
     }
 
     /// <summary>

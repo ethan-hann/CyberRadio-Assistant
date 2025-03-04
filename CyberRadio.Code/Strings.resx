@@ -1359,4 +1359,10 @@ Are you sure you want to clear all station data?</value>
   <data name="ConfigReloadSuccess" xml:space="preserve">
     <value>Successfully reloaded configuration from file.</value>
   </data>
+  <data name="ThemeNameHelp" xml:space="preserve">
+    <value>Specifies the name of the theme to use for CRA. The name should match a file in 'themes'.</value>
+  </data>
+  <data name="SplashScreen_SetupThemeManager" xml:space="preserve">
+    <value>Initializing the Theme Manager...</value>
+  </data>
 </root>

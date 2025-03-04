@@ -19,6 +19,7 @@ using AetherUtils.Core.Extensions;
 using AetherUtils.Core.Files;
 using RadioExt_Helper.models;
 using RadioExt_Helper.Properties;
+using RadioExt_Helper.theming;
 using RadioExt_Helper.utility;
 using ListView = System.Windows.Forms.ListView;
 
@@ -105,6 +106,8 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
 
         UpdateListsAndViews();
         SetOrderedList();
+
+        ThemeManager.Instance.ApplyThemeToUserControl(this);
     }
 
     /// <summary>

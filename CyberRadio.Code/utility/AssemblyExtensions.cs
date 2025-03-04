@@ -39,6 +39,21 @@ internal static class AssemblyExtensions
     }
 
     /// <summary>
+    /// Reads an embedded image resource from the assembly.
+    /// </summary>
+    /// <param name="assembly">The assembly to read from.</param>
+    /// <param name="resourceName">The fully qualified name of the embedded image.</param>
+    /// <returns>An image representing the resource or <c>null</c> if the resource could not be found.</returns>
+    public static Image? GetEmbeddedIcon(this Assembly assembly, string resourceName)
+    {
+        using var stream = assembly.GetManifestResourceStream(resourceName);
+        if (stream == null) return null;
+
+        using StreamReader reader = new(stream);
+        return Image.FromStream(stream);
+    }
+
+    /// <summary>
     /// Extracts an embedded resource from the assembly to a temporary file.
     /// </summary>
     /// <param name="assembly">The assembly to extract from.</param>

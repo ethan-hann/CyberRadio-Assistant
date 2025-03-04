@@ -25,6 +25,7 @@ using RadioExt_Helper.config;
 using RadioExt_Helper.models;
 using RadioExt_Helper.nexus_api;
 using RadioExt_Helper.Properties;
+using RadioExt_Helper.theming;
 using RadioExt_Helper.user_controls;
 using RadioExt_Helper.utility;
 using WIG.Lib.Models;
@@ -288,6 +289,9 @@ public sealed partial class MainForm : Form
             Size = new Size(windowSize.Width, windowSize.Height);
 
         Translate();
+
+        //Apply theming
+        ThemeManager.Instance.LoadTheme(ThemeManager.Instance.GetSavedTheme(), true);
 
         //SetApiStatus(this, EventArgs.Empty); //TODO: Re-enable this when the API feature is fully implemented
     }

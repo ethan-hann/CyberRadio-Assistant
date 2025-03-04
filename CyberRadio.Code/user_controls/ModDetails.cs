@@ -16,6 +16,7 @@
 
 using Pathoschild.FluentNexus.Models;
 using RadioExt_Helper.nexus_api;
+using RadioExt_Helper.theming;
 
 namespace RadioExt_Helper.user_controls;
 
@@ -46,6 +47,8 @@ public sealed partial class ModDetails : UserControl, IUserControl
     private void ModDetails_Load(object sender, EventArgs e)
     {
         _ = InitializeAsync();
+
+        ThemeManager.Instance.ApplyThemeToUserControl(this);
     }
 
     private async Task InitializeAsync()

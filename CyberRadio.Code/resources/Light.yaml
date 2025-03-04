@@ -1,0 +1,36 @@
+BackgroundColor: "#ffffff"
+ForegroundColor: "#000000"
+
+PrimaryButton:
+  BackgroundColor: "#f0f0f0"
+  TextColor: "#000000"
+  BorderColor: "#000000"
+  BorderThickness: 2
+  BorderRadius: 5
+  UseShadow: true
+
+SecondaryButton:
+  BackgroundColor: "#e0e0e0"
+  TextColor: "#222222"
+  BorderColor: "#888888"
+  BorderThickness: 1
+  BorderRadius: 3
+  UseShadow: false
+
+DangerButton:
+  BackgroundColor: "#ffcccc"
+  TextColor: "#aa0000"
+  BorderColor: "#ff0000"
+  BorderThickness: 2
+  BorderRadius: 5
+  UseShadow: true
+
+MenuStripBackground: "#cccccc"
+MenuStripTextColor: "#000000"
+
+FontFamily: "Segoe UI"
+FontSize: 9.0
+
+IconSet: "light"
+
+HighContrast: false
