@@ -52,9 +52,9 @@
             // 
             label4.Anchor = AnchorStyles.Right;
             label4.AutoSize = true;
-            label4.Location = new Point(40, 108);
+            label4.Location = new Point(45, 108);
             label4.Name = "label4";
-            label4.Size = new Size(89, 17);
+            label4.Size = new Size(84, 17);
             label4.TabIndex = 6;
             label4.Text = "Staging Path:";
             // 
@@ -74,9 +74,9 @@
             // 
             label2.Anchor = AnchorStyles.Right;
             label2.AutoSize = true;
-            label2.Location = new Point(5, 61);
+            label2.Location = new Point(7, 61);
             label2.Name = "label2";
-            label2.Size = new Size(124, 17);
+            label2.Size = new Size(122, 17);
             label2.TabIndex = 3;
             label2.Text = "Radio Station Path: ";
             // 
@@ -96,9 +96,9 @@
             // 
             label1.Anchor = AnchorStyles.Right;
             label1.AutoSize = true;
-            label1.Location = new Point(16, 14);
+            label1.Location = new Point(20, 14);
             label1.Name = "label1";
-            label1.Size = new Size(113, 17);
+            label1.Size = new Size(109, 17);
             label1.TabIndex = 0;
             label1.Text = "Game Base Path: ";
             // 
