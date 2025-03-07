@@ -14,6 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+using System.Diagnostics;
 using System.Reflection;
 using System.Text;
 using AetherUtils.Core.Extensions;
@@ -179,6 +180,13 @@ public partial class SplashScreen : Form
         await GlobalData.ConfigManager.SaveAsync();
 
         await Task.Delay(500);
+
+        var assembly = Assembly.GetExecutingAssembly();
+        string[] names = assembly.GetManifestResourceNames();
+        foreach (var name in names)
+        {
+            Debug.WriteLine(name);
+        }
 
         return statusMessages;
     }

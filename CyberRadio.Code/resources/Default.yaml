@@ -1,0 +1,67 @@
+ThemeName: "Default"
+BackgroundColor: "#f0f0f0"
+ForegroundColor: "#000000"
+
+PrimaryButton:
+  BackgroundColor: "#f0f0f0"
+  TextColor: "#000000"
+  BorderColor: "#cccccc"
+  MouseDownBackColor: "#007aff"
+  MouseOverBackColor: "#02d7f2"
+  BorderThickness: 1
+  BorderRadius: 0
+  IsFlat: true
+  UseShadow: false
+  FontFamily: "Segoe UI"
+  FontSize: 9.0
+  FontStyle: "Regular"
+
+SecondaryButton:
+  BackgroundColor: "#f0f0f0"
+  TextColor: "#000000"
+  BorderColor: "#cccccc"
+  MouseDownBackColor: "#007aff"
+  MouseOverBackColor: "#02d7f2"
+  BorderThickness: 1
+  BorderRadius: 0
+  IsFlat: true
+  UseShadow: false
+  FontFamily: "Segoe UI"
+  FontSize: 9.0
+  FontStyle: "Regular"
+
+DangerButton:
+  BackgroundColor: "#ffcccc"
+  TextColor: "#ff0000"
+  BorderColor: "#cc0000"
+  MouseDownBackColor: "#c00000"
+  MouseOverBackColor: "#ff5555"
+  BorderThickness: 1
+  BorderRadius: 0
+  IsFlat: true
+  UseShadow: false
+  FontFamily: "Segoe UI"
+  FontSize: 9.0
+  FontStyle: "Regular"
+
+TextBoxBackground: "#ffffff"
+TextBoxTextColor: "#000000"
+
+LabelTextColor: "#000000"
+
+ListViewBackground: "#ffffff"
+ListViewTextColor: "#000000"
+
+MenuStripBackground: "#f0f0f0"
+MenuStripTextColor: "#000000"
+MenuStripFontFamily: "Segoe UI"
+MenuStripFontSize: 9.0
+MenuStripFontStyle: "SemiBold"
+
+FontFamily: "Segoe UI"
+FontSize: 9.0
+FontStyle: "Regular"
+
+IconSet: "default"
+
+HighContrast: false

@@ -125,7 +125,7 @@ namespace RadioExt_Helper.forms
             // fileToolStripMenuItem
             // 
             fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { stationsToolStripMenuItem, toolStripSeparator2, backupToolStripMenuItem, toolStripSeparator3, configurationToolStripMenuItem, pathsToolStripMenuItem, toolStripSeparator4, exitToolStripMenuItem });
-            fileToolStripMenuItem.Image = Properties.Resources.file__16x16;
+            fileToolStripMenuItem.Image = Properties.Resources.file;
             fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             fileToolStripMenuItem.Size = new Size(53, 20);
             fileToolStripMenuItem.Text = "File";
@@ -133,7 +133,7 @@ namespace RadioExt_Helper.forms
             // stationsToolStripMenuItem
             // 
             stationsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { exportToGameToolStripMenuItem, refreshStationsToolStripMenuItem, synchronizeStationsToolStripMenuItem, toolStripSeparator5, clearAllDataToolStripMenuItem });
-            stationsToolStripMenuItem.Image = Properties.Resources.radio_16x16;
+            stationsToolStripMenuItem.Image = Properties.Resources.radio;
             stationsToolStripMenuItem.Name = "stationsToolStripMenuItem";
             stationsToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Alt | Keys.S;
             stationsToolStripMenuItem.Size = new Size(231, 22);
@@ -173,7 +173,7 @@ namespace RadioExt_Helper.forms
             // 
             // clearAllDataToolStripMenuItem
             // 
-            clearAllDataToolStripMenuItem.Image = Properties.Resources.delete__16x16;
+            clearAllDataToolStripMenuItem.Image = Properties.Resources.delete;
             clearAllDataToolStripMenuItem.Name = "clearAllDataToolStripMenuItem";
             clearAllDataToolStripMenuItem.Size = new Size(266, 22);
             clearAllDataToolStripMenuItem.Text = "Clear All Data!";
@@ -187,7 +187,7 @@ namespace RadioExt_Helper.forms
             // backupToolStripMenuItem
             // 
             backupToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { backupStagingFolderToolStripMenuItem, restoreStagingFolderToolStripMenuItem });
-            backupToolStripMenuItem.Image = Properties.Resources.back_up_16x16;
+            backupToolStripMenuItem.Image = Properties.Resources.back_up;
             backupToolStripMenuItem.Name = "backupToolStripMenuItem";
             backupToolStripMenuItem.ShortcutKeys = Keys.Alt | Keys.B;
             backupToolStripMenuItem.Size = new Size(231, 22);
@@ -195,7 +195,7 @@ namespace RadioExt_Helper.forms
             // 
             // backupStagingFolderToolStripMenuItem
             // 
-            backupStagingFolderToolStripMenuItem.Image = Properties.Resources.zip_file_16x16;
+            backupStagingFolderToolStripMenuItem.Image = Properties.Resources.zip_file;
             backupStagingFolderToolStripMenuItem.Name = "backupStagingFolderToolStripMenuItem";
             backupStagingFolderToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.B;
             backupStagingFolderToolStripMenuItem.Size = new Size(275, 22);
@@ -204,7 +204,7 @@ namespace RadioExt_Helper.forms
             // 
             // restoreStagingFolderToolStripMenuItem
             // 
-            restoreStagingFolderToolStripMenuItem.Image = Properties.Resources.zip_file_16x16;
+            restoreStagingFolderToolStripMenuItem.Image = Properties.Resources.zip_file;
             restoreStagingFolderToolStripMenuItem.Name = "restoreStagingFolderToolStripMenuItem";
             restoreStagingFolderToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.R;
             restoreStagingFolderToolStripMenuItem.Size = new Size(275, 22);
@@ -269,7 +269,7 @@ namespace RadioExt_Helper.forms
             // 
             // exitToolStripMenuItem
             // 
-            exitToolStripMenuItem.Image = Properties.Resources.exit_16x16;
+            exitToolStripMenuItem.Image = Properties.Resources.exit;
             exitToolStripMenuItem.Name = "exitToolStripMenuItem";
             exitToolStripMenuItem.ShortcutKeys = Keys.Alt | Keys.F4;
             exitToolStripMenuItem.Size = new Size(231, 22);
@@ -279,7 +279,7 @@ namespace RadioExt_Helper.forms
             // modsToolStripMenuItem
             // 
             modsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { downloadRadioModsToolStripMenuItem });
-            modsToolStripMenuItem.Image = Properties.Resources.game_16x16;
+            modsToolStripMenuItem.Image = Properties.Resources.game;
             modsToolStripMenuItem.Name = "modsToolStripMenuItem";
             modsToolStripMenuItem.Size = new Size(65, 20);
             modsToolStripMenuItem.Text = "Mods";
@@ -287,7 +287,7 @@ namespace RadioExt_Helper.forms
             // 
             // downloadRadioModsToolStripMenuItem
             // 
-            downloadRadioModsToolStripMenuItem.Image = Properties.Resources.download_16x16;
+            downloadRadioModsToolStripMenuItem.Image = Properties.Resources.download;
             downloadRadioModsToolStripMenuItem.Name = "downloadRadioModsToolStripMenuItem";
             downloadRadioModsToolStripMenuItem.Size = new Size(193, 22);
             downloadRadioModsToolStripMenuItem.Text = "Download Radio Mods";
@@ -296,14 +296,14 @@ namespace RadioExt_Helper.forms
             // toolsToolStripMenuItem
             // 
             toolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { iconGeneratorToolStripMenuItem });
-            toolsToolStripMenuItem.Image = Properties.Resources.tools_16x16;
+            toolsToolStripMenuItem.Image = Properties.Resources.tools;
             toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             toolsToolStripMenuItem.Size = new Size(63, 20);
             toolsToolStripMenuItem.Text = "Tools";
             // 
             // iconGeneratorToolStripMenuItem
             // 
-            iconGeneratorToolStripMenuItem.Image = Properties.Resources.magic_wand_16x16;
+            iconGeneratorToolStripMenuItem.Image = Properties.Resources.magic_wand;
             iconGeneratorToolStripMenuItem.Name = "iconGeneratorToolStripMenuItem";
             iconGeneratorToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.I;
             iconGeneratorToolStripMenuItem.Size = new Size(231, 22);
@@ -655,7 +655,7 @@ namespace RadioExt_Helper.forms
             // 
             // revertChangesToolStripMenuItem
             // 
-            revertChangesToolStripMenuItem.Image = Properties.Resources.refresh__16x16;
+            revertChangesToolStripMenuItem.Image = Properties.Resources.refresh;
             revertChangesToolStripMenuItem.Name = "revertChangesToolStripMenuItem";
             revertChangesToolStripMenuItem.Size = new Size(156, 22);
             revertChangesToolStripMenuItem.Text = "Revert Changes";

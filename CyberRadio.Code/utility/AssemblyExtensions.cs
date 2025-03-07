@@ -15,6 +15,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 using System.Reflection;
+using RadioExt_Helper.Properties;
 
 namespace RadioExt_Helper.utility;
 
@@ -42,15 +43,11 @@ internal static class AssemblyExtensions
     /// Reads an embedded image resource from the assembly.
     /// </summary>
     /// <param name="assembly">The assembly to read from.</param>
-    /// <param name="resourceName">The fully qualified name of the embedded image.</param>
+    /// <param name="resourceName">The name of the embedded image.</param>
     /// <returns>An image representing the resource or <c>null</c> if the resource could not be found.</returns>
     public static Image? GetEmbeddedIcon(this Assembly assembly, string resourceName)
     {
-        using var stream = assembly.GetManifestResourceStream(resourceName);
-        if (stream == null) return null;
-
-        using StreamReader reader = new(stream);
-        return Image.FromStream(stream);
+        return Resources.ResourceManager.GetObject(resourceName) as Image;
     }
 
     /// <summary>

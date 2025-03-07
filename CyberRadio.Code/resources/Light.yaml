@@ -1,3 +1,4 @@
+ThemeName: "Light"
 BackgroundColor: "#ffffff"
 ForegroundColor: "#202124"
 
@@ -5,25 +6,43 @@ PrimaryButton:
   BackgroundColor: "#1a73e8"
   TextColor: "#ffffff"
   BorderColor: "#1a73e8"
+  MouseDownBackColor: "#135abe"
+  MouseOverBackColor: "#4c8bf5"
   BorderThickness: 2
   BorderRadius: 8
+  IsFlat: false
   UseShadow: true
+  FontFamily: "Roboto"
+  FontSize: 10.0
+  FontStyle: "Bold"
 
 SecondaryButton:
   BackgroundColor: "#f1f3f4"
   TextColor: "#202124"
   BorderColor: "#dadce0"
+  MouseDownBackColor: "#c4c7c9"
+  MouseOverBackColor: "#e8eaed"
   BorderThickness: 2
   BorderRadius: 8
+  IsFlat: true
   UseShadow: false
+  FontFamily: "Roboto"
+  FontSize: 10.0
+  FontStyle: "Regular"
 
 DangerButton:
   BackgroundColor: "#d93025"
   TextColor: "#ffffff"
   BorderColor: "#b71c1c"
+  MouseDownBackColor: "#a00d0d"
+  MouseOverBackColor: "#e57373"
   BorderThickness: 2
   BorderRadius: 8
+  IsFlat: false
   UseShadow: true
+  FontFamily: "Roboto"
+  FontSize: 10.0
+  FontStyle: "Bold"
 
 TextBoxBackground: "#ffffff"
 TextBoxTextColor: "#202124"
@@ -35,9 +54,13 @@ ListViewTextColor: "#202124"
 
 MenuStripBackground: "#f8f9fa"
 MenuStripTextColor: "#202124"
+MenuStripFontFamily: "Roboto"
+MenuStripFontSize: 10.0
+MenuStripFontStyle: "Medium"
 
 FontFamily: "Roboto"
-FontSize: 12.0
+FontSize: 10.0
+FontStyle: "Regular"
 
 IconSet: "light"
 

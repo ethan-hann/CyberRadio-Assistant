@@ -67,6 +67,7 @@
 
     <ItemGroup>
         <EmbeddedResource Include="resources\final_ui_icon_strings.txt" />
+        <EmbeddedResource Include="resources\Default.yaml" />
         <EmbeddedResource Include="resources\Light.yaml" />
     </ItemGroup>
 

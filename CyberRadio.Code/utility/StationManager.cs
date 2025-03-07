@@ -138,9 +138,6 @@ public partial class StationManager : IDisposable
                 _stations[station.Id] = new Pair<TrackableObject<Station>, List<IEditor>>(station, [editor]);
                 editor.StationUpdated += Editor_StationUpdated;
 
-                //Apply theme to the editor
-                ThemeManager.Instance.ApplyThemeToUserControl(editor);
-
                 StationsAsBindingList.Add(station);
 
                 var stagingPath = GlobalData.ConfigManager.Get("stagingPath") as string ?? string.Empty;
@@ -197,6 +194,9 @@ public partial class StationManager : IDisposable
                 //Add the station's icon editors as well and find the active icon to display.
                 foreach (var icon in station.TrackedObject.Icons)
                     AddStationIconEditor(station.Id, icon.Id, icon.TrackedObject.IsFromArchive);
+
+                //Apply theme to the editor
+                ThemeManager.Instance.ApplyThemeToUserControl(editor);
 
                 StationAdded?.Invoke(this, station.Id);
                 return station.Id;
@@ -1629,6 +1629,11 @@ public partial class StationManager : IDisposable
     /// The current list of stations managed by the manager as a list.
     /// </summary>
     public List<TrackableObject<Station>> StationsAsList => _stations.Values.Select(pair => pair.Key).ToList();
+
+    /// <summary>
+    /// The list of all editors managed by the manager. This includes all station editors, icon editors, and song editors.
+    /// </summary>
+    public List<IEditor> Editors => _stations.Values.SelectMany(pair => pair.Value).ToList();
 
     /// <summary>
     /// The list of protected staging folders that should not be deleted. Normally, this contains at least the path to the "icons" folder.

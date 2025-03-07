@@ -291,7 +291,7 @@ public sealed partial class MainForm : Form
         Translate();
 
         //Apply theming
-        ApplyTheming();
+        //ApplyTheming();
 
         //SetApiStatus(this, EventArgs.Empty); //TODO: Re-enable this when the API feature is fully implemented
     }
@@ -306,9 +306,54 @@ public sealed partial class MainForm : Form
         btnDeleteStation.SetMetadata("style", "danger");
 
         //Tool strip item metadata
-        ThemeManager.Instance.SetMenuItemMetadata(fileToolStripMenuItem, "icon", "file");
+        ApplyMetadataToToolStripIcons();
 
         ThemeManager.Instance.LoadTheme(ThemeManager.Instance.GetSavedTheme());
+    }
+
+    /// <summary>
+    ///    Applies metadata to the tool strip icons for the theme.
+    /// </summary>
+    private void ApplyMetadataToToolStripIcons()
+    {
+        //File
+        ThemeManager.Instance.SetMenuItemMetadata(fileToolStripMenuItem, "icon", "file");
+        ThemeManager.Instance.SetMenuItemMetadata(stationsToolStripMenuItem, "icon", "radio");
+        ThemeManager.Instance.SetMenuItemMetadata(exportToGameToolStripMenuItem, "icon", "export");
+        ThemeManager.Instance.SetMenuItemMetadata(refreshStationsToolStripMenuItem, "icon", "refresh");
+        ThemeManager.Instance.SetMenuItemMetadata(synchronizeStationsToolStripMenuItem, "icon", "sync");
+        ThemeManager.Instance.SetMenuItemMetadata(clearAllDataToolStripMenuItem, "icon", "delete");
+        ThemeManager.Instance.SetMenuItemMetadata(backupToolStripMenuItem, "icon", "back_up");
+        ThemeManager.Instance.SetMenuItemMetadata(backupStagingFolderToolStripMenuItem, "icon", "zip_file");
+        ThemeManager.Instance.SetMenuItemMetadata(restoreStagingFolderToolStripMenuItem, "icon", "zip_file");
+        ThemeManager.Instance.SetMenuItemMetadata(configurationToolStripMenuItem, "icon", "settings");
+        ThemeManager.Instance.SetMenuItemMetadata(pathsToolStripMenuItem, "icon", "folder");
+        ThemeManager.Instance.SetMenuItemMetadata(openStagingPathToolStripMenuItem, "icon", "link");
+        ThemeManager.Instance.SetMenuItemMetadata(openGamePathToolStripMenuItem, "icon", "link");
+        ThemeManager.Instance.SetMenuItemMetadata(openLogFolderToolStripMenuItem, "icon", "link");
+        ThemeManager.Instance.SetMenuItemMetadata(exitToolStripMenuItem, "icon", "exit");
+
+        //Mods
+        ThemeManager.Instance.SetMenuItemMetadata(modsToolStripMenuItem, "icon", "game");
+        ThemeManager.Instance.SetMenuItemMetadata(downloadRadioModsToolStripMenuItem, "icon", "download");
+
+        //Tools
+        ThemeManager.Instance.SetMenuItemMetadata(toolsToolStripMenuItem, "icon", "tools");
+        ThemeManager.Instance.SetMenuItemMetadata(iconGeneratorToolStripMenuItem, "icon", "magic_wand");
+
+        //Help
+        ThemeManager.Instance.SetMenuItemMetadata(helpToolStripMenuItem, "icon", "info");
+        ThemeManager.Instance.SetMenuItemMetadata(howToUseToolStripMenuItem, "icon", "guide");
+        ThemeManager.Instance.SetMenuItemMetadata(radioExtOnNexusModsToolStripMenuItem, "icon", "link");
+        ThemeManager.Instance.SetMenuItemMetadata(radioExtGitHubToolStripMenuItem, "icon", "link");
+        ThemeManager.Instance.SetMenuItemMetadata(aboutToolStripMenuItem, "icon", "info");
+        ThemeManager.Instance.SetMenuItemMetadata(checkForUpdatesToolStripMenuItem, "icon", "update");
+
+        //Language
+        ThemeManager.Instance.SetMenuItemMetadata(languageToolStripMenuItem, "icon", "language");
+
+        //Right-click context menus
+        ThemeManager.Instance.SetMenuItemMetadata(revertChangesToolStripMenuItem, "icon", "refresh");
     }
 
     /// <summary>
@@ -335,6 +380,8 @@ public sealed partial class MainForm : Form
 
         HandleUserControlVisibility();
         CopyOodleToIconManager();
+
+        ApplyTheming();
     }
 
     /// <summary>
