@@ -306,7 +306,7 @@ public sealed partial class MainForm : Form
         btnDeleteStation.SetMetadata("style", "danger");
 
         //Tool strip item metadata
-
+        ThemeManager.Instance.SetMenuItemMetadata(fileToolStripMenuItem, "icon", "file");
 
         ThemeManager.Instance.LoadTheme(ThemeManager.Instance.GetSavedTheme());
     }
