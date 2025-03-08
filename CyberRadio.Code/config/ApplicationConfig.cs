@@ -18,6 +18,7 @@ using System.ComponentModel;
 using AetherUtils.Core.Attributes;
 using AetherUtils.Core.Configuration;
 using RadioExt_Helper.utility;
+using YamlDotNet.Serialization;
 
 namespace RadioExt_Helper.config;
 
@@ -55,12 +56,14 @@ public sealed class ApplicationConfig
     /// </summary>
     [Config(AutoCheckForUpdatesKey)]
     [Description("CheckForUpdatesOptionHelp")]
+    [YamlMember(Description = "Specifies whether the application should automatically check for updates on startup.")]
     public bool AutoCheckForUpdates { get; set; } = true;
 
     /// <summary>
     /// Specifies whether the application is running for the first time.
     /// </summary>
     [Config(IsFirstRunKey)]
+    [YamlMember(Description = "Specifies whether the application is running for the first time.")]
     public bool IsFirstRun { get; set; } = true;
 
     /// <summary>
@@ -69,6 +72,7 @@ public sealed class ApplicationConfig
     /// </summary>
     [Config(AutoExportToGameKey)]
     [Description("AutoExportOptionHelp")]
+    [YamlMember(Description = "Specifies whether the application should automatically export the stations to the game directory after exporting to staging.")]
     public bool AutoExportToGame { get; set; }
 
     /// <summary>
@@ -76,6 +80,7 @@ public sealed class ApplicationConfig
     /// </summary>
     [Config(WatchForGameChangesKey)]
     [Description("WatchForChangesHelp")]
+    [YamlMember(Description = "Specifies whether the application should automatically watch for changes in the game's radios directory.")]
     public bool WatchForGameChanges { get; set; } = true;
 
     /// <summary>
@@ -83,6 +88,7 @@ public sealed class ApplicationConfig
     /// </summary>
     [Config(CopySongFilesToBackupKey)]
     [Description("CopySongFilesToBackupHelp")]
+    [YamlMember(Description = "Specifies whether the application should copy the song files when creating a backup of the staging folder.")]
     public bool CopySongFilesToBackup { get; set; } = true;
 
     /// <summary>
@@ -90,6 +96,7 @@ public sealed class ApplicationConfig
     /// </summary>
     [Config(DefaultSongLocationKey)]
     [Description("DefaultSongLocationHelp")]
+    [YamlMember(Description = "Specifies the default location for song files that have been imported from a station .zip or .rar file.")]
     public string DefaultSongLocation { get; set; } = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic);
 
     /// <summary>
@@ -97,36 +104,42 @@ public sealed class ApplicationConfig
     /// </summary>
     [Config(BackupCompressionLevelKey)]
     [Description("BackupCompressionLevelHelp")]
+    [YamlMember(Description = "Specifies the backup compression level to use when zipping the staging folder.")]
     public CompressionLevel BackupCompressionLevel { get; set; } = CompressionLevel.Normal;
 
     /// <summary>
     ///     The path to the staging directory.
     /// </summary>
     [Config(StagingPathKey)]
+    [YamlMember(Description = "The path to the staging directory.")]
     public string StagingPath { get; set; } = string.Empty;
 
     /// <summary>
     ///     The path to the game directory.
     /// </summary>
     [Config(GameBasePathKey)]
+    [YamlMember(Description = "The path to the game directory.")]
     public string GameBasePath { get; set; } = string.Empty;
 
     /// <summary>
     ///     The selected language for the application.
     /// </summary>
     [Config(LanguageKey)]
+    [YamlMember(Description = "The currently selected language for the application.")]
     public string Language { get; set; } = "English (en)";
 
     /// <summary>
     ///     The window size of the application.
     /// </summary>
     [Config(WindowSizeKey)]
+    [YamlMember(Description = "The window size of the application.")]
     public WindowSize WindowSize { get; set; } = new();
 
     /// <summary>
     /// The API key the user has entered for accessing the Nexus API.
     /// </summary>
     [Config(NexusApiKeyKey)]
+    [YamlMember(Description = "The API key for accessing the Nexus API.")]
     public string NexusApiKey { get; set; } = string.Empty;
 
     /// <summary>
@@ -134,6 +147,7 @@ public sealed class ApplicationConfig
     /// </summary>
     [Config(ThemeNameKey)]
     [Description("ThemeNameHelp")]
+    [YamlMember(Description = "The name of the theme to use for the application.")]
     public string ThemeName { get; set; } = "Light";
 
     /// <summary>
@@ -141,6 +155,7 @@ public sealed class ApplicationConfig
     /// </summary>
     [Config(ForbiddenKeywordsKey)]
     [Description("ForbiddenPathsHelp")]
+    [YamlMember(Description = "The list of forbidden keywords and whether they are enabled or not.")]
     public List<ForbiddenKeyword> ForbiddenKeywords { get; set; } =
     [
         new("Game Launchers", "steam", true), new("Game Launchers", "steamapps", true),
@@ -174,6 +189,7 @@ public sealed class ApplicationConfig
     ///     The log options for the application.
     /// </summary>
     [Config(LogOptionsKey)]
+    [YamlMember(Description = "The log options for the application.")]
     public LogOptions LogOptions { get; set; } = new()
     {
         AppName = "CyberRadioAssistant",
