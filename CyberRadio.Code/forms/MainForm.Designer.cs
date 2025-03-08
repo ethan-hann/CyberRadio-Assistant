@@ -132,6 +132,7 @@ namespace RadioExt_Helper.forms
             // 
             // stationsToolStripMenuItem
             // 
+            stationsToolStripMenuItem.BackColor = Color.Transparent;
             stationsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { exportToGameToolStripMenuItem, refreshStationsToolStripMenuItem, synchronizeStationsToolStripMenuItem, toolStripSeparator5, clearAllDataToolStripMenuItem });
             stationsToolStripMenuItem.Image = Properties.Resources.radio;
             stationsToolStripMenuItem.Name = "stationsToolStripMenuItem";

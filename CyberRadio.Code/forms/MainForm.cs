@@ -43,6 +43,7 @@ public sealed partial class MainForm : Form
 {
     private readonly ImageComboBox<ImageComboBoxItem> _languageComboBox = new();
     private readonly List<ImageComboBoxItem> _languages = [];
+    private readonly ToolStripControlHost _languageToolStripControlHost;
     private readonly NoStationsCtl _noStationsCtrl = new();
     private readonly Timer _resizeTimer;
     private readonly ImageList _stationImageList = new();
@@ -73,7 +74,7 @@ public sealed partial class MainForm : Form
         };
 
         SetImageList();
-        InitializeLanguageDropDown();
+        _languageToolStripControlHost = InitializeLanguageDropDown();
         InitializeEvents();
 
         SelectLanguage();
@@ -291,7 +292,7 @@ public sealed partial class MainForm : Form
         Translate();
 
         //Apply theming
-        //ApplyTheming();
+        ApplyTheming();
 
         //SetApiStatus(this, EventArgs.Empty); //TODO: Re-enable this when the API feature is fully implemented
     }
@@ -300,7 +301,6 @@ public sealed partial class MainForm : Form
     {
         //First set metadata for buttons and menu items
         btnEnableSelected.SetMetadata("style", "primary");
-        //btnEnableSelected.SetMetadata("icon", "success");
         btnDisableSelected.SetMetadata("style", "secondary");
         btnAddStation.SetMetadata("style", "primary");
         btnDeleteStation.SetMetadata("style", "danger");
@@ -309,6 +309,8 @@ public sealed partial class MainForm : Form
         ApplyMetadataToToolStripIcons();
 
         ThemeManager.Instance.LoadTheme(ThemeManager.Instance.GetSavedTheme());
+
+        ThemeManager.Instance.ApplyThemeToCustomMenuControls(_languageToolStripControlHost);
     }
 
     /// <summary>
@@ -380,14 +382,13 @@ public sealed partial class MainForm : Form
 
         HandleUserControlVisibility();
         CopyOodleToIconManager();
-
-        ApplyTheming();
     }
 
     /// <summary>
-    ///     Initializes the language drop-down with supported languages and images.
+    /// Initializes the language drop-down with supported languages and images.
     /// </summary>
-    private void InitializeLanguageDropDown()
+    /// <returns>The <see cref="ToolStripControlHost"/> that hosts the combobox.</returns>
+    private ToolStripControlHost InitializeLanguageDropDown()
     {
         // Populate the language combo box with all supported languages
         _languages.Add(new ImageComboBoxItem("English (en)", Resources.united_kingdom));
@@ -409,6 +410,7 @@ public sealed partial class MainForm : Form
 
         // Add the ToolStripControlHost to the "Language" tool strip menu
         languageToolStripMenuItem.DropDownItems.Add(toolStripControlHost);
+        return toolStripControlHost;
     }
 
     /// <summary>

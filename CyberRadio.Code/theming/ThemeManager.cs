@@ -1,10 +1,8 @@
 ﻿using System.Drawing.Drawing2D;
 using System.Drawing.Text;
-using System.Globalization;
 using System.Reflection;
 using AetherUtils.Core.Logging;
 using RadioExt_Helper.utility;
-using SharpCompress.Common;
 using YamlDotNet.Serialization;
 
 namespace RadioExt_Helper.theming;
@@ -22,6 +20,16 @@ public class ThemeManager
     /// Get the current theme.
     /// </summary>
     public Theme CurrentTheme { get; private set; } = new();
+
+    /// <summary>
+    /// Get the font used for the main application.
+    /// </summary>
+    public Font? MainFont { get; private set; }
+
+    /// <summary>
+    /// Get the font used for menu strips.
+    /// </summary>
+    public Font? MenuStripFont { get; private set; }
 
     /// <summary>
     /// Get a value indicating whether the theme manager has been initialized.
@@ -145,12 +153,6 @@ public class ThemeManager
             ApplyThemeToControl(form);
             form.Invalidate(); // Force UI refresh
         }
-
-        //var editors = StationManager.Instance.Editors.Cast<UserControl>();
-        //foreach (var control in editors)
-        //{
-        //    ApplyThemeToUserControl(control);
-        //}
     }
 
     /// <summary>
@@ -196,34 +198,37 @@ public class ThemeManager
         if (!IsInitialized || !IsUsingThemes) return;
         if (control == null || control.IsDisposed) return;
 
-        // Validate font size
-        var validatedFontSize = CurrentTheme.FontSize > 0 ? CurrentTheme.FontSize : 9.0f;
-        var validatedMenuFontSize = CurrentTheme.MenuStripFontSize > 0 ? CurrentTheme.MenuStripFontSize : 9.0f;
-
-        // Validate font family
-        var themeFontFamily = FontExists(CurrentTheme.FontFamily) ? new FontFamily(CurrentTheme.FontFamily) : SystemFonts.DefaultFont.FontFamily;
-        var menuFontFamily = FontExists(CurrentTheme.MenuStripFontFamily) ? new FontFamily(CurrentTheme.MenuStripFontFamily) : SystemFonts.DefaultFont.FontFamily;
-
-        // Handle SemiBold manually for Segoe UI
-        if (CurrentTheme.FontFamily.Equals("Segoe UI", StringComparison.OrdinalIgnoreCase) &&
-            CurrentTheme.FontStyle.Equals("semibold", StringComparison.OrdinalIgnoreCase))
+        if (MenuStripFont == null || MainFont == null)
         {
-            themeFontFamily = new FontFamily("Segoe UI Semibold");
+            // Validate font size
+            var validatedFontSize = CurrentTheme.FontSize > 0 ? CurrentTheme.FontSize : 9.0f;
+            var validatedMenuFontSize = CurrentTheme.MenuStripFontSize > 0 ? CurrentTheme.MenuStripFontSize : 9.0f;
+
+            // Validate font family
+            var themeFontFamily = FontExists(CurrentTheme.FontFamily) ? new FontFamily(CurrentTheme.FontFamily) : SystemFonts.DefaultFont.FontFamily;
+            var menuFontFamily = FontExists(CurrentTheme.MenuStripFontFamily) ? new FontFamily(CurrentTheme.MenuStripFontFamily) : SystemFonts.DefaultFont.FontFamily;
+
+            // Handle SemiBold manually for Segoe UI
+            if (CurrentTheme.FontFamily.Equals("Segoe UI", StringComparison.OrdinalIgnoreCase) &&
+                CurrentTheme.FontStyle.Equals("semibold", StringComparison.OrdinalIgnoreCase))
+            {
+                themeFontFamily = new FontFamily("Segoe UI Semibold");
+            }
+
+            if (CurrentTheme.MenuStripFontFamily.Equals("Segoe UI", StringComparison.OrdinalIgnoreCase) &&
+                CurrentTheme.MenuStripFontStyle.Equals("semibold", StringComparison.OrdinalIgnoreCase))
+            {
+                menuFontFamily = new FontFamily("Segoe UI Semibold");
+            }
+
+            // Validate font style
+            var themeFontStyle = ParseFontStyle(CurrentTheme.FontStyle);
+            var menuFontStyle = ParseFontStyle(CurrentTheme.MenuStripFontStyle);
+
+            // Create final fonts
+            MainFont = new Font(themeFontFamily, validatedFontSize, themeFontStyle);
+            MenuStripFont = new Font(menuFontFamily, validatedMenuFontSize, menuFontStyle);
         }
-
-        if (CurrentTheme.MenuStripFontFamily.Equals("Segoe UI", StringComparison.OrdinalIgnoreCase) &&
-            CurrentTheme.MenuStripFontStyle.Equals("semibold", StringComparison.OrdinalIgnoreCase))
-        {
-            menuFontFamily = new FontFamily("Segoe UI Semibold");
-        }
-
-        // Validate font style
-        var themeFontStyle = ParseFontStyle(CurrentTheme.FontStyle);
-        var menuFontStyle = ParseFontStyle(CurrentTheme.MenuStripFontStyle);
-
-        // Create final fonts
-        var themeFont = new Font(themeFontFamily, validatedFontSize, themeFontStyle);
-        var menuStripFont = new Font(menuFontFamily, validatedMenuFontSize, menuFontStyle);
 
         // Apply high contrast settings if enabled
         if (CurrentTheme.HighContrast)
@@ -234,7 +239,7 @@ public class ThemeManager
         }
         else
         {
-            control.Font = themeFont;
+            control.Font = MainFont;
         }
 
         // Apply theme to different control types
@@ -267,15 +272,19 @@ public class ThemeManager
             case ListBox:
             case ComboBox:
             case TrackBar:
-            case DataGridView:
                 control.BackColor = CurrentTheme.BackgroundColor;
                 control.ForeColor = CurrentTheme.LabelTextColor;
+                break;
+            case DataGridView dgv:
+                dgv.BackgroundColor = CurrentTheme.BackgroundColor;
+                dgv.GridColor = CurrentTheme.BackgroundColor;
+                dgv.ForeColor = CurrentTheme.TextBoxTextColor;
                 break;
             case MenuStrip:
             case ToolStrip:
                 control.BackColor = CurrentTheme.MenuStripBackground;
                 control.ForeColor = CurrentTheme.MenuStripTextColor;
-                control.Font = menuStripFont;
+                control.Font = MenuStripFont;
                 break;
             case Panel:
             case TabControl:
@@ -459,11 +468,26 @@ public class ThemeManager
     }
 
     /// <summary>
+    /// Apply the current theme to the specified <see cref="ToolStripControlHost"/>.
+    /// </summary>
+    /// <param name="host"></param>
+    public void ApplyThemeToCustomMenuControls(ToolStripControlHost host)
+    {
+        host.Font = MenuStripFont ?? SystemFonts.DefaultFont;
+        host.BackColor = CurrentTheme.MenuStripBackground;
+        host.ForeColor = CurrentTheme.MenuStripTextColor;
+    }
+
+    /// <summary>
     /// Apply the current icon theme to the specified menu item and all of its children.
     /// </summary>
     /// <param name="item">The <see cref="ToolStripMenuItem"/> to apply the icon theme to.</param>
     private void ApplyIconToMenuItem(ToolStripMenuItem item)
     {
+        //Always apply the colors to the menu item regardless of the icon
+        item.BackColor = CurrentTheme.MenuStripBackground;
+        item.ForeColor = CurrentTheme.MenuStripTextColor;
+
         var metadata = GetMenuItemMetadata(item);
 
         var iconName = metadata.GetValueOrDefault("icon", string.Empty);
@@ -473,7 +497,7 @@ public class ThemeManager
         var fullIconName = $"{iconName}_{CurrentTheme.IconSet}";
         var image = _executingAssembly.GetEmbeddedIcon($"{fullIconName}");
         item.Image = image;
-
+        
         foreach (ToolStripItem subItem in item.DropDownItems)
         {
             if (subItem is ToolStripMenuItem subMenuItem)

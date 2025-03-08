@@ -30,7 +30,8 @@ namespace RadioExt_Helper.user_controls
         /// </summary>
         private void InitializeComponent()
         {
-            models.ImageProperties imageProperties2 = new models.ImageProperties();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            models.ImageProperties imageProperties1 = new models.ImageProperties();
             txtDisplayName = new TextBox();
             lblName = new Label();
             label3 = new Label();
@@ -242,6 +243,14 @@ namespace RadioExt_Helper.user_controls
             // 
             dgvMetadata.BackgroundColor = Color.WhiteSmoke;
             dgvMetadata.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = Color.Transparent;
+            dataGridViewCellStyle1.Font = new Font("Segoe UI Variable Display", 9.75F, FontStyle.Bold);
+            dataGridViewCellStyle1.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.False;
+            dgvMetadata.DefaultCellStyle = dataGridViewCellStyle1;
             dgvMetadata.Dock = DockStyle.Fill;
             dgvMetadata.Location = new Point(3, 21);
             dgvMetadata.Name = "dgvMetadata";
@@ -577,11 +586,11 @@ namespace RadioExt_Helper.user_controls
             picStationIcon.AllowDrop = true;
             picStationIcon.Dock = DockStyle.Fill;
             picStationIcon.Image = Properties.Resources.drag_and_drop;
-            imageProperties2.Height = 0;
-            imageProperties2.ImageFormat = System.Drawing.Imaging.ImageFormat.Png;
-            imageProperties2.PixelFormat = System.Drawing.Imaging.PixelFormat.DontCare;
-            imageProperties2.Width = 0;
-            picStationIcon.ImageProperties = imageProperties2;
+            imageProperties1.Height = 0;
+            imageProperties1.ImageFormat = System.Drawing.Imaging.ImageFormat.Png;
+            imageProperties1.PixelFormat = System.Drawing.Imaging.PixelFormat.DontCare;
+            imageProperties1.Width = 0;
+            picStationIcon.ImageProperties = imageProperties1;
             picStationIcon.Location = new Point(3, 3);
             picStationIcon.Name = "picStationIcon";
             tlpCustomIcon.SetRowSpan(picStationIcon, 3);
