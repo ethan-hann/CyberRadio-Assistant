@@ -47,7 +47,6 @@ public sealed class ApplicationConfig
     private const string LanguageKey = "language";
     private const string WindowSizeKey = "windowSize";
     private const string NexusApiKeyKey = "nexusApiKey";
-    private const string ThemeNameKey = "themeName";
     private const string ForbiddenKeywordsKey = "forbiddenKeywords";
     private const string LogOptionsKey = "logOptions";
 
