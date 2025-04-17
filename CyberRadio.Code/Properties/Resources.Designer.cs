@@ -1893,6 +1893,16 @@ namespace RadioExt_Helper.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap SPLASH_Not_Quite_RC {
+            get {
+                object obj = ResourceManager.GetObject("SPLASH_Not_Quite_RC", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap station_size {
             get {
                 object obj = ResourceManager.GetObject("station_size", resourceCulture);

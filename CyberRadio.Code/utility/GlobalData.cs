@@ -35,6 +35,9 @@ public static class GlobalData
     private const string ConfigFileName = "config.yml";
     private const string DefaultLanguage = "English (en)";
 
+    /// <summary>
+    /// The version of the application.
+    /// </summary>
     public static readonly Version AppVersion =
         Assembly.GetExecutingAssembly().GetName().Version is { } v
             ? new Version(v.Major, v.Minor, v.Build)
@@ -83,14 +86,33 @@ public static class GlobalData
 
         LoadUiIcons();
 
-        InitializeConfig();
+        // Initialize the config manager
+        Exception? e = null;
+        try
+        {
+            InitializeConfig();
+        }
+        catch (Exception ex)
+        {
+            e = ex;
+            MessageBox.Show(Strings.GetString("ConfigError"), Strings.GetString("Error"), 
+                MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+
         InitializeLogging();
+
+        // If the config manager failed to initialize, log the exception after logging is initialized
+        if (e != null)
+            AuLogger.GetCurrentLogger(nameof(GlobalData)).Error(e, "Error initializing configuration.");
 
         SetCulture(ConfigManager.Get("language") as string ?? DefaultLanguage);
 
         _globalDataInitialized = true;
     }
 
+    /// <summary>
+    /// Initializes the ComboBox template with default properties.
+    /// </summary>
     public static void InitializeComboBoxTemplate()
     {
         UiIconsComboTemplate = CreateComboBoxTemplate();
@@ -136,24 +158,33 @@ public static class GlobalData
     /// </summary>
     private static void InitializeConfig()
     {
-        if (ConfigManager.ConfigExists)
+        try
         {
-            if (ConfigManager.Load())
+            if (ConfigManager.ConfigExists)
             {
-                //Set the log header everytime the application is launched to ensure the version is correct in the header
-                ConfigManager.Set("logHeader", SystemInfo.GetLogFileHeader());
-                ConfigManager.Save();
+                if (ConfigManager.Load())
+                {
+                    //Set the log header everytime the application is launched to ensure the version is correct in the header
+                    ConfigManager.Set("logHeader", SystemInfo.GetLogFileHeader());
+                    ConfigManager.Save();
+                }
+                else //Create the default config if the config file is corrupted or failed to load.
+                {
+                    ConfigManager.CreateDefaultConfig();
+                    ConfigManager.Save();
+                }
             }
-            else //Create the default config if the config file is corrupted or failed to load.
+            else
             {
                 ConfigManager.CreateDefaultConfig();
                 ConfigManager.Save();
             }
         }
-        else
+        catch (Exception ex)
         {
             ConfigManager.CreateDefaultConfig();
             ConfigManager.Save();
+            throw new Exception("Failed to initialize configuration.", ex);
         }
     }
 

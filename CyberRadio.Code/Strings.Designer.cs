@@ -466,6 +466,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The configuration file was invalid or could not be read. A default config will be used..
+        /// </summary>
+        internal static string ConfigError {
+            get {
+                return ResourceManager.GetString("ConfigError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to reload the configuration from the file? All unsaved options will be lost..
         /// </summary>
         internal static string ConfigReloadConfirm {
