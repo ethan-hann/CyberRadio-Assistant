@@ -28,9 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            ListViewGroup listViewGroup4 = new ListViewGroup("Game Launchers", HorizontalAlignment.Left);
-            ListViewGroup listViewGroup5 = new ListViewGroup("Mod Managers", HorizontalAlignment.Left);
-            ListViewGroup listViewGroup6 = new ListViewGroup("Windows Related", HorizontalAlignment.Left);
+            ListViewGroup listViewGroup1 = new ListViewGroup("Game Launchers", HorizontalAlignment.Left);
+            ListViewGroup listViewGroup2 = new ListViewGroup("Mod Managers", HorizontalAlignment.Left);
+            ListViewGroup listViewGroup3 = new ListViewGroup("Windows Related", HorizontalAlignment.Left);
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ConfigForm));
             tableLayoutPanel1 = new TableLayoutPanel();
             chkCheckForUpdates = new CheckBox();
@@ -74,14 +74,14 @@
             lblApiInputHelp = new Label();
             txtApiKey = new MaskedTextBox();
             tableLayoutPanel2 = new TableLayoutPanel();
+            btnReloadFromFile = new Button();
+            btnSaveAndClose = new Button();
             btnCancel = new Button();
             btnResetToDefault = new Button();
-            btnSaveAndClose = new Button();
             fldrOpenLogPath = new FolderBrowserDialog();
             statusStrip1 = new StatusStrip();
             lblHelpText = new ToolStripStatusLabel();
             fldrOpenDefaultMusicPath = new FolderBrowserDialog();
-            btnReloadFromFile = new Button();
             tableLayoutPanel1.SuspendLayout();
             tableLayoutPanel7.SuspendLayout();
             tableLayoutPanel6.SuspendLayout();
@@ -427,13 +427,13 @@
             // 
             lvForbiddenPaths.CheckBoxes = true;
             lvForbiddenPaths.Dock = DockStyle.Fill;
-            listViewGroup4.Header = "Game Launchers";
-            listViewGroup4.Name = "lvgGameLaunchers";
-            listViewGroup5.Header = "Mod Managers";
-            listViewGroup5.Name = "lvgModManagers";
-            listViewGroup6.Header = "Windows Related";
-            listViewGroup6.Name = "lvgWindowsRelated";
-            lvForbiddenPaths.Groups.AddRange(new ListViewGroup[] { listViewGroup4, listViewGroup5, listViewGroup6 });
+            listViewGroup1.Header = "Game Launchers";
+            listViewGroup1.Name = "lvgGameLaunchers";
+            listViewGroup2.Header = "Mod Managers";
+            listViewGroup2.Name = "lvgModManagers";
+            listViewGroup3.Header = "Windows Related";
+            listViewGroup3.Name = "lvgWindowsRelated";
+            lvForbiddenPaths.Groups.AddRange(new ListViewGroup[] { listViewGroup1, listViewGroup2, listViewGroup3 });
             lvForbiddenPaths.Location = new Point(0, 0);
             lvForbiddenPaths.Name = "lvForbiddenPaths";
             lvForbiddenPaths.Size = new Size(562, 220);
@@ -732,6 +732,42 @@
             tableLayoutPanel2.Size = new Size(793, 41);
             tableLayoutPanel2.TabIndex = 2;
             // 
+            // btnReloadFromFile
+            // 
+            btnReloadFromFile.BackColor = Color.Yellow;
+            btnReloadFromFile.Dock = DockStyle.Fill;
+            btnReloadFromFile.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
+            btnReloadFromFile.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
+            btnReloadFromFile.FlatStyle = FlatStyle.Flat;
+            btnReloadFromFile.Image = Properties.Resources.file__16x16;
+            btnReloadFromFile.Location = new Point(201, 3);
+            btnReloadFromFile.Name = "btnReloadFromFile";
+            btnReloadFromFile.Size = new Size(192, 35);
+            btnReloadFromFile.TabIndex = 9;
+            btnReloadFromFile.Text = "Reload From File";
+            btnReloadFromFile.TextAlign = ContentAlignment.MiddleRight;
+            btnReloadFromFile.TextImageRelation = TextImageRelation.ImageBeforeText;
+            btnReloadFromFile.UseVisualStyleBackColor = false;
+            btnReloadFromFile.Click += BtnReloadFromFile_Click;
+            // 
+            // btnSaveAndClose
+            // 
+            btnSaveAndClose.BackColor = Color.Yellow;
+            btnSaveAndClose.Dock = DockStyle.Fill;
+            btnSaveAndClose.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
+            btnSaveAndClose.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
+            btnSaveAndClose.FlatStyle = FlatStyle.Flat;
+            btnSaveAndClose.Image = Properties.Resources.disk__16x16;
+            btnSaveAndClose.Location = new Point(3, 3);
+            btnSaveAndClose.Name = "btnSaveAndClose";
+            btnSaveAndClose.Size = new Size(192, 35);
+            btnSaveAndClose.TabIndex = 6;
+            btnSaveAndClose.Text = "Save and Close";
+            btnSaveAndClose.TextAlign = ContentAlignment.MiddleRight;
+            btnSaveAndClose.TextImageRelation = TextImageRelation.ImageBeforeText;
+            btnSaveAndClose.UseVisualStyleBackColor = false;
+            btnSaveAndClose.Click += BtnSaveAndClose_Click;
+            // 
             // btnCancel
             // 
             btnCancel.BackColor = Color.Yellow;
@@ -767,24 +803,6 @@
             btnResetToDefault.UseVisualStyleBackColor = false;
             btnResetToDefault.Click += BtnResetToDefault_Click;
             // 
-            // btnSaveAndClose
-            // 
-            btnSaveAndClose.BackColor = Color.Yellow;
-            btnSaveAndClose.Dock = DockStyle.Fill;
-            btnSaveAndClose.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
-            btnSaveAndClose.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
-            btnSaveAndClose.FlatStyle = FlatStyle.Flat;
-            btnSaveAndClose.Image = Properties.Resources.disk__16x16;
-            btnSaveAndClose.Location = new Point(3, 3);
-            btnSaveAndClose.Name = "btnSaveAndClose";
-            btnSaveAndClose.Size = new Size(192, 35);
-            btnSaveAndClose.TabIndex = 6;
-            btnSaveAndClose.Text = "Save and Close";
-            btnSaveAndClose.TextAlign = ContentAlignment.MiddleRight;
-            btnSaveAndClose.TextImageRelation = TextImageRelation.ImageBeforeText;
-            btnSaveAndClose.UseVisualStyleBackColor = false;
-            btnSaveAndClose.Click += BtnSaveAndClose_Click;
-            // 
             // fldrOpenLogPath
             // 
             fldrOpenLogPath.Description = "Select the location to store log files";
@@ -812,24 +830,6 @@
             // 
             fldrOpenDefaultMusicPath.Description = "Select the default path for song files when importing stations";
             fldrOpenDefaultMusicPath.UseDescriptionForTitle = true;
-            // 
-            // btnReloadFromFile
-            // 
-            btnReloadFromFile.BackColor = Color.Yellow;
-            btnReloadFromFile.Dock = DockStyle.Fill;
-            btnReloadFromFile.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
-            btnReloadFromFile.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
-            btnReloadFromFile.FlatStyle = FlatStyle.Flat;
-            btnReloadFromFile.Image = Properties.Resources.file__16x16;
-            btnReloadFromFile.Location = new Point(201, 3);
-            btnReloadFromFile.Name = "btnReloadFromFile";
-            btnReloadFromFile.Size = new Size(192, 35);
-            btnReloadFromFile.TabIndex = 9;
-            btnReloadFromFile.Text = "Reload From File";
-            btnReloadFromFile.TextAlign = ContentAlignment.MiddleRight;
-            btnReloadFromFile.TextImageRelation = TextImageRelation.ImageBeforeText;
-            btnReloadFromFile.UseVisualStyleBackColor = false;
-            btnReloadFromFile.Click += BtnReloadFromFile_Click;
             // 
             // ConfigForm
             // 

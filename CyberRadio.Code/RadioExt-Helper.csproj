@@ -8,12 +8,12 @@
         <Nullable>enable</Nullable>
         <UseWindowsForms>true</UseWindowsForms>
         <ImplicitUsings>enable</ImplicitUsings>
-        <ApplicationIcon>resources\cyber-radio-assistant.ico</ApplicationIcon>
+        <ApplicationIcon>resources\cra_new_icon.ico</ApplicationIcon>
         <StartupObject>RadioExt_Helper.Program</StartupObject>
         <GenerateDocumentationFile>True</GenerateDocumentationFile>
         <AssemblyVersion>2.0.446.0</AssemblyVersion>
         <FileVersion>2.0.446.0</FileVersion>
-        <Version>2.0.446</Version>
+        <Version>2.0.453</Version>
         <Company>Ethan Hann</Company>
         <Product>Cyber Radio Assistant</Product>
         <NeutralLanguage>en</NeutralLanguage>
@@ -56,6 +56,10 @@
 
     <ItemGroup>
         <None Remove="resources\final_ui_icon_strings.txt" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="resources\cra_new_icon.ico" />
     </ItemGroup>
 
     <ItemGroup>
