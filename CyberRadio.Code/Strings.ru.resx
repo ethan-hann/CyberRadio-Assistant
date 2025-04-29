@@ -1359,4 +1359,11 @@
   <data name="ConfigReloadSuccess" xml:space="preserve">
     <value>Успешно перезагруженная конфигурация из файла.</value>
   </data>
+  <data name="ConfigError" xml:space="preserve">
+    <value>Файл конфигурации был недействительным или не мог быть прочитал. Будет использоваться конфигурация по умолчанию.</value>
+  </data>
+  <data name="AboutCredits" xml:space="preserve">
+    <value>Особая благодарность Justarandomguyintheinternet (https://github.com/justarandomguyintheinternet/cp77radioext) за потрясающий мод Radioext!
+Особая благодарность DemonseedXP (https://next.nexusmods.com/profile/demonseedxp) за значок приложения и экрана Splash!</value>
+  </data>
 </root>

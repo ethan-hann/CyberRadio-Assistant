@@ -1359,4 +1359,11 @@ Sind Sie sicher, dass Sie alle Stationsdaten löschen möchten?</value>
   <data name="ConfigReloadSuccess" xml:space="preserve">
     <value>Die Konfiguration erfolgreich aus der Datei neu laden.</value>
   </data>
+  <data name="ConfigError" xml:space="preserve">
+    <value>Die Konfigurationsdatei war ungültig oder konnte nicht gelesen werden. Eine Standardkonfiguration wird verwendet.</value>
+  </data>
+  <data name="AboutCredits" xml:space="preserve">
+    <value>Besonderer Dank geht an JustarandomguyInternet (https://github.com/justarandomguyInternet/CP77Radioext) für den fantastischen Radiotext -Mod!
+Besonderer Dank geht an Demonseedxp (https://next.nexusmods.com/profile/demonseedxp) für das App -Symbol und den Splash -Bildschirm!</value>
+  </data>
 </root>

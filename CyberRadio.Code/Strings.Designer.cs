@@ -70,6 +70,16 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Special thanks to justarandomguyintheinternet (https://github.com/justarandomguyintheinternet/CP77_radioExt) for the awesome radioExt mod!
+        ///Special thanks to demonseedxp (https://next.nexusmods.com/profile/demonseedxp) for the app icon and splash screen!.
+        /// </summary>
+        internal static string AboutCredits {
+            get {
+                return ResourceManager.GetString("AboutCredits", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Github Repo.
         /// </summary>
         internal static string AboutGithubRepo {

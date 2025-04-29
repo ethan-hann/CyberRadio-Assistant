@@ -1359,4 +1359,11 @@ Asegúrese de crear una copia de seguridad de sus estaciones antes de borrar los
   <data name="ConfigReloadSuccess" xml:space="preserve">
     <value>Configuración recargada con éxito desde el archivo.</value>
   </data>
+  <data name="ConfigError" xml:space="preserve">
+    <value>El archivo de configuración no era válido o no se podía leer. Se utilizará una configuración predeterminada.</value>
+  </data>
+  <data name="AboutCredits" xml:space="preserve">
+    <value>¡Un agradecimiento especial a JustarandomGuytheinternet (https://github.com/justarandomguyintheinternet/cp77radioext) para el increíble mod de radioxt!
+¡Un agradecimiento especial a DemonseDXP (https://next.nexusmods.com/profile/demonseedxp) por el icono de la aplicación y la pantalla de salpicaduras!</value>
+  </data>
 </root>

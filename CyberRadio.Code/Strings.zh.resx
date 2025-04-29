@@ -1359,4 +1359,11 @@
   <data name="ConfigReloadSuccess" xml:space="preserve">
     <value>从文件中成功重新加载配置。</value>
   </data>
+  <data name="ConfigError" xml:space="preserve">
+    <value>配置文件无效或无法读取。将使用默认配置。</value>
+  </data>
+  <data name="AboutCredits" xml:space="preserve">
+    <value>特别感谢JustArandomGuyinTheinternet（https://github.com/justarandomguyintheinternternet/cp77radioext）！
+特别感谢Demonseedxp（https://next.nexusmods.com/profile/demonseedxp），适用于应用程序图标和Splash屏幕！</value>
+  </data>
 </root>

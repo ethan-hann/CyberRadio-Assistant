@@ -1362,4 +1362,8 @@ Are you sure you want to clear all station data?</value>
   <data name="ConfigError" xml:space="preserve">
     <value>The configuration file was invalid or could not be read. A default config will be used.</value>
   </data>
+  <data name="AboutCredits" xml:space="preserve">
+    <value>Special thanks to justarandomguyintheinternet (https://github.com/justarandomguyintheinternet/CP77_radioExt) for the awesome radioExt mod!
+Special thanks to demonseedxp (https://next.nexusmods.com/profile/demonseedxp) for the app icon and splash screen!</value>
+  </data>
 </root>

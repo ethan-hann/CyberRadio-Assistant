@@ -1359,4 +1359,11 @@ Assurez-vous de créer une sauvegarde de vos stations avant de nettoyer les donn
   <data name="ConfigReloadSuccess" xml:space="preserve">
     <value>Configuration rechargée avec succès à partir du fichier.</value>
   </data>
+  <data name="ConfigError" xml:space="preserve">
+    <value>Le fichier de configuration n'était pas valide ou n'a pas pu être lu. Une configuration par défaut sera utilisée.</value>
+  </data>
+  <data name="AboutCredits" xml:space="preserve">
+    <value>Un merci spécial à juskarandomguyintheinternet (https://github.com/justarandomguyintheinternet/CP77RadioExt) pour le super radioext mod!
+Un merci spécial à DeMonseedxp (https://next.nexusmods.com/profile/demonseedxp) pour l'icône de l'application et l'écran Splash!</value>
+  </data>
 </root>

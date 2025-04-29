@@ -1359,4 +1359,11 @@ Sei sicuro di voler cancellare tutti i dati della stazione?</value>
   <data name="ConfigReloadSuccess" xml:space="preserve">
     <value>Configurazione ricaricata correttamente dal file.</value>
   </data>
+  <data name="ConfigError" xml:space="preserve">
+    <value>Il file di configurazione non era valido o non poteva essere letto. Verrà utilizzata una configurazione predefinita.</value>
+  </data>
+  <data name="AboutCredits" xml:space="preserve">
+    <value>Un ringraziamento speciale a Justarandomguyintheinternet (https://github.com/justarandomguyintheinternet/cp77radioext) per la fantastica mod radioext!
+Un ringraziamento speciale a DemonseedXP (https://next.nexusmods.com/profile/demonseedxp) per l'icona dell'app e la schermata di splash!</value>
+  </data>
 </root>

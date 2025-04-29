@@ -40,6 +40,21 @@ public partial class AboutBox : Form
     private void AboutBox_Load(object sender, EventArgs e)
     {
         Translate();
+
+        PopulateRichText();
+    }
+
+    private void PopulateRichText()
+    {
+        rtbCredits.DetectUrls = true;
+        rtbCredits.LinkClicked += (s, e) =>
+        {
+            if (e.LinkText is { } url)
+                url.OpenUrl();
+        };
+
+        // Set the text for the credits
+        rtbCredits.Text = Strings.AboutCredits;
     }
 
     /// <summary>
@@ -50,8 +65,6 @@ public partial class AboutBox : Form
         Text = string.Concat(Strings.About, " - ", string.Format(Strings.AboutVersion, GlobalData.AppVersion));
         lblAppName.Text = Strings.MainTitle;
         lblAboutInfo.Text = Strings.AboutInfo;
-        lblSpecialThanks1.Text = Strings.AboutSpecialThanks1;
-        lblSpecialThanks2.Text = Strings.AboutSpecialThanks2;
         lnkGithubRepo.Text = Strings.AboutGithubRepo;
         lnkLicense.Text = Strings.AboutLicense;
     }

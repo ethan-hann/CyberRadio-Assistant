@@ -32,11 +32,9 @@
             lblAppName = new Label();
             tableLayoutPanel1 = new TableLayoutPanel();
             panel1 = new Panel();
+            rtbCredits = new RichTextBox();
             lnkNexusMods = new LinkLabel();
             lnkGithubRepo = new LinkLabel();
-            lblSpecialThanks2 = new Label();
-            lnkRadioExtDev = new LinkLabel();
-            lblSpecialThanks1 = new Label();
             lblAboutInfo = new Label();
             tableLayoutPanel2 = new TableLayoutPanel();
             lblCopyright = new Label();
@@ -91,16 +89,23 @@
             // 
             // panel1
             // 
+            panel1.Controls.Add(rtbCredits);
             panel1.Controls.Add(lnkNexusMods);
             panel1.Controls.Add(lnkGithubRepo);
-            panel1.Controls.Add(lblSpecialThanks2);
-            panel1.Controls.Add(lnkRadioExtDev);
-            panel1.Controls.Add(lblSpecialThanks1);
             panel1.Dock = DockStyle.Fill;
             panel1.Location = new Point(3, 75);
             panel1.Name = "panel1";
             panel1.Size = new Size(366, 76);
             panel1.TabIndex = 3;
+            // 
+            // rtbCredits
+            // 
+            rtbCredits.Dock = DockStyle.Left;
+            rtbCredits.Location = new Point(0, 0);
+            rtbCredits.Name = "rtbCredits";
+            rtbCredits.Size = new Size(284, 76);
+            rtbCredits.TabIndex = 10;
+            rtbCredits.Text = "";
             // 
             // lnkNexusMods
             // 
@@ -126,39 +131,6 @@
             lnkGithubRepo.Text = "Github Repo";
             lnkGithubRepo.TextAlign = ContentAlignment.MiddleCenter;
             lnkGithubRepo.LinkClicked += LnkGithubRepo_LinkClicked;
-            // 
-            // lblSpecialThanks2
-            // 
-            lblSpecialThanks2.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            lblSpecialThanks2.AutoSize = true;
-            lblSpecialThanks2.Location = new Point(3, 55);
-            lblSpecialThanks2.Name = "lblSpecialThanks2";
-            lblSpecialThanks2.Size = new Size(172, 15);
-            lblSpecialThanks2.TabIndex = 5;
-            lblSpecialThanks2.Text = "for the awesome radioExt mod!";
-            lblSpecialThanks2.TextAlign = ContentAlignment.MiddleCenter;
-            // 
-            // lnkRadioExtDev
-            // 
-            lnkRadioExtDev.AutoSize = true;
-            lnkRadioExtDev.Location = new Point(3, 40);
-            lnkRadioExtDev.Name = "lnkRadioExtDev";
-            lnkRadioExtDev.Size = new Size(166, 15);
-            lnkRadioExtDev.TabIndex = 4;
-            lnkRadioExtDev.TabStop = true;
-            lnkRadioExtDev.Text = "justarandomguyontheinternet";
-            lnkRadioExtDev.LinkClicked += LnkRadioExtDev_LinkClicked;
-            // 
-            // lblSpecialThanks1
-            // 
-            lblSpecialThanks1.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            lblSpecialThanks1.AutoSize = true;
-            lblSpecialThanks1.Location = new Point(3, 25);
-            lblSpecialThanks1.Name = "lblSpecialThanks1";
-            lblSpecialThanks1.Size = new Size(96, 15);
-            lblSpecialThanks1.TabIndex = 3;
-            lblSpecialThanks1.Text = "Special thanks to";
-            lblSpecialThanks1.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // lblAboutInfo
             // 
@@ -249,12 +221,10 @@
         private Label lblAboutInfo;
         private Label lblCopyright;
         private Panel panel1;
-        private Label lblSpecialThanks2;
-        private LinkLabel lnkRadioExtDev;
-        private Label lblSpecialThanks1;
         private TableLayoutPanel tableLayoutPanel2;
         private LinkLabel lnkGithubRepo;
         private LinkLabel lnkLicense;
         private LinkLabel lnkNexusMods;
+        private RichTextBox rtbCredits;
     }
 }
