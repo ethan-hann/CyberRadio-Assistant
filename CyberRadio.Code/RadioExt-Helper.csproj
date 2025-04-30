@@ -67,7 +67,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="AetherUtils.Core" Version="1.0.10" />
+        <PackageReference Include="AetherUtils.Core" Version="1.0.12" />
         <PackageReference Include="NAudio" Version="2.2.1" />
         <PackageReference Include="Pathoschild.FluentNexus" Version="1.0.5" />
         <PackageReference Include="SharpCompress" Version="0.39.0" />
