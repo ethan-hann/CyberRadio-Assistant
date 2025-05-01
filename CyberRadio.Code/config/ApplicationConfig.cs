@@ -73,9 +73,10 @@ public sealed class ApplicationConfig
     /// <summary>
     /// Specifies the backup compression level to use when zipping the staging folder.
     /// </summary>
-    [Config("backupCompressionLevel", "Specifies the backup compression level to use when zipping the staging folder.", CompressionLevel.Normal)]
+    [Config("backupCompressionLevel", "Specifies the backup compression level to use when zipping the staging folder.",
+        CompressionLevel.Normal)]
     [Description("BackupCompressionLevelHelp")]
-    public CompressionLevel BackupCompressionLevel { get; set; }
+    public CompressionLevel BackupCompressionLevel { get; set; } = CompressionLevel.Normal;
 
     /// <summary>
     /// Specifies the path to the staging directory where the radio stations are temporarily stored.
@@ -93,7 +94,7 @@ public sealed class ApplicationConfig
     /// The currently selected language for the application.
     /// </summary>
     [Config("language", "The currently selected language for the application.", "English (en)")]
-    public string Language { get; set; } = string.Empty;
+    public string Language { get; set; } = "English (en)";
 
     /// <summary>
     /// The window size of the application.
