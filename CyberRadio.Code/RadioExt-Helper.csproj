@@ -13,7 +13,7 @@
         <GenerateDocumentationFile>True</GenerateDocumentationFile>
         <AssemblyVersion>2.0.446.0</AssemblyVersion>
         <FileVersion>2.0.446.0</FileVersion>
-        <Version>2.0.455</Version>
+        <Version>2.0.446</Version>
         <Company>Ethan Hann</Company>
         <Product>Cyber Radio Assistant</Product>
         <NeutralLanguage>en</NeutralLanguage>
@@ -71,15 +71,15 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="AetherUtils.Core" Version="1.0.12" />
+        <PackageReference Include="AetherUtils.Core" Version="1.0.14" />
         <PackageReference Include="NAudio" Version="2.2.1" />
         <PackageReference Include="Pathoschild.FluentNexus" Version="1.0.5" />
         <PackageReference Include="SharpCompress" Version="0.39.0" />
         <PackageReference Include="SharpZipLib" Version="1.4.2" />
-        <PackageReference Include="SixLabors.ImageSharp" Version="3.1.7" />
-        <PackageReference Include="System.Management" Version="9.0.2" />
+        <PackageReference Include="SixLabors.ImageSharp" Version="3.1.8" />
+        <PackageReference Include="System.Management" Version="9.0.4" />
         <PackageReference Include="System.Net.Http" Version="4.3.4" />
-        <PackageReference Include="System.Text.Json" Version="9.0.2" />
+        <PackageReference Include="System.Text.Json" Version="9.0.4" />
         <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
         <PackageReference Include="TagLibSharp" Version="2.3.0" />
         <PackageReference Include="WIG.Lib" Version="1.0.46" />
