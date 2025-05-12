@@ -50,6 +50,7 @@ public partial class SplashScreen : Form
     private async void SplashScreen_Load(object sender, EventArgs e)
     {
         UpdateStatus(Strings.SplashScreen_Starting);
+
         var statusMessages = await PerformBackgroundTasks();
         statusMessages.ForEach(msg =>
         {

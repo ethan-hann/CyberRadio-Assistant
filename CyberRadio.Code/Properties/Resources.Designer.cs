@@ -1913,6 +1913,16 @@ namespace RadioExt_Helper.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Splash_screen_fixed {
+            get {
+                object obj = ResourceManager.GetObject("Splash_screen_fixed", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap station_size {
             get {
                 object obj = ResourceManager.GetObject("station_size", resourceCulture);

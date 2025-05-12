@@ -38,13 +38,13 @@
             // 
             // lblVersion
             // 
-            lblVersion.Anchor = AnchorStyles.Left;
+            lblVersion.Anchor = AnchorStyles.Right;
             lblVersion.AutoSize = true;
             lblVersion.BackColor = Color.Transparent;
             lblVersion.Font = new Font("Segoe UI Variable Display", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblVersion.ForeColor = Color.White;
             lblVersion.ImageAlign = ContentAlignment.MiddleLeft;
-            lblVersion.Location = new Point(3, 7);
+            lblVersion.Location = new Point(489, 1);
             lblVersion.Name = "lblVersion";
             lblVersion.Padding = new Padding(40, 0, 0, 0);
             lblVersion.Size = new Size(92, 26);
@@ -59,11 +59,11 @@
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             tableLayoutPanel1.Controls.Add(lblSplashStatus, 0, 0);
             tableLayoutPanel1.Dock = DockStyle.Bottom;
-            tableLayoutPanel1.Location = new Point(0, 288);
+            tableLayoutPanel1.Location = new Point(0, 315);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 1;
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel1.Size = new Size(584, 73);
+            tableLayoutPanel1.Size = new Size(584, 46);
             tableLayoutPanel1.TabIndex = 3;
             // 
             // lblSplashStatus
@@ -72,7 +72,7 @@
             lblSplashStatus.AutoSize = true;
             lblSplashStatus.Font = new Font("Segoe UI Variable Display", 11.25F, FontStyle.Bold);
             lblSplashStatus.ForeColor = Color.White;
-            lblSplashStatus.Location = new Point(3, 26);
+            lblSplashStatus.Location = new Point(3, 13);
             lblSplashStatus.Name = "lblSplashStatus";
             lblSplashStatus.Size = new Size(578, 20);
             lblSplashStatus.TabIndex = 0;
@@ -90,7 +90,7 @@
             tableLayoutPanel2.Name = "tableLayoutPanel2";
             tableLayoutPanel2.RowCount = 1;
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel2.Size = new Size(584, 40);
+            tableLayoutPanel2.Size = new Size(584, 29);
             tableLayoutPanel2.TabIndex = 4;
             // 
             // SplashScreen
@@ -98,7 +98,7 @@
             AutoScaleDimensions = new SizeF(96F, 96F);
             AutoScaleMode = AutoScaleMode.Dpi;
             BackColor = Color.Black;
-            BackgroundImage = Properties.Resources.Splash_screen_4_2;
+            BackgroundImage = Properties.Resources.Splash_screen_fixed;
             BackgroundImageLayout = ImageLayout.Stretch;
             ClientSize = new Size(584, 361);
             ControlBox = false;
