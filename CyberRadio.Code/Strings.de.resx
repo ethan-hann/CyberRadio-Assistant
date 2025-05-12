@@ -1257,4 +1257,113 @@ Sind Sie sicher, dass Sie alle Stationsdaten löschen möchten?</value>
   <data name="CopySongFilesToBackupHelp" xml:space="preserve">
     <value>Wenn Sie überprüft werden, gibt an, dass Songdateien (einschließlich externer) in der Backup .zip -Datei für die Stationen aufgenommen werden sollten.</value>
   </data>
+  <data name="MainForm_NoStationsImported" xml:space="preserve">
+    <value>Es wurden keine Stationen importiert. Überprüfen Sie, ob die Datei .zip/.rar eine gültige Station enthält.</value>
+  </data>
+  <data name="MainForm_NoStationsImportedTitle" xml:space="preserve">
+    <value>Nichts zu importieren</value>
+  </data>
+  <data name="StagingPathForbidden" xml:space="preserve">
+    <value>Ungültiger Pfad: {0}</value>
+  </data>
+  <data name="ForbiddenPath_RootDirectory" xml:space="preserve">
+    <value>Der Staging -Pfad kann nicht auf die Wurzel eines Laufwerks eingestellt werden</value>
+  </data>
+  <data name="ForbiddenPath_SystemDirectory" xml:space="preserve">
+    <value>Der Staging -Pfad kann nicht auf ein reserviertes Systemverzeichnis eingestellt werden.</value>
+  </data>
+  <data name="ForbiddenPath_ProgramFiles" xml:space="preserve">
+    <value>Der Staging -Pfad kann nicht auf das Verzeichnis der Programmdateien eingestellt werden.</value>
+  </data>
+  <data name="ForbiddenPath_UserAppData" xml:space="preserve">
+    <value>Der Staging -Pfad kann nicht auf ein Anwendungsdatenverzeichnis eingestellt werden.</value>
+  </data>
+  <data name="ForbiddenPath_VortexFolder" xml:space="preserve">
+    <value>Der Staging-Pfad kann nicht auf einen wirbelmännischen Ordner eingestellt werden.</value>
+  </data>
+  <data name="SplashScreen_CheckingStagingPath" xml:space="preserve">
+    <value>Überprüfen Sie den Staging -Pfad ...</value>
+  </data>
+  <data name="SplashScreen_StagingPathForbidden" xml:space="preserve">
+    <value>Der Staging -Pfad war ungültig. Auf eine leere Zeichenfolge zurücksetzen.</value>
+  </data>
+  <data name="SplashScreen_StagingPathValid" xml:space="preserve">
+    <value>Der Staging -Pfad ist gültig!</value>
+  </data>
+  <data name="ForbiddenPathsHelp" xml:space="preserve">
+    <value>Definiert die Schlüsselwörter, die beim Einstellen des Staging -Pfades für Radiosender durchsucht werden. Alle Pfade, die hier Schlüsselwörter enthalten, sind nicht zulässig.</value>
+  </data>
+  <data name="ForbiddenKeywordListViewColumn" xml:space="preserve">
+    <value>Stichwort</value>
+  </data>
+  <data name="ForbiddenKeywordEmpty" xml:space="preserve">
+    <value>Schlüsselwort kann nicht leer sein!</value>
+  </data>
+  <data name="ForbiddenKeywordNoGroup" xml:space="preserve">
+    <value>Gruppe kann nicht leer sein!</value>
+  </data>
+  <data name="ForbiddenKeywordInput_Title" xml:space="preserve">
+    <value>Neues Keyword</value>
+  </data>
+  <data name="ForbiddenKeywordInput_Keyword" xml:space="preserve">
+    <value>Stichwort:</value>
+  </data>
+  <data name="ForbiddenKeywordInput_Group" xml:space="preserve">
+    <value>Gruppe:</value>
+  </data>
+  <data name="ForbiddenKeywordInput_IsForbidden" xml:space="preserve">
+    <value>Ist verboten?</value>
+  </data>
+  <data name="ForbiddenKeywordInput_AddAndNew" xml:space="preserve">
+    <value>Hinzufügen und neu</value>
+  </data>
+  <data name="ForbiddenKeywordInput_Add" xml:space="preserve">
+    <value>Hinzufügen und schließen</value>
+  </data>
+  <data name="ForbiddenPath_KeywordMatch" xml:space="preserve">
+    <value>Der Staging -Pfad enthält verbotene Schlüsselwörter. Sie können diese in den Einstellungen definieren.</value>
+  </data>
+  <data name="DeleteSelectedKeywords" xml:space="preserve">
+    <value>Löschen Sie ausgewählte Schlüsselwörter</value>
+  </data>
+  <data name="PathSettings" xml:space="preserve">
+    <value>Pfadaufstellung</value>
+  </data>
+  <data name="NewKeywordHelp" xml:space="preserve">
+    <value>Fügen Sie der verbotenen Pfadprüfung ein neues Schlüsselwort hinzu.</value>
+  </data>
+  <data name="DeleteSelectedKeywordHelp" xml:space="preserve">
+    <value>Löschen Sie die ausgewählten Schlüsselwörter aus der Liste. Normalerweise ist es besser, das Schlüsselwort mit dem Kontrollkästchen einfach zu deaktivieren.</value>
+  </data>
+  <data name="SystemPaths" xml:space="preserve">
+    <value>Systempfade</value>
+  </data>
+  <data name="GroupNotAllowedToBeModified" xml:space="preserve">
+    <value>Die Gruppe "Systempfade" kann nicht geändert werden.</value>
+  </data>
+  <data name="OodleDllMissing" xml:space="preserve">
+    <value>'oodle.dll' wurde nicht in den Dateien des Spiels gefunden. Möglicherweise haben Sie Probleme beim Erstellen und Extrahieren von Stationssymbolen.</value>
+  </data>
+  <data name="OodleDllFound" xml:space="preserve">
+    <value>In den Spieldateien gefunden {0}! Sie sollten keine Probleme mit Ikonen haben.</value>
+  </data>
+  <data name="ConfigReloadConfirm" xml:space="preserve">
+    <value>Sind Sie sicher, dass Sie die Konfiguration aus der Datei neu laden möchten? Alle ungeretteten Optionen gehen verloren.</value>
+  </data>
+  <data name="ConfigReloadError" xml:space="preserve">
+    <value>Beim Neuladen der Konfigurationsdatei trat ein Fehler auf.</value>
+  </data>
+  <data name="ReloadFromFile" xml:space="preserve">
+    <value>Aus der Datei neu laden</value>
+  </data>
+  <data name="ConfigReloadSuccess" xml:space="preserve">
+    <value>Die Konfiguration erfolgreich aus der Datei neu laden.</value>
+  </data>
+  <data name="ConfigError" xml:space="preserve">
+    <value>Die Konfigurationsdatei war ungültig oder konnte nicht gelesen werden. Eine Standardkonfiguration wird verwendet.</value>
+  </data>
+  <data name="AboutCredits" xml:space="preserve">
+    <value>Besonderer Dank geht an JustarandomguyInternet (https://github.com/justarandomguyInternet/CP77Radioext) für den fantastischen Radiotext -Mod!
+Besonderer Dank geht an Demonseedxp (https://next.nexusmods.com/profile/demonseedxp) für das App -Symbol und den Splash -Bildschirm!</value>
+  </data>
 </root>

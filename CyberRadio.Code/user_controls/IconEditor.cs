@@ -1,5 +1,5 @@
 ﻿// IconEditor.cs : RadioExt-Helper
-// Copyright (C) 2024  Ethan Hann
+// Copyright (C) 2025  Ethan Hann
 // 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -120,10 +120,24 @@ public sealed partial class IconEditor : UserControl, IEditor
     /// </summary>
     public event EventHandler<TrackableObject<WolvenIcon>>? IconUpdated;
 
+    /// <summary>
+    /// Event that occurs when an icon import has started.
+    /// </summary>
     public event EventHandler? IconImportStarted;
+
+    /// <summary>
+    /// Event that occurs when an icon import has finished.
+    /// </summary>
     public event EventHandler? IconImportFinished;
 
+    /// <summary>
+    /// Event that occurs when an icon extraction has started.
+    /// </summary>
     public event EventHandler? IconExtractStarted;
+
+    /// <summary>
+    /// Event that occurs when an icon extraction has finished.
+    /// </summary>
     public event EventHandler? IconExtractFinished;
 
     ~IconEditor()
@@ -164,7 +178,7 @@ public sealed partial class IconEditor : UserControl, IEditor
             picStationIcon.AllowDrop = false;
             btnImportIcon.Visible = false;
             btnStartExtract.Enabled = true;
-            SetImagePreviewProperties(Icon.TrackedObject.IsFromArchive);
+            SetImagePreviewProperties(true);
         }
         else
         {
@@ -201,16 +215,24 @@ public sealed partial class IconEditor : UserControl, IEditor
                 {
                     txtAtlasName.Enabled = false;
 
-                    txtAtlasName.Text =
-                        !Icon.TrackedObject.CustomIcon.InkAtlasPath.Equals("path\\to\\custom\\atlas.inkatlas")
-                            ? Icon.TrackedObject.AtlasName
-                            : string.Empty;
-                    txtAtlasName.PlaceholderText =
-                        Strings.IconEditor_SetFieldsBasedOnImagePath_To_be_determined_from_archive___;
+                    if (Path.Exists(Icon.TrackedObject.ImagePath))
+                    {
+                        txtAtlasName.Text = Icon.TrackedObject.AtlasName;
+                    }
+                    else
+                    {
+                        txtAtlasName.Text = string.Empty;
+                        txtAtlasName.PlaceholderText =
+                            Strings.IconEditor_SetFieldsBasedOnImagePath_To_be_determined_from_archive___;
+                        lblImageStatus.Text = Strings
+                            .IconEditor_SetFieldsBasedOnImagePath_The_extracted_image_could_not_be_found_;
+                    }
 
-                    btnStartExtract.Enabled =
-                        !Icon.TrackedObject
-                            .CheckIconValid(); //Disable the extract button if the icon is valid (no need to extract again).
+                    // We only want to disable the import/extract button if the icon is already created. No need to extract again.
+                    btnImportIcon.Enabled = Icon.TrackedObject.IsFromArchive
+                        ? !Path.Exists(Icon.TrackedObject.ImagePath)
+                        : !Path.Exists(Icon.TrackedObject.ArchivePath);
+                    btnStartExtract.Enabled = btnImportIcon.Enabled;
                 }
             });
         }
@@ -512,23 +534,42 @@ public sealed partial class IconEditor : UserControl, IEditor
             picStationIcon.ClearImage();
 
             //If the icon is valid, prevent changes to the fields, and set fromInitialArchive to false (indicating the icon is valid) so the image gets set.
-            if (Icon.TrackedObject.CheckIconValid())
-            {
-                fromInitialArchive = false;
-                MakeEditorReadOnly();
-            }
-            else
-            {
-                UnmakeEditorReadOnly();
-            }
+            //if (Icon.TrackedObject.CheckIconValid())
+            //{
+            //    fromInitialArchive = false;
+            //    MakeEditorReadOnly();
+            //}
+            //else
+            //{
+            //    UnmakeEditorReadOnly();
+            //}
 
             if (fromInitialArchive)
             {
-                lblImageWidth.Text = string.Format(Strings.IconEditor_Translate_W___0_, "TBD");
-                lblImageHeight.Text = string.Format(Strings.IconEditor_Translate_H___0_, "TBD");
-                lblImageFormat.Text = string.Format(Strings.IconEditor_Translate_Format___0_, "TBD");
-                lblImageColorMode.Text = string.Format(Strings.IconEditor_Translate_Color_Mode___0_, "TBD");
-                picStationIcon.Image = Resources.pending_extraction_128x128;
+                if (!Path.Exists(Icon.TrackedObject.ImagePath))
+                {
+                    lblImageWidth.Text = string.Format(Strings.IconEditor_Translate_W___0_, "TBD");
+                    lblImageHeight.Text = string.Format(Strings.IconEditor_Translate_H___0_, "TBD");
+                    lblImageFormat.Text = string.Format(Strings.IconEditor_Translate_Format___0_, "TBD");
+                    lblImageColorMode.Text = string.Format(Strings.IconEditor_Translate_Color_Mode___0_, "TBD");
+                    picStationIcon.Image = Resources.pending_extraction_128x128;
+                    UnmakeEditorReadOnly();
+                }
+                else
+                {
+                    Icon.TrackedObject.EnsureImage();
+                    picStationIcon.SetImage(Icon.TrackedObject.ImagePath);
+
+                    lblImageWidth.Text = string.Format(Strings.IconEditor_Translate_W___0_,
+                        picStationIcon.ImageProperties.Width + " px");
+                    lblImageHeight.Text = string.Format(Strings.IconEditor_Translate_H___0_,
+                        picStationIcon.ImageProperties.Height + " px");
+                    lblImageFormat.Text = string.Format(Strings.IconEditor_Translate_Format___0_,
+                        picStationIcon.ImageProperties.ImageFormat);
+                    lblImageColorMode.Text = string.Format(Strings.IconEditor_Translate_Color_Mode___0_,
+                        picStationIcon.ImageProperties.PixelFormat);
+                    MakeEditorReadOnly();
+                }
             }
             else
             {
@@ -543,6 +584,10 @@ public sealed partial class IconEditor : UserControl, IEditor
                     picStationIcon.ImageProperties.ImageFormat);
                 lblImageColorMode.Text = string.Format(Strings.IconEditor_Translate_Color_Mode___0_,
                     picStationIcon.ImageProperties.PixelFormat);
+                if (Icon.TrackedObject.CheckIconValid())
+                    MakeEditorReadOnly();
+                else
+                    UnmakeEditorReadOnly();
             }
 
             if (picStationIcon.Image == null) return;
@@ -575,7 +620,12 @@ public sealed partial class IconEditor : UserControl, IEditor
             txtImagePath.ReadOnly = true;
             txtIconPath.ReadOnly = true;
             txtIconPart.ReadOnly = true;
-            btnImportIcon.Enabled = false;
+
+            // We only want to disable the import/extract button if the icon is already created.
+            btnImportIcon.Enabled = Icon.TrackedObject.IsFromArchive
+                ? !Path.Exists(Icon.TrackedObject.ImagePath)
+                : !Path.Exists(Icon.TrackedObject.ArchivePath);
+
             btnCancelImport.Enabled = _isImporting || _isExtracting;
             picStationIcon.AllowDrop = false;
 

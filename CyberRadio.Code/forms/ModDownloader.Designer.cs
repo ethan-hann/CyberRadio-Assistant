@@ -36,7 +36,7 @@
             colModId = new DataGridViewTextBoxColumn();
             panel1 = new Panel();
             btnPasteModIds = new Button();
-            lblModIdHelp = new custom_controls.WrapLabel();
+            lblModIdHelp = new RadioExt_Helper.custom_controls.WrapLabel();
             tableLayoutPanel1 = new TableLayoutPanel();
             btnCancel = new Button();
             btnGetMods = new Button();

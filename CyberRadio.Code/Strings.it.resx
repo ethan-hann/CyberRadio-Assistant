@@ -1257,4 +1257,113 @@ Sei sicuro di voler cancellare tutti i dati della stazione?</value>
   <data name="CopySongFilesToBackupHelp" xml:space="preserve">
     <value>Se verificati, indica che i file di brani (incluso esterno) dovrebbero essere inclusi nel file .zip di backup per le stazioni.</value>
   </data>
+  <data name="MainForm_NoStationsImported" xml:space="preserve">
+    <value>Nessuna stazione è stata importata. Verificare il file .zip/.rar contiene una stazione valida.</value>
+  </data>
+  <data name="MainForm_NoStationsImportedTitle" xml:space="preserve">
+    <value>Niente da importare</value>
+  </data>
+  <data name="StagingPathForbidden" xml:space="preserve">
+    <value>Path non valido: {0}</value>
+  </data>
+  <data name="ForbiddenPath_RootDirectory" xml:space="preserve">
+    <value>Il percorso di stadiazione non può essere impostato sulla radice di un'unità</value>
+  </data>
+  <data name="ForbiddenPath_SystemDirectory" xml:space="preserve">
+    <value>Il percorso di stadiazione non può essere impostato su una directory di sistema riservata.</value>
+  </data>
+  <data name="ForbiddenPath_ProgramFiles" xml:space="preserve">
+    <value>Il percorso di stadiazione non può essere impostato sulla directory dei file del programma.</value>
+  </data>
+  <data name="ForbiddenPath_UserAppData" xml:space="preserve">
+    <value>Il percorso di stadiazione non può essere impostato su una directory dei dati dell'applicazione.</value>
+  </data>
+  <data name="ForbiddenPath_VortexFolder" xml:space="preserve">
+    <value>Il percorso di staging non può essere impostato su una cartella gestita da vortice.</value>
+  </data>
+  <data name="SplashScreen_CheckingStagingPath" xml:space="preserve">
+    <value>Controllo del percorso di stadiazione ...</value>
+  </data>
+  <data name="SplashScreen_StagingPathForbidden" xml:space="preserve">
+    <value>Il percorso di stadiazione non era valido. Ripristina una stringa vuota.</value>
+  </data>
+  <data name="SplashScreen_StagingPathValid" xml:space="preserve">
+    <value>Il percorso di stadiazione è valido!</value>
+  </data>
+  <data name="ForbiddenPathsHelp" xml:space="preserve">
+    <value>Definisce le parole chiave che vengono cercate quando si imposta il percorso di stadiazione per le stazioni radio. Non sono consentiti percorsi che contengono parole chiave qui.</value>
+  </data>
+  <data name="ForbiddenKeywordListViewColumn" xml:space="preserve">
+    <value>Parole chiave</value>
+  </data>
+  <data name="ForbiddenKeywordEmpty" xml:space="preserve">
+    <value>La parola chiave non può essere vuota!</value>
+  </data>
+  <data name="ForbiddenKeywordNoGroup" xml:space="preserve">
+    <value>Il gruppo non può essere vuoto!</value>
+  </data>
+  <data name="ForbiddenKeywordInput_Title" xml:space="preserve">
+    <value>Nuova parola chiave</value>
+  </data>
+  <data name="ForbiddenKeywordInput_Keyword" xml:space="preserve">
+    <value>Parola chiave:</value>
+  </data>
+  <data name="ForbiddenKeywordInput_Group" xml:space="preserve">
+    <value>Gruppo:</value>
+  </data>
+  <data name="ForbiddenKeywordInput_IsForbidden" xml:space="preserve">
+    <value>È proibito?</value>
+  </data>
+  <data name="ForbiddenKeywordInput_AddAndNew" xml:space="preserve">
+    <value>Aggiungi e nuovo</value>
+  </data>
+  <data name="ForbiddenKeywordInput_Add" xml:space="preserve">
+    <value>Aggiungi e chiudi</value>
+  </data>
+  <data name="ForbiddenPath_KeywordMatch" xml:space="preserve">
+    <value>Il percorso di stadiazione contiene parole chiave proibite. Puoi definirli nelle impostazioni.</value>
+  </data>
+  <data name="DeleteSelectedKeywords" xml:space="preserve">
+    <value>Elimina parole chiave selezionate</value>
+  </data>
+  <data name="PathSettings" xml:space="preserve">
+    <value>Setup del percorso</value>
+  </data>
+  <data name="NewKeywordHelp" xml:space="preserve">
+    <value>Aggiungi una nuova parola chiave al controllo del percorso proibito.</value>
+  </data>
+  <data name="DeleteSelectedKeywordHelp" xml:space="preserve">
+    <value>Elimina le parole chiave selezionate dall'elenco. Di solito è meglio disabilitare la parola chiave con la casella di controllo.</value>
+  </data>
+  <data name="SystemPaths" xml:space="preserve">
+    <value>Percorsi di sistema</value>
+  </data>
+  <data name="GroupNotAllowedToBeModified" xml:space="preserve">
+    <value>Il gruppo "percorsi di sistema" non può essere modificato.</value>
+  </data>
+  <data name="OodleDllMissing" xml:space="preserve">
+    <value>'oodle.dll' non è stato trovato nei file del gioco. Potresti avere problemi di creare ed estrarre icone della stazione.</value>
+  </data>
+  <data name="OodleDllFound" xml:space="preserve">
+    <value>Trovato {0} nei file di gioco! Non dovresti avere problemi con le icone.</value>
+  </data>
+  <data name="ConfigReloadConfirm" xml:space="preserve">
+    <value>Sei sicuro di voler ricaricare la configurazione dal file? Tutte le opzioni non salvate andranno perse.</value>
+  </data>
+  <data name="ConfigReloadError" xml:space="preserve">
+    <value>Si è verificato un errore durante la ricarica del file di configurazione.</value>
+  </data>
+  <data name="ReloadFromFile" xml:space="preserve">
+    <value>Ricarica dal file</value>
+  </data>
+  <data name="ConfigReloadSuccess" xml:space="preserve">
+    <value>Configurazione ricaricata correttamente dal file.</value>
+  </data>
+  <data name="ConfigError" xml:space="preserve">
+    <value>Il file di configurazione non era valido o non poteva essere letto. Verrà utilizzata una configurazione predefinita.</value>
+  </data>
+  <data name="AboutCredits" xml:space="preserve">
+    <value>Un ringraziamento speciale a Justarandomguyintheinternet (https://github.com/justarandomguyintheinternet/cp77radioext) per la fantastica mod radioext!
+Un ringraziamento speciale a DemonseedXP (https://next.nexusmods.com/profile/demonseedxp) per l'icona dell'app e la schermata di splash!</value>
+  </data>
 </root>

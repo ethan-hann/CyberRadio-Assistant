@@ -28,16 +28,18 @@
         /// </summary>
         private void InitializeComponent()
         {
+            ListViewGroup listViewGroup1 = new ListViewGroup("Game Launchers", HorizontalAlignment.Left);
+            ListViewGroup listViewGroup2 = new ListViewGroup("Mod Managers", HorizontalAlignment.Left);
+            ListViewGroup listViewGroup3 = new ListViewGroup("Windows Related", HorizontalAlignment.Left);
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ConfigForm));
             tableLayoutPanel1 = new TableLayoutPanel();
             chkCheckForUpdates = new CheckBox();
             tableLayoutPanel7 = new TableLayoutPanel();
-            chkCopySongFilesToBackup = new CheckBox();
             lblBackupCompressionLvl = new Label();
             cmbCompressionLevels = new ComboBox();
+            chkCopySongFilesToBackup = new CheckBox();
             chkAutoExportToGame = new CheckBox();
             chkWatchForChanges = new CheckBox();
-            btnEditPaths = new Button();
             tableLayoutPanel6 = new TableLayoutPanel();
             btnEditDefaultSongLocation = new Button();
             lblDefaultSongLocation = new Label();
@@ -49,6 +51,14 @@
             btnEditLogsPath = new Button();
             lblLogPathLabel = new Label();
             lblCurrentLogPath = new Label();
+            tabPathSetup = new TabPage();
+            splitContainer1 = new SplitContainer();
+            lvForbiddenPaths = new ListView();
+            panel3 = new Panel();
+            tableLayoutPanel5 = new TableLayoutPanel();
+            btnEditPaths = new Button();
+            btnDeleteSelectedKeyword = new Button();
+            btnAddKeyword = new Button();
             tabNexus = new TabPage();
             tableLayoutPanel4 = new TableLayoutPanel();
             panel2 = new Panel();
@@ -64,9 +74,10 @@
             lblApiInputHelp = new Label();
             txtApiKey = new MaskedTextBox();
             tableLayoutPanel2 = new TableLayoutPanel();
+            btnReloadFromFile = new Button();
+            btnSaveAndClose = new Button();
             btnCancel = new Button();
             btnResetToDefault = new Button();
-            btnSaveAndClose = new Button();
             fldrOpenLogPath = new FolderBrowserDialog();
             statusStrip1 = new StatusStrip();
             lblHelpText = new ToolStripStatusLabel();
@@ -78,6 +89,13 @@
             tabGeneral.SuspendLayout();
             tabLogging.SuspendLayout();
             tableLayoutPanel3.SuspendLayout();
+            tabPathSetup.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
+            splitContainer1.Panel1.SuspendLayout();
+            splitContainer1.Panel2.SuspendLayout();
+            splitContainer1.SuspendLayout();
+            panel3.SuspendLayout();
+            tableLayoutPanel5.SuspendLayout();
             tabNexus.SuspendLayout();
             tableLayoutPanel4.SuspendLayout();
             panel2.SuspendLayout();
@@ -95,7 +113,6 @@
             tableLayoutPanel1.Controls.Add(tableLayoutPanel7, 0, 3);
             tableLayoutPanel1.Controls.Add(chkAutoExportToGame, 0, 1);
             tableLayoutPanel1.Controls.Add(chkWatchForChanges, 0, 2);
-            tableLayoutPanel1.Controls.Add(btnEditPaths, 0, 5);
             tableLayoutPanel1.Controls.Add(tableLayoutPanel6, 0, 4);
             tableLayoutPanel1.Dock = DockStyle.Fill;
             tableLayoutPanel1.Location = new Point(3, 3);
@@ -142,21 +159,6 @@
             tableLayoutPanel7.Size = new Size(773, 33);
             tableLayoutPanel7.TabIndex = 2;
             // 
-            // chkCopySongFilesToBackup
-            // 
-            chkCopySongFilesToBackup.Anchor = AnchorStyles.Left;
-            chkCopySongFilesToBackup.AutoSize = true;
-            chkCopySongFilesToBackup.Location = new Point(7, 7);
-            chkCopySongFilesToBackup.Margin = new Padding(7, 3, 3, 3);
-            chkCopySongFilesToBackup.Name = "chkCopySongFilesToBackup";
-            chkCopySongFilesToBackup.Size = new Size(171, 19);
-            chkCopySongFilesToBackup.TabIndex = 3;
-            chkCopySongFilesToBackup.Tag = "CopySongFilesToBackupHelp";
-            chkCopySongFilesToBackup.Text = "Copy Song Files to Backup?";
-            chkCopySongFilesToBackup.UseVisualStyleBackColor = true;
-            chkCopySongFilesToBackup.MouseEnter += ControlMouseEnter;
-            chkCopySongFilesToBackup.MouseLeave += ControlMouseLeave;
-            // 
             // lblBackupCompressionLvl
             // 
             lblBackupCompressionLvl.Anchor = AnchorStyles.Right;
@@ -179,6 +181,21 @@
             cmbCompressionLevels.Tag = "BackupCompressionLevelHelp";
             cmbCompressionLevels.MouseEnter += ControlMouseEnter;
             cmbCompressionLevels.MouseLeave += ControlMouseLeave;
+            // 
+            // chkCopySongFilesToBackup
+            // 
+            chkCopySongFilesToBackup.Anchor = AnchorStyles.Left;
+            chkCopySongFilesToBackup.AutoSize = true;
+            chkCopySongFilesToBackup.Location = new Point(7, 7);
+            chkCopySongFilesToBackup.Margin = new Padding(7, 3, 3, 3);
+            chkCopySongFilesToBackup.Name = "chkCopySongFilesToBackup";
+            chkCopySongFilesToBackup.Size = new Size(171, 19);
+            chkCopySongFilesToBackup.TabIndex = 3;
+            chkCopySongFilesToBackup.Tag = "CopySongFilesToBackupHelp";
+            chkCopySongFilesToBackup.Text = "Copy Song Files to Backup?";
+            chkCopySongFilesToBackup.UseVisualStyleBackColor = true;
+            chkCopySongFilesToBackup.MouseEnter += ControlMouseEnter;
+            chkCopySongFilesToBackup.MouseLeave += ControlMouseLeave;
             // 
             // chkAutoExportToGame
             // 
@@ -209,26 +226,6 @@
             chkWatchForChanges.UseVisualStyleBackColor = true;
             chkWatchForChanges.MouseEnter += ControlMouseEnter;
             chkWatchForChanges.MouseLeave += ControlMouseLeave;
-            // 
-            // btnEditPaths
-            // 
-            btnEditPaths.BackColor = Color.Yellow;
-            btnEditPaths.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
-            btnEditPaths.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
-            btnEditPaths.FlatStyle = FlatStyle.Flat;
-            btnEditPaths.Image = Properties.Resources.folder__16x16;
-            btnEditPaths.Location = new Point(3, 160);
-            btnEditPaths.Name = "btnEditPaths";
-            btnEditPaths.Size = new Size(773, 30);
-            btnEditPaths.TabIndex = 5;
-            btnEditPaths.Tag = "EditPathsOptionHelp";
-            btnEditPaths.Text = "Edit Paths...";
-            btnEditPaths.TextAlign = ContentAlignment.MiddleRight;
-            btnEditPaths.TextImageRelation = TextImageRelation.ImageBeforeText;
-            btnEditPaths.UseVisualStyleBackColor = false;
-            btnEditPaths.Click += BtnEditPaths_Click;
-            btnEditPaths.MouseEnter += ControlMouseEnter;
-            btnEditPaths.MouseLeave += ControlMouseLeave;
             // 
             // tableLayoutPanel6
             // 
@@ -280,6 +277,7 @@
             // 
             tabConfigs.Controls.Add(tabGeneral);
             tabConfigs.Controls.Add(tabLogging);
+            tabConfigs.Controls.Add(tabPathSetup);
             tabConfigs.Controls.Add(tabNexus);
             tabConfigs.Dock = DockStyle.Fill;
             tabConfigs.Location = new Point(0, 0);
@@ -396,6 +394,145 @@
             lblCurrentLogPath.Size = new Size(536, 17);
             lblCurrentLogPath.TabIndex = 10;
             lblCurrentLogPath.Text = "<no path>";
+            // 
+            // tabPathSetup
+            // 
+            tabPathSetup.BackColor = Color.White;
+            tabPathSetup.Controls.Add(splitContainer1);
+            tabPathSetup.Location = new Point(4, 24);
+            tabPathSetup.Name = "tabPathSetup";
+            tabPathSetup.Padding = new Padding(3);
+            tabPathSetup.Size = new Size(785, 226);
+            tabPathSetup.TabIndex = 3;
+            tabPathSetup.Text = "Paths Setup";
+            // 
+            // splitContainer1
+            // 
+            splitContainer1.Dock = DockStyle.Fill;
+            splitContainer1.Location = new Point(3, 3);
+            splitContainer1.Name = "splitContainer1";
+            // 
+            // splitContainer1.Panel1
+            // 
+            splitContainer1.Panel1.Controls.Add(lvForbiddenPaths);
+            // 
+            // splitContainer1.Panel2
+            // 
+            splitContainer1.Panel2.Controls.Add(panel3);
+            splitContainer1.Size = new Size(779, 220);
+            splitContainer1.SplitterDistance = 562;
+            splitContainer1.TabIndex = 1;
+            // 
+            // lvForbiddenPaths
+            // 
+            lvForbiddenPaths.CheckBoxes = true;
+            lvForbiddenPaths.Dock = DockStyle.Fill;
+            listViewGroup1.Header = "Game Launchers";
+            listViewGroup1.Name = "lvgGameLaunchers";
+            listViewGroup2.Header = "Mod Managers";
+            listViewGroup2.Name = "lvgModManagers";
+            listViewGroup3.Header = "Windows Related";
+            listViewGroup3.Name = "lvgWindowsRelated";
+            lvForbiddenPaths.Groups.AddRange(new ListViewGroup[] { listViewGroup1, listViewGroup2, listViewGroup3 });
+            lvForbiddenPaths.Location = new Point(0, 0);
+            lvForbiddenPaths.Name = "lvForbiddenPaths";
+            lvForbiddenPaths.Size = new Size(562, 220);
+            lvForbiddenPaths.TabIndex = 1;
+            lvForbiddenPaths.Tag = "ForbiddenPathsHelp";
+            lvForbiddenPaths.UseCompatibleStateImageBehavior = false;
+            lvForbiddenPaths.View = View.Details;
+            lvForbiddenPaths.ItemChecked += lvForbiddenPaths_ItemChecked;
+            lvForbiddenPaths.MouseEnter += ControlMouseEnter;
+            lvForbiddenPaths.MouseLeave += ControlMouseLeave;
+            // 
+            // panel3
+            // 
+            panel3.Controls.Add(tableLayoutPanel5);
+            panel3.Dock = DockStyle.Fill;
+            panel3.Location = new Point(0, 0);
+            panel3.Name = "panel3";
+            panel3.Size = new Size(213, 220);
+            panel3.TabIndex = 2;
+            // 
+            // tableLayoutPanel5
+            // 
+            tableLayoutPanel5.ColumnCount = 1;
+            tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tableLayoutPanel5.Controls.Add(btnEditPaths, 0, 2);
+            tableLayoutPanel5.Controls.Add(btnDeleteSelectedKeyword, 0, 1);
+            tableLayoutPanel5.Controls.Add(btnAddKeyword, 0, 0);
+            tableLayoutPanel5.Dock = DockStyle.Top;
+            tableLayoutPanel5.Location = new Point(0, 0);
+            tableLayoutPanel5.Name = "tableLayoutPanel5";
+            tableLayoutPanel5.RowCount = 3;
+            tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
+            tableLayoutPanel5.Size = new Size(213, 120);
+            tableLayoutPanel5.TabIndex = 0;
+            // 
+            // btnEditPaths
+            // 
+            btnEditPaths.BackColor = Color.Yellow;
+            btnEditPaths.Dock = DockStyle.Fill;
+            btnEditPaths.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
+            btnEditPaths.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
+            btnEditPaths.FlatStyle = FlatStyle.Flat;
+            btnEditPaths.Image = Properties.Resources.folder__16x16;
+            btnEditPaths.Location = new Point(3, 83);
+            btnEditPaths.Name = "btnEditPaths";
+            btnEditPaths.Size = new Size(207, 34);
+            btnEditPaths.TabIndex = 11;
+            btnEditPaths.Tag = "EditPathsOptionHelp";
+            btnEditPaths.Text = "Edit Paths...";
+            btnEditPaths.TextAlign = ContentAlignment.MiddleRight;
+            btnEditPaths.TextImageRelation = TextImageRelation.ImageBeforeText;
+            btnEditPaths.UseVisualStyleBackColor = false;
+            btnEditPaths.Click += BtnEditPaths_Click;
+            btnEditPaths.MouseEnter += ControlMouseEnter;
+            btnEditPaths.MouseLeave += ControlMouseLeave;
+            // 
+            // btnDeleteSelectedKeyword
+            // 
+            btnDeleteSelectedKeyword.BackColor = Color.Yellow;
+            btnDeleteSelectedKeyword.Dock = DockStyle.Fill;
+            btnDeleteSelectedKeyword.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
+            btnDeleteSelectedKeyword.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
+            btnDeleteSelectedKeyword.FlatStyle = FlatStyle.Flat;
+            btnDeleteSelectedKeyword.Image = Properties.Resources.delete__16x16;
+            btnDeleteSelectedKeyword.Location = new Point(3, 43);
+            btnDeleteSelectedKeyword.Name = "btnDeleteSelectedKeyword";
+            btnDeleteSelectedKeyword.Size = new Size(207, 34);
+            btnDeleteSelectedKeyword.TabIndex = 10;
+            btnDeleteSelectedKeyword.Tag = "DeleteSelectedKeywordHelp";
+            btnDeleteSelectedKeyword.Text = "Delete Selected Keyword(s)";
+            btnDeleteSelectedKeyword.TextAlign = ContentAlignment.MiddleRight;
+            btnDeleteSelectedKeyword.TextImageRelation = TextImageRelation.ImageBeforeText;
+            btnDeleteSelectedKeyword.UseVisualStyleBackColor = false;
+            btnDeleteSelectedKeyword.Click += btnDeleteSelectedKeyword_Click;
+            btnDeleteSelectedKeyword.MouseEnter += ControlMouseEnter;
+            btnDeleteSelectedKeyword.MouseLeave += ControlMouseLeave;
+            // 
+            // btnAddKeyword
+            // 
+            btnAddKeyword.BackColor = Color.Yellow;
+            btnAddKeyword.Dock = DockStyle.Fill;
+            btnAddKeyword.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
+            btnAddKeyword.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
+            btnAddKeyword.FlatStyle = FlatStyle.Flat;
+            btnAddKeyword.Image = Properties.Resources.add__16x16;
+            btnAddKeyword.Location = new Point(3, 3);
+            btnAddKeyword.Name = "btnAddKeyword";
+            btnAddKeyword.Size = new Size(207, 34);
+            btnAddKeyword.TabIndex = 9;
+            btnAddKeyword.Tag = "NewKeywordHelp";
+            btnAddKeyword.Text = "New Keyword";
+            btnAddKeyword.TextAlign = ContentAlignment.MiddleRight;
+            btnAddKeyword.TextImageRelation = TextImageRelation.ImageBeforeText;
+            btnAddKeyword.UseVisualStyleBackColor = false;
+            btnAddKeyword.Click += btnAddKeyword_Click;
+            btnAddKeyword.MouseEnter += ControlMouseEnter;
+            btnAddKeyword.MouseLeave += ControlMouseLeave;
             // 
             // tabNexus
             // 
@@ -578,56 +715,40 @@
             // 
             // tableLayoutPanel2
             // 
-            tableLayoutPanel2.ColumnCount = 3;
-            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 56.6153831F));
-            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 43.3846169F));
-            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 142F));
-            tableLayoutPanel2.Controls.Add(btnCancel, 0, 0);
-            tableLayoutPanel2.Controls.Add(btnResetToDefault, 0, 0);
+            tableLayoutPanel2.ColumnCount = 4;
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+            tableLayoutPanel2.Controls.Add(btnReloadFromFile, 1, 0);
             tableLayoutPanel2.Controls.Add(btnSaveAndClose, 0, 0);
+            tableLayoutPanel2.Controls.Add(btnCancel, 3, 0);
+            tableLayoutPanel2.Controls.Add(btnResetToDefault, 2, 0);
             tableLayoutPanel2.Dock = DockStyle.Bottom;
             tableLayoutPanel2.Location = new Point(0, 254);
             tableLayoutPanel2.Name = "tableLayoutPanel2";
             tableLayoutPanel2.RowCount = 1;
-            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             tableLayoutPanel2.Size = new Size(793, 41);
             tableLayoutPanel2.TabIndex = 2;
             // 
-            // btnCancel
+            // btnReloadFromFile
             // 
-            btnCancel.BackColor = Color.Yellow;
-            btnCancel.Dock = DockStyle.Fill;
-            btnCancel.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
-            btnCancel.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
-            btnCancel.FlatStyle = FlatStyle.Flat;
-            btnCancel.Image = Properties.Resources.cancel_16x16;
-            btnCancel.Location = new Point(653, 3);
-            btnCancel.Name = "btnCancel";
-            btnCancel.Size = new Size(137, 35);
-            btnCancel.TabIndex = 8;
-            btnCancel.Text = "Cancel";
-            btnCancel.TextAlign = ContentAlignment.MiddleRight;
-            btnCancel.TextImageRelation = TextImageRelation.ImageBeforeText;
-            btnCancel.UseVisualStyleBackColor = false;
-            btnCancel.Click += BtnCancel_Click;
-            // 
-            // btnResetToDefault
-            // 
-            btnResetToDefault.BackColor = Color.Yellow;
-            btnResetToDefault.Dock = DockStyle.Fill;
-            btnResetToDefault.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
-            btnResetToDefault.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
-            btnResetToDefault.FlatStyle = FlatStyle.Flat;
-            btnResetToDefault.Image = Properties.Resources.refresh__16x16;
-            btnResetToDefault.Location = new Point(371, 3);
-            btnResetToDefault.Name = "btnResetToDefault";
-            btnResetToDefault.Size = new Size(276, 35);
-            btnResetToDefault.TabIndex = 7;
-            btnResetToDefault.Text = "Reset to Defaults";
-            btnResetToDefault.TextAlign = ContentAlignment.MiddleRight;
-            btnResetToDefault.TextImageRelation = TextImageRelation.ImageBeforeText;
-            btnResetToDefault.UseVisualStyleBackColor = false;
-            btnResetToDefault.Click += BtnResetToDefault_Click;
+            btnReloadFromFile.BackColor = Color.Yellow;
+            btnReloadFromFile.Dock = DockStyle.Fill;
+            btnReloadFromFile.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
+            btnReloadFromFile.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
+            btnReloadFromFile.FlatStyle = FlatStyle.Flat;
+            btnReloadFromFile.Image = Properties.Resources.file__16x16;
+            btnReloadFromFile.Location = new Point(201, 3);
+            btnReloadFromFile.Name = "btnReloadFromFile";
+            btnReloadFromFile.Size = new Size(192, 35);
+            btnReloadFromFile.TabIndex = 9;
+            btnReloadFromFile.Text = "Reload From File";
+            btnReloadFromFile.TextAlign = ContentAlignment.MiddleRight;
+            btnReloadFromFile.TextImageRelation = TextImageRelation.ImageBeforeText;
+            btnReloadFromFile.UseVisualStyleBackColor = false;
+            btnReloadFromFile.Click += BtnReloadFromFile_Click;
             // 
             // btnSaveAndClose
             // 
@@ -639,13 +760,48 @@
             btnSaveAndClose.Image = Properties.Resources.disk__16x16;
             btnSaveAndClose.Location = new Point(3, 3);
             btnSaveAndClose.Name = "btnSaveAndClose";
-            btnSaveAndClose.Size = new Size(362, 35);
+            btnSaveAndClose.Size = new Size(192, 35);
             btnSaveAndClose.TabIndex = 6;
             btnSaveAndClose.Text = "Save and Close";
             btnSaveAndClose.TextAlign = ContentAlignment.MiddleRight;
             btnSaveAndClose.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnSaveAndClose.UseVisualStyleBackColor = false;
             btnSaveAndClose.Click += BtnSaveAndClose_Click;
+            // 
+            // btnCancel
+            // 
+            btnCancel.BackColor = Color.Yellow;
+            btnCancel.Dock = DockStyle.Fill;
+            btnCancel.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
+            btnCancel.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
+            btnCancel.FlatStyle = FlatStyle.Flat;
+            btnCancel.Image = Properties.Resources.cancel_16x16;
+            btnCancel.Location = new Point(597, 3);
+            btnCancel.Name = "btnCancel";
+            btnCancel.Size = new Size(193, 35);
+            btnCancel.TabIndex = 8;
+            btnCancel.Text = "Cancel";
+            btnCancel.TextAlign = ContentAlignment.MiddleRight;
+            btnCancel.TextImageRelation = TextImageRelation.ImageBeforeText;
+            btnCancel.UseVisualStyleBackColor = false;
+            btnCancel.Click += BtnCancel_Click;
+            // 
+            // btnResetToDefault
+            // 
+            btnResetToDefault.BackColor = Color.Yellow;
+            btnResetToDefault.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
+            btnResetToDefault.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
+            btnResetToDefault.FlatStyle = FlatStyle.Flat;
+            btnResetToDefault.Image = Properties.Resources.refresh__16x16;
+            btnResetToDefault.Location = new Point(399, 3);
+            btnResetToDefault.Name = "btnResetToDefault";
+            btnResetToDefault.Size = new Size(192, 35);
+            btnResetToDefault.TabIndex = 7;
+            btnResetToDefault.Text = "Reset to Defaults";
+            btnResetToDefault.TextAlign = ContentAlignment.MiddleRight;
+            btnResetToDefault.TextImageRelation = TextImageRelation.ImageBeforeText;
+            btnResetToDefault.UseVisualStyleBackColor = false;
+            btnResetToDefault.Click += BtnResetToDefault_Click;
             // 
             // fldrOpenLogPath
             // 
@@ -684,7 +840,6 @@
             Controls.Add(tabConfigs);
             Controls.Add(tableLayoutPanel2);
             Controls.Add(statusStrip1);
-            FormBorderStyle = FormBorderStyle.FixedDialog;
             HelpButton = true;
             Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
@@ -707,6 +862,13 @@
             tabLogging.ResumeLayout(false);
             tableLayoutPanel3.ResumeLayout(false);
             tableLayoutPanel3.PerformLayout();
+            tabPathSetup.ResumeLayout(false);
+            splitContainer1.Panel1.ResumeLayout(false);
+            splitContainer1.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
+            splitContainer1.ResumeLayout(false);
+            panel3.ResumeLayout(false);
+            tableLayoutPanel5.ResumeLayout(false);
             tabNexus.ResumeLayout(false);
             tableLayoutPanel4.ResumeLayout(false);
             tableLayoutPanel4.PerformLayout();
@@ -727,7 +889,6 @@
         private TableLayoutPanel tableLayoutPanel1;
         private CheckBox chkCheckForUpdates;
         private CheckBox chkAutoExportToGame;
-        private Button btnEditPaths;
         private TabControl tabConfigs;
         private TabPage tabGeneral;
         private TabPage tabLogging;
@@ -766,5 +927,14 @@
         private TableLayoutPanel tableLayoutPanel7;
         private Label lblDefaultSongLocation;
         private FolderBrowserDialog fldrOpenDefaultMusicPath;
+        private TabPage tabPathSetup;
+        private ListView lvForbiddenPaths;
+        private Panel panel3;
+        private TableLayoutPanel tableLayoutPanel5;
+        private Button btnAddKeyword;
+        private Button btnDeleteSelectedKeyword;
+        private Button btnEditPaths;
+        private SplitContainer splitContainer1;
+        private Button btnReloadFromFile;
     }
 }

@@ -1,5 +1,5 @@
 ﻿// BackupManager.cs : RadioExt-Helper
-// Copyright (C) 2024  Ethan Hann
+// Copyright (C) 2025  Ethan Hann
 // 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -365,7 +365,10 @@ public class BackupManager(CompressionLevel level)
                         continue;
                     }
 
-                    var destinationPath = Path.Combine(restorePath, entryName);
+                    var destinationPath = Path.GetFullPath(Path.Combine(restorePath, entryName));
+                    var fullRestorePath = Path.GetFullPath(restorePath + Path.DirectorySeparatorChar);
+                    if (!destinationPath.StartsWith(fullRestorePath))
+                        throw new InvalidOperationException("Entry is outside the target dir: " + destinationPath);
 
                     // Ensure the directory exists
                     var destinationDirectory = Path.GetDirectoryName(destinationPath);
@@ -387,7 +390,11 @@ public class BackupManager(CompressionLevel level)
 
                     if (entry == null) continue;
 
-                    var destinationPath = Path.Combine(originalPath);
+                    var destinationPath = Path.GetFullPath(Path.Combine(originalPath));
+                    var fullOriginalPath = Path.GetFullPath(originalPath + Path.DirectorySeparatorChar);
+                    if (!fullOriginalPath.StartsWith(destinationPath))
+                        throw new InvalidOperationException("Entry is outside the target dir: " + destinationPath);
+
                     var destinationDirectory = Path.GetDirectoryName(destinationPath);
                     if (destinationDirectory != null && !Directory.Exists(destinationDirectory))
                         Directory.CreateDirectory(destinationDirectory);

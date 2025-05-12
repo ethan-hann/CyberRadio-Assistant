@@ -1,5 +1,5 @@
 ﻿// ConfigForm.cs : RadioExt-Helper
-// Copyright (C) 2024  Ethan Hann
+// Copyright (C) 2025  Ethan Hann
 // 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,6 +16,7 @@
 
 using AetherUtils.Core.Extensions;
 using AetherUtils.Core.Logging;
+using RadioExt_Helper.config;
 using RadioExt_Helper.nexus_api;
 using RadioExt_Helper.Properties;
 using RadioExt_Helper.utility;
@@ -29,6 +30,8 @@ public sealed partial class ConfigForm : Form
 {
     private readonly Dictionary<string, CompressionLevel> _localizedCompressionLevels = new();
     private readonly ImageList _tabImages = new();
+
+    private readonly Dictionary<string, ListViewGroup> _forbiddenGroups = new();
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="ConfigForm" /> class.
@@ -67,11 +70,13 @@ public sealed partial class ConfigForm : Form
     private void ConfigForm_Load(object sender, EventArgs e)
     {
         _tabImages.Images.Add("general", Resources.settings__16x16);
+        _tabImages.Images.Add("paths", Resources.folder_no_fill__16x16);
         _tabImages.Images.Add("logging", Resources.log__16x16);
         _tabImages.Images.Add("nexus_api", Resources.api_16x16);
         tabConfigs.ImageList = _tabImages;
 
         tabGeneral.ImageKey = @"general";
+        tabPathSetup.ImageKey = @"paths";
         tabLogging.ImageKey = @"logging";
         tabNexus.ImageKey = @"nexus_api";
 
@@ -92,16 +97,21 @@ public sealed partial class ConfigForm : Form
 
         //Tabs
         tabGeneral.Text = Strings.GeneralSettings;
+        tabPathSetup.Text = Strings.PathSettings;
         tabLogging.Text = Strings.LogSettings;
 
         //General Tab
         chkCheckForUpdates.Text = Strings.CheckForUpdatesOption;
         chkAutoExportToGame.Text = Strings.AutoExportOption;
-        btnEditPaths.Text = Strings.EditPathsOption;
         chkWatchForChanges.Text = Strings.WatchForChangesOption;
         lblBackupCompressionLvl.Text = Strings.BackupCompressionLevel;
         chkCopySongFilesToBackup.Text = Strings.CopySongFilesToBackupOption;
         btnEditDefaultSongLocation.Text = Strings.DefaultSongLocationOption;
+
+        //Forbidden Paths Tab
+        btnAddKeyword.Text = Strings.ForbiddenKeywordInput_Title;
+        btnDeleteSelectedKeyword.Text = Strings.DeleteSelectedKeywords;
+        btnEditPaths.Text = Strings.EditPathsOption;
 
         //Logging Tab
         lblLogPathLabel.Text = Strings.LogPathLabel;
@@ -111,6 +121,7 @@ public sealed partial class ConfigForm : Form
 
         //Buttons
         btnSaveAndClose.Text = Strings.SaveAndClose;
+        btnReloadFromFile.Text = Strings.ReloadFromFile;
         btnResetToDefault.Text = Strings.ResetToDefaults;
         btnCancel.Text = Strings.Cancel;
 
@@ -143,6 +154,143 @@ public sealed partial class ConfigForm : Form
         // Set the combo box to the current compression level
         var compressionLevel = config.BackupCompressionLevel;
         cmbCompressionLevels.SelectedItem = GetLocalizedName(compressionLevel);
+
+        //Set the forbidden keywords
+        SetupForbiddenPathsListView(config);
+    }
+
+    private void SetupForbiddenPathsListView(ApplicationConfig? config)
+    {
+        lvForbiddenPaths.BeginUpdate();
+        lvForbiddenPaths.Columns.Add(Strings.ForbiddenKeywordListViewColumn, 120, HorizontalAlignment.Left);
+
+        // Clear existing items
+        lvForbiddenPaths.Items.Clear();
+        lvForbiddenPaths.Groups.Clear(); // Also clear existing groups to avoid duplicates
+
+        // Retrieve the list from configuration
+        var keywords = config?.ForbiddenKeywords ?? [];
+
+        foreach (var keyword in keywords)
+        {
+            // Ensure the group exists
+            if (!_forbiddenGroups.TryGetValue(keyword.Group, out var group))
+            {
+                group = new ListViewGroup(keyword.Group, HorizontalAlignment.Left);
+                lvForbiddenPaths.Groups.Add(group);
+                _forbiddenGroups[keyword.Group] = group;
+            }
+
+            // Create and add item to the ListView
+            var item = new ListViewItem(keyword.Keyword)
+            {
+                Checked = keyword.IsForbidden,
+                Group = group,
+                Tag = keyword
+            };
+
+            lvForbiddenPaths.Items.Add(item);
+        }
+
+        //Setup always forbidden items (not in the configuration as we don't want to allow removal)
+        var alwaysForbidden = PathHelper.GetAlwaysForbiddenPaths();
+        foreach (var keyword in alwaysForbidden)
+        {
+            // Ensure the group exists
+            if (!_forbiddenGroups.TryGetValue(keyword.Group, out var group))
+            {
+                group = new ListViewGroup(keyword.Group, HorizontalAlignment.Left);
+                lvForbiddenPaths.Groups.Add(group);
+                _forbiddenGroups[keyword.Group] = group;
+            }
+
+            // Create and add item to the ListView (don't add tag as it's not a config item)
+            var item = new ListViewItem(keyword.Keyword)
+            {
+                Checked = keyword.IsForbidden,
+                Group = group
+            };
+
+            lvForbiddenPaths.Items.Add(item);
+        }
+
+        // Resize the columns to fit the content
+        lvForbiddenPaths.ResizeColumns();
+
+        lvForbiddenPaths.EndUpdate();
+    }
+
+    private void btnAddKeyword_Click(object sender, EventArgs e)
+    {
+        ForbiddenKeywordInput inputForm = new(lvForbiddenPaths.Groups);
+        inputForm.ForbiddenKeywordAdded += InputForm_ForbiddenKeywordAdded;
+        inputForm.ShowDialog(this);
+    }
+
+    private void InputForm_ForbiddenKeywordAdded(object? sender, ForbiddenKeyword e)
+    {
+        lvForbiddenPaths.BeginUpdate();
+
+        // Ensure the group exists
+        if (!_forbiddenGroups.TryGetValue(e.Group, out var group))
+        {
+            group = new ListViewGroup(e.Group, HorizontalAlignment.Left);
+            lvForbiddenPaths.Groups.Add(group);
+            _forbiddenGroups[e.Group] = group;
+        }
+
+        // Add the new keyword to the list view
+        var item = new ListViewItem(e.Keyword)
+        {
+            Checked = e.IsForbidden,
+            Group = group,
+            Tag = e
+        };
+
+        lvForbiddenPaths.Items.Add(item);
+
+        // Resize the columns to fit the content
+        lvForbiddenPaths.ResizeColumns();
+
+        lvForbiddenPaths.EndUpdate();
+    }
+
+    private void btnDeleteSelectedKeyword_Click(object sender, EventArgs e)
+    {
+        lvForbiddenPaths.BeginUpdate();
+
+        // Copy selected items to avoid modification exception
+        var selectedItems = lvForbiddenPaths.SelectedItems.Cast<ListViewItem>().ToList();
+
+        // Remove each selected item from the ListView
+        foreach (var item in selectedItems)
+            if (item.Tag is ForbiddenKeyword) // Don't remove always forbidden items. We can just check if the item has a tag to determine if it's a config item.
+                lvForbiddenPaths.Items.Remove(item);
+
+        // Cleanup any empty groups
+        var groupsToRemove = lvForbiddenPaths.Groups.Cast<ListViewGroup>()
+            .Where(group => lvForbiddenPaths.Items.Cast<ListViewItem>().All(item => item.Group != group))
+            .ToList();
+
+        foreach (var group in groupsToRemove.Where(group =>
+                     !group.Header.Equals(Strings.SystemPaths, StringComparison.CurrentCulture)))
+        {
+            _forbiddenGroups.Remove(group.Header);
+            lvForbiddenPaths.Groups.Remove(group);
+        }
+
+        lvForbiddenPaths.EndUpdate();
+    }
+
+    private void lvForbiddenPaths_ItemChecked(object sender, ItemCheckedEventArgs e)
+    {
+        if (e.Item.Tag is not ForbiddenKeyword keyword)
+        {
+            e.Item.Checked = true;
+            return;
+        }
+
+        keyword.IsForbidden = e.Item.Checked;
     }
 
     /// <summary>
@@ -269,6 +417,14 @@ public sealed partial class ConfigForm : Form
         if (!lblCurrentLogPath.Text.Equals(Strings.NoLogPathSet))
             saved &= GlobalData.ConfigManager.Set("logFileDirectory", lblCurrentLogPath.Text);
 
+        //TODO: set the values for the forbidden keywords
+        List<ForbiddenKeyword> updatedKeywords = [];
+        foreach (ListViewItem item in lvForbiddenPaths.Items)
+            if (item.Tag is ForbiddenKeyword keyword)
+                updatedKeywords.Add(keyword);
+
+        saved &= GlobalData.ConfigManager.Set("forbiddenKeywords", updatedKeywords);
+
         return saved && GlobalData.ConfigManager.Save();
     }
 
@@ -368,6 +524,42 @@ public sealed partial class ConfigForm : Form
             var caption = Strings.Error;
             MessageBox.Show(this, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
             AuLogger.GetCurrentLogger<ConfigForm>("SaveAndClose").Error("Could not save configuration file.");
+        }
+    }
+
+    private void BtnReloadFromFile_Click(object sender, EventArgs e)
+    {
+        var text = Strings.ConfigReloadConfirm;
+        var captionConfirm = Strings.Confirm;
+        if (MessageBox.Show(this, text, captionConfirm, MessageBoxButtons.YesNo, MessageBoxIcon.Warning) !=
+            DialogResult.Yes) return;
+
+        try
+        {
+            if (GlobalData.ConfigManager.Load())
+            {
+                SetValues();
+                var reloadSuccessText = Strings.ConfigReloadSuccess;
+                var captionSuccess = Strings.Success;
+                MessageBox.Show(this, reloadSuccessText, captionSuccess, MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+            }
+            else
+            {
+                var reloadErrorText = Strings.ConfigReloadError;
+                var captionError = Strings.Error;
+                MessageBox.Show(this, reloadErrorText, captionError, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                AuLogger.GetCurrentLogger<ConfigForm>("ReloadFromFile").Error(
+                    "Could not reload configuration file. This could be due to an invalid option or the file not existing.");
+            }
+        }
+        catch (Exception ex)
+        {
+            var reloadErrorText = Strings.ConfigReloadError;
+            var captionError = Strings.Error;
+            MessageBox.Show(this, reloadErrorText, captionError, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            AuLogger.GetCurrentLogger<ConfigForm>("ReloadFromFile").Error(ex,
+                "Could not reload configuration file. This could be due to an invalid option or the file not existing.");
         }
     }
 

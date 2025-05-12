@@ -1257,4 +1257,113 @@ Tem certeza de que deseja limpar todos os dados da estação?</value>
   <data name="CopySongFilesToBackupHelp" xml:space="preserve">
     <value>Se verificado, indica que os arquivos de músicas (incluindo externos) devem ser incluídos no arquivo .zip de backup para as estações.</value>
   </data>
+  <data name="MainForm_NoStationsImported" xml:space="preserve">
+    <value>Nenhuma posição foi importada. Verifique se o arquivo .zip/.ru contém uma estação válida.</value>
+  </data>
+  <data name="MainForm_NoStationsImportedTitle" xml:space="preserve">
+    <value>Nada para importar</value>
+  </data>
+  <data name="StagingPathForbidden" xml:space="preserve">
+    <value>Caminho inválido: {0}</value>
+  </data>
+  <data name="ForbiddenPath_RootDirectory" xml:space="preserve">
+    <value>O caminho de estadiamento não pode ser definido para a raiz de uma unidade</value>
+  </data>
+  <data name="ForbiddenPath_SystemDirectory" xml:space="preserve">
+    <value>O caminho de estadiamento não pode ser definido como um diretório de sistema reservado.</value>
+  </data>
+  <data name="ForbiddenPath_ProgramFiles" xml:space="preserve">
+    <value>O caminho de estadiamento não pode ser definido como o diretório de arquivos do programa.</value>
+  </data>
+  <data name="ForbiddenPath_UserAppData" xml:space="preserve">
+    <value>O caminho de estadiamento não pode ser definido como um diretório de dados do aplicativo.</value>
+  </data>
+  <data name="ForbiddenPath_VortexFolder" xml:space="preserve">
+    <value>O caminho de encenação não pode ser definido como uma pasta gerenciada pelo vórtice.</value>
+  </data>
+  <data name="SplashScreen_CheckingStagingPath" xml:space="preserve">
+    <value>Verificando o caminho de estadiamento ...</value>
+  </data>
+  <data name="SplashScreen_StagingPathForbidden" xml:space="preserve">
+    <value>O caminho de estadiamento foi inválido. Redefinir para uma corda vazia.</value>
+  </data>
+  <data name="SplashScreen_StagingPathValid" xml:space="preserve">
+    <value>O caminho de encenação é válido!</value>
+  </data>
+  <data name="ForbiddenPathsHelp" xml:space="preserve">
+    <value>Define as palavras -chave que são pesquisadas ao definir o caminho de preparação para estações de rádio. Quaisquer caminhos que contenham palavras -chave aqui não são permitidos.</value>
+  </data>
+  <data name="ForbiddenKeywordListViewColumn" xml:space="preserve">
+    <value>Palavra -chave</value>
+  </data>
+  <data name="ForbiddenKeywordEmpty" xml:space="preserve">
+    <value>A palavra -chave não pode estar vazia!</value>
+  </data>
+  <data name="ForbiddenKeywordNoGroup" xml:space="preserve">
+    <value>Grupo não pode estar vazio!</value>
+  </data>
+  <data name="ForbiddenKeywordInput_Title" xml:space="preserve">
+    <value>Nova palavra -chave</value>
+  </data>
+  <data name="ForbiddenKeywordInput_Keyword" xml:space="preserve">
+    <value>Palavra -chave:</value>
+  </data>
+  <data name="ForbiddenKeywordInput_Group" xml:space="preserve">
+    <value>Grupo:</value>
+  </data>
+  <data name="ForbiddenKeywordInput_IsForbidden" xml:space="preserve">
+    <value>É proibido?</value>
+  </data>
+  <data name="ForbiddenKeywordInput_AddAndNew" xml:space="preserve">
+    <value>Adicione e novo</value>
+  </data>
+  <data name="ForbiddenKeywordInput_Add" xml:space="preserve">
+    <value>Adicione e feche</value>
+  </data>
+  <data name="ForbiddenPath_KeywordMatch" xml:space="preserve">
+    <value>O caminho de estadiamento contém palavras -chave proibidas. Você pode defini -los nas configurações.</value>
+  </data>
+  <data name="DeleteSelectedKeywords" xml:space="preserve">
+    <value>Excluir palavras -chave selecionadas</value>
+  </data>
+  <data name="PathSettings" xml:space="preserve">
+    <value>Configuração do caminho</value>
+  </data>
+  <data name="NewKeywordHelp" xml:space="preserve">
+    <value>Adicione uma nova palavra -chave à verificação do caminho proibido.</value>
+  </data>
+  <data name="DeleteSelectedKeywordHelp" xml:space="preserve">
+    <value>Exclua as palavras -chave selecionadas da lista. Geralmente é melhor desativar a palavra -chave com a caixa de seleção.</value>
+  </data>
+  <data name="SystemPaths" xml:space="preserve">
+    <value>Caminhos do sistema</value>
+  </data>
+  <data name="GroupNotAllowedToBeModified" xml:space="preserve">
+    <value>O grupo 'Caminhos do sistema' não pode ser modificado.</value>
+  </data>
+  <data name="OodleDllMissing" xml:space="preserve">
+    <value>'Oodle.dll' não foi encontrado nos arquivos do jogo. Você pode ter problemas para criar e extrair ícones da estação.</value>
+  </data>
+  <data name="OodleDllFound" xml:space="preserve">
+    <value>Encontrado {0} nos arquivos do jogo! Você não deve ter problemas com os ícones.</value>
+  </data>
+  <data name="ConfigReloadConfirm" xml:space="preserve">
+    <value>Tem certeza de que deseja recarregar a configuração do arquivo? Todas as opções não salvas serão perdidas.</value>
+  </data>
+  <data name="ConfigReloadError" xml:space="preserve">
+    <value>Ocorreu um erro ao recarregar o arquivo de configuração.</value>
+  </data>
+  <data name="ReloadFromFile" xml:space="preserve">
+    <value>Recarregue do arquivo</value>
+  </data>
+  <data name="ConfigReloadSuccess" xml:space="preserve">
+    <value>Configuração recarregada com sucesso do arquivo.</value>
+  </data>
+  <data name="ConfigError" xml:space="preserve">
+    <value>O arquivo de configuração foi inválido ou não pôde ser lido. Uma configuração padrão será usada.</value>
+  </data>
+  <data name="AboutCredits" xml:space="preserve">
+    <value>Agradecimentos especiais a justarandomguyintheinternet (https://github.com/justarandomguyintheinternet/cp77radioext) pelo incrível mod de rádioext!
+Agradecimentos especiais ao Demonseedxp (https://next.nexusmods.com/profile/demonseedxp) pelo ícone do aplicativo e tela de respingos!</value>
+  </data>
 </root>

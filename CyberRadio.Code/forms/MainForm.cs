@@ -1,5 +1,5 @@
 // MainForm.cs : RadioExt-Helper
-// Copyright (C) 2024  Ethan Hann
+// Copyright (C) 2025  Ethan Hann
 // 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -114,6 +114,13 @@ public sealed partial class MainForm : Form
 
     private void OnStationImported(object? sender, List<Guid?> stationIds)
     {
+        if (stationIds.Count <= 0) //No stations were imported, so we can show the user an error message.
+        {
+            MessageBox.Show(Strings.MainForm_NoStationsImported, Strings.MainForm_NoStationsImportedTitle,
+                MessageBoxButtons.OK, MessageBoxIcon.Error);
+            return;
+        }
+
         var importedIconNames = string.Join(", ", stationIds.Select(stationId =>
             StationManager.Instance.GetStation(stationId)?.Key.TrackedObject.MetaData.DisplayName));
 
@@ -308,6 +315,7 @@ public sealed partial class MainForm : Form
         }
 
         HandleUserControlVisibility();
+        CopyOodleToIconManager();
     }
 
     /// <summary>
@@ -416,6 +424,26 @@ public sealed partial class MainForm : Form
         splitContainer1.Panel2.Controls.Clear();
         splitContainer1.Panel2.Controls.Add(_noStationsCtrl);
         _noStationsCtrl.Visible = true;
+    }
+
+    private void CopyOodleToIconManager()
+    {
+        //Check for and Copy Oodle Dll to the icon manager
+        var oodleCheck = PathHelper.ContainsOodleDll(Path.Combine(GameBasePath, "bin", "x64"));
+
+        if (oodleCheck.exists)
+        {
+            if (!IconManager.Instance.IsInitialized || oodleCheck.filePath == null) return;
+
+            IconManager.Instance.CopyOodleDllToWolvenKitPath(oodleCheck.filePath);
+            AuLogger.GetCurrentLogger<MainForm>("CopyOodleToIconManager")
+                .Info(
+                    $"Oodle DLL was found in game's base path and copied to WolvenKit directory: {Path.GetFileName(oodleCheck.filePath)}");
+        }
+        else
+        {
+            AuLogger.GetCurrentLogger<MainForm>("MainForm_Shown").Warn("Oodle DLL is missing from the game path.");
+        }
     }
 
     /// <summary>
@@ -748,6 +776,9 @@ public sealed partial class MainForm : Form
         StationManager.Instance.RemoveStation(station.Id);
         UpdateEnabledStationCount();
         HandleUserControlVisibility();
+
+        if (lbStations.Items.Count <= 0)
+            UpdateTitleBar(null);
     }
 
     private void CmbLanguageSelect_SelectedIndexChanged(object? sender, EventArgs e)
@@ -899,12 +930,18 @@ public sealed partial class MainForm : Form
 
     private void RefreshStationsToolStripMenuItem_Click(object sender, EventArgs e)
     {
-        if (lbStations.Items.Count <= 0) return;
-
-        var text = Strings.ConfirmRefreshStations;
-        var caption = Strings.Confirm;
-        if (MessageBox.Show(this, text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+        if (lbStations.Items.Count <= 0)
+        {
             PopulateStations();
+        }
+        else
+        {
+            var text = Strings.ConfirmRefreshStations;
+            var caption = Strings.Confirm;
+            if (MessageBox.Show(this, text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning) ==
+                DialogResult.Yes)
+                PopulateStations();
+        }
     }
 
     private void SynchronizeStationsToolStripMenuItem_Click(object sender, EventArgs e)

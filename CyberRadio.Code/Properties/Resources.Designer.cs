@@ -383,6 +383,16 @@ namespace RadioExt_Helper.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap cra_new_icon {
+            get {
+                object obj = ResourceManager.GetObject("cra_new_icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap CRA_splash {
             get {
                 object obj = ResourceManager.GetObject("CRA_splash", resourceCulture);
@@ -1886,6 +1896,26 @@ namespace RadioExt_Helper.Properties {
         internal static System.Drawing.Bitmap spain__32x32 {
             get {
                 object obj = ResourceManager.GetObject("spain__32x32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Splash_screen_4_2 {
+            get {
+                object obj = ResourceManager.GetObject("Splash_screen_4-2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Splash_screen_fixed {
+            get {
+                object obj = ResourceManager.GetObject("Splash_screen_fixed", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

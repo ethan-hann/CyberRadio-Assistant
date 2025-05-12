@@ -70,6 +70,16 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Special thanks to justarandomguyintheinternet (https://github.com/justarandomguyintheinternet/CP77_radioExt) for the awesome radioExt mod!
+        ///Special thanks to demonseedxp (https://next.nexusmods.com/profile/demonseedxp) for the app icon and splash screen!.
+        /// </summary>
+        internal static string AboutCredits {
+            get {
+                return ResourceManager.GetString("AboutCredits", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Github Repo.
         /// </summary>
         internal static string AboutGithubRepo {
@@ -466,6 +476,42 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The configuration file was invalid or could not be read. A default config will be used..
+        /// </summary>
+        internal static string ConfigError {
+            get {
+                return ResourceManager.GetString("ConfigError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to reload the configuration from the file? All unsaved options will be lost..
+        /// </summary>
+        internal static string ConfigReloadConfirm {
+            get {
+                return ResourceManager.GetString("ConfigReloadConfirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An error occurred while reloading the configuration file..
+        /// </summary>
+        internal static string ConfigReloadError {
+            get {
+                return ResourceManager.GetString("ConfigReloadError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Successfully reloaded configuration from file..
+        /// </summary>
+        internal static string ConfigReloadSuccess {
+            get {
+                return ResourceManager.GetString("ConfigReloadSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to reset the configuration to default values?.
         /// </summary>
         internal static string ConfigResetConfirm {
@@ -713,6 +759,24 @@ namespace RadioExt_Helper {
         internal static string DeleteIcon {
             get {
                 return ResourceManager.GetString("DeleteIcon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete the selected keywords from the list. It is usually better to just disable the keyword with the checkbox..
+        /// </summary>
+        internal static string DeleteSelectedKeywordHelp {
+            get {
+                return ResourceManager.GetString("DeleteSelectedKeywordHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete Selected Keywords.
+        /// </summary>
+        internal static string DeleteSelectedKeywords {
+            get {
+                return ResourceManager.GetString("DeleteSelectedKeywords", resourceCulture);
             }
         }
         
@@ -1118,6 +1182,150 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Keyword cannot be empty!.
+        /// </summary>
+        internal static string ForbiddenKeywordEmpty {
+            get {
+                return ResourceManager.GetString("ForbiddenKeywordEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add and Close.
+        /// </summary>
+        internal static string ForbiddenKeywordInput_Add {
+            get {
+                return ResourceManager.GetString("ForbiddenKeywordInput_Add", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add and New.
+        /// </summary>
+        internal static string ForbiddenKeywordInput_AddAndNew {
+            get {
+                return ResourceManager.GetString("ForbiddenKeywordInput_AddAndNew", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Group:.
+        /// </summary>
+        internal static string ForbiddenKeywordInput_Group {
+            get {
+                return ResourceManager.GetString("ForbiddenKeywordInput_Group", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Is Forbidden?.
+        /// </summary>
+        internal static string ForbiddenKeywordInput_IsForbidden {
+            get {
+                return ResourceManager.GetString("ForbiddenKeywordInput_IsForbidden", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Keyword:.
+        /// </summary>
+        internal static string ForbiddenKeywordInput_Keyword {
+            get {
+                return ResourceManager.GetString("ForbiddenKeywordInput_Keyword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New Keyword.
+        /// </summary>
+        internal static string ForbiddenKeywordInput_Title {
+            get {
+                return ResourceManager.GetString("ForbiddenKeywordInput_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Keyword.
+        /// </summary>
+        internal static string ForbiddenKeywordListViewColumn {
+            get {
+                return ResourceManager.GetString("ForbiddenKeywordListViewColumn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Group cannot be empty!.
+        /// </summary>
+        internal static string ForbiddenKeywordNoGroup {
+            get {
+                return ResourceManager.GetString("ForbiddenKeywordNoGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The staging path contains forbidden keywords. You can define these in the settings..
+        /// </summary>
+        internal static string ForbiddenPath_KeywordMatch {
+            get {
+                return ResourceManager.GetString("ForbiddenPath_KeywordMatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The staging path cannot be set to the Program Files directory..
+        /// </summary>
+        internal static string ForbiddenPath_ProgramFiles {
+            get {
+                return ResourceManager.GetString("ForbiddenPath_ProgramFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The staging path cannot be set to the root of a drive.
+        /// </summary>
+        internal static string ForbiddenPath_RootDirectory {
+            get {
+                return ResourceManager.GetString("ForbiddenPath_RootDirectory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The staging path cannot be set to a reserved system directory..
+        /// </summary>
+        internal static string ForbiddenPath_SystemDirectory {
+            get {
+                return ResourceManager.GetString("ForbiddenPath_SystemDirectory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The staging path cannot be set to an application data directory..
+        /// </summary>
+        internal static string ForbiddenPath_UserAppData {
+            get {
+                return ResourceManager.GetString("ForbiddenPath_UserAppData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The staging path cannot be set to a Vortex-managed folder..
+        /// </summary>
+        internal static string ForbiddenPath_VortexFolder {
+            get {
+                return ResourceManager.GetString("ForbiddenPath_VortexFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Defines the keywords that are searched when setting the staging path for radio stations. Any paths that contain keywords here are not allowed..
+        /// </summary>
+        internal static string ForbiddenPathsHelp {
+            get {
+                return ResourceManager.GetString("ForbiddenPathsHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to From .archive file....
         /// </summary>
         internal static string FromArchiveFile {
@@ -1177,6 +1385,15 @@ namespace RadioExt_Helper {
         internal static string GeneralSettings {
             get {
                 return ResourceManager.GetString("GeneralSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The &apos;System Paths&apos; group cannot be modified..
+        /// </summary>
+        internal static string GroupNotAllowedToBeModified {
+            get {
+                return ResourceManager.GetString("GroupNotAllowedToBeModified", resourceCulture);
             }
         }
         
@@ -2039,6 +2256,24 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No stations were imported. Verify the .zip/.rar file contains a valid station..
+        /// </summary>
+        internal static string MainForm_NoStationsImported {
+            get {
+                return ResourceManager.GetString("MainForm_NoStationsImported", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nothing to Import.
+        /// </summary>
+        internal static string MainForm_NoStationsImportedTitle {
+            get {
+                return ResourceManager.GetString("MainForm_NoStationsImportedTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Backup Files (*.zip).
         /// </summary>
         internal static string MainForm_RestoreFileBrowserFilter {
@@ -2161,6 +2396,15 @@ namespace RadioExt_Helper {
         internal static string NewIcon {
             get {
                 return ResourceManager.GetString("NewIcon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add a new keyword to the forbidden path check..
+        /// </summary>
+        internal static string NewKeywordHelp {
+            get {
+                return ResourceManager.GetString("NewKeywordHelp", resourceCulture);
             }
         }
         
@@ -2348,6 +2592,24 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Found {0} in the game files! You should not have issues with icons..
+        /// </summary>
+        internal static string OodleDllFound {
+            get {
+                return ResourceManager.GetString("OodleDllFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;oodle.dll&apos; was not found in the game&apos;s files. You may have issues creating and extracting station icons..
+        /// </summary>
+        internal static string OodleDllMissing {
+            get {
+                return ResourceManager.GetString("OodleDllMissing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select a .archive file to open.
         /// </summary>
         internal static string OpenArchiveFile {
@@ -2438,6 +2700,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Path Setup.
+        /// </summary>
+        internal static string PathSettings {
+            get {
+                return ResourceManager.GetString("PathSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to radioExt GitHub.
         /// </summary>
         internal static string RadioExtGithub {
@@ -2515,6 +2786,15 @@ namespace RadioExt_Helper {
         internal static string RefreshStations {
             get {
                 return ResourceManager.GetString("RefreshStations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reload From File.
+        /// </summary>
+        internal static string ReloadFromFile {
+            get {
+                return ResourceManager.GetString("ReloadFromFile", resourceCulture);
             }
         }
         
@@ -2861,6 +3141,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Checking staging path....
+        /// </summary>
+        internal static string SplashScreen_CheckingStagingPath {
+            get {
+                return ResourceManager.GetString("SplashScreen_CheckingStagingPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Finalizing....
         /// </summary>
         internal static string SplashScreen_Finalizing {
@@ -2897,6 +3186,24 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Staging path was invalid. Reset to an empty string..
+        /// </summary>
+        internal static string SplashScreen_StagingPathForbidden {
+            get {
+                return ResourceManager.GetString("SplashScreen_StagingPathForbidden", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Staging path is valid!.
+        /// </summary>
+        internal static string SplashScreen_StagingPathValid {
+            get {
+                return ResourceManager.GetString("SplashScreen_StagingPathValid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Starting....
         /// </summary>
         internal static string SplashScreen_Starting {
@@ -2929,6 +3236,15 @@ namespace RadioExt_Helper {
         internal static string StagingPath {
             get {
                 return ResourceManager.GetString("StagingPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid Path: {0}.
+        /// </summary>
+        internal static string StagingPathForbidden {
+            get {
+                return ResourceManager.GetString("StagingPathForbidden", resourceCulture);
             }
         }
         
@@ -3136,6 +3452,15 @@ namespace RadioExt_Helper {
         internal static string SyncStatusError {
             get {
                 return ResourceManager.GetString("SyncStatusError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to System Paths.
+        /// </summary>
+        internal static string SystemPaths {
+            get {
+                return ResourceManager.GetString("SystemPaths", resourceCulture);
             }
         }
         

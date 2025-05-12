@@ -1,5 +1,5 @@
 ﻿// PathSettings.cs : RadioExt-Helper
-// Copyright (C) 2024  Ethan Hann
+// Copyright (C) 2025  Ethan Hann
 // 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -14,8 +14,12 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+using System.Text;
+using AetherUtils.Core.Extensions;
 using AetherUtils.Core.Logging;
 using RadioExt_Helper.utility;
+using WIG.Lib.Utility;
+using PathHelper = RadioExt_Helper.utility.PathHelper;
 
 namespace RadioExt_Helper.forms;
 
@@ -110,7 +114,7 @@ public partial class PathSettings : Form
     private void BtnChangeGameBasePath_Click(object sender, EventArgs e)
     {
         var basePath = PathHelper.GetGamePath();
-        if (basePath == null || basePath.Equals(string.Empty)) return;
+        if (basePath.Equals(string.Empty)) return;
         var stagingPath = GlobalData.ConfigManager.Get("stagingPath") as string ?? string.Empty;
 
         if (PathHelper.IsSubPath(stagingPath, basePath))
@@ -133,6 +137,22 @@ public partial class PathSettings : Form
                     AuLogger.GetCurrentLogger<PathSettings>("ChangeGameBasePath")
                         .Info($"Updated game base path: {basePath}");
                     GameBasePathChanged?.Invoke(this, EventArgs.Empty);
+
+                    // Check for Oodle DLL
+                    var oodleCheck = PathHelper.ContainsOodleDll(Path.Combine(GameBasePath, "bin", "x64"));
+                    if (oodleCheck.exists && IconManager.Instance.IsInitialized && oodleCheck.filePath != null)
+                    {
+                        IconManager.Instance.CopyOodleDllToWolvenKitPath(oodleCheck.filePath);
+                        AuLogger.GetCurrentLogger<PathSettings>("ChangeGameBasePath").Info(
+                            $"Oodle DLL was found in game's base path: {Path.GetFileName(oodleCheck.filePath)}. It was copied to the WolvenKit temporary directory.");
+                    }
+                    else
+                    {
+                        MessageBox.Show(this, Strings.OodleDllMissing, Strings.Error, MessageBoxButtons.OK,
+                            MessageBoxIcon.Warning);
+                        AuLogger.GetCurrentLogger<PathSettings>("ChangeGameBasePath")
+                            .Warn("Oodle DLL is missing from the game path.");
+                    }
                 }
             }
             else
@@ -161,6 +181,31 @@ public partial class PathSettings : Form
             MessageBox.Show(this, Strings.StagingPathWithinGamePath, Strings.Error, MessageBoxButtons.OK,
                 MessageBoxIcon.Error);
             AuLogger.GetCurrentLogger<PathSettings>("ChangeStagingPath").Warn("Staging path is within the game path.");
+            return;
+        }
+
+        // Check if the staging path is within any forbidden paths
+        var forbiddenPathResult = PathHelper.IsForbiddenPath(stagingPath);
+        if (forbiddenPathResult.IsForbidden)
+        {
+            var reason = Strings.ResourceManager.GetString(forbiddenPathResult.Reason.ToDescriptionString());
+            if (reason == null)
+            {
+                MessageBox.Show(this, string.Format(Strings.StagingPathForbidden, stagingPath), Strings.Error,
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                AuLogger.GetCurrentLogger<PathSettings>("ChangeStagingPath")
+                    .Warn("Staging path is within a forbidden path.");
+                return;
+            }
+
+            var text = new StringBuilder();
+            text.AppendLine(string.Format(Strings.StagingPathForbidden, stagingPath));
+            text.AppendLine();
+            text.AppendLine(reason);
+            MessageBox.Show(this, text.ToString(), Strings.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            AuLogger.GetCurrentLogger<PathSettings>("ChangeStagingPath")
+                .Warn("Staging path is within a forbidden path.");
             return;
         }
 

@@ -71,7 +71,7 @@
             // pictureBox1
             // 
             pictureBox1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
-            pictureBox1.Image = Properties.Resources.cyber_radio_assistant2;
+            pictureBox1.Image = Properties.Resources.cra_new_icon;
             pictureBox1.Location = new Point(314, 3);
             pictureBox1.Name = "pictureBox1";
             pictureBox1.Size = new Size(256, 332);

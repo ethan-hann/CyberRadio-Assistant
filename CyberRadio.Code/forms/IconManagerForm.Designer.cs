@@ -178,13 +178,13 @@ namespace RadioExt_Helper.forms
             // 
             newIconContextStrip.Items.AddRange(new ToolStripItem[] { fromArchiveFileToolStripMenuItem });
             newIconContextStrip.Name = "newIconContextStrip";
-            newIconContextStrip.Size = new Size(181, 48);
+            newIconContextStrip.Size = new Size(175, 26);
             // 
             // fromArchiveFileToolStripMenuItem
             // 
             fromArchiveFileToolStripMenuItem.Image = Properties.Resources.box_16x16;
             fromArchiveFileToolStripMenuItem.Name = "fromArchiveFileToolStripMenuItem";
-            fromArchiveFileToolStripMenuItem.Size = new Size(180, 22);
+            fromArchiveFileToolStripMenuItem.Size = new Size(174, 22);
             fromArchiveFileToolStripMenuItem.Text = "From .archive file...";
             fromArchiveFileToolStripMenuItem.Click += fromArchiveFileToolStripMenuItem_Click;
             // 

@@ -28,70 +28,83 @@
         /// </summary>
         private void InitializeComponent()
         {
-            statusStrip1 = new StatusStrip();
-            toolStripStatusLabel1 = new ToolStripStatusLabel();
-            lblSplashStatus = new ToolStripStatusLabel();
-            toolStripStatusLabel2 = new ToolStripStatusLabel();
             lblVersion = new Label();
-            statusStrip1.SuspendLayout();
+            tableLayoutPanel1 = new TableLayoutPanel();
+            lblSplashStatus = new Label();
+            tableLayoutPanel2 = new TableLayoutPanel();
+            tableLayoutPanel1.SuspendLayout();
+            tableLayoutPanel2.SuspendLayout();
             SuspendLayout();
-            // 
-            // statusStrip1
-            // 
-            statusStrip1.BackColor = Color.Transparent;
-            statusStrip1.Items.AddRange(new ToolStripItem[] { toolStripStatusLabel1, lblSplashStatus, toolStripStatusLabel2 });
-            statusStrip1.Location = new Point(0, 336);
-            statusStrip1.Name = "statusStrip1";
-            statusStrip1.Size = new Size(584, 25);
-            statusStrip1.SizingGrip = false;
-            statusStrip1.TabIndex = 1;
-            statusStrip1.Text = "statusStrip1";
-            // 
-            // toolStripStatusLabel1
-            // 
-            toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            toolStripStatusLabel1.Size = new Size(259, 20);
-            toolStripStatusLabel1.Spring = true;
-            // 
-            // lblSplashStatus
-            // 
-            lblSplashStatus.Font = new Font("Segoe UI Variable Text Semibold", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblSplashStatus.ForeColor = Color.FromArgb(224, 224, 224);
-            lblSplashStatus.Name = "lblSplashStatus";
-            lblSplashStatus.Size = new Size(50, 20);
-            lblSplashStatus.Text = "Status";
-            // 
-            // toolStripStatusLabel2
-            // 
-            toolStripStatusLabel2.Name = "toolStripStatusLabel2";
-            toolStripStatusLabel2.Size = new Size(259, 20);
-            toolStripStatusLabel2.Spring = true;
             // 
             // lblVersion
             // 
+            lblVersion.Anchor = AnchorStyles.Right;
             lblVersion.AutoSize = true;
             lblVersion.BackColor = Color.Transparent;
             lblVersion.Font = new Font("Segoe UI Variable Display", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblVersion.ForeColor = Color.Silver;
+            lblVersion.ForeColor = Color.White;
             lblVersion.ImageAlign = ContentAlignment.MiddleLeft;
-            lblVersion.Location = new Point(23, 4);
+            lblVersion.Location = new Point(489, 1);
             lblVersion.Name = "lblVersion";
-            lblVersion.Size = new Size(52, 26);
+            lblVersion.Padding = new Padding(40, 0, 0, 0);
+            lblVersion.Size = new Size(92, 26);
             lblVersion.TabIndex = 2;
             lblVersion.Text = "1.0.0";
             lblVersion.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // tableLayoutPanel1
+            // 
+            tableLayoutPanel1.BackColor = Color.Transparent;
+            tableLayoutPanel1.ColumnCount = 1;
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tableLayoutPanel1.Controls.Add(lblSplashStatus, 0, 0);
+            tableLayoutPanel1.Dock = DockStyle.Bottom;
+            tableLayoutPanel1.Location = new Point(0, 315);
+            tableLayoutPanel1.Name = "tableLayoutPanel1";
+            tableLayoutPanel1.RowCount = 1;
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tableLayoutPanel1.Size = new Size(584, 46);
+            tableLayoutPanel1.TabIndex = 3;
+            // 
+            // lblSplashStatus
+            // 
+            lblSplashStatus.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            lblSplashStatus.AutoSize = true;
+            lblSplashStatus.Font = new Font("Segoe UI Variable Display", 11.25F, FontStyle.Bold);
+            lblSplashStatus.ForeColor = Color.White;
+            lblSplashStatus.Location = new Point(3, 13);
+            lblSplashStatus.Name = "lblSplashStatus";
+            lblSplashStatus.Size = new Size(578, 20);
+            lblSplashStatus.TabIndex = 0;
+            lblSplashStatus.Text = "Status";
+            lblSplashStatus.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // tableLayoutPanel2
+            // 
+            tableLayoutPanel2.BackColor = Color.Transparent;
+            tableLayoutPanel2.ColumnCount = 1;
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tableLayoutPanel2.Controls.Add(lblVersion, 0, 0);
+            tableLayoutPanel2.Dock = DockStyle.Top;
+            tableLayoutPanel2.Location = new Point(0, 0);
+            tableLayoutPanel2.Name = "tableLayoutPanel2";
+            tableLayoutPanel2.RowCount = 1;
+            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tableLayoutPanel2.Size = new Size(584, 29);
+            tableLayoutPanel2.TabIndex = 4;
             // 
             // SplashScreen
             // 
             AutoScaleDimensions = new SizeF(96F, 96F);
             AutoScaleMode = AutoScaleMode.Dpi;
-            BackColor = Color.White;
-            BackgroundImage = Properties.Resources.CRA_splash;
+            BackColor = Color.Black;
+            BackgroundImage = Properties.Resources.Splash_screen_fixed;
             BackgroundImageLayout = ImageLayout.Stretch;
             ClientSize = new Size(584, 361);
             ControlBox = false;
-            Controls.Add(lblVersion);
-            Controls.Add(statusStrip1);
+            Controls.Add(tableLayoutPanel2);
+            Controls.Add(tableLayoutPanel1);
+            DoubleBuffered = true;
             FormBorderStyle = FormBorderStyle.None;
             Name = "SplashScreen";
             ShowIcon = false;
@@ -100,18 +113,17 @@
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Splash";
             Load += SplashScreen_Load;
-            statusStrip1.ResumeLayout(false);
-            statusStrip1.PerformLayout();
+            tableLayoutPanel1.ResumeLayout(false);
+            tableLayoutPanel1.PerformLayout();
+            tableLayoutPanel2.ResumeLayout(false);
+            tableLayoutPanel2.PerformLayout();
             ResumeLayout(false);
-            PerformLayout();
         }
 
         #endregion
-
-        private StatusStrip statusStrip1;
-        private ToolStripStatusLabel lblSplashStatus;
-        private ToolStripStatusLabel toolStripStatusLabel1;
-        private ToolStripStatusLabel toolStripStatusLabel2;
         private Label lblVersion;
+        private TableLayoutPanel tableLayoutPanel1;
+        private Label lblSplashStatus;
+        private TableLayoutPanel tableLayoutPanel2;
     }
 }

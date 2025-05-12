@@ -1,5 +1,5 @@
 ﻿// GlobalData.cs : RadioExt-Helper
-// Copyright (C) 2024  Ethan Hann
+// Copyright (C) 2025  Ethan Hann
 // 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -20,7 +20,6 @@ using System.Reflection;
 using System.Resources;
 using AetherUtils.Core.Configuration;
 using AetherUtils.Core.Logging;
-using AetherUtils.Core.Structs;
 using RadioExt_Helper.config;
 using RadioExt_Helper.forms;
 
@@ -36,6 +35,9 @@ public static class GlobalData
     private const string ConfigFileName = "config.yml";
     private const string DefaultLanguage = "English (en)";
 
+    /// <summary>
+    /// The version of the application.
+    /// </summary>
     public static readonly Version AppVersion =
         Assembly.GetExecutingAssembly().GetName().Version is { } v
             ? new Version(v.Major, v.Minor, v.Build)
@@ -60,7 +62,7 @@ public static class GlobalData
     /// <summary>
     /// Get the configuration manager responsible for managing the application configuration.
     /// </summary>
-    public static CyberConfigManager ConfigManager { get; private set; } = null!;
+    public static ConfigManager<ApplicationConfig> ConfigManager { get; private set; } = null!;
 
     private static BindingList<string> UiIcons { get; set; } = [];
     private static ComboBox? UiIconsComboTemplate { get; set; }
@@ -80,18 +82,36 @@ public static class GlobalData
     public static void Initialize()
     {
         if (_globalDataInitialized) return;
-        ConfigManager = CreateConfigManager();
+        ConfigManager = ConfigManagerFactory.CreateAndLoad<ApplicationConfig>(ConfigFilePath);
 
         LoadUiIcons();
 
-        InitializeConfig();
+        Exception? e = null;
+        try
+        {
+            // Always update the log header and save
+            ConfigManager.Set("logHeader", SystemInfo.GetLogFileHeader());
+            ConfigManager.Save();
+        }
+        catch (Exception ex)
+        {
+            e = ex;
+            MessageBox.Show(Strings.GetString("ConfigError"), Strings.GetString("Error"),
+                MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+
         InitializeLogging();
 
-        SetCulture(ConfigManager.Get("language") as string ?? DefaultLanguage);
+        if (e != null)
+            AuLogger.GetCurrentLogger(nameof(GlobalData)).Error(e, "Error initializing configuration.");
 
+        SetCulture(ConfigManager.Get("language") as string ?? DefaultLanguage);
         _globalDataInitialized = true;
     }
 
+    /// <summary>
+    /// Initializes the ComboBox template with default properties.
+    /// </summary>
     public static void InitializeComboBoxTemplate()
     {
         UiIconsComboTemplate = CreateComboBoxTemplate();
@@ -129,48 +149,6 @@ public static class GlobalData
         var mostRecentLogFile = logFiles.OrderByDescending(File.GetLastWriteTime).FirstOrDefault();
 
         return mostRecentLogFile ?? string.Empty;
-    }
-
-    /// <summary>
-    ///     Initializes the configuration manager and loads the application config.
-    ///     If the config file exists, it is loaded. Otherwise, a default config is created and saved.
-    /// </summary>
-    private static void InitializeConfig()
-    {
-        if (ConfigManager.ConfigExists)
-        {
-            if (ConfigManager.Load())
-            {
-                //Set the log header everytime the application is launched to ensure the version is correct in the header
-                ConfigOption logOption = new("logHeader", SystemInfo.GetLogFileHeader());
-                ConfigManager.Set(logOption);
-                ConfigManager.Save();
-            }
-            else //Create the default config if the config file is corrupted or failed to load.
-            {
-                ConfigManager.CreateDefaultConfig();
-                ConfigManager.Save();
-            }
-        }
-        else
-        {
-            ConfigManager.CreateDefaultConfig();
-            ConfigManager.Save();
-        }
-    }
-
-    /// <summary>
-    ///     Creates an instance of the <see cref="CyberConfigManager" /> class.
-    /// </summary>
-    /// <remarks>
-    ///     This method is used to create and initialize a new instance of the <see cref="CyberConfigManager" /> class, which
-    ///     is a configuration manager
-    ///     for a YAML configuration file using <see cref="ApplicationConfig" /> as the base configuration.
-    /// </remarks>
-    /// <returns>A new instance of the <see cref="CyberConfigManager" /> class.</returns>
-    private static CyberConfigManager CreateConfigManager()
-    {
-        return new CyberConfigManager(ConfigFilePath);
     }
 
     /// <summary>

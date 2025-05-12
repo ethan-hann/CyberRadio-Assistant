@@ -1257,4 +1257,113 @@
   <data name="LocateAllMissingSongsDesc" xml:space="preserve">
     <value>Выберите папку, содержащую отсутствующие файлы песни</value>
   </data>
+  <data name="MainForm_NoStationsImported" xml:space="preserve">
+    <value>Станции не были импортированы. Проверьте файл .zip/.rar содержит действительную станцию.</value>
+  </data>
+  <data name="MainForm_NoStationsImportedTitle" xml:space="preserve">
+    <value>Ничего, чтобы импортировать</value>
+  </data>
+  <data name="StagingPathForbidden" xml:space="preserve">
+    <value>Неверный путь: {0}</value>
+  </data>
+  <data name="ForbiddenPath_RootDirectory" xml:space="preserve">
+    <value>Путь по постановке не может быть установлен на корень диска</value>
+  </data>
+  <data name="ForbiddenPath_SystemDirectory" xml:space="preserve">
+    <value>Путь по постановке не может быть установлен в резервный каталог системы.</value>
+  </data>
+  <data name="ForbiddenPath_ProgramFiles" xml:space="preserve">
+    <value>Путь постановки не может быть установлен в каталог файлов программы.</value>
+  </data>
+  <data name="ForbiddenPath_UserAppData" xml:space="preserve">
+    <value>Путь постановки не может быть установлен в каталог данных приложения.</value>
+  </data>
+  <data name="ForbiddenPath_VortexFolder" xml:space="preserve">
+    <value>Путь к постановке не может быть установлен в папку, управляемую вихрем.</value>
+  </data>
+  <data name="SplashScreen_CheckingStagingPath" xml:space="preserve">
+    <value>Проверка промежуточного пути ...</value>
+  </data>
+  <data name="SplashScreen_StagingPathForbidden" xml:space="preserve">
+    <value>Поставленный путь был недействительным. Сбросить на пустую строку.</value>
+  </data>
+  <data name="SplashScreen_StagingPathValid" xml:space="preserve">
+    <value>Постановка пути действителен!</value>
+  </data>
+  <data name="ForbiddenPathsHelp" xml:space="preserve">
+    <value>Определяет ключевые слова, которые ищут при установке пути постановки для радиостанций. Любые пути, которые содержат ключевые слова здесь, не допускаются.</value>
+  </data>
+  <data name="ForbiddenKeywordListViewColumn" xml:space="preserve">
+    <value>Ключевое слово</value>
+  </data>
+  <data name="ForbiddenKeywordEmpty" xml:space="preserve">
+    <value>Ключевое слово не может быть пустым!</value>
+  </data>
+  <data name="ForbiddenKeywordNoGroup" xml:space="preserve">
+    <value>Группа не может быть пустой!</value>
+  </data>
+  <data name="ForbiddenKeywordInput_Title" xml:space="preserve">
+    <value>Новое ключевое слово</value>
+  </data>
+  <data name="ForbiddenKeywordInput_Keyword" xml:space="preserve">
+    <value>Ключевое слово:</value>
+  </data>
+  <data name="ForbiddenKeywordInput_Group" xml:space="preserve">
+    <value>Группа:</value>
+  </data>
+  <data name="ForbiddenKeywordInput_IsForbidden" xml:space="preserve">
+    <value>Запрещено?</value>
+  </data>
+  <data name="ForbiddenKeywordInput_AddAndNew" xml:space="preserve">
+    <value>Добавить и новый</value>
+  </data>
+  <data name="ForbiddenKeywordInput_Add" xml:space="preserve">
+    <value>Добавить и закрыть</value>
+  </data>
+  <data name="ForbiddenPath_KeywordMatch" xml:space="preserve">
+    <value>Переход содержит запрещенные ключевые слова. Вы можете определить их в настройках.</value>
+  </data>
+  <data name="DeleteSelectedKeywords" xml:space="preserve">
+    <value>Удалить выбранные ключевые слова</value>
+  </data>
+  <data name="PathSettings" xml:space="preserve">
+    <value>Настройка пути</value>
+  </data>
+  <data name="NewKeywordHelp" xml:space="preserve">
+    <value>Добавьте новое ключевое слово в проверку запретного пути.</value>
+  </data>
+  <data name="DeleteSelectedKeywordHelp" xml:space="preserve">
+    <value>Удалить выбранные ключевые слова из списка. Обычно лучше просто отключить ключевое слово с помощью флажки.</value>
+  </data>
+  <data name="SystemPaths" xml:space="preserve">
+    <value>Системные пути</value>
+  </data>
+  <data name="GroupNotAllowedToBeModified" xml:space="preserve">
+    <value>Группа «Системные пути» не может быть изменена.</value>
+  </data>
+  <data name="OodleDllMissing" xml:space="preserve">
+    <value>'Ooodle.dll' не был найден в файлах игры. У вас могут быть проблемы, создающие и извлечение значков станции.</value>
+  </data>
+  <data name="OodleDllFound" xml:space="preserve">
+    <value>Нашел {0} в файлах игры! У вас не должно быть проблем с значками.</value>
+  </data>
+  <data name="ConfigReloadConfirm" xml:space="preserve">
+    <value>Вы уверены, что хотите перезагрузить конфигурацию из файла? Все неспасенные варианты будут потеряны.</value>
+  </data>
+  <data name="ConfigReloadError" xml:space="preserve">
+    <value>Произошла ошибка при перезагрузке файла конфигурации.</value>
+  </data>
+  <data name="ReloadFromFile" xml:space="preserve">
+    <value>Перезагрузить из файла</value>
+  </data>
+  <data name="ConfigReloadSuccess" xml:space="preserve">
+    <value>Успешно перезагруженная конфигурация из файла.</value>
+  </data>
+  <data name="ConfigError" xml:space="preserve">
+    <value>Файл конфигурации был недействительным или не мог быть прочитал. Будет использоваться конфигурация по умолчанию.</value>
+  </data>
+  <data name="AboutCredits" xml:space="preserve">
+    <value>Особая благодарность Justarandomguyintheinternet (https://github.com/justarandomguyintheinternet/cp77radioext) за потрясающий мод Radioext!
+Особая благодарность DemonseedXP (https://next.nexusmods.com/profile/demonseedxp) за значок приложения и экрана Splash!</value>
+  </data>
 </root>

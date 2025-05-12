@@ -1,5 +1,5 @@
 ﻿// Updater.cs : RadioExt-Helper
-// Copyright (C) 2024  Ethan Hann
+// Copyright (C) 2025  Ethan Hann
 // 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -46,7 +46,8 @@ public static class Updater
                 return;
             }
 
-            var latestVersion = new Version(version.Replace("v", "")); //Remove the leading 'v' from the version tag on Github
+            var latestVersion =
+                new Version(version.Replace("v", "")); //Remove the leading 'v' from the version tag on Github
             var currentVersion = Assembly.GetExecutingAssembly().GetName().Version;
 
             if (currentVersion != null)

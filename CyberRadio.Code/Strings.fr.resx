@@ -1257,4 +1257,113 @@ Assurez-vous de créer une sauvegarde de vos stations avant de nettoyer les donn
   <data name="CopySongFilesToBackupHelp" xml:space="preserve">
     <value>S'il est vérifié, indique que les fichiers de chansons (y compris externes) doivent être inclus dans le fichier de sauvegarde .zip pour les stations.</value>
   </data>
+  <data name="MainForm_NoStationsImported" xml:space="preserve">
+    <value>Aucune station n'a été importée. Vérifiez que le fichier .zip / .rar contient une station valide.</value>
+  </data>
+  <data name="MainForm_NoStationsImportedTitle" xml:space="preserve">
+    <value>Rien à importer</value>
+  </data>
+  <data name="StagingPathForbidden" xml:space="preserve">
+    <value>Chemin non valide: {0}</value>
+  </data>
+  <data name="ForbiddenPath_RootDirectory" xml:space="preserve">
+    <value>Le chemin de stadification ne peut pas être réglé sur la racine d'un lecteur</value>
+  </data>
+  <data name="ForbiddenPath_SystemDirectory" xml:space="preserve">
+    <value>Le chemin de stadification ne peut pas être défini sur un répertoire système réservé.</value>
+  </data>
+  <data name="ForbiddenPath_ProgramFiles" xml:space="preserve">
+    <value>Le chemin de stadification ne peut pas être défini sur le répertoire des fichiers du programme.</value>
+  </data>
+  <data name="ForbiddenPath_UserAppData" xml:space="preserve">
+    <value>Le chemin de stadification ne peut pas être défini sur un répertoire de données d'application.</value>
+  </data>
+  <data name="ForbiddenPath_VortexFolder" xml:space="preserve">
+    <value>Le chemin de stadification ne peut pas être défini sur un dossier géré par vortex.</value>
+  </data>
+  <data name="SplashScreen_CheckingStagingPath" xml:space="preserve">
+    <value>Vérification du chemin de stadification ...</value>
+  </data>
+  <data name="SplashScreen_StagingPathForbidden" xml:space="preserve">
+    <value>Le chemin de mise en scène n'était pas valide. Réinitialiser avec une chaîne vide.</value>
+  </data>
+  <data name="SplashScreen_StagingPathValid" xml:space="preserve">
+    <value>Le chemin de mise en scène est valide!</value>
+  </data>
+  <data name="ForbiddenPathsHelp" xml:space="preserve">
+    <value>Définit les mots clés qui sont recherchés lors de la définition du chemin de stadification des stations radio. Tous les chemins contenant des mots clés ici ne sont pas autorisés.</value>
+  </data>
+  <data name="ForbiddenKeywordListViewColumn" xml:space="preserve">
+    <value>Mot-clé</value>
+  </data>
+  <data name="ForbiddenKeywordEmpty" xml:space="preserve">
+    <value>Le mot-clé ne peut pas être vide!</value>
+  </data>
+  <data name="ForbiddenKeywordNoGroup" xml:space="preserve">
+    <value>Le groupe ne peut pas être vide!</value>
+  </data>
+  <data name="ForbiddenKeywordInput_Title" xml:space="preserve">
+    <value>Nouveau mot-clé</value>
+  </data>
+  <data name="ForbiddenKeywordInput_Keyword" xml:space="preserve">
+    <value>Mot-clé:</value>
+  </data>
+  <data name="ForbiddenKeywordInput_Group" xml:space="preserve">
+    <value>Groupe:</value>
+  </data>
+  <data name="ForbiddenKeywordInput_IsForbidden" xml:space="preserve">
+    <value>Est interdit?</value>
+  </data>
+  <data name="ForbiddenKeywordInput_AddAndNew" xml:space="preserve">
+    <value>Ajouter et nouveau</value>
+  </data>
+  <data name="ForbiddenKeywordInput_Add" xml:space="preserve">
+    <value>Ajouter et fermer</value>
+  </data>
+  <data name="ForbiddenPath_KeywordMatch" xml:space="preserve">
+    <value>Le chemin de stadification contient des mots clés interdits. Vous pouvez les définir dans les paramètres.</value>
+  </data>
+  <data name="DeleteSelectedKeywords" xml:space="preserve">
+    <value>Supprimer les mots clés sélectionnés</value>
+  </data>
+  <data name="PathSettings" xml:space="preserve">
+    <value>Configuration du chemin</value>
+  </data>
+  <data name="NewKeywordHelp" xml:space="preserve">
+    <value>Ajoutez un nouveau mot-clé à la vérification du chemin interdit.</value>
+  </data>
+  <data name="DeleteSelectedKeywordHelp" xml:space="preserve">
+    <value>Supprimez les mots clés sélectionnés de la liste. Il est généralement préférable de simplement désactiver le mot-clé avec la case à cocher.</value>
+  </data>
+  <data name="SystemPaths" xml:space="preserve">
+    <value>Chemins système</value>
+  </data>
+  <data name="GroupNotAllowedToBeModified" xml:space="preserve">
+    <value>Le groupe «Paths système» ne peut pas être modifié.</value>
+  </data>
+  <data name="OodleDllMissing" xml:space="preserve">
+    <value>«Oodle.dll» n'a pas été trouvé dans les fichiers du jeu. Vous pouvez avoir des problèmes de création et d'extraction d'icônes de station.</value>
+  </data>
+  <data name="OodleDllFound" xml:space="preserve">
+    <value>Found {0} dans les fichiers de jeu! Vous ne devriez pas avoir de problèmes avec les icônes.</value>
+  </data>
+  <data name="ConfigReloadConfirm" xml:space="preserve">
+    <value>Êtes-vous sûr de vouloir recharger la configuration à partir du fichier? Toutes les options non sauvées seront perdues.</value>
+  </data>
+  <data name="ConfigReloadError" xml:space="preserve">
+    <value>Une erreur s'est produite lors du rechargement du fichier de configuration.</value>
+  </data>
+  <data name="ReloadFromFile" xml:space="preserve">
+    <value>Recharger à partir du fichier</value>
+  </data>
+  <data name="ConfigReloadSuccess" xml:space="preserve">
+    <value>Configuration rechargée avec succès à partir du fichier.</value>
+  </data>
+  <data name="ConfigError" xml:space="preserve">
+    <value>Le fichier de configuration n'était pas valide ou n'a pas pu être lu. Une configuration par défaut sera utilisée.</value>
+  </data>
+  <data name="AboutCredits" xml:space="preserve">
+    <value>Un merci spécial à juskarandomguyintheinternet (https://github.com/justarandomguyintheinternet/CP77RadioExt) pour le super radioext mod!
+Un merci spécial à DeMonseedxp (https://next.nexusmods.com/profile/demonseedxp) pour l'icône de l'application et l'écran Splash!</value>
+  </data>
 </root>
