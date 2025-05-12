@@ -17,7 +17,7 @@ If you wish to provide translations for the application, that's awesome! 🥳 Th
 
 If you can do that, great! Let's get started.
 
-1. Download and open the template file [translations.xlsx](https://drive.tortal.tech/wl/?id=Z2SZSDQjDwsKy4A0b7Wnw1Xub5yLR5US&fmode=download) in an editor of your choice. Excel would work best here but you can also use [OpenOffice](https://www.openoffice.org/) or [Microsoft Office Online](https://www.office.com/) if you don't have the Microsoft Office Suite.
+1. Download and open the template file [translations.xlsx](https://drive.tortal.tech/wl/?id=m8BlOk4XZD7k7GyHWldUxr0Lj8tZaUpi&fmode=download) in an editor of your choice. Excel would work best here but you can also use [OpenOffice](https://www.openoffice.org/) or [Microsoft Office Online](https://www.office.com/) if you don't have the Microsoft Office Suite.
 
 2. The template spreadsheet has two columns: `Key` and `English (en)`. Please do not delete these columns. Instead, to add a new translation, add a new column with your language as the column header. Also, include the [culture .NET tag](https://www.venea.net/web/culture_code) for the language in parentheses.
 
