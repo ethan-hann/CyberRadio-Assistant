@@ -1366,4 +1366,7 @@ Are you sure you want to clear all station data?</value>
     <value>Special thanks to justarandomguyintheinternet (https://github.com/justarandomguyintheinternet/CP77_radioExt) for the awesome radioExt mod!
 Special thanks to demonseedxp (https://next.nexusmods.com/profile/demonseedxp) for the app icon and splash screen!</value>
   </data>
+  <data name="SplashScreen_SetupAudioConverter" xml:space="preserve">
+    <value>Setting up audio converter...</value>
+  </data>
 </root>
