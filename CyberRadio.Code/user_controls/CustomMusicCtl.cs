@@ -17,6 +17,7 @@
 using System.Diagnostics;
 using AetherUtils.Core.Extensions;
 using AetherUtils.Core.Files;
+using RadioExt_Helper.forms;
 using RadioExt_Helper.models;
 using RadioExt_Helper.Properties;
 using RadioExt_Helper.utility;
@@ -74,7 +75,9 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
         lblStationSizeLabel.Text = Strings.TotalStationSizeLabel;
 
         fdlgOpenSongs.Title = Strings.AddSongsFileBrowserTitle;
-        fdlgOpenSongs.Filter = Strings.AddSongsFileBrowserFilter + @"|*.mp3;*.wav;*.ogg;*.flac;*.mp2;*.wax;*.wma";
+        fdlgOpenSongs.Filter = @"Audio/Video Files|*.mp3;*.wav;*.ogg;*.flac;*.mp2;*.wax;*.wma;*.aac;*.m4a;
+                                    *.aiff;*.alac;*.opus;*.amr;*.ac3;*.mp4;*.m4v;*.mov;*.avi;*.wmv;*.flv;*.mkv;
+                                    *.webm;*.mpeg;*.mpg;*.3gp;*.3g2;*.ts;*.mts;*.m2ts";
         tabSongs.Text = Strings.SongListing;
         tabSongOrder.Text = Strings.SongOrder;
 
@@ -195,17 +198,42 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
     {
         if (fdlgOpenSongs.ShowDialog() != DialogResult.OK) return;
 
-        foreach (var path in fdlgOpenSongs.FileNames)
-        {
-            var song = Song.FromFile(path);
-            if (song == null) continue;
+        var config = GlobalData.ConfigManager.GetConfig();
+        if (config == null) return;
 
-            if (!CanSongBeAdded(song)) continue;
-            Station.TrackedObject.Songs.Add(song);
+        // Check if the selected files are valid audio files
+        List<string> needConversion = [];
+        List<string> noConversionNeeded = [];
+        needConversion.AddRange(fdlgOpenSongs.FileNames.Where(fileName => !PathHelper.IsValidAudioFile(fileName)));
+
+        if (needConversion.Count > 0)
+        {
+            //Ask the user if they want to convert the files
+            var result = MessageBox.Show(this, 
+                string.Format(Strings.AudioConverterPrompt, needConversion.Count), Strings.Confirm,
+                MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (result == DialogResult.Yes)
+            {
+                // Show the audio converter form
+                var audioConverterForm = new AudioConverterForm(needConversion, Station);
+                audioConverterForm.ConversionCompleted += AudioConverterForm_ConversionCompleted;
+                audioConverterForm.ShowDialog(this);
+            }
         }
+
+        // Add the files that don't need conversion
+        noConversionNeeded.AddRange(fdlgOpenSongs.FileNames.Where(f => !needConversion.Contains(f)));
+        foreach (var song in noConversionNeeded.Select(Song.FromFile).OfType<Song>().Where(CanSongBeAdded))
+            Station.TrackedObject.Songs.Add(song);
 
         UpdateListsAndViews();
         StationUpdated?.Invoke(this, EventArgs.Empty);
+    }
+
+    private void AudioConverterForm_ConversionCompleted(object? sender, List<string> e)
+    {
+        foreach (var song in e.Select(Song.FromFile).OfType<Song>().Where(CanSongBeAdded))
+            Station.TrackedObject.Songs.Add(song);
     }
 
     private void BtnRemoveSongs_Click(object sender, EventArgs e)
@@ -283,7 +311,9 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
         // Reset the file browser to its original state
         fdlgOpenSongs.Multiselect = true;
         fdlgOpenSongs.Title = Strings.AddSongsFileBrowserTitle;
-        fdlgOpenSongs.Filter = Strings.AddSongsFileBrowserFilter + @"|*.mp3;*.wav;*.ogg;*.flac;*.mp2;*.wax;*.wma";
+        fdlgOpenSongs.Filter = @"Audio/Video Files|*.mp3;*.wav;*.ogg;*.flac;*.mp2;*.wax;*.wma;*.aac;*.m4a;
+                                    *.aiff;*.alac;*.opus;*.amr;*.ac3;*.mp4;*.m4v;*.mov;*.avi;*.wmv;*.flv;*.mkv;
+                                    *.webm;*.mpeg;*.mpg;*.3gp;*.3g2;*.ts;*.mts;*.m2ts";
         fdlgOpenSongs.FileName = string.Empty;
     }
 

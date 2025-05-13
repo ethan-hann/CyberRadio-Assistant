@@ -1369,4 +1369,57 @@ Special thanks to demonseedxp (https://next.nexusmods.com/profile/demonseedxp) f
   <data name="SplashScreen_SetupAudioConverter" xml:space="preserve">
     <value>Setting up audio converter...</value>
   </data>
+  <data name="AudioConverterTitle" xml:space="preserve">
+    <value>Convert Audio</value>
+  </data>
+  <data name="InputPathsColumn" xml:space="preserve">
+    <value>Input Path</value>
+  </data>
+  <data name="OutputPathsColumn" xml:space="preserve">
+    <value>Output Path</value>
+  </data>
+  <data name="CheckAll" xml:space="preserve">
+    <value>Check All</value>
+  </data>
+  <data name="UncheckAll" xml:space="preserve">
+    <value>Uncheck All</value>
+  </data>
+  <data name="AddFiles" xml:space="preserve">
+    <value>Add Files...</value>
+  </data>
+  <data name="StartConversion" xml:space="preserve">
+    <value>Start Conversion</value>
+  </data>
+  <data name="ConversionOngoing" xml:space="preserve">
+    <value>Files are currently being converted. Please wait until they have finished.</value>
+  </data>
+  <data name="Converting" xml:space="preserve">
+    <value>Converting file</value>
+  </data>
+  <data name="NoFilesSelected_Conversion" xml:space="preserve">
+    <value>No files were selected for conversion.
+Please select at least one file and try again.</value>
+  </data>
+  <data name="NoConversionNeeded" xml:space="preserve">
+    <value>No conversion needed</value>
+  </data>
+  <data name="ChangeOutputDirectory" xml:space="preserve">
+    <value>Change Output Folder...</value>
+  </data>
+  <data name="ChangeOutputDirectoryDescription" xml:space="preserve">
+    <value>Select a folder to save converted audio files to</value>
+  </data>
+  <data name="ConversionLog" xml:space="preserve">
+    <value>Conversion Log</value>
+  </data>
+  <data name="TotalConversionsLabel" xml:space="preserve">
+    <value>Converting: {0} / {1}</value>
+  </data>
+  <data name="AudioConverterMenuOption" xml:space="preserve">
+    <value>Audio Converter</value>
+  </data>
+  <data name="AudioConverterPrompt" xml:space="preserve">
+    <value>There are {0} file(s) that need to be converted in order to work with radioExt.
+Would you like to convert them now?</value>
+  </data>
 </root>

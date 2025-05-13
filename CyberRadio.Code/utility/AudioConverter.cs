@@ -146,7 +146,7 @@ namespace RadioExt_Helper.utility
         /// </summary>
         /// <param name="inputPath">The file path to check.</param>
         /// <returns><c>true</c> if conversion is needed; <c>false</c> otherwise.</returns>
-        public bool NeedsConversion(string inputPath) => PathHelper.IsValidAudioFile(inputPath);
+        public bool NeedsConversion(string inputPath) => !PathHelper.IsValidAudioFile(inputPath);
 
         /// <summary>
         /// Converts the given file to <c>.mp3</c> if it is not a supported format.
@@ -154,7 +154,7 @@ namespace RadioExt_Helper.utility
         /// <param name="inputPath">The path to the input audio file.</param>
         /// <param name="outputDirectory">The directory to save the converted file. If null, uses input file's directory.</param>
         /// <returns>The path to the converted file, or null if conversion failed or not needed.</returns>
-        public async Task<string?> ConvertToMp3Async(string inputPath, string outputDirectory)
+        public async Task<string?> ConvertToMp3Async(string inputPath, string? outputDirectory)
         {
             var logger = AuLogger.GetCurrentLogger<AudioConverter>("ConvertToMp3IfNeededAsync");
             try
@@ -175,7 +175,8 @@ namespace RadioExt_Helper.utility
                     throw new InvalidOperationException("Converted directory is not set.");
                 }
 
-                var outputFile = Path.Combine(ConvertedDirectory, Path.GetFileNameWithoutExtension(inputPath) + ".mp3");
+                var outputFile = Path.Combine(outputDirectory ?? ConvertedDirectory, 
+                    Path.GetFileNameWithoutExtension(inputPath) + ".mp3");
 
                 // Fire event and log
                 ConversionStarted?.Invoke(this, inputPath);

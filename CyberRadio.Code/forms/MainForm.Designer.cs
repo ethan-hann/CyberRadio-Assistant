@@ -94,6 +94,7 @@ namespace RadioExt_Helper.forms
             pgBackupProgress = new ToolStripProgressBar();
             lblSpring2 = new ToolStripStatusLabel();
             statusStripBackup = new StatusStrip();
+            audioConverterToolStripMenuItem = new ToolStripMenuItem();
             menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
@@ -295,7 +296,7 @@ namespace RadioExt_Helper.forms
             // 
             // toolsToolStripMenuItem
             // 
-            toolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { iconGeneratorToolStripMenuItem });
+            toolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { iconGeneratorToolStripMenuItem, audioConverterToolStripMenuItem });
             toolsToolStripMenuItem.Image = Properties.Resources.tools_16x16;
             toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             toolsToolStripMenuItem.Size = new Size(63, 20);
@@ -688,6 +689,14 @@ namespace RadioExt_Helper.forms
             statusStripBackup.Text = "statusStrip2";
             statusStripBackup.Visible = false;
             // 
+            // audioConverterToolStripMenuItem
+            // 
+            audioConverterToolStripMenuItem.Image = Properties.Resources.sound_waves__16x16;
+            audioConverterToolStripMenuItem.Name = "audioConverterToolStripMenuItem";
+            audioConverterToolStripMenuItem.Size = new Size(231, 22);
+            audioConverterToolStripMenuItem.Text = "Audio Converter";
+            audioConverterToolStripMenuItem.Click += audioConverterToolStripMenuItem_Click;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(96F, 96F);
@@ -796,5 +805,6 @@ namespace RadioExt_Helper.forms
         private ContextMenuStrip cmsNewStation;
         private ToolStripMenuItem fromzipFileToolStripMenuItem;
         private TextBox txtStationFilter;
+        private ToolStripMenuItem audioConverterToolStripMenuItem;
     }
 }

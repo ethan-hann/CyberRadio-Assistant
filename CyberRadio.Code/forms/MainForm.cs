@@ -386,6 +386,7 @@ public sealed partial class MainForm : Form
         apiStatusToolStripMenuItem.Text = Strings.ApiStatus;
         stationsToolStripMenuItem.Text = Strings.Stations;
         iconGeneratorToolStripMenuItem.Text = Strings.IconManagerMenuOption;
+        audioConverterToolStripMenuItem.Text = Strings.AudioConverterMenuOption;
         lblBackupStatus.Text = Strings.BackupReady;
         txtStationFilter.PlaceholderText = Strings.SearchStations;
         fromzipFileToolStripMenuItem.Text = Strings.ImportFromZipFile;
@@ -1289,5 +1290,12 @@ public sealed partial class MainForm : Form
             AuLogger.GetCurrentLogger<MainForm>("ManagerFormOnIconUpdated")
                 .Error(ex, "An error occurred while updating the station icon.");
         }
+    }
+
+    private void audioConverterToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        //Open the Audio Converter form with no input files and no station.
+        var audioConverterForm = new AudioConverterForm([], null);
+        audioConverterForm.Show(this);
     }
 }
