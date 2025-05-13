@@ -134,6 +134,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add Files....
+        /// </summary>
+        internal static string AddFiles {
+            get {
+                return ResourceManager.GetString("AddFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add Selected  .
         /// </summary>
         internal static string AddSelected {
@@ -238,6 +247,34 @@ namespace RadioExt_Helper {
         internal static string AreYouSure {
             get {
                 return ResourceManager.GetString("AreYouSure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Audio Converter.
+        /// </summary>
+        internal static string AudioConverterMenuOption {
+            get {
+                return ResourceManager.GetString("AudioConverterMenuOption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There are {0} file(s) that need to be converted in order to work with radioExt.
+        ///Would you like to convert them now?.
+        /// </summary>
+        internal static string AudioConverterPrompt {
+            get {
+                return ResourceManager.GetString("AudioConverterPrompt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Convert Audio.
+        /// </summary>
+        internal static string AudioConverterTitle {
+            get {
+                return ResourceManager.GetString("AudioConverterTitle", resourceCulture);
             }
         }
         
@@ -418,6 +455,33 @@ namespace RadioExt_Helper {
         internal static string Change {
             get {
                 return ResourceManager.GetString("Change", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Change Output Folder....
+        /// </summary>
+        internal static string ChangeOutputDirectory {
+            get {
+                return ResourceManager.GetString("ChangeOutputDirectory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select a folder to save converted audio files to.
+        /// </summary>
+        internal static string ChangeOutputDirectoryDescription {
+            get {
+                return ResourceManager.GetString("ChangeOutputDirectoryDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Check All.
+        /// </summary>
+        internal static string CheckAll {
+            get {
+                return ResourceManager.GetString("CheckAll", resourceCulture);
             }
         }
         
@@ -615,6 +679,33 @@ namespace RadioExt_Helper {
         internal static string ConfirmSyncStationsExternal {
             get {
                 return ResourceManager.GetString("ConfirmSyncStationsExternal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Conversion Log.
+        /// </summary>
+        internal static string ConversionLog {
+            get {
+                return ResourceManager.GetString("ConversionLog", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Files are currently being converted. Please wait until they have finished..
+        /// </summary>
+        internal static string ConversionOngoing {
+            get {
+                return ResourceManager.GetString("ConversionOngoing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Converting file.
+        /// </summary>
+        internal static string Converting {
+            get {
+                return ResourceManager.GetString("Converting", resourceCulture);
             }
         }
         
@@ -1993,6 +2084,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Input Path.
+        /// </summary>
+        internal static string InputPathsColumn {
+            get {
+                return ResourceManager.GetString("InputPathsColumn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The active icon is invalid. Please ensure the icon is imported and the archive file is present..
         /// </summary>
         internal static string InvalidActiveIcon {
@@ -2454,12 +2554,31 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No conversion needed.
+        /// </summary>
+        internal static string NoConversionNeeded {
+            get {
+                return ResourceManager.GetString("NoConversionNeeded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The path to the Cyberpunk 2077 executable has not been set.
         ///Please set it now..
         /// </summary>
         internal static string NoExeFound {
             get {
                 return ResourceManager.GetString("NoExeFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No files were selected for conversion.
+        ///Please select at least one file and try again..
+        /// </summary>
+        internal static string NoFilesSelected_Conversion {
+            get {
+                return ResourceManager.GetString("NoFilesSelected_Conversion", resourceCulture);
             }
         }
         
@@ -2669,6 +2788,15 @@ namespace RadioExt_Helper {
         internal static string Order {
             get {
                 return ResourceManager.GetString("Order", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Output Path.
+        /// </summary>
+        internal static string OutputPathsColumn {
+            get {
+                return ResourceManager.GetString("OutputPathsColumn", resourceCulture);
             }
         }
         
@@ -3294,6 +3422,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Start Conversion.
+        /// </summary>
+        internal static string StartConversion {
+            get {
+                return ResourceManager.GetString("StartConversion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Start Restore.
         /// </summary>
         internal static string StartRestore {
@@ -3483,6 +3620,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Converting: {0} / {1}.
+        /// </summary>
+        internal static string TotalConversionsLabel {
+            get {
+                return ResourceManager.GetString("TotalConversionsLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Total File Size:.
         /// </summary>
         internal static string TotalFileSize {
@@ -3542,6 +3688,15 @@ namespace RadioExt_Helper {
         internal static string Ultra {
             get {
                 return ResourceManager.GetString("Ultra", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Uncheck All.
+        /// </summary>
+        internal static string UncheckAll {
+            get {
+                return ResourceManager.GetString("UncheckAll", resourceCulture);
             }
         }
         
