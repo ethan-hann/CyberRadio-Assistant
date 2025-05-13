@@ -83,6 +83,8 @@
         <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
         <PackageReference Include="TagLibSharp" Version="2.3.0" />
         <PackageReference Include="WIG.Lib" Version="1.0.46" />
+        <PackageReference Include="Xabe.FFmpeg" Version="6.0.1" />
+        <PackageReference Include="Xabe.FFmpeg.Downloader" Version="6.0.1" />
     </ItemGroup>
 
     <ItemGroup>

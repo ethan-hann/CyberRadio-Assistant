@@ -3177,6 +3177,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Setting up audio converter....
+        /// </summary>
+        internal static string SplashScreen_SetupAudioConverter {
+            get {
+                return ResourceManager.GetString("SplashScreen_SetupAudioConverter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Initializing the Icon Manager....
         /// </summary>
         internal static string SplashScreen_SetupIconManager {

@@ -147,6 +147,7 @@ public sealed class ApplicationConfig
         NewFileEveryLaunch = true,
         LogFileDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
             "RadioExt-Helper", "logs"),
+        LogLayout = "${longdate}|${level:uppercase=true}|${logger}|${message:withexception=true}",
         LogHeader = SystemInfo.GetLogFileHeader(),
         IncludeDateTime = true,
         IncludeDateOnly = false
