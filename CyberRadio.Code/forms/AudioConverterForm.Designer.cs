@@ -1,4 +1,6 @@
-﻿namespace RadioExt_Helper.forms
+﻿using RadioExt_Helper.utility;
+
+namespace RadioExt_Helper.forms
 {
     partial class AudioConverterForm
     {
@@ -15,6 +17,9 @@
         {
             if (disposing && (components != null))
             {
+                AudioConverter.Instance.ConversionStarted -= OnConversionStarted;
+                AudioConverter.Instance.ConversionProgress -= OnConversionProgress;
+                AudioConverter.Instance.ConversionCompleted -= OnConversionCompleted;
                 components.Dispose();
             }
             base.Dispose(disposing);
@@ -36,6 +41,7 @@
             toolStripStatusLabel1 = new ToolStripStatusLabel();
             progressBar = new ToolStripProgressBar();
             tableLayoutPanel1 = new TableLayoutPanel();
+            btnCancel = new Button();
             btnStartConversion = new Button();
             btnAddFiles = new Button();
             grpConversionLog = new GroupBox();
@@ -107,10 +113,12 @@
             // 
             // tableLayoutPanel1
             // 
-            tableLayoutPanel1.ColumnCount = 3;
+            tableLayoutPanel1.ColumnCount = 4;
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 51.5306129F));
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 48.4693871F));
-            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 219F));
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 138F));
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 101F));
+            tableLayoutPanel1.Controls.Add(btnCancel, 3, 0);
             tableLayoutPanel1.Controls.Add(btnStartConversion, 1, 0);
             tableLayoutPanel1.Controls.Add(btnAddFiles, 0, 0);
             tableLayoutPanel1.Dock = DockStyle.Bottom;
@@ -120,6 +128,25 @@
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
             tableLayoutPanel1.Size = new Size(612, 33);
             tableLayoutPanel1.TabIndex = 9;
+            // 
+            // btnCancel
+            // 
+            btnCancel.BackColor = Color.Yellow;
+            btnCancel.Dock = DockStyle.Fill;
+            btnCancel.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
+            btnCancel.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
+            btnCancel.FlatStyle = FlatStyle.Flat;
+            btnCancel.Font = new Font("Segoe UI", 9F);
+            btnCancel.Image = Properties.Resources.cancel_16x16;
+            btnCancel.Location = new Point(513, 3);
+            btnCancel.Name = "btnCancel";
+            btnCancel.Size = new Size(96, 27);
+            btnCancel.TabIndex = 9;
+            btnCancel.Text = "Cancel";
+            btnCancel.TextAlign = ContentAlignment.MiddleRight;
+            btnCancel.TextImageRelation = TextImageRelation.ImageBeforeText;
+            btnCancel.UseVisualStyleBackColor = false;
+            btnCancel.Click += btnCancel_Click;
             // 
             // btnStartConversion
             // 
@@ -131,9 +158,9 @@
             btnStartConversion.FlatStyle = FlatStyle.Flat;
             btnStartConversion.Font = new Font("Segoe UI", 9F);
             btnStartConversion.Image = Properties.Resources.sound_waves__16x16;
-            btnStartConversion.Location = new Point(205, 3);
+            btnStartConversion.Location = new Point(195, 3);
             btnStartConversion.Name = "btnStartConversion";
-            btnStartConversion.Size = new Size(404, 27);
+            btnStartConversion.Size = new Size(312, 27);
             btnStartConversion.TabIndex = 8;
             btnStartConversion.Text = "Start Conversion";
             btnStartConversion.TextAlign = ContentAlignment.MiddleRight;
@@ -152,7 +179,7 @@
             btnAddFiles.Image = Properties.Resources.add__16x16;
             btnAddFiles.Location = new Point(3, 3);
             btnAddFiles.Name = "btnAddFiles";
-            btnAddFiles.Size = new Size(196, 27);
+            btnAddFiles.Size = new Size(186, 27);
             btnAddFiles.TabIndex = 7;
             btnAddFiles.Text = "Add Files...";
             btnAddFiles.TextAlign = ContentAlignment.MiddleRight;
@@ -265,7 +292,7 @@
             // toolStripStatusLabel3
             // 
             toolStripStatusLabel3.Name = "toolStripStatusLabel3";
-            toolStripStatusLabel3.Size = new Size(53, 17);
+            toolStripStatusLabel3.Size = new Size(84, 17);
             toolStripStatusLabel3.Spring = true;
             // 
             // lblTotalConversions
@@ -352,5 +379,6 @@
         private StatusStrip statusStrip2;
         private ToolStripStatusLabel toolStripStatusLabel3;
         private ToolStripStatusLabel lblTotalConversions;
+        private Button btnCancel;
     }
 }

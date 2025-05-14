@@ -1366,4 +1366,60 @@
     <value>Особая благодарность Justarandomguyintheinternet (https://github.com/justarandomguyintheinternet/cp77radioext) за потрясающий мод Radioext!
 Особая благодарность DemonseedXP (https://next.nexusmods.com/profile/demonseedxp) за значок приложения и экрана Splash!</value>
   </data>
+  <data name="SplashScreen_SetupAudioConverter" xml:space="preserve">
+    <value>Настройка аудио преобразователя ...</value>
+  </data>
+  <data name="AudioConverterTitle" xml:space="preserve">
+    <value>Конвертировать аудио</value>
+  </data>
+  <data name="InputPathsColumn" xml:space="preserve">
+    <value>Путь ввода</value>
+  </data>
+  <data name="OutputPathsColumn" xml:space="preserve">
+    <value>Выходной путь</value>
+  </data>
+  <data name="CheckAll" xml:space="preserve">
+    <value>Проверьте все</value>
+  </data>
+  <data name="UncheckAll" xml:space="preserve">
+    <value>Снимите все</value>
+  </data>
+  <data name="AddFiles" xml:space="preserve">
+    <value>Добавить файлы ...</value>
+  </data>
+  <data name="StartConversion" xml:space="preserve">
+    <value>Начать преобразование</value>
+  </data>
+  <data name="ConversionOngoing" xml:space="preserve">
+    <value>Файлы в настоящее время преобразуются. Пожалуйста, подождите, пока они не закончится.</value>
+  </data>
+  <data name="Converting" xml:space="preserve">
+    <value>Преобразование файла</value>
+  </data>
+  <data name="NoFilesSelected_Conversion" xml:space="preserve">
+    <value>Для преобразования не было выбрано файлов.
+Пожалуйста, выберите хотя бы один файл и попробуйте еще раз.</value>
+  </data>
+  <data name="NoConversionNeeded" xml:space="preserve">
+    <value>Конверсия не требуется</value>
+  </data>
+  <data name="ChangeOutputDirectory" xml:space="preserve">
+    <value>Измените выводущую папку ...</value>
+  </data>
+  <data name="ChangeOutputDirectoryDescription" xml:space="preserve">
+    <value>Выберите папку для сохранения преобразованных аудиофайлов в</value>
+  </data>
+  <data name="ConversionLog" xml:space="preserve">
+    <value>Журнал преобразования</value>
+  </data>
+  <data name="TotalConversionsLabel" xml:space="preserve">
+    <value>Преобразование: {0} / {1}</value>
+  </data>
+  <data name="AudioConverterMenuOption" xml:space="preserve">
+    <value>Аудио преобразователь</value>
+  </data>
+  <data name="AudioConverterPrompt" xml:space="preserve">
+    <value>Существуют {0} файлы (ы), которые необходимо преобразовать для работы с Radioxt.
+Хотели бы вы сейчас преобразовать их?</value>
+  </data>
 </root>

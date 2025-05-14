@@ -1366,4 +1366,60 @@
     <value>特别感谢JustArandomGuyinTheinternet（https://github.com/justarandomguyintheinternternet/cp77radioext）！
 特别感谢Demonseedxp（https://next.nexusmods.com/profile/demonseedxp），适用于应用程序图标和Splash屏幕！</value>
   </data>
+  <data name="SplashScreen_SetupAudioConverter" xml:space="preserve">
+    <value>设置音频转换器...</value>
+  </data>
+  <data name="AudioConverterTitle" xml:space="preserve">
+    <value>转换音频</value>
+  </data>
+  <data name="InputPathsColumn" xml:space="preserve">
+    <value>输入路径</value>
+  </data>
+  <data name="OutputPathsColumn" xml:space="preserve">
+    <value>输出路径</value>
+  </data>
+  <data name="CheckAll" xml:space="preserve">
+    <value>检查全部</value>
+  </data>
+  <data name="UncheckAll" xml:space="preserve">
+    <value>取消选中</value>
+  </data>
+  <data name="AddFiles" xml:space="preserve">
+    <value>添加文件...</value>
+  </data>
+  <data name="StartConversion" xml:space="preserve">
+    <value>开始转换</value>
+  </data>
+  <data name="ConversionOngoing" xml:space="preserve">
+    <value>文件当前正在转换。请等到他们完成。</value>
+  </data>
+  <data name="Converting" xml:space="preserve">
+    <value>转换文件</value>
+  </data>
+  <data name="NoFilesSelected_Conversion" xml:space="preserve">
+    <value>没有选择文件进行转换。
+请选择至少一个文件，然后重试。</value>
+  </data>
+  <data name="NoConversionNeeded" xml:space="preserve">
+    <value>无需转换</value>
+  </data>
+  <data name="ChangeOutputDirectory" xml:space="preserve">
+    <value>更改输出文件夹...</value>
+  </data>
+  <data name="ChangeOutputDirectoryDescription" xml:space="preserve">
+    <value>选择一个文件夹以将转换后的音频文件保存到</value>
+  </data>
+  <data name="ConversionLog" xml:space="preserve">
+    <value>转换日志</value>
+  </data>
+  <data name="TotalConversionsLabel" xml:space="preserve">
+    <value>转换：{0} / {1}</value>
+  </data>
+  <data name="AudioConverterMenuOption" xml:space="preserve">
+    <value>音频转换器</value>
+  </data>
+  <data name="AudioConverterPrompt" xml:space="preserve">
+    <value>有{0}文件需要转换以与Radioext一起使用。
+您现在想转换它们吗？</value>
+  </data>
 </root>

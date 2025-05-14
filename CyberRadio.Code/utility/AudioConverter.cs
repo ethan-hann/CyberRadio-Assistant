@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
-using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using AetherUtils.Core.Logging;
 using RadioExt_Helper.models;
@@ -12,7 +11,8 @@ using Xabe.FFmpeg.Downloader;
 namespace RadioExt_Helper.utility
 {
     /// <summary>
-    /// Provides methods for converting audio files to a valid format.
+    /// Provides methods for converting audio/video files to .mp3
+    /// using FFmpeg (via Xabe.FFmpeg) with cancellation support.
     /// </summary>
     public sealed class AudioConverter
     {
@@ -22,38 +22,30 @@ namespace RadioExt_Helper.utility
         private AudioConverter() { }
 
         /// <summary>
-        /// Event that is raised when a file conversion starts. Event data is the file path being converted.
-        /// </summary>
-        public event EventHandler<string>? ConversionStarted;
-
-        /// <summary>
-        /// Event that is raised on conversion progress. Event data is a tuple containing the file path and the percentage of completion (0-100).
-        /// </summary>
-        public event EventHandler<(string file, int percent)>? ConversionProgress;
-
-        /// <summary>
-        /// Event that is raised when a conversion fails. Event data is a tuple containing the input file path, a flag indicating success, and the error message (if any)/output path.
-        /// If the conversion was successful, the output path will be provided.
-        /// If the conversion failed, the error message will be provided.
-        /// </summary>
-        public event EventHandler<(string file, bool success, string messageOrOutputPath)>? ConversionCompleted;
-
-        /// <summary>
-        /// Get the singleton instance of the AudioConverter class.
+        /// Singleton instance of AudioConverter.
         /// </summary>
         public static AudioConverter Instance
         {
             get
             {
                 lock (Lock)
-                {
                     return _instance ??= new AudioConverter();
-                }
             }
         }
 
+        /// <summary>Fired when a conversion starts (arg = input path).</summary>
+        public event EventHandler<string>? ConversionStarted;
+
+        /// <summary>Fired on progress (arg = (input path, percent)).</summary>
+        public event EventHandler<(string file, int percent)>? ConversionProgress;
+
         /// <summary>
-        /// The working directory for FFmpeg binaries and conversion.
+        /// Fired when done or failed (arg = (input path, success, output path or error)).
+        /// </summary>
+        public event EventHandler<(string file, bool success, string messageOrOutputPath)>? ConversionCompleted;
+
+        /// <summary>
+        /// The directory where FFmpeg binaries are stored.
         /// </summary>
         public string? WorkingDirectory { get; private set; }
 
@@ -63,51 +55,47 @@ namespace RadioExt_Helper.utility
         public string? ConvertedDirectory { get; private set; }
 
         /// <summary>
-        /// Indicates whether the AudioConverter has been initialized.
+        /// True if FFmpeg binaries are downloaded and paths are set.
         /// </summary>
         public bool IsInitialized { get; private set; }
 
         /// <summary>
-        /// Initializes the AudioConverter instance and downloads FFmpeg if needed.
+        /// Ensures FFmpeg binaries are downloaded & paths are set.
         /// </summary>
         public async Task<List<string>> InitializeAsync()
         {
             var messages = new List<string>();
-            if (IsInitialized) return [];
+            if (IsInitialized) return messages;
+
+            var logger = AuLogger.GetCurrentLogger<AudioConverter>("InitializeAsync");
             try
             {
-                AuLogger.GetCurrentLogger<AudioConverter>("InitializeAsync").Info("Initializing FFmpeg...");
-
+                logger.Info("Initializing FFmpeg...");
                 messages.AddRange(SetupRequiredPaths());
 
-                if (WorkingDirectory == null)
+                if (WorkingDirectory is null)
                 {
-                    messages.Add("Working directory is null.");
+                    messages.Add("WorkingDirectory is null.");
                     return messages;
                 }
 
-                // Check if FFmpeg is already downloaded
-                if (FFmpeg.ExecutablesPath != null && Directory.Exists(FFmpeg.ExecutablesPath))
+                // Download if missing
+                if (!File.Exists(Path.Combine(WorkingDirectory, "ffmpeg")) ||
+                    !File.Exists(Path.Combine(WorkingDirectory, "ffprobe")))
                 {
-                    if (File.Exists(Path.Combine(FFmpeg.ExecutablesPath, "ffmpeg")) &&
-                        File.Exists(Path.Combine(FFmpeg.ExecutablesPath, "ffprobe")))
-                    {
-                        messages.Add("FFmpeg binaries already exist.");
-                        IsInitialized = true;
-                        return messages;
-                    }
+                    await FFmpegDownloader.GetLatestVersion(FFmpegVersion.Official, WorkingDirectory);
                 }
 
-                await FFmpegDownloader.GetLatestVersion(FFmpegVersion.Official, WorkingDirectory);
                 IsInitialized = true;
                 messages.Add("FFmpeg binaries are ready.");
-                return messages;
             }
             catch (Exception ex)
             {
-                messages.Add($"Failed to initialize FFmpeg: {ex}");
-                return messages;
+                messages.Add($"Failed to initialize FFmpeg: {ex.Message}");
+                logger.Error(ex, "InitializeAsync");
             }
+
+            return messages;
         }
 
         private List<string> SetupRequiredPaths()
@@ -115,108 +103,109 @@ namespace RadioExt_Helper.utility
             var messages = new List<string>();
             try
             {
-                WorkingDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                WorkingDirectory = Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
                     "RadioExt-Helper", "ffmpeg");
-
-                ConvertedDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                ConvertedDirectory = Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
                     "RadioExt-Helper", "converted-audio");
 
-                if (!Directory.Exists(WorkingDirectory))
-                    Directory.CreateDirectory(WorkingDirectory);
-
-                if (!Directory.Exists(ConvertedDirectory))
-                    Directory.CreateDirectory(ConvertedDirectory);
+                Directory.CreateDirectory(WorkingDirectory!);
+                Directory.CreateDirectory(ConvertedDirectory!);
 
                 FFmpeg.SetExecutablesPath(WorkingDirectory);
-                messages.Add($"FFmpeg executables path set to: {WorkingDirectory}");
-                messages.Add($"Converted audio directory set: {ConvertedDirectory}");
-                return messages;
+                messages.Add($"FFmpeg path: {WorkingDirectory}");
+                messages.Add($"Converted directory: {ConvertedDirectory}");
             }
             catch (Exception ex)
             {
-                messages.Add($"Failed to set up FFmpeg paths: {ex}");
+                messages.Add($"Path setup failed: {ex.Message}");
                 WorkingDirectory = null;
                 ConvertedDirectory = null;
-                return messages;
             }
+
+            return messages;
         }
 
         /// <summary>
-        /// Checks if the given file needs conversion based on its extension.
+        /// Returns true if the file is not already a supported audio format.
         /// </summary>
-        /// <param name="inputPath">The file path to check.</param>
-        /// <returns><c>true</c> if conversion is needed; <c>false</c> otherwise.</returns>
-        public bool NeedsConversion(string inputPath) => !PathHelper.IsValidAudioFile(inputPath);
+        public static bool NeedsConversion(string inputPath) =>
+            !PathHelper.IsValidAudioFile(inputPath);
 
         /// <summary>
-        /// Converts the given file to <c>.mp3</c> if it is not a supported format.
+        /// Converts <paramref name="inputPath"/> to .mp3 in <paramref name="outputDirectory"/> (or default).
+        /// Honors <paramref name="cancellationToken"/> and raises all three events.
         /// </summary>
-        /// <param name="inputPath">The path to the input audio file.</param>
-        /// <param name="outputDirectory">The directory to save the converted file. If null, uses input file's directory.</param>
-        /// <returns>The path to the converted file, or null if conversion failed or not needed.</returns>
-        public async Task<string?> ConvertToMp3Async(string inputPath, string? outputDirectory)
+        public async Task<string?> ConvertToMp3Async(
+            string inputPath,
+            string? outputDirectory = null,
+            CancellationToken cancellationToken = default)
         {
-            var logger = AuLogger.GetCurrentLogger<AudioConverter>("ConvertToMp3IfNeededAsync");
+            var logger = AuLogger.GetCurrentLogger<AudioConverter>("ConvertToMp3Async");
+
+            if (!NeedsConversion(inputPath))
+                return null;
+
+            if (ConvertedDirectory is null)
+            {
+                const string err = "ConvertedDirectory is not set.";
+                logger.Error(err);
+                throw new InvalidOperationException(err);
+            }
+
+            var outDir = outputDirectory ?? ConvertedDirectory;
+            var outputFile = Path.Combine(
+                outDir,
+                Path.GetFileNameWithoutExtension(inputPath) + ".mp3");
+
             try
             {
-                // Check if the file needs conversion
-                var needsConvert = NeedsConversion(inputPath);
-                AuLogger.GetCurrentLogger<AudioConverter>("NeedsConversion")
-                    .Info(needsConvert
-                        ? $"File '{inputPath}' is not a valid audio file. Conversion needed."
-                        : $"File '{inputPath}' is a valid audio file. No conversion needed.");
-                if (!needsConvert)
-                    return null;
-
-                // Prepare output path
-                if (ConvertedDirectory == null)
-                {
-                    logger.Error("Converted directory is not set.");
-                    throw new InvalidOperationException("Converted directory is not set.");
-                }
-
-                var outputFile = Path.Combine(outputDirectory ?? ConvertedDirectory, 
-                    Path.GetFileNameWithoutExtension(inputPath) + ".mp3");
-
-                // Fire event and log
+                cancellationToken.ThrowIfCancellationRequested();
                 ConversionStarted?.Invoke(this, inputPath);
-                logger.Info($"Starting conversion: '{inputPath}' -> '{outputFile}'");
+                logger.Info($"Starting conversion: {inputPath} → {outputFile}");
 
-                // Ensure FFmpeg is ready
                 await InitializeAsync();
+                cancellationToken.ThrowIfCancellationRequested();
 
-                var conversion = FFmpeg.Conversions.New()
-                    .AddParameter($"-y") // Overwrite output
-                    .AddParameter($"-i \"{inputPath}\"")
-                    .SetOutput(outputFile)
-                    .SetOverwriteOutput(true);
+                // Use the built-in snippet for audio → mp3
+                var conversion = await FFmpeg.Conversions
+                    .FromSnippet.Convert(inputPath, outputFile);
 
-                conversion.OnProgress += (_, args) =>
+                conversion.SetOverwriteOutput(true);
+
+                conversion.OnProgress += (_, progress) =>
                 {
-                    var percent = args.Percent;
-                    ConversionProgress?.Invoke(this, (inputPath, percent));
-                    logger.Info($"Converting '{inputPath}': {percent}% complete.");
+                    ConversionProgress?.Invoke(this, (inputPath, progress.Percent));
                 };
 
-                await conversion.Start();
+                await conversion.Start(cancellationToken);
 
                 if (File.Exists(outputFile))
                 {
                     ConversionCompleted?.Invoke(this, (inputPath, true, outputFile));
-                    logger.Info($"Conversion complete: '{inputPath}' -> '{outputFile}'");
+                    logger.Info($"Conversion succeeded: {outputFile}");
                     return outputFile;
                 }
                 else
                 {
-                    ConversionCompleted?.Invoke(this, (inputPath, false, "Output file not found after conversion."));
-                    logger.Error($"Conversion failed: '{inputPath}'. Output file not found.");
+                    var msg = "Output file not found after conversion.";
+                    ConversionCompleted?.Invoke(this, (inputPath, false, msg));
+                    logger.Error(msg);
                     return null;
                 }
+            }
+            catch (OperationCanceledException)
+            {
+                var msg = "Conversion cancelled by user.";
+                ConversionCompleted?.Invoke(this, (inputPath, false, msg));
+                logger.Warn(msg);
+                return null;
             }
             catch (Exception ex)
             {
                 ConversionCompleted?.Invoke(this, (inputPath, false, ex.Message));
-                logger.Error(ex, $"Error converting '{inputPath}' to mp3.");
+                logger.Error(ex, $"Error converting '{inputPath}'");
                 return null;
             }
         }

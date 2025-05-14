@@ -204,7 +204,22 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
         // Check if the selected files are valid audio files
         List<string> needConversion = [];
         List<string> noConversionNeeded = [];
-        needConversion.AddRange(fdlgOpenSongs.FileNames.Where(fileName => !PathHelper.IsValidAudioFile(fileName)));
+        List<string> alreadyInStation = [];
+        needConversion.AddRange(fdlgOpenSongs.FileNames.Where(AudioConverter.NeedsConversion));
+        noConversionNeeded.AddRange(fdlgOpenSongs.FileNames.Where(f => !needConversion.Contains(f)));
+        
+        //Check if the proposed MP3 (that would be the final converted file) is already in the station
+        alreadyInStation.AddRange(from file in needConversion 
+            let proposedMp3 = $"{Path.GetFileNameWithoutExtension(file)}.mp3"
+            where Station.TrackedObject.Songs.Any(s => s.FilePath.Contains(proposedMp3)) 
+            select file);
+
+        // Remove files that are already in the station from needConversion
+        needConversion.RemoveAll(f => alreadyInStation.Contains(f));
+        
+        // Add songs that don't require conversion first
+        foreach (var song in noConversionNeeded.Select(Song.FromFile).OfType<Song>().Where(CanSongBeAdded))
+            Station.TrackedObject.Songs.Add(song);
 
         if (needConversion.Count > 0)
         {
@@ -221,11 +236,6 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
             }
         }
 
-        // Add the files that don't need conversion
-        noConversionNeeded.AddRange(fdlgOpenSongs.FileNames.Where(f => !needConversion.Contains(f)));
-        foreach (var song in noConversionNeeded.Select(Song.FromFile).OfType<Song>().Where(CanSongBeAdded))
-            Station.TrackedObject.Songs.Add(song);
-
         UpdateListsAndViews();
         StationUpdated?.Invoke(this, EventArgs.Empty);
     }
@@ -234,6 +244,9 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
     {
         foreach (var song in e.Select(Song.FromFile).OfType<Song>().Where(CanSongBeAdded))
             Station.TrackedObject.Songs.Add(song);
+
+        UpdateListsAndViews();
+        StationUpdated?.Invoke(this, EventArgs.Empty);
     }
 
     private void BtnRemoveSongs_Click(object sender, EventArgs e)

@@ -1366,4 +1366,60 @@ Sind Sie sicher, dass Sie alle Stationsdaten löschen möchten?</value>
     <value>Besonderer Dank geht an JustarandomguyInternet (https://github.com/justarandomguyInternet/CP77Radioext) für den fantastischen Radiotext -Mod!
 Besonderer Dank geht an Demonseedxp (https://next.nexusmods.com/profile/demonseedxp) für das App -Symbol und den Splash -Bildschirm!</value>
   </data>
+  <data name="SplashScreen_SetupAudioConverter" xml:space="preserve">
+    <value>Einrichten von Audiokonverter ...</value>
+  </data>
+  <data name="AudioConverterTitle" xml:space="preserve">
+    <value>Audio konvertieren</value>
+  </data>
+  <data name="InputPathsColumn" xml:space="preserve">
+    <value>Eingabepfad</value>
+  </data>
+  <data name="OutputPathsColumn" xml:space="preserve">
+    <value>Ausgangspfad</value>
+  </data>
+  <data name="CheckAll" xml:space="preserve">
+    <value>Überprüfen Sie alle</value>
+  </data>
+  <data name="UncheckAll" xml:space="preserve">
+    <value>Alle deaktivieren</value>
+  </data>
+  <data name="AddFiles" xml:space="preserve">
+    <value>Dateien hinzufügen ...</value>
+  </data>
+  <data name="StartConversion" xml:space="preserve">
+    <value>Starten Sie die Konvertierung</value>
+  </data>
+  <data name="ConversionOngoing" xml:space="preserve">
+    <value>Dateien werden derzeit konvertiert. Bitte warten Sie, bis sie fertig sind.</value>
+  </data>
+  <data name="Converting" xml:space="preserve">
+    <value>Konvertierende Datei</value>
+  </data>
+  <data name="NoFilesSelected_Conversion" xml:space="preserve">
+    <value>Für die Konvertierung wurden keine Dateien ausgewählt.
+Bitte wählen Sie mindestens eine Datei aus und versuchen Sie es erneut.</value>
+  </data>
+  <data name="NoConversionNeeded" xml:space="preserve">
+    <value>Keine Konvertierung erforderlich</value>
+  </data>
+  <data name="ChangeOutputDirectory" xml:space="preserve">
+    <value>Ausgangsordner ändern ...</value>
+  </data>
+  <data name="ChangeOutputDirectoryDescription" xml:space="preserve">
+    <value>Wählen Sie einen Ordner zum Speichern konvertierter Audiodateien auf</value>
+  </data>
+  <data name="ConversionLog" xml:space="preserve">
+    <value>Konvertierungsprotokoll</value>
+  </data>
+  <data name="TotalConversionsLabel" xml:space="preserve">
+    <value>Konvertieren: {0} / {1}</value>
+  </data>
+  <data name="AudioConverterMenuOption" xml:space="preserve">
+    <value>Audiokonverter</value>
+  </data>
+  <data name="AudioConverterPrompt" xml:space="preserve">
+    <value>Es gibt {0} -Datei (n), die konvertiert werden müssen, um mit Radioext zu arbeiten.
+Möchten Sie sie jetzt konvertieren?</value>
+  </data>
 </root>
