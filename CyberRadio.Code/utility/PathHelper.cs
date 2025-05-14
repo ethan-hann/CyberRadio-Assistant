@@ -48,9 +48,7 @@ public static partial class PathHelper
         Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles).ToLowerInvariant(),
         Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86).ToLowerInvariant(),
         Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData).ToLowerInvariant(),
-        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData).ToLowerInvariant(),
-        //TODO: REMOVE THIS RESTRICTION! It's causing all paths under the C:\ drive to be forbidden.
-        Path.GetPathRoot(Environment.SystemDirectory)?.ToLowerInvariant() ?? string.Empty
+        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData).ToLowerInvariant()
     ];
 
     [GeneratedRegex(@"oo\dext_\d+_win(?:32|64)\.dll", RegexOptions.IgnoreCase, "en-US")]
