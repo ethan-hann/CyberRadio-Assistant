@@ -149,7 +149,6 @@ public sealed class ApplicationConfig
             "RadioExt-Helper", "logs"),
         LogLayout = "${longdate}|${level:uppercase=true}|${logger}|${message:withexception=true}",
         LogHeader = SystemInfo.GetLogFileHeader(),
-        LogLayout = "${longdate}|${level:uppercase=true}|${logger}|${message:withexception=true}",
         IncludeDateTime = true,
         IncludeDateOnly = false
     };
