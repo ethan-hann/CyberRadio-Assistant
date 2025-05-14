@@ -9,7 +9,7 @@ _layout: landing
 [![GitHub Release](https://img.shields.io/github/v/release/ethan-hann/CyberRadio-Assistant?include_prereleases&display_name=release&style=flat)](https://github.com/ethan-hann/CyberRadio-Assistant/releases)
 [![GPLv3](https://img.shields.io/static/v1.svg?label=📃%20License&message=GPL%20v3.0&color=informational)](https://choosealicense.com/licenses/gpl-3.0/)
 
-[![Buy me a coffee](https://img.shields.io/static/v1.svg?label=Buy%20me%20a%20coffee&message=🥨&color=black&logo=buy%20me%20a%20coffee&logoColor=white&labelColor=6f4e37)](https://www.buymeacoffee.com/ethanhann) 
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/W7W11EYAF9)
 
 # Welcome to Cyber Radio Assistant! 📻
 
