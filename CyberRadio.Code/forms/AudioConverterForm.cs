@@ -1,6 +1,8 @@
-﻿using AetherUtils.Core.Extensions;
+﻿using System.ComponentModel;
+using AetherUtils.Core.Extensions;
 using AetherUtils.Core.Logging;
 using RadioExt_Helper.models;
+using RadioExt_Helper.Properties;
 using RadioExt_Helper.utility;
 
 namespace RadioExt_Helper.forms
@@ -21,6 +23,11 @@ namespace RadioExt_Helper.forms
         private readonly List<string> _inputFiles;
 
         /// <summary>
+        /// The list of conversion candidates. Each candidate represents a file to be converted and its target format.
+        /// </summary>
+        private readonly BindingList<ConvertCandidate> _candidates = [];
+
+        /// <summary>
         /// Indicates whether a conversion is currently in progress.
         /// </summary>
         private bool _isConverting;
@@ -36,14 +43,16 @@ namespace RadioExt_Helper.forms
         private int _conversionCounter;
 
         /// <summary>
-        /// The list of checked items in the ListView representing files selected for conversion.
+        /// The list of checked items in the listbox that are to be converted.
         /// </summary>
-        private List<ListViewItem> _checkedItems = [];
+        private List<ConvertCandidate> _checkedItems = [];
 
         /// <summary>
         /// The radio station context for the conversion, if any.
         /// </summary>
         private readonly TrackableObject<Station>? _station;
+
+        private readonly string _defaultMusicPath = GlobalData.ConfigManager.Get("defaultSongLocation") as string ?? string.Empty;
 
         private CancellationTokenSource? _cts;
 
@@ -71,13 +80,11 @@ namespace RadioExt_Helper.forms
         /// </summary>
         private void AudioConverterForm_Load(object sender, EventArgs e)
         {
-            SetupListView();
+            SetupListBox();
+            SetupPropertyGrid();
 
-            _checkedItems = lvFiles.Items.Cast<ListViewItem>()
-                .Where(item => item.Checked)
-                .ToList();
+            _checkedItems = lbCandidates.CheckedItems.Cast<ConvertCandidate>().ToList();
             _totalToConvert = _checkedItems.Count;
-            SetButtonsEnabledState();
 
             // Set up event listeners
             AudioConverter.Instance.ConversionStarted += OnConversionStarted;
@@ -85,6 +92,8 @@ namespace RadioExt_Helper.forms
             AudioConverter.Instance.ConversionCompleted += OnConversionCompleted;
 
             Translate();
+
+            SetUiEnabledStates();
         }
 
         /// <summary>
@@ -104,67 +113,100 @@ namespace RadioExt_Helper.forms
             btnCancel.Text = Strings.Cancel;
             grpConversionLog.Text = Strings.ConversionLog;
             lblTotalConversions.Text = string.Format(Strings.TotalConversionsLabel, _conversionCounter, _totalToConvert);
-            changeOutputToolStripMenuItem.Text = Strings.ChangeOutputDirectory;
+            //changeOutputToolStripMenuItem.Text = Strings.ChangeOutputDirectory;
             fdlgChangeOutput.Description = Strings.ChangeOutputDirectoryDescription;
 
-            //Listview
-            lvFiles.Columns[0].Text = Strings.InputPathsColumn;
-            lvFiles.Columns[1].Text = Strings.OutputPathsColumn;
+            ////Listview
+            //lvFiles.Columns[0].Text = Strings.InputPathsColumn;
+            //lvFiles.Columns[1].Text = Strings.OutputPathsColumn;
         }
 
         /// <summary>
         /// Sets up the ListView with columns and populates it with the input files.
         /// </summary>
-        private void SetupListView()
-        {
-            lvFiles.BeginUpdate();
-            lvFiles.Columns.Clear();
-            lvFiles.Columns.Add(Strings.InputPathsColumn, 120, HorizontalAlignment.Left);
-            lvFiles.Columns.Add(Strings.OutputPathsColumn, 120, HorizontalAlignment.Left);
-            lvFiles.Items.Clear();
-
-            foreach (var inputFile in _inputFiles)
-            {
-                AddFileToListView(inputFile);
-            }
-            lvFiles.ResizeColumns();
-            lvFiles.EndUpdate();
-        }
-
-        /// <summary>
-        /// Adds a file to the ListView with its corresponding output path.
-        /// </summary>
-        /// <param name="inputFile">The input file path to add.</param>
-        private void AddFileToListView(string inputFile)
+        private void SetupListBox()
         {
             try
             {
-                var item = new ListViewItem(inputFile)
-                {
-                    Checked = true,
-                    Tag = inputFile
-                };
+                _candidates.Clear();
 
-                string outputPath;
-                var defaultMusicPath = GlobalData.ConfigManager.Get("defaultSongLocation") as string ?? string.Empty;
-                if (_station != null)
+                foreach (var inputFile in _inputFiles)
                 {
-                    var stationName = _station.TrackedObject.MetaData.DisplayName;
-                    outputPath = Path.Combine(defaultMusicPath, stationName, Path.GetFileNameWithoutExtension(inputFile) + ".mp3");
+                    AddFileToListBox(inputFile);
                 }
-                else
-                {
-                    outputPath = Path.Combine(defaultMusicPath, "converted", Path.GetFileNameWithoutExtension(inputFile) + ".mp3");
-                }
-                item.SubItems.Add(outputPath);
-                lvFiles.Items.Add(item);
-                _totalToConvert = lvFiles.Items.Count;
+
+                lbCandidates.BeginUpdate();
+                // bind the listbox to the candidates
+                lbCandidates.DataSource = null;
+                lbCandidates.DataSource = _candidates;
+                lbCandidates.DisplayMember = "ToString";
+                _totalToConvert = _candidates.Count;
+                lbCandidates.EndUpdate();
+
+                lbCandidates.SelectedIndex = _totalToConvert > 0 ? 0 : -1;
+
+                CheckAll();
             }
             catch (Exception ex)
             {
-                AuLogger.GetCurrentLogger<AudioConverterForm>("AddFileToListView")
-                    .Error(ex, $"Failed to add file to list view: {inputFile}");
+                AuLogger.GetCurrentLogger<AudioConverterForm>("SetupListBox")
+                    .Error(ex, "Failed to set up the ListBox.");
+
             }
+        }
+
+        private void SetupPropertyGrid()
+        {
+            var changeOutputPathBtn = new ToolStripButton(Strings.ChangeOutputDirectory, Resources.folder__16x16);
+            pgConvertCandidate.AddButton("change_path", changeOutputPathBtn);
+            pgConvertCandidate.DrawButtons();
+
+            changeOutputPathBtn.Click += ChangeOutputPathBtn_Click;
+        }
+
+        private void ChangeOutputPathBtn_Click(object? sender, EventArgs e)
+        {
+            if (fdlgChangeOutput.ShowDialog() != DialogResult.OK) return;
+            var outputPath = fdlgChangeOutput.SelectedPath;
+            if (string.IsNullOrEmpty(outputPath)) return;
+
+            // Update the path of the selected item
+            if (lbCandidates.SelectedItem is not ConvertCandidate selectedItem) return;
+
+            selectedItem.OutputPath = Path.Combine(outputPath, $"{Path.GetFileNameWithoutExtension(selectedItem.InputPath)}{selectedItem.TargetFormat.ToDescriptionString()}");
+
+            //    foreach (var item in lvFiles.SelectedItems)
+            //    {
+            //        if (item is not ListViewItem listViewItem) continue;
+            //        var inputFile = listViewItem.Tag?.ToString();
+            //        if (string.IsNullOrEmpty(inputFile)) continue;
+            //        var outputPath = Path.Combine(fdlgChangeOutput.SelectedPath, Path.GetFileNameWithoutExtension(inputFile) + ".mp3");
+            //        listViewItem.SubItems[1].Text = outputPath;
+            //    }
+        }
+
+        private void AddFileToListBox(string fileName)
+        {
+            string outputPath;
+            if (_station != null)
+            {
+                var stationName = _station.TrackedObject.MetaData.DisplayName;
+                outputPath = Path.Combine(_defaultMusicPath, stationName);
+            }
+            else
+            {
+                outputPath = Path.Combine(_defaultMusicPath, "converted");
+            }
+
+            var convertCandidate = new ConvertCandidate(fileName, ValidAudioFiles.Mp3, outputPath);
+            _candidates.Add(convertCandidate);
+
+            // Set the last item as checked
+            var lastIndex = lbCandidates.Items.Count - 1;
+            if (lastIndex >= 0)
+                lbCandidates.SetItemChecked(lastIndex, true);
+
+            _totalToConvert = lbCandidates.CheckedItems.Count;
         }
 
         /// <summary>
@@ -172,9 +214,14 @@ namespace RadioExt_Helper.forms
         /// </summary>
         private void btnCheckAll_Click(object sender, EventArgs e)
         {
-            foreach (ListViewItem item in lvFiles.Items)
-                item.Checked = true;
-            SetButtonsEnabledState();
+            CheckAll();
+        }
+
+        private void CheckAll()
+        {
+            for (var i = 0; i < lbCandidates.Items.Count; i++)
+                lbCandidates.SetItemChecked(i, true);
+            SetUiEnabledStates();
         }
 
         /// <summary>
@@ -182,9 +229,14 @@ namespace RadioExt_Helper.forms
         /// </summary>
         private void btnUncheckAll_Click(object sender, EventArgs e)
         {
-            foreach (ListViewItem item in lvFiles.Items)
-                item.Checked = false;
-            SetButtonsEnabledState();
+            UncheckAll();
+        }
+
+        private void UncheckAll()
+        {
+            for (var i = 0; i < lbCandidates.Items.Count; i++)
+                lbCandidates.SetItemChecked(i, false);
+            SetUiEnabledStates();
         }
 
         /// <summary>
@@ -193,15 +245,20 @@ namespace RadioExt_Helper.forms
         private void btnAddFiles_Click(object sender, EventArgs e)
         {
             if (fdlgOpenSongs.ShowDialog() != DialogResult.OK) return;
+
             foreach (var file in fdlgOpenSongs.FileNames)
             {
-                if (lvFiles.Items.Cast<ListViewItem>().Any(item => item?.Tag?.ToString() == file))
+                if (string.IsNullOrEmpty(file))
                     continue;
-                AddFileToListView(file);
+
+                // Check if the file is already in the list
+                if (lbCandidates.Items.Cast<ConvertCandidate>().Any(item => item.InputPath.Equals(file)))
+                    continue;
+                AddFileToListBox(file);
             }
-            lvFiles.ResizeColumns();
-            lblTotalConversions.Text = string.Format(Strings.TotalConversionsLabel, _conversionCounter, _totalToConvert);
-            SetButtonsEnabledState();
+
+            
+            SetUiEnabledStates();
         }
 
         /// <summary>
@@ -211,9 +268,7 @@ namespace RadioExt_Helper.forms
         {
             try
             {
-                _checkedItems = lvFiles.Items.Cast<ListViewItem>()
-                    .Where(item => item.Checked)
-                    .ToList();
+                _checkedItems = lbCandidates.CheckedItems.Cast<ConvertCandidate>().ToList();
 
                 if (_checkedItems.Count == 0)
                 {
@@ -234,6 +289,8 @@ namespace RadioExt_Helper.forms
                 btnUncheckAll.Enabled = false;
                 btnAddFiles.Enabled = false;
                 btnCancel.Enabled = true;
+                pgConvertCandidate.Enabled = false;
+                lbCandidates.Enabled = false;
                 btnStartConversion.Text = Strings.Converting;
 
                 // reset counters/UI
@@ -251,25 +308,28 @@ namespace RadioExt_Helper.forms
                         if (_cts.IsCancellationRequested)
                             break;
 
-                        if (item.Tag is not string inputFile)
-                            continue;
-
-                        if (!AudioConverter.NeedsConversion(inputFile))
+                        if (!AudioConverter.NeedsConversion(item.InputPath))
                         {
-                            AddLogLine($"{inputFile} => {Strings.NoConversionNeeded}");
+                            AddLogLine($"{item.InputPath} => {Strings.NoConversionNeeded}");
                             _totalToConvert--;
                             continue;
                         }
 
-                        var outputPath = Path.GetDirectoryName(item.SubItems[1].Text);
-                        await AudioConverter.Instance.ConvertToMp3Async(inputFile, outputPath, _cts.Token);
+                        RunOnUI(() =>
+                        {
+                            lbCandidates.SelectedItem = item;
+                        });
+
+                        await AudioConverter.Instance.ConvertAsync(item, _cts.Token);
                     }
 
                     if (_totalToConvert <= 0)
                     {
                         RunOnUI(() =>
                         {
-                            SetButtonsEnabledState();
+                            SetUiEnabledStates();
+                            pgConvertCandidate.Enabled = true;
+                            lbCandidates.Enabled = true;
                             btnStartConversion.Text = Strings.StartConversion;
                             lblStatus.Text = Strings.Ready;
                             lblTotalConversions.Text = string.Format(Strings.TotalConversionsLabel, 0, 0);
@@ -297,11 +357,13 @@ namespace RadioExt_Helper.forms
         private void RestoreUI()
         {
             btnCancel.Enabled = false;
-            SetButtonsEnabledState();
+            SetUiEnabledStates();
             btnStartConversion.Text = Strings.StartConversion;
             lblStatus.Text = Strings.Ready;
             lblTotalConversions.Text =
                 string.Format(Strings.TotalConversionsLabel, _conversionCounter, _totalToConvert);
+            pgConvertCandidate.Enabled = true;
+            lbCandidates.Enabled = true;
         }
 
         /// <summary>
@@ -309,9 +371,8 @@ namespace RadioExt_Helper.forms
         /// </summary>
         private void InvokeConversionComplete()
         {
-            var convertedFiles = lvFiles.Items.Cast<ListViewItem>()
-                .Where(item => item.Checked)
-                .Select(item => item.SubItems[1].Text)
+            var convertedFiles = lbCandidates.CheckedItems.Cast<ConvertCandidate>()
+                .Select(item => item.OutputPath)
                 .ToList();
 
             ConversionCompleted?.Invoke(this, convertedFiles);
@@ -327,12 +388,14 @@ namespace RadioExt_Helper.forms
 
             RunOnUI(() =>
             {
-                SetButtonsEnabledState();
+                SetUiEnabledStates();
+                pgConvertCandidate.Enabled = true;
+                lbCandidates.Enabled = true;
                 btnStartConversion.Text = Strings.StartConversion;
                 lblTotalConversions.Text = string.Format(Strings.TotalConversionsLabel, _conversionCounter, _totalToConvert);
                 lblStatus.Text = Strings.Ready;
                 _inputFiles.Clear();
-                SetupListView();
+                SetupListBox();
             });
         }
 
@@ -355,8 +418,10 @@ namespace RadioExt_Helper.forms
                 lblTotalConversions.Text = string.Format(Strings.TotalConversionsLabel, _conversionCounter, _totalToConvert);
                 if (_conversionCounter < _totalToConvert) return;
 
-                SetButtonsEnabledState();
+                SetUiEnabledStates();
                 btnStartConversion.Text = Strings.StartConversion;
+                pgConvertCandidate.Enabled = true;
+                lbCandidates.Enabled = true;
                 lblStatus.Text = Strings.Ready;
                 InvokeConversionComplete();
             }
@@ -392,15 +457,10 @@ namespace RadioExt_Helper.forms
             _isConverting = true;
         }
 
-        /// <summary>
-        /// Handles the ItemChecked event for the ListView. Updates the enabled state of the Start Conversion button and conversion counters.
-        /// </summary>
-        private void lvFiles_ItemChecked(object sender, ItemCheckedEventArgs e)
+        private void lbCandidates_ItemCheck(object sender, ItemCheckEventArgs e)
         {
-            _totalToConvert = lvFiles.Items.Cast<ListViewItem>().Count(i => i.Checked);
-            lblTotalConversions.Text = string.Format(Strings.TotalConversionsLabel, _conversionCounter, _totalToConvert);
-
-            SetButtonsEnabledState();
+            _totalToConvert = lbCandidates.CheckedItems.Count + (e.NewValue == CheckState.Checked ? 1 : -1);
+            SetUiEnabledStates();
         }
 
         /// <summary>
@@ -430,45 +490,21 @@ namespace RadioExt_Helper.forms
         }
 
         /// <summary>
-        /// Handles the Change Output Directory menu item click event. Allows changing the output directory for selected files.
-        /// </summary>
-        private void changeOutputToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (fdlgChangeOutput.ShowDialog() != DialogResult.OK) return;
-            foreach (var item in lvFiles.SelectedItems)
-            {
-                if (item is not ListViewItem listViewItem) continue;
-                var inputFile = listViewItem.Tag?.ToString();
-                if (string.IsNullOrEmpty(inputFile)) continue;
-                var outputPath = Path.Combine(fdlgChangeOutput.SelectedPath, Path.GetFileNameWithoutExtension(inputFile) + ".mp3");
-                listViewItem.SubItems[1].Text = outputPath;
-            }
-        }
-
-        /// <summary>
-        /// Handles the MouseDown event for the ListView. Shows the context menu if appropriate.
-        /// </summary>
-        private void lvFiles_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button != MouseButtons.Right) return;
-            if (_station != null) return;
-            if (_totalToConvert <= 0) return;
-            if (lvFiles.SelectedItems.Count <= 0) return;
-            cmsFiles.Show(Cursor.Position);
-        }
-
-        /// <summary>
         /// Sets the enabled state of the main action buttons based on state of the current action.
         /// </summary>
-        private void SetButtonsEnabledState()
+        private void SetUiEnabledStates()
         {
             btnCancel.Enabled = _isConverting;
 
-            btnCheckAll.Enabled = !_isConverting & lvFiles.Items.Count > 0;
+            btnCheckAll.Enabled = !_isConverting & lbCandidates.Items.Count > 0;
             btnUncheckAll.Enabled = btnCheckAll.Enabled;
             btnAddFiles.Enabled = !_isConverting;
-            btnStartConversion.Enabled = !_isConverting & lvFiles.Items.Count > 0 & _totalToConvert > 0;
+            btnStartConversion.Enabled = !_isConverting & lbCandidates.Items.Count > 0 & _totalToConvert > 0;
+            pgConvertCandidate.Enabled = !_isConverting & lbCandidates.Items.Count > 0 & _totalToConvert > 0;
+            lbCandidates.Enabled = !_isConverting;
             btnCancel.Enabled = _isConverting;
+
+            lblTotalConversions.Text = string.Format(Strings.TotalConversionsLabel, _conversionCounter, _totalToConvert);
         }
 
         /// <summary>
@@ -494,6 +530,12 @@ namespace RadioExt_Helper.forms
         {
             _cts?.Cancel();
             btnCancel.Enabled = false;
+        }
+
+        private void lbCandidates_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            //Show the selected candidate in the property grid
+            pgConvertCandidate.SelectedObject = lbCandidates.SelectedItem;
         }
     }
 }

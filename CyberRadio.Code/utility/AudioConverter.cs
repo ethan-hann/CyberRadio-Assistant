@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using AetherUtils.Core.Extensions;
 using AetherUtils.Core.Logging;
 using RadioExt_Helper.models;
 using Xabe.FFmpeg;
@@ -134,6 +135,15 @@ namespace RadioExt_Helper.utility
             !PathHelper.IsValidAudioFile(inputPath);
 
         /// <summary>
+        /// Returns true if the file is not already a supported audio format.
+        /// </summary>
+        /// <param name="inputPath">The input file to check.</param>
+        /// <param name="targetExtension">The target extension that the file should be.</param>
+        /// <returns></returns>
+        public static bool NeedsConversion(string inputPath, string targetExtension)
+            => !inputPath.EndsWith(targetExtension, StringComparison.OrdinalIgnoreCase);
+
+        /// <summary>
         /// Converts <paramref name="inputPath"/> to .mp3 in <paramref name="outputDirectory"/> (or default).
         /// Honors <paramref name="cancellationToken"/> and raises all three events.
         /// </summary>
@@ -206,6 +216,59 @@ namespace RadioExt_Helper.utility
             {
                 ConversionCompleted?.Invoke(this, (inputPath, false, ex.Message));
                 logger.Error(ex, $"Error converting '{inputPath}'");
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Converts a file to the specified target format based on the conversion candidate.
+        /// </summary>
+        /// <param name="candidate">The <see cref="ConvertCandidate"/> to use for this conversion.</param>
+        /// <param name="cancellationToken">An optional token to support cancellation.</param>
+        /// <returns></returns>
+        public async Task<string?> ConvertAsync(ConvertCandidate candidate, CancellationToken cancellationToken = default)
+        {
+            // skip if already correct extension
+            if (!NeedsConversion(candidate.InputPath, candidate.TargetFormat.ToDescriptionString()))
+                return candidate.InputPath;
+
+            // ensure we have ffmpeg/ffprobe
+            await InitializeAsync().ConfigureAwait(false);
+
+            ConversionStarted?.Invoke(this, candidate.InputPath);
+
+            var conversion = await FFmpeg.Conversions
+                .FromSnippet.Convert(candidate.InputPath, candidate.OutputPath);
+
+            conversion.SetOverwriteOutput(true);
+
+            conversion.OnProgress += (_, prog) =>
+                ConversionProgress?.Invoke(this, (candidate.InputPath, prog.Percent));
+
+            try
+            {
+                await conversion.Start(cancellationToken).ConfigureAwait(false);
+
+                if (File.Exists(candidate.OutputPath))
+                {
+                    ConversionCompleted?.Invoke(this, (candidate.InputPath, true, candidate.OutputPath));
+                    return candidate.OutputPath;
+                }
+                else
+                {
+                    const string msg = "Output file not found.";
+                    ConversionCompleted?.Invoke(this, (candidate.InputPath, false, msg));
+                    return null;
+                }
+            }
+            catch (OperationCanceledException)
+            {
+                ConversionCompleted?.Invoke(this, (candidate.InputPath, false, "Cancelled"));
+                return null;
+            }
+            catch (Exception ex)
+            {
+                ConversionCompleted?.Invoke(this, (candidate.InputPath, false, ex.Message));
                 return null;
             }
         }

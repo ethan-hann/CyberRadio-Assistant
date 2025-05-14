@@ -35,7 +35,6 @@ namespace RadioExt_Helper.forms
         {
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AudioConverterForm));
-            lvFiles = new ListView();
             statusStrip1 = new StatusStrip();
             lblStatus = new ToolStripStatusLabel();
             toolStripStatusLabel1 = new ToolStripStatusLabel();
@@ -49,44 +48,36 @@ namespace RadioExt_Helper.forms
             tableLayoutPanel2 = new TableLayoutPanel();
             btnUncheckAll = new Button();
             btnCheckAll = new Button();
-            tableLayoutPanel3 = new TableLayoutPanel();
-            statusStrip2 = new StatusStrip();
-            toolStripStatusLabel3 = new ToolStripStatusLabel();
-            lblTotalConversions = new ToolStripStatusLabel();
             fdlgOpenSongs = new OpenFileDialog();
-            cmsFiles = new ContextMenuStrip(components);
-            changeOutputToolStripMenuItem = new ToolStripMenuItem();
             fdlgChangeOutput = new FolderBrowserDialog();
+            splitContainer1 = new SplitContainer();
+            lbCandidates = new CheckedListBox();
+            tableLayoutPanel4 = new TableLayoutPanel();
+            lblTotalConversions = new Label();
+            pgConvertCandidate = new AetherUtils.Core.WinForms.Controls.AuPropertyGrid(components);
+            splitContainer2 = new SplitContainer();
             statusStrip1.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
             grpConversionLog.SuspendLayout();
             tableLayoutPanel2.SuspendLayout();
-            tableLayoutPanel3.SuspendLayout();
-            statusStrip2.SuspendLayout();
-            cmsFiles.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
+            splitContainer1.Panel1.SuspendLayout();
+            splitContainer1.Panel2.SuspendLayout();
+            splitContainer1.SuspendLayout();
+            tableLayoutPanel4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)splitContainer2).BeginInit();
+            splitContainer2.Panel1.SuspendLayout();
+            splitContainer2.Panel2.SuspendLayout();
+            splitContainer2.SuspendLayout();
             SuspendLayout();
-            // 
-            // lvFiles
-            // 
-            lvFiles.CheckBoxes = true;
-            lvFiles.Dock = DockStyle.Top;
-            lvFiles.Location = new Point(0, 38);
-            lvFiles.Name = "lvFiles";
-            lvFiles.ShowGroups = false;
-            lvFiles.Size = new Size(612, 204);
-            lvFiles.TabIndex = 0;
-            lvFiles.UseCompatibleStateImageBehavior = false;
-            lvFiles.View = View.Details;
-            lvFiles.ItemChecked += lvFiles_ItemChecked;
-            lvFiles.MouseDown += lvFiles_MouseDown;
             // 
             // statusStrip1
             // 
             statusStrip1.BackColor = Color.Transparent;
             statusStrip1.Items.AddRange(new ToolStripItem[] { lblStatus, toolStripStatusLabel1, progressBar });
-            statusStrip1.Location = new Point(0, 409);
+            statusStrip1.Location = new Point(0, 567);
             statusStrip1.Name = "statusStrip1";
-            statusStrip1.Size = new Size(612, 25);
+            statusStrip1.Size = new Size(667, 25);
             statusStrip1.SizingGrip = false;
             statusStrip1.TabIndex = 8;
             statusStrip1.Text = "statusStrip1";
@@ -103,7 +94,7 @@ namespace RadioExt_Helper.forms
             // toolStripStatusLabel1
             // 
             toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            toolStripStatusLabel1.Size = new Size(381, 20);
+            toolStripStatusLabel1.Size = new Size(436, 20);
             toolStripStatusLabel1.Spring = true;
             // 
             // progressBar
@@ -122,11 +113,11 @@ namespace RadioExt_Helper.forms
             tableLayoutPanel1.Controls.Add(btnStartConversion, 1, 0);
             tableLayoutPanel1.Controls.Add(btnAddFiles, 0, 0);
             tableLayoutPanel1.Dock = DockStyle.Bottom;
-            tableLayoutPanel1.Location = new Point(0, 376);
+            tableLayoutPanel1.Location = new Point(0, 534);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 1;
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel1.Size = new Size(612, 33);
+            tableLayoutPanel1.Size = new Size(667, 33);
             tableLayoutPanel1.TabIndex = 9;
             // 
             // btnCancel
@@ -138,7 +129,7 @@ namespace RadioExt_Helper.forms
             btnCancel.FlatStyle = FlatStyle.Flat;
             btnCancel.Font = new Font("Segoe UI", 9F);
             btnCancel.Image = Properties.Resources.cancel_16x16;
-            btnCancel.Location = new Point(513, 3);
+            btnCancel.Location = new Point(568, 3);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(96, 27);
             btnCancel.TabIndex = 9;
@@ -158,9 +149,9 @@ namespace RadioExt_Helper.forms
             btnStartConversion.FlatStyle = FlatStyle.Flat;
             btnStartConversion.Font = new Font("Segoe UI", 9F);
             btnStartConversion.Image = Properties.Resources.sound_waves__16x16;
-            btnStartConversion.Location = new Point(195, 3);
+            btnStartConversion.Location = new Point(223, 3);
             btnStartConversion.Name = "btnStartConversion";
-            btnStartConversion.Size = new Size(312, 27);
+            btnStartConversion.Size = new Size(339, 27);
             btnStartConversion.TabIndex = 8;
             btnStartConversion.Text = "Start Conversion";
             btnStartConversion.TextAlign = ContentAlignment.MiddleRight;
@@ -179,7 +170,7 @@ namespace RadioExt_Helper.forms
             btnAddFiles.Image = Properties.Resources.add__16x16;
             btnAddFiles.Location = new Point(3, 3);
             btnAddFiles.Name = "btnAddFiles";
-            btnAddFiles.Size = new Size(186, 27);
+            btnAddFiles.Size = new Size(214, 27);
             btnAddFiles.TabIndex = 7;
             btnAddFiles.Text = "Add Files...";
             btnAddFiles.TextAlign = ContentAlignment.MiddleRight;
@@ -191,9 +182,9 @@ namespace RadioExt_Helper.forms
             // 
             grpConversionLog.Controls.Add(rtbConversionLog);
             grpConversionLog.Dock = DockStyle.Fill;
-            grpConversionLog.Location = new Point(0, 242);
+            grpConversionLog.Location = new Point(0, 0);
             grpConversionLog.Name = "grpConversionLog";
-            grpConversionLog.Size = new Size(612, 134);
+            grpConversionLog.Size = new Size(667, 183);
             grpConversionLog.TabIndex = 10;
             grpConversionLog.TabStop = false;
             grpConversionLog.Text = "Conversion Log";
@@ -205,7 +196,7 @@ namespace RadioExt_Helper.forms
             rtbConversionLog.Location = new Point(3, 19);
             rtbConversionLog.Name = "rtbConversionLog";
             rtbConversionLog.ReadOnly = true;
-            rtbConversionLog.Size = new Size(606, 112);
+            rtbConversionLog.Size = new Size(661, 161);
             rtbConversionLog.TabIndex = 0;
             rtbConversionLog.Text = "";
             // 
@@ -216,12 +207,12 @@ namespace RadioExt_Helper.forms
             tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             tableLayoutPanel2.Controls.Add(btnUncheckAll, 1, 0);
             tableLayoutPanel2.Controls.Add(btnCheckAll, 0, 0);
-            tableLayoutPanel2.Dock = DockStyle.Fill;
-            tableLayoutPanel2.Location = new Point(3, 3);
+            tableLayoutPanel2.Dock = DockStyle.Top;
+            tableLayoutPanel2.Location = new Point(0, 0);
             tableLayoutPanel2.Name = "tableLayoutPanel2";
             tableLayoutPanel2.RowCount = 1;
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel2.Size = new Size(245, 32);
+            tableLayoutPanel2.Size = new Size(318, 32);
             tableLayoutPanel2.TabIndex = 11;
             // 
             // btnUncheckAll
@@ -233,9 +224,9 @@ namespace RadioExt_Helper.forms
             btnUncheckAll.FlatStyle = FlatStyle.Flat;
             btnUncheckAll.Font = new Font("Segoe UI", 9F);
             btnUncheckAll.Image = Properties.Resources.disabled__16x16;
-            btnUncheckAll.Location = new Point(125, 3);
+            btnUncheckAll.Location = new Point(162, 3);
             btnUncheckAll.Name = "btnUncheckAll";
-            btnUncheckAll.Size = new Size(117, 26);
+            btnUncheckAll.Size = new Size(153, 26);
             btnUncheckAll.TabIndex = 9;
             btnUncheckAll.Text = "Uncheck All";
             btnUncheckAll.TextAlign = ContentAlignment.MiddleRight;
@@ -254,7 +245,7 @@ namespace RadioExt_Helper.forms
             btnCheckAll.Image = Properties.Resources.enabled__16x16;
             btnCheckAll.Location = new Point(3, 3);
             btnCheckAll.Name = "btnCheckAll";
-            btnCheckAll.Size = new Size(116, 26);
+            btnCheckAll.Size = new Size(153, 26);
             btnCheckAll.TabIndex = 8;
             btnCheckAll.Text = "Check All";
             btnCheckAll.TextAlign = ContentAlignment.MiddleRight;
@@ -262,78 +253,104 @@ namespace RadioExt_Helper.forms
             btnCheckAll.UseVisualStyleBackColor = false;
             btnCheckAll.Click += btnCheckAll_Click;
             // 
-            // tableLayoutPanel3
-            // 
-            tableLayoutPanel3.ColumnCount = 3;
-            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 41.17647F));
-            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 24.0196075F));
-            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 34.96732F));
-            tableLayoutPanel3.Controls.Add(tableLayoutPanel2, 0, 0);
-            tableLayoutPanel3.Controls.Add(statusStrip2, 2, 0);
-            tableLayoutPanel3.Dock = DockStyle.Top;
-            tableLayoutPanel3.Location = new Point(0, 0);
-            tableLayoutPanel3.Name = "tableLayoutPanel3";
-            tableLayoutPanel3.RowCount = 1;
-            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel3.Size = new Size(612, 38);
-            tableLayoutPanel3.TabIndex = 12;
-            // 
-            // statusStrip2
-            // 
-            statusStrip2.BackColor = Color.Transparent;
-            statusStrip2.Items.AddRange(new ToolStripItem[] { toolStripStatusLabel3, lblTotalConversions });
-            statusStrip2.Location = new Point(397, 16);
-            statusStrip2.Name = "statusStrip2";
-            statusStrip2.Size = new Size(215, 22);
-            statusStrip2.SizingGrip = false;
-            statusStrip2.TabIndex = 12;
-            statusStrip2.Text = "statusStrip2";
-            // 
-            // toolStripStatusLabel3
-            // 
-            toolStripStatusLabel3.Name = "toolStripStatusLabel3";
-            toolStripStatusLabel3.Size = new Size(84, 17);
-            toolStripStatusLabel3.Spring = true;
-            // 
-            // lblTotalConversions
-            // 
-            lblTotalConversions.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblTotalConversions.Name = "lblTotalConversions";
-            lblTotalConversions.Size = new Size(116, 17);
-            lblTotalConversions.Text = "Converting: {0} / {1}";
-            lblTotalConversions.TextAlign = ContentAlignment.MiddleRight;
-            // 
             // fdlgOpenSongs
             // 
             fdlgOpenSongs.Multiselect = true;
             // 
-            // cmsFiles
-            // 
-            cmsFiles.Items.AddRange(new ToolStripItem[] { changeOutputToolStripMenuItem });
-            cmsFiles.Name = "cmsFiles";
-            cmsFiles.Size = new Size(193, 26);
-            // 
-            // changeOutputToolStripMenuItem
-            // 
-            changeOutputToolStripMenuItem.Image = Properties.Resources.folder__16x16;
-            changeOutputToolStripMenuItem.Name = "changeOutputToolStripMenuItem";
-            changeOutputToolStripMenuItem.Size = new Size(192, 22);
-            changeOutputToolStripMenuItem.Text = "Change Output Path...";
-            changeOutputToolStripMenuItem.Click += changeOutputToolStripMenuItem_Click;
-            // 
             // fdlgChangeOutput
             // 
             fdlgChangeOutput.UseDescriptionForTitle = true;
+            // 
+            // splitContainer1
+            // 
+            splitContainer1.Dock = DockStyle.Fill;
+            splitContainer1.Location = new Point(0, 0);
+            splitContainer1.Name = "splitContainer1";
+            // 
+            // splitContainer1.Panel1
+            // 
+            splitContainer1.Panel1.Controls.Add(lbCandidates);
+            splitContainer1.Panel1.Controls.Add(tableLayoutPanel2);
+            splitContainer1.Panel1.Controls.Add(tableLayoutPanel4);
+            // 
+            // splitContainer1.Panel2
+            // 
+            splitContainer1.Panel2.Controls.Add(pgConvertCandidate);
+            splitContainer1.Size = new Size(667, 347);
+            splitContainer1.SplitterDistance = 318;
+            splitContainer1.TabIndex = 13;
+            // 
+            // lbCandidates
+            // 
+            lbCandidates.BackColor = Color.White;
+            lbCandidates.Dock = DockStyle.Fill;
+            lbCandidates.FormattingEnabled = true;
+            lbCandidates.Location = new Point(0, 32);
+            lbCandidates.Name = "lbCandidates";
+            lbCandidates.Size = new Size(318, 287);
+            lbCandidates.TabIndex = 12;
+            lbCandidates.ThreeDCheckBoxes = true;
+            lbCandidates.ItemCheck += lbCandidates_ItemCheck;
+            lbCandidates.SelectedIndexChanged += lbCandidates_SelectedIndexChanged;
+            // 
+            // tableLayoutPanel4
+            // 
+            tableLayoutPanel4.ColumnCount = 1;
+            tableLayoutPanel4.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tableLayoutPanel4.Controls.Add(lblTotalConversions, 0, 0);
+            tableLayoutPanel4.Dock = DockStyle.Bottom;
+            tableLayoutPanel4.Location = new Point(0, 319);
+            tableLayoutPanel4.Name = "tableLayoutPanel4";
+            tableLayoutPanel4.RowCount = 1;
+            tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tableLayoutPanel4.Size = new Size(318, 28);
+            tableLayoutPanel4.TabIndex = 0;
+            // 
+            // lblTotalConversions
+            // 
+            lblTotalConversions.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            lblTotalConversions.AutoSize = true;
+            lblTotalConversions.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            lblTotalConversions.Location = new Point(3, 4);
+            lblTotalConversions.Name = "lblTotalConversions";
+            lblTotalConversions.Size = new Size(312, 19);
+            lblTotalConversions.TabIndex = 0;
+            lblTotalConversions.Text = "Converting: {0} / {1}";
+            lblTotalConversions.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // pgConvertCandidate
+            // 
+            pgConvertCandidate.Dock = DockStyle.Fill;
+            pgConvertCandidate.Location = new Point(0, 0);
+            pgConvertCandidate.Name = "pgConvertCandidate";
+            pgConvertCandidate.Size = new Size(345, 347);
+            pgConvertCandidate.TabIndex = 0;
+            // 
+            // splitContainer2
+            // 
+            splitContainer2.Dock = DockStyle.Fill;
+            splitContainer2.Location = new Point(0, 0);
+            splitContainer2.Name = "splitContainer2";
+            splitContainer2.Orientation = Orientation.Horizontal;
+            // 
+            // splitContainer2.Panel1
+            // 
+            splitContainer2.Panel1.Controls.Add(splitContainer1);
+            // 
+            // splitContainer2.Panel2
+            // 
+            splitContainer2.Panel2.Controls.Add(grpConversionLog);
+            splitContainer2.Size = new Size(667, 534);
+            splitContainer2.SplitterDistance = 347;
+            splitContainer2.TabIndex = 14;
             // 
             // AudioConverterForm
             // 
             AutoScaleDimensions = new SizeF(96F, 96F);
             AutoScaleMode = AutoScaleMode.Dpi;
             BackColor = Color.White;
-            ClientSize = new Size(612, 434);
-            Controls.Add(grpConversionLog);
-            Controls.Add(lvFiles);
-            Controls.Add(tableLayoutPanel3);
+            ClientSize = new Size(667, 592);
+            Controls.Add(splitContainer2);
             Controls.Add(tableLayoutPanel1);
             Controls.Add(statusStrip1);
             Icon = (Icon)resources.GetObject("$this.Icon");
@@ -347,18 +364,21 @@ namespace RadioExt_Helper.forms
             tableLayoutPanel1.ResumeLayout(false);
             grpConversionLog.ResumeLayout(false);
             tableLayoutPanel2.ResumeLayout(false);
-            tableLayoutPanel3.ResumeLayout(false);
-            tableLayoutPanel3.PerformLayout();
-            statusStrip2.ResumeLayout(false);
-            statusStrip2.PerformLayout();
-            cmsFiles.ResumeLayout(false);
+            splitContainer1.Panel1.ResumeLayout(false);
+            splitContainer1.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
+            splitContainer1.ResumeLayout(false);
+            tableLayoutPanel4.ResumeLayout(false);
+            tableLayoutPanel4.PerformLayout();
+            splitContainer2.Panel1.ResumeLayout(false);
+            splitContainer2.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)splitContainer2).EndInit();
+            splitContainer2.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
-
-        private ListView lvFiles;
         private StatusStrip statusStrip1;
         private ToolStripStatusLabel lblStatus;
         private TableLayoutPanel tableLayoutPanel1;
@@ -369,16 +389,16 @@ namespace RadioExt_Helper.forms
         private Button btnUncheckAll;
         private Button btnCheckAll;
         private Button btnStartConversion;
-        private TableLayoutPanel tableLayoutPanel3;
         private OpenFileDialog fdlgOpenSongs;
         private ToolStripStatusLabel toolStripStatusLabel1;
         private ToolStripProgressBar progressBar;
-        private ContextMenuStrip cmsFiles;
-        private ToolStripMenuItem changeOutputToolStripMenuItem;
         private FolderBrowserDialog fdlgChangeOutput;
-        private StatusStrip statusStrip2;
-        private ToolStripStatusLabel toolStripStatusLabel3;
-        private ToolStripStatusLabel lblTotalConversions;
         private Button btnCancel;
+        private SplitContainer splitContainer1;
+        private SplitContainer splitContainer2;
+        private TableLayoutPanel tableLayoutPanel4;
+        private Label lblTotalConversions;
+        private AetherUtils.Core.WinForms.Controls.AuPropertyGrid pgConvertCandidate;
+        private CheckedListBox lbCandidates;
     }
 }
