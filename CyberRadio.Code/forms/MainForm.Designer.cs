@@ -58,6 +58,7 @@ namespace RadioExt_Helper.forms
             downloadRadioModsToolStripMenuItem = new ToolStripMenuItem();
             toolsToolStripMenuItem = new ToolStripMenuItem();
             iconGeneratorToolStripMenuItem = new ToolStripMenuItem();
+            audioConverterToolStripMenuItem = new ToolStripMenuItem();
             helpToolStripMenuItem = new ToolStripMenuItem();
             howToUseToolStripMenuItem = new ToolStripMenuItem();
             radioExtOnNexusModsToolStripMenuItem = new ToolStripMenuItem();
@@ -94,7 +95,6 @@ namespace RadioExt_Helper.forms
             pgBackupProgress = new ToolStripProgressBar();
             lblSpring2 = new ToolStripStatusLabel();
             statusStripBackup = new StatusStrip();
-            audioConverterToolStripMenuItem = new ToolStripMenuItem();
             menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
@@ -307,9 +307,18 @@ namespace RadioExt_Helper.forms
             iconGeneratorToolStripMenuItem.Image = Properties.Resources.magic_wand_16x16;
             iconGeneratorToolStripMenuItem.Name = "iconGeneratorToolStripMenuItem";
             iconGeneratorToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.I;
-            iconGeneratorToolStripMenuItem.Size = new Size(231, 22);
+            iconGeneratorToolStripMenuItem.Size = new Size(234, 22);
             iconGeneratorToolStripMenuItem.Text = "Station Icon Manager";
             iconGeneratorToolStripMenuItem.Click += IconGeneratorToolStripMenuItem_Click;
+            // 
+            // audioConverterToolStripMenuItem
+            // 
+            audioConverterToolStripMenuItem.Image = Properties.Resources.sound_waves__16x16;
+            audioConverterToolStripMenuItem.Name = "audioConverterToolStripMenuItem";
+            audioConverterToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Alt | Keys.A;
+            audioConverterToolStripMenuItem.Size = new Size(234, 22);
+            audioConverterToolStripMenuItem.Text = "Audio Converter";
+            audioConverterToolStripMenuItem.Click += audioConverterToolStripMenuItem_Click;
             // 
             // helpToolStripMenuItem
             // 
@@ -688,14 +697,6 @@ namespace RadioExt_Helper.forms
             statusStripBackup.TabIndex = 3;
             statusStripBackup.Text = "statusStrip2";
             statusStripBackup.Visible = false;
-            // 
-            // audioConverterToolStripMenuItem
-            // 
-            audioConverterToolStripMenuItem.Image = Properties.Resources.sound_waves__16x16;
-            audioConverterToolStripMenuItem.Name = "audioConverterToolStripMenuItem";
-            audioConverterToolStripMenuItem.Size = new Size(231, 22);
-            audioConverterToolStripMenuItem.Text = "Audio Converter";
-            audioConverterToolStripMenuItem.Click += audioConverterToolStripMenuItem_Click;
             // 
             // MainForm
             // 

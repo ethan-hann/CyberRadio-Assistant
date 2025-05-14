@@ -75,9 +75,7 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
         lblStationSizeLabel.Text = Strings.TotalStationSizeLabel;
 
         fdlgOpenSongs.Title = Strings.AddSongsFileBrowserTitle;
-        fdlgOpenSongs.Filter = @"Audio/Video Files|*.mp3;*.wav;*.ogg;*.flac;*.mp2;*.wax;*.wma;*.aac;*.m4a;
-                                    *.aiff;*.alac;*.opus;*.amr;*.ac3;*.mp4;*.m4v;*.mov;*.avi;*.wmv;*.flv;*.mkv;
-                                    *.webm;*.mpeg;*.mpg;*.3gp;*.3g2;*.ts;*.mts;*.m2ts";
+        fdlgOpenSongs.Filter = @"Audio/Video Files|*.mp3;*.wav;*.ogg;*.flac;*.mp2;*.wax;*.wma;*.aac;*.m4a;*.aiff;*.alac;*.opus;*.amr;*.ac3;*.mp4;*.m4v;*.mov;*.avi;*.wmv;*.flv;*.mkv;*.webm;*.mpeg;*.mpg;*.3gp;*.3g2;*.ts;*.mts;*.m2ts";
         tabSongs.Text = Strings.SongListing;
         tabSongOrder.Text = Strings.SongOrder;
 
