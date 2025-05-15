@@ -1,4 +1,5 @@
-﻿using AetherUtils.Core.Extensions;
+﻿using System.ComponentModel;
+using AetherUtils.Core.Extensions;
 
 namespace RadioExt_Helper.models;
 
@@ -10,17 +11,44 @@ public class ConvertCandidate
     /// <summary>
     /// The source file to convert.
     /// </summary>
+    [Description("The path of the input file.")]
+    [DisplayName("Input File")]
+    [Category("General")]
+    [Browsable(true)]
+    [ReadOnly(true)]
     public string InputPath { get; }
 
     /// <summary>
     /// The target format to convert to.
     /// </summary>
-    public ValidAudioFiles TargetFormat { get; set; }
+    [Description("The target format for the conversion.")]
+    [DisplayName("Target Format")]
+    [Category("General")]
+    [Browsable(true)]
+    [ReadOnly(false)]
+    public ValidAudioFiles TargetFormat
+    {
+        get => _targetFormat;
+        set
+        {
+            _targetFormat = value;
+            var ext = _targetFormat.ToDescriptionString();
+            var name = Path.GetFileNameWithoutExtension(InputPath) + ext;
+            OutputPath = Path.Combine(Path.GetDirectoryName(OutputPath) ?? string.Empty, name);
+        }
+    }
 
     /// <summary>
     /// The output path where the converted file will be saved. Computed from the input path and target format.
     /// </summary>
+    [Description("The path of the output file.")]
+    [DisplayName("Output File")]
+    [Category("General")]
+    [Browsable(true)]
+    [ReadOnly(true)]
     public string OutputPath { get; set; }
+
+    private ValidAudioFiles _targetFormat;
 
     /// <summary>
     /// Creates a new conversion candidate.

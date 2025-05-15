@@ -157,11 +157,23 @@ namespace RadioExt_Helper.forms
 
         private void SetupPropertyGrid()
         {
-            var changeOutputPathBtn = new ToolStripButton(Strings.ChangeOutputDirectory, Resources.folder__16x16);
-            pgConvertCandidate.AddButton("change_path", changeOutputPathBtn);
-            pgConvertCandidate.DrawButtons();
+            //Remove the built-in buttons via reflection
+            var toolStrip = pgConvertCandidate.Controls.OfType<ToolStrip>().FirstOrDefault();
 
-            changeOutputPathBtn.Click += ChangeOutputPathBtn_Click;
+            if (toolStrip != null)
+            {
+                toolStrip.Items.Clear();
+
+                //Add custom button
+                var changeOutputPathBtn = new ToolStripButton(Strings.ChangeOutputDirectory, Resources.folder__16x16);
+                pgConvertCandidate.AddButton("change_path", changeOutputPathBtn);
+                changeOutputPathBtn.Click += ChangeOutputPathBtn_Click;
+
+                //If the station is not null, disable button as we don't want to change the output path
+                changeOutputPathBtn.Enabled = _station == null;
+            }
+
+            pgConvertCandidate.DrawButtons();
         }
 
         private void ChangeOutputPathBtn_Click(object? sender, EventArgs e)
@@ -174,15 +186,8 @@ namespace RadioExt_Helper.forms
             if (lbCandidates.SelectedItem is not ConvertCandidate selectedItem) return;
 
             selectedItem.OutputPath = Path.Combine(outputPath, $"{Path.GetFileNameWithoutExtension(selectedItem.InputPath)}{selectedItem.TargetFormat.ToDescriptionString()}");
-
-            //    foreach (var item in lvFiles.SelectedItems)
-            //    {
-            //        if (item is not ListViewItem listViewItem) continue;
-            //        var inputFile = listViewItem.Tag?.ToString();
-            //        if (string.IsNullOrEmpty(inputFile)) continue;
-            //        var outputPath = Path.Combine(fdlgChangeOutput.SelectedPath, Path.GetFileNameWithoutExtension(inputFile) + ".mp3");
-            //        listViewItem.SubItems[1].Text = outputPath;
-            //    }
+            pgConvertCandidate.Invalidate();
+            pgConvertCandidate.Update();
         }
 
         private void AddFileToListBox(string fileName)
@@ -257,7 +262,7 @@ namespace RadioExt_Helper.forms
                 AddFileToListBox(file);
             }
 
-            
+
             SetUiEnabledStates();
         }
 
@@ -343,7 +348,7 @@ namespace RadioExt_Helper.forms
                 }
                 finally
                 {
-                    RestoreUI();
+                    RestoreUi();
                     InvokeConversionComplete();
                 }
             }
@@ -354,7 +359,7 @@ namespace RadioExt_Helper.forms
             }
         }
 
-        private void RestoreUI()
+        private void RestoreUi()
         {
             btnCancel.Enabled = false;
             SetUiEnabledStates();
@@ -522,7 +527,7 @@ namespace RadioExt_Helper.forms
             }
             catch (Exception)
             {
-                // ignored
+                // ignored to prevent log spam
             }
         }
 
@@ -535,6 +540,12 @@ namespace RadioExt_Helper.forms
         private void lbCandidates_SelectedIndexChanged(object sender, EventArgs e)
         {
             //Show the selected candidate in the property grid
+            pgConvertCandidate.SelectedObject = lbCandidates.SelectedItem;
+        }
+
+        private void pgConvertCandidate_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
+        {
+            //Ensure the property grid is updated with the selected item when a value is changed
             pgConvertCandidate.SelectedObject = lbCandidates.SelectedItem;
         }
     }

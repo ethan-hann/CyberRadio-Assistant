@@ -15,6 +15,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using AetherUtils.Core.Logging;
 using Newtonsoft.Json;
 using File = TagLib.File;
@@ -99,6 +100,21 @@ public sealed class Song : IEquatable<Song>, ICloneable
     private static Song CreateSongFromFile(string filePath)
     {
         var file = File.Create(filePath);
+
+        //Parse duration
+        if (TimeSpan.TryParse(file.Tag.Length, CultureInfo.InvariantCulture,
+                out var duration))
+        {
+            return new Song
+            {
+                FilePath = filePath,
+                Title = file.Tag.Title ?? Path.GetFileName(filePath),
+                Artist = file.Tag.FirstPerformer ?? string.Empty,
+                FileSize = (ulong)new FileInfo(filePath).Length,
+                Duration = duration
+            };
+        }
+
         return new Song
         {
             FilePath = filePath,
@@ -109,11 +125,13 @@ public sealed class Song : IEquatable<Song>, ICloneable
         };
     }
 
+    /// <inheritdoc />
     public override bool Equals(object? obj)
     {
         return Equals(obj as Song);
     }
 
+    /// <inheritdoc />
     [SuppressMessage("ReSharper", "NonReadonlyMemberInGetHashCode")]
     public override int GetHashCode()
     {

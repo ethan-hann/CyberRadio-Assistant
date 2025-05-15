@@ -17,6 +17,7 @@
 using System.Diagnostics;
 using AetherUtils.Core.Extensions;
 using AetherUtils.Core.Files;
+using AetherUtils.Core.Logging;
 using RadioExt_Helper.forms;
 using RadioExt_Helper.models;
 using RadioExt_Helper.Properties;
@@ -206,10 +207,10 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
         needConversion.AddRange(fdlgOpenSongs.FileNames.Where(AudioConverter.NeedsConversion));
         noConversionNeeded.AddRange(fdlgOpenSongs.FileNames.Where(f => !needConversion.Contains(f)));
         
-        //Check if the proposed MP3 (that would be the final converted file) is already in the station
-        alreadyInStation.AddRange(from file in needConversion 
-            let proposedMp3 = $"{Path.GetFileNameWithoutExtension(file)}.mp3"
-            where Station.TrackedObject.Songs.Any(s => s.FilePath.Contains(proposedMp3)) 
+        //Check if the proposed file is already in the station
+        alreadyInStation.AddRange(from file in needConversion
+            let proposedFile = Path.GetFileNameWithoutExtension(file)
+            where Station.TrackedObject.Songs.Any(s => s.FilePath.Contains(proposedFile)) 
             select file);
 
         // Remove files that are already in the station from needConversion
@@ -322,9 +323,7 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
         // Reset the file browser to its original state
         fdlgOpenSongs.Multiselect = true;
         fdlgOpenSongs.Title = Strings.AddSongsFileBrowserTitle;
-        fdlgOpenSongs.Filter = @"Audio/Video Files|*.mp3;*.wav;*.ogg;*.flac;*.mp2;*.wax;*.wma;*.aac;*.m4a;
-                                    *.aiff;*.alac;*.opus;*.amr;*.ac3;*.mp4;*.m4v;*.mov;*.avi;*.wmv;*.flv;*.mkv;
-                                    *.webm;*.mpeg;*.mpg;*.3gp;*.3g2;*.ts;*.mts;*.m2ts";
+        fdlgOpenSongs.Filter = @"Audio/Video Files|*.mp3;*.wav;*.ogg;*.flac;*.mp2;*.wax;*.wma;*.aac;*.m4a;*.aiff;*.alac;*.opus;*.amr;*.ac3;*.mp4;*.m4v;*.mov;*.avi;*.wmv;*.flv;*.mkv;*.webm;*.mpeg;*.mpg;*.3gp;*.3g2;*.ts;*.mts;*.m2ts";
         fdlgOpenSongs.FileName = string.Empty;
     }
 
@@ -463,8 +462,15 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
 
         if (lvSongs.SelectedItems[0].Tag is not Song song) return;
 
-        if (Directory.GetParent(song.FilePath) is { } parentDir)
-            Process.Start("explorer.exe", parentDir.FullName);
+        try
+        {
+            if (Directory.GetParent(song.FilePath) is { } parentDir)
+                Process.Start("explorer.exe", parentDir.FullName);
+        }
+        catch (Exception ex)
+        {
+            AuLogger.GetCurrentLogger<CustomMusicCtl>("LVSongs_MouseDoubleClick").Error(ex, "Error opening song file in Windows Explorer.");
+        }
     }
 
     private void btnAddSongs_MouseEnter(object sender, EventArgs e)

@@ -75,9 +75,9 @@ namespace RadioExt_Helper.forms
             // 
             statusStrip1.BackColor = Color.Transparent;
             statusStrip1.Items.AddRange(new ToolStripItem[] { lblStatus, toolStripStatusLabel1, progressBar });
-            statusStrip1.Location = new Point(0, 567);
+            statusStrip1.Location = new Point(0, 502);
             statusStrip1.Name = "statusStrip1";
-            statusStrip1.Size = new Size(667, 25);
+            statusStrip1.Size = new Size(945, 25);
             statusStrip1.SizingGrip = false;
             statusStrip1.TabIndex = 8;
             statusStrip1.Text = "statusStrip1";
@@ -94,7 +94,7 @@ namespace RadioExt_Helper.forms
             // toolStripStatusLabel1
             // 
             toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            toolStripStatusLabel1.Size = new Size(436, 20);
+            toolStripStatusLabel1.Size = new Size(714, 20);
             toolStripStatusLabel1.Spring = true;
             // 
             // progressBar
@@ -113,11 +113,11 @@ namespace RadioExt_Helper.forms
             tableLayoutPanel1.Controls.Add(btnStartConversion, 1, 0);
             tableLayoutPanel1.Controls.Add(btnAddFiles, 0, 0);
             tableLayoutPanel1.Dock = DockStyle.Bottom;
-            tableLayoutPanel1.Location = new Point(0, 534);
+            tableLayoutPanel1.Location = new Point(0, 469);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 1;
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel1.Size = new Size(667, 33);
+            tableLayoutPanel1.Size = new Size(945, 33);
             tableLayoutPanel1.TabIndex = 9;
             // 
             // btnCancel
@@ -129,7 +129,7 @@ namespace RadioExt_Helper.forms
             btnCancel.FlatStyle = FlatStyle.Flat;
             btnCancel.Font = new Font("Segoe UI", 9F);
             btnCancel.Image = Properties.Resources.cancel_16x16;
-            btnCancel.Location = new Point(568, 3);
+            btnCancel.Location = new Point(846, 3);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(96, 27);
             btnCancel.TabIndex = 9;
@@ -149,9 +149,9 @@ namespace RadioExt_Helper.forms
             btnStartConversion.FlatStyle = FlatStyle.Flat;
             btnStartConversion.Font = new Font("Segoe UI", 9F);
             btnStartConversion.Image = Properties.Resources.sound_waves__16x16;
-            btnStartConversion.Location = new Point(223, 3);
+            btnStartConversion.Location = new Point(366, 3);
             btnStartConversion.Name = "btnStartConversion";
-            btnStartConversion.Size = new Size(339, 27);
+            btnStartConversion.Size = new Size(474, 27);
             btnStartConversion.TabIndex = 8;
             btnStartConversion.Text = "Start Conversion";
             btnStartConversion.TextAlign = ContentAlignment.MiddleRight;
@@ -170,7 +170,7 @@ namespace RadioExt_Helper.forms
             btnAddFiles.Image = Properties.Resources.add__16x16;
             btnAddFiles.Location = new Point(3, 3);
             btnAddFiles.Name = "btnAddFiles";
-            btnAddFiles.Size = new Size(214, 27);
+            btnAddFiles.Size = new Size(357, 27);
             btnAddFiles.TabIndex = 7;
             btnAddFiles.Text = "Add Files...";
             btnAddFiles.TextAlign = ContentAlignment.MiddleRight;
@@ -182,9 +182,10 @@ namespace RadioExt_Helper.forms
             // 
             grpConversionLog.Controls.Add(rtbConversionLog);
             grpConversionLog.Dock = DockStyle.Fill;
+            grpConversionLog.Font = new Font("Segoe UI Variable Display", 9.75F, FontStyle.Bold);
             grpConversionLog.Location = new Point(0, 0);
             grpConversionLog.Name = "grpConversionLog";
-            grpConversionLog.Size = new Size(667, 183);
+            grpConversionLog.Size = new Size(945, 161);
             grpConversionLog.TabIndex = 10;
             grpConversionLog.TabStop = false;
             grpConversionLog.Text = "Conversion Log";
@@ -193,10 +194,10 @@ namespace RadioExt_Helper.forms
             // 
             rtbConversionLog.BackColor = Color.White;
             rtbConversionLog.Dock = DockStyle.Fill;
-            rtbConversionLog.Location = new Point(3, 19);
+            rtbConversionLog.Location = new Point(3, 21);
             rtbConversionLog.Name = "rtbConversionLog";
             rtbConversionLog.ReadOnly = true;
-            rtbConversionLog.Size = new Size(661, 161);
+            rtbConversionLog.Size = new Size(939, 137);
             rtbConversionLog.TabIndex = 0;
             rtbConversionLog.Text = "";
             // 
@@ -212,7 +213,7 @@ namespace RadioExt_Helper.forms
             tableLayoutPanel2.Name = "tableLayoutPanel2";
             tableLayoutPanel2.RowCount = 1;
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel2.Size = new Size(318, 32);
+            tableLayoutPanel2.Size = new Size(312, 32);
             tableLayoutPanel2.TabIndex = 11;
             // 
             // btnUncheckAll
@@ -224,9 +225,9 @@ namespace RadioExt_Helper.forms
             btnUncheckAll.FlatStyle = FlatStyle.Flat;
             btnUncheckAll.Font = new Font("Segoe UI", 9F);
             btnUncheckAll.Image = Properties.Resources.disabled__16x16;
-            btnUncheckAll.Location = new Point(162, 3);
+            btnUncheckAll.Location = new Point(159, 3);
             btnUncheckAll.Name = "btnUncheckAll";
-            btnUncheckAll.Size = new Size(153, 26);
+            btnUncheckAll.Size = new Size(150, 26);
             btnUncheckAll.TabIndex = 9;
             btnUncheckAll.Text = "Uncheck All";
             btnUncheckAll.TextAlign = ContentAlignment.MiddleRight;
@@ -245,7 +246,7 @@ namespace RadioExt_Helper.forms
             btnCheckAll.Image = Properties.Resources.enabled__16x16;
             btnCheckAll.Location = new Point(3, 3);
             btnCheckAll.Name = "btnCheckAll";
-            btnCheckAll.Size = new Size(153, 26);
+            btnCheckAll.Size = new Size(150, 26);
             btnCheckAll.TabIndex = 8;
             btnCheckAll.Text = "Check All";
             btnCheckAll.TextAlign = ContentAlignment.MiddleRight;
@@ -276,8 +277,8 @@ namespace RadioExt_Helper.forms
             // splitContainer1.Panel2
             // 
             splitContainer1.Panel2.Controls.Add(pgConvertCandidate);
-            splitContainer1.Size = new Size(667, 347);
-            splitContainer1.SplitterDistance = 318;
+            splitContainer1.Size = new Size(945, 304);
+            splitContainer1.SplitterDistance = 312;
             splitContainer1.TabIndex = 13;
             // 
             // lbCandidates
@@ -287,7 +288,7 @@ namespace RadioExt_Helper.forms
             lbCandidates.FormattingEnabled = true;
             lbCandidates.Location = new Point(0, 32);
             lbCandidates.Name = "lbCandidates";
-            lbCandidates.Size = new Size(318, 287);
+            lbCandidates.Size = new Size(312, 244);
             lbCandidates.TabIndex = 12;
             lbCandidates.ThreeDCheckBoxes = true;
             lbCandidates.ItemCheck += lbCandidates_ItemCheck;
@@ -299,11 +300,11 @@ namespace RadioExt_Helper.forms
             tableLayoutPanel4.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             tableLayoutPanel4.Controls.Add(lblTotalConversions, 0, 0);
             tableLayoutPanel4.Dock = DockStyle.Bottom;
-            tableLayoutPanel4.Location = new Point(0, 319);
+            tableLayoutPanel4.Location = new Point(0, 276);
             tableLayoutPanel4.Name = "tableLayoutPanel4";
             tableLayoutPanel4.RowCount = 1;
             tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel4.Size = new Size(318, 28);
+            tableLayoutPanel4.Size = new Size(312, 28);
             tableLayoutPanel4.TabIndex = 0;
             // 
             // lblTotalConversions
@@ -313,7 +314,7 @@ namespace RadioExt_Helper.forms
             lblTotalConversions.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             lblTotalConversions.Location = new Point(3, 4);
             lblTotalConversions.Name = "lblTotalConversions";
-            lblTotalConversions.Size = new Size(312, 19);
+            lblTotalConversions.Size = new Size(306, 19);
             lblTotalConversions.TabIndex = 0;
             lblTotalConversions.Text = "Converting: {0} / {1}";
             lblTotalConversions.TextAlign = ContentAlignment.MiddleCenter;
@@ -323,8 +324,9 @@ namespace RadioExt_Helper.forms
             pgConvertCandidate.Dock = DockStyle.Fill;
             pgConvertCandidate.Location = new Point(0, 0);
             pgConvertCandidate.Name = "pgConvertCandidate";
-            pgConvertCandidate.Size = new Size(345, 347);
+            pgConvertCandidate.Size = new Size(629, 304);
             pgConvertCandidate.TabIndex = 0;
+            pgConvertCandidate.PropertyValueChanged += pgConvertCandidate_PropertyValueChanged;
             // 
             // splitContainer2
             // 
@@ -340,8 +342,8 @@ namespace RadioExt_Helper.forms
             // splitContainer2.Panel2
             // 
             splitContainer2.Panel2.Controls.Add(grpConversionLog);
-            splitContainer2.Size = new Size(667, 534);
-            splitContainer2.SplitterDistance = 347;
+            splitContainer2.Size = new Size(945, 469);
+            splitContainer2.SplitterDistance = 304;
             splitContainer2.TabIndex = 14;
             // 
             // AudioConverterForm
@@ -349,7 +351,7 @@ namespace RadioExt_Helper.forms
             AutoScaleDimensions = new SizeF(96F, 96F);
             AutoScaleMode = AutoScaleMode.Dpi;
             BackColor = Color.White;
-            ClientSize = new Size(667, 592);
+            ClientSize = new Size(945, 527);
             Controls.Add(splitContainer2);
             Controls.Add(tableLayoutPanel1);
             Controls.Add(statusStrip1);
