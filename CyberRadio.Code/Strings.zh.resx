@@ -1422,4 +1422,10 @@
     <value>有{0}文件需要转换以与Radioext一起使用。
 您现在想转换它们吗？</value>
   </data>
+  <data name="AudioConvert_ConfirmRemoveFiles" xml:space="preserve">
+    <value>您确定要从队列中删除{0}文件吗？</value>
+  </data>
+  <data name="AudioConvert_RemoveSelectedFiles" xml:space="preserve">
+    <value>删除选定的文件</value>
+  </data>
 </root>

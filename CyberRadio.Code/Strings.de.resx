@@ -1422,4 +1422,10 @@ Bitte wählen Sie mindestens eine Datei aus und versuchen Sie es erneut.</value>
     <value>Es gibt {0} -Datei (n), die konvertiert werden müssen, um mit Radioext zu arbeiten.
 Möchten Sie sie jetzt konvertieren?</value>
   </data>
+  <data name="AudioConvert_ConfirmRemoveFiles" xml:space="preserve">
+    <value>Sind Sie sicher, dass Sie {0} -Dateien aus der Warteschlange entfernen möchten?</value>
+  </data>
+  <data name="AudioConvert_RemoveSelectedFiles" xml:space="preserve">
+    <value>Entfernen Sie ausgewählte Dateien</value>
+  </data>
 </root>

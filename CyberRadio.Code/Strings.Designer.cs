@@ -251,6 +251,24 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to remove {0} files from the queue?.
+        /// </summary>
+        internal static string AudioConvert_ConfirmRemoveFiles {
+            get {
+                return ResourceManager.GetString("AudioConvert_ConfirmRemoveFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove Selected Files.
+        /// </summary>
+        internal static string AudioConvert_RemoveSelectedFiles {
+            get {
+                return ResourceManager.GetString("AudioConvert_RemoveSelectedFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Audio Converter.
         /// </summary>
         internal static string AudioConverterMenuOption {

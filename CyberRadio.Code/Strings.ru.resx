@@ -1422,4 +1422,10 @@
     <value>Существуют {0} файлы (ы), которые необходимо преобразовать для работы с Radioxt.
 Хотели бы вы сейчас преобразовать их?</value>
   </data>
+  <data name="AudioConvert_ConfirmRemoveFiles" xml:space="preserve">
+    <value>Вы уверены, что хотите удалить файлы {0} из очереди?</value>
+  </data>
+  <data name="AudioConvert_RemoveSelectedFiles" xml:space="preserve">
+    <value>Удалить выбранные файлы</value>
+  </data>
 </root>

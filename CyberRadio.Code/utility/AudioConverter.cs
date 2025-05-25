@@ -197,13 +197,11 @@ namespace RadioExt_Helper.utility
                     logger.Info($"Conversion succeeded: {outputFile}");
                     return outputFile;
                 }
-                else
-                {
-                    var msg = "Output file not found after conversion.";
-                    ConversionCompleted?.Invoke(this, (inputPath, false, msg));
-                    logger.Error(msg);
-                    return null;
-                }
+                
+                var msg = "Output file not found after conversion.";
+                ConversionCompleted?.Invoke(this, (inputPath, false, msg));
+                logger.Error(msg);
+                return null;
             }
             catch (OperationCanceledException)
             {
@@ -254,12 +252,10 @@ namespace RadioExt_Helper.utility
                     ConversionCompleted?.Invoke(this, (candidate.InputPath, true, candidate.OutputPath));
                     return candidate.OutputPath;
                 }
-                else
-                {
-                    const string msg = "Output file not found.";
-                    ConversionCompleted?.Invoke(this, (candidate.InputPath, false, msg));
-                    return null;
-                }
+
+                const string msg = "Output file not found.";
+                ConversionCompleted?.Invoke(this, (candidate.InputPath, false, msg));
+                return null;
             }
             catch (OperationCanceledException)
             {

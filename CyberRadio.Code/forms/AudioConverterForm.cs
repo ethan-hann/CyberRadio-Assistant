@@ -33,6 +33,11 @@ namespace RadioExt_Helper.forms
         private bool _isConverting;
 
         /// <summary>
+        /// Indicates the user has cancelled the running conversion.
+        /// </summary>
+        private bool _isCancelling;
+
+        /// <summary>
         /// The total number of files to convert.
         /// </summary>
         private int _totalToConvert;
@@ -52,7 +57,8 @@ namespace RadioExt_Helper.forms
         /// </summary>
         private readonly TrackableObject<Station>? _station;
 
-        private readonly string _defaultMusicPath = GlobalData.ConfigManager.Get("defaultSongLocation") as string ?? string.Empty;
+        private readonly string _defaultMusicPath = GlobalData.ConfigManager.Get("defaultSongLocation") as string ??
+                                                    Environment.GetFolderPath(Environment.SpecialFolder.MyMusic);
 
         private CancellationTokenSource? _cts;
 
@@ -109,16 +115,14 @@ namespace RadioExt_Helper.forms
             btnCheckAll.Text = Strings.CheckAll;
             btnUncheckAll.Text = Strings.UncheckAll;
             btnAddFiles.Text = Strings.AddFiles;
+            btnRemoveFiles.Text = Strings.AudioConvert_RemoveSelectedFiles;
             btnStartConversion.Text = Strings.StartConversion;
             btnCancel.Text = Strings.Cancel;
             grpConversionLog.Text = Strings.ConversionLog;
             lblTotalConversions.Text = string.Format(Strings.TotalConversionsLabel, _conversionCounter, _totalToConvert);
-            //changeOutputToolStripMenuItem.Text = Strings.ChangeOutputDirectory;
             fdlgChangeOutput.Description = Strings.ChangeOutputDirectoryDescription;
 
-            ////Listview
-            //lvFiles.Columns[0].Text = Strings.InputPathsColumn;
-            //lvFiles.Columns[1].Text = Strings.OutputPathsColumn;
+            // No need to translate the property grid buttons as it's done in SetupPropertyGrid()
         }
 
         /// <summary>
@@ -195,11 +199,17 @@ namespace RadioExt_Helper.forms
             string outputPath;
             if (_station != null)
             {
+                // If a station is provided, we use its display name (which should be the folder name as well) in the staging folder.
                 var stationName = _station.TrackedObject.MetaData.DisplayName;
-                outputPath = Path.Combine(_defaultMusicPath, stationName);
+                var stagingFolder = GlobalData.ConfigManager.Get("stagingPath") as string ?? string.Empty;
+                if (string.IsNullOrEmpty(stagingFolder))
+                    stagingFolder = _defaultMusicPath;
+
+                outputPath = Path.Combine(stagingFolder, stationName);
             }
             else
             {
+                // If no station is provided, we use the default music path.
                 outputPath = Path.Combine(_defaultMusicPath, "converted");
             }
 
@@ -210,6 +220,9 @@ namespace RadioExt_Helper.forms
             var lastIndex = lbCandidates.Items.Count - 1;
             if (lastIndex >= 0)
                 lbCandidates.SetItemChecked(lastIndex, true);
+
+            // Select it in the property grid
+            pgConvertCandidate.SelectedObject = _candidates[lastIndex < 0 ? 0 : lastIndex];
 
             _totalToConvert = lbCandidates.CheckedItems.Count;
         }
@@ -245,7 +258,7 @@ namespace RadioExt_Helper.forms
         }
 
         /// <summary>
-        /// Handles the Add Files button click event. Opens a file dialog to add new files to the ListView.
+        /// Handles the Add Files button click event. Opens a file dialog to add new files to the ListBox.
         /// </summary>
         private void btnAddFiles_Click(object sender, EventArgs e)
         {
@@ -264,6 +277,40 @@ namespace RadioExt_Helper.forms
 
 
             SetUiEnabledStates();
+        }
+
+        /// <summary>
+        /// Handles the Remove Files button click event. Removes selected files from the ListBox.
+        /// </summary>
+        private void btnRemoveFiles_Click(object sender, EventArgs e)
+        {
+            if (lbCandidates.CheckedItems.Count <= 0) return;
+
+            // Confirm with user
+            var result = MessageBox.Show(string.Format(Strings.AudioConvert_ConfirmRemoveFiles, lbCandidates.CheckedItems.Count), 
+                Strings.Confirm, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (result != DialogResult.Yes) return;
+
+            var selectedItems = lbCandidates.CheckedItems.Cast<ConvertCandidate>().ToList();
+            foreach (var item in selectedItems)
+                _candidates.Remove(item);
+
+            _totalToConvert = lbCandidates.CheckedItems.Count;
+            _checkedItems = lbCandidates.CheckedItems.Cast<ConvertCandidate>().ToList();
+            _conversionCounter = 0; // Reset conversion counter when items are removed
+            _isConverting = false;
+
+            SetUiEnabledStates();
+            
+            if (lbCandidates.Items.Count > 0)
+            {
+                lbCandidates.SelectedIndex = 0; // Select the first item after removal
+                pgConvertCandidate.SelectedObject = lbCandidates.SelectedItem; // Show the first item in the property grid
+            }
+            else
+            {
+                pgConvertCandidate.SelectedObject = null; // Clear the property grid if no items left
+            }
         }
 
         /// <summary>
@@ -380,16 +427,14 @@ namespace RadioExt_Helper.forms
                 .Select(item => item.OutputPath)
                 .ToList();
 
-            ConversionCompleted?.Invoke(this, convertedFiles);
+            // We only want to notify if the conversion was successful and not cancelled.
+            if (!_isCancelling)
+                ConversionCompleted?.Invoke(this, convertedFiles);
 
             _conversionCounter = 0;
             _totalToConvert = 0;
             _isConverting = false;
-
-            if (_station != null)
-            {
-                Close();
-            }
+            _isCancelling = false;
 
             RunOnUI(() =>
             {
@@ -504,6 +549,7 @@ namespace RadioExt_Helper.forms
             btnCheckAll.Enabled = !_isConverting & lbCandidates.Items.Count > 0;
             btnUncheckAll.Enabled = btnCheckAll.Enabled;
             btnAddFiles.Enabled = !_isConverting;
+            btnRemoveFiles.Enabled = !_isConverting & _totalToConvert > 0;
             btnStartConversion.Enabled = !_isConverting & lbCandidates.Items.Count > 0 & _totalToConvert > 0;
             pgConvertCandidate.Enabled = !_isConverting & lbCandidates.Items.Count > 0 & _totalToConvert > 0;
             lbCandidates.Enabled = !_isConverting;
@@ -535,6 +581,7 @@ namespace RadioExt_Helper.forms
         {
             _cts?.Cancel();
             btnCancel.Enabled = false;
+            _isCancelling = true;
         }
 
         private void lbCandidates_SelectedIndexChanged(object sender, EventArgs e)

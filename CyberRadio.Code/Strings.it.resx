@@ -1422,4 +1422,10 @@ Seleziona almeno un file e riprova.</value>
     <value>Ci sono {0} file che devono essere convertiti per lavorare con radioext.
 Ti piacerebbe convertirli adesso?</value>
   </data>
+  <data name="AudioConvert_ConfirmRemoveFiles" xml:space="preserve">
+    <value>Sei sicuro di voler rimuovere i file {0} dalla coda?</value>
+  </data>
+  <data name="AudioConvert_RemoveSelectedFiles" xml:space="preserve">
+    <value>Rimuovere i file selezionati</value>
+  </data>
 </root>

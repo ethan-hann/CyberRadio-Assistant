@@ -56,6 +56,7 @@ namespace RadioExt_Helper.forms
             lblTotalConversions = new Label();
             pgConvertCandidate = new AetherUtils.Core.WinForms.Controls.AuPropertyGrid(components);
             splitContainer2 = new SplitContainer();
+            btnRemoveFiles = new Button();
             statusStrip1.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
             grpConversionLog.SuspendLayout();
@@ -107,16 +108,18 @@ namespace RadioExt_Helper.forms
             tableLayoutPanel1.ColumnCount = 4;
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 51.5306129F));
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 48.4693871F));
-            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 138F));
-            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 101F));
-            tableLayoutPanel1.Controls.Add(btnCancel, 3, 0);
-            tableLayoutPanel1.Controls.Add(btnStartConversion, 1, 0);
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 391F));
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 96F));
+            tableLayoutPanel1.Controls.Add(btnRemoveFiles, 1, 0);
             tableLayoutPanel1.Controls.Add(btnAddFiles, 0, 0);
+            tableLayoutPanel1.Controls.Add(btnCancel, 3, 0);
+            tableLayoutPanel1.Controls.Add(btnStartConversion, 2, 0);
             tableLayoutPanel1.Dock = DockStyle.Bottom;
             tableLayoutPanel1.Location = new Point(0, 469);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 1;
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
             tableLayoutPanel1.Size = new Size(945, 33);
             tableLayoutPanel1.TabIndex = 9;
             // 
@@ -129,9 +132,9 @@ namespace RadioExt_Helper.forms
             btnCancel.FlatStyle = FlatStyle.Flat;
             btnCancel.Font = new Font("Segoe UI", 9F);
             btnCancel.Image = Properties.Resources.cancel_16x16;
-            btnCancel.Location = new Point(846, 3);
+            btnCancel.Location = new Point(851, 3);
             btnCancel.Name = "btnCancel";
-            btnCancel.Size = new Size(96, 27);
+            btnCancel.Size = new Size(91, 27);
             btnCancel.TabIndex = 9;
             btnCancel.Text = "Cancel";
             btnCancel.TextAlign = ContentAlignment.MiddleRight;
@@ -142,16 +145,15 @@ namespace RadioExt_Helper.forms
             // btnStartConversion
             // 
             btnStartConversion.BackColor = Color.Yellow;
-            tableLayoutPanel1.SetColumnSpan(btnStartConversion, 2);
             btnStartConversion.Dock = DockStyle.Fill;
             btnStartConversion.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
             btnStartConversion.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
             btnStartConversion.FlatStyle = FlatStyle.Flat;
             btnStartConversion.Font = new Font("Segoe UI", 9F);
             btnStartConversion.Image = Properties.Resources.sound_waves__16x16;
-            btnStartConversion.Location = new Point(366, 3);
+            btnStartConversion.Location = new Point(460, 3);
             btnStartConversion.Name = "btnStartConversion";
-            btnStartConversion.Size = new Size(474, 27);
+            btnStartConversion.Size = new Size(385, 27);
             btnStartConversion.TabIndex = 8;
             btnStartConversion.Text = "Start Conversion";
             btnStartConversion.TextAlign = ContentAlignment.MiddleRight;
@@ -170,7 +172,7 @@ namespace RadioExt_Helper.forms
             btnAddFiles.Image = Properties.Resources.add__16x16;
             btnAddFiles.Location = new Point(3, 3);
             btnAddFiles.Name = "btnAddFiles";
-            btnAddFiles.Size = new Size(357, 27);
+            btnAddFiles.Size = new Size(230, 27);
             btnAddFiles.TabIndex = 7;
             btnAddFiles.Text = "Add Files...";
             btnAddFiles.TextAlign = ContentAlignment.MiddleRight;
@@ -346,6 +348,25 @@ namespace RadioExt_Helper.forms
             splitContainer2.SplitterDistance = 304;
             splitContainer2.TabIndex = 14;
             // 
+            // btnRemoveFiles
+            // 
+            btnRemoveFiles.BackColor = Color.Yellow;
+            btnRemoveFiles.Dock = DockStyle.Fill;
+            btnRemoveFiles.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
+            btnRemoveFiles.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
+            btnRemoveFiles.FlatStyle = FlatStyle.Flat;
+            btnRemoveFiles.Font = new Font("Segoe UI", 9F);
+            btnRemoveFiles.Image = Properties.Resources.delete__16x16;
+            btnRemoveFiles.Location = new Point(239, 3);
+            btnRemoveFiles.Name = "btnRemoveFiles";
+            btnRemoveFiles.Size = new Size(215, 27);
+            btnRemoveFiles.TabIndex = 10;
+            btnRemoveFiles.Text = "Remove Selected Files";
+            btnRemoveFiles.TextAlign = ContentAlignment.MiddleRight;
+            btnRemoveFiles.TextImageRelation = TextImageRelation.ImageBeforeText;
+            btnRemoveFiles.UseVisualStyleBackColor = false;
+            btnRemoveFiles.Click += btnRemoveFiles_Click;
+            // 
             // AudioConverterForm
             // 
             AutoScaleDimensions = new SizeF(96F, 96F);
@@ -355,6 +376,7 @@ namespace RadioExt_Helper.forms
             Controls.Add(splitContainer2);
             Controls.Add(tableLayoutPanel1);
             Controls.Add(statusStrip1);
+            HelpButton = true;
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "AudioConverterForm";
             StartPosition = FormStartPosition.CenterParent;
@@ -402,5 +424,6 @@ namespace RadioExt_Helper.forms
         private Label lblTotalConversions;
         private AetherUtils.Core.WinForms.Controls.AuPropertyGrid pgConvertCandidate;
         private CheckedListBox lbCandidates;
+        private Button btnRemoveFiles;
     }
 }
