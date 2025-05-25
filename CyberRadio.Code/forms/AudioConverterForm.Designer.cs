@@ -40,9 +40,10 @@ namespace RadioExt_Helper.forms
             toolStripStatusLabel1 = new ToolStripStatusLabel();
             progressBar = new ToolStripProgressBar();
             tableLayoutPanel1 = new TableLayoutPanel();
+            btnRemoveFiles = new Button();
+            btnAddFiles = new Button();
             btnCancel = new Button();
             btnStartConversion = new Button();
-            btnAddFiles = new Button();
             grpConversionLog = new GroupBox();
             rtbConversionLog = new RichTextBox();
             tableLayoutPanel2 = new TableLayoutPanel();
@@ -56,7 +57,6 @@ namespace RadioExt_Helper.forms
             lblTotalConversions = new Label();
             pgConvertCandidate = new AetherUtils.Core.WinForms.Controls.AuPropertyGrid(components);
             splitContainer2 = new SplitContainer();
-            btnRemoveFiles = new Button();
             statusStrip1.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
             grpConversionLog.SuspendLayout();
@@ -123,43 +123,27 @@ namespace RadioExt_Helper.forms
             tableLayoutPanel1.Size = new Size(945, 33);
             tableLayoutPanel1.TabIndex = 9;
             // 
-            // btnCancel
+            // btnRemoveFiles
             // 
-            btnCancel.BackColor = Color.Yellow;
-            btnCancel.Dock = DockStyle.Fill;
-            btnCancel.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
-            btnCancel.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
-            btnCancel.FlatStyle = FlatStyle.Flat;
-            btnCancel.Font = new Font("Segoe UI", 9F);
-            btnCancel.Image = Properties.Resources.cancel_16x16;
-            btnCancel.Location = new Point(851, 3);
-            btnCancel.Name = "btnCancel";
-            btnCancel.Size = new Size(91, 27);
-            btnCancel.TabIndex = 9;
-            btnCancel.Text = "Cancel";
-            btnCancel.TextAlign = ContentAlignment.MiddleRight;
-            btnCancel.TextImageRelation = TextImageRelation.ImageBeforeText;
-            btnCancel.UseVisualStyleBackColor = false;
-            btnCancel.Click += btnCancel_Click;
-            // 
-            // btnStartConversion
-            // 
-            btnStartConversion.BackColor = Color.Yellow;
-            btnStartConversion.Dock = DockStyle.Fill;
-            btnStartConversion.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
-            btnStartConversion.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
-            btnStartConversion.FlatStyle = FlatStyle.Flat;
-            btnStartConversion.Font = new Font("Segoe UI", 9F);
-            btnStartConversion.Image = Properties.Resources.sound_waves__16x16;
-            btnStartConversion.Location = new Point(460, 3);
-            btnStartConversion.Name = "btnStartConversion";
-            btnStartConversion.Size = new Size(385, 27);
-            btnStartConversion.TabIndex = 8;
-            btnStartConversion.Text = "Start Conversion";
-            btnStartConversion.TextAlign = ContentAlignment.MiddleRight;
-            btnStartConversion.TextImageRelation = TextImageRelation.ImageBeforeText;
-            btnStartConversion.UseVisualStyleBackColor = false;
-            btnStartConversion.Click += btnStartConversion_Click;
+            btnRemoveFiles.BackColor = Color.Yellow;
+            btnRemoveFiles.Dock = DockStyle.Fill;
+            btnRemoveFiles.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
+            btnRemoveFiles.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
+            btnRemoveFiles.FlatStyle = FlatStyle.Flat;
+            btnRemoveFiles.Font = new Font("Segoe UI", 9F);
+            btnRemoveFiles.Image = Properties.Resources.delete__16x16;
+            btnRemoveFiles.Location = new Point(239, 3);
+            btnRemoveFiles.Name = "btnRemoveFiles";
+            btnRemoveFiles.Size = new Size(215, 27);
+            btnRemoveFiles.TabIndex = 10;
+            btnRemoveFiles.Tag = "AudioConvert_RemoveFilesHelp";
+            btnRemoveFiles.Text = "Remove Selected Files";
+            btnRemoveFiles.TextAlign = ContentAlignment.MiddleRight;
+            btnRemoveFiles.TextImageRelation = TextImageRelation.ImageBeforeText;
+            btnRemoveFiles.UseVisualStyleBackColor = false;
+            btnRemoveFiles.Click += btnRemoveFiles_Click;
+            btnRemoveFiles.MouseEnter += ControlMouseEnter;
+            btnRemoveFiles.MouseLeave += ControlMouseLeave;
             // 
             // btnAddFiles
             // 
@@ -174,11 +158,58 @@ namespace RadioExt_Helper.forms
             btnAddFiles.Name = "btnAddFiles";
             btnAddFiles.Size = new Size(230, 27);
             btnAddFiles.TabIndex = 7;
+            btnAddFiles.Tag = "AudioConvert_AddFilesHelp";
             btnAddFiles.Text = "Add Files...";
             btnAddFiles.TextAlign = ContentAlignment.MiddleRight;
             btnAddFiles.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnAddFiles.UseVisualStyleBackColor = false;
             btnAddFiles.Click += btnAddFiles_Click;
+            btnAddFiles.MouseEnter += ControlMouseEnter;
+            btnAddFiles.MouseLeave += ControlMouseLeave;
+            // 
+            // btnCancel
+            // 
+            btnCancel.BackColor = Color.Yellow;
+            btnCancel.Dock = DockStyle.Fill;
+            btnCancel.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
+            btnCancel.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
+            btnCancel.FlatStyle = FlatStyle.Flat;
+            btnCancel.Font = new Font("Segoe UI", 9F);
+            btnCancel.Image = Properties.Resources.cancel_16x16;
+            btnCancel.Location = new Point(851, 3);
+            btnCancel.Name = "btnCancel";
+            btnCancel.Size = new Size(91, 27);
+            btnCancel.TabIndex = 9;
+            btnCancel.Tag = "AudioConvert_CancelHelp";
+            btnCancel.Text = "Cancel";
+            btnCancel.TextAlign = ContentAlignment.MiddleRight;
+            btnCancel.TextImageRelation = TextImageRelation.ImageBeforeText;
+            btnCancel.UseVisualStyleBackColor = false;
+            btnCancel.Click += btnCancel_Click;
+            btnCancel.MouseEnter += ControlMouseEnter;
+            btnCancel.MouseLeave += ControlMouseLeave;
+            // 
+            // btnStartConversion
+            // 
+            btnStartConversion.BackColor = Color.Yellow;
+            btnStartConversion.Dock = DockStyle.Fill;
+            btnStartConversion.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
+            btnStartConversion.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
+            btnStartConversion.FlatStyle = FlatStyle.Flat;
+            btnStartConversion.Font = new Font("Segoe UI", 9F);
+            btnStartConversion.Image = Properties.Resources.sound_waves__16x16;
+            btnStartConversion.Location = new Point(460, 3);
+            btnStartConversion.Name = "btnStartConversion";
+            btnStartConversion.Size = new Size(385, 27);
+            btnStartConversion.TabIndex = 8;
+            btnStartConversion.Tag = "AudioConvert_StartConversionHelp";
+            btnStartConversion.Text = "Start Conversion";
+            btnStartConversion.TextAlign = ContentAlignment.MiddleRight;
+            btnStartConversion.TextImageRelation = TextImageRelation.ImageBeforeText;
+            btnStartConversion.UseVisualStyleBackColor = false;
+            btnStartConversion.Click += btnStartConversion_Click;
+            btnStartConversion.MouseEnter += ControlMouseEnter;
+            btnStartConversion.MouseLeave += ControlMouseLeave;
             // 
             // grpConversionLog
             // 
@@ -201,7 +232,10 @@ namespace RadioExt_Helper.forms
             rtbConversionLog.ReadOnly = true;
             rtbConversionLog.Size = new Size(939, 137);
             rtbConversionLog.TabIndex = 0;
+            rtbConversionLog.Tag = "AudioConvert_ConversionLogHelp";
             rtbConversionLog.Text = "";
+            rtbConversionLog.MouseEnter += ControlMouseEnter;
+            rtbConversionLog.MouseLeave += ControlMouseLeave;
             // 
             // tableLayoutPanel2
             // 
@@ -231,11 +265,14 @@ namespace RadioExt_Helper.forms
             btnUncheckAll.Name = "btnUncheckAll";
             btnUncheckAll.Size = new Size(150, 26);
             btnUncheckAll.TabIndex = 9;
+            btnUncheckAll.Tag = "AudioConvert_UncheckAllHelp";
             btnUncheckAll.Text = "Uncheck All";
             btnUncheckAll.TextAlign = ContentAlignment.MiddleRight;
             btnUncheckAll.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnUncheckAll.UseVisualStyleBackColor = false;
             btnUncheckAll.Click += btnUncheckAll_Click;
+            btnUncheckAll.MouseEnter += ControlMouseEnter;
+            btnUncheckAll.MouseLeave += ControlMouseLeave;
             // 
             // btnCheckAll
             // 
@@ -250,11 +287,14 @@ namespace RadioExt_Helper.forms
             btnCheckAll.Name = "btnCheckAll";
             btnCheckAll.Size = new Size(150, 26);
             btnCheckAll.TabIndex = 8;
+            btnCheckAll.Tag = "AudioConvert_CheckAllHelp";
             btnCheckAll.Text = "Check All";
             btnCheckAll.TextAlign = ContentAlignment.MiddleRight;
             btnCheckAll.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnCheckAll.UseVisualStyleBackColor = false;
             btnCheckAll.Click += btnCheckAll_Click;
+            btnCheckAll.MouseEnter += ControlMouseEnter;
+            btnCheckAll.MouseLeave += ControlMouseLeave;
             // 
             // fdlgOpenSongs
             // 
@@ -292,9 +332,12 @@ namespace RadioExt_Helper.forms
             lbCandidates.Name = "lbCandidates";
             lbCandidates.Size = new Size(312, 244);
             lbCandidates.TabIndex = 12;
+            lbCandidates.Tag = "AudioConvert_ListBoxHelp";
             lbCandidates.ThreeDCheckBoxes = true;
             lbCandidates.ItemCheck += lbCandidates_ItemCheck;
             lbCandidates.SelectedIndexChanged += lbCandidates_SelectedIndexChanged;
+            lbCandidates.MouseEnter += ControlMouseEnter;
+            lbCandidates.MouseLeave += ControlMouseLeave;
             // 
             // tableLayoutPanel4
             // 
@@ -318,8 +361,11 @@ namespace RadioExt_Helper.forms
             lblTotalConversions.Name = "lblTotalConversions";
             lblTotalConversions.Size = new Size(306, 19);
             lblTotalConversions.TabIndex = 0;
+            lblTotalConversions.Tag = "AudioConvert_ConvertingLabelHelp";
             lblTotalConversions.Text = "Converting: {0} / {1}";
             lblTotalConversions.TextAlign = ContentAlignment.MiddleCenter;
+            lblTotalConversions.MouseEnter += ControlMouseEnter;
+            lblTotalConversions.MouseLeave += ControlMouseLeave;
             // 
             // pgConvertCandidate
             // 
@@ -328,7 +374,10 @@ namespace RadioExt_Helper.forms
             pgConvertCandidate.Name = "pgConvertCandidate";
             pgConvertCandidate.Size = new Size(629, 304);
             pgConvertCandidate.TabIndex = 0;
+            pgConvertCandidate.Tag = "AudioConvert_PropertyGridHelp";
             pgConvertCandidate.PropertyValueChanged += pgConvertCandidate_PropertyValueChanged;
+            pgConvertCandidate.Enter += ControlMouseEnter;
+            pgConvertCandidate.Leave += ControlMouseLeave;
             // 
             // splitContainer2
             // 
@@ -347,25 +396,6 @@ namespace RadioExt_Helper.forms
             splitContainer2.Size = new Size(945, 469);
             splitContainer2.SplitterDistance = 304;
             splitContainer2.TabIndex = 14;
-            // 
-            // btnRemoveFiles
-            // 
-            btnRemoveFiles.BackColor = Color.Yellow;
-            btnRemoveFiles.Dock = DockStyle.Fill;
-            btnRemoveFiles.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
-            btnRemoveFiles.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
-            btnRemoveFiles.FlatStyle = FlatStyle.Flat;
-            btnRemoveFiles.Font = new Font("Segoe UI", 9F);
-            btnRemoveFiles.Image = Properties.Resources.delete__16x16;
-            btnRemoveFiles.Location = new Point(239, 3);
-            btnRemoveFiles.Name = "btnRemoveFiles";
-            btnRemoveFiles.Size = new Size(215, 27);
-            btnRemoveFiles.TabIndex = 10;
-            btnRemoveFiles.Text = "Remove Selected Files";
-            btnRemoveFiles.TextAlign = ContentAlignment.MiddleRight;
-            btnRemoveFiles.TextImageRelation = TextImageRelation.ImageBeforeText;
-            btnRemoveFiles.UseVisualStyleBackColor = false;
-            btnRemoveFiles.Click += btnRemoveFiles_Click;
             // 
             // AudioConverterForm
             // 

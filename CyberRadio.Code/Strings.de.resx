@@ -1390,9 +1390,6 @@ Besonderer Dank geht an Demonseedxp (https://next.nexusmods.com/profile/demonsee
   <data name="StartConversion" xml:space="preserve">
     <value>Starten Sie die Konvertierung</value>
   </data>
-  <data name="ConversionOngoing" xml:space="preserve">
-    <value>Dateien werden derzeit konvertiert. Bitte warten Sie, bis sie fertig sind.</value>
-  </data>
   <data name="Converting" xml:space="preserve">
     <value>Konvertierende Datei</value>
   </data>
@@ -1427,5 +1424,59 @@ Möchten Sie sie jetzt konvertieren?</value>
   </data>
   <data name="AudioConvert_RemoveSelectedFiles" xml:space="preserve">
     <value>Entfernen Sie ausgewählte Dateien</value>
+  </data>
+  <data name="ConversionOngoing" xml:space="preserve">
+    <value>Dateien werden derzeit konvertiert. Bitte warten Sie, bis sie fertig sind, oder klicken Sie auf "Abbrechen".</value>
+  </data>
+  <data name="AudioConvert_CheckAllHelp" xml:space="preserve">
+    <value>Aktivieren Sie alle Elemente in der Warteschlange zur Konvertierung.</value>
+  </data>
+  <data name="AudioConvert_UncheckAllHelp" xml:space="preserve">
+    <value>Deaktivieren Sie alle Elemente in der Warteschlange.</value>
+  </data>
+  <data name="AudioConvert_ListBoxHelp" xml:space="preserve">
+    <value>Zeigt die aktuelle Konvertierungswarteschlange an. Aktivieren Sie das Kontrollkästchen, um die Konvertierung zu aktivieren.</value>
+  </data>
+  <data name="AudioConvert_ConvertingLabelHelp" xml:space="preserve">
+    <value>Zeigt die Gesamtzahl der konvertierten Dateien / Dateien zum Konvertieren an.</value>
+  </data>
+  <data name="AudioConvert_PropertyGridHelp" xml:space="preserve">
+    <value>Zeigt die Eigenschaften des ausgewählten Kandidaten an.</value>
+  </data>
+  <data name="AudioConvert_ConversionLogHelp" xml:space="preserve">
+    <value>Zeigt den aktuellen Status der Konvertierung von FFMPEG an.</value>
+  </data>
+  <data name="AudioConvert_AddFilesHelp" xml:space="preserve">
+    <value>Fügen Sie zusätzliche Dateien hinzu, um in die Warteschlange zu konvertieren.</value>
+  </data>
+  <data name="AudioConvert_RemoveFilesHelp" xml:space="preserve">
+    <value>Entfernen Sie die aktuell überprüften Dateien in der Warteschlange.</value>
+  </data>
+  <data name="AudioConvert_StartConversionHelp" xml:space="preserve">
+    <value>Startet die Konvertierung basierend auf den geprüften Elementen in der Warteschlange.</value>
+  </data>
+  <data name="AudioConvert_CancelHelp" xml:space="preserve">
+    <value>Stornieren Sie die derzeit ausgeführte Konvertierung.</value>
+  </data>
+  <data name="ConvertCandidate_InputPathDesc" xml:space="preserve">
+    <value>Der Pfad der Eingabedatei.</value>
+  </data>
+  <data name="ConvertCandidate_Category" xml:space="preserve">
+    <value>Konvertierung</value>
+  </data>
+  <data name="ConvertCandidate_InputPathDisplayName" xml:space="preserve">
+    <value>Eingabedatei</value>
+  </data>
+  <data name="ConvertCandidate_OutputPathDesc" xml:space="preserve">
+    <value>Der Pfad der Ausgabedatei. Wenn Sie für eine Station konvertieren, ist dies in der Inszenierung auf den Ordner der Station eingestellt und kann nicht geändert werden.</value>
+  </data>
+  <data name="ConvertCandidate_OutputPathDisplayName" xml:space="preserve">
+    <value>Ausgabedatei</value>
+  </data>
+  <data name="ConvertCandidate_TargetFormatDesc" xml:space="preserve">
+    <value>Das Zielformat für die Konvertierung.</value>
+  </data>
+  <data name="ConvertCandidate_TargetFormatDisplayName" xml:space="preserve">
+    <value>Zielformat</value>
   </data>
 </root>

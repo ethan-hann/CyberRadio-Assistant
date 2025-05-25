@@ -1390,9 +1390,6 @@ Un ringraziamento speciale a DemonseedXP (https://next.nexusmods.com/profile/dem
   <data name="StartConversion" xml:space="preserve">
     <value>Inizia la conversione</value>
   </data>
-  <data name="ConversionOngoing" xml:space="preserve">
-    <value>I file sono attualmente in fase di convertito. Per favore, aspetta fino a quando non hanno finito.</value>
-  </data>
   <data name="Converting" xml:space="preserve">
     <value>File di conversione</value>
   </data>
@@ -1427,5 +1424,59 @@ Ti piacerebbe convertirli adesso?</value>
   </data>
   <data name="AudioConvert_RemoveSelectedFiles" xml:space="preserve">
     <value>Rimuovere i file selezionati</value>
+  </data>
+  <data name="ConversionOngoing" xml:space="preserve">
+    <value>I file sono attualmente in fase di convertito. Si prega di attendere fino al termine o fai clic su `Annulla`.</value>
+  </data>
+  <data name="AudioConvert_CheckAllHelp" xml:space="preserve">
+    <value>Abilita tutti gli elementi in coda per la conversione.</value>
+  </data>
+  <data name="AudioConvert_UncheckAllHelp" xml:space="preserve">
+    <value>Disabilita tutti gli articoli in coda.</value>
+  </data>
+  <data name="AudioConvert_ListBoxHelp" xml:space="preserve">
+    <value>Mostra la coda di conversione attuale. Controlla la casella per abilitare la conversione.</value>
+  </data>
+  <data name="AudioConvert_ConvertingLabelHelp" xml:space="preserve">
+    <value>Mostra il numero totale di file convertiti / file in convertire.</value>
+  </data>
+  <data name="AudioConvert_PropertyGridHelp" xml:space="preserve">
+    <value>Mostra le proprietà del candidato selezionato.</value>
+  </data>
+  <data name="AudioConvert_ConversionLogHelp" xml:space="preserve">
+    <value>Mostra lo stato corrente della conversione da FFMPEG.</value>
+  </data>
+  <data name="AudioConvert_AddFilesHelp" xml:space="preserve">
+    <value>Aggiungi file aggiuntivi per convertire in coda.</value>
+  </data>
+  <data name="AudioConvert_RemoveFilesHelp" xml:space="preserve">
+    <value>Rimuovere i file attualmente controllati dalla coda.</value>
+  </data>
+  <data name="AudioConvert_StartConversionHelp" xml:space="preserve">
+    <value>Avvia la conversione in base agli elementi controllati in coda.</value>
+  </data>
+  <data name="AudioConvert_CancelHelp" xml:space="preserve">
+    <value>Annulla la conversione attualmente in esecuzione.</value>
+  </data>
+  <data name="ConvertCandidate_InputPathDesc" xml:space="preserve">
+    <value>Il percorso del file di input.</value>
+  </data>
+  <data name="ConvertCandidate_Category" xml:space="preserve">
+    <value>Conversione</value>
+  </data>
+  <data name="ConvertCandidate_InputPathDisplayName" xml:space="preserve">
+    <value>File di input</value>
+  </data>
+  <data name="ConvertCandidate_OutputPathDesc" xml:space="preserve">
+    <value>Il percorso del file di output. Se si converte per una stazione, questo è impostato sulla cartella della stazione in messa in scena e non può essere modificato.</value>
+  </data>
+  <data name="ConvertCandidate_OutputPathDisplayName" xml:space="preserve">
+    <value>File di output</value>
+  </data>
+  <data name="ConvertCandidate_TargetFormatDesc" xml:space="preserve">
+    <value>Il formato target per la conversione.</value>
+  </data>
+  <data name="ConvertCandidate_TargetFormatDisplayName" xml:space="preserve">
+    <value>Formato target</value>
   </data>
 </root>

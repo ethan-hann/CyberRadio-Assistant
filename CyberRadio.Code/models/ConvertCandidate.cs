@@ -16,11 +16,13 @@
 
 using System.ComponentModel;
 using AetherUtils.Core.Extensions;
+using RadioExt_Helper.utility.localization;
 
 namespace RadioExt_Helper.models;
 
 /// <summary>
 /// Represents one file-to-file conversion job. Specifically designed to be shown in a property grid.
+/// Localizes the property descriptions and display names using a custom type description provider.
 /// </summary>
 public class ConvertCandidate
 {
@@ -45,9 +47,9 @@ public class ConvertCandidate
     /// <summary>
     /// The source file to convert.
     /// </summary>
-    [Description("The path of the input file.")]
-    [DisplayName("Input File")]
-    [Category("General")]
+    [Description("ConvertCandidate_InputPathDesc")]
+    [DisplayName("ConvertCandidate_InputPathDisplayName")]
+    [Category("ConvertCandidate_Category")]
     [Browsable(true)]
     [ReadOnly(true)]
     public string InputPath { get; }
@@ -55,9 +57,9 @@ public class ConvertCandidate
     /// <summary>
     /// The target format to convert to.
     /// </summary>
-    [Description("The target format for the conversion.")]
-    [DisplayName("Target Format")]
-    [Category("General")]
+    [Description("ConvertCandidate_TargetFormatDesc")]
+    [DisplayName("ConvertCandidate_TargetFormatDisplayName")]
+    [Category("ConvertCandidate_Category")]
     [Browsable(true)]
     [ReadOnly(false)]
     public ValidAudioFiles TargetFormat
@@ -75,13 +77,20 @@ public class ConvertCandidate
     /// <summary>
     /// The output path where the converted file will be saved. Computed from the input path and target format.
     /// </summary>
-    [Description(
-        "The path of the output file. If converting for a station, this is set to the station's folder in staging and cannot be changed.")]
-    [DisplayName("Output File")]
-    [Category("General")]
+    [Description("ConvertCandidate_OutputPathDesc")]
+    [DisplayName("ConvertCandidate_OutputPathDisplayName")]
+    [Category("ConvertCandidate_Category")]
     [Browsable(true)]
     [ReadOnly(true)]
     public string OutputPath { get; set; }
+
+    /// <summary>
+    /// Static constructor to register the type with a localized type description provider.
+    /// </summary>
+    static ConvertCandidate()
+    {
+        TypeDescriptor.AddProvider(new LocalizedTypeDescriptionProvider(typeof(ConvertCandidate)), typeof(ConvertCandidate));
+    }
 
     /// <inheritdoc />
     public override string ToString()

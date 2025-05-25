@@ -550,7 +550,7 @@ public partial class AudioConverterForm : Form
     {
         if (!_isConverting) return;
 
-        MessageBox.Show(Strings.ConversionOngoing, Strings.Error, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        MessageBox.Show(Strings.ConversionOngoing, Strings.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
         e.Cancel = true;
     }
 
@@ -609,5 +609,25 @@ public partial class AudioConverterForm : Form
     {
         //Ensure the property grid is updated with the selected item when a value is changed
         pgConvertCandidate.SelectedObject = lbCandidates.SelectedItem;
+    }
+
+    private void ControlMouseEnter(object sender, EventArgs e)
+    {
+        if (_isConverting) return;
+
+        this.SafeInvoke(() =>
+        {
+            if (sender is not Control hoveredControl) return;
+
+            var helpKey = hoveredControl.Tag as string ?? string.Empty;
+            if (!string.IsNullOrEmpty(helpKey))
+                lblStatus.Text = GlobalData.Strings.GetString(helpKey);
+        });
+    }
+
+    private void ControlMouseLeave(object sender, EventArgs e)
+    {
+        if (!_isConverting)
+            this.SafeInvoke(() => lblStatus.Text = Strings.Ready);
     }
 }
