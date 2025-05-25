@@ -29,6 +29,15 @@ public class ConvertCandidate
     private ValidAudioFiles _targetFormat;
 
     /// <summary>
+    /// Static constructor to register the type with a localized type description provider.
+    /// </summary>
+    static ConvertCandidate()
+    {
+        TypeDescriptor.AddProvider(new LocalizedTypeDescriptionProvider(typeof(ConvertCandidate)),
+            typeof(ConvertCandidate));
+    }
+
+    /// <summary>
     /// Creates a new conversion candidate.
     /// </summary>
     /// <param name="inputPath">The source file to convert.</param>
@@ -83,14 +92,6 @@ public class ConvertCandidate
     [Browsable(true)]
     [ReadOnly(true)]
     public string OutputPath { get; set; }
-
-    /// <summary>
-    /// Static constructor to register the type with a localized type description provider.
-    /// </summary>
-    static ConvertCandidate()
-    {
-        TypeDescriptor.AddProvider(new LocalizedTypeDescriptionProvider(typeof(ConvertCandidate)), typeof(ConvertCandidate));
-    }
 
     /// <inheritdoc />
     public override string ToString()
