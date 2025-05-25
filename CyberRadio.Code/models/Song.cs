@@ -104,7 +104,6 @@ public sealed class Song : IEquatable<Song>, ICloneable
         //Parse duration
         if (TimeSpan.TryParse(file.Tag.Length, CultureInfo.InvariantCulture,
                 out var duration))
-        {
             return new Song
             {
                 FilePath = filePath,
@@ -113,7 +112,6 @@ public sealed class Song : IEquatable<Song>, ICloneable
                 FileSize = (ulong)new FileInfo(filePath).Length,
                 Duration = duration
             };
-        }
 
         return new Song
         {

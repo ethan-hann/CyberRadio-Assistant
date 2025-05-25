@@ -76,7 +76,8 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
         lblStationSizeLabel.Text = Strings.TotalStationSizeLabel;
 
         fdlgOpenSongs.Title = Strings.AddSongsFileBrowserTitle;
-        fdlgOpenSongs.Filter = @"Audio/Video Files|*.mp3;*.wav;*.ogg;*.flac;*.mp2;*.wax;*.wma;*.aac;*.m4a;*.aiff;*.alac;*.opus;*.amr;*.ac3;*.mp4;*.m4v;*.mov;*.avi;*.wmv;*.flv;*.mkv;*.webm;*.mpeg;*.mpg;*.3gp;*.3g2;*.ts;*.mts;*.m2ts";
+        fdlgOpenSongs.Filter =
+            @"Audio/Video Files|*.mp3;*.wav;*.ogg;*.flac;*.mp2;*.wax;*.wma;*.aac;*.m4a;*.aiff;*.alac;*.opus;*.amr;*.ac3;*.mp4;*.m4v;*.mov;*.avi;*.wmv;*.flv;*.mkv;*.webm;*.mpeg;*.mpg;*.3gp;*.3g2;*.ts;*.mts;*.m2ts";
         tabSongs.Text = Strings.SongListing;
         tabSongOrder.Text = Strings.SongOrder;
 
@@ -206,16 +207,16 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
         List<string> alreadyInStation = [];
         needConversion.AddRange(fdlgOpenSongs.FileNames.Where(AudioConverter.NeedsConversion));
         noConversionNeeded.AddRange(fdlgOpenSongs.FileNames.Where(f => !needConversion.Contains(f)));
-        
+
         //Check if the proposed file is already in the station
         alreadyInStation.AddRange(from file in needConversion
             let proposedFile = Path.GetFileNameWithoutExtension(file)
-            where Station.TrackedObject.Songs.Any(s => s.FilePath.Contains(proposedFile)) 
+            where Station.TrackedObject.Songs.Any(s => s.FilePath.Contains(proposedFile))
             select file);
 
         // Remove files that are already in the station from needConversion
         needConversion.RemoveAll(f => alreadyInStation.Contains(f));
-        
+
         // Add songs that don't require conversion first
         foreach (var song in noConversionNeeded.Select(Song.FromFile).OfType<Song>().Where(CanSongBeAdded))
             Station.TrackedObject.Songs.Add(song);
@@ -223,7 +224,7 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
         if (needConversion.Count > 0)
         {
             //Ask the user if they want to convert the files
-            var result = MessageBox.Show(this, 
+            var result = MessageBox.Show(this,
                 string.Format(Strings.AudioConverterPrompt, needConversion.Count), Strings.Confirm,
                 MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (result == DialogResult.Yes)
@@ -323,7 +324,8 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
         // Reset the file browser to its original state
         fdlgOpenSongs.Multiselect = true;
         fdlgOpenSongs.Title = Strings.AddSongsFileBrowserTitle;
-        fdlgOpenSongs.Filter = @"Audio/Video Files|*.mp3;*.wav;*.ogg;*.flac;*.mp2;*.wax;*.wma;*.aac;*.m4a;*.aiff;*.alac;*.opus;*.amr;*.ac3;*.mp4;*.m4v;*.mov;*.avi;*.wmv;*.flv;*.mkv;*.webm;*.mpeg;*.mpg;*.3gp;*.3g2;*.ts;*.mts;*.m2ts";
+        fdlgOpenSongs.Filter =
+            @"Audio/Video Files|*.mp3;*.wav;*.ogg;*.flac;*.mp2;*.wax;*.wma;*.aac;*.m4a;*.aiff;*.alac;*.opus;*.amr;*.ac3;*.mp4;*.m4v;*.mov;*.avi;*.wmv;*.flv;*.mkv;*.webm;*.mpeg;*.mpg;*.3gp;*.3g2;*.ts;*.mts;*.m2ts";
         fdlgOpenSongs.FileName = string.Empty;
     }
 
@@ -469,7 +471,8 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
         }
         catch (Exception ex)
         {
-            AuLogger.GetCurrentLogger<CustomMusicCtl>("LVSongs_MouseDoubleClick").Error(ex, "Error opening song file in Windows Explorer.");
+            AuLogger.GetCurrentLogger<CustomMusicCtl>("LVSongs_MouseDoubleClick")
+                .Error(ex, "Error opening song file in Windows Explorer.");
         }
     }
 
