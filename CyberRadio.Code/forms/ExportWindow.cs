@@ -711,6 +711,14 @@ public partial class ExportWindow : Form
                 AuLogger.GetCurrentLogger<ExportWindow>("CopyIconsToGame")
                     .Warn("The icons folder in the staging directory is not protected; it should be at this point!");
 
+            // Ensure the game directory exists
+            if (!Directory.Exists(looseArchiveGamePath))
+            {
+                Directory.CreateDirectory(looseArchiveGamePath);
+                AuLogger.GetCurrentLogger<ExportWindow>("CopyIconsToGame")
+                    .Info($"Modded archive directory did not exists. It was created: {looseArchiveGamePath}");
+            }
+
             //Get the active icon for each station based on the icons list
             foreach (var station
                      in activeStations.Where(station => station.TrackedObject.CustomIcon.UseCustom))
