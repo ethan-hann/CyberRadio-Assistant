@@ -223,9 +223,11 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
 
         if (needConversion.Count > 0)
         {
+            var pluralPrompt = needConversion.Count > 1;
+
             //Ask the user if they want to convert the files
             var result = MessageBox.Show(this,
-                string.Format(Strings.AudioConverterPrompt, needConversion.Count), Strings.Confirm,
+                string.Format(pluralPrompt ? Strings.AudioConverterPrompt : Strings.AudioConverterPrompt_Single, needConversion.Count), Strings.Confirm,
                 MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (result == DialogResult.Yes)
             {

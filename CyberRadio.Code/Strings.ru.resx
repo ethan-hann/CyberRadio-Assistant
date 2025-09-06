@@ -1415,10 +1415,6 @@
   <data name="AudioConverterMenuOption" xml:space="preserve">
     <value>Аудио преобразователь</value>
   </data>
-  <data name="AudioConverterPrompt" xml:space="preserve">
-    <value>Существуют {0} файлы (ы), которые необходимо преобразовать для работы с Radioxt.
-Хотели бы вы сейчас преобразовать их?</value>
-  </data>
   <data name="AudioConvert_ConfirmRemoveFiles" xml:space="preserve">
     <value>Вы уверены, что хотите удалить файлы {0} из очереди?</value>
   </data>
@@ -1478,5 +1474,13 @@
   </data>
   <data name="ConvertCandidate_TargetFormatDisplayName" xml:space="preserve">
     <value>Целевой формат</value>
+  </data>
+  <data name="AudioConverterPrompt_Single" xml:space="preserve">
+    <value>Существует {0} файл, который необходимо преобразовать, чтобы работать с Radioxt.
+Хотите конвертировать его сейчас?</value>
+  </data>
+  <data name="AudioConverterPrompt" xml:space="preserve">
+    <value>Существуют файлы {0}, которые необходимо преобразовать, чтобы работать с Radioxt.
+Хотели бы вы сейчас преобразовать их?</value>
   </data>
 </root>

@@ -368,12 +368,22 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to There are {0} file(s) that need to be converted in order to work with radioExt.
+        ///   Looks up a localized string similar to There are {0} files that need to be converted in order to work with radioExt.
         ///Would you like to convert them now?.
         /// </summary>
         internal static string AudioConverterPrompt {
             get {
                 return ResourceManager.GetString("AudioConverterPrompt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There is {0} file that needs to be converted in order to work with radioExt.
+        ///Would you like to convert it now?.
+        /// </summary>
+        internal static string AudioConverterPrompt_Single {
+            get {
+                return ResourceManager.GetString("AudioConverterPrompt_Single", resourceCulture);
             }
         }
         

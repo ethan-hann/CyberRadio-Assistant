@@ -1415,10 +1415,6 @@
   <data name="AudioConverterMenuOption" xml:space="preserve">
     <value>音频转换器</value>
   </data>
-  <data name="AudioConverterPrompt" xml:space="preserve">
-    <value>有{0}文件需要转换以与Radioext一起使用。
-您现在想转换它们吗？</value>
-  </data>
   <data name="AudioConvert_ConfirmRemoveFiles" xml:space="preserve">
     <value>您确定要从队列中删除{0}文件吗？</value>
   </data>
@@ -1478,5 +1474,13 @@
   </data>
   <data name="ConvertCandidate_TargetFormatDisplayName" xml:space="preserve">
     <value>目标格式</value>
+  </data>
+  <data name="AudioConverterPrompt_Single" xml:space="preserve">
+    <value>有{0}文件需要转换以与RadioExt合作。
+您想现在转换吗？</value>
+  </data>
+  <data name="AudioConverterPrompt" xml:space="preserve">
+    <value>为了使用RadioExt，需要转换{0}文件。
+您现在想转换它们吗？</value>
   </data>
 </root>

@@ -1415,10 +1415,6 @@ Seleziona almeno un file e riprova.</value>
   <data name="AudioConverterMenuOption" xml:space="preserve">
     <value>Convertitore audio</value>
   </data>
-  <data name="AudioConverterPrompt" xml:space="preserve">
-    <value>Ci sono {0} file che devono essere convertiti per lavorare con radioext.
-Ti piacerebbe convertirli adesso?</value>
-  </data>
   <data name="AudioConvert_ConfirmRemoveFiles" xml:space="preserve">
     <value>Sei sicuro di voler rimuovere i file {0} dalla coda?</value>
   </data>
@@ -1478,5 +1474,13 @@ Ti piacerebbe convertirli adesso?</value>
   </data>
   <data name="ConvertCandidate_TargetFormatDisplayName" xml:space="preserve">
     <value>Formato target</value>
+  </data>
+  <data name="AudioConverterPrompt_Single" xml:space="preserve">
+    <value>Esiste un file {0} che deve essere convertito per lavorare con radioext.
+Ti piacerebbe convertirlo adesso?</value>
+  </data>
+  <data name="AudioConverterPrompt" xml:space="preserve">
+    <value>Esistono file {0} che devono essere convertiti per lavorare con RadioExt.
+Ti piacerebbe convertirli adesso?</value>
   </data>
 </root>

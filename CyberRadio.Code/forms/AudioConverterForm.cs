@@ -301,6 +301,14 @@ public partial class AudioConverterForm : Form
     {
         if (lbCandidates.CheckedItems.Count <= 0) return;
 
+        //Make sure we aren't converting
+        if (_isConverting)
+        {
+            MessageBox.Show(Strings.ConversionOngoing, Strings.Error,
+                MessageBoxButtons.OK, MessageBoxIcon.Error);
+            return;
+        }
+
         // Confirm with user
         var result = MessageBox.Show(
             string.Format(Strings.AudioConvert_ConfirmRemoveFiles, lbCandidates.CheckedItems.Count),
@@ -355,6 +363,7 @@ public partial class AudioConverterForm : Form
             btnStartConversion.Enabled = false;
             btnCheckAll.Enabled = false;
             btnUncheckAll.Enabled = false;
+            btnRemoveFiles.Enabled = false;
             btnAddFiles.Enabled = false;
             btnCancel.Enabled = true;
             pgConvertCandidate.Enabled = false;
