@@ -223,6 +223,17 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
 
         if (needConversion.Count > 0)
         {
+            //Check if the station has been exported to staging yet. If not, we can't convert files.
+            var stagingFolder = GlobalData.ConfigManager.Get("stagingPath") as string ?? string.Empty;
+            var proposedOutputFolder = Path.Combine(stagingFolder, Station.TrackedObject.MetaData.DisplayName);
+
+            if (!FileHelper.DoesFolderExist(proposedOutputFolder))
+            {
+                MessageBox.Show(this, Strings.AudioConvert_NoStagingFolder, Strings.Error, MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                return;
+            }
+
             var pluralPrompt = needConversion.Count > 1;
 
             //Ask the user if they want to convert the files

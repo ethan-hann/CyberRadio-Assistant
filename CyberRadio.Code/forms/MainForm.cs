@@ -1296,6 +1296,6 @@ public sealed partial class MainForm : Form
     {
         //Open the Audio Converter form with no input files and no station.
         var audioConverterForm = new AudioConverterForm([], null);
-        audioConverterForm.ShowDialog(this);
+        audioConverterForm.Show(this);
     }
 }

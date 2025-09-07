@@ -1483,4 +1483,23 @@ Möchten Sie es jetzt konvertieren?</value>
     <value>Es gibt {0} -Dateien, die konvertiert werden müssen, um mit Radioext zu arbeiten.
 Möchten Sie sie jetzt konvertieren?</value>
   </data>
+  <data name="AudioConvert_Error" xml:space="preserve">
+    <value>Bei der Konvertierung trat ein Fehler auf. Überprüfen Sie das Protokoll für weitere Details.</value>
+  </data>
+  <data name="AudioConvert_ConfirmStartConversion" xml:space="preserve">
+    <value>Die Konvertierung kann eine Weile dauern, abhängig von der Größe und der Anzahl der Dateien, die konvertiert werden müssen.
+Sie können jederzeit abbrechen, indem Sie auf "Abbrechen" klicken. Konvertierung beginnen?</value>
+  </data>
+  <data name="AudioConvert_NoStagingFolder" xml:space="preserve">
+    <value>Die aktuelle Station wurde noch nicht in die Inszenierung exportiert.
+Audiodateien können nicht konvertiert werden, bis der Senderordner erstellt wurde. Exportieren Sie in die Inszenierung und versuchen Sie es erneut.</value>
+  </data>
+  <data name="IconEditor_ImportIcon_Confirm_Message" xml:space="preserve">
+    <value>Das Erstellen eines benutzerdefinierten Symbols kann abhängig vom verwendeten Bild eine Weile dauern.
+Bitte sei geduldig. Sie können jederzeit mit der Schaltfläche "Action abbrechen" abbrechen. Import beginnen?</value>
+  </data>
+  <data name="IconEditor_ExtractIcon_Confirm_Message" xml:space="preserve">
+    <value>Das Extrahieren eines Symbols aus einer .archive -Datei kann eine Weile dauern.
+Bitte sei geduldig. Sie können jederzeit mit der Schaltfläche "Action abbrechen" abbrechen. Extraktion beginnen?</value>
+  </data>
 </root>

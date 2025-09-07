@@ -360,6 +360,11 @@ public partial class AudioConverterForm : Form
                 return;
             }
 
+            // Confirm with user that conversion can take a while
+            var confirmResult = MessageBox.Show(Strings.AudioConvert_ConfirmStartConversion,
+                Strings.Confirm, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (confirmResult != DialogResult.Yes) return;
+
             btnStartConversion.Enabled = false;
             btnCheckAll.Enabled = false;
             btnUncheckAll.Enabled = false;
@@ -382,7 +387,6 @@ public partial class AudioConverterForm : Form
             {
                 foreach (var item in _checkedItems)
                 {
-                    // respect the “stop now” request
                     if (_cts.IsCancellationRequested)
                         break;
 
@@ -411,17 +415,28 @@ public partial class AudioConverterForm : Form
             }
             catch (Exception ex)
             {
+                MessageBox.Show(Strings.AudioConvert_Error, Strings.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+
                 AuLogger.GetCurrentLogger<AudioConverterForm>("btnStartConversion_Click")
                     .Error(ex, "An error occurred during conversion.");
             }
             finally
             {
+                AuLogger.GetCurrentLogger<AudioConverterForm>("btnStartConversion_Click")
+                    .Info("Conversion Log:\n" + rtbConversionLog.Text);
+
+                AuLogger.GetCurrentLogger<AudioConverterForm>("btnStartConversion_Click")
+                    .Info($"Conversion process completed. Converted {_conversionCounter} of {_totalToConvert} files.");
+
                 RestoreUi();
                 InvokeConversionComplete();
             }
         }
         catch (Exception ex)
         {
+            //Show message box
+            MessageBox.Show(Strings.AudioConvert_Error, Strings.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+
             AuLogger.GetCurrentLogger<AudioConverterForm>("btnStartConversion_Click")
                 .Error(ex, "An error occurred during conversion.");
         }

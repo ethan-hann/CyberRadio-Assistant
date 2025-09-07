@@ -1483,4 +1483,23 @@
     <value>为了使用RadioExt，需要转换{0}文件。
 您现在想转换它们吗？</value>
   </data>
+  <data name="AudioConvert_Error" xml:space="preserve">
+    <value>转换时发生错误。检查日志以获取更多详细信息。</value>
+  </data>
+  <data name="AudioConvert_ConfirmStartConversion" xml:space="preserve">
+    <value>转换可能需要一段时间，具体取决于要转换的文件的大小和数量。
+您可以随时单击“取消”来取消。开始转换？</value>
+  </data>
+  <data name="AudioConvert_NoStagingFolder" xml:space="preserve">
+    <value>当前的电台尚未出口到舞台上。
+在创建站文件夹之前，无法转换音频文件。导出到分期，然后重试。</value>
+  </data>
+  <data name="IconEditor_ImportIcon_Confirm_Message" xml:space="preserve">
+    <value>根据所使用的图像，创建自定义图标可能需要一段时间。
+请耐心等待。您可以随时使用“取消操作”按钮取消。开始导入？</value>
+  </data>
+  <data name="IconEditor_ExtractIcon_Confirm_Message" xml:space="preserve">
+    <value>从.archive文件中提取图标可能需要一段时间。
+请耐心等待。您可以随时使用“取消操作”按钮取消。开始提取？</value>
+  </data>
 </root>

@@ -287,6 +287,16 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Conversion can take a while depending on the size and amount of files to convert.
+        ///You can cancel at any time by clicking &quot;Cancel&quot;. Start conversion?.
+        /// </summary>
+        internal static string AudioConvert_ConfirmStartConversion {
+            get {
+                return ResourceManager.GetString("AudioConvert_ConfirmStartConversion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Shows the current status of the conversion from ffmpeg..
         /// </summary>
         internal static string AudioConvert_ConversionLogHelp {
@@ -305,11 +315,30 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to An error occurred while converting. Check the log for more details..
+        /// </summary>
+        internal static string AudioConvert_Error {
+            get {
+                return ResourceManager.GetString("AudioConvert_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Shows the current conversion queue. Check the box to enable for conversion..
         /// </summary>
         internal static string AudioConvert_ListBoxHelp {
             get {
                 return ResourceManager.GetString("AudioConvert_ListBoxHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The current station hasn&apos;t been exported to staging yet.
+        ///Can&apos;t convert audio files until station folder is created. Export to staging and try again..
+        /// </summary>
+        internal static string AudioConvert_NoStagingFolder {
+            get {
+                return ResourceManager.GetString("AudioConvert_NoStagingFolder", resourceCulture);
             }
         }
         
@@ -1391,6 +1420,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Extracting icon....
+        /// </summary>
+        internal static string ExtractingIcon {
+            get {
+                return ResourceManager.GetString("ExtractingIcon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Extreme.
         /// </summary>
         internal static string Extreme {
@@ -1760,6 +1798,16 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Extracting an icon from a .archive file can take a while.
+        ///Please be patient. You can cancel at any time using the &quot;Cancel Action&quot; button. Start extraction?.
+        /// </summary>
+        internal static string IconEditor_ExtractIcon_Confirm_Message {
+            get {
+                return ResourceManager.GetString("IconEditor_ExtractIcon_Confirm_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This icon has already been created and marked as read-only. Please create a new icon if you want a different image..
         /// </summary>
         internal static string IconEditor_IconAlreadyCreated_DragDrop {
@@ -1828,6 +1876,16 @@ namespace RadioExt_Helper {
         internal static string IconEditor_ImportIcon {
             get {
                 return ResourceManager.GetString("IconEditor_ImportIcon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Creating a custom icon can take a while depending on the image used.
+        ///Please be patient. You can cancel at any time using the &quot;Cancel Action&quot; button. Start import?.
+        /// </summary>
+        internal static string IconEditor_ImportIcon_Confirm_Message {
+            get {
+                return ResourceManager.GetString("IconEditor_ImportIcon_Confirm_Message", resourceCulture);
             }
         }
         
@@ -2225,6 +2283,15 @@ namespace RadioExt_Helper {
         internal static string ImportFromZipFile {
             get {
                 return ResourceManager.GetString("ImportFromZipFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Importing icon....
+        /// </summary>
+        internal static string ImportingIcon {
+            get {
+                return ResourceManager.GetString("ImportingIcon", resourceCulture);
             }
         }
         

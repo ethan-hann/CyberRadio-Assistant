@@ -34,6 +34,7 @@ public sealed partial class IconEditor : UserControl, IEditor
     private CancellationTokenSource _cancellationTokenSource;
 
     private string _iconPath = string.Empty;
+    private string? _lastStatusText;
     private bool _isExtracting;
 
     private bool _isImporting;
@@ -316,10 +317,18 @@ public sealed partial class IconEditor : UserControl, IEditor
     {
         if (_isImporting || _isExtracting) return;
 
+        //Confirm with user that icon import can take a while.
+        var result = MessageBox.Show(Strings.IconEditor_ImportIcon_Confirm_Message,
+            Strings.Confirm, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+        if (result != DialogResult.Yes) return;
+
         pgProgress.Visible = true;
         _isImporting = true;
         btnImportIcon.Enabled = false;
         btnCancelImport.Enabled = true;
+
+        lblStatus.Text = Strings.ImportingIcon;
 
         const int maxValue = 250;
         var progress = new Progress<int>(value =>
@@ -384,11 +393,19 @@ public sealed partial class IconEditor : UserControl, IEditor
     {
         if (_isImporting || _isExtracting) return;
 
+        //Confirm with user that icon extraction can take a while.
+        var result = MessageBox.Show(Strings.IconEditor_ExtractIcon_Confirm_Message,
+            Strings.Confirm, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+        if (result != DialogResult.Yes) return;
+
         pgProgress.Visible = true;
         _isExtracting = true;
         btnImportIcon.Enabled = false;
         btnStartExtract.Enabled = false;
         btnCancelImport.Enabled = true;
+
+        lblStatus.Text = Strings.ExtractingIcon;
 
         const int maxValue = 250;
         var progress = new Progress<int>(value =>
@@ -626,6 +643,10 @@ public sealed partial class IconEditor : UserControl, IEditor
                 ? !Path.Exists(Icon.TrackedObject.ImagePath)
                 : !Path.Exists(Icon.TrackedObject.ArchivePath);
 
+            //If we are currently importing, we want to keep the import button disabled to prevent multiple imports at once.
+            if (_isImporting)
+                btnImportIcon.Enabled = false;
+
             btnCancelImport.Enabled = _isImporting || _isExtracting;
             picStationIcon.AllowDrop = false;
 
@@ -638,7 +659,9 @@ public sealed partial class IconEditor : UserControl, IEditor
         this.SafeInvoke(() =>
         {
             txtAtlasName.ReadOnly = false;
-            btnImportIcon.Enabled = true;
+            btnImportIcon.Enabled = Icon.TrackedObject.IsFromArchive
+                ? !Path.Exists(Icon.TrackedObject.ImagePath)
+                : !Path.Exists(Icon.TrackedObject.ArchivePath);
             btnCancelImport.Enabled = _isImporting || _isExtracting;
             picStationIcon.AllowDrop = true;
 
@@ -708,42 +731,49 @@ public sealed partial class IconEditor : UserControl, IEditor
 
     private void lblIconName_MouseEnter(object sender, EventArgs e)
     {
-        lblStatus.Text = Strings.IconEditor_IconName_Hint;
+        if (!_isImporting)
+            lblStatus.Text = Strings.IconEditor_IconName_Hint;
     }
 
     private void lblAtlasName_MouseEnter(object sender, EventArgs e)
     {
-        lblStatus.Text = Strings.IconEditor_AtlasName_Hint;
+        if (!_isImporting)
+            lblStatus.Text = Strings.IconEditor_AtlasName_Hint;
     }
 
     private void lblSha256Hash_MouseEnter(object sender, EventArgs e)
     {
-        lblStatus.Text = Strings.IconEditor_Sha256Hash_Hint;
+        if (!_isImporting)
+            lblStatus.Text = Strings.IconEditor_Sha256Hash_Hint;
     }
 
     private void lblArchivePath_MouseEnter(object sender, EventArgs e)
     {
-        lblStatus.Text = Strings.IconEditor_ArchivePath_Hint;
+        if (!_isImporting)
+            lblStatus.Text = Strings.IconEditor_ArchivePath_Hint;
     }
 
     private void lblImagePath_MouseEnter(object sender, EventArgs e)
     {
-        lblStatus.Text = Strings.IconEditor_ImagePath_Hint;
+        if (!_isImporting)
+            lblStatus.Text = Strings.IconEditor_ImagePath_Hint;
     }
 
     private void lblIconPath_MouseEnter(object sender, EventArgs e)
     {
-        lblStatus.Text = Strings.IconEditor_IconPath_Hint;
+        if (!_isImporting)
+            lblStatus.Text = Strings.IconEditor_IconPath_Hint;
     }
 
     private void lblIconPart_MouseEnter(object sender, EventArgs e)
     {
-        lblStatus.Text = Strings.IconEditor_IconPart_Hint;
+        if (!_isImporting)
+            lblStatus.Text = Strings.IconEditor_IconPart_Hint;
     }
 
     private void LblMouseLeave(object sender, EventArgs e)
     {
-        lblStatus.Text = Strings.Ready;
+        lblStatus.Text = !_isImporting ? Strings.Ready : _lastStatusText;
     }
 
     private void txtAtlasName_TextChanged(object sender, EventArgs e)
@@ -797,26 +827,31 @@ public sealed partial class IconEditor : UserControl, IEditor
 
     private void picStationIcon_MouseEnter(object sender, EventArgs e)
     {
-        lblStatus.Text = Strings.IconEditor_CustomIconPictureHelp;
+        if (!_isImporting)
+            lblStatus.Text = Strings.IconEditor_CustomIconPictureHelp;
     }
 
     private void btnImportIcon_MouseEnter(object sender, EventArgs e)
     {
-        lblStatus.Text = Strings.IconEditor_ImportIcon;
+        if (!_isImporting)
+            lblStatus.Text = Strings.IconEditor_ImportIcon;
     }
 
     private void btnStartExtract_MouseEnter(object sender, EventArgs e)
     {
-        lblStatus.Text = Strings.IconEditor_ExtractIcon;
+        if (!_isImporting)
+            lblStatus.Text = Strings.IconEditor_ExtractIcon;
     }
 
     private void btnCancelImport_MouseEnter(object sender, EventArgs e)
     {
+        _lastStatusText = lblStatus.Text;
         lblStatus.Text = Strings.IconEditor_CancelAction;
     }
 
     private void CopyBtnMouseEnter(object sender, EventArgs e)
     {
-        lblStatus.Text = Strings.IconEditor_CopyToClipboard;
+        if (!_isImporting)
+            lblStatus.Text = Strings.IconEditor_CopyToClipboard;
     }
 }

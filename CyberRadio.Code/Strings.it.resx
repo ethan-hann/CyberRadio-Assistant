@@ -1483,4 +1483,23 @@ Ti piacerebbe convertirlo adesso?</value>
     <value>Esistono file {0} che devono essere convertiti per lavorare con RadioExt.
 Ti piacerebbe convertirli adesso?</value>
   </data>
+  <data name="AudioConvert_Error" xml:space="preserve">
+    <value>Si è verificato un errore durante la conversione. Controlla il registro per maggiori dettagli.</value>
+  </data>
+  <data name="AudioConvert_ConfirmStartConversion" xml:space="preserve">
+    <value>La conversione può richiedere un po 'di tempo a seconda delle dimensioni e della quantità di file da convertire.
+È possibile annullare in qualsiasi momento facendo clic su "Annulla". Iniziare la conversione?</value>
+  </data>
+  <data name="AudioConvert_NoStagingFolder" xml:space="preserve">
+    <value>L'attuale stazione non è stata ancora esportata in messa in scena.
+Impossibile convertire i file audio fino a quando non viene creata la cartella della stazione. Esporta nella messa in scena e riprova.</value>
+  </data>
+  <data name="IconEditor_ImportIcon_Confirm_Message" xml:space="preserve">
+    <value>La creazione di un'icona personalizzata può richiedere un po 'di tempo a seconda dell'immagine utilizzata.
+Si prega di essere paziente. È possibile annullare in qualsiasi momento utilizzando il pulsante "Annulla Action". Iniziare l'importazione?</value>
+  </data>
+  <data name="IconEditor_ExtractIcon_Confirm_Message" xml:space="preserve">
+    <value>L'estrazione di un'icona da un file archivo può richiedere del tempo.
+Si prega di essere paziente. È possibile annullare in qualsiasi momento utilizzando il pulsante "Annulla Action". Iniziare l'estrazione?</value>
+  </data>
 </root>
