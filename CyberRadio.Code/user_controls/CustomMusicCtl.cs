@@ -17,6 +17,8 @@
 using System.Diagnostics;
 using AetherUtils.Core.Extensions;
 using AetherUtils.Core.Files;
+using AetherUtils.Core.Logging;
+using RadioExt_Helper.forms;
 using RadioExt_Helper.models;
 using RadioExt_Helper.Properties;
 using RadioExt_Helper.utility;
@@ -74,7 +76,8 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
         lblStationSizeLabel.Text = Strings.TotalStationSizeLabel;
 
         fdlgOpenSongs.Title = Strings.AddSongsFileBrowserTitle;
-        fdlgOpenSongs.Filter = Strings.AddSongsFileBrowserFilter + @"|*.mp3;*.wav;*.ogg;*.flac;*.mp2;*.wax;*.wma";
+        fdlgOpenSongs.Filter =
+            @"Audio/Video Files|*.mp3;*.wav;*.ogg;*.flac;*.mp2;*.wax;*.wma;*.aac;*.m4a;*.aiff;*.alac;*.opus;*.amr;*.ac3;*.mp4;*.m4v;*.mov;*.avi;*.wmv;*.flv;*.mkv;*.webm;*.mpeg;*.mpg;*.3gp;*.3g2;*.ts;*.mts;*.m2ts";
         tabSongs.Text = Strings.SongListing;
         tabSongOrder.Text = Strings.SongOrder;
 
@@ -195,14 +198,65 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
     {
         if (fdlgOpenSongs.ShowDialog() != DialogResult.OK) return;
 
-        foreach (var path in fdlgOpenSongs.FileNames)
-        {
-            var song = Song.FromFile(path);
-            if (song == null) continue;
+        var config = GlobalData.ConfigManager.GetConfig();
+        if (config == null) return;
 
-            if (!CanSongBeAdded(song)) continue;
+        // Check if the selected files are valid audio files
+        List<string> needConversion = [];
+        List<string> noConversionNeeded = [];
+        List<string> alreadyInStation = [];
+        needConversion.AddRange(fdlgOpenSongs.FileNames.Where(AudioConverter.NeedsConversion));
+        noConversionNeeded.AddRange(fdlgOpenSongs.FileNames.Where(f => !needConversion.Contains(f)));
+
+        //Check if the proposed file is already in the station
+        alreadyInStation.AddRange(from file in needConversion
+            let proposedFile = Path.GetFileNameWithoutExtension(file)
+            where Station.TrackedObject.Songs.Any(s => s.FilePath.Contains(proposedFile))
+            select file);
+
+        // Remove files that are already in the station from needConversion
+        needConversion.RemoveAll(f => alreadyInStation.Contains(f));
+
+        // Add songs that don't require conversion first
+        foreach (var song in noConversionNeeded.Select(Song.FromFile).OfType<Song>().Where(CanSongBeAdded))
             Station.TrackedObject.Songs.Add(song);
+
+        if (needConversion.Count > 0)
+        {
+            //Check if the station has been exported to staging yet. If not, we can't convert files.
+            var stagingFolder = GlobalData.ConfigManager.Get("stagingPath") as string ?? string.Empty;
+            var proposedOutputFolder = Path.Combine(stagingFolder, Station.TrackedObject.MetaData.DisplayName);
+
+            if (!FileHelper.DoesFolderExist(proposedOutputFolder))
+            {
+                MessageBox.Show(this, Strings.AudioConvert_NoStagingFolder, Strings.Error, MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                return;
+            }
+
+            var pluralPrompt = needConversion.Count > 1;
+
+            //Ask the user if they want to convert the files
+            var result = MessageBox.Show(this,
+                string.Format(pluralPrompt ? Strings.AudioConverterPrompt : Strings.AudioConverterPrompt_Single, needConversion.Count), Strings.Confirm,
+                MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (result == DialogResult.Yes)
+            {
+                // Show the audio converter form
+                var audioConverterForm = new AudioConverterForm(needConversion, Station);
+                audioConverterForm.ConversionCompleted += AudioConverterForm_ConversionCompleted;
+                audioConverterForm.ShowDialog(this);
+            }
         }
+
+        UpdateListsAndViews();
+        StationUpdated?.Invoke(this, EventArgs.Empty);
+    }
+
+    private void AudioConverterForm_ConversionCompleted(object? sender, List<string> e)
+    {
+        foreach (var song in e.Select(Song.FromFile).OfType<Song>().Where(CanSongBeAdded))
+            Station.TrackedObject.Songs.Add(song);
 
         UpdateListsAndViews();
         StationUpdated?.Invoke(this, EventArgs.Empty);
@@ -283,7 +337,8 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
         // Reset the file browser to its original state
         fdlgOpenSongs.Multiselect = true;
         fdlgOpenSongs.Title = Strings.AddSongsFileBrowserTitle;
-        fdlgOpenSongs.Filter = Strings.AddSongsFileBrowserFilter + @"|*.mp3;*.wav;*.ogg;*.flac;*.mp2;*.wax;*.wma";
+        fdlgOpenSongs.Filter =
+            @"Audio/Video Files|*.mp3;*.wav;*.ogg;*.flac;*.mp2;*.wax;*.wma;*.aac;*.m4a;*.aiff;*.alac;*.opus;*.amr;*.ac3;*.mp4;*.m4v;*.mov;*.avi;*.wmv;*.flv;*.mkv;*.webm;*.mpeg;*.mpg;*.3gp;*.3g2;*.ts;*.mts;*.m2ts";
         fdlgOpenSongs.FileName = string.Empty;
     }
 
@@ -422,8 +477,16 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
 
         if (lvSongs.SelectedItems[0].Tag is not Song song) return;
 
-        if (Directory.GetParent(song.FilePath) is { } parentDir)
-            Process.Start("explorer.exe", parentDir.FullName);
+        try
+        {
+            if (Directory.GetParent(song.FilePath) is { } parentDir)
+                Process.Start("explorer.exe", parentDir.FullName);
+        }
+        catch (Exception ex)
+        {
+            AuLogger.GetCurrentLogger<CustomMusicCtl>("LVSongs_MouseDoubleClick")
+                .Error(ex, "Error opening song file in Windows Explorer.");
+        }
     }
 
     private void btnAddSongs_MouseEnter(object sender, EventArgs e)

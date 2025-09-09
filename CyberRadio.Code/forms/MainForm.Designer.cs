@@ -58,6 +58,7 @@ namespace RadioExt_Helper.forms
             downloadRadioModsToolStripMenuItem = new ToolStripMenuItem();
             toolsToolStripMenuItem = new ToolStripMenuItem();
             iconGeneratorToolStripMenuItem = new ToolStripMenuItem();
+            audioConverterToolStripMenuItem = new ToolStripMenuItem();
             helpToolStripMenuItem = new ToolStripMenuItem();
             howToUseToolStripMenuItem = new ToolStripMenuItem();
             radioExtOnNexusModsToolStripMenuItem = new ToolStripMenuItem();
@@ -295,7 +296,7 @@ namespace RadioExt_Helper.forms
             // 
             // toolsToolStripMenuItem
             // 
-            toolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { iconGeneratorToolStripMenuItem });
+            toolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { iconGeneratorToolStripMenuItem, audioConverterToolStripMenuItem });
             toolsToolStripMenuItem.Image = Properties.Resources.tools_16x16;
             toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             toolsToolStripMenuItem.Size = new Size(63, 20);
@@ -306,9 +307,18 @@ namespace RadioExt_Helper.forms
             iconGeneratorToolStripMenuItem.Image = Properties.Resources.magic_wand_16x16;
             iconGeneratorToolStripMenuItem.Name = "iconGeneratorToolStripMenuItem";
             iconGeneratorToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.I;
-            iconGeneratorToolStripMenuItem.Size = new Size(231, 22);
+            iconGeneratorToolStripMenuItem.Size = new Size(234, 22);
             iconGeneratorToolStripMenuItem.Text = "Station Icon Manager";
             iconGeneratorToolStripMenuItem.Click += IconGeneratorToolStripMenuItem_Click;
+            // 
+            // audioConverterToolStripMenuItem
+            // 
+            audioConverterToolStripMenuItem.Image = Properties.Resources.sound_waves__16x16;
+            audioConverterToolStripMenuItem.Name = "audioConverterToolStripMenuItem";
+            audioConverterToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Alt | Keys.A;
+            audioConverterToolStripMenuItem.Size = new Size(234, 22);
+            audioConverterToolStripMenuItem.Text = "Audio Converter";
+            audioConverterToolStripMenuItem.Click += audioConverterToolStripMenuItem_Click;
             // 
             // helpToolStripMenuItem
             // 
@@ -796,5 +806,6 @@ namespace RadioExt_Helper.forms
         private ContextMenuStrip cmsNewStation;
         private ToolStripMenuItem fromzipFileToolStripMenuItem;
         private TextBox txtStationFilter;
+        private ToolStripMenuItem audioConverterToolStripMenuItem;
     }
 }

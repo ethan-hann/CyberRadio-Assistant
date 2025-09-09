@@ -1366,4 +1366,140 @@ Asegúrese de crear una copia de seguridad de sus estaciones antes de borrar los
     <value>¡Un agradecimiento especial a JustarandomGuytheinternet (https://github.com/justarandomguyintheinternet/cp77radioext) para el increíble mod de radioxt!
 ¡Un agradecimiento especial a DemonseDXP (https://next.nexusmods.com/profile/demonseedxp) por el icono de la aplicación y la pantalla de salpicaduras!</value>
   </data>
+  <data name="SplashScreen_SetupAudioConverter" xml:space="preserve">
+    <value>Configuración del convertidor de audio ...</value>
+  </data>
+  <data name="AudioConverterTitle" xml:space="preserve">
+    <value>Convertir audio</value>
+  </data>
+  <data name="InputPathsColumn" xml:space="preserve">
+    <value>Ruta de entrada</value>
+  </data>
+  <data name="OutputPathsColumn" xml:space="preserve">
+    <value>Ruta de salida</value>
+  </data>
+  <data name="CheckAll" xml:space="preserve">
+    <value>Comprobar todo</value>
+  </data>
+  <data name="UncheckAll" xml:space="preserve">
+    <value>Desmarque todos</value>
+  </data>
+  <data name="AddFiles" xml:space="preserve">
+    <value>Agregar archivos ...</value>
+  </data>
+  <data name="StartConversion" xml:space="preserve">
+    <value>Iniciar conversión</value>
+  </data>
+  <data name="Converting" xml:space="preserve">
+    <value>Archivo de conversión</value>
+  </data>
+  <data name="NoFilesSelected_Conversion" xml:space="preserve">
+    <value>No se seleccionaron archivos para la conversión.
+Seleccione al menos un archivo e intente nuevamente.</value>
+  </data>
+  <data name="NoConversionNeeded" xml:space="preserve">
+    <value>No se necesita conversión</value>
+  </data>
+  <data name="ChangeOutputDirectory" xml:space="preserve">
+    <value>Cambiar la carpeta de salida ...</value>
+  </data>
+  <data name="ChangeOutputDirectoryDescription" xml:space="preserve">
+    <value>Seleccione una carpeta para guardar archivos de audio convertidos para</value>
+  </data>
+  <data name="ConversionLog" xml:space="preserve">
+    <value>Registro de conversión</value>
+  </data>
+  <data name="TotalConversionsLabel" xml:space="preserve">
+    <value>Convertir: {0} / {1}</value>
+  </data>
+  <data name="AudioConverterMenuOption" xml:space="preserve">
+    <value>Convertidor de audio</value>
+  </data>
+  <data name="AudioConvert_ConfirmRemoveFiles" xml:space="preserve">
+    <value>¿Está seguro de que desea eliminar los archivos {0} de la cola?</value>
+  </data>
+  <data name="AudioConvert_RemoveSelectedFiles" xml:space="preserve">
+    <value>Eliminar archivos seleccionados</value>
+  </data>
+  <data name="ConversionOngoing" xml:space="preserve">
+    <value>Los archivos se están convirtiendo actualmente. Espere hasta que hayan terminado o haga clic en 'Cancelar'.</value>
+  </data>
+  <data name="AudioConvert_CheckAllHelp" xml:space="preserve">
+    <value>Habilite todos los elementos en la cola para su conversión.</value>
+  </data>
+  <data name="AudioConvert_UncheckAllHelp" xml:space="preserve">
+    <value>Deshabilite todos los artículos en la cola.</value>
+  </data>
+  <data name="AudioConvert_ListBoxHelp" xml:space="preserve">
+    <value>Muestra la cola de conversión actual. Marque la casilla para habilitar la conversión.</value>
+  </data>
+  <data name="AudioConvert_ConvertingLabelHelp" xml:space="preserve">
+    <value>Muestra el número total de archivos convertidos / archivos para convertir.</value>
+  </data>
+  <data name="AudioConvert_PropertyGridHelp" xml:space="preserve">
+    <value>Muestra las propiedades del candidato seleccionado.</value>
+  </data>
+  <data name="AudioConvert_ConversionLogHelp" xml:space="preserve">
+    <value>Muestra el estado actual de la conversión de FFMPEG.</value>
+  </data>
+  <data name="AudioConvert_AddFilesHelp" xml:space="preserve">
+    <value>Agregue archivos adicionales para convertir a la cola.</value>
+  </data>
+  <data name="AudioConvert_RemoveFilesHelp" xml:space="preserve">
+    <value>Elimine los archivos verificados actualmente de la cola.</value>
+  </data>
+  <data name="AudioConvert_StartConversionHelp" xml:space="preserve">
+    <value>Inicia la conversión en función de los elementos marcados en la cola.</value>
+  </data>
+  <data name="AudioConvert_CancelHelp" xml:space="preserve">
+    <value>Cancelar la conversión de ejecución actualmente.</value>
+  </data>
+  <data name="ConvertCandidate_InputPathDesc" xml:space="preserve">
+    <value>La ruta del archivo de entrada.</value>
+  </data>
+  <data name="ConvertCandidate_Category" xml:space="preserve">
+    <value>Conversión</value>
+  </data>
+  <data name="ConvertCandidate_InputPathDisplayName" xml:space="preserve">
+    <value>Archivo de entrada</value>
+  </data>
+  <data name="ConvertCandidate_OutputPathDesc" xml:space="preserve">
+    <value>La ruta del archivo de salida. Si se convierte para una estación, esto se establece en la carpeta de la estación en puesta en escena y no se puede cambiar.</value>
+  </data>
+  <data name="ConvertCandidate_OutputPathDisplayName" xml:space="preserve">
+    <value>Archivo de salida</value>
+  </data>
+  <data name="ConvertCandidate_TargetFormatDesc" xml:space="preserve">
+    <value>El formato objetivo para la conversión.</value>
+  </data>
+  <data name="ConvertCandidate_TargetFormatDisplayName" xml:space="preserve">
+    <value>Formato de destino</value>
+  </data>
+  <data name="AudioConverterPrompt_Single" xml:space="preserve">
+    <value>Hay un archivo {0} que debe convertirse para trabajar con Radioext.
+¿Te gustaría convertirlo ahora?</value>
+  </data>
+  <data name="AudioConverterPrompt" xml:space="preserve">
+    <value>Hay {0} archivos que deben convertirse para trabajar con Radioext.
+¿Te gustaría convertirlos ahora?</value>
+  </data>
+  <data name="AudioConvert_Error" xml:space="preserve">
+    <value>Se produjo un error al convertir. Consulte el registro para obtener más detalles.</value>
+  </data>
+  <data name="AudioConvert_ConfirmStartConversion" xml:space="preserve">
+    <value>La conversión puede llevar un tiempo dependiendo del tamaño y la cantidad de archivos para convertir.
+Puede cancelar en cualquier momento haciendo clic en "Cancelar". Iniciar conversión?</value>
+  </data>
+  <data name="AudioConvert_NoStagingFolder" xml:space="preserve">
+    <value>La estación actual aún no se ha exportado a la puesta en escena.
+No se puede convertir archivos de audio hasta que se cree la carpeta de la estación. Exportar a la puesta en escena y volver a intentarlo.</value>
+  </data>
+  <data name="IconEditor_ImportIcon_Confirm_Message" xml:space="preserve">
+    <value>Crear un icono personalizado puede llevar un tiempo dependiendo de la imagen utilizada.
+Por favor, sea paciente. Puede cancelar en cualquier momento usando el botón "Cancelar acción". Comenzar la importación?</value>
+  </data>
+  <data name="IconEditor_ExtractIcon_Confirm_Message" xml:space="preserve">
+    <value>Extraer un icono de un archivo. Archive puede llevar un tiempo.
+Por favor, sea paciente. Puede cancelar en cualquier momento usando el botón "Cancelar acción". Iniciar extracción?</value>
+  </data>
 </root>

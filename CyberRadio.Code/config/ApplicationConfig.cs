@@ -15,7 +15,6 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 using System.ComponentModel;
-using System.Security;
 using AetherUtils.Core.Attributes;
 using AetherUtils.Core.Configuration;
 using RadioExt_Helper.utility;
@@ -31,7 +30,8 @@ public sealed class ApplicationConfig
     /// <summary>
     ///   Specifies whether the application should automatically check for updates on startup.
     /// </summary>
-    [Config("autoCheckForUpdates", "Specifies whether the application should automatically check for updates on startup.", true)]
+    [Config("autoCheckForUpdates",
+        "Specifies whether the application should automatically check for updates on startup.", true)]
     [Description("CheckForUpdatesOptionHelp")]
     public bool AutoCheckForUpdates { get; set; }
 
@@ -45,28 +45,34 @@ public sealed class ApplicationConfig
     /// <summary>
     ///  Specifies whether the application should automatically export the stations to the game directory after exporting to staging.
     /// </summary>
-    [Config("autoExportToGame", "Specifies whether the application should automatically export the stations to the game directory after exporting to staging.")]
+    [Config("autoExportToGame",
+        "Specifies whether the application should automatically export the stations to the game directory after exporting to staging.")]
     [Description("AutoExportOptionHelp")]
     public bool AutoExportToGame { get; set; }
 
     /// <summary>
     ///  Specifies whether the application should automatically watch for changes in the game's radios directory.
     /// </summary>
-    [Config("watchForGameChanges", "Specifies whether the application should automatically watch for changes in the game's radios directory.", true)]
+    [Config("watchForGameChanges",
+        "Specifies whether the application should automatically watch for changes in the game's radios directory.",
+        true)]
     [Description("WatchForChangesHelp")]
     public bool WatchForGameChanges { get; set; }
 
     /// <summary>
     ///  Specifies whether the application should automatically copy the song files when creating a backup of the staging folder.
     /// </summary>
-    [Config("copySongFilesToBackup", "Specifies whether the application should copy the song files when creating a backup of the staging folder.", true)]
+    [Config("copySongFilesToBackup",
+        "Specifies whether the application should copy the song files when creating a backup of the staging folder.",
+        true)]
     [Description("CopySongFilesToBackupHelp")]
     public bool CopySongFilesToBackup { get; set; }
 
     /// <summary>
     ///  Specifies the default location for song files that have been imported from a station .zip or .rar file.
     /// </summary>
-    [Config("defaultSongLocation", "Specifies the default location for song files that have been imported from a station .zip or .rar file.")]
+    [Config("defaultSongLocation",
+        "Specifies the default location for song files that have been imported from a station .zip or .rar file.")]
     [Description("DefaultSongLocationHelp")]
     public string DefaultSongLocation { get; set; } = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic);
 
@@ -147,8 +153,8 @@ public sealed class ApplicationConfig
         NewFileEveryLaunch = true,
         LogFileDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
             "RadioExt-Helper", "logs"),
-        LogHeader = SystemInfo.GetLogFileHeader(),
         LogLayout = "${longdate}|${level:uppercase=true}|${logger}|${message:withexception=true}",
+        LogHeader = SystemInfo.GetLogFileHeader(),
         IncludeDateTime = true,
         IncludeDateOnly = false
     };

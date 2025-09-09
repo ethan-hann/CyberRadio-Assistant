@@ -134,6 +134,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add Files....
+        /// </summary>
+        internal static string AddFiles {
+            get {
+                return ResourceManager.GetString("AddFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add Selected  .
         /// </summary>
         internal static string AddSelected {
@@ -238,6 +247,181 @@ namespace RadioExt_Helper {
         internal static string AreYouSure {
             get {
                 return ResourceManager.GetString("AreYouSure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add additional files to convert to the queue..
+        /// </summary>
+        internal static string AudioConvert_AddFilesHelp {
+            get {
+                return ResourceManager.GetString("AudioConvert_AddFilesHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cancel the currently running conversion..
+        /// </summary>
+        internal static string AudioConvert_CancelHelp {
+            get {
+                return ResourceManager.GetString("AudioConvert_CancelHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enable all items in the queue for conversion..
+        /// </summary>
+        internal static string AudioConvert_CheckAllHelp {
+            get {
+                return ResourceManager.GetString("AudioConvert_CheckAllHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to remove {0} files from the queue?.
+        /// </summary>
+        internal static string AudioConvert_ConfirmRemoveFiles {
+            get {
+                return ResourceManager.GetString("AudioConvert_ConfirmRemoveFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Conversion can take a while depending on the size and amount of files to convert.
+        ///You can cancel at any time by clicking &quot;Cancel&quot;. Start conversion?.
+        /// </summary>
+        internal static string AudioConvert_ConfirmStartConversion {
+            get {
+                return ResourceManager.GetString("AudioConvert_ConfirmStartConversion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shows the current status of the conversion from ffmpeg..
+        /// </summary>
+        internal static string AudioConvert_ConversionLogHelp {
+            get {
+                return ResourceManager.GetString("AudioConvert_ConversionLogHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shows the total number of files converted / files to convert..
+        /// </summary>
+        internal static string AudioConvert_ConvertingLabelHelp {
+            get {
+                return ResourceManager.GetString("AudioConvert_ConvertingLabelHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An error occurred while converting. Check the log for more details..
+        /// </summary>
+        internal static string AudioConvert_Error {
+            get {
+                return ResourceManager.GetString("AudioConvert_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shows the current conversion queue. Check the box to enable for conversion..
+        /// </summary>
+        internal static string AudioConvert_ListBoxHelp {
+            get {
+                return ResourceManager.GetString("AudioConvert_ListBoxHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The current station hasn&apos;t been exported to staging yet.
+        ///Can&apos;t convert audio files until station folder is created. Export to staging and try again..
+        /// </summary>
+        internal static string AudioConvert_NoStagingFolder {
+            get {
+                return ResourceManager.GetString("AudioConvert_NoStagingFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shows the selected candidate&apos;s properties..
+        /// </summary>
+        internal static string AudioConvert_PropertyGridHelp {
+            get {
+                return ResourceManager.GetString("AudioConvert_PropertyGridHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove the currently checked files from the queue..
+        /// </summary>
+        internal static string AudioConvert_RemoveFilesHelp {
+            get {
+                return ResourceManager.GetString("AudioConvert_RemoveFilesHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove Selected Files.
+        /// </summary>
+        internal static string AudioConvert_RemoveSelectedFiles {
+            get {
+                return ResourceManager.GetString("AudioConvert_RemoveSelectedFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Starts the conversion based on the checked items in the queue..
+        /// </summary>
+        internal static string AudioConvert_StartConversionHelp {
+            get {
+                return ResourceManager.GetString("AudioConvert_StartConversionHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Disable all items in the queue..
+        /// </summary>
+        internal static string AudioConvert_UncheckAllHelp {
+            get {
+                return ResourceManager.GetString("AudioConvert_UncheckAllHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Audio Converter.
+        /// </summary>
+        internal static string AudioConverterMenuOption {
+            get {
+                return ResourceManager.GetString("AudioConverterMenuOption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There are {0} files that need to be converted in order to work with radioExt.
+        ///Would you like to convert them now?.
+        /// </summary>
+        internal static string AudioConverterPrompt {
+            get {
+                return ResourceManager.GetString("AudioConverterPrompt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There is {0} file that needs to be converted in order to work with radioExt.
+        ///Would you like to convert it now?.
+        /// </summary>
+        internal static string AudioConverterPrompt_Single {
+            get {
+                return ResourceManager.GetString("AudioConverterPrompt_Single", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Convert Audio.
+        /// </summary>
+        internal static string AudioConverterTitle {
+            get {
+                return ResourceManager.GetString("AudioConverterTitle", resourceCulture);
             }
         }
         
@@ -418,6 +602,33 @@ namespace RadioExt_Helper {
         internal static string Change {
             get {
                 return ResourceManager.GetString("Change", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Change Output Folder....
+        /// </summary>
+        internal static string ChangeOutputDirectory {
+            get {
+                return ResourceManager.GetString("ChangeOutputDirectory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select a folder to save converted audio files to.
+        /// </summary>
+        internal static string ChangeOutputDirectoryDescription {
+            get {
+                return ResourceManager.GetString("ChangeOutputDirectoryDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Check All.
+        /// </summary>
+        internal static string CheckAll {
+            get {
+                return ResourceManager.GetString("CheckAll", resourceCulture);
             }
         }
         
@@ -615,6 +826,96 @@ namespace RadioExt_Helper {
         internal static string ConfirmSyncStationsExternal {
             get {
                 return ResourceManager.GetString("ConfirmSyncStationsExternal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Conversion Log.
+        /// </summary>
+        internal static string ConversionLog {
+            get {
+                return ResourceManager.GetString("ConversionLog", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Files are currently being converted. Please wait until they have finished or click `Cancel`..
+        /// </summary>
+        internal static string ConversionOngoing {
+            get {
+                return ResourceManager.GetString("ConversionOngoing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Conversion.
+        /// </summary>
+        internal static string ConvertCandidate_Category {
+            get {
+                return ResourceManager.GetString("ConvertCandidate_Category", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The path of the input file..
+        /// </summary>
+        internal static string ConvertCandidate_InputPathDesc {
+            get {
+                return ResourceManager.GetString("ConvertCandidate_InputPathDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Input File.
+        /// </summary>
+        internal static string ConvertCandidate_InputPathDisplayName {
+            get {
+                return ResourceManager.GetString("ConvertCandidate_InputPathDisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The path of the output file. If converting for a station, this is set to the station&apos;s folder in staging and cannot be changed..
+        /// </summary>
+        internal static string ConvertCandidate_OutputPathDesc {
+            get {
+                return ResourceManager.GetString("ConvertCandidate_OutputPathDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Output File.
+        /// </summary>
+        internal static string ConvertCandidate_OutputPathDisplayName {
+            get {
+                return ResourceManager.GetString("ConvertCandidate_OutputPathDisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The target format for the conversion..
+        /// </summary>
+        internal static string ConvertCandidate_TargetFormatDesc {
+            get {
+                return ResourceManager.GetString("ConvertCandidate_TargetFormatDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Target Format.
+        /// </summary>
+        internal static string ConvertCandidate_TargetFormatDisplayName {
+            get {
+                return ResourceManager.GetString("ConvertCandidate_TargetFormatDisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Converting file.
+        /// </summary>
+        internal static string Converting {
+            get {
+                return ResourceManager.GetString("Converting", resourceCulture);
             }
         }
         
@@ -1119,6 +1420,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Extracting icon....
+        /// </summary>
+        internal static string ExtractingIcon {
+            get {
+                return ResourceManager.GetString("ExtractingIcon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Extreme.
         /// </summary>
         internal static string Extreme {
@@ -1488,6 +1798,16 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Extracting an icon from a .archive file can take a while.
+        ///Please be patient. You can cancel at any time using the &quot;Cancel Action&quot; button. Start extraction?.
+        /// </summary>
+        internal static string IconEditor_ExtractIcon_Confirm_Message {
+            get {
+                return ResourceManager.GetString("IconEditor_ExtractIcon_Confirm_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This icon has already been created and marked as read-only. Please create a new icon if you want a different image..
         /// </summary>
         internal static string IconEditor_IconAlreadyCreated_DragDrop {
@@ -1556,6 +1876,16 @@ namespace RadioExt_Helper {
         internal static string IconEditor_ImportIcon {
             get {
                 return ResourceManager.GetString("IconEditor_ImportIcon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Creating a custom icon can take a while depending on the image used.
+        ///Please be patient. You can cancel at any time using the &quot;Cancel Action&quot; button. Start import?.
+        /// </summary>
+        internal static string IconEditor_ImportIcon_Confirm_Message {
+            get {
+                return ResourceManager.GetString("IconEditor_ImportIcon_Confirm_Message", resourceCulture);
             }
         }
         
@@ -1957,6 +2287,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Importing icon....
+        /// </summary>
+        internal static string ImportingIcon {
+            get {
+                return ResourceManager.GetString("ImportingIcon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ink Atlas Part:.
         /// </summary>
         internal static string InkAtlasPart {
@@ -1989,6 +2328,15 @@ namespace RadioExt_Helper {
         internal static string InkPathHelp {
             get {
                 return ResourceManager.GetString("InkPathHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Input Path.
+        /// </summary>
+        internal static string InputPathsColumn {
+            get {
+                return ResourceManager.GetString("InputPathsColumn", resourceCulture);
             }
         }
         
@@ -2454,12 +2802,31 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No conversion needed.
+        /// </summary>
+        internal static string NoConversionNeeded {
+            get {
+                return ResourceManager.GetString("NoConversionNeeded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The path to the Cyberpunk 2077 executable has not been set.
         ///Please set it now..
         /// </summary>
         internal static string NoExeFound {
             get {
                 return ResourceManager.GetString("NoExeFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No files were selected for conversion.
+        ///Please select at least one file and try again..
+        /// </summary>
+        internal static string NoFilesSelected_Conversion {
+            get {
+                return ResourceManager.GetString("NoFilesSelected_Conversion", resourceCulture);
             }
         }
         
@@ -2669,6 +3036,15 @@ namespace RadioExt_Helper {
         internal static string Order {
             get {
                 return ResourceManager.GetString("Order", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Output Path.
+        /// </summary>
+        internal static string OutputPathsColumn {
+            get {
+                return ResourceManager.GetString("OutputPathsColumn", resourceCulture);
             }
         }
         
@@ -3177,6 +3553,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Setting up audio converter....
+        /// </summary>
+        internal static string SplashScreen_SetupAudioConverter {
+            get {
+                return ResourceManager.GetString("SplashScreen_SetupAudioConverter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Initializing the Icon Manager....
         /// </summary>
         internal static string SplashScreen_SetupIconManager {
@@ -3281,6 +3666,15 @@ namespace RadioExt_Helper {
         internal static string StartBackup {
             get {
                 return ResourceManager.GetString("StartBackup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start Conversion.
+        /// </summary>
+        internal static string StartConversion {
+            get {
+                return ResourceManager.GetString("StartConversion", resourceCulture);
             }
         }
         
@@ -3474,6 +3868,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Converting: {0} / {1}.
+        /// </summary>
+        internal static string TotalConversionsLabel {
+            get {
+                return ResourceManager.GetString("TotalConversionsLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Total File Size:.
         /// </summary>
         internal static string TotalFileSize {
@@ -3533,6 +3936,15 @@ namespace RadioExt_Helper {
         internal static string Ultra {
             get {
                 return ResourceManager.GetString("Ultra", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Uncheck All.
+        /// </summary>
+        internal static string UncheckAll {
+            get {
+                return ResourceManager.GetString("UncheckAll", resourceCulture);
             }
         }
         

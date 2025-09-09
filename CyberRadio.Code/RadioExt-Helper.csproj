@@ -74,15 +74,17 @@
         <PackageReference Include="AetherUtils.Core" Version="1.0.15" />
         <PackageReference Include="NAudio" Version="2.2.1" />
         <PackageReference Include="Pathoschild.FluentNexus" Version="1.0.5" />
-        <PackageReference Include="SharpCompress" Version="0.39.0" />
+        <PackageReference Include="SharpCompress" Version="0.40.0" />
         <PackageReference Include="SharpZipLib" Version="1.4.2" />
-        <PackageReference Include="SixLabors.ImageSharp" Version="3.1.8" />
-        <PackageReference Include="System.Management" Version="9.0.5" />
+        <PackageReference Include="SixLabors.ImageSharp" Version="3.1.11" />
+        <PackageReference Include="System.Management" Version="9.0.8" />
         <PackageReference Include="System.Net.Http" Version="4.3.4" />
-        <PackageReference Include="System.Text.Json" Version="9.0.5" />
+        <PackageReference Include="System.Text.Json" Version="9.0.8" />
         <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
         <PackageReference Include="TagLibSharp" Version="2.3.0" />
         <PackageReference Include="WIG.Lib" Version="1.0.46" />
+        <PackageReference Include="Xabe.FFmpeg" Version="6.0.2" />
+        <PackageReference Include="Xabe.FFmpeg.Downloader" Version="6.0.2" />
     </ItemGroup>
 
     <ItemGroup>

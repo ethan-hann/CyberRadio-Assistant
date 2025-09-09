@@ -28,10 +28,9 @@ namespace RadioExt_Helper.forms;
 /// </summary>
 public sealed partial class ConfigForm : Form
 {
+    private readonly Dictionary<string, ListViewGroup> _forbiddenGroups = new();
     private readonly Dictionary<string, CompressionLevel> _localizedCompressionLevels = new();
     private readonly ImageList _tabImages = new();
-
-    private readonly Dictionary<string, ListViewGroup> _forbiddenGroups = new();
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="ConfigForm" /> class.
@@ -417,13 +416,16 @@ public sealed partial class ConfigForm : Form
         if (!lblCurrentLogPath.Text.Equals(Strings.NoLogPathSet))
             saved &= GlobalData.ConfigManager.Set("logFileDirectory", lblCurrentLogPath.Text);
 
-        //TODO: set the values for the forbidden keywords
         List<ForbiddenKeyword> updatedKeywords = [];
         foreach (ListViewItem item in lvForbiddenPaths.Items)
             if (item.Tag is ForbiddenKeyword keyword)
                 updatedKeywords.Add(keyword);
 
         saved &= GlobalData.ConfigManager.Set("forbiddenKeywords", updatedKeywords);
+
+        //Set logLayout
+        saved &= GlobalData.ConfigManager.Set("logLayout",
+            "${longdate}|${level:uppercase=true}|${logger}|${message:withexception=true}");
 
         return saved && GlobalData.ConfigManager.Save();
     }

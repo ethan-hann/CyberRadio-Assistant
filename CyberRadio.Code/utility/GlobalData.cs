@@ -139,7 +139,7 @@ public static class GlobalData
         var folderPath = GetLogFolderPath();
 
         // Get all log files in the directory
-        var logFiles = Directory.GetFiles(folderPath, $"{options?.AppName}_*.log", SearchOption.TopDirectoryOnly);
+        var logFiles = Directory.GetFiles(folderPath, $"{options?.AppName}*.log", SearchOption.TopDirectoryOnly);
 
         // Check if there are no log files
         if (logFiles.Length == 0)
