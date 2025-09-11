@@ -88,6 +88,11 @@ public sealed partial class IconEditor : UserControl, IEditor
     /// </summary>
     public TrackableObject<AdditionalStation> Station { get; }
 
+    /// <summary>
+    /// Null for this editor type.
+    /// </summary>
+    public TrackableObject<ReplacementStation>? ReplacedStation => null;
+
     public void Translate()
     {
         editorTabs.TabPages[0].Text = string.Format(Strings.IconEditor_Translate_Editing_Icon___0_, @"custom_icon");

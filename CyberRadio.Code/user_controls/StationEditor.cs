@@ -66,6 +66,11 @@ public sealed partial class StationEditor : UserControl, IEditor
     /// </summary>
     public TrackableObject<AdditionalStation> Station { get; }
 
+    /// <summary>
+    /// Gets the trackable replacement station object, if applicable.
+    /// </summary>
+    public TrackableObject<ReplacementStation>? ReplacedStation => null;
+
     public Guid Id { get; set; } = Guid.NewGuid();
     public EditorType Type { get; set; } = EditorType.StationEditor;
 

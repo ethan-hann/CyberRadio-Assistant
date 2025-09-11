@@ -34,9 +34,14 @@ public interface IEditor
     public EditorType Type { get; set; }
 
     /// <summary>
-    ///     The tracked station associated with this control.
+    ///     The tracked station associated with this control, if applicable.
     /// </summary>
-    public TrackableObject<AdditionalStation> Station { get; }
+    public TrackableObject<AdditionalStation>? Station { get; }
+
+    /// <summary>
+    /// The tracked replacement station associated with this control, if applicable.
+    /// </summary>
+    public TrackableObject<ReplacementStation>? ReplacedStation { get; }
 
     /// <summary>
     /// Defines the method to translate the control into the current language.

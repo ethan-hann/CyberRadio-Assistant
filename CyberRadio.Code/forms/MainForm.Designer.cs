@@ -88,6 +88,7 @@ namespace RadioExt_Helper.forms
             btnAddStation = new SplitButton();
             cmsNewStation = new ContextMenuStrip(components);
             fromzipFileToolStripMenuItem = new ToolStripMenuItem();
+            replaceVanillaStationToolStripMenuItem = new ToolStripMenuItem();
             stationBindingSource = new BindingSource(components);
             cmsRevertStationChanges = new ContextMenuStrip(components);
             revertChangesToolStripMenuItem = new ToolStripMenuItem();
@@ -95,7 +96,16 @@ namespace RadioExt_Helper.forms
             pgBackupProgress = new ToolStripProgressBar();
             lblSpring2 = new ToolStripStatusLabel();
             statusStripBackup = new StatusStrip();
-            replaceVanillaStationToolStripMenuItem = new ToolStripMenuItem();
+            splitContainer2 = new SplitContainer();
+            groupBox1 = new GroupBox();
+            lbReplacedStations = new ListBox();
+            statusStrip2 = new StatusStrip();
+            toolStripStatusLabel2 = new ToolStripStatusLabel();
+            toolStripStatusLabel4 = new ToolStripStatusLabel();
+            toolStripStatusLabel5 = new ToolStripStatusLabel();
+            tableLayoutPanel3 = new TableLayoutPanel();
+            splitButton1 = new SplitButton();
+            splitButton2 = new SplitButton();
             menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
@@ -110,6 +120,13 @@ namespace RadioExt_Helper.forms
             ((System.ComponentModel.ISupportInitialize)stationBindingSource).BeginInit();
             cmsRevertStationChanges.SuspendLayout();
             statusStripBackup.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)splitContainer2).BeginInit();
+            splitContainer2.Panel1.SuspendLayout();
+            splitContainer2.Panel2.SuspendLayout();
+            splitContainer2.SuspendLayout();
+            groupBox1.SuspendLayout();
+            statusStrip2.SuspendLayout();
+            tableLayoutPanel3.SuspendLayout();
             SuspendLayout();
             // 
             // menuStrip1
@@ -120,7 +137,7 @@ namespace RadioExt_Helper.forms
             menuStrip1.LayoutStyle = ToolStripLayoutStyle.HorizontalStackWithOverflow;
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new Size(1267, 24);
+            menuStrip1.Size = new Size(1060, 24);
             menuStrip1.TabIndex = 0;
             menuStrip1.Text = "menuStrip1";
             // 
@@ -405,14 +422,14 @@ namespace RadioExt_Helper.forms
             // 
             // splitContainer1.Panel1
             // 
-            splitContainer1.Panel1.Controls.Add(grpStations);
+            splitContainer1.Panel1.Controls.Add(splitContainer2);
             splitContainer1.Panel1.Controls.Add(tableLayoutPanel1);
             // 
             // splitContainer1.Panel2
             // 
             splitContainer1.Panel2.BackColor = Color.Transparent;
-            splitContainer1.Size = new Size(1267, 833);
-            splitContainer1.SplitterDistance = 326;
+            splitContainer1.Size = new Size(1060, 590);
+            splitContainer1.SplitterDistance = 296;
             splitContainer1.TabIndex = 1;
             // 
             // grpStations
@@ -424,7 +441,7 @@ namespace RadioExt_Helper.forms
             grpStations.Dock = DockStyle.Fill;
             grpStations.Location = new Point(0, 0);
             grpStations.Name = "grpStations";
-            grpStations.Size = new Size(326, 796);
+            grpStations.Size = new Size(296, 276);
             grpStations.TabIndex = 2;
             grpStations.TabStop = false;
             grpStations.Text = "Stations";
@@ -449,7 +466,7 @@ namespace RadioExt_Helper.forms
             lbStations.NewStationColor = Color.DarkGreen;
             lbStations.NewStationFont = new Font("Segoe UI", 9F, FontStyle.Bold);
             lbStations.SavedStationIconKey = "saved_station";
-            lbStations.Size = new Size(320, 695);
+            lbStations.Size = new Size(290, 175);
             lbStations.SongsMissingColor = Color.FromArgb(192, 0, 0);
             lbStations.SongsMissingFont = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lbStations.TabIndex = 0;
@@ -468,7 +485,7 @@ namespace RadioExt_Helper.forms
             tableLayoutPanel2.Name = "tableLayoutPanel2";
             tableLayoutPanel2.RowCount = 1;
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel2.Size = new Size(320, 34);
+            tableLayoutPanel2.Size = new Size(290, 34);
             tableLayoutPanel2.TabIndex = 1;
             // 
             // btnDisableSelected
@@ -480,10 +497,10 @@ namespace RadioExt_Helper.forms
             btnDisableSelected.FlatStyle = FlatStyle.Flat;
             btnDisableSelected.Image = Properties.Resources.disabled__16x16;
             btnDisableSelected.ImageAlign = ContentAlignment.MiddleLeft;
-            btnDisableSelected.Location = new Point(163, 3);
+            btnDisableSelected.Location = new Point(148, 3);
             btnDisableSelected.Menu = cmsDisable;
             btnDisableSelected.Name = "btnDisableSelected";
-            btnDisableSelected.Size = new Size(154, 28);
+            btnDisableSelected.Size = new Size(139, 28);
             btnDisableSelected.TabIndex = 1;
             btnDisableSelected.Text = "Disable Selected";
             btnDisableSelected.UseVisualStyleBackColor = false;
@@ -517,7 +534,7 @@ namespace RadioExt_Helper.forms
             btnEnableSelected.Location = new Point(3, 3);
             btnEnableSelected.Menu = cmsEnable;
             btnEnableSelected.Name = "btnEnableSelected";
-            btnEnableSelected.Size = new Size(154, 28);
+            btnEnableSelected.Size = new Size(139, 28);
             btnEnableSelected.TabIndex = 0;
             btnEnableSelected.Text = "Enable Selected";
             btnEnableSelected.UseVisualStyleBackColor = false;
@@ -544,7 +561,7 @@ namespace RadioExt_Helper.forms
             txtStationFilter.Location = new Point(3, 19);
             txtStationFilter.Name = "txtStationFilter";
             txtStationFilter.PlaceholderText = "Enter filter here...";
-            txtStationFilter.Size = new Size(320, 23);
+            txtStationFilter.Size = new Size(290, 23);
             txtStationFilter.TabIndex = 3;
             txtStationFilter.TextChanged += txtStationFilter_TextChanged;
             // 
@@ -552,9 +569,9 @@ namespace RadioExt_Helper.forms
             // 
             statusStrip1.BackColor = Color.White;
             statusStrip1.Items.AddRange(new ToolStripItem[] { toolStripStatusLabel1, lblStationCount, toolStripStatusLabel3 });
-            statusStrip1.Location = new Point(3, 771);
+            statusStrip1.Location = new Point(3, 251);
             statusStrip1.Name = "statusStrip1";
-            statusStrip1.Size = new Size(320, 22);
+            statusStrip1.Size = new Size(290, 22);
             statusStrip1.SizingGrip = false;
             statusStrip1.TabIndex = 2;
             statusStrip1.Text = "statusStrip1";
@@ -562,7 +579,7 @@ namespace RadioExt_Helper.forms
             // toolStripStatusLabel1
             // 
             toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            toolStripStatusLabel1.Size = new Size(69, 17);
+            toolStripStatusLabel1.Size = new Size(54, 17);
             toolStripStatusLabel1.Spring = true;
             // 
             // lblStationCount
@@ -575,7 +592,7 @@ namespace RadioExt_Helper.forms
             // toolStripStatusLabel3
             // 
             toolStripStatusLabel3.Name = "toolStripStatusLabel3";
-            toolStripStatusLabel3.Size = new Size(69, 17);
+            toolStripStatusLabel3.Size = new Size(54, 17);
             toolStripStatusLabel3.Spring = true;
             // 
             // tableLayoutPanel1
@@ -586,12 +603,12 @@ namespace RadioExt_Helper.forms
             tableLayoutPanel1.Controls.Add(btnDeleteStation, 1, 0);
             tableLayoutPanel1.Controls.Add(btnAddStation, 0, 0);
             tableLayoutPanel1.Dock = DockStyle.Bottom;
-            tableLayoutPanel1.Location = new Point(0, 796);
+            tableLayoutPanel1.Location = new Point(0, 553);
             tableLayoutPanel1.Margin = new Padding(3, 2, 3, 2);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 1;
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel1.Size = new Size(326, 37);
+            tableLayoutPanel1.Size = new Size(296, 37);
             tableLayoutPanel1.TabIndex = 1;
             // 
             // btnDeleteStation
@@ -603,10 +620,10 @@ namespace RadioExt_Helper.forms
             btnDeleteStation.FlatStyle = FlatStyle.Flat;
             btnDeleteStation.Font = new Font("Segoe UI Variable Display Semib", 9.75F, FontStyle.Bold);
             btnDeleteStation.Image = Properties.Resources.delete__16x16;
-            btnDeleteStation.Location = new Point(166, 2);
+            btnDeleteStation.Location = new Point(151, 2);
             btnDeleteStation.Margin = new Padding(3, 2, 3, 2);
             btnDeleteStation.Name = "btnDeleteStation";
-            btnDeleteStation.Size = new Size(157, 33);
+            btnDeleteStation.Size = new Size(142, 33);
             btnDeleteStation.TabIndex = 1;
             btnDeleteStation.Text = "Delete Station";
             btnDeleteStation.TextAlign = ContentAlignment.MiddleRight;
@@ -627,7 +644,7 @@ namespace RadioExt_Helper.forms
             btnAddStation.Margin = new Padding(3, 2, 3, 2);
             btnAddStation.Menu = cmsNewStation;
             btnAddStation.Name = "btnAddStation";
-            btnAddStation.Size = new Size(157, 33);
+            btnAddStation.Size = new Size(142, 33);
             btnAddStation.SplitWidth = 25;
             btnAddStation.TabIndex = 0;
             btnAddStation.Text = "New Station";
@@ -640,7 +657,7 @@ namespace RadioExt_Helper.forms
             // 
             cmsNewStation.Items.AddRange(new ToolStripItem[] { fromzipFileToolStripMenuItem, replaceVanillaStationToolStripMenuItem });
             cmsNewStation.Name = "cmsNewStation";
-            cmsNewStation.Size = new Size(202, 70);
+            cmsNewStation.Size = new Size(202, 48);
             // 
             // fromzipFileToolStripMenuItem
             // 
@@ -649,6 +666,13 @@ namespace RadioExt_Helper.forms
             fromzipFileToolStripMenuItem.Size = new Size(201, 22);
             fromzipFileToolStripMenuItem.Text = "From .zip file...";
             fromzipFileToolStripMenuItem.Click += fromZipFileToolStripMenuItem_Click;
+            // 
+            // replaceVanillaStationToolStripMenuItem
+            // 
+            replaceVanillaStationToolStripMenuItem.Name = "replaceVanillaStationToolStripMenuItem";
+            replaceVanillaStationToolStripMenuItem.Size = new Size(201, 22);
+            replaceVanillaStationToolStripMenuItem.Text = "Replace Vanilla Station...";
+            replaceVanillaStationToolStripMenuItem.Click += replaceVanillaStationToolStripMenuItem_Click;
             // 
             // stationBindingSource
             // 
@@ -699,19 +723,132 @@ namespace RadioExt_Helper.forms
             statusStripBackup.Text = "statusStrip2";
             statusStripBackup.Visible = false;
             // 
-            // replaceVanillaStationToolStripMenuItem
+            // splitContainer2
             // 
-            replaceVanillaStationToolStripMenuItem.Name = "replaceVanillaStationToolStripMenuItem";
-            replaceVanillaStationToolStripMenuItem.Size = new Size(201, 22);
-            replaceVanillaStationToolStripMenuItem.Text = "Replace Vanilla Station...";
-            replaceVanillaStationToolStripMenuItem.Click += replaceVanillaStationToolStripMenuItem_Click;
+            splitContainer2.Dock = DockStyle.Fill;
+            splitContainer2.Location = new Point(0, 0);
+            splitContainer2.Name = "splitContainer2";
+            splitContainer2.Orientation = Orientation.Horizontal;
+            // 
+            // splitContainer2.Panel1
+            // 
+            splitContainer2.Panel1.Controls.Add(grpStations);
+            // 
+            // splitContainer2.Panel2
+            // 
+            splitContainer2.Panel2.Controls.Add(groupBox1);
+            splitContainer2.Size = new Size(296, 553);
+            splitContainer2.SplitterDistance = 276;
+            splitContainer2.TabIndex = 3;
+            // 
+            // groupBox1
+            // 
+            groupBox1.Controls.Add(lbReplacedStations);
+            groupBox1.Controls.Add(tableLayoutPanel3);
+            groupBox1.Controls.Add(statusStrip2);
+            groupBox1.Dock = DockStyle.Fill;
+            groupBox1.Location = new Point(0, 0);
+            groupBox1.Name = "groupBox1";
+            groupBox1.Size = new Size(296, 273);
+            groupBox1.TabIndex = 0;
+            groupBox1.TabStop = false;
+            groupBox1.Text = "Replaced Stations";
+            // 
+            // lbReplacedStations
+            // 
+            lbReplacedStations.Dock = DockStyle.Fill;
+            lbReplacedStations.FormattingEnabled = true;
+            lbReplacedStations.ItemHeight = 15;
+            lbReplacedStations.Location = new Point(3, 53);
+            lbReplacedStations.Name = "lbReplacedStations";
+            lbReplacedStations.Size = new Size(290, 195);
+            lbReplacedStations.TabIndex = 0;
+            // 
+            // statusStrip2
+            // 
+            statusStrip2.BackColor = Color.White;
+            statusStrip2.Items.AddRange(new ToolStripItem[] { toolStripStatusLabel2, toolStripStatusLabel4, toolStripStatusLabel5 });
+            statusStrip2.Location = new Point(3, 248);
+            statusStrip2.Name = "statusStrip2";
+            statusStrip2.Size = new Size(290, 22);
+            statusStrip2.SizingGrip = false;
+            statusStrip2.TabIndex = 3;
+            statusStrip2.Text = "statusStrip2";
+            // 
+            // toolStripStatusLabel2
+            // 
+            toolStripStatusLabel2.Name = "toolStripStatusLabel2";
+            toolStripStatusLabel2.Size = new Size(54, 17);
+            toolStripStatusLabel2.Spring = true;
+            // 
+            // toolStripStatusLabel4
+            // 
+            toolStripStatusLabel4.Font = new Font("Segoe UI Variable Small", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            toolStripStatusLabel4.Name = "toolStripStatusLabel4";
+            toolStripStatusLabel4.Size = new Size(167, 17);
+            toolStripStatusLabel4.Text = "Enabled Stations: {0} / {1}";
+            // 
+            // toolStripStatusLabel5
+            // 
+            toolStripStatusLabel5.Name = "toolStripStatusLabel5";
+            toolStripStatusLabel5.Size = new Size(54, 17);
+            toolStripStatusLabel5.Spring = true;
+            // 
+            // tableLayoutPanel3
+            // 
+            tableLayoutPanel3.ColumnCount = 2;
+            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tableLayoutPanel3.Controls.Add(splitButton1, 1, 0);
+            tableLayoutPanel3.Controls.Add(splitButton2, 0, 0);
+            tableLayoutPanel3.Dock = DockStyle.Top;
+            tableLayoutPanel3.Location = new Point(3, 19);
+            tableLayoutPanel3.Name = "tableLayoutPanel3";
+            tableLayoutPanel3.RowCount = 1;
+            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tableLayoutPanel3.Size = new Size(290, 34);
+            tableLayoutPanel3.TabIndex = 4;
+            // 
+            // splitButton1
+            // 
+            splitButton1.BackColor = Color.Yellow;
+            splitButton1.Dock = DockStyle.Fill;
+            splitButton1.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
+            splitButton1.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
+            splitButton1.FlatStyle = FlatStyle.Flat;
+            splitButton1.Image = Properties.Resources.disabled__16x16;
+            splitButton1.ImageAlign = ContentAlignment.MiddleLeft;
+            splitButton1.Location = new Point(148, 3);
+            splitButton1.Menu = cmsDisable;
+            splitButton1.Name = "splitButton1";
+            splitButton1.Size = new Size(139, 28);
+            splitButton1.TabIndex = 1;
+            splitButton1.Text = "Disable Selected";
+            splitButton1.UseVisualStyleBackColor = false;
+            // 
+            // splitButton2
+            // 
+            splitButton2.BackColor = Color.Yellow;
+            splitButton2.Dock = DockStyle.Fill;
+            splitButton2.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
+            splitButton2.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
+            splitButton2.FlatStyle = FlatStyle.Flat;
+            splitButton2.Image = Properties.Resources.enabled__16x16;
+            splitButton2.ImageAlign = ContentAlignment.MiddleLeft;
+            splitButton2.Location = new Point(3, 3);
+            splitButton2.Menu = cmsEnable;
+            splitButton2.Name = "splitButton2";
+            splitButton2.Size = new Size(139, 28);
+            splitButton2.TabIndex = 0;
+            splitButton2.Text = "Enable Selected";
+            splitButton2.UseVisualStyleBackColor = false;
             // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(96F, 96F);
             AutoScaleMode = AutoScaleMode.Dpi;
             BackColor = Color.White;
-            ClientSize = new Size(1267, 857);
+            ClientSize = new Size(1060, 614);
             Controls.Add(splitContainer1);
             Controls.Add(menuStrip1);
             Controls.Add(statusStripBackup);
@@ -748,6 +885,15 @@ namespace RadioExt_Helper.forms
             cmsRevertStationChanges.ResumeLayout(false);
             statusStripBackup.ResumeLayout(false);
             statusStripBackup.PerformLayout();
+            splitContainer2.Panel1.ResumeLayout(false);
+            splitContainer2.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)splitContainer2).EndInit();
+            splitContainer2.ResumeLayout(false);
+            groupBox1.ResumeLayout(false);
+            groupBox1.PerformLayout();
+            statusStrip2.ResumeLayout(false);
+            statusStrip2.PerformLayout();
+            tableLayoutPanel3.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -816,5 +962,15 @@ namespace RadioExt_Helper.forms
         private TextBox txtStationFilter;
         private ToolStripMenuItem audioConverterToolStripMenuItem;
         private ToolStripMenuItem replaceVanillaStationToolStripMenuItem;
+        private SplitContainer splitContainer2;
+        private GroupBox groupBox1;
+        private ListBox lbReplacedStations;
+        private TableLayoutPanel tableLayoutPanel3;
+        private SplitButton splitButton1;
+        private SplitButton splitButton2;
+        private StatusStrip statusStrip2;
+        private ToolStripStatusLabel toolStripStatusLabel2;
+        private ToolStripStatusLabel toolStripStatusLabel4;
+        private ToolStripStatusLabel toolStripStatusLabel5;
     }
 }
