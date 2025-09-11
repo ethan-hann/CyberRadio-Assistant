@@ -30,5 +30,6 @@ public enum ValidAudioFiles
     [Description(".flac")] Flac,
     [Description(".mp2")] Mp2,
     [Description(".wax")] Wax,
-    [Description(".wma")] Wma
+    [Description(".wma")] Wma,
+    [Description(".wem")] Wem
 }

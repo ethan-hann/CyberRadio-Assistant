@@ -46,7 +46,7 @@ public sealed partial class IconEditor : UserControl, IEditor
     /// <param name="station">The station associated with the editor.</param>
     /// <param name="icon">The icon to initialize the editor with.</param>
     /// <param name="type">The <see cref="IconEditorType"/> to set the initial state of the editor.</param>
-    public IconEditor(TrackableObject<Station> station, TrackableObject<WolvenIcon> icon, IconEditorType type)
+    public IconEditor(TrackableObject<AdditionalStation> station, TrackableObject<WolvenIcon> icon, IconEditorType type)
     {
         InitializeComponent();
 
@@ -86,7 +86,7 @@ public sealed partial class IconEditor : UserControl, IEditor
     /// <summary>
     /// The station that the icon is associated with.
     /// </summary>
-    public TrackableObject<Station> Station { get; }
+    public TrackableObject<AdditionalStation> Station { get; }
 
     public void Translate()
     {

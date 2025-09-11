@@ -165,12 +165,19 @@ public sealed class AudioConverter
     /// </summary>
     /// <param name="candidate">The <see cref="ConvertCandidate"/> to use for this conversion.</param>
     /// <param name="cancellationToken">An optional token to support cancellation.</param>
+    /// <param name="byPassNeedsConversionCheck">If true, will bypass the <c>NeedsConversion</c> check and convert the file anyway.</param>
     /// <returns></returns>
-    public async Task<string?> ConvertAsync(ConvertCandidate candidate, CancellationToken cancellationToken = default)
+    public async Task<string?> ConvertAsync(ConvertCandidate candidate, bool byPassNeedsConversionCheck, CancellationToken cancellationToken = default)
     {
-        // skip if already correct extension
-        if (!NeedsConversion(candidate.InputPath, candidate.TargetFormat.ToDescriptionString()))
-            return candidate.InputPath;
+        if (candidate is null)
+            throw new ArgumentNullException(nameof(candidate));
+
+        if (!byPassNeedsConversionCheck)
+        {
+            // skip if already correct extension
+            if (!NeedsConversion(candidate.InputPath, candidate.TargetFormat.ToDescriptionString()))
+                return candidate.InputPath;
+        }
 
         // ensure we have ffmpeg/ffprobe
         await InitializeAsync().ConfigureAwait(false);

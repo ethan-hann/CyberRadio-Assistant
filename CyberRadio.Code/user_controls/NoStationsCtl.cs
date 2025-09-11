@@ -37,7 +37,7 @@ public sealed partial class NoStationsCtl : UserControl, IUserControl
     /// <summary>
     /// Gets the trackable object for the station.
     /// </summary>
-    public TrackableObject<Station> Station => new(new Station());
+    public TrackableObject<AdditionalStation> Station => new(new AdditionalStation());
 
     /// <summary>
     /// Translates the text of the control to the current language.

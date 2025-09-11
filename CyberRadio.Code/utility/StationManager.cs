@@ -24,6 +24,7 @@ using RadioExt_Helper.models;
 using RadioExt_Helper.user_controls;
 using SharpCompress.Archives;
 using WIG.Lib.Models;
+using WIG.Lib.Models.Audio;
 
 namespace RadioExt_Helper.utility;
 
@@ -55,7 +56,7 @@ public partial class StationManager : IDisposable
     /// </summary>
     /// <returns></returns>
     [GeneratedRegex(@"^\d+(\.\d+)?\s*")]
-    private static partial Regex DisplayNameRegex();
+    static partial Regex DisplayNameRegex();
 
     /// <summary>
     /// Loads stations from the specified directory into the manager, clearing any existing stations.
@@ -110,9 +111,17 @@ public partial class StationManager : IDisposable
     /// <param name="station">The station to add.</param>
     /// <param name="isOnDisk">Indicates whether the station is an in-memory addition or was added from .json files on disk.</param>
     /// <returns>The <see cref="Guid"/> of the newly added station.</returns>
-    public Guid AddStation(TrackableObject<Station> station, bool isOnDisk)
+    public Guid AddStation(TrackableObject<AdditionalStation> station, bool isOnDisk)
     {
         return AddStation(station, isOnDisk, "\\");
+    }
+
+    public Guid AddVanillaStation(TrackableObject<ReplacementStation> station, bool isOnDisk)
+    {
+        try
+        {
+
+        }
     }
 
     /// <summary>
@@ -122,7 +131,7 @@ public partial class StationManager : IDisposable
     /// <param name="isOnDisk">Indicates whether the station is an in-memory addition or was added from .json files on disk.</param>
     /// <param name="pathOnDisk">Specifies the path to the station folder relative to the staging folder.</param>
     /// <returns>The <see cref="Guid"/> of the newly added station.</returns>
-    public Guid AddStation(TrackableObject<Station> station, bool isOnDisk, string pathOnDisk)
+    public Guid AddStation(TrackableObject<AdditionalStation> station, bool isOnDisk, string pathOnDisk)
     {
         try
         {
@@ -134,7 +143,7 @@ public partial class StationManager : IDisposable
                     _newStations.Add(station.Id);
 
                 var editor = new StationEditor(station);
-                _stations[station.Id] = new Pair<TrackableObject<Station>, List<IEditor>>(station, [editor]);
+                _stations[station.Id] = new Pair<TrackableObject<AdditionalStation>, List<IEditor>>(station, [editor]);
                 editor.StationUpdated += Editor_StationUpdated;
 
                 StationsAsBindingList.Add(station);
@@ -776,7 +785,7 @@ public partial class StationManager : IDisposable
     /// <returns>A pair where the key is the <see cref="TrackableObject{T}"/> and the value is 
     /// the list of <see cref="IEditor"/>s associated with the station; 
     /// or <c>null</c> if the <paramref name="stationId"/> did not exist in the manager.</returns>
-    public Pair<TrackableObject<Station>, List<IEditor>>? GetStation(Guid? stationId)
+    public Pair<TrackableObject<AdditionalStation>, List<IEditor>>? GetStation(Guid? stationId)
     {
         try
         {
@@ -1211,14 +1220,14 @@ public partial class StationManager : IDisposable
     /// <returns>The <see cref="Guid"/> of the newly added station.</returns>
     private Guid AddBlankStation()
     {
-        var station = new Station
+        var station = new AdditionalStation
         {
             MetaData =
             {
                 DisplayName = Strings.NewStationListBoxEntry
             }
         };
-        var trackedStation = new TrackableObject<Station>(station);
+        var trackedStation = new TrackableObject<AdditionalStation>(station);
         return AddStation(trackedStation, false);
     }
 
@@ -1258,7 +1267,7 @@ public partial class StationManager : IDisposable
                         songList.Add(song);
                 });
 
-            var station = new Station { MetaData = metadata, Songs = songList };
+            var station = new AdditionalStation { MetaData = metadata, Songs = songList };
 
             if (iconFiles.Count > 0)
             {
@@ -1295,7 +1304,7 @@ public partial class StationManager : IDisposable
                     station.AddIcon(trackedIcon, icon.IsActive);
                 }
 
-            var trackedStation = new TrackableObject<Station>(station);
+            var trackedStation = new TrackableObject<AdditionalStation>(station);
 
             EnsureDisplayNameFormat(trackedStation);
             trackedStation.AcceptChanges();
@@ -1395,7 +1404,7 @@ public partial class StationManager : IDisposable
     /// </summary>
     /// <param name="station">The station to ensure the display name of.</param>
     /// <returns>The parsed FM number from the original display name string; or, the original FM number if the same.</returns>
-    public float EnsureDisplayNameFormat(TrackableObject<Station> station)
+    public float EnsureDisplayNameFormat(TrackableObject<AdditionalStation> station)
     {
         return EnsureDisplayNameFormat(station, null);
     }
@@ -1407,7 +1416,7 @@ public partial class StationManager : IDisposable
     /// <param name="station">The station to ensure the display name of.</param>
     /// <param name="optionalFmVal">The FM number to ensure is in front of the station name. If null, the default FM value will be used instead.</param>
     /// <returns>The parsed FM number from the original display name string; or, the original FM number if the same.</returns>
-    public float EnsureDisplayNameFormat(TrackableObject<Station> station, float? optionalFmVal)
+    public float EnsureDisplayNameFormat(TrackableObject<AdditionalStation> station, float? optionalFmVal)
     {
         var currentName = station.TrackedObject.MetaData.DisplayName;
 
@@ -1550,7 +1559,7 @@ public partial class StationManager : IDisposable
     ///         <item>Value: <c>List of all editor's associated with the station.</c></item>
     ///     </list>
     /// </summary>
-    private readonly Dictionary<Guid, Pair<TrackableObject<Station>, List<IEditor>>> _stations = [];
+    private readonly Dictionary<Guid, Pair<TrackableObject<AdditionalStation>, List<IEditor>>> _stations = [];
 
     /// <summary>
     /// The JSON object used to serialize and deserialize the metadata of a station.
@@ -1615,12 +1624,12 @@ public partial class StationManager : IDisposable
     /// <summary>
     /// The current list of stations managed by the manager as a binding list. Auto-updates when stations are added or removed.
     /// </summary>
-    public BindingList<TrackableObject<Station>> StationsAsBindingList { get; } = [];
+    public BindingList<TrackableObject<AdditionalStation>> StationsAsBindingList { get; } = [];
 
     /// <summary>
     /// The current list of stations managed by the manager as a list.
     /// </summary>
-    public List<TrackableObject<Station>> StationsAsList => _stations.Values.Select(pair => pair.Key).ToList();
+    public List<TrackableObject<AdditionalStation>> StationsAsList => _stations.Values.Select(pair => pair.Key).ToList();
 
     /// <summary>
     /// The list of protected staging folders that should not be deleted. Normally, this contains at least the path to the "icons" folder.

@@ -32,7 +32,7 @@ public partial class IconManagerForm : Form
     private readonly string _createdFromPngString = Strings.CreatedFromPng;
     private readonly TrackableObject<WolvenIcon>? _iconFromImagePath;
     private readonly ToolTip _iconToolTip = new();
-    private readonly TrackableObject<Station> _station;
+    private readonly TrackableObject<AdditionalStation> _station;
 
     private readonly ImageList _stationImageList = new();
     private IconEditor? _currentEditor;
@@ -40,14 +40,14 @@ public partial class IconManagerForm : Form
     private bool _isExportingIcon;
     private bool _isImportingIcon;
 
-    public IconManagerForm(TrackableObject<Station> station)
+    public IconManagerForm(TrackableObject<AdditionalStation> station)
     {
         InitializeComponent();
 
         _station = station;
     }
 
-    public IconManagerForm(TrackableObject<Station> station, string imagePath)
+    public IconManagerForm(TrackableObject<AdditionalStation> station, string imagePath)
     {
         InitializeComponent();
 

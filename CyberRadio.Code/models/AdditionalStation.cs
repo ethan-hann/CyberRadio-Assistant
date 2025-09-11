@@ -17,6 +17,7 @@
 using System.ComponentModel;
 using AetherUtils.Core.Logging;
 using Newtonsoft.Json;
+using RadioExt_Helper.utility;
 using WIG.Lib.Models;
 
 namespace RadioExt_Helper.models;
@@ -24,11 +25,17 @@ namespace RadioExt_Helper.models;
 /// <summary>
 ///     Represents a single radio station. Contains all information related to the station.
 /// </summary>
-public sealed class Station : INotifyPropertyChanged, ICloneable, IEquatable<Station>
+public sealed class AdditionalStation : IStation, INotifyPropertyChanged, ICloneable, IEquatable<AdditionalStation>
 {
     private List<TrackableObject<WolvenIcon>> _icons = [];
     private MetaData _metaData = new();
     private List<Song> _songs = [];
+
+    /// <inheritdoc />
+    public List<string> Tags { get; set; } = [];
+
+    /// <inheritdoc />
+    public StationType StationType => StationType.Additional;
 
     /// <summary>
     ///     The metadata associated with this station.
@@ -103,7 +110,7 @@ public sealed class Station : INotifyPropertyChanged, ICloneable, IEquatable<Sta
 
     public object Clone()
     {
-        return new Station
+        return new AdditionalStation
         {
             MetaData = (MetaData)MetaData.Clone(),
             Songs = [.. Songs],
@@ -111,7 +118,7 @@ public sealed class Station : INotifyPropertyChanged, ICloneable, IEquatable<Sta
         };
     }
 
-    public bool Equals(Station? other)
+    public bool Equals(AdditionalStation? other)
     {
         if (other == null) return false;
         return MetaData.Equals(other.MetaData) &&
@@ -199,7 +206,7 @@ public sealed class Station : INotifyPropertyChanged, ICloneable, IEquatable<Sta
         }
         catch (Exception e)
         {
-            AuLogger.GetCurrentLogger<Station>().Error(e);
+            AuLogger.GetCurrentLogger<AdditionalStation>().Error(e);
         }
 
         return null;
@@ -223,7 +230,7 @@ public sealed class Station : INotifyPropertyChanged, ICloneable, IEquatable<Sta
         }
         catch (Exception e)
         {
-            AuLogger.GetCurrentLogger<Station>().Error(e);
+            AuLogger.GetCurrentLogger<AdditionalStation>().Error(e);
         }
 
         return false;
@@ -245,7 +252,7 @@ public sealed class Station : INotifyPropertyChanged, ICloneable, IEquatable<Sta
         }
         catch (Exception ex)
         {
-            AuLogger.GetCurrentLogger<Station>("AddCustomData").Error(ex,
+            AuLogger.GetCurrentLogger<AdditionalStation>("AddCustomData").Error(ex,
                 $"An error occurred while adding custom data for the station: {MetaData.DisplayName}");
         }
     }
@@ -265,7 +272,7 @@ public sealed class Station : INotifyPropertyChanged, ICloneable, IEquatable<Sta
         }
         catch (Exception ex)
         {
-            AuLogger.GetCurrentLogger<Station>("RemoveCustomData").Error(ex,
+            AuLogger.GetCurrentLogger<AdditionalStation>("RemoveCustomData").Error(ex,
                 $"An error occurred while removing custom data for the station: {MetaData.DisplayName}");
         }
     }
@@ -283,7 +290,7 @@ public sealed class Station : INotifyPropertyChanged, ICloneable, IEquatable<Sta
         }
         catch (Exception ex)
         {
-            AuLogger.GetCurrentLogger<Station>("ContainsCustomData").Error(ex,
+            AuLogger.GetCurrentLogger<AdditionalStation>("ContainsCustomData").Error(ex,
                 $"An error occurred while checking the custom data with key ({key}) for the station: {MetaData.DisplayName}");
         }
 
@@ -303,7 +310,7 @@ public sealed class Station : INotifyPropertyChanged, ICloneable, IEquatable<Sta
         }
         catch (Exception ex)
         {
-            AuLogger.GetCurrentLogger<Station>("ContainsCustomData").Error(ex,
+            AuLogger.GetCurrentLogger<AdditionalStation>("ContainsCustomData").Error(ex,
                 $"An error occurred while getting the custom data with key ({key}) for the station: {MetaData.DisplayName}");
         }
 
@@ -322,7 +329,7 @@ public sealed class Station : INotifyPropertyChanged, ICloneable, IEquatable<Sta
 
     public override bool Equals(object? obj)
     {
-        return Equals(obj as Station);
+        return Equals(obj as AdditionalStation);
     }
 
     public override int GetHashCode()

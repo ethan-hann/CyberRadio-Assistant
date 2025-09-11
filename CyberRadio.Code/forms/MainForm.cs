@@ -559,7 +559,7 @@ public sealed partial class MainForm : Form
             lbStations.SelectedIndex = index;
         }
 
-        if (lbStations.SelectedItem is not TrackableObject<Station> station) return;
+        if (lbStations.SelectedItem is not TrackableObject<AdditionalStation> station) return;
         SelectStationEditor(station.Id);
         UpdateTitleBar(station.Id);
     }
@@ -620,7 +620,7 @@ public sealed partial class MainForm : Form
 
     private void RevertChangesToolStripMenuItem_Click(object sender, EventArgs e)
     {
-        if (lbStations.SelectedItem is not TrackableObject<Station> station) return;
+        if (lbStations.SelectedItem is not TrackableObject<AdditionalStation> station) return;
 
         //We only want to revert the changes if there is a pending save. Otherwise, the wrong icon is drawn in the list box.
         if (!station.IsPendingSave) return;
@@ -642,7 +642,7 @@ public sealed partial class MainForm : Form
     /// </summary>
     private void BtnEnableStation_Click(object sender, EventArgs e)
     {
-        if (lbStations.SelectedItem is not TrackableObject<Station> s) return;
+        if (lbStations.SelectedItem is not TrackableObject<AdditionalStation> s) return;
 
         SetStationStatus(true, false, s.Id);
     }
@@ -654,7 +654,7 @@ public sealed partial class MainForm : Form
     /// </summary>
     private void BtnDisableStation_Click(object sender, EventArgs e)
     {
-        if (lbStations.SelectedItem is not TrackableObject<Station> s) return;
+        if (lbStations.SelectedItem is not TrackableObject<AdditionalStation> s) return;
 
         SetStationStatus(false, false, s.Id);
     }
@@ -666,7 +666,7 @@ public sealed partial class MainForm : Form
     /// </summary>
     private void BtnEnableAll_Click(object sender, EventArgs e)
     {
-        SetStationStatus(true, true, lbStations.Items.Cast<TrackableObject<Station>>().Select(s => s.Id).ToArray());
+        SetStationStatus(true, true, lbStations.Items.Cast<TrackableObject<AdditionalStation>>().Select(s => s.Id).ToArray());
     }
 
     /// <summary>
@@ -676,7 +676,7 @@ public sealed partial class MainForm : Form
     /// <param name="e">The event arguments.</param>
     private void BtnDisableAll_Click(object sender, EventArgs e)
     {
-        SetStationStatus(false, true, lbStations.Items.Cast<TrackableObject<Station>>().Select(s => s.Id).ToArray());
+        SetStationStatus(false, true, lbStations.Items.Cast<TrackableObject<AdditionalStation>>().Select(s => s.Id).ToArray());
     }
 
     /// <summary>
@@ -808,7 +808,7 @@ public sealed partial class MainForm : Form
             .Where(s => s.TrackedObject.MetaData.DisplayName.ToLower().Contains(searchTerm)).ToList();
 
         lbStations.BeginUpdate();
-        lbStations.DataSource = new BindingList<TrackableObject<Station>>(filteredStations);
+        lbStations.DataSource = new BindingList<TrackableObject<AdditionalStation>>(filteredStations);
         lbStations.Invalidate();
         lbStations.EndUpdate();
     }
@@ -820,7 +820,7 @@ public sealed partial class MainForm : Form
     /// <param name="stationId">The event arguments.</param>
     private void OnStationUpdated(object? sender, Guid stationId)
     {
-        if (lbStations.SelectedItem is not TrackableObject<Station> station) return;
+        if (lbStations.SelectedItem is not TrackableObject<AdditionalStation> station) return;
 
         StationManager.Instance.OnStationUpdated(station.Id);
         lbStations.BeginUpdate();
@@ -833,7 +833,7 @@ public sealed partial class MainForm : Form
         if (GameBasePath.Equals(string.Empty) || StagingPath.Equals(string.Empty))
             return;
 
-        if (lbStations.SelectedItem is not TrackableObject<Station> station) return;
+        if (lbStations.SelectedItem is not TrackableObject<AdditionalStation> station) return;
         StationManager.Instance.RemoveStation(station.Id);
         UpdateEnabledStationCount();
         HandleUserControlVisibility();
@@ -1294,7 +1294,7 @@ public sealed partial class MainForm : Form
 
     private void IconGeneratorToolStripMenuItem_Click(object sender, EventArgs e)
     {
-        if (lbStations.SelectedItem is not TrackableObject<Station> station) return;
+        if (lbStations.SelectedItem is not TrackableObject<AdditionalStation> station) return;
         ShowIconManagerForm(station);
     }
 
@@ -1302,7 +1302,7 @@ public sealed partial class MainForm : Form
     /// Show the Icon Manager form for the selected station.
     /// </summary>
     /// <param name="station">The station to associate with the icon manager form.</param>
-    public void ShowIconManagerForm(TrackableObject<Station> station)
+    public void ShowIconManagerForm(TrackableObject<AdditionalStation> station)
     {
         ShowIconManagerForm(station, string.Empty);
     }
@@ -1312,7 +1312,7 @@ public sealed partial class MainForm : Form
     /// </summary>
     /// <param name="station">The station to associate with the icon manager form.</param>
     /// <param name="newIconImagePath">The path to the .png icon used to create a new icon immediately.</param>
-    public void ShowIconManagerForm(TrackableObject<Station> station, string newIconImagePath)
+    public void ShowIconManagerForm(TrackableObject<AdditionalStation> station, string newIconImagePath)
     {
         var managerForm = newIconImagePath == ""
             ? new IconManagerForm(station)
@@ -1335,7 +1335,7 @@ public sealed partial class MainForm : Form
     {
         try
         {
-            if (lbStations.SelectedItem is not TrackableObject<Station> station) return;
+            if (lbStations.SelectedItem is not TrackableObject<AdditionalStation> station) return;
 
             lbStations.BeginUpdate();
 

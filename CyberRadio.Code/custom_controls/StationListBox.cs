@@ -284,7 +284,7 @@ public sealed partial class StationListBox : ListBox
 
             e.DrawBackground();
 
-            if (Items[e.Index] is TrackableObject<Station> station)
+            if (Items[e.Index] is TrackableObject<AdditionalStation> station)
             {
                 // Determine the primary icon (enabled/disabled)
                 var primaryIconKey = station.TrackedObject.GetStatus() ? _enabledIconKey : _disabledIconKey;
@@ -333,14 +333,14 @@ public sealed partial class StationListBox : ListBox
     /// <param name="station">A station to get the color of.</param>
     /// <returns>If the station has no missing songs, is not a duplicate name, and is not a new station, returns the original fore color. Otherwise, returns a
     /// blend of colors depending on whether the station is missing songs, is a duplicate, and/or is a new station.</returns>
-    private Color GetItemColor(TrackableObject<Station> station)
+    private Color GetItemColor(TrackableObject<AdditionalStation> station)
     {
         var returnColor = ForeColor;
 
         if (station.TrackedObject.Songs.Any(s => !FileHelper.DoesFileExist(s.FilePath)))
             returnColor = CombineColors(returnColor, _songsMissingColor);
 
-        if (Items.OfType<TrackableObject<Station>>().Count(s =>
+        if (Items.OfType<TrackableObject<AdditionalStation>>().Count(s =>
                 s.TrackedObject.MetaData.DisplayName.Equals(station.TrackedObject.MetaData.DisplayName)) > 1)
             returnColor = CombineColors(returnColor, _duplicateStationsColor);
 
@@ -350,14 +350,14 @@ public sealed partial class StationListBox : ListBox
         return returnColor;
     }
 
-    private Font GetItemFont(TrackableObject<Station> station)
+    private Font GetItemFont(TrackableObject<AdditionalStation> station)
     {
         var font = Font;
 
         if (station.TrackedObject.Songs.Any(s => !FileHelper.DoesFileExist(s.FilePath)))
             font = _songsMissingFont;
 
-        else if (Items.OfType<TrackableObject<Station>>().Count(s =>
+        else if (Items.OfType<TrackableObject<AdditionalStation>>().Count(s =>
                      s.TrackedObject.MetaData.DisplayName.Equals(station.TrackedObject.MetaData.DisplayName)) > 1)
             font = _duplicateStationsFont;
 

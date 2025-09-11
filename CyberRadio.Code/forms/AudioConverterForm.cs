@@ -44,7 +44,7 @@ public partial class AudioConverterForm : Form
     /// <summary>
     /// The radio station context for the conversion, if any.
     /// </summary>
-    private readonly TrackableObject<Station>? _station;
+    private readonly TrackableObject<AdditionalStation>? _station;
 
     /// <summary>
     /// The list of checked items in the listbox that are to be converted.
@@ -81,7 +81,7 @@ public partial class AudioConverterForm : Form
     /// An optional <see cref="TrackableObject{Station}"/> representing the radio station context for the conversion.
     /// If <c>null</c>, the conversion is not associated with a specific station.
     /// </param>
-    public AudioConverterForm(List<string> inputFiles, TrackableObject<Station>? station)
+    public AudioConverterForm(List<string> inputFiles, TrackableObject<AdditionalStation>? station)
     {
         InitializeComponent();
 
@@ -399,7 +399,7 @@ public partial class AudioConverterForm : Form
 
                     RunOnUI(() => { lbCandidates.SelectedItem = item; });
 
-                    await AudioConverter.Instance.ConvertAsync(item, _cts.Token);
+                    await AudioConverter.Instance.ConvertAsync(item, false, _cts.Token);
                 }
 
                 if (_totalToConvert <= 0)

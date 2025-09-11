@@ -652,7 +652,7 @@ namespace RadioExt_Helper.forms
             // 
             // stationBindingSource
             // 
-            stationBindingSource.DataSource = typeof(models.Station);
+            stationBindingSource.DataSource = typeof(models.AdditionalStation);
             // 
             // cmsRevertStationChanges
             // 

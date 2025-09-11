@@ -39,7 +39,7 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
     /// Initializes a new instance of the <see cref="CustomMusicCtl"/> class.
     /// </summary>
     /// <param name="station">The trackable station object.</param>
-    public CustomMusicCtl(TrackableObject<Station> station)
+    public CustomMusicCtl(TrackableObject<AdditionalStation> station)
     {
         Station = station;
 
@@ -54,7 +54,7 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
     /// <summary>
     /// Gets the trackable station object associated with the control.
     /// </summary>
-    public TrackableObject<Station> Station { get; }
+    public TrackableObject<AdditionalStation> Station { get; }
 
     /// <summary>
     /// Translates the control's text to the appropriate language.

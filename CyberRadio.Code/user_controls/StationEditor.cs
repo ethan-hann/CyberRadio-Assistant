@@ -41,7 +41,7 @@ public sealed partial class StationEditor : UserControl, IEditor
     /// Initializes a new instance of the <see cref="StationEditor"/> class.
     /// </summary>
     /// <param name="station">The trackable station object.</param>
-    public StationEditor(TrackableObject<Station> station)
+    public StationEditor(TrackableObject<AdditionalStation> station)
     {
         InitializeComponent();
         Dock = DockStyle.Fill;
@@ -64,7 +64,7 @@ public sealed partial class StationEditor : UserControl, IEditor
     /// <summary>
     /// Gets the trackable station object.
     /// </summary>
-    public TrackableObject<Station> Station { get; }
+    public TrackableObject<AdditionalStation> Station { get; }
 
     public Guid Id { get; set; } = Guid.NewGuid();
     public EditorType Type { get; set; } = EditorType.StationEditor;

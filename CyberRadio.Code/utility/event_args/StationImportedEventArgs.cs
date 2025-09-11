@@ -35,11 +35,11 @@ using RadioExt_Helper.models;
 namespace RadioExt_Helper.utility.event_args;
 
 public class StationImportedEventArgs(
-    TrackableObject<Station> station,
+    TrackableObject<AdditionalStation> station,
     string? iconFilePath,
     string? iconFileName) : EventArgs
 {
-    public TrackableObject<Station> Station { get; private set; } = station;
+    public TrackableObject<AdditionalStation> Station { get; private set; } = station;
     public string? IconFilePath { get; private set; } = iconFilePath;
     public string? IconFileName { get; private set; } = iconFileName;
 }

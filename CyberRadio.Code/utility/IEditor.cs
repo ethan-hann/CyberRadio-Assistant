@@ -36,7 +36,7 @@ public interface IEditor
     /// <summary>
     ///     The tracked station associated with this control.
     /// </summary>
-    public TrackableObject<Station> Station { get; }
+    public TrackableObject<AdditionalStation> Station { get; }
 
     /// <summary>
     /// Defines the method to translate the control into the current language.

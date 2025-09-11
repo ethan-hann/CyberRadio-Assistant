@@ -38,7 +38,7 @@ public partial class ExportWindow : Form
 
     private readonly Json<MetaData> _metaDataJson = new();
     private readonly Json<List<Song>> _songListJson = new();
-    private readonly List<TrackableObject<Station>> _stationsToExport;
+    private readonly List<TrackableObject<AdditionalStation>> _stationsToExport;
 
     private readonly string _statusString = Strings.ExportingStationStatus;
 
@@ -103,7 +103,7 @@ public partial class ExportWindow : Form
         if (e.ColumnIndex == 0) // Assuming the icon is in the first column
         {
             if (e.Item == null || lvStations.SmallImageList == null ||
-                e.Item.Tag is not TrackableObject<Station> station) return;
+                e.Item.Tag is not TrackableObject<AdditionalStation> station) return;
 
             var image = lvStations.SmallImageList.Images[station.TrackedObject.GetStatus() ? "enabled" : "disabled"];
             if (image == null) return;
@@ -375,7 +375,7 @@ public partial class ExportWindow : Form
     /// <param name="stations">The list of <see cref="TrackableObject{Station}"/> stations to use for mapping.</param>
     /// <returns>A dictionary containing the directory-song mappings.</returns>
     private static Dictionary<string, string> MapSongsToDirectories(List<string> existingDirectories,
-        List<TrackableObject<Station>> stations)
+        List<TrackableObject<AdditionalStation>> stations)
     {
         var songDirectoryMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
@@ -398,7 +398,7 @@ public partial class ExportWindow : Form
     /// <param name="newStationPath">The path to the new station's directory.</param>
     /// <param name="station">The station to copy songs for.</param>
     private void CopySongFiles(Dictionary<string, string> songDirectoryMap, string newStationPath,
-        TrackableObject<Station> station)
+        TrackableObject<AdditionalStation> station)
     {
         foreach (var song in station.TrackedObject.Songs)
         {
@@ -474,11 +474,11 @@ public partial class ExportWindow : Form
     }
 
     /// <summary>
-    ///     Creates the station directory in the staging path for the specified <see cref="Station" />.
+    ///     Creates the station directory in the staging path for the specified <see cref="AdditionalStation" />.
     /// </summary>
     /// <param name="station">The station to create the directory for.</param>
     /// <returns>The path to the station's directory.</returns>
-    private static string CreateStationDirectory(TrackableObject<Station> station)
+    private static string CreateStationDirectory(TrackableObject<AdditionalStation> station)
     {
         if (string.IsNullOrEmpty(StagingPath)) return string.Empty;
 
@@ -493,7 +493,7 @@ public partial class ExportWindow : Form
     /// <param name="stationPath">The path where the metadata JSON file will be created.</param>
     /// <param name="station">The station object containing the metadata to be saved.</param>
     /// <returns>True if the file was successfully saved; otherwise, false.</returns>
-    private bool CreateMetaDataJson(string stationPath, TrackableObject<Station> station)
+    private bool CreateMetaDataJson(string stationPath, TrackableObject<AdditionalStation> station)
     {
         var mdPath = Path.Combine(stationPath, "metadata.json");
         return _metaDataJson.SaveJson(mdPath, station.TrackedObject.MetaData);
@@ -505,7 +505,7 @@ public partial class ExportWindow : Form
     /// <param name="stationPath">The path where the song list JSON file will be created.</param>
     /// <param name="station">The station object containing the songs to be saved.</param>
     /// <returns>True if the file was successfully saved; otherwise, false.</returns>
-    private bool CreateSongListJson(string stationPath, TrackableObject<Station> station)
+    private bool CreateSongListJson(string stationPath, TrackableObject<AdditionalStation> station)
     {
         var songPath = Path.Combine(stationPath, "songs.sgls");
         return _songListJson.SaveJson(songPath, station.TrackedObject.Songs);
@@ -517,7 +517,7 @@ public partial class ExportWindow : Form
     /// <param name="stationPath">The path where the icon list JSON file will be created.</param>
     /// <param name="station">The station object containing the icons to be saved.</param>
     /// <returns>True if the file was successfully saved; otherwise, false.</returns>
-    private bool CreateIconListJson(string stationPath, TrackableObject<Station> station)
+    private bool CreateIconListJson(string stationPath, TrackableObject<AdditionalStation> station)
     {
         var iconPath = Path.Combine(stationPath, "icons.icls");
 
@@ -700,7 +700,7 @@ public partial class ExportWindow : Form
     /// Copy the icons from the staging directory (if present and the hash matches) to the game directory.
     /// </summary>
     /// <param name="activeStations">The list of active stations to copy the icons of.</param>
-    private void CopyIconsToGame(List<TrackableObject<Station>> activeStations)
+    private void CopyIconsToGame(List<TrackableObject<AdditionalStation>> activeStations)
     {
         try
         {
@@ -810,11 +810,11 @@ public partial class ExportWindow : Form
 
     /// <summary>
     /// Delete the active station's inactive icons from the game directory (if present and the hash matches).
-    /// This is different from <see cref="DeleteInactiveStationIconsFromGame(List{TrackableObject{Station}})"/> 
+    /// This is different from <see cref="DeleteInactiveStationIconsFromGame(List{TrackableObject{AdditionalStation}})"/> 
     /// in that this deletes ACTIVE station's inactive icons from the game.
     /// </summary>
     /// <param name="activeStations">The list of active stations to delete inactive icons of.</param>
-    private void DeleteActiveStationInactiveIconsFromGame(List<TrackableObject<Station>> activeStations)
+    private void DeleteActiveStationInactiveIconsFromGame(List<TrackableObject<AdditionalStation>> activeStations)
     {
         try
         {
@@ -878,7 +878,7 @@ public partial class ExportWindow : Form
     /// Remove the icons of inactive stations from the game directory.
     /// </summary>
     /// <param name="inactiveStations">The list of inactive stations to remove icons of.</param>
-    private void DeleteInactiveStationIconsFromGame(List<TrackableObject<Station>> inactiveStations)
+    private void DeleteInactiveStationIconsFromGame(List<TrackableObject<AdditionalStation>> inactiveStations)
     {
         try
         {
