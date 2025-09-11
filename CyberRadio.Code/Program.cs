@@ -40,6 +40,12 @@ internal static class Program
         }
 
         // After the splash screen is closed, show the main form
-        Application.Run(new MainForm());
+        var mainForm = new MainForm();
+
+        // If the main form is exiting (hard-closing), do not run the application
+        if (mainForm.IsHardClosing)
+            return;
+
+        Application.Run(mainForm);
     }
 }

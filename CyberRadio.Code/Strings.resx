@@ -1508,4 +1508,16 @@ Please be patient. You can cancel at any time using the "Cancel Action" button. 
   <data name="ImportingIcon" xml:space="preserve">
     <value>Importing icon...</value>
   </data>
+  <data name="SplashScreen_SetupAudioManager" xml:space="preserve">
+    <value>Initializing the Audio Manager...</value>
+  </data>
+  <data name="InvalidGamePath" xml:space="preserve">
+    <value>The game base path was invalid. Please set it now.</value>
+  </data>
+  <data name="InitializationError" xml:space="preserve">
+    <value>Initialization Error</value>
+  </data>
+  <data name="InvalidConfigExit" xml:space="preserve">
+    <value>The configuration is still invalid after showing the configuration form. The application will now exit.</value>
+  </data>
 </root>

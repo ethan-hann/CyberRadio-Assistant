@@ -1502,4 +1502,22 @@
     <value>从.archive文件中提取图标可能需要一段时间。
 请耐心等待。您可以随时使用“取消操作”按钮取消。开始提取？</value>
   </data>
+  <data name="ExtractingIcon" xml:space="preserve">
+    <value>提取图标...</value>
+  </data>
+  <data name="ImportingIcon" xml:space="preserve">
+    <value>导入图标...</value>
+  </data>
+  <data name="SplashScreen_SetupAudioManager" xml:space="preserve">
+    <value>初始化音频管理器...</value>
+  </data>
+  <data name="InvalidGamePath" xml:space="preserve">
+    <value>游戏基础路径无效。请立即设置。</value>
+  </data>
+  <data name="InitializationError" xml:space="preserve">
+    <value>初始化错误</value>
+  </data>
+  <data name="InvalidConfigExit" xml:space="preserve">
+    <value>显示配置表格后，配置仍然无效。该应用程序现在将退出。</value>
+  </data>
 </root>

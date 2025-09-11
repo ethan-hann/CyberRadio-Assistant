@@ -2296,6 +2296,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Initialization Error.
+        /// </summary>
+        internal static string InitializationError {
+            get {
+                return ResourceManager.GetString("InitializationError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ink Atlas Part:.
         /// </summary>
         internal static string InkAtlasPart {
@@ -2359,6 +2368,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The configuration is still invalid after showing the configuration form. The application will now exit..
+        /// </summary>
+        internal static string InvalidConfigExit {
+            get {
+                return ResourceManager.GetString("InvalidConfigExit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please select the correct file..
         /// </summary>
         internal static string InvalidFile {
@@ -2373,6 +2391,15 @@ namespace RadioExt_Helper {
         internal static string InvalidFileCaption {
             get {
                 return ResourceManager.GetString("InvalidFileCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The game base path was invalid. Please set it now..
+        /// </summary>
+        internal static string InvalidGamePath {
+            get {
+                return ResourceManager.GetString("InvalidGamePath", resourceCulture);
             }
         }
         
@@ -3558,6 +3585,15 @@ namespace RadioExt_Helper {
         internal static string SplashScreen_SetupAudioConverter {
             get {
                 return ResourceManager.GetString("SplashScreen_SetupAudioConverter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Initializing the Audio Manager....
+        /// </summary>
+        internal static string SplashScreen_SetupAudioManager {
+            get {
+                return ResourceManager.GetString("SplashScreen_SetupAudioManager", resourceCulture);
             }
         }
         

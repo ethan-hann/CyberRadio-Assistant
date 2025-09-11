@@ -18,6 +18,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Timers;
 using AetherUtils.Core.Extensions;
+using AetherUtils.Core.Files;
 using AetherUtils.Core.Logging;
 using AetherUtils.Core.WinForms.Controls;
 using AetherUtils.Core.WinForms.Models;
@@ -51,8 +52,14 @@ public sealed partial class MainForm : Form
     private bool _ignoreSelectedIndexChanged;
 
     private bool _isAppClosing;
+    private bool _isHardClosing;
     private bool _isExportInProgress;
     private bool _isSyncInProgress;
+
+    /// <summary>
+    /// Get a value indicating whether the application is in the process of closing because of invalid configuration or a critical error.
+    /// </summary>
+    public bool IsHardClosing => _isHardClosing;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="MainForm" /> class.
@@ -82,6 +89,49 @@ public sealed partial class MainForm : Form
 
         //Add the icons folder to the protected folders list
         StationManager.Instance.AddProtectedFolder(Path.Combine(StagingPath, "icons"));
+
+        //Add the audio folder to the protected folders list
+        StationManager.Instance.AddProtectedFolder(Path.Combine(StagingPath, "audio"));
+
+        //Ensure the configuration is valid
+        var validConfig = GlobalData.ConfigManager.ConfigExists;
+        var gameBasePath = GlobalData.ConfigManager.GetConfig()?.GameBasePath;
+        var isFirstRun = GlobalData.ConfigManager.GetConfig()?.IsFirstRun ?? false;
+        var stagingPath = GlobalData.ConfigManager.GetConfig()?.StagingPath;
+
+        if (stagingPath != null)
+            validConfig &= FileHelper.DoesFolderExist(stagingPath);
+        if (gameBasePath != null)
+            validConfig &= FileHelper.DoesFolderExist(gameBasePath);
+
+        // If the configuration is not valid, and it's not the first run, show an error message and open the configuration form
+        if (!validConfig && !isFirstRun)
+        {
+            AuLogger.GetCurrentLogger<MainForm>().Error("The configuration file was invalid. Ensure the game base path and the staging directory exist.");
+            MessageBox.Show(this, Strings.InvalidGamePath, Strings.InitializationError, MessageBoxButtons.OK);
+
+            //Show the configuration form to allow the user to set the paths
+            using ConfigForm configForm = new("tabPathSetup");
+            configForm.ShowDialog(this);
+
+            //Re-check the configuration after the form is closed
+            validConfig = GlobalData.ConfigManager.ConfigExists;
+            gameBasePath = GlobalData.ConfigManager.GetConfig()?.GameBasePath;
+            stagingPath = GlobalData.ConfigManager.GetConfig()?.StagingPath;
+
+            if (stagingPath != null)
+                validConfig &= FileHelper.DoesFolderExist(stagingPath);
+            if (gameBasePath != null)
+                validConfig &= FileHelper.DoesFolderExist(gameBasePath);
+
+            if (!validConfig)
+            {
+                AuLogger.GetCurrentLogger<MainForm>().Fatal("The configuration is still invalid after showing the configuration form. The application will now exit.");
+                MessageBox.Show(this, Strings.InvalidConfigExit, Strings.InitializationError, MessageBoxButtons.OK);
+                _isHardClosing = true;
+                Close();
+            }
+        }
 
         SetupDirectoryWatcher();
     }
@@ -246,31 +296,39 @@ public sealed partial class MainForm : Form
     /// </summary>
     private void SetupDirectoryWatcher()
     {
-        if (_directoryWatcher != null)
+        try
         {
-            _directoryWatcher.FileCreated -= OnDirectoryWatcherFileCreated;
-            _directoryWatcher.FileChanged -= OnDirectoryWatcherFileChanged;
-            _directoryWatcher.FileRenamed -= OnDirectoryWatcherFileRenamed;
-            _directoryWatcher.FileDeleted -= OnDirectoryWatcherFileDeleted;
-            _directoryWatcher.Error -= OnDirectoryWatcherError;
+            if (_directoryWatcher != null)
+            {
+                _directoryWatcher.FileCreated -= OnDirectoryWatcherFileCreated;
+                _directoryWatcher.FileChanged -= OnDirectoryWatcherFileChanged;
+                _directoryWatcher.FileRenamed -= OnDirectoryWatcherFileRenamed;
+                _directoryWatcher.FileDeleted -= OnDirectoryWatcherFileDeleted;
+                _directoryWatcher.Error -= OnDirectoryWatcherError;
+            }
+
+            _directoryWatcher?.Stop();
+            _directoryWatcher = null;
+
+            if (GlobalData.ConfigManager.Get("watchForGameChanges") as bool? != true) return;
+
+            if (GameBasePath.Equals(string.Empty))
+                return;
+
+            _directoryWatcher = new DirectoryWatcher(PathHelper.GetRadiosPath(GameBasePath), TimeSpan.FromSeconds(5));
+            _directoryWatcher.FileCreated += OnDirectoryWatcherFileCreated;
+            _directoryWatcher.FileChanged += OnDirectoryWatcherFileChanged;
+            _directoryWatcher.FileRenamed += OnDirectoryWatcherFileRenamed;
+            _directoryWatcher.FileDeleted += OnDirectoryWatcherFileDeleted;
+            _directoryWatcher.Error += OnDirectoryWatcherError;
+
+            _directoryWatcher.Start();
         }
-
-        _directoryWatcher?.Stop();
-        _directoryWatcher = null;
-
-        if (GlobalData.ConfigManager.Get("watchForGameChanges") as bool? != true) return;
-
-        if (GameBasePath.Equals(string.Empty))
-            return;
-
-        _directoryWatcher = new DirectoryWatcher(PathHelper.GetRadiosPath(GameBasePath), TimeSpan.FromSeconds(5));
-        _directoryWatcher.FileCreated += OnDirectoryWatcherFileCreated;
-        _directoryWatcher.FileChanged += OnDirectoryWatcherFileChanged;
-        _directoryWatcher.FileRenamed += OnDirectoryWatcherFileRenamed;
-        _directoryWatcher.FileDeleted += OnDirectoryWatcherFileDeleted;
-        _directoryWatcher.Error += OnDirectoryWatcherError;
-
-        _directoryWatcher.Start();
+        catch (Exception ex)
+        {
+            AuLogger.GetCurrentLogger<MainForm>("SetupDirectoryWatcher")
+                .Error(ex, "An error occurred while setting up the directory watcher.");
+        }
     }
 
     /// <summary>
@@ -1214,14 +1272,22 @@ public sealed partial class MainForm : Form
 
     private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
     {
-        _isAppClosing = true;
-
         if (e.CloseReason is CloseReason.TaskManagerClosing or CloseReason.WindowsShutDown) return;
 
-        if (!CheckForPendingSaveStations())
-            e.Cancel = true;
+        // If the application is hard closing (e.g., because of invalid config checks), skip the pending save check
+        if (_isHardClosing)
+        {
+            CleanupEvents();
+        }
         else
-            CleanupEvents(); // Clean up events (unsubscribe) before closing the application
+        {
+            _isAppClosing = true;
+
+            if (!CheckForPendingSaveStations())
+                e.Cancel = true;
+            else
+                CleanupEvents();
+        }
     }
 
     private void IconGeneratorToolStripMenuItem_Click(object sender, EventArgs e)

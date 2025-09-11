@@ -162,6 +162,14 @@ public partial class SplashScreen : Form
             ? "Audio Converter initialized successfully."
             : "Audio Converter initialization failed.");
 
+        //Setup Audio Manager
+        UpdateStatus(Strings.SplashScreen_SetupAudioManager);
+        await AudioManager.Instance.InitializeAsync();
+        await Task.Delay(200);
+        statusMessages.Add(AudioManager.Instance.IsInitialized
+            ? "Audio Manager initialized successfully."
+            : "Audio Manager initialization failed.");
+
         //TODO: Add Nexus API key authentication when feature is implemented
         //var nexusApiKey = GlobalData.ConfigManager.Get("nexusApiKey") as string ?? string.Empty;
         //if (!nexusApiKey.Equals(string.Empty))

@@ -1502,4 +1502,22 @@ Si prega di essere paziente. È possibile annullare in qualsiasi momento utilizz
     <value>L'estrazione di un'icona da un file archivo può richiedere del tempo.
 Si prega di essere paziente. È possibile annullare in qualsiasi momento utilizzando il pulsante "Annulla Action". Iniziare l'estrazione?</value>
   </data>
+  <data name="ExtractingIcon" xml:space="preserve">
+    <value>Icona di estrazione ...</value>
+  </data>
+  <data name="ImportingIcon" xml:space="preserve">
+    <value>Icona di importazione ...</value>
+  </data>
+  <data name="SplashScreen_SetupAudioManager" xml:space="preserve">
+    <value>Inizializzazione del gestore audio ...</value>
+  </data>
+  <data name="InvalidGamePath" xml:space="preserve">
+    <value>Il percorso base di gioco non era valido. Per favore, impostalo ora.</value>
+  </data>
+  <data name="InitializationError" xml:space="preserve">
+    <value>Errore di inizializzazione</value>
+  </data>
+  <data name="InvalidConfigExit" xml:space="preserve">
+    <value>La configurazione non è valida dopo aver mostrato il modulo di configurazione. L'applicazione ora uscirà.</value>
+  </data>
 </root>

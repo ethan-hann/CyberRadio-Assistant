@@ -427,7 +427,11 @@ public sealed partial class ConfigForm : Form
         saved &= GlobalData.ConfigManager.Set("logLayout",
             "${longdate}|${level:uppercase=true}|${logger}|${message:withexception=true}");
 
-        return saved && GlobalData.ConfigManager.Save();
+        // Save the configuration to disk
+        saved &= GlobalData.ConfigManager.Save();
+
+        // Reload the configuration to ensure all values are properly set in memory
+        return saved && GlobalData.ConfigManager.Load();
     }
 
     /// <summary>

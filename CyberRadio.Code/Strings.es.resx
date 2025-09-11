@@ -1502,4 +1502,22 @@ Por favor, sea paciente. Puede cancelar en cualquier momento usando el botón "C
     <value>Extraer un icono de un archivo. Archive puede llevar un tiempo.
 Por favor, sea paciente. Puede cancelar en cualquier momento usando el botón "Cancelar acción". Iniciar extracción?</value>
   </data>
+  <data name="ExtractingIcon" xml:space="preserve">
+    <value>Extracción del icono ...</value>
+  </data>
+  <data name="ImportingIcon" xml:space="preserve">
+    <value>Importar icono ...</value>
+  </data>
+  <data name="SplashScreen_SetupAudioManager" xml:space="preserve">
+    <value>Inicializando el administrador de audio ...</value>
+  </data>
+  <data name="InvalidGamePath" xml:space="preserve">
+    <value>El camino de la base del juego no era válido. Por favor, configúrelo ahora.</value>
+  </data>
+  <data name="InitializationError" xml:space="preserve">
+    <value>Error de inicialización</value>
+  </data>
+  <data name="InvalidConfigExit" xml:space="preserve">
+    <value>La configuración aún no es válida después de mostrar el formulario de configuración. La aplicación ahora saldrá.</value>
+  </data>
 </root>
