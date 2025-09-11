@@ -1520,4 +1520,13 @@ Please be patient. You can cancel at any time using the "Cancel Action" button. 
   <data name="InvalidConfigExit" xml:space="preserve">
     <value>The configuration is still invalid after showing the configuration form. The application will now exit.</value>
   </data>
+  <data name="ReplaceVanillaStation" xml:space="preserve">
+    <value>Replace Vanilla Station...</value>
+  </data>
+  <data name="VanillaStationSelector_NoStationSelectedMessage" xml:space="preserve">
+    <value>Please select a station first.</value>
+  </data>
+  <data name="VanillaStationSelector_NoStationSelected" xml:space="preserve">
+    <value>No Station Selected</value>
+  </data>
 </root>

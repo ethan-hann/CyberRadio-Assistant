@@ -95,6 +95,7 @@ namespace RadioExt_Helper.forms
             pgBackupProgress = new ToolStripProgressBar();
             lblSpring2 = new ToolStripStatusLabel();
             statusStripBackup = new StatusStrip();
+            replaceVanillaStationToolStripMenuItem = new ToolStripMenuItem();
             menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
@@ -637,15 +638,15 @@ namespace RadioExt_Helper.forms
             // 
             // cmsNewStation
             // 
-            cmsNewStation.Items.AddRange(new ToolStripItem[] { fromzipFileToolStripMenuItem });
+            cmsNewStation.Items.AddRange(new ToolStripItem[] { fromzipFileToolStripMenuItem, replaceVanillaStationToolStripMenuItem });
             cmsNewStation.Name = "cmsNewStation";
-            cmsNewStation.Size = new Size(152, 26);
+            cmsNewStation.Size = new Size(202, 70);
             // 
             // fromzipFileToolStripMenuItem
             // 
             fromzipFileToolStripMenuItem.Image = Properties.Resources.zip_file_16x16;
             fromzipFileToolStripMenuItem.Name = "fromzipFileToolStripMenuItem";
-            fromzipFileToolStripMenuItem.Size = new Size(151, 22);
+            fromzipFileToolStripMenuItem.Size = new Size(201, 22);
             fromzipFileToolStripMenuItem.Text = "From .zip file...";
             fromzipFileToolStripMenuItem.Click += fromZipFileToolStripMenuItem_Click;
             // 
@@ -697,6 +698,13 @@ namespace RadioExt_Helper.forms
             statusStripBackup.TabIndex = 3;
             statusStripBackup.Text = "statusStrip2";
             statusStripBackup.Visible = false;
+            // 
+            // replaceVanillaStationToolStripMenuItem
+            // 
+            replaceVanillaStationToolStripMenuItem.Name = "replaceVanillaStationToolStripMenuItem";
+            replaceVanillaStationToolStripMenuItem.Size = new Size(201, 22);
+            replaceVanillaStationToolStripMenuItem.Text = "Replace Vanilla Station...";
+            replaceVanillaStationToolStripMenuItem.Click += replaceVanillaStationToolStripMenuItem_Click;
             // 
             // MainForm
             // 
@@ -807,5 +815,6 @@ namespace RadioExt_Helper.forms
         private ToolStripMenuItem fromzipFileToolStripMenuItem;
         private TextBox txtStationFilter;
         private ToolStripMenuItem audioConverterToolStripMenuItem;
+        private ToolStripMenuItem replaceVanillaStationToolStripMenuItem;
     }
 }

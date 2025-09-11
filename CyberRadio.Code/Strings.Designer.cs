@@ -3247,6 +3247,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Replace Vanilla Station....
+        /// </summary>
+        internal static string ReplaceVanillaStation {
+            get {
+                return ResourceManager.GetString("ReplaceVanillaStation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Reset to Defaults.
         /// </summary>
         internal static string ResetToDefaults {
@@ -4152,6 +4161,24 @@ namespace RadioExt_Helper {
         internal static string Value {
             get {
                 return ResourceManager.GetString("Value", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No Station Selected.
+        /// </summary>
+        internal static string VanillaStationSelector_NoStationSelected {
+            get {
+                return ResourceManager.GetString("VanillaStationSelector_NoStationSelected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please select a station first..
+        /// </summary>
+        internal static string VanillaStationSelector_NoStationSelectedMessage {
+            get {
+                return ResourceManager.GetString("VanillaStationSelector_NoStationSelectedMessage", resourceCulture);
             }
         }
         

@@ -29,6 +29,7 @@ using RadioExt_Helper.Properties;
 using RadioExt_Helper.user_controls;
 using RadioExt_Helper.utility;
 using WIG.Lib.Models;
+using WIG.Lib.Models.Audio;
 using WIG.Lib.Utility;
 using ApplicationContext = RadioExt_Helper.utility.ApplicationContext;
 using PathHelper = RadioExt_Helper.utility.PathHelper;
@@ -448,6 +449,7 @@ public sealed partial class MainForm : Form
         lblBackupStatus.Text = Strings.BackupReady;
         txtStationFilter.PlaceholderText = Strings.SearchStations;
         fromzipFileToolStripMenuItem.Text = Strings.ImportFromZipFile;
+        replaceVanillaStationToolStripMenuItem.Text = Strings.ReplaceVanillaStation;
         exitToolStripMenuItem.Text = Strings.Exit;
         clearAllDataToolStripMenuItem.Text = Strings.ClearAllData;
         modsToolStripMenuItem.Text = Strings.Mods;
@@ -1363,5 +1365,26 @@ public sealed partial class MainForm : Form
         //Open the Audio Converter form with no input files and no station.
         var audioConverterForm = new AudioConverterForm([], null);
         audioConverterForm.Show(this);
+    }
+
+    private void replaceVanillaStationToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        if (GameBasePath.Equals(string.Empty) || StagingPath.Equals(string.Empty))
+            return;
+
+        var vanillaStationSelector = new VanillaStationSelector();
+        vanillaStationSelector.OnStationSelected += OnVanillaStationSelected;
+        vanillaStationSelector.ShowDialog(this);
+    }
+
+    private void OnVanillaStationSelected(object? sender, VanillaStation e)
+    {
+        //Create a new station based on the vanilla station selected.
+        var id = StationManager.Instance.AddStation(e);
+        lbStations.SelectedItem = StationManager.Instance.GetStation(id)?.Key;
+
+        SelectStationEditor(id);
+        UpdateEnabledStationCount();
+        HandleUserControlVisibility();
     }
 }
