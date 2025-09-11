@@ -55,8 +55,6 @@ public partial class StationManager : IDisposable
     /// Regular expression that matches a display name with an optional FM number at the start.
     /// </summary>
     /// <returns></returns>
-    [GeneratedRegex(@"^\d+(\.\d+)?\s*")]
-    static partial Regex DisplayNameRegex();
 
     /// <summary>
     /// Loads stations from the specified directory into the manager, clearing any existing stations.
@@ -118,10 +116,7 @@ public partial class StationManager : IDisposable
 
     public Guid AddVanillaStation(TrackableObject<ReplacementStation> station, bool isOnDisk)
     {
-        try
-        {
-
-        }
+        return Guid.Empty;
     }
 
     /// <summary>
@@ -1645,6 +1640,9 @@ public partial class StationManager : IDisposable
     /// Get a value indicating whether the station manager is empty (i.e., has no stations).
     /// </summary>
     public bool IsEmpty => _stations.Count == 0;
+
+    [GeneratedRegex(@"^\d+(\.\d+)?\s*")]
+    private static partial Regex DisplayNameRegex();
 
     #endregion
 }

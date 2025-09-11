@@ -1379,12 +1379,13 @@ public sealed partial class MainForm : Form
 
     private void OnVanillaStationSelected(object? sender, VanillaStation e)
     {
+        MessageBox.Show(this, $"Selected station: {e.StationName}");
         //Create a new station based on the vanilla station selected.
-        var id = StationManager.Instance.AddStation(e);
-        lbStations.SelectedItem = StationManager.Instance.GetStation(id)?.Key;
+        //var id = StationManager.Instance.AddStation(e);
+        //lbStations.SelectedItem = StationManager.Instance.GetStation(id)?.Key;
 
-        SelectStationEditor(id);
-        UpdateEnabledStationCount();
-        HandleUserControlVisibility();
+        //SelectStationEditor(id);
+        //UpdateEnabledStationCount();
+        //HandleUserControlVisibility();
     }
 }
