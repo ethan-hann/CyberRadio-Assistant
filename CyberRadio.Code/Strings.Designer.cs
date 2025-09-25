@@ -1226,6 +1226,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enabled Vanilla Stations: {0} / {1}.
+        /// </summary>
+        internal static string EnabledVanillaStationsCount {
+            get {
+                return ResourceManager.GetString("EnabledVanillaStationsCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enable Selected.
         /// </summary>
         internal static string EnableSelected {

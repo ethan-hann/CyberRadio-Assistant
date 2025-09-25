@@ -52,11 +52,6 @@ public partial class StationManager : IDisposable
     }
 
     /// <summary>
-    /// Regular expression that matches a display name with an optional FM number at the start.
-    /// </summary>
-    /// <returns></returns>
-
-    /// <summary>
     /// Loads stations from the specified directory into the manager, clearing any existing stations.
     /// </summary>
     /// <param name="directory">The directory to load stations from.</param>
@@ -66,7 +61,15 @@ public partial class StationManager : IDisposable
         {
             ClearStations();
             foreach (var d in FileHelper.SafeEnumerateDirectories(directory))
-                ProcessDirectory(d, d, false);
+            {
+                // Check if the `.vanilla` file is present in the directory indicating it's a vanilla replacement station
+                var vanillaFilePath = Path.Combine(d, ".vanilla");
+                if (FileHelper.DoesFileExist(vanillaFilePath))
+                    ProcessVanillaDirectory(d, true);
+                else
+                    ProcessDirectory(d, d, false);
+            }
+                
         }
         catch (Exception ex)
         {
@@ -91,7 +94,14 @@ public partial class StationManager : IDisposable
             if (string.IsNullOrEmpty(songDirectory)) return null;
 
             if (!PathHelper.IsSubPath(GlobalData.ConfigManager.Get("stagingPath") as string ?? string.Empty, directory))
-                return ProcessDirectory(directory, songDirectory, treatAsNewStation);
+            {
+                // Check if the `.vanilla` file is present in the directory indicating it's a vanilla replacement station
+                var vanillaFilePath = Path.Combine(directory, ".vanilla");
+                return FileHelper.DoesFileExist(vanillaFilePath) ? 
+                    ProcessVanillaDirectory(directory, treatAsNewStation) : 
+                    ProcessDirectory(directory, songDirectory, treatAsNewStation);
+            }
+
             AuLogger.GetCurrentLogger<StationManager>()
                 .Warn($"Attempted to load station from staging directory: {directory}");
             return null;
@@ -114,9 +124,15 @@ public partial class StationManager : IDisposable
         return AddStation(station, isOnDisk, "\\");
     }
 
+    /// <summary>
+    /// Adds a new replacement station and editor to the manager.
+    /// </summary>
+    /// <param name="station">The replacement station to add.</param>
+    /// <param name="isOnDisk">Indicates whether the station is an in-memory addition or was added from .json files on disk.</param>
+    /// <returns>The <see cref="Guid"/> of the newly added replacement station.</returns>
     public Guid AddVanillaStation(TrackableObject<ReplacementStation> station, bool isOnDisk)
     {
-        return Guid.Empty;
+        return AddVanillaStation(station, isOnDisk, "\\");
     }
 
     /// <summary>
@@ -210,6 +226,57 @@ public partial class StationManager : IDisposable
     }
 
     /// <summary>
+    /// Adds a new replacement station and editor to the manager. Optionally, specify the path to the station folder relative to the staging folder.
+    /// </summary>
+    /// <param name="station">The replacement station to add.</param>
+    /// <param name="isOnDisk">Indicates whether the replacement station is an in-memory addition or was added from .json files on disk.</param>
+    /// <param name="pathOnDisk">Specifies the path to the station folder relative to the staging folder.</param>
+    /// <returns>The <see cref="Guid"/> of the newly added station.</returns>
+    public Guid AddVanillaStation(TrackableObject<ReplacementStation> station, bool isOnDisk, string pathOnDisk)
+    {
+        try
+        {
+            lock (_replacementStations)
+            {
+                if (CheckForDuplicateVanillaStation(station.Id))
+                    return Guid.Empty;
+
+                if (!isOnDisk)
+                    _newStations.Add(station.Id);
+
+                var editor = new ReplacementStationEditor(station);
+                _replacementStations[station.Id] = new Pair<TrackableObject<ReplacementStation>, List<IEditor>>(station, [editor]);
+
+                editor.StationUpdated += Editor_StationUpdated;
+
+                ReplacementStationsAsBindingList.Add(station);
+
+                var stagingPath = GlobalData.ConfigManager.Get("stagingPath") as string ?? string.Empty;
+                if (pathOnDisk.Equals("\\"))
+                {
+                    StationPaths[station.Id] = Path.Combine(pathOnDisk, station.TrackedObject.DisplayName);
+                }
+                else
+                {
+                    var relativePath = PathHelper.GetRelativePath(pathOnDisk, stagingPath);
+                    if (relativePath.Equals(pathOnDisk))
+                        StationPaths[station.Id] = Path.Combine("\\", station.TrackedObject.DisplayName);
+                    else
+                        StationPaths[station.Id] = relativePath;
+                }
+                
+                VanillaStationAdded?.Invoke(this, station.Id);
+                return station.Id;
+            }
+        }
+        catch (Exception ex)
+        {
+            AuLogger.GetCurrentLogger<StationManager>().Error(ex, "Error adding vanilla station to manager.");
+            return Guid.Empty;
+        }
+    }
+
+    /// <summary>
     /// Add an icon to a station. Also, adds an IconEditor the internal list of editors for the station.
     /// </summary>
     /// <param name="stationId">The station ID to add the icon to.</param>
@@ -276,20 +343,44 @@ public partial class StationManager : IDisposable
             var stationId = LoadStationFromDirectory(directories.tempDir, directories.songDir, true);
             var station = GetStation(stationId)?.Key;
 
-            if (station == null)
-            {
-                AuLogger.GetCurrentLogger<StationManager>("HandleStationArchive")
-                    .Warn($"Station not found in directory: {directories.tempDir}");
-                return null;
-            }
+            if (station != null) return station.Id;
 
-            return station.Id;
+            AuLogger.GetCurrentLogger<StationManager>("HandleStationArchive")
+                .Warn($"Station not found in directory: {directories.tempDir}");
+            return null;
+
         }
         catch (Exception ex)
         {
             AuLogger.GetCurrentLogger<StationManager>().Error(ex, "Error importing station from archive.");
         }
 
+        return null;
+    }
+
+    /// <summary>
+    /// Import a vanilla station from an archive file. The station will be extracted and added to the manager.
+    /// </summary>
+    /// <param name="filePath">The path to the .zip file containing the radio station.</param>
+    /// <returns>The <see cref="Guid"/> of the imported station; <c>null</c> if the station couldn't be imported.</returns>
+    public Guid? ImportVanillaStationFromArchive(string filePath)
+    {
+        try
+        {
+            var directories = ExtractStationArchive(filePath);
+            var stationId = LoadStationFromDirectory(directories.tempDir, directories.songDir, true);
+            var station = GetVanillaStation(stationId)?.Key;
+
+            if (station != null) return station.Id;
+
+            AuLogger.GetCurrentLogger<StationManager>("HandleVanillaStationArchive")
+                .Warn($"Vanilla Station not found in directory: {directories.tempDir}");
+            return null;
+        }
+        catch (Exception ex)
+        {
+            AuLogger.GetCurrentLogger<StationManager>().Error(ex, "Error importing vanilla station from archive.");
+        }
         return null;
     }
 
@@ -570,7 +661,7 @@ public partial class StationManager : IDisposable
     }
 
     /// <summary>
-    /// Removes a station, and it's editors from the manager.
+    /// Removes a station, and its editors from the manager.
     /// </summary>
     /// <param name="stationId">The station to remove, by ID.</param>
     public void RemoveStation(Guid stationId)
@@ -603,6 +694,36 @@ public partial class StationManager : IDisposable
     }
 
     /// <summary>
+    /// Remove a vanilla station, and its editor from the manager.
+    /// </summary>
+    /// <param name="stationId">The station to remove, by ID.</param>
+    public void RemoveVanillaStation(Guid stationId)
+    {
+        try
+        {
+            lock (_replacementStations)
+            {
+                if (!_replacementStations.TryGetValue(stationId, out var pair)) return;
+
+                foreach (var editor in pair.Value.Where(e => e.Type == EditorType.StationEditor).Cast<ReplacementStationEditor>())
+                    editor.Dispose();
+
+                _replacementStations.Remove(stationId);
+                _newStations.Remove(stationId);
+                StationPaths.Remove(stationId);
+
+                ReplacementStationsAsBindingList.Remove(ReplacementStationsAsBindingList.First(s => s.Id == stationId));
+
+                VanillaStationRemoved?.Invoke(this, stationId);
+            }
+        }
+        catch (Exception ex)
+        {
+            AuLogger.GetCurrentLogger<StationManager>().Error(ex, "Error removing vanilla station from manager.");
+        }
+    }
+
+    /// <summary>
     /// Gets the station count string, formatted with the enabled station count and localized.
     /// </summary>
     /// <returns>A formatted string showing enabled and disabled station counts: <c>Enabled Stations: {0} / {1}</c></returns>
@@ -611,6 +732,17 @@ public partial class StationManager : IDisposable
         var enabledCount = _stations.Select(pair => pair.Value.Key.TrackedObject.MetaData.IsActive)
             .Count(isActive => isActive);
         return string.Format(StationCountFormat, enabledCount, _stations.Count);
+    }
+
+    /// <summary>
+    /// Gets the vanilla station count string, formatted with the enabled vanilla station count and localized.
+    /// </summary>
+    /// <returns>A formatted string showing enabled and disabled station counts: <c>Enabled Vanilla Stations: {0} / {1}</c></returns>
+    public string GetVanillaStationCount()
+    {
+        var enabledCount = _replacementStations.Select(pair => pair.Value.Key.TrackedObject.IsActive)
+            .Count(isActive => isActive);
+        return string.Format(VanillaStationCountFormat, enabledCount, _replacementStations.Count);
     }
 
     /// <summary>
@@ -750,21 +882,35 @@ public partial class StationManager : IDisposable
 
                 _stations.Clear();
                 StationsAsBindingList.Clear();
-                StationPaths.Clear();
-                _newStations.Clear();
-
-                if (deleteFoldersFromStaging)
-                {
-                    var stagingPath = GlobalData.ConfigManager.Get("stagingPath") as string ?? string.Empty;
-                    foreach (var folder in FileHelper.SafeEnumerateDirectories(stagingPath))
-                        if (IsProtectedFolder(folder))
-                            PathHelper.ClearDirectory(
-                                folder); //Don't remove protected folders; just remove their contents
-                        else
-                            Directory.Delete(folder, true);
-                }
-
+                
                 StationsCleared?.Invoke(this, EventArgs.Empty);
+            }
+
+            lock (_replacementStations)
+            {
+                foreach (var editor in _replacementStations.Values
+                             .SelectMany(p => p.Value.Where(e => e.Type == EditorType.StationEditor))
+                             .Cast<ReplacementStationEditor>())
+                    editor.Dispose();
+
+                _replacementStations.Clear();
+                ReplacementStationsAsBindingList.Clear();
+
+                VanillaStationsCleared?.Invoke(this, EventArgs.Empty);
+            }
+
+            StationPaths.Clear();
+            _newStations.Clear();
+
+            if (deleteFoldersFromStaging)
+            {
+                var stagingPath = GlobalData.ConfigManager.Get("stagingPath") as string ?? string.Empty;
+                foreach (var folder in FileHelper.SafeEnumerateDirectories(stagingPath))
+                    if (IsProtectedFolder(folder))
+                        PathHelper.ClearDirectory(
+                            folder); //Don't remove protected folders; just remove their contents
+                    else
+                        Directory.Delete(folder, true);
             }
         }
         catch (Exception ex)
@@ -810,6 +956,42 @@ public partial class StationManager : IDisposable
     }
 
     /// <summary>
+    /// Get the vanilla station and editors for the specified station ID.
+    /// </summary>
+    /// <param name="stationId">The ID of the station to get.</param>
+    /// <returns>A pair where the key is the <see cref="TrackableObject{T}"/> and the value is 
+    /// the list of <see cref="IEditor"/>s associated with the station; 
+    /// or <c>null</c> if the <paramref name="stationId"/> did not exist in the manager.</returns>
+    public Pair<TrackableObject<ReplacementStation>, List<IEditor>>? GetVanillaStation(Guid? stationId)
+    {
+        try
+        {
+            lock (_replacementStations)
+            {
+                try
+                {
+                    if (stationId == null) return null;
+                    var id = (Guid)stationId;
+                    lock (_replacementStations)
+                    {
+                        return _replacementStations.TryGetValue(id, out var pair) ? pair : null;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    AuLogger.GetCurrentLogger<StationManager>().Error(ex, "Error getting vanilla station from manager.");
+                    return null;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            AuLogger.GetCurrentLogger<StationManager>().Error(ex, "Error getting vanilla station from manager.");
+            return null;
+        }
+    }
+
+    /// <summary>
     /// Get the station editor for the specified station ID.
     /// </summary>
     /// <param name="stationId">The station to get the editor of, by id.</param>
@@ -846,6 +1028,44 @@ public partial class StationManager : IDisposable
     }
 
     /// <summary>
+    /// Get the vanilla station editor for the specified station ID.
+    /// </summary>
+    /// <param name="stationId">The station to get the editor of, by id.</param>
+    /// <returns>The station editor for the specified station id or <c>null</c> if no editor exists in the manager.</returns>
+    public ReplacementStationEditor? GetVanillaStationEditor(Guid? stationId)
+    {
+        try
+        {
+            lock (_replacementStations)
+            {
+                try
+                {
+                    if (stationId == null) return null;
+                    var id = (Guid)stationId;
+                    lock (_replacementStations)
+                    {
+                        return _replacementStations.TryGetValue(id, out var pair)
+                            ? pair.Value.FirstOrDefault(e => e.Type == EditorType.StationEditor) as ReplacementStationEditor
+                            : null;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    AuLogger.GetCurrentLogger<StationManager>("GetVanillaStationEditor")
+                        .Error(ex, "Error getting vanilla station editor from manager.");
+                    return null;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            AuLogger.GetCurrentLogger<StationManager>("GetVanillaStationEditor")
+                .Error(ex, "Error getting vanilla station editor from manager.");
+            return null;
+        }
+    }
+
+    /// <summary>
     /// Stops all music players for all stations in the manager.
     /// </summary>
     public void StopAllMusicPlayers()
@@ -867,7 +1087,7 @@ public partial class StationManager : IDisposable
     /// </summary>
     /// <param name="stationId">The ID of the station to change the status of.</param>
     /// <param name="newStatus">The new status of the station: <c>true</c> = enabled; <c>false</c> = disabled.</param>
-    public void ChangeStationStatus(Guid stationId, bool newStatus)
+    public void ChangeStationActiveStatus(Guid stationId, bool newStatus)
     {
         try
         {
@@ -885,11 +1105,33 @@ public partial class StationManager : IDisposable
     }
 
     /// <summary>
+    /// Set the vanilla station's active status to the new status and raise the <see cref="VanillaStationUpdated"/> event.
+    /// </summary>
+    /// <param name="stationId">The ID of the station to change the status of.</param>
+    /// <param name="newStatus">The new status of the vanilla station: <c>true</c> = enabled; <c>false</c> = disabled.</param>
+    public void ChangeVanillaStationActiveStatus(Guid stationId, bool newStatus)
+    {
+        try
+        {
+            if (!_replacementStations.TryGetValue(stationId, out var pair)) return;
+
+            pair.Key.TrackedObject.IsActive = newStatus;
+            ReplacementStationsAsBindingList.First(s => s.Id == stationId).TrackedObject.IsActive = newStatus;
+
+            VanillaStationUpdated?.Invoke(this, stationId);
+        }
+        catch (Exception ex)
+        {
+            AuLogger.GetCurrentLogger<StationManager>().Error(ex, "Error changing vanilla station status.");
+        }
+    }
+
+    /// <summary>
     /// Check the pending save status of the station with the specified ID.
     /// </summary>
     /// <param name="stationId">The ID of the station to check.</param>
     /// <returns><c>true</c> if there are pending changes; <c>false</c> otherwise.</returns>
-    public bool CheckStatus(Guid stationId)
+    public bool CheckSaveStatus(Guid stationId)
     {
         try
         {
@@ -904,16 +1146,48 @@ public partial class StationManager : IDisposable
     }
 
     /// <summary>
+    /// Check the pending save status of the vanilla station with the specified ID.
+    /// </summary>
+    /// <param name="stationId">The ID of the station to check.</param>
+    /// <returns><c>true</c> if there are pending changes; <c>false</c> otherwise.</returns>
+    public bool CheckVanillaSaveStatus(Guid stationId)
+    {
+        try
+        {
+            return _replacementStations[stationId].Key.CheckPendingSaveStatus() &
+                   ReplacementStationsAsBindingList.First(s => s.Id == stationId).CheckPendingSaveStatus();
+        }
+        catch (Exception ex)
+        {
+            AuLogger.GetCurrentLogger<StationManager>().Error(ex, "Error checking vanilla station status.");
+            return false;
+        }
+    }
+
+    /// <summary>
     /// Occurs when a station is updated.
     /// </summary>
     /// <param name="stationId">The <see cref="Guid"/> of the station that was updated.</param>
     public void OnStationUpdated(Guid stationId)
     {
         var newName = CheckForDuplicateStation(stationId);
-        CheckStatus(stationId);
+        CheckSaveStatus(stationId);
 
         ((StationEditor)_stations[stationId].Value.First(e => e.Type == EditorType.StationEditor))
             .UpdateStationName(newName);
+    }
+
+    /// <summary>
+    /// Occurs when a vanilla station is updated.
+    /// </summary>
+    /// <param name="stationId">The <see cref="Guid"/> of the replacement station that was updated.</param>
+    public void OnVanillaStationUpdated(Guid stationId)
+    {
+        if (!CheckForDuplicateVanillaStation(stationId))
+            CheckVanillaSaveStatus(stationId);
+        else
+            AuLogger.GetCurrentLogger<StationManager>("OnVanillaStationUpdated")
+                .Warn("Duplicate vanilla station name found when updating vanilla station.");
     }
 
     /// <summary>
@@ -953,6 +1227,33 @@ public partial class StationManager : IDisposable
     }
 
     /// <summary>
+    /// Checks for duplicate vanilla station names and returns true if a duplicate is found. This is different from <see cref="CheckForDuplicateStation"/>
+    /// in that it doesn't modify the station name; it only checks if a duplicate vanilla station name exists since we should only ever have one replacement station
+    /// for a vanilla station.
+    /// </summary>
+    /// <param name="stationId">The ID of the station to check.</param>
+    /// <returns><c>true</c> if the station already exists; <c>false</c> otherwise.</returns>
+    public bool CheckForDuplicateVanillaStation(Guid stationId)
+    {
+        if (!_replacementStations.TryGetValue(stationId, out var pair)) return false;
+
+        var station = pair.Key.TrackedObject;
+        var originalName = station.VanillaStation?.StationName ?? string.Empty;
+        
+        foreach (var existingStation in _replacementStations.Values.Select(p => p.Key))
+        {
+            if (existingStation.Id == stationId) continue;
+
+            if (!existingStation.TrackedObject.VanillaStation?.StationName.Equals(originalName,
+                    StringComparison.OrdinalIgnoreCase) ?? true) continue;
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>
     /// Translates all editors in the manager to the current language.
     /// </summary>
     public void TranslateEditors()
@@ -960,8 +1261,12 @@ public partial class StationManager : IDisposable
         try
         {
             foreach (var editorList in _stations.Values.Select(pair => pair.Value))
-            foreach (var editor in editorList)
-                editor.Translate();
+                foreach (var editor in editorList)
+                    editor.Translate();
+
+            foreach (var editorList in _replacementStations.Values.Select(pair => pair.Value))
+                foreach (var editor in editorList)
+                    editor.Translate();
         }
         catch (Exception ex)
         {
@@ -995,6 +1300,30 @@ public partial class StationManager : IDisposable
     }
 
     /// <summary>
+    /// Get a dictionary of vanilla stations with a pair indicating if the station has missing songs and the count of missing songs.
+    /// </summary>
+    /// <returns>A dictionary where the key is the vanilla station's ID and the value is a pair containing whether the station is missing songs and the count of missing songs.</returns>
+    public Dictionary<Guid, Pair<bool, int>> CheckForVanillaMissingSongs()
+    {
+        try
+        {
+            var missingSongs = new Dictionary<Guid, Pair<bool, int>>();
+            foreach (var pair in _replacementStations)
+            {
+                var station = pair.Value.Key.TrackedObject;
+                var missingCount = station.Tracks.Count(t => !FileHelper.DoesFileExist(t.ReplacementFilePath, false));
+                missingSongs[pair.Key] = new Pair<bool, int>(missingCount > 0, missingCount);
+            }
+            return missingSongs;
+        }
+        catch (Exception ex)
+        {
+            AuLogger.GetCurrentLogger<StationManager>().Error(ex, "Error checking for vanilla missing songs.");
+            return [];
+        }
+    }
+
+    /// <summary>
     /// Get a dictionary of station ids with a value indicating if the station has pending saves.
     /// </summary>
     /// <returns>A dictionary where the key is the station's ID and the value indicates if the station is pending save.</returns>
@@ -1011,6 +1340,27 @@ public partial class StationManager : IDisposable
         catch (Exception ex)
         {
             AuLogger.GetCurrentLogger<StationManager>().Error(ex, "Error checking for pending saves.");
+            return [];
+        }
+    }
+
+    /// <summary>
+    /// Get a dictionary of vanilla station ids with a value indicating if the station has pending saves.
+    /// </summary>
+    /// <returns>A dictionary where the key is the station's ID and the value indicates if the station is pending save.</returns>
+    public Dictionary<Guid, bool> CheckVanillaPendingSave()
+    {
+        try
+        {
+            var pendingSave = new Dictionary<Guid, bool>();
+            foreach (var pair in _replacementStations)
+                pendingSave[pair.Key] = pair.Value.Key.IsPendingSave
+                                        & ReplacementStationsAsBindingList.First(s => s.Id == pair.Key).IsPendingSave;
+            return pendingSave;
+        }
+        catch (Exception ex)
+        {
+            AuLogger.GetCurrentLogger<StationManager>().Error(ex, "Error checking for vanilla pending saves.");
             return [];
         }
     }
@@ -1115,6 +1465,12 @@ public partial class StationManager : IDisposable
         return StationPaths.TryGetValue((Guid)stationId, out var path) ? path : string.Empty;
     }
 
+    /// <summary>
+    /// Synchronize files from the source directory to the target directory.
+    /// </summary>
+    /// <param name="sourceDir">The directory to synchronize from.</param>
+    /// <param name="targetDir">The directory to synchronize to.</param>
+    /// <returns></returns>
     private async Task SynchronizeFilesAsync(string sourceDir, string targetDir)
     {
         var sourceFiles = FileHelper.SafeEnumerateFiles(sourceDir);
@@ -1180,6 +1536,12 @@ public partial class StationManager : IDisposable
         await Task.WhenAll(dirTasks);
     }
 
+    /// <summary>
+    /// Copy a directory and all its contents to the target directory.
+    /// </summary>
+    /// <param name="sourceDir">The directory to copy from.</param>
+    /// <param name="targetDir">The directory to copy to.</param>
+    /// <returns></returns>
     private async Task CopyDirectoryAsync(string sourceDir, string targetDir)
     {
         var files = FileHelper.SafeEnumerateFiles(sourceDir);
@@ -1204,8 +1566,18 @@ public partial class StationManager : IDisposable
 
     private void Editor_StationUpdated(object? sender, EventArgs e)
     {
-        if (sender is StationEditor editor)
-            StationUpdated?.Invoke(this, editor.Station.Id);
+        switch (sender)
+        {
+            case StationEditor editor:
+                StationUpdated?.Invoke(this, editor.Station.Id);
+                break;
+            case IconEditor iconEditor:
+                StationUpdated?.Invoke(this, iconEditor.Station.Id);
+                break;
+            case ReplacementStationEditor { ReplacedStation: not null } replEditor:
+                StationUpdated?.Invoke(this, replEditor.ReplacedStation.Id);
+                break;
+        }
     }
 
     /// <summary>
@@ -1309,6 +1681,44 @@ public partial class StationManager : IDisposable
         catch (Exception ex)
         {
             AuLogger.GetCurrentLogger<StationManager>().Error(ex, "Error processing directory.");
+            return null;
+        }
+    }
+
+    /// <summary>
+    /// Processes a vanilla station directory by loading the data from the files in the directory and adding them to the manager.
+    /// </summary>
+    /// <param name="directory">The directory to process.</param>
+    /// <param name="treatAsNewStation">Indicates if this directory should be treated as a new station (i.e., not in the staging directory already) or not.</param>
+    /// <returns>The newly processed Station ID; or <c>null</c> if the directory couldn't be processed.</returns>
+    private Guid? ProcessVanillaDirectory(string directory, bool treatAsNewStation)
+    {
+        try
+        {
+            var files = FileHelper.SafeEnumerateFiles(directory, "*.*", SearchOption.AllDirectories).ToList();
+            var stationData = files.Where(file => file.EndsWith("replaced.json")).Select(_replacementStationJson.LoadJson)
+                .FirstOrDefault();
+
+            if (stationData == null) return null;
+
+            var station = new ReplacementStation
+            {
+                VanillaStation = stationData.VanillaStation,
+                Tracks = stationData.Tracks,
+                IsActive = stationData.IsActive,
+                Notes = stationData.Notes,
+                DisplayName = stationData.DisplayName
+            };
+
+            var trackedStation = new TrackableObject<ReplacementStation>(station);
+            trackedStation.AcceptChanges();
+
+            return AddVanillaStation(trackedStation, !treatAsNewStation, directory);
+        }
+        catch (Exception ex)
+        {
+            AuLogger.GetCurrentLogger<StationManager>("ProcessVanillaDirectory")
+                .Error(ex, "Error processing vanilla directory.");
             return null;
         }
     }
@@ -1482,9 +1892,19 @@ public partial class StationManager : IDisposable
     public event EventHandler<Guid>? StationAdded;
 
     /// <summary>
+    /// Event that is raised when a vanilla station is updated in the manager. Event data is the station ID.
+    /// </summary>
+    public event EventHandler<Guid>? VanillaStationAdded;
+
+    /// <summary>
     /// Event that is raised when a station is removed from the manager. Event data is the station ID.
     /// </summary>
     public event EventHandler<Guid>? StationRemoved;
+
+    /// <summary>
+    /// Event that is raised when a vanilla station is removed from the manager. Event data is the station ID.
+    /// </summary>
+    public event EventHandler<Guid>? VanillaStationRemoved;
 
     /// <summary>
     /// Event that is raised when a station is updated in the manager. Event data is the station ID.
@@ -1492,14 +1912,24 @@ public partial class StationManager : IDisposable
     public event EventHandler<Guid>? StationUpdated;
 
     /// <summary>
-    /// Event that is raised when a station is imported into the manager. Event data is the station ID.
+    /// Event that is raised when a vanilla station is updated in the manager. Event data is the station ID.
     /// </summary>
-    public event EventHandler<List<Guid?>>? StationImported;
+    public event EventHandler<Guid>? VanillaStationUpdated;
 
     /// <summary>
     /// Event that is raised when all stations are cleared from the manager.
     /// </summary>
     public event EventHandler? StationsCleared;
+
+    /// <summary>
+    /// Event that is raised when all vanilla stations are cleared from the manager.
+    /// </summary>
+    public event EventHandler? VanillaStationsCleared;
+
+    /// <summary>
+    /// Event that is raised when stations have finished importing from a directory or archive.
+    /// </summary>
+    public event EventHandler<List<Guid?>>? StationImported;
 
     /// <summary>
     /// Event that is raised when a station name is found to be a duplicate. Event data is a tuple with the station ID and the updated name.
@@ -1541,6 +1971,11 @@ public partial class StationManager : IDisposable
     /// </summary>
     private static string StationCountFormat => Strings.EnabledStationsCount;
 
+    /// <summary>
+    /// The format string for the vanilla station count.
+    /// </summary>
+    private static string VanillaStationCountFormat => Strings.EnabledVanillaStationsCount;
+
     #endregion
 
     #region Private, Readonly Members
@@ -1557,6 +1992,17 @@ public partial class StationManager : IDisposable
     private readonly Dictionary<Guid, Pair<TrackableObject<AdditionalStation>, List<IEditor>>> _stations = [];
 
     /// <summary>
+    /// The dictionary of replacement stations and editors managed by the manager. Each replacement station has a unique ID which is used as the key.
+    /// <para>Key: <c>Unique station ID</c></para>
+    /// <para>Value: Pair with following:</para>
+    ///     <list type="bullet">
+    ///         <item>Key: <c>Trackable replacement station</c></item>
+    ///         <item>Value: <c>List of all editor's associated with the replacement station.</c></item>
+    ///     </list>
+    /// </summary>
+    private readonly Dictionary<Guid, Pair<TrackableObject<ReplacementStation>, List<IEditor>>> _replacementStations = [];
+
+    /// <summary>
     /// The JSON object used to serialize and deserialize the metadata of a station.
     /// </summary>
     private readonly Json<MetaData> _metaDataJson = new();
@@ -1570,6 +2016,11 @@ public partial class StationManager : IDisposable
     /// The JSON object used to serialize and deserialize the list of icons.
     /// </summary>
     private readonly Json<List<WolvenIcon>> _iconListJson = new();
+
+    /// <summary>
+    /// The JSON object used to serialize and deserialize a replacement station.
+    /// </summary>
+    private readonly Json<ReplacementStation> _replacementStationJson = new();
 
     /// <summary>
     /// List of new station IDs added to the manager during the current session. These stations should not be allowed to revert changes unless saved to disk.
@@ -1627,6 +2078,16 @@ public partial class StationManager : IDisposable
     public List<TrackableObject<AdditionalStation>> StationsAsList => _stations.Values.Select(pair => pair.Key).ToList();
 
     /// <summary>
+    /// The current list of replacement stations managed by the manager as a binding list. Auto-updates when replacement stations are added or removed.
+    /// </summary>
+    public BindingList<TrackableObject<ReplacementStation>> ReplacementStationsAsBindingList { get; } = [];
+
+    /// <summary>
+    /// The current list of replacement stations managed by the manager as a list.
+    /// </summary>
+    public List<TrackableObject<ReplacementStation>> ReplacementStationsAsList => _replacementStations.Values.Select(pair => pair.Key).ToList();
+
+    /// <summary>
     /// The list of protected staging folders that should not be deleted. Normally, this contains at least the path to the "icons" folder.
     /// </summary>
     private List<string> ProtectedStagingFolders { get; } = [];
@@ -1639,8 +2100,12 @@ public partial class StationManager : IDisposable
     /// <summary>
     /// Get a value indicating whether the station manager is empty (i.e., has no stations).
     /// </summary>
-    public bool IsEmpty => _stations.Count == 0;
+    public bool IsEmpty => _stations.Count == 0 & _replacementStations.Count == 0;
 
+    /// <summary>
+    /// Regular expression that matches a display name with an optional FM number at the start.
+    /// </summary>
+    /// <returns></returns>
     [GeneratedRegex(@"^\d+(\.\d+)?\s*")]
     private static partial Regex DisplayNameRegex();
 

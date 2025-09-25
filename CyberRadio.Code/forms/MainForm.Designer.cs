@@ -69,6 +69,7 @@ namespace RadioExt_Helper.forms
             languageToolStripMenuItem = new ToolStripMenuItem();
             apiStatusToolStripMenuItem = new ToolStripMenuItem();
             splitContainer1 = new SplitContainer();
+            splitContainer2 = new SplitContainer();
             grpStations = new GroupBox();
             lbStations = new StationListBox();
             tableLayoutPanel2 = new TableLayoutPanel();
@@ -83,6 +84,15 @@ namespace RadioExt_Helper.forms
             toolStripStatusLabel1 = new ToolStripStatusLabel();
             lblStationCount = new ToolStripStatusLabel();
             toolStripStatusLabel3 = new ToolStripStatusLabel();
+            groupBox1 = new GroupBox();
+            lbReplacedStations = new ListBox();
+            tableLayoutPanel3 = new TableLayoutPanel();
+            btnDisableReplacementStation = new SplitButton();
+            btnEnableReplacementStation = new SplitButton();
+            statusStrip2 = new StatusStrip();
+            toolStripStatusLabel2 = new ToolStripStatusLabel();
+            lblVanillaStationCount = new ToolStripStatusLabel();
+            toolStripStatusLabel5 = new ToolStripStatusLabel();
             tableLayoutPanel1 = new TableLayoutPanel();
             btnDeleteStation = new Button();
             btnAddStation = new SplitButton();
@@ -96,37 +106,27 @@ namespace RadioExt_Helper.forms
             pgBackupProgress = new ToolStripProgressBar();
             lblSpring2 = new ToolStripStatusLabel();
             statusStripBackup = new StatusStrip();
-            splitContainer2 = new SplitContainer();
-            groupBox1 = new GroupBox();
-            lbReplacedStations = new ListBox();
-            statusStrip2 = new StatusStrip();
-            toolStripStatusLabel2 = new ToolStripStatusLabel();
-            toolStripStatusLabel4 = new ToolStripStatusLabel();
-            toolStripStatusLabel5 = new ToolStripStatusLabel();
-            tableLayoutPanel3 = new TableLayoutPanel();
-            splitButton1 = new SplitButton();
-            splitButton2 = new SplitButton();
             menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)splitContainer2).BeginInit();
+            splitContainer2.Panel1.SuspendLayout();
+            splitContainer2.Panel2.SuspendLayout();
+            splitContainer2.SuspendLayout();
             grpStations.SuspendLayout();
             tableLayoutPanel2.SuspendLayout();
             cmsDisable.SuspendLayout();
             cmsEnable.SuspendLayout();
             statusStrip1.SuspendLayout();
+            groupBox1.SuspendLayout();
+            tableLayoutPanel3.SuspendLayout();
+            statusStrip2.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
             cmsNewStation.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)stationBindingSource).BeginInit();
             cmsRevertStationChanges.SuspendLayout();
             statusStripBackup.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)splitContainer2).BeginInit();
-            splitContainer2.Panel1.SuspendLayout();
-            splitContainer2.Panel2.SuspendLayout();
-            splitContainer2.SuspendLayout();
-            groupBox1.SuspendLayout();
-            statusStrip2.SuspendLayout();
-            tableLayoutPanel3.SuspendLayout();
             SuspendLayout();
             // 
             // menuStrip1
@@ -432,6 +432,24 @@ namespace RadioExt_Helper.forms
             splitContainer1.SplitterDistance = 296;
             splitContainer1.TabIndex = 1;
             // 
+            // splitContainer2
+            // 
+            splitContainer2.Dock = DockStyle.Fill;
+            splitContainer2.Location = new Point(0, 0);
+            splitContainer2.Name = "splitContainer2";
+            splitContainer2.Orientation = Orientation.Horizontal;
+            // 
+            // splitContainer2.Panel1
+            // 
+            splitContainer2.Panel1.Controls.Add(grpStations);
+            // 
+            // splitContainer2.Panel2
+            // 
+            splitContainer2.Panel2.Controls.Add(groupBox1);
+            splitContainer2.Size = new Size(296, 553);
+            splitContainer2.SplitterDistance = 276;
+            splitContainer2.TabIndex = 3;
+            // 
             // grpStations
             // 
             grpStations.Controls.Add(lbStations);
@@ -471,6 +489,7 @@ namespace RadioExt_Helper.forms
             lbStations.SongsMissingFont = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lbStations.TabIndex = 0;
             lbStations.SelectedIndexChanged += LbStations_SelectedIndexChanged;
+            lbStations.Enter += lbStations_Enter;
             lbStations.MouseDown += LbStations_MouseDown;
             // 
             // tableLayoutPanel2
@@ -594,6 +613,113 @@ namespace RadioExt_Helper.forms
             toolStripStatusLabel3.Name = "toolStripStatusLabel3";
             toolStripStatusLabel3.Size = new Size(54, 17);
             toolStripStatusLabel3.Spring = true;
+            // 
+            // groupBox1
+            // 
+            groupBox1.Controls.Add(lbReplacedStations);
+            groupBox1.Controls.Add(tableLayoutPanel3);
+            groupBox1.Controls.Add(statusStrip2);
+            groupBox1.Dock = DockStyle.Fill;
+            groupBox1.Location = new Point(0, 0);
+            groupBox1.Name = "groupBox1";
+            groupBox1.Size = new Size(296, 273);
+            groupBox1.TabIndex = 0;
+            groupBox1.TabStop = false;
+            groupBox1.Text = "Replaced Stations";
+            // 
+            // lbReplacedStations
+            // 
+            lbReplacedStations.Dock = DockStyle.Fill;
+            lbReplacedStations.FormattingEnabled = true;
+            lbReplacedStations.ItemHeight = 15;
+            lbReplacedStations.Location = new Point(3, 53);
+            lbReplacedStations.Name = "lbReplacedStations";
+            lbReplacedStations.Size = new Size(290, 195);
+            lbReplacedStations.TabIndex = 0;
+            lbReplacedStations.SelectedIndexChanged += lbReplacedStations_SelectedIndexChanged;
+            lbReplacedStations.Enter += lbReplacedStations_Enter;
+            lbReplacedStations.MouseDown += LbStations_MouseDown;
+            // 
+            // tableLayoutPanel3
+            // 
+            tableLayoutPanel3.ColumnCount = 2;
+            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tableLayoutPanel3.Controls.Add(btnDisableReplacementStation, 1, 0);
+            tableLayoutPanel3.Controls.Add(btnEnableReplacementStation, 0, 0);
+            tableLayoutPanel3.Dock = DockStyle.Top;
+            tableLayoutPanel3.Location = new Point(3, 19);
+            tableLayoutPanel3.Name = "tableLayoutPanel3";
+            tableLayoutPanel3.RowCount = 1;
+            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tableLayoutPanel3.Size = new Size(290, 34);
+            tableLayoutPanel3.TabIndex = 4;
+            // 
+            // btnDisableReplacementStation
+            // 
+            btnDisableReplacementStation.BackColor = Color.Yellow;
+            btnDisableReplacementStation.Dock = DockStyle.Fill;
+            btnDisableReplacementStation.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
+            btnDisableReplacementStation.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
+            btnDisableReplacementStation.FlatStyle = FlatStyle.Flat;
+            btnDisableReplacementStation.Image = Properties.Resources.disabled__16x16;
+            btnDisableReplacementStation.ImageAlign = ContentAlignment.MiddleLeft;
+            btnDisableReplacementStation.Location = new Point(148, 3);
+            btnDisableReplacementStation.Menu = cmsDisable;
+            btnDisableReplacementStation.Name = "btnDisableReplacementStation";
+            btnDisableReplacementStation.Size = new Size(139, 28);
+            btnDisableReplacementStation.TabIndex = 1;
+            btnDisableReplacementStation.Text = "Disable Selected";
+            btnDisableReplacementStation.UseVisualStyleBackColor = false;
+            btnDisableReplacementStation.Click += BtnDisableStation_Click;
+            // 
+            // btnEnableReplacementStation
+            // 
+            btnEnableReplacementStation.BackColor = Color.Yellow;
+            btnEnableReplacementStation.Dock = DockStyle.Fill;
+            btnEnableReplacementStation.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
+            btnEnableReplacementStation.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
+            btnEnableReplacementStation.FlatStyle = FlatStyle.Flat;
+            btnEnableReplacementStation.Image = Properties.Resources.enabled__16x16;
+            btnEnableReplacementStation.ImageAlign = ContentAlignment.MiddleLeft;
+            btnEnableReplacementStation.Location = new Point(3, 3);
+            btnEnableReplacementStation.Menu = cmsEnable;
+            btnEnableReplacementStation.Name = "btnEnableReplacementStation";
+            btnEnableReplacementStation.Size = new Size(139, 28);
+            btnEnableReplacementStation.TabIndex = 0;
+            btnEnableReplacementStation.Text = "Enable Selected";
+            btnEnableReplacementStation.UseVisualStyleBackColor = false;
+            btnEnableReplacementStation.Click += BtnEnableStation_Click;
+            // 
+            // statusStrip2
+            // 
+            statusStrip2.BackColor = Color.White;
+            statusStrip2.Items.AddRange(new ToolStripItem[] { toolStripStatusLabel2, lblVanillaStationCount, toolStripStatusLabel5 });
+            statusStrip2.Location = new Point(3, 248);
+            statusStrip2.Name = "statusStrip2";
+            statusStrip2.Size = new Size(290, 22);
+            statusStrip2.SizingGrip = false;
+            statusStrip2.TabIndex = 3;
+            statusStrip2.Text = "statusStrip2";
+            // 
+            // toolStripStatusLabel2
+            // 
+            toolStripStatusLabel2.Name = "toolStripStatusLabel2";
+            toolStripStatusLabel2.Size = new Size(31, 17);
+            toolStripStatusLabel2.Spring = true;
+            // 
+            // lblVanillaStationCount
+            // 
+            lblVanillaStationCount.Font = new Font("Segoe UI Variable Small", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblVanillaStationCount.Name = "lblVanillaStationCount";
+            lblVanillaStationCount.Size = new Size(213, 17);
+            lblVanillaStationCount.Text = "Enabled Vanilla Stations: {0} / {1}";
+            // 
+            // toolStripStatusLabel5
+            // 
+            toolStripStatusLabel5.Name = "toolStripStatusLabel5";
+            toolStripStatusLabel5.Size = new Size(31, 17);
+            toolStripStatusLabel5.Spring = true;
             // 
             // tableLayoutPanel1
             // 
@@ -723,126 +849,6 @@ namespace RadioExt_Helper.forms
             statusStripBackup.Text = "statusStrip2";
             statusStripBackup.Visible = false;
             // 
-            // splitContainer2
-            // 
-            splitContainer2.Dock = DockStyle.Fill;
-            splitContainer2.Location = new Point(0, 0);
-            splitContainer2.Name = "splitContainer2";
-            splitContainer2.Orientation = Orientation.Horizontal;
-            // 
-            // splitContainer2.Panel1
-            // 
-            splitContainer2.Panel1.Controls.Add(grpStations);
-            // 
-            // splitContainer2.Panel2
-            // 
-            splitContainer2.Panel2.Controls.Add(groupBox1);
-            splitContainer2.Size = new Size(296, 553);
-            splitContainer2.SplitterDistance = 276;
-            splitContainer2.TabIndex = 3;
-            // 
-            // groupBox1
-            // 
-            groupBox1.Controls.Add(lbReplacedStations);
-            groupBox1.Controls.Add(tableLayoutPanel3);
-            groupBox1.Controls.Add(statusStrip2);
-            groupBox1.Dock = DockStyle.Fill;
-            groupBox1.Location = new Point(0, 0);
-            groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(296, 273);
-            groupBox1.TabIndex = 0;
-            groupBox1.TabStop = false;
-            groupBox1.Text = "Replaced Stations";
-            // 
-            // lbReplacedStations
-            // 
-            lbReplacedStations.Dock = DockStyle.Fill;
-            lbReplacedStations.FormattingEnabled = true;
-            lbReplacedStations.ItemHeight = 15;
-            lbReplacedStations.Location = new Point(3, 53);
-            lbReplacedStations.Name = "lbReplacedStations";
-            lbReplacedStations.Size = new Size(290, 195);
-            lbReplacedStations.TabIndex = 0;
-            // 
-            // statusStrip2
-            // 
-            statusStrip2.BackColor = Color.White;
-            statusStrip2.Items.AddRange(new ToolStripItem[] { toolStripStatusLabel2, toolStripStatusLabel4, toolStripStatusLabel5 });
-            statusStrip2.Location = new Point(3, 248);
-            statusStrip2.Name = "statusStrip2";
-            statusStrip2.Size = new Size(290, 22);
-            statusStrip2.SizingGrip = false;
-            statusStrip2.TabIndex = 3;
-            statusStrip2.Text = "statusStrip2";
-            // 
-            // toolStripStatusLabel2
-            // 
-            toolStripStatusLabel2.Name = "toolStripStatusLabel2";
-            toolStripStatusLabel2.Size = new Size(54, 17);
-            toolStripStatusLabel2.Spring = true;
-            // 
-            // toolStripStatusLabel4
-            // 
-            toolStripStatusLabel4.Font = new Font("Segoe UI Variable Small", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            toolStripStatusLabel4.Name = "toolStripStatusLabel4";
-            toolStripStatusLabel4.Size = new Size(167, 17);
-            toolStripStatusLabel4.Text = "Enabled Stations: {0} / {1}";
-            // 
-            // toolStripStatusLabel5
-            // 
-            toolStripStatusLabel5.Name = "toolStripStatusLabel5";
-            toolStripStatusLabel5.Size = new Size(54, 17);
-            toolStripStatusLabel5.Spring = true;
-            // 
-            // tableLayoutPanel3
-            // 
-            tableLayoutPanel3.ColumnCount = 2;
-            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tableLayoutPanel3.Controls.Add(splitButton1, 1, 0);
-            tableLayoutPanel3.Controls.Add(splitButton2, 0, 0);
-            tableLayoutPanel3.Dock = DockStyle.Top;
-            tableLayoutPanel3.Location = new Point(3, 19);
-            tableLayoutPanel3.Name = "tableLayoutPanel3";
-            tableLayoutPanel3.RowCount = 1;
-            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel3.Size = new Size(290, 34);
-            tableLayoutPanel3.TabIndex = 4;
-            // 
-            // splitButton1
-            // 
-            splitButton1.BackColor = Color.Yellow;
-            splitButton1.Dock = DockStyle.Fill;
-            splitButton1.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
-            splitButton1.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
-            splitButton1.FlatStyle = FlatStyle.Flat;
-            splitButton1.Image = Properties.Resources.disabled__16x16;
-            splitButton1.ImageAlign = ContentAlignment.MiddleLeft;
-            splitButton1.Location = new Point(148, 3);
-            splitButton1.Menu = cmsDisable;
-            splitButton1.Name = "splitButton1";
-            splitButton1.Size = new Size(139, 28);
-            splitButton1.TabIndex = 1;
-            splitButton1.Text = "Disable Selected";
-            splitButton1.UseVisualStyleBackColor = false;
-            // 
-            // splitButton2
-            // 
-            splitButton2.BackColor = Color.Yellow;
-            splitButton2.Dock = DockStyle.Fill;
-            splitButton2.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
-            splitButton2.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
-            splitButton2.FlatStyle = FlatStyle.Flat;
-            splitButton2.Image = Properties.Resources.enabled__16x16;
-            splitButton2.ImageAlign = ContentAlignment.MiddleLeft;
-            splitButton2.Location = new Point(3, 3);
-            splitButton2.Menu = cmsEnable;
-            splitButton2.Name = "splitButton2";
-            splitButton2.Size = new Size(139, 28);
-            splitButton2.TabIndex = 0;
-            splitButton2.Text = "Enable Selected";
-            splitButton2.UseVisualStyleBackColor = false;
-            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(96F, 96F);
@@ -872,6 +878,10 @@ namespace RadioExt_Helper.forms
             splitContainer1.Panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
             splitContainer1.ResumeLayout(false);
+            splitContainer2.Panel1.ResumeLayout(false);
+            splitContainer2.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)splitContainer2).EndInit();
+            splitContainer2.ResumeLayout(false);
             grpStations.ResumeLayout(false);
             grpStations.PerformLayout();
             tableLayoutPanel2.ResumeLayout(false);
@@ -879,21 +889,17 @@ namespace RadioExt_Helper.forms
             cmsEnable.ResumeLayout(false);
             statusStrip1.ResumeLayout(false);
             statusStrip1.PerformLayout();
+            groupBox1.ResumeLayout(false);
+            groupBox1.PerformLayout();
+            tableLayoutPanel3.ResumeLayout(false);
+            statusStrip2.ResumeLayout(false);
+            statusStrip2.PerformLayout();
             tableLayoutPanel1.ResumeLayout(false);
             cmsNewStation.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)stationBindingSource).EndInit();
             cmsRevertStationChanges.ResumeLayout(false);
             statusStripBackup.ResumeLayout(false);
             statusStripBackup.PerformLayout();
-            splitContainer2.Panel1.ResumeLayout(false);
-            splitContainer2.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)splitContainer2).EndInit();
-            splitContainer2.ResumeLayout(false);
-            groupBox1.ResumeLayout(false);
-            groupBox1.PerformLayout();
-            statusStrip2.ResumeLayout(false);
-            statusStrip2.PerformLayout();
-            tableLayoutPanel3.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -966,11 +972,11 @@ namespace RadioExt_Helper.forms
         private GroupBox groupBox1;
         private ListBox lbReplacedStations;
         private TableLayoutPanel tableLayoutPanel3;
-        private SplitButton splitButton1;
-        private SplitButton splitButton2;
+        private SplitButton btnDisableReplacementStation;
+        private SplitButton btnEnableReplacementStation;
         private StatusStrip statusStrip2;
         private ToolStripStatusLabel toolStripStatusLabel2;
-        private ToolStripStatusLabel toolStripStatusLabel4;
+        private ToolStripStatusLabel lblVanillaStationCount;
         private ToolStripStatusLabel toolStripStatusLabel5;
     }
 }

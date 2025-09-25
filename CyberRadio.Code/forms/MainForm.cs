@@ -14,9 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Timers;
 using AetherUtils.Core.Extensions;
 using AetherUtils.Core.Files;
 using AetherUtils.Core.Logging;
@@ -28,9 +25,13 @@ using RadioExt_Helper.nexus_api;
 using RadioExt_Helper.Properties;
 using RadioExt_Helper.user_controls;
 using RadioExt_Helper.utility;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Timers;
 using WIG.Lib.Models;
 using WIG.Lib.Models.Audio;
 using WIG.Lib.Utility;
+using static System.Collections.Specialized.BitVector32;
 using ApplicationContext = RadioExt_Helper.utility.ApplicationContext;
 using PathHelper = RadioExt_Helper.utility.PathHelper;
 using Timer = System.Timers.Timer;
@@ -49,6 +50,7 @@ public sealed partial class MainForm : Form
     private readonly ImageList _stationImageList = new();
 
     private StationEditor? _currentEditor;
+    private ReplacementStationEditor? _currentReplacementStationEditor;
     private DirectoryWatcher? _directoryWatcher;
     private bool _ignoreSelectedIndexChanged;
 
@@ -56,6 +58,7 @@ public sealed partial class MainForm : Form
     private bool _isHardClosing;
     private bool _isExportInProgress;
     private bool _isSyncInProgress;
+    private bool _mainStationListBoxSelected;
 
     /// <summary>
     /// Get a value indicating whether the application is in the process of closing because of invalid configuration or a critical error.
@@ -87,6 +90,9 @@ public sealed partial class MainForm : Form
 
         lbStations.DataSource = StationManager.Instance.StationsAsBindingList;
         lbStations.DisplayMember = "TrackedObject.MetaData";
+
+        lbReplacedStations.DataSource = StationManager.Instance.ReplacementStationsAsBindingList;
+        lbReplacedStations.DisplayMember = "DisplayName";
 
         //Add the icons folder to the protected folders list
         StationManager.Instance.AddProtectedFolder(Path.Combine(StagingPath, "icons"));
@@ -157,10 +163,22 @@ public sealed partial class MainForm : Form
         StationManager.Instance.StationsSynchronized += OnStationsSynchronized;
         StationManager.Instance.StationImported += OnStationImported;
 
+        StationManager.Instance.VanillaStationUpdated += OnVanillaStationUpdated;
+
         lbStations.StationsImported += OnStationImported;
 
         // Save the configuration when resizing has stopped
         _resizeTimer.Elapsed += (_, _) => { SaveWindowSize(); };
+    }
+
+    private void OnVanillaStationUpdated(object? sender, Guid e)
+    {
+        if (lbReplacedStations.SelectedItem is not TrackableObject<ReplacementStation> station) return;
+
+        StationManager.Instance.OnVanillaStationUpdated(station.Id);
+        lbReplacedStations.BeginUpdate();
+        lbReplacedStations.Invalidate();
+        lbReplacedStations.EndUpdate();
     }
 
     private void OnStationImported(object? sender, List<Guid?> stationIds)
@@ -257,6 +275,10 @@ public sealed partial class MainForm : Form
         StationManager.Instance.SyncStatusChanged -= OnStationSyncStatusChanged;
         StationManager.Instance.StationsSynchronized -= OnStationsSynchronized;
         StationManager.Instance.StationImported -= OnStationImported;
+
+        StationManager.Instance.VanillaStationUpdated -= OnVanillaStationUpdated;
+
+        lbStations.StationsImported -= OnStationImported;
 
         _resizeTimer.Elapsed -= resizeTimerOnElapsed;
     }
@@ -538,13 +560,14 @@ public sealed partial class MainForm : Form
     }
 
     /// <summary>
-    /// Selects a listbox item from the station listbox based on the index. Also, updates the station editor and title bar.
+    /// Selects a listbox item from the station listboxes based on the index. Also, updates the station editor and title bar.
+    /// Chooses which listbox to use based on the <see cref="_mainStationListBoxSelected"/> flag.
     /// </summary>
     /// <param name="index">The index to select in the listbox.</param>
     /// <param name="userDriven">Indicate whether the selection was driven by the user.</param>
     private void SelectListBoxItem(int index, bool userDriven)
     {
-        if (index < 0 || index >= lbStations.Items.Count) return;
+        if (index < 0 || index >= (_mainStationListBoxSelected ? lbStations.Items.Count : lbReplacedStations.Items.Count)) return;
 
         if (userDriven)
         {
@@ -556,12 +579,24 @@ public sealed partial class MainForm : Form
         }
         else
         {
-            lbStations.SelectedIndex = index;
+            if (_mainStationListBoxSelected)
+                lbStations.SelectedIndex = index;
+            else
+                lbReplacedStations.SelectedIndex = index;
         }
 
-        if (lbStations.SelectedItem is not TrackableObject<AdditionalStation> station) return;
-        SelectStationEditor(station.Id);
-        UpdateTitleBar(station.Id);
+        if (_mainStationListBoxSelected)
+        {
+            if (lbStations.SelectedItem is not TrackableObject<AdditionalStation> station) return;
+            SelectStationEditor(station.Id);
+            UpdateTitleBar(station.Id);
+        }
+        else
+        {
+            if (lbReplacedStations.SelectedItem is not TrackableObject<ReplacementStation> station) return;
+            SelectReplacementStationEditor(station.Id);
+            UpdateTitleBar(station.Id);
+        }
     }
 
     /// <summary>
@@ -576,11 +611,12 @@ public sealed partial class MainForm : Form
     }
 
     /// <summary>
-    ///     Updates the enabled station count label.
+    ///     Updates the enabled station count labels.
     /// </summary>
     private void UpdateEnabledStationCount()
     {
         this.SafeInvoke(() => { lblStationCount.Text = StationManager.Instance.GetStationCount(); });
+        this.SafeInvoke(() => { lblVanillaStationCount.Text = StationManager.Instance.GetVanillaStationCount(); });
     }
 
     /// <summary>
@@ -590,7 +626,14 @@ public sealed partial class MainForm : Form
     /// </summary>
     private void LbStations_SelectedIndexChanged(object? sender, EventArgs e)
     {
+        _mainStationListBoxSelected = true;
         this.SafeInvoke(() => SelectListBoxItem(lbStations.SelectedIndex, true));
+    }
+
+    private void lbReplacedStations_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        _mainStationListBoxSelected = false;
+        this.SafeInvoke(() => SelectListBoxItem(lbReplacedStations.SelectedIndex, true));
     }
 
     /// <summary>
@@ -601,7 +644,7 @@ public sealed partial class MainForm : Form
     {
         try
         {
-            if (_currentEditor == editor) return;
+            if (splitContainer1.Panel2.Controls.Contains(editor)) return;
             if (editor == null) return;
 
             _currentEditor = editor;
@@ -618,21 +661,62 @@ public sealed partial class MainForm : Form
         }
     }
 
+    private void UpdateReplacementStationEditor(ReplacementStationEditor? editor)
+    {
+        try
+        {
+            if (splitContainer1.Panel2.Controls.Contains(editor)) return;
+            if (editor == null) return;
+
+            _currentReplacementStationEditor = editor;
+
+            splitContainer1.Panel2.SuspendLayout();
+            splitContainer1.Panel2.Controls.Clear();
+            splitContainer1.Panel2.Controls.Add(_currentReplacementStationEditor);
+            splitContainer1.Panel2.ResumeLayout();
+        }
+        catch (Exception ex)
+        {
+            AuLogger.GetCurrentLogger<MainForm>("UpdateReplacementStationEditor")
+                .Error(ex, "An error occurred while updating the replacement station editor.");
+        }
+    }
+
     private void RevertChangesToolStripMenuItem_Click(object sender, EventArgs e)
     {
-        if (lbStations.SelectedItem is not TrackableObject<AdditionalStation> station) return;
+        if (_mainStationListBoxSelected)
+        {
+            if (lbStations.SelectedItem is not TrackableObject<AdditionalStation> station) return;
 
-        //We only want to revert the changes if there is a pending save. Otherwise, the wrong icon is drawn in the list box.
-        if (!station.IsPendingSave) return;
+            //We only want to revert the changes if there is a pending save. Otherwise, the wrong icon is drawn in the list box.
+            if (!station.IsPendingSave) return;
 
-        if (StationManager.Instance.IsNewStation(station.Id)) return; //Don't allow reverting changes on new stations.
+            if (StationManager.Instance.IsNewStation(station.Id)) return; //Don't allow reverting changes on new stations.
 
-        station.DeclineChanges(); // Revert the changes made to the station's properties since the last save.
+            station.DeclineChanges(); // Revert the changes made to the station's properties since the last save.
 
-        StationManager.Instance.GetStationEditor(station.Id)?.ResetUi();
+            StationManager.Instance.GetStationEditor(station.Id)?.ResetUi();
 
-        OnStationUpdated(sender, station.Id); //Update the UI to reflect the changes.
-        SelectStationEditor(station.Id); //Update the editor to reflect the changes.
+            OnStationUpdated(sender, station.Id); //Update the UI to reflect the changes.
+            SelectStationEditor(station.Id); //Update the editor to reflect the changes.
+        }
+        else
+        {
+            if (lbReplacedStations.SelectedItem is not TrackableObject<ReplacementStation> station) return;
+
+            if (!station.IsPendingSave) return;
+
+            if (StationManager.Instance.IsNewStation(station.Id)) return; //Don't allow reverting changes on new stations.
+
+            station.DeclineChanges(); // Revert the changes made to the station's properties since the last save.
+
+            //TODO: reset the replacement station editor UI
+            //StationManager.Instance.GetVanillaStationEditor(station.Id)?.ResetUi();
+
+            OnVanillaStationUpdated(sender, station.Id); //Update the UI to reflect the changes.
+            SelectReplacementStationEditor(station.Id); //Update the editor to reflect the changes.
+        }
+
     }
 
     /// <summary>
@@ -642,10 +726,18 @@ public sealed partial class MainForm : Form
     /// </summary>
     private void BtnEnableStation_Click(object sender, EventArgs e)
     {
-        if (lbStations.SelectedItem is not TrackableObject<AdditionalStation> s) return;
-
-        SetStationStatus(true, false, s.Id);
+        if (_mainStationListBoxSelected)
+        {
+            if (lbStations.SelectedItem is not TrackableObject<AdditionalStation> s) return;
+            SetStationStatus(true, false, s.Id);
+        }
+        else
+        {
+            if (lbReplacedStations.SelectedItem is not TrackableObject<ReplacementStation> s) return;
+            SetStationStatus(true, false, s.Id);
+        }
     }
+
 
     /// <summary>
     ///     Handles the Click event of the btnDisableStation button.
@@ -654,9 +746,16 @@ public sealed partial class MainForm : Form
     /// </summary>
     private void BtnDisableStation_Click(object sender, EventArgs e)
     {
-        if (lbStations.SelectedItem is not TrackableObject<AdditionalStation> s) return;
-
-        SetStationStatus(false, false, s.Id);
+        if (_mainStationListBoxSelected)
+        {
+            if (lbStations.SelectedItem is not TrackableObject<AdditionalStation> s) return;
+            SetStationStatus(false, false, s.Id);
+        }
+        else
+        {
+            if (lbReplacedStations.SelectedItem is not TrackableObject<ReplacementStation> s) return;
+            SetStationStatus(false, false, s.Id);
+        }
     }
 
     /// <summary>
@@ -666,7 +765,10 @@ public sealed partial class MainForm : Form
     /// </summary>
     private void BtnEnableAll_Click(object sender, EventArgs e)
     {
-        SetStationStatus(true, true, lbStations.Items.Cast<TrackableObject<AdditionalStation>>().Select(s => s.Id).ToArray());
+        SetStationStatus(true, true,
+            _mainStationListBoxSelected
+                ? lbStations.Items.Cast<TrackableObject<AdditionalStation>>().Select(s => s.Id).ToArray()
+                : lbReplacedStations.Items.Cast<TrackableObject<ReplacementStation>>().Select(s => s.Id).ToArray());
     }
 
     /// <summary>
@@ -676,7 +778,10 @@ public sealed partial class MainForm : Form
     /// <param name="e">The event arguments.</param>
     private void BtnDisableAll_Click(object sender, EventArgs e)
     {
-        SetStationStatus(false, true, lbStations.Items.Cast<TrackableObject<AdditionalStation>>().Select(s => s.Id).ToArray());
+        SetStationStatus(false, true,
+            _mainStationListBoxSelected
+                ? lbStations.Items.Cast<TrackableObject<AdditionalStation>>().Select(s => s.Id).ToArray()
+                : lbReplacedStations.Items.Cast<TrackableObject<ReplacementStation>>().Select(s => s.Id).ToArray());
     }
 
     /// <summary>
@@ -687,23 +792,55 @@ public sealed partial class MainForm : Form
     /// <param name="stationIds">The station ID(s) to change the status of.</param>
     private void SetStationStatus(bool newStatus, bool setAllStations, params Guid[] stationIds)
     {
-        lbStations.BeginUpdate();
         if (!setAllStations)
         {
-            StationManager.Instance.ChangeStationStatus(stationIds[0], newStatus);
-            StationManager.Instance.CheckStatus(stationIds[0]);
+            if (_mainStationListBoxSelected)
+            {
+                lbStations.BeginUpdate();
+                StationManager.Instance.ChangeStationActiveStatus(stationIds[0], newStatus);
+                StationManager.Instance.CheckSaveStatus(stationIds[0]);
+            }
+            else
+            {
+                lbReplacedStations.BeginUpdate();
+                StationManager.Instance.ChangeVanillaStationActiveStatus(stationIds[0], newStatus);
+                StationManager.Instance.CheckVanillaSaveStatus(stationIds[0]);
+            }
         }
         else
         {
-            foreach (var stationId in stationIds)
+            if (_mainStationListBoxSelected)
             {
-                StationManager.Instance.ChangeStationStatus(stationId, newStatus);
-                StationManager.Instance.CheckStatus(stationId);
+                lbStations.BeginUpdate();
+                foreach (var stationId in stationIds)
+                {
+                    StationManager.Instance.ChangeStationActiveStatus(stationId, newStatus);
+                    StationManager.Instance.CheckSaveStatus(stationId);
+                }
             }
+            else
+            {
+                lbReplacedStations.BeginUpdate();
+                foreach (var stationId in stationIds)
+                {
+                    StationManager.Instance.ChangeVanillaStationActiveStatus(stationId, newStatus);
+                    StationManager.Instance.CheckVanillaSaveStatus(stationId);
+                }
+            }
+
         }
 
-        lbStations.Invalidate();
-        lbStations.EndUpdate();
+        if (_mainStationListBoxSelected)
+        {
+            lbStations.Invalidate();
+            lbStations.EndUpdate();
+        }
+        else
+        {
+            lbReplacedStations.Invalidate();
+            lbReplacedStations.EndUpdate();
+        }
+
         UpdateEnabledStationCount();
     }
 
@@ -771,6 +908,14 @@ public sealed partial class MainForm : Form
         UpdateStationEditor(StationManager.Instance.GetStationEditor(stationId));
     }
 
+    private void SelectReplacementStationEditor(Guid? stationId)
+    {
+        if (stationId == null) return;
+
+        StationManager.Instance.StopAllMusicPlayers();
+        UpdateReplacementStationEditor(StationManager.Instance.GetVanillaStationEditor(stationId));
+    }
+
     /// <summary>
     /// Updates the title bar with the app name followed by the relative path to the station.
     /// </summary>
@@ -833,13 +978,34 @@ public sealed partial class MainForm : Form
         if (GameBasePath.Equals(string.Empty) || StagingPath.Equals(string.Empty))
             return;
 
-        if (lbStations.SelectedItem is not TrackableObject<AdditionalStation> station) return;
-        StationManager.Instance.RemoveStation(station.Id);
-        UpdateEnabledStationCount();
-        HandleUserControlVisibility();
+        if (_mainStationListBoxSelected)
+        {
+            if (lbStations.SelectedItem is not TrackableObject<AdditionalStation> station) return;
+            StationManager.Instance.RemoveStation(station.Id);
+            UpdateEnabledStationCount();
+            HandleUserControlVisibility();
 
-        if (lbStations.Items.Count <= 0)
-            UpdateTitleBar(null);
+            if (lbStations.Items.Count <= 0)
+                UpdateTitleBar(null);
+        }
+        else
+        {
+            if (lbReplacedStations.SelectedItem is not TrackableObject<ReplacementStation> station) return;
+            StationManager.Instance.RemoveVanillaStation(station.Id);
+            UpdateEnabledStationCount();
+            HandleUserControlVisibility();
+
+            if (lbReplacedStations.Items.Count <= 0 & lbStations.Items.Count <= 0)
+                UpdateTitleBar(null);
+
+            if (lbReplacedStations.Items.Count > 0) return;
+
+            //If there are no more replaced stations, switch back to the main station list.
+            _mainStationListBoxSelected = true;
+            lbStations.SelectedIndex = 0;
+            SelectListBoxItem(0, false);
+        }
+
     }
 
     private void CmbLanguageSelect_SelectedIndexChanged(object? sender, EventArgs e)
@@ -865,15 +1031,29 @@ public sealed partial class MainForm : Form
 
     private void LbStations_MouseDown(object sender, MouseEventArgs e)
     {
-        var index = lbStations.IndexFromPoint(e.Location);
-        if (index == ListBox.NoMatches)
-            _ignoreSelectedIndexChanged = true;
+        if (_mainStationListBoxSelected)
+        {
+            var index = lbStations.IndexFromPoint(e.Location);
+            if (index == ListBox.NoMatches)
+                _ignoreSelectedIndexChanged = true;
 
-        if (e.Button != MouseButtons.Right) return;
+            if (e.Button != MouseButtons.Right) return;
 
-        //Show the "Revert Changes" context menu if the station is selected and was right-clicked.
-        if (lbStations.SelectedIndex == index)
-            cmsRevertStationChanges.Show(Cursor.Position);
+            //Show the "Revert Changes" context menu if the station is selected and was right-clicked.
+            if (lbStations.SelectedIndex == index)
+                cmsRevertStationChanges.Show(Cursor.Position);
+        }
+        else
+        {
+            var index = lbReplacedStations.IndexFromPoint(e.Location);
+            if (index == ListBox.NoMatches)
+                _ignoreSelectedIndexChanged = true;
+            if (e.Button != MouseButtons.Right) return;
+
+            //Show the "Revert Changes" context menu if the station is selected and was right-clicked.
+            if (lbReplacedStations.SelectedIndex == index)
+                cmsRevertStationChanges.Show(Cursor.Position);
+        }
     }
 
     private void OpenStagingPathToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1141,7 +1321,7 @@ public sealed partial class MainForm : Form
             return;
         }
 
-        if (lbStations.Items.Count > 0)
+        if (lbStations.Items.Count > 0 || lbReplacedStations.Items.Count > 0)
             if (MessageBox.Show(this, Strings.ConfirmRestore, Strings.Confirm, MessageBoxButtons.YesNo,
                     MessageBoxIcon.Warning) == DialogResult.No)
                 return;
@@ -1256,9 +1436,13 @@ public sealed partial class MainForm : Form
     private bool CheckForPendingSaveStations()
     {
         var pendingSave = StationManager.Instance.CheckPendingSave();
-        if (pendingSave.Values.All(p => p != true)) return true;
+        var pendingVanillaSave = StationManager.Instance.CheckVanillaPendingSave();
+        var pendingAny = pendingSave.Values.All(p => p != true);
+        pendingAny &= pendingVanillaSave.Values.All(p => p != true);
 
-        var count = pendingSave.Count(p => p.Value);
+        if (!pendingAny) return true;
+
+        var count = pendingSave.Count(p => p.Value) + pendingVanillaSave.Count(p => p.Value);
         var text = string.Format(Strings.ConfirmExit, count);
 
         return MessageBox.Show(this, text, Strings.Confirm, MessageBoxButtons.YesNo, MessageBoxIcon.Warning) !=
@@ -1373,19 +1557,38 @@ public sealed partial class MainForm : Form
             return;
 
         var vanillaStationSelector = new VanillaStationSelector();
-        vanillaStationSelector.OnStationSelected += OnVanillaStationSelected;
+        vanillaStationSelector.OnStationSelected += OnVanillaStationAdded;
         vanillaStationSelector.ShowDialog(this);
     }
 
-    private void OnVanillaStationSelected(object? sender, VanillaStation e)
+    private void OnVanillaStationAdded(object? sender, VanillaStation e)
     {
-        MessageBox.Show(this, $"Selected station: {e.StationName}");
-        //Create a new station based on the vanilla station selected.
-        //var id = StationManager.Instance.AddStation(e);
-        //lbStations.SelectedItem = StationManager.Instance.GetStation(id)?.Key;
+        var replacementStation = new ReplacementStation()
+        {
+            VanillaStation = e,
+            DisplayName = $"[Replaced] {e.StationName}",
+            IsActive = true
+        };
 
-        //SelectStationEditor(id);
-        //UpdateEnabledStationCount();
-        //HandleUserControlVisibility();
+        var station = new TrackableObject<ReplacementStation>(replacementStation);
+
+        var id = StationManager.Instance.AddVanillaStation(station, false);
+        lbReplacedStations.SelectedItem = StationManager.Instance.GetVanillaStation(id)?.Key;
+
+        SelectReplacementStationEditor(id);
+        UpdateEnabledStationCount();
+        HandleUserControlVisibility();
+    }
+
+    private void lbStations_Enter(object sender, EventArgs e)
+    {
+        _mainStationListBoxSelected = true;
+        lbReplacedStations.SelectedIndex = -1;
+    }
+
+    private void lbReplacedStations_Enter(object sender, EventArgs e)
+    {
+        _mainStationListBoxSelected = false;
+        lbStations.SelectedIndex = -1;
     }
 }

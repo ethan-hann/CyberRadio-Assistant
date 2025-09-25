@@ -10,14 +10,33 @@ namespace RadioExt_Helper.models;
 /// </summary>
 public sealed class ReplacementStation : IStation, INotifyPropertyChanged, ICloneable, IEquatable<ReplacementStation>
 {
+    private string _displayName = string.Empty;
     private VanillaStation? _vanillaStation;
     private List<ReplacementTrack> _tracks = [];
+    private bool _isActive;
+    private string _notes = string.Empty;
 
     /// <inheritdoc />
     public List<string> Tags { get; set; } = [];
 
     /// <inheritdoc />
-    public StationType StationType { get; set; } = StationType.Replacement;
+    public StationType StationType => StationType.Replacement;
+
+    /// <summary>
+    /// The display name for this replacement station. Does not affect in-game name.
+    /// </summary>
+    [JsonProperty("displayName")]
+    public string DisplayName
+    {
+        get => _displayName;
+        set
+        {
+            if (_displayName == value) return;
+            _displayName = value;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DisplayName)));
+        }
+    }
+
 
     /// <summary>
     /// The vanilla station that this replacement station corresponds to.
@@ -48,6 +67,36 @@ public sealed class ReplacementStation : IStation, INotifyPropertyChanged, IClon
 
             _tracks = value;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Tracks)));
+        }
+    }
+
+    /// <summary>
+    /// Indicates whether this replacement station is active (i.e., should replace the vanilla station when exporting).
+    /// </summary>
+    [JsonProperty("enabled")]
+    public bool IsActive
+    {
+        get => _isActive;
+        set
+        {
+            if (_isActive == value) return;
+            _isActive = value;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsActive)));
+        }
+    }
+
+    /// <summary>
+    /// Additional notes about the replacement station. Can be used for user reference. Stores HTML content from TinyMCE editor.
+    /// </summary>
+    [JsonProperty("notes")]
+    public string Notes
+    {
+        get => _notes;
+        set
+        {
+            if (_notes == value) return;
+            _notes = value;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Notes)));
         }
     }
 
@@ -88,6 +137,6 @@ public sealed class ReplacementStation : IStation, INotifyPropertyChanged, IClon
     /// <inheritdoc />
     public override int GetHashCode()
     {
-        return HashCode.Combine(_vanillaStation, _tracks);
+        return HashCode.Combine(_vanillaStation, _tracks, _isActive);
     }
 }

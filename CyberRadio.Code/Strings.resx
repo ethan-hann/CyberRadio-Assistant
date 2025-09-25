@@ -1529,4 +1529,7 @@ Please be patient. You can cancel at any time using the "Cancel Action" button. 
   <data name="VanillaStationSelector_NoStationSelected" xml:space="preserve">
     <value>No Station Selected</value>
   </data>
+  <data name="EnabledVanillaStationsCount" xml:space="preserve">
+    <value>Enabled Vanilla Stations: {0} / {1}</value>
+  </data>
 </root>
