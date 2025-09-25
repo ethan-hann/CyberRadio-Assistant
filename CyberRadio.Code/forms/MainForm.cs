@@ -58,6 +58,8 @@ public sealed partial class MainForm : Form
     private bool _isExportInProgress;
     private bool _isSyncInProgress;
     private bool _mainStationListBoxSelected;
+    private bool _isVanillaGroupCollapsed;
+    private int _previousSplitterHeight;
 
     /// <summary>
     /// Get a value indicating whether the application is in the process of closing because of invalid configuration or a critical error.
@@ -140,6 +142,8 @@ public sealed partial class MainForm : Form
         }
 
         SetupDirectoryWatcher();
+
+        _previousSplitterHeight = splitContainer2.SplitterDistance;
     }
 
     /// <summary>
@@ -1454,16 +1458,16 @@ public sealed partial class MainForm : Form
     /// <summary>
     /// Get a value indicating if there are stations pending save and the user confirmed to quit the application.
     /// </summary>
-    /// <returns><c>true</c> if there are no pending saves or the user confirmed exit;
-    /// <c>false</c> if there are pending changes and the user denied exit.</returns>
+    /// <returns><c>true</c> if there are pending saves or the user confirmed exit;
+    /// <c>false</c> if there are no pending changes and the user denied exit.</returns>
     private bool CheckForPendingSaveStations()
     {
         var pendingSave = StationManager.Instance.CheckPendingSave();
         var pendingVanillaSave = StationManager.Instance.CheckVanillaPendingSave();
-        var pendingAny = pendingSave.Values.All(p => p != true);
-        pendingAny &= pendingVanillaSave.Values.All(p => p != true);
+        var pendingAny = pendingSave.Values.All(p => p);
+        pendingAny &= pendingVanillaSave.Values.All(p => p);
 
-        if (!pendingAny) return true;
+        if (pendingAny) return true;
 
         var count = pendingSave.Count(p => p.Value) + pendingVanillaSave.Count(p => p.Value);
         var text = string.Format(Strings.ConfirmExit, count);
@@ -1555,7 +1559,7 @@ public sealed partial class MainForm : Form
 
             var activeIcon = StationManager.Instance.GetStationActiveIcon(station.Id);
             var editor = StationManager.Instance.GetStationEditor(station.Id);
-            icon?.CheckPendingSaveStatus();
+            icon.CheckPendingSaveStatus();
             editor?.UpdateIcon(activeIcon);
 
             lbStations.EndUpdate();
@@ -1639,5 +1643,37 @@ public sealed partial class MainForm : Form
         }
 
         PostSelectionCoalesceCheck();
+    }
+
+    private void btnCollapseVanillaSection_Click(object sender, EventArgs e)
+    {
+        _isVanillaGroupCollapsed = !_isVanillaGroupCollapsed;
+
+        splitContainer2.SplitterDistance = _isVanillaGroupCollapsed ? splitContainer2.Height : _previousSplitterHeight;
+        splitContainer2.IsSplitterFixed = _isVanillaGroupCollapsed;
+        grpVanillaStations.Visible = !_isVanillaGroupCollapsed;
+
+        btnCollapseVanillaSection.Text = _isVanillaGroupCollapsed ? "Show Vanilla Stations" : "Hide Vanilla Stations";
+        btnCollapseVanillaSection.Image = _isVanillaGroupCollapsed ? Resources.up__16x16 : Resources.down__16x16;
+
+        //Deselect stations in vanilla group
+        lbReplacedStations.ClearSelected();
+        if (lbStations.Items.Count > 0)
+            lbStations.SelectedIndex = 0;
+
+        //Disable/Enable "Add vanilla station button"
+        replaceVanillaStationToolStripMenuItem.Enabled = !_isVanillaGroupCollapsed;
+    }
+
+    private void splitContainer2_SplitterMoving(object sender, SplitterCancelEventArgs e)
+    {
+        if (!_isVanillaGroupCollapsed)
+            _previousSplitterHeight = splitContainer2.SplitterDistance;
+    }
+
+    private void splitContainer2_SplitterMoved(object sender, SplitterEventArgs e)
+    {
+        if (!_isVanillaGroupCollapsed)
+            _previousSplitterHeight = splitContainer2.SplitterDistance;
     }
 }
