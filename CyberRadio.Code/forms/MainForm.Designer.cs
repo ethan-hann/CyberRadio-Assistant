@@ -87,7 +87,7 @@ namespace RadioExt_Helper.forms
             tableLayoutPanel4 = new TableLayoutPanel();
             btnCollapseVanillaSection = new Button();
             grpVanillaStations = new GroupBox();
-            lbReplacedStations = new ListBox();
+            lbReplacedStations = new ReplacementStationListBox();
             tableLayoutPanel3 = new TableLayoutPanel();
             btnDisableReplacementStation = new SplitButton();
             btnEnableReplacementStation = new SplitButton();
@@ -670,13 +670,28 @@ namespace RadioExt_Helper.forms
             // 
             // lbReplacedStations
             // 
+            lbReplacedStations.AllowDrop = true;
+            lbReplacedStations.CausesValidation = false;
+            lbReplacedStations.DisabledIconKey = "disabled";
             lbReplacedStations.Dock = DockStyle.Fill;
+            lbReplacedStations.DrawMode = DrawMode.OwnerDrawFixed;
+            lbReplacedStations.DuplicateColor = Color.FromArgb(255, 128, 0);
+            lbReplacedStations.DuplicateFont = new Font("Segoe UI Semibold", 9F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
+            lbReplacedStations.EditedStationIconKey = "edited_station";
+            lbReplacedStations.EnabledIconKey = "enabled";
+            lbReplacedStations.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lbReplacedStations.FormattingEnabled = true;
-            lbReplacedStations.ItemHeight = 15;
+            lbReplacedStations.ItemHeight = 17;
             lbReplacedStations.Location = new Point(3, 53);
+            lbReplacedStations.Margin = new Padding(3, 2, 3, 2);
             lbReplacedStations.Name = "lbReplacedStations";
+            lbReplacedStations.NewStationColor = Color.DarkGreen;
+            lbReplacedStations.NewStationFont = new Font("Segoe UI", 9F, FontStyle.Bold);
+            lbReplacedStations.SavedStationIconKey = "saved_station";
             lbReplacedStations.Size = new Size(290, 156);
-            lbReplacedStations.TabIndex = 0;
+            lbReplacedStations.SongsMissingColor = Color.FromArgb(192, 0, 0);
+            lbReplacedStations.SongsMissingFont = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lbReplacedStations.TabIndex = 5;
             lbReplacedStations.SelectedIndexChanged += lbReplacedStations_SelectedIndexChanged;
             lbReplacedStations.Enter += lbReplacedStations_Enter;
             lbReplacedStations.MouseDown += LbStations_MouseDown;
@@ -1012,7 +1027,6 @@ namespace RadioExt_Helper.forms
         private ToolStripMenuItem audioConverterToolStripMenuItem;
         private ToolStripMenuItem replaceVanillaStationToolStripMenuItem;
         private GroupBox grpVanillaStations;
-        private ListBox lbReplacedStations;
         private TableLayoutPanel tableLayoutPanel3;
         private SplitButton btnDisableReplacementStation;
         private SplitButton btnEnableReplacementStation;
@@ -1023,5 +1037,6 @@ namespace RadioExt_Helper.forms
         private TableLayoutPanel tableLayoutPanel4;
         private Button btnCollapseVanillaSection;
         private SplitContainer splitContainer2;
+        private ReplacementStationListBox lbReplacedStations;
     }
 }

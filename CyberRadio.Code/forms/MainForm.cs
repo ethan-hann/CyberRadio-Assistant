@@ -303,6 +303,7 @@ public sealed partial class MainForm : Form
         _stationImageList.Images.Add("saved_station", Resources.disk);
         _stationImageList.ImageSize = new Size(16, 16);
         lbStations.ImageList = _stationImageList;
+        lbReplacedStations.ImageList = _stationImageList;
     }
 
     /// <summary>

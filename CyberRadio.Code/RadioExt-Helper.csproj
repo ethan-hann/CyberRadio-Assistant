@@ -88,6 +88,9 @@
     </ItemGroup>
 
     <ItemGroup>
+        <Compile Update="custom_controls\ReplacementStationListBox.cs">
+          <SubType>Component</SubType>
+        </Compile>
         <Compile Update="Properties\Resources.Designer.cs">
             <DesignTime>True</DesignTime>
             <AutoGen>True</AutoGen>
