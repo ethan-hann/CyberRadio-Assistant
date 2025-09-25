@@ -1532,4 +1532,13 @@ Please be patient. You can cancel at any time using the "Cancel Action" button. 
   <data name="EnabledVanillaStationsCount" xml:space="preserve">
     <value>Enabled Vanilla Stations: {0} / {1}</value>
   </data>
+  <data name="HideVanillaStations" xml:space="preserve">
+    <value>Hide Vanilla Stations</value>
+  </data>
+  <data name="ShowVanillaStations" xml:space="preserve">
+    <value>Show Vanilla Stations</value>
+  </data>
+  <data name="ReplacementStations" xml:space="preserve">
+    <value>Vanilla Stations</value>
+  </data>
 </root>

@@ -1520,4 +1520,25 @@
   <data name="InvalidConfigExit" xml:space="preserve">
     <value>Конфигурация по -прежнему недействительна после показа формы конфигурации. Приложение теперь выйдет.</value>
   </data>
+  <data name="ReplaceVanillaStation" xml:space="preserve">
+    <value>Заменить ванильную станцию ​​...</value>
+  </data>
+  <data name="VanillaStationSelector_NoStationSelectedMessage" xml:space="preserve">
+    <value>Пожалуйста, выберите станцию ​​сначала.</value>
+  </data>
+  <data name="VanillaStationSelector_NoStationSelected" xml:space="preserve">
+    <value>Никакая станция не выбрана</value>
+  </data>
+  <data name="EnabledVanillaStationsCount" xml:space="preserve">
+    <value>Включенные ванильные станции: {0} / {1}</value>
+  </data>
+  <data name="HideVanillaStations" xml:space="preserve">
+    <value>Скрыть ванильные станции</value>
+  </data>
+  <data name="ShowVanillaStations" xml:space="preserve">
+    <value>Показать ванильные станции</value>
+  </data>
+  <data name="ReplacementStations" xml:space="preserve">
+    <value>Ванильные станции</value>
+  </data>
 </root>

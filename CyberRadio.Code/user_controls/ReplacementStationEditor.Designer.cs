@@ -47,7 +47,7 @@
             BackColor = Color.White;
             Controls.Add(label1);
             Name = "ReplacementStationEditor";
-            Size = new Size(846, 570);
+            Size = new Size(884, 590);
             Load += ReplacementStationEditor_Load;
             ResumeLayout(false);
             PerformLayout();

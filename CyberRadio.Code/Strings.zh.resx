@@ -1520,4 +1520,25 @@
   <data name="InvalidConfigExit" xml:space="preserve">
     <value>显示配置表格后，配置仍然无效。该应用程序现在将退出。</value>
   </data>
+  <data name="ReplaceVanillaStation" xml:space="preserve">
+    <value>更换香草站...</value>
+  </data>
+  <data name="VanillaStationSelector_NoStationSelectedMessage" xml:space="preserve">
+    <value>请先选择一个站。</value>
+  </data>
+  <data name="VanillaStationSelector_NoStationSelected" xml:space="preserve">
+    <value>没有选择站</value>
+  </data>
+  <data name="EnabledVanillaStationsCount" xml:space="preserve">
+    <value>启用的香草站：{0} / {1}</value>
+  </data>
+  <data name="HideVanillaStations" xml:space="preserve">
+    <value>隐藏香草台</value>
+  </data>
+  <data name="ShowVanillaStations" xml:space="preserve">
+    <value>显示香草台</value>
+  </data>
+  <data name="ReplacementStations" xml:space="preserve">
+    <value>香草电台</value>
+  </data>
 </root>

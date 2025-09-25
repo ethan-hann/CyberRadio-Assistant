@@ -486,14 +486,18 @@ public sealed partial class MainForm : Form
         backupStagingFolderToolStripMenuItem.Text = Strings.BackupStagingFolder;
 
         grpStations.Text = Strings.Stations;
+        grpVanillaStations.Text = Strings.ReplacementStations;
 
         // Buttons
         btnAddStation.Text = Strings.NewStation;
         btnDeleteStation.Text = Strings.DeleteStation;
         btnEnableSelected.Text = Strings.EnableSelected;
         btnEnableAll.Text = Strings.EnableAllStations;
+        btnEnableReplacementStation.Text = Strings.EnableSelected;
         btnDisableSelected.Text = Strings.DisableSelected;
+        btnDisableReplacementStation.Text = Strings.DisableSelected;
         btnDisableAll.Text = Strings.DisableAllStations;
+        btnCollapseVanillaSection.Text = Strings.HideVanillaStations;
 
         UpdateEnabledStationCount();
     }
@@ -1655,7 +1659,7 @@ public sealed partial class MainForm : Form
         splitContainer2.IsSplitterFixed = _isVanillaGroupCollapsed;
         grpVanillaStations.Visible = !_isVanillaGroupCollapsed;
 
-        btnCollapseVanillaSection.Text = _isVanillaGroupCollapsed ? "Show Vanilla Stations" : "Hide Vanilla Stations";
+        btnCollapseVanillaSection.Text = _isVanillaGroupCollapsed ? Strings.ShowVanillaStations : Strings.HideVanillaStations;
         btnCollapseVanillaSection.Image = _isVanillaGroupCollapsed ? Resources.up__16x16 : Resources.down__16x16;
 
         //Deselect stations in vanilla group

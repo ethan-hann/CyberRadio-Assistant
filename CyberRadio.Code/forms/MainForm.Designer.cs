@@ -466,7 +466,7 @@ namespace RadioExt_Helper.forms
             grpStations.Dock = DockStyle.Fill;
             grpStations.Location = new Point(0, 0);
             grpStations.Name = "grpStations";
-            grpStations.Size = new Size(296, 271);
+            grpStations.Size = new Size(296, 276);
             grpStations.TabIndex = 2;
             grpStations.TabStop = false;
             grpStations.Text = "Stations";
@@ -491,7 +491,7 @@ namespace RadioExt_Helper.forms
             lbStations.NewStationColor = Color.DarkGreen;
             lbStations.NewStationFont = new Font("Segoe UI", 9F, FontStyle.Bold);
             lbStations.SavedStationIconKey = "saved_station";
-            lbStations.Size = new Size(290, 170);
+            lbStations.Size = new Size(290, 175);
             lbStations.SongsMissingColor = Color.FromArgb(192, 0, 0);
             lbStations.SongsMissingFont = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lbStations.TabIndex = 0;
@@ -595,7 +595,7 @@ namespace RadioExt_Helper.forms
             // 
             statusStrip1.BackColor = Color.White;
             statusStrip1.Items.AddRange(new ToolStripItem[] { toolStripStatusLabel1, lblStationCount, toolStripStatusLabel3 });
-            statusStrip1.Location = new Point(3, 246);
+            statusStrip1.Location = new Point(3, 251);
             statusStrip1.Name = "statusStrip1";
             statusStrip1.Size = new Size(290, 22);
             statusStrip1.SizingGrip = false;
@@ -627,31 +627,31 @@ namespace RadioExt_Helper.forms
             tableLayoutPanel4.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             tableLayoutPanel4.Controls.Add(btnCollapseVanillaSection, 0, 0);
             tableLayoutPanel4.Dock = DockStyle.Bottom;
-            tableLayoutPanel4.Location = new Point(0, 271);
+            tableLayoutPanel4.Location = new Point(0, 276);
             tableLayoutPanel4.Name = "tableLayoutPanel4";
             tableLayoutPanel4.RowCount = 1;
             tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel4.Size = new Size(296, 44);
+            tableLayoutPanel4.Size = new Size(296, 39);
             tableLayoutPanel4.TabIndex = 3;
             // 
             // btnCollapseVanillaSection
             // 
-            btnCollapseVanillaSection.BackColor = Color.WhiteSmoke;
+            btnCollapseVanillaSection.BackColor = Color.Yellow;
             btnCollapseVanillaSection.Dock = DockStyle.Fill;
-            btnCollapseVanillaSection.FlatAppearance.BorderColor = Color.Black;
-            btnCollapseVanillaSection.FlatAppearance.BorderSize = 2;
+            btnCollapseVanillaSection.FlatAppearance.BorderColor = Color.FromArgb(64, 64, 64);
+            btnCollapseVanillaSection.FlatAppearance.BorderSize = 3;
             btnCollapseVanillaSection.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
             btnCollapseVanillaSection.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
             btnCollapseVanillaSection.FlatStyle = FlatStyle.Flat;
             btnCollapseVanillaSection.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnCollapseVanillaSection.ForeColor = Color.FromArgb(64, 64, 64);
             btnCollapseVanillaSection.Image = Properties.Resources.down__16x16;
             btnCollapseVanillaSection.ImageAlign = ContentAlignment.MiddleRight;
             btnCollapseVanillaSection.Location = new Point(3, 3);
             btnCollapseVanillaSection.Name = "btnCollapseVanillaSection";
-            btnCollapseVanillaSection.Size = new Size(290, 38);
+            btnCollapseVanillaSection.Size = new Size(290, 33);
             btnCollapseVanillaSection.TabIndex = 0;
             btnCollapseVanillaSection.Text = "Hide Vanilla Stations";
-            btnCollapseVanillaSection.TextAlign = ContentAlignment.MiddleLeft;
             btnCollapseVanillaSection.TextImageRelation = TextImageRelation.TextBeforeImage;
             btnCollapseVanillaSection.UseVisualStyleBackColor = false;
             btnCollapseVanillaSection.Click += btnCollapseVanillaSection_Click;

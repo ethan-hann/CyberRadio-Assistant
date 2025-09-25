@@ -1726,6 +1726,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Hide Vanilla Stations.
+        /// </summary>
+        internal static string HideVanillaStations {
+            get {
+                return ResourceManager.GetString("HideVanillaStations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to High.
         /// </summary>
         internal static string High {
@@ -3256,6 +3265,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Vanilla Stations.
+        /// </summary>
+        internal static string ReplacementStations {
+            get {
+                return ResourceManager.GetString("ReplacementStations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Replace Vanilla Station....
         /// </summary>
         internal static string ReplaceVanillaStation {
@@ -3441,6 +3459,15 @@ namespace RadioExt_Helper {
         internal static string Settings {
             get {
                 return ResourceManager.GetString("Settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show Vanilla Stations.
+        /// </summary>
+        internal static string ShowVanillaStations {
+            get {
+                return ResourceManager.GetString("ShowVanillaStations", resourceCulture);
             }
         }
         

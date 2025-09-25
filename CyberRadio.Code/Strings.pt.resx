@@ -1520,4 +1520,25 @@ Por favor, seja paciente. Você pode cancelar a qualquer momento usando o botão
   <data name="InvalidConfigExit" xml:space="preserve">
     <value>A configuração ainda é inválida após mostrar o formulário de configuração. O aplicativo agora sairá.</value>
   </data>
+  <data name="ReplaceVanillaStation" xml:space="preserve">
+    <value>Substitua a estação de baunilha ...</value>
+  </data>
+  <data name="VanillaStationSelector_NoStationSelectedMessage" xml:space="preserve">
+    <value>Selecione uma estação primeiro.</value>
+  </data>
+  <data name="VanillaStationSelector_NoStationSelected" xml:space="preserve">
+    <value>Nenhuma estação selecionada</value>
+  </data>
+  <data name="EnabledVanillaStationsCount" xml:space="preserve">
+    <value>Estações de baunilha ativadas: {0} / {1}</value>
+  </data>
+  <data name="HideVanillaStations" xml:space="preserve">
+    <value>Ocultar estações de baunilha</value>
+  </data>
+  <data name="ShowVanillaStations" xml:space="preserve">
+    <value>Mostre estações de baunilha</value>
+  </data>
+  <data name="ReplacementStations" xml:space="preserve">
+    <value>Estações de baunilha</value>
+  </data>
 </root>

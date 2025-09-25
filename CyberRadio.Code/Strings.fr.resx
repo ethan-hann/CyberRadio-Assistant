@@ -1520,4 +1520,25 @@ Soyez patient. Vous pouvez annuler à tout moment à l'aide du bouton "Annuler A
   <data name="InvalidConfigExit" xml:space="preserve">
     <value>La configuration n'est toujours pas valide après avoir affiché le formulaire de configuration. L'application va maintenant quitter.</value>
   </data>
+  <data name="ReplaceVanillaStation" xml:space="preserve">
+    <value>Remplacer la station de vanille ...</value>
+  </data>
+  <data name="VanillaStationSelector_NoStationSelectedMessage" xml:space="preserve">
+    <value>Veuillez d'abord sélectionner une station.</value>
+  </data>
+  <data name="VanillaStationSelector_NoStationSelected" xml:space="preserve">
+    <value>Aucune station sélectionnée</value>
+  </data>
+  <data name="EnabledVanillaStationsCount" xml:space="preserve">
+    <value>Stations de vanille activées: {0} / {1}</value>
+  </data>
+  <data name="HideVanillaStations" xml:space="preserve">
+    <value>Masquer les stations de vanille</value>
+  </data>
+  <data name="ShowVanillaStations" xml:space="preserve">
+    <value>Montrer les stations de vanille</value>
+  </data>
+  <data name="ReplacementStations" xml:space="preserve">
+    <value>Stations de vanille</value>
+  </data>
 </root>

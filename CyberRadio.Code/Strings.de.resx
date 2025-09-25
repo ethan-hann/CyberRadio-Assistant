@@ -1520,4 +1520,25 @@ Bitte sei geduldig. Sie können jederzeit mit der Schaltfläche "Action abbreche
   <data name="InvalidConfigExit" xml:space="preserve">
     <value>Die Konfiguration ist nach der Anzeige des Konfigurationsformulars weiterhin ungültig. Die Anwendung wird nun beendet.</value>
   </data>
+  <data name="ReplaceVanillaStation" xml:space="preserve">
+    <value>Vanillestation ersetzen ...</value>
+  </data>
+  <data name="VanillaStationSelector_NoStationSelectedMessage" xml:space="preserve">
+    <value>Bitte wählen Sie zuerst eine Station aus.</value>
+  </data>
+  <data name="VanillaStationSelector_NoStationSelected" xml:space="preserve">
+    <value>Keine Station ausgewählt</value>
+  </data>
+  <data name="EnabledVanillaStationsCount" xml:space="preserve">
+    <value>Aktivierte Vanillestationen: {0} / {1}</value>
+  </data>
+  <data name="HideVanillaStations" xml:space="preserve">
+    <value>Vanillestationen verstecken</value>
+  </data>
+  <data name="ShowVanillaStations" xml:space="preserve">
+    <value>Vanillestationen zeigen</value>
+  </data>
+  <data name="ReplacementStations" xml:space="preserve">
+    <value>Vanillestationen</value>
+  </data>
 </root>
