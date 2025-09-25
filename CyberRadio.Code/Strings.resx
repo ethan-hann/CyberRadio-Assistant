@@ -1541,4 +1541,10 @@ Please be patient. You can cancel at any time using the "Cancel Action" button. 
   <data name="ReplacementStations" xml:space="preserve">
     <value>Vanilla Stations</value>
   </data>
+  <data name="VanillaStationNameHelp" xml:space="preserve">
+    <value>The name of the station in game. Cannot be changed.</value>
+  </data>
+  <data name="VanillaStationDisplayNameHelp" xml:space="preserve">
+    <value>The name of the station in CRA. Has no effect in game.</value>
+  </data>
 </root>

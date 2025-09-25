@@ -30,7 +30,7 @@ namespace RadioExt_Helper.user_controls
         /// </summary>
         private void InitializeComponent()
         {
-            models.ImageProperties imageProperties2 = new models.ImageProperties();
+            models.ImageProperties imageProperties1 = new models.ImageProperties();
             txtDisplayName = new TextBox();
             lblName = new Label();
             label3 = new Label();
@@ -577,11 +577,11 @@ namespace RadioExt_Helper.user_controls
             picStationIcon.AllowDrop = true;
             picStationIcon.Dock = DockStyle.Fill;
             picStationIcon.Image = Properties.Resources.drag_and_drop;
-            imageProperties2.Height = 0;
-            imageProperties2.ImageFormat = System.Drawing.Imaging.ImageFormat.Png;
-            imageProperties2.PixelFormat = System.Drawing.Imaging.PixelFormat.DontCare;
-            imageProperties2.Width = 0;
-            picStationIcon.ImageProperties = imageProperties2;
+            imageProperties1.Height = 0;
+            imageProperties1.ImageFormat = System.Drawing.Imaging.ImageFormat.Png;
+            imageProperties1.PixelFormat = System.Drawing.Imaging.PixelFormat.DontCare;
+            imageProperties1.Width = 0;
+            picStationIcon.ImageProperties = imageProperties1;
             picStationIcon.Location = new Point(3, 3);
             picStationIcon.Name = "picStationIcon";
             tlpCustomIcon.SetRowSpan(picStationIcon, 3);
@@ -799,7 +799,7 @@ namespace RadioExt_Helper.user_controls
             // 
             // lblStatus
             // 
-            lblStatus.Image = Properties.Resources.status__16x16;
+            lblStatus.Image = Properties.Resources.info__16x16;
             lblStatus.Margin = new Padding(5, 3, 0, 2);
             lblStatus.Name = "lblStatus";
             lblStatus.Padding = new Padding(2);

@@ -4201,6 +4201,24 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The name of the station in CRA. Has no effect in game..
+        /// </summary>
+        internal static string VanillaStationDisplayNameHelp {
+            get {
+                return ResourceManager.GetString("VanillaStationDisplayNameHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The name of the station in game. Cannot be changed..
+        /// </summary>
+        internal static string VanillaStationNameHelp {
+            get {
+                return ResourceManager.GetString("VanillaStationNameHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No Station Selected.
         /// </summary>
         internal static string VanillaStationSelector_NoStationSelected {

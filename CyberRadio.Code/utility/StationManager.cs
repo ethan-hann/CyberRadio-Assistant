@@ -238,8 +238,7 @@ public partial class StationManager : IDisposable
         {
             lock (_replacementStations)
             {
-                if (CheckForDuplicateVanillaStation(station.Id))
-                    return Guid.Empty;
+                CheckForDuplicateVanillaStation(station.Id);
 
                 if (!isOnDisk)
                     _newStations.Add(station.Id);
@@ -1183,11 +1182,11 @@ public partial class StationManager : IDisposable
     /// <param name="stationId">The <see cref="Guid"/> of the replacement station that was updated.</param>
     public void OnVanillaStationUpdated(Guid stationId)
     {
-        if (!CheckForDuplicateVanillaStation(stationId))
-            CheckVanillaSaveStatus(stationId);
-        else
-            AuLogger.GetCurrentLogger<StationManager>("OnVanillaStationUpdated")
-                .Warn("Duplicate vanilla station name found when updating vanilla station.");
+        var newName = CheckForDuplicateVanillaStation(stationId);
+        CheckVanillaSaveStatus(stationId);
+
+        ((ReplacementStationEditor)_replacementStations[stationId].Value
+            .First(e => e.Type == EditorType.StationEditor)).UpdateStationName(newName);
     }
 
     /// <summary>
@@ -1215,7 +1214,7 @@ public partial class StationManager : IDisposable
             updatedName = $"{originalName} ({duplicateCount})";
         }
 
-        if (duplicateCount <= 0) return updatedName;
+        if (duplicateCount <= 0) return originalName;
 
         station.MetaData.DisplayName = updatedName;
         StationsAsBindingList.First(s => s.Id == stationId).TrackedObject.MetaData.DisplayName = updatedName;
@@ -1227,30 +1226,40 @@ public partial class StationManager : IDisposable
     }
 
     /// <summary>
-    /// Checks for duplicate vanilla station names and returns true if a duplicate is found. This is different from <see cref="CheckForDuplicateStation"/>
-    /// in that it doesn't modify the station name; it only checks if a duplicate vanilla station name exists since we should only ever have one replacement station
-    /// for a vanilla station.
+    /// Checks for duplicate vanilla station names and gets an updated name if a duplicate is found.
+    /// This method checks the display name of the replacement station, not the original vanilla station name.
     /// </summary>
     /// <param name="stationId">The ID of the station to check.</param>
-    /// <returns><c>true</c> if the station already exists; <c>false</c> otherwise.</returns>
-    public bool CheckForDuplicateVanillaStation(Guid stationId)
+    /// <returns>The updated station name.</returns>
+    public string CheckForDuplicateVanillaStation(Guid stationId)
     {
-        if (!_replacementStations.TryGetValue(stationId, out var pair)) return false;
+        if (!_replacementStations.TryGetValue(stationId, out var pair)) return string.Empty;
 
         var station = pair.Key.TrackedObject;
-        var originalName = station.VanillaStation?.StationName ?? string.Empty;
-        
+        var originalName = station.DisplayName;
+        var updatedName = originalName;
+        var duplicateCount = 0;
+
         foreach (var existingStation in _replacementStations.Values.Select(p => p.Key))
         {
             if (existingStation.Id == stationId) continue;
 
-            if (!existingStation.TrackedObject.VanillaStation?.StationName.Equals(originalName,
-                    StringComparison.OrdinalIgnoreCase) ?? true) continue;
+            if (!existingStation.TrackedObject.DisplayName.Equals(updatedName,
+                    StringComparison.OrdinalIgnoreCase)) continue;
 
-            return true;
+            duplicateCount++;
+            updatedName = $"{originalName} ({duplicateCount})";
         }
 
-        return false;
+        if (duplicateCount <= 0) return originalName;
+
+        station.DisplayName = updatedName;
+        ReplacementStationsAsBindingList.First(s => s.Id == stationId).TrackedObject.DisplayName = updatedName;
+
+        VanillaStationUpdated?.Invoke(this, stationId);
+        VanillaStationNameDuplicate?.Invoke(this, (stationId, updatedName));
+
+        return updatedName;
     }
 
     /// <summary>
@@ -1333,8 +1342,12 @@ public partial class StationManager : IDisposable
         {
             var pendingSave = new Dictionary<Guid, bool>();
             foreach (var pair in _stations)
+            {
                 pendingSave[pair.Key] = pair.Value.Key.IsPendingSave
-                                        & StationsAsBindingList.First(s => s.Id == pair.Key).IsPendingSave;
+                                        & StationsAsBindingList
+                                            .First(s => s.Id == pair.Key).IsPendingSave;
+                pendingSave[pair.Key] |= IsNewStation(pair.Key);
+            }
             return pendingSave;
         }
         catch (Exception ex)
@@ -1354,8 +1367,12 @@ public partial class StationManager : IDisposable
         {
             var pendingSave = new Dictionary<Guid, bool>();
             foreach (var pair in _replacementStations)
+            {
                 pendingSave[pair.Key] = pair.Value.Key.IsPendingSave
-                                        & ReplacementStationsAsBindingList.First(s => s.Id == pair.Key).IsPendingSave;
+                                        & ReplacementStationsAsBindingList
+                                            .First(s => s.Id == pair.Key).IsPendingSave;
+                pendingSave[pair.Key] |= IsNewStation(pair.Key);
+            }
             return pendingSave;
         }
         catch (Exception ex)
@@ -1575,7 +1592,7 @@ public partial class StationManager : IDisposable
                 StationUpdated?.Invoke(this, iconEditor.Station.Id);
                 break;
             case ReplacementStationEditor { ReplacedStation: not null } replEditor:
-                StationUpdated?.Invoke(this, replEditor.ReplacedStation.Id);
+                VanillaStationUpdated?.Invoke(this, replEditor.ReplacedStation.Id);
                 break;
         }
     }
@@ -1935,6 +1952,11 @@ public partial class StationManager : IDisposable
     /// Event that is raised when a station name is found to be a duplicate. Event data is a tuple with the station ID and the updated name.
     /// </summary>
     public event EventHandler<(Guid stationId, string updatedName)>? StationNameDuplicate;
+
+    /// <summary>
+    /// Event that is raised when a vanilla station name is found to be a duplicate. Event data is a tuple with the station ID and the updated name.
+    /// </summary>
+    public event EventHandler<(Guid stationId, string updatedName)>? VanillaStationNameDuplicate;
 
     /// <summary>
     /// Event that is raised when the synchronization progress changes. Event data is the current progress percentage.

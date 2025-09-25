@@ -162,27 +162,17 @@ public sealed partial class MainForm : Form
         _languageComboBox.SelectedIndexChanged += CmbLanguageSelect_SelectedIndexChanged;
 
         StationManager.Instance.StationUpdated += OnStationUpdated;
+        StationManager.Instance.VanillaStationUpdated += OnVanillaStationUpdated;
         StationManager.Instance.SyncProgressChanged += OnStationSyncProgressChanged;
         StationManager.Instance.SyncStatusChanged += OnStationSyncStatusChanged;
         StationManager.Instance.StationsSynchronized += OnStationsSynchronized;
         StationManager.Instance.StationImported += OnStationImported;
 
-        StationManager.Instance.VanillaStationUpdated += OnVanillaStationUpdated;
-
         lbStations.StationsImported += OnStationImported;
+        lbReplacedStations.ReplacementStationsImported += OnVanillaStationImported;
 
         // Save the configuration when resizing has stopped
         _resizeTimer.Elapsed += (_, _) => { SaveWindowSize(); };
-    }
-
-    private void OnVanillaStationUpdated(object? sender, Guid e)
-    {
-        if (lbReplacedStations.SelectedItem is not TrackableObject<ReplacementStation> station) return;
-
-        StationManager.Instance.OnVanillaStationUpdated(station.Id);
-        lbReplacedStations.BeginUpdate();
-        lbReplacedStations.Invalidate();
-        lbReplacedStations.EndUpdate();
     }
 
     private void OnStationImported(object? sender, List<Guid?> stationIds)
@@ -206,6 +196,22 @@ public sealed partial class MainForm : Form
         var firstStationId = stationIds.First();
         lbStations.SelectedItem = StationManager.Instance.GetStation(firstStationId)?.Key;
         SelectStationEditor(firstStationId);
+        UpdateEnabledStationCount();
+        HandleUserControlVisibility();
+    }
+
+    private void OnVanillaStationImported(object? sender, List<Guid?> stationIds)
+    {
+        if (stationIds.Count <= 0)
+        {
+            MessageBox.Show(Strings.MainForm_NoStationsImported, Strings.MainForm_NoStationsImportedTitle,
+                MessageBoxButtons.OK, MessageBoxIcon.Error);
+            return;
+        }
+
+        var firstStationId = stationIds.First();
+        lbReplacedStations.SelectedItem = StationManager.Instance.GetVanillaStation(firstStationId)?.Key;
+        SelectReplacementStationEditor(firstStationId);
         UpdateEnabledStationCount();
         HandleUserControlVisibility();
     }
@@ -275,14 +281,14 @@ public sealed partial class MainForm : Form
         _languageComboBox.SelectedIndexChanged -= CmbLanguageSelect_SelectedIndexChanged;
 
         StationManager.Instance.StationUpdated -= OnStationUpdated;
+        StationManager.Instance.VanillaStationUpdated -= OnVanillaStationUpdated;
         StationManager.Instance.SyncProgressChanged -= OnStationSyncProgressChanged;
         StationManager.Instance.SyncStatusChanged -= OnStationSyncStatusChanged;
         StationManager.Instance.StationsSynchronized -= OnStationsSynchronized;
         StationManager.Instance.StationImported -= OnStationImported;
 
-        StationManager.Instance.VanillaStationUpdated -= OnVanillaStationUpdated;
-
         lbStations.StationsImported -= OnStationImported;
+        lbReplacedStations.ReplacementStationsImported -= OnVanillaStationImported;
 
         _resizeTimer.Elapsed -= resizeTimerOnElapsed;
     }
@@ -583,6 +589,7 @@ public sealed partial class MainForm : Form
         this.SafeInvoke(() =>
         {
             lbStations.BeginUpdate();
+            lbReplacedStations.BeginUpdate();
 
             if (!string.IsNullOrEmpty(StagingPath))
                 StationManager.Instance.LoadStations(StagingPath);
@@ -590,6 +597,7 @@ public sealed partial class MainForm : Form
             UpdateUiAfterPopulation();
 
             lbStations.EndUpdate();
+            lbReplacedStations.EndUpdate();
         });
     }
 
@@ -599,7 +607,11 @@ public sealed partial class MainForm : Form
     private void UpdateUiAfterPopulation()
     {
         if (lbStations.Items.Count > 0)
-            SelectListBoxItem(0, false);
+            _mainStationListBoxSelected = true;
+        else if (lbReplacedStations.Items.Count > 0)
+            _mainStationListBoxSelected = false;
+
+        SelectListBoxItem(0, false);
 
         HandleUserControlVisibility();
         UpdateEnabledStationCount();
@@ -758,8 +770,7 @@ public sealed partial class MainForm : Form
 
             station.DeclineChanges(); // Revert the changes made to the station's properties since the last save.
 
-            //TODO: reset the replacement station editor UI
-            //StationManager.Instance.GetVanillaStationEditor(station.Id)?.ResetUi();
+            StationManager.Instance.GetVanillaStationEditor(station.Id)?.ResetUi();
 
             OnVanillaStationUpdated(sender, station.Id); //Update the UI to reflect the changes.
             SelectReplacementStationEditor(station.Id); //Update the editor to reflect the changes.
@@ -1021,6 +1032,16 @@ public sealed partial class MainForm : Form
         lbStations.EndUpdate();
     }
 
+    private void OnVanillaStationUpdated(object? sender, Guid stationId)
+    {
+        if (lbReplacedStations.SelectedItem is not TrackableObject<ReplacementStation> station) return;
+
+        StationManager.Instance.OnVanillaStationUpdated(station.Id);
+        lbReplacedStations.BeginUpdate();
+        lbReplacedStations.Invalidate();
+        lbReplacedStations.EndUpdate();
+    }
+
     private void BtnDeleteStation_Click(object sender, EventArgs e)
     {
         if (GameBasePath.Equals(string.Empty) || StagingPath.Equals(string.Empty))
@@ -1204,7 +1225,7 @@ public sealed partial class MainForm : Form
 
     private void RefreshStationsToolStripMenuItem_Click(object sender, EventArgs e)
     {
-        if (lbStations.Items.Count <= 0)
+        if (lbStations.Items.Count <= 0 && lbReplacedStations.Items.Count <= 0)
         {
             PopulateStations();
         }
@@ -1321,7 +1342,7 @@ public sealed partial class MainForm : Form
     private void BackupStagingFolderToolStripMenuItem_Click(object sender, EventArgs e)
     {
         if (string.IsNullOrEmpty(StagingPath)) return;
-        if (lbStations.Items.Count <= 0) return;
+        if (lbStations.Items.Count <= 0 & lbReplacedStations.Items.Count <=0) return;
 
         //Check for sync in progress to prevent backup during sync
         if (_isSyncInProgress)
@@ -1464,21 +1485,25 @@ public sealed partial class MainForm : Form
     /// <summary>
     /// Get a value indicating if there are stations pending save and the user confirmed to quit the application.
     /// </summary>
-    /// <returns><c>true</c> if there are pending saves or the user confirmed exit;
-    /// <c>false</c> if there are no pending changes and the user denied exit.</returns>
+    /// <returns><c>true</c> if there are pending saves or the user denied exit;
+    /// <c>false</c> if there are no pending changes or the user confirmed exit.</returns>
     private bool CheckForPendingSaveStations()
     {
-        var pendingSave = StationManager.Instance.CheckPendingSave();
-        var pendingVanillaSave = StationManager.Instance.CheckVanillaPendingSave();
-        var pendingAny = pendingSave.Values.All(p => p);
-        pendingAny &= pendingVanillaSave.Values.All(p => p);
+        var pendingSaveDict = StationManager.Instance.CheckPendingSave();
+        var pendingVanillaSaveDict = StationManager.Instance.CheckVanillaPendingSave();
+        var pendingSave = pendingSaveDict.Count(k => k.Value);
+        var pendingVanillaSave = pendingVanillaSaveDict.Count(k => k.Value);
+        //var pendingAny = pendingSave.Values.All(p => p != true);
+        //pendingAny &= pendingVanillaSave.Values.All(p => p != true);
 
-        if (!pendingAny) return true;
-
-        var count = pendingSave.Count(p => p.Value) + pendingVanillaSave.Count(p => p.Value);
+        var count = (pendingSave + pendingVanillaSave);
+        var pendingAny = count > 0;
         var text = string.Format(Strings.ConfirmExit, count);
 
-        return MessageBox.Show(this, text, Strings.Confirm, MessageBoxButtons.YesNo, MessageBoxIcon.Warning) !=
+        if (!pendingAny)
+            return false;
+
+        return MessageBox.Show(this, text, Strings.Confirm, MessageBoxButtons.YesNo, MessageBoxIcon.Warning) ==
                DialogResult.No;
     }
 
@@ -1502,7 +1527,7 @@ public sealed partial class MainForm : Form
         {
             _isAppClosing = true;
 
-            if (!CheckForPendingSaveStations())
+            if (CheckForPendingSaveStations())
                 e.Cancel = true;
             else
                 CleanupEvents();
@@ -1596,6 +1621,7 @@ public sealed partial class MainForm : Form
 
     private void OnVanillaStationAdded(object? sender, VanillaStation e)
     {
+        lbStations.ClearSelected();
         var replacementStation = new ReplacementStation()
         {
             VanillaStation = e,
@@ -1607,7 +1633,7 @@ public sealed partial class MainForm : Form
 
         var id = StationManager.Instance.AddVanillaStation(station, false);
         lbReplacedStations.SelectedItem = StationManager.Instance.GetVanillaStation(id)?.Key;
-
+        
         SelectReplacementStationEditor(id);
         UpdateEnabledStationCount();
         HandleUserControlVisibility();

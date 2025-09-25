@@ -297,7 +297,8 @@ public sealed partial class ReplacementStationListBox : ListBox
                 }
 
                 // Determine the secondary icon (changes pending/saved)
-                var secondaryIconKey = station.IsPendingSave ? _editedStationIconKey : _savedStationIconKey;
+                var secondaryIconKey = station.IsPendingSave | 
+                                       StationManager.Instance.IsNewStation(station.Id) ? _editedStationIconKey : _savedStationIconKey;
 
                 // Calculate the position for the secondary icon at the right edge
                 var iconX = e.Bounds.Right - 16 - 4; // 16 is the icon width, 4 is some padding from the edge

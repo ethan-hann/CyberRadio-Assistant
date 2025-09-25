@@ -28,33 +28,195 @@
         /// </summary>
         private void InitializeComponent()
         {
-            label1 = new Label();
+            statusStrip1 = new StatusStrip();
+            lblStatus = new ToolStripStatusLabel();
+            tabControl = new TabControl();
+            tabDisplay = new TabPage();
+            grpDisplay = new GroupBox();
+            tlpDisplayTable = new TableLayoutPanel();
+            txtDisplayName = new TextBox();
+            lblDisplayName = new Label();
+            lblVanillaName = new Label();
+            txtVanillaStationName = new TextBox();
+            tabMusic = new TabPage();
+            statusStrip1.SuspendLayout();
+            tabControl.SuspendLayout();
+            tabDisplay.SuspendLayout();
+            grpDisplay.SuspendLayout();
+            tlpDisplayTable.SuspendLayout();
             SuspendLayout();
             // 
-            // label1
+            // statusStrip1
             // 
-            label1.AutoSize = true;
-            label1.Location = new Point(44, 86);
-            label1.Name = "label1";
-            label1.Size = new Size(76, 15);
-            label1.TabIndex = 0;
-            label1.Text = "station name";
+            statusStrip1.BackColor = Color.Transparent;
+            statusStrip1.Items.AddRange(new ToolStripItem[] { lblStatus });
+            statusStrip1.Location = new Point(0, 614);
+            statusStrip1.Name = "statusStrip1";
+            statusStrip1.Size = new Size(987, 25);
+            statusStrip1.SizingGrip = false;
+            statusStrip1.TabIndex = 8;
+            statusStrip1.Text = "statusStrip1";
+            // 
+            // lblStatus
+            // 
+            lblStatus.Image = Properties.Resources.info__16x16;
+            lblStatus.Margin = new Padding(5, 3, 0, 2);
+            lblStatus.Name = "lblStatus";
+            lblStatus.Padding = new Padding(2);
+            lblStatus.Size = new Size(59, 20);
+            lblStatus.Text = "Ready";
+            // 
+            // tabControl
+            // 
+            tabControl.Controls.Add(tabDisplay);
+            tabControl.Controls.Add(tabMusic);
+            tabControl.Dock = DockStyle.Fill;
+            tabControl.Font = new Font("Segoe UI", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            tabControl.Location = new Point(0, 0);
+            tabControl.Name = "tabControl";
+            tabControl.SelectedIndex = 0;
+            tabControl.Size = new Size(987, 614);
+            tabControl.TabIndex = 10;
+            // 
+            // tabDisplay
+            // 
+            tabDisplay.BackColor = Color.White;
+            tabDisplay.BorderStyle = BorderStyle.FixedSingle;
+            tabDisplay.Controls.Add(grpDisplay);
+            tabDisplay.Font = new Font("Microsoft Sans Serif", 9.749999F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            tabDisplay.ImageIndex = 0;
+            tabDisplay.Location = new Point(4, 29);
+            tabDisplay.Name = "tabDisplay";
+            tabDisplay.Padding = new Padding(3);
+            tabDisplay.Size = new Size(979, 581);
+            tabDisplay.TabIndex = 0;
+            tabDisplay.Text = "Main Info";
+            // 
+            // grpDisplay
+            // 
+            grpDisplay.BackColor = Color.White;
+            grpDisplay.Controls.Add(tlpDisplayTable);
+            grpDisplay.Dock = DockStyle.Top;
+            grpDisplay.Font = new Font("Segoe UI Variable Display", 9.75F, FontStyle.Bold);
+            grpDisplay.Location = new Point(3, 3);
+            grpDisplay.Name = "grpDisplay";
+            grpDisplay.Size = new Size(971, 209);
+            grpDisplay.TabIndex = 3;
+            grpDisplay.TabStop = false;
+            grpDisplay.Text = "Display";
+            // 
+            // tlpDisplayTable
+            // 
+            tlpDisplayTable.ColumnCount = 2;
+            tlpDisplayTable.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 13.9896374F));
+            tlpDisplayTable.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 86.01036F));
+            tlpDisplayTable.Controls.Add(txtDisplayName, 1, 1);
+            tlpDisplayTable.Controls.Add(lblDisplayName, 0, 1);
+            tlpDisplayTable.Controls.Add(lblVanillaName, 0, 0);
+            tlpDisplayTable.Controls.Add(txtVanillaStationName, 1, 0);
+            tlpDisplayTable.Dock = DockStyle.Fill;
+            tlpDisplayTable.Location = new Point(3, 21);
+            tlpDisplayTable.Name = "tlpDisplayTable";
+            tlpDisplayTable.RowCount = 3;
+            tlpDisplayTable.RowStyles.Add(new RowStyle(SizeType.Percent, 44.3038F));
+            tlpDisplayTable.RowStyles.Add(new RowStyle(SizeType.Percent, 55.6962F));
+            tlpDisplayTable.RowStyles.Add(new RowStyle(SizeType.Absolute, 111F));
+            tlpDisplayTable.Size = new Size(965, 185);
+            tlpDisplayTable.TabIndex = 0;
+            // 
+            // txtDisplayName
+            // 
+            txtDisplayName.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            txtDisplayName.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            txtDisplayName.Location = new Point(138, 41);
+            txtDisplayName.Name = "txtDisplayName";
+            txtDisplayName.Size = new Size(824, 23);
+            txtDisplayName.TabIndex = 3;
+            txtDisplayName.TextChanged += txtDisplayName_TextChanged;
+            // 
+            // lblDisplayName
+            // 
+            lblDisplayName.Anchor = AnchorStyles.Right;
+            lblDisplayName.AutoSize = true;
+            lblDisplayName.Font = new Font("Segoe UI Variable Text", 9F);
+            lblDisplayName.Location = new Point(50, 44);
+            lblDisplayName.Name = "lblDisplayName";
+            lblDisplayName.Size = new Size(82, 16);
+            lblDisplayName.TabIndex = 2;
+            lblDisplayName.Text = "Display Name:";
+            lblDisplayName.MouseEnter += lblDisplayName_MouseEnter;
+            lblDisplayName.MouseLeave += Lbl_MouseLeave;
+            // 
+            // lblVanillaName
+            // 
+            lblVanillaName.Anchor = AnchorStyles.Right;
+            lblVanillaName.AutoSize = true;
+            lblVanillaName.Font = new Font("Segoe UI Variable Text", 9F);
+            lblVanillaName.Location = new Point(14, 8);
+            lblVanillaName.Name = "lblVanillaName";
+            lblVanillaName.Size = new Size(118, 16);
+            lblVanillaName.TabIndex = 0;
+            lblVanillaName.Text = "Vanilla Station Name:";
+            lblVanillaName.MouseEnter += lblVanillaName_MouseEnter;
+            lblVanillaName.MouseLeave += Lbl_MouseLeave;
+            // 
+            // txtVanillaStationName
+            // 
+            txtVanillaStationName.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            txtVanillaStationName.Enabled = false;
+            txtVanillaStationName.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            txtVanillaStationName.Location = new Point(138, 4);
+            txtVanillaStationName.Name = "txtVanillaStationName";
+            txtVanillaStationName.ReadOnly = true;
+            txtVanillaStationName.Size = new Size(824, 23);
+            txtVanillaStationName.TabIndex = 1;
+            // 
+            // tabMusic
+            // 
+            tabMusic.BackColor = Color.White;
+            tabMusic.BorderStyle = BorderStyle.FixedSingle;
+            tabMusic.ImageIndex = 1;
+            tabMusic.Location = new Point(4, 29);
+            tabMusic.Name = "tabMusic";
+            tabMusic.Padding = new Padding(3);
+            tabMusic.Size = new Size(979, 581);
+            tabMusic.TabIndex = 1;
+            tabMusic.Text = "Tracks";
+            tabMusic.ToolTipText = "Change the music this radio station will play.";
             // 
             // ReplacementStationEditor
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;
-            Controls.Add(label1);
+            Controls.Add(tabControl);
+            Controls.Add(statusStrip1);
             Name = "ReplacementStationEditor";
-            Size = new Size(884, 590);
+            Size = new Size(987, 639);
             Load += ReplacementStationEditor_Load;
+            statusStrip1.ResumeLayout(false);
+            statusStrip1.PerformLayout();
+            tabControl.ResumeLayout(false);
+            tabDisplay.ResumeLayout(false);
+            grpDisplay.ResumeLayout(false);
+            tlpDisplayTable.ResumeLayout(false);
+            tlpDisplayTable.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
 
-        private Label label1;
+        private StatusStrip statusStrip1;
+        private ToolStripStatusLabel lblStatus;
+        private TabControl tabControl;
+        private TabPage tabDisplay;
+        private TabPage tabMusic;
+        private GroupBox grpDisplay;
+        private TableLayoutPanel tlpDisplayTable;
+        private Label lblDisplayName;
+        private Label lblVanillaName;
+        private TextBox txtVanillaStationName;
+        private TextBox txtDisplayName;
     }
 }
