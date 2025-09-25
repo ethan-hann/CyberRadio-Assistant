@@ -31,7 +31,6 @@ using System.Timers;
 using WIG.Lib.Models;
 using WIG.Lib.Models.Audio;
 using WIG.Lib.Utility;
-using static System.Collections.Specialized.BitVector32;
 using ApplicationContext = RadioExt_Helper.utility.ApplicationContext;
 using PathHelper = RadioExt_Helper.utility.PathHelper;
 using Timer = System.Timers.Timer;
@@ -92,7 +91,7 @@ public sealed partial class MainForm : Form
         lbStations.DisplayMember = "TrackedObject.MetaData";
 
         lbReplacedStations.DataSource = StationManager.Instance.ReplacementStationsAsBindingList;
-        lbReplacedStations.DisplayMember = "DisplayName";
+        lbReplacedStations.DisplayMember = "TrackedObject.DisplayName";
 
         //Add the icons folder to the protected folders list
         StationManager.Instance.AddProtectedFolder(Path.Combine(StagingPath, "icons"));
@@ -509,6 +508,43 @@ public sealed partial class MainForm : Form
         _noStationsCtrl.Visible = true;
     }
 
+    /// <summary>
+    /// Show the "no stations" panel only when neither listbox has a selection.
+    /// Never clears/re-adds controls unless we're actually switching content,
+    /// which avoids the visible flash.
+    /// </summary>
+    private void HandleNoStationsSelected()
+    {
+        if (lbStations.SelectedIndex != -1 || lbReplacedStations.SelectedIndex != -1)
+            return;
+
+        if (!splitContainer1.Panel2.Controls.Contains(_noStationsCtrl))
+        {
+            splitContainer1.Panel2.SuspendLayout();
+            try
+            {
+                splitContainer1.Panel2.Controls.Clear();
+                splitContainer1.Panel2.Controls.Add(_noStationsCtrl);
+            }
+            finally
+            {
+                splitContainer1.Panel2.ResumeLayout(performLayout: true);
+            }
+        }
+
+        _noStationsCtrl.Visible = true;
+    }
+
+    /// <summary>
+    /// Queue a post-message-loop check so we don't show the "no stations"
+    /// control during the brief handoff between listboxes.
+    /// </summary>
+    private void PostSelectionCoalesceCheck()
+    {
+        // Schedule after current events (Enter/SelectedIndexChanged) finish.
+        BeginInvoke((Action)(HandleNoStationsSelected));
+    }
+
     private void CopyOodleToIconManager()
     {
         //Check for and Copy Oodle Dll to the icon manager
@@ -628,12 +664,14 @@ public sealed partial class MainForm : Form
     {
         _mainStationListBoxSelected = true;
         this.SafeInvoke(() => SelectListBoxItem(lbStations.SelectedIndex, true));
+        PostSelectionCoalesceCheck();
     }
 
     private void lbReplacedStations_SelectedIndexChanged(object sender, EventArgs e)
     {
         _mainStationListBoxSelected = false;
         this.SafeInvoke(() => SelectListBoxItem(lbReplacedStations.SelectedIndex, true));
+        PostSelectionCoalesceCheck();
     }
 
     /// <summary>
@@ -1031,29 +1069,14 @@ public sealed partial class MainForm : Form
 
     private void LbStations_MouseDown(object sender, MouseEventArgs e)
     {
-        if (_mainStationListBoxSelected)
-        {
-            var index = lbStations.IndexFromPoint(e.Location);
-            if (index == ListBox.NoMatches)
-                _ignoreSelectedIndexChanged = true;
+        if (e.Button != MouseButtons.Right) return;
 
-            if (e.Button != MouseButtons.Right) return;
+        var index = _mainStationListBoxSelected ? lbStations.IndexFromPoint(e.Location) : lbReplacedStations.IndexFromPoint(e.Location);
 
-            //Show the "Revert Changes" context menu if the station is selected and was right-clicked.
-            if (lbStations.SelectedIndex == index)
-                cmsRevertStationChanges.Show(Cursor.Position);
-        }
-        else
-        {
-            var index = lbReplacedStations.IndexFromPoint(e.Location);
-            if (index == ListBox.NoMatches)
-                _ignoreSelectedIndexChanged = true;
-            if (e.Button != MouseButtons.Right) return;
-
-            //Show the "Revert Changes" context menu if the station is selected and was right-clicked.
-            if (lbReplacedStations.SelectedIndex == index)
-                cmsRevertStationChanges.Show(Cursor.Position);
-        }
+        if (lbStations.SelectedIndex == index)
+            cmsRevertStationChanges.Show(Cursor.Position);
+        else if (lbReplacedStations.SelectedIndex == index)
+            cmsRevertStationChanges.Show(Cursor.Position);
     }
 
     private void OpenStagingPathToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1583,12 +1606,38 @@ public sealed partial class MainForm : Form
     private void lbStations_Enter(object sender, EventArgs e)
     {
         _mainStationListBoxSelected = true;
-        lbReplacedStations.SelectedIndex = -1;
+
+        // Prevent SelectedIndexChanged churn while we clear the other list
+        _ignoreSelectedIndexChanged = true;
+        try
+        {
+            if (lbReplacedStations.SelectedIndex != -1)
+                lbReplacedStations.ClearSelected();
+        }
+        finally
+        {
+            _ignoreSelectedIndexChanged = false;
+        }
+
+        // Defer: only show "no stations" if BOTH end up unselected
+        PostSelectionCoalesceCheck();
     }
 
     private void lbReplacedStations_Enter(object sender, EventArgs e)
     {
         _mainStationListBoxSelected = false;
-        lbStations.SelectedIndex = -1;
+
+        _ignoreSelectedIndexChanged = true;
+        try
+        {
+            if (lbStations.SelectedIndex != -1)
+                lbStations.ClearSelected();
+        }
+        finally
+        {
+            _ignoreSelectedIndexChanged = false;
+        }
+
+        PostSelectionCoalesceCheck();
     }
 }
