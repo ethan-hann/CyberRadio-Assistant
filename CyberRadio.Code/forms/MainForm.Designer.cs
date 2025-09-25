@@ -450,6 +450,7 @@ namespace RadioExt_Helper.forms
             // splitContainer2.Panel2
             // 
             splitContainer2.Panel2.Controls.Add(grpVanillaStations);
+            splitContainer2.Panel2.Controls.Add(statusStrip2);
             splitContainer2.Size = new Size(296, 553);
             splitContainer2.SplitterDistance = 315;
             splitContainer2.TabIndex = 3;
@@ -659,11 +660,10 @@ namespace RadioExt_Helper.forms
             // 
             grpVanillaStations.Controls.Add(lbReplacedStations);
             grpVanillaStations.Controls.Add(tableLayoutPanel3);
-            grpVanillaStations.Controls.Add(statusStrip2);
             grpVanillaStations.Dock = DockStyle.Fill;
             grpVanillaStations.Location = new Point(0, 0);
             grpVanillaStations.Name = "grpVanillaStations";
-            grpVanillaStations.Size = new Size(296, 234);
+            grpVanillaStations.Size = new Size(296, 212);
             grpVanillaStations.TabIndex = 0;
             grpVanillaStations.TabStop = false;
             grpVanillaStations.Text = "Vanilla Stations";
@@ -736,9 +736,9 @@ namespace RadioExt_Helper.forms
             // 
             statusStrip2.BackColor = Color.White;
             statusStrip2.Items.AddRange(new ToolStripItem[] { toolStripStatusLabel2, lblVanillaStationCount, toolStripStatusLabel5 });
-            statusStrip2.Location = new Point(3, 209);
+            statusStrip2.Location = new Point(0, 212);
             statusStrip2.Name = "statusStrip2";
-            statusStrip2.Size = new Size(290, 22);
+            statusStrip2.Size = new Size(296, 22);
             statusStrip2.SizingGrip = false;
             statusStrip2.TabIndex = 3;
             statusStrip2.Text = "statusStrip2";
@@ -746,7 +746,7 @@ namespace RadioExt_Helper.forms
             // toolStripStatusLabel2
             // 
             toolStripStatusLabel2.Name = "toolStripStatusLabel2";
-            toolStripStatusLabel2.Size = new Size(31, 17);
+            toolStripStatusLabel2.Size = new Size(34, 17);
             toolStripStatusLabel2.Spring = true;
             // 
             // lblVanillaStationCount
@@ -759,7 +759,7 @@ namespace RadioExt_Helper.forms
             // toolStripStatusLabel5
             // 
             toolStripStatusLabel5.Name = "toolStripStatusLabel5";
-            toolStripStatusLabel5.Size = new Size(31, 17);
+            toolStripStatusLabel5.Size = new Size(34, 17);
             toolStripStatusLabel5.Spring = true;
             // 
             // tableLayoutPanel1
@@ -922,6 +922,7 @@ namespace RadioExt_Helper.forms
             splitContainer1.ResumeLayout(false);
             splitContainer2.Panel1.ResumeLayout(false);
             splitContainer2.Panel2.ResumeLayout(false);
+            splitContainer2.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer2).EndInit();
             splitContainer2.ResumeLayout(false);
             grpStations.ResumeLayout(false);
@@ -933,7 +934,6 @@ namespace RadioExt_Helper.forms
             statusStrip1.PerformLayout();
             tableLayoutPanel4.ResumeLayout(false);
             grpVanillaStations.ResumeLayout(false);
-            grpVanillaStations.PerformLayout();
             tableLayoutPanel3.ResumeLayout(false);
             statusStrip2.ResumeLayout(false);
             statusStrip2.PerformLayout();

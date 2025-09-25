@@ -45,6 +45,7 @@ public sealed partial class MainForm : Form
     private readonly ImageComboBox<ImageComboBoxItem> _languageComboBox = new();
     private readonly List<ImageComboBoxItem> _languages = [];
     private readonly NoStationsCtl _noStationsCtrl = new();
+    private readonly NoStationSelectedCtl _noStationSelectedCtrl = new();
     private readonly Timer _resizeTimer;
     private readonly ImageList _stationImageList = new();
 
@@ -522,13 +523,13 @@ public sealed partial class MainForm : Form
         if (lbStations.SelectedIndex != -1 || lbReplacedStations.SelectedIndex != -1)
             return;
 
-        if (!splitContainer1.Panel2.Controls.Contains(_noStationsCtrl))
+        if (!splitContainer1.Panel2.Controls.Contains(_noStationSelectedCtrl))
         {
             splitContainer1.Panel2.SuspendLayout();
             try
             {
                 splitContainer1.Panel2.Controls.Clear();
-                splitContainer1.Panel2.Controls.Add(_noStationsCtrl);
+                splitContainer1.Panel2.Controls.Add(_noStationSelectedCtrl);
             }
             finally
             {
@@ -536,7 +537,7 @@ public sealed partial class MainForm : Form
             }
         }
 
-        _noStationsCtrl.Visible = true;
+        _noStationSelectedCtrl.Visible = true;
     }
 
     /// <summary>
@@ -1467,7 +1468,7 @@ public sealed partial class MainForm : Form
         var pendingAny = pendingSave.Values.All(p => p);
         pendingAny &= pendingVanillaSave.Values.All(p => p);
 
-        if (pendingAny) return true;
+        if (!pendingAny) return true;
 
         var count = pendingSave.Count(p => p.Value) + pendingVanillaSave.Count(p => p.Value);
         var text = string.Format(Strings.ConfirmExit, count);
@@ -1658,7 +1659,7 @@ public sealed partial class MainForm : Form
 
         //Deselect stations in vanilla group
         lbReplacedStations.ClearSelected();
-        if (lbStations.Items.Count > 0)
+        if (lbStations.Items.Count > 0 && lbStations.SelectedIndex == -1)
             lbStations.SelectedIndex = 0;
 
         //Disable/Enable "Add vanilla station button"
