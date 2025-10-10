@@ -61,14 +61,14 @@ public sealed partial class ReplacementStationListBox : ListBox
     // ------------------- NEW: Delegates for vanilla rendering -------------------
     /// <summary>Returns the display text for the item (vanilla mode). If null, ToString() is used.</summary>
     [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public Func<object, string>? TextSelector { get; set; }
+    public static Func<object, string>? TextSelector { get; set; }
 
     /// <summary>Returns the Resources.resx key for the item's image (vanilla mode). If null, sanitation fallback is used.</summary>
     [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public Func<object, string>? ResourceKeySelector { get; set; }
+    public static Func<object, string>? ResourceKeySelector { get; set; }
 
     // ------------------- NEW: Image sizing for vanilla mode -------------------
-    private int _imageEdge = 48;
+    private static int _imageEdge = 48;
 
     [Browsable(true)]
     [Category("Appearance")]
@@ -119,7 +119,7 @@ public sealed partial class ReplacementStationListBox : ListBox
     private Font _songsMissingFont = new(DefaultFont, FontStyle.Bold);
 
     // ------------------- NEW: thumbnail cache (vanilla mode) -------------------
-    private readonly Dictionary<object, Image> _thumbCache = new(ReferenceEqualityComparer.Instance);
+    private static readonly Dictionary<object, Image> _thumbCache = new(ReferenceEqualityComparer.Instance);
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ReplacementStationListBox"/> class.
@@ -467,7 +467,7 @@ public sealed partial class ReplacementStationListBox : ListBox
     }
 
     // ------------------- Helpers: vanilla thumbnails -------------------
-    private Image? GetOrCreateThumb(object item)
+    public static Image? GetOrCreateThumb(object item)
     {
         if (_thumbCache.TryGetValue(item, out var cached))
             return cached;

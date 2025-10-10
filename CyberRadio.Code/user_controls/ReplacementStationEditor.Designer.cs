@@ -39,11 +39,14 @@
             lblVanillaName = new Label();
             txtVanillaStationName = new TextBox();
             tabMusic = new TabPage();
+            lblIcon = new Label();
+            pbStationIcon = new PictureBox();
             statusStrip1.SuspendLayout();
             tabControl.SuspendLayout();
             tabDisplay.SuspendLayout();
             grpDisplay.SuspendLayout();
             tlpDisplayTable.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pbStationIcon).BeginInit();
             SuspendLayout();
             // 
             // statusStrip1
@@ -100,7 +103,7 @@
             grpDisplay.Font = new Font("Segoe UI Variable Display", 9.75F, FontStyle.Bold);
             grpDisplay.Location = new Point(3, 3);
             grpDisplay.Name = "grpDisplay";
-            grpDisplay.Size = new Size(971, 209);
+            grpDisplay.Size = new Size(971, 205);
             grpDisplay.TabIndex = 3;
             grpDisplay.TabStop = false;
             grpDisplay.Text = "Display";
@@ -110,10 +113,12 @@
             tlpDisplayTable.ColumnCount = 2;
             tlpDisplayTable.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 13.9896374F));
             tlpDisplayTable.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 86.01036F));
+            tlpDisplayTable.Controls.Add(lblIcon, 0, 2);
             tlpDisplayTable.Controls.Add(txtDisplayName, 1, 1);
             tlpDisplayTable.Controls.Add(lblDisplayName, 0, 1);
             tlpDisplayTable.Controls.Add(lblVanillaName, 0, 0);
             tlpDisplayTable.Controls.Add(txtVanillaStationName, 1, 0);
+            tlpDisplayTable.Controls.Add(pbStationIcon, 1, 2);
             tlpDisplayTable.Dock = DockStyle.Fill;
             tlpDisplayTable.Location = new Point(3, 21);
             tlpDisplayTable.Name = "tlpDisplayTable";
@@ -121,14 +126,14 @@
             tlpDisplayTable.RowStyles.Add(new RowStyle(SizeType.Percent, 44.3038F));
             tlpDisplayTable.RowStyles.Add(new RowStyle(SizeType.Percent, 55.6962F));
             tlpDisplayTable.RowStyles.Add(new RowStyle(SizeType.Absolute, 111F));
-            tlpDisplayTable.Size = new Size(965, 185);
+            tlpDisplayTable.Size = new Size(965, 181);
             tlpDisplayTable.TabIndex = 0;
             // 
             // txtDisplayName
             // 
             txtDisplayName.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             txtDisplayName.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            txtDisplayName.Location = new Point(138, 41);
+            txtDisplayName.Location = new Point(138, 38);
             txtDisplayName.Name = "txtDisplayName";
             txtDisplayName.Size = new Size(824, 23);
             txtDisplayName.TabIndex = 3;
@@ -139,7 +144,7 @@
             lblDisplayName.Anchor = AnchorStyles.Right;
             lblDisplayName.AutoSize = true;
             lblDisplayName.Font = new Font("Segoe UI Variable Text", 9F);
-            lblDisplayName.Location = new Point(50, 44);
+            lblDisplayName.Location = new Point(50, 42);
             lblDisplayName.Name = "lblDisplayName";
             lblDisplayName.Size = new Size(82, 16);
             lblDisplayName.TabIndex = 2;
@@ -152,7 +157,7 @@
             lblVanillaName.Anchor = AnchorStyles.Right;
             lblVanillaName.AutoSize = true;
             lblVanillaName.Font = new Font("Segoe UI Variable Text", 9F);
-            lblVanillaName.Location = new Point(14, 8);
+            lblVanillaName.Location = new Point(14, 7);
             lblVanillaName.Name = "lblVanillaName";
             lblVanillaName.Size = new Size(118, 16);
             lblVanillaName.TabIndex = 0;
@@ -184,6 +189,26 @@
             tabMusic.Text = "Tracks";
             tabMusic.ToolTipText = "Change the music this radio station will play.";
             // 
+            // lblIcon
+            // 
+            lblIcon.Anchor = AnchorStyles.Right;
+            lblIcon.AutoSize = true;
+            lblIcon.Font = new Font("Segoe UI Variable Text", 9F);
+            lblIcon.Location = new Point(59, 117);
+            lblIcon.Name = "lblIcon";
+            lblIcon.Size = new Size(73, 16);
+            lblIcon.TabIndex = 4;
+            lblIcon.Text = "Station Icon:";
+            // 
+            // pbStationIcon
+            // 
+            pbStationIcon.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
+            pbStationIcon.Location = new Point(138, 72);
+            pbStationIcon.Name = "pbStationIcon";
+            pbStationIcon.Size = new Size(143, 106);
+            pbStationIcon.TabIndex = 5;
+            pbStationIcon.TabStop = false;
+            // 
             // ReplacementStationEditor
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -201,6 +226,7 @@
             grpDisplay.ResumeLayout(false);
             tlpDisplayTable.ResumeLayout(false);
             tlpDisplayTable.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)pbStationIcon).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -218,5 +244,7 @@
         private Label lblVanillaName;
         private TextBox txtVanillaStationName;
         private TextBox txtDisplayName;
+        private Label lblIcon;
+        private PictureBox pbStationIcon;
     }
 }

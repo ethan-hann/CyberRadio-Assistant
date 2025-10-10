@@ -29,18 +29,6 @@ namespace RadioExt_Helper.forms
         public VanillaStationSelector()
         {
             InitializeComponent();
-
-            lbVanillaStations.TextSelector = obj =>
-            {
-                if (obj is VanillaStation vs) return vs.StationName;
-                return obj?.ToString() ?? string.Empty;
-            };
-
-            lbVanillaStations.ResourceKeySelector = obj =>
-            {
-                if (obj is VanillaStation vs) return vs.StationName;
-                return obj?.ToString() ?? string.Empty;
-            };
         }
 
         private void VanillaStationSelector_Load(object sender, EventArgs e)

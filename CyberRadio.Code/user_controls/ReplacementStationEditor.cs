@@ -1,4 +1,5 @@
-﻿using RadioExt_Helper.models;
+﻿using RadioExt_Helper.custom_controls;
+using RadioExt_Helper.models;
 using RadioExt_Helper.Properties;
 using RadioExt_Helper.utility;
 
@@ -75,6 +76,8 @@ namespace RadioExt_Helper.user_controls
         {
             txtVanillaStationName.Text = ReplacedStation?.TrackedObject?.VanillaStation?.StationName ?? "Unknown Station";
             txtDisplayName.Text = ReplacedStation?.TrackedObject?.DisplayName ?? "New Replacement Station";
+
+            pbStationIcon.Image = ReplacementStationListBox.GetOrCreateThumb(ReplacedStation.TrackedObject.VanillaStation);
         }
 
         private void SetMusicTabValues()
