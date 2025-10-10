@@ -1899,8 +1899,7 @@ public partial class StationManager : IDisposable
     {
         return ProtectedStagingFolders.Contains(folder);
     }
-
-
+    
     #region Events
 
     /// <summary>

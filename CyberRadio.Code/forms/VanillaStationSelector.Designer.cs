@@ -1,4 +1,6 @@
-﻿namespace RadioExt_Helper.forms
+﻿using RadioExt_Helper.custom_controls;
+
+namespace RadioExt_Helper.forms
 {
     partial class VanillaStationSelector
     {
@@ -28,11 +30,12 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(VanillaStationSelector));
             tableLayoutPanel1 = new TableLayoutPanel();
             btnSelectStation = new Button();
             splitContainer1 = new SplitContainer();
-            lbVanillaStations = new ListBox();
+            lbVanillaStations = new ReplacementStationListBox();
             tableLayoutPanel2 = new TableLayoutPanel();
             lblHelp = new Label();
             lvTracks = new ListView();
@@ -99,13 +102,28 @@
             // 
             // lbVanillaStations
             // 
+            lbVanillaStations.AllowDrop = true;
+            lbVanillaStations.BorderStyle = BorderStyle.FixedSingle;
+            lbVanillaStations.DisabledIconKey = "disabled";
             lbVanillaStations.Dock = DockStyle.Fill;
+            lbVanillaStations.DrawMode = DrawMode.OwnerDrawVariable;
+            lbVanillaStations.DuplicateColor = Color.Red;
+            lbVanillaStations.DuplicateFont = new Font("Segoe UI", 9F, FontStyle.Italic);
+            lbVanillaStations.EditedStationIconKey = "edited_station";
+            lbVanillaStations.EnabledIconKey = "enabled";
             lbVanillaStations.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold);
             lbVanillaStations.FormattingEnabled = true;
-            lbVanillaStations.ItemHeight = 17;
+            lbVanillaStations.ImageTextGap = 5;
+            lbVanillaStations.ItemHeight = 24;
             lbVanillaStations.Location = new Point(0, 55);
             lbVanillaStations.Name = "lbVanillaStations";
+            lbVanillaStations.NewStationColor = Color.Green;
+            lbVanillaStations.NewStationFont = new Font("Segoe UI", 9F, FontStyle.Bold);
+            lbVanillaStations.RenderModeEx = ReplacementStationListBox.ItemRenderMode.ImageAndText;
+            lbVanillaStations.SavedStationIconKey = "saved_station";
             lbVanillaStations.Size = new Size(381, 458);
+            lbVanillaStations.SongsMissingColor = Color.Orange;
+            lbVanillaStations.SongsMissingFont = new Font("Segoe UI", 9F, FontStyle.Bold);
             lbVanillaStations.TabIndex = 0;
             lbVanillaStations.SelectedIndexChanged += lbVanillaStations_SelectedIndexChanged;
             // 
@@ -196,7 +214,7 @@
         private TableLayoutPanel tableLayoutPanel1;
         private Button btnSelectStation;
         private SplitContainer splitContainer1;
-        private ListBox lbVanillaStations;
+        private ReplacementStationListBox lbVanillaStations;
         private ListView lvTracks;
         private ColumnHeader colTrackName;
         private ColumnHeader colTrackArtist;

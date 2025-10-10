@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using AetherUtils.Core.Extensions;
 using AetherUtils.Core.Logging;
+using RadioExt_Helper.models;
+using RadioExt_Helper.utility;
 using WIG.Lib.Models.Audio;
 using WIG.Lib.Utility;
 
@@ -27,6 +29,18 @@ namespace RadioExt_Helper.forms
         public VanillaStationSelector()
         {
             InitializeComponent();
+
+            lbVanillaStations.TextSelector = obj =>
+            {
+                if (obj is VanillaStation vs) return vs.StationName;
+                return obj?.ToString() ?? string.Empty;
+            };
+
+            lbVanillaStations.ResourceKeySelector = obj =>
+            {
+                if (obj is VanillaStation vs) return vs.StationName;
+                return obj?.ToString() ?? string.Empty;
+            };
         }
 
         private void VanillaStationSelector_Load(object sender, EventArgs e)
@@ -37,8 +51,11 @@ namespace RadioExt_Helper.forms
 
         private void PopulateListBox()
         {
+            var stationsAlreadyReplaced = new List<VanillaStation>();
+            StationManager.Instance.ReplacementStationsAsList.ForEach(s => stationsAlreadyReplaced.Add(s.TrackedObject.VanillaStation));
+                
             lbVanillaStations.DataSource = null;
-            lbVanillaStations.DataSource = AudioManager.Instance.VanillaStations;
+            lbVanillaStations.DataSource = AudioManager.Instance.VanillaStations.Except(stationsAlreadyReplaced).ToList();
             lbVanillaStations.DisplayMember = "StationName";
         }
 
