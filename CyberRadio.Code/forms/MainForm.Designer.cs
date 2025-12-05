@@ -671,6 +671,7 @@ namespace RadioExt_Helper.forms
             // lbReplacedStations
             // 
             lbReplacedStations.AllowDrop = true;
+            lbReplacedStations.BorderStyle = BorderStyle.FixedSingle;
             lbReplacedStations.CausesValidation = false;
             lbReplacedStations.DisabledIconKey = "disabled";
             lbReplacedStations.Dock = DockStyle.Fill;
@@ -727,7 +728,7 @@ namespace RadioExt_Helper.forms
             btnDisableReplacementStation.TabIndex = 1;
             btnDisableReplacementStation.Text = "Disable Selected";
             btnDisableReplacementStation.UseVisualStyleBackColor = false;
-            btnDisableReplacementStation.Click += BtnDisableStation_Click;
+            btnDisableReplacementStation.Click += btnDisableReplacementStation_Click;
             // 
             // btnEnableReplacementStation
             // 
@@ -745,7 +746,7 @@ namespace RadioExt_Helper.forms
             btnEnableReplacementStation.TabIndex = 0;
             btnEnableReplacementStation.Text = "Enable Selected";
             btnEnableReplacementStation.UseVisualStyleBackColor = false;
-            btnEnableReplacementStation.Click += BtnEnableStation_Click;
+            btnEnableReplacementStation.Click += btnEnableReplacementStation_Click;
             // 
             // statusStrip2
             // 

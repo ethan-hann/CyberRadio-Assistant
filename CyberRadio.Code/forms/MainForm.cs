@@ -785,16 +785,8 @@ public sealed partial class MainForm : Form
     /// </summary>
     private void BtnEnableStation_Click(object sender, EventArgs e)
     {
-        if (_mainStationListBoxSelected)
-        {
-            if (lbStations.SelectedItem is not TrackableObject<AdditionalStation> s) return;
-            SetStationStatus(true, false, s.Id);
-        }
-        else
-        {
-            if (lbReplacedStations.SelectedItem is not TrackableObject<ReplacementStation> s) return;
-            SetStationStatus(true, false, s.Id);
-        }
+        if (lbStations.SelectedItem is not TrackableObject<AdditionalStation> s) return;
+        SetStationStatus(true, false, s.Id);
     }
 
 
@@ -805,16 +797,20 @@ public sealed partial class MainForm : Form
     /// </summary>
     private void BtnDisableStation_Click(object sender, EventArgs e)
     {
-        if (_mainStationListBoxSelected)
-        {
-            if (lbStations.SelectedItem is not TrackableObject<AdditionalStation> s) return;
-            SetStationStatus(false, false, s.Id);
-        }
-        else
-        {
-            if (lbReplacedStations.SelectedItem is not TrackableObject<ReplacementStation> s) return;
-            SetStationStatus(false, false, s.Id);
-        }
+        if (lbStations.SelectedItem is not TrackableObject<AdditionalStation> s) return;
+        SetStationStatus(false, false, s.Id);
+    }
+
+    private void btnEnableReplacementStation_Click(object sender, EventArgs e)
+    {
+        if (lbReplacedStations.SelectedItem is not TrackableObject<ReplacementStation> s) return;
+        SetStationStatus(true, false, s.Id);
+    }
+
+    private void btnDisableReplacementStation_Click(object sender, EventArgs e)
+    {
+        if (lbReplacedStations.SelectedItem is not TrackableObject<ReplacementStation> s) return;
+        SetStationStatus(false, false, s.Id);
     }
 
     /// <summary>
@@ -1342,7 +1338,7 @@ public sealed partial class MainForm : Form
     private void BackupStagingFolderToolStripMenuItem_Click(object sender, EventArgs e)
     {
         if (string.IsNullOrEmpty(StagingPath)) return;
-        if (lbStations.Items.Count <= 0 & lbReplacedStations.Items.Count <=0) return;
+        if (lbStations.Items.Count <= 0 & lbReplacedStations.Items.Count <= 0) return;
 
         //Check for sync in progress to prevent backup during sync
         if (_isSyncInProgress)
@@ -1632,11 +1628,14 @@ public sealed partial class MainForm : Form
         var station = new TrackableObject<ReplacementStation>(replacementStation);
 
         var id = StationManager.Instance.AddVanillaStation(station, false);
-        lbReplacedStations.SelectedItem = StationManager.Instance.GetVanillaStation(id)?.Key;
         
         SelectReplacementStationEditor(id);
         UpdateEnabledStationCount();
         HandleUserControlVisibility();
+
+        //Select the new station in the list box
+        lbReplacedStations.SelectedItem = StationManager.Instance.GetVanillaStation(id)?.Key;
+        lbReplacedStations_SelectedIndexChanged(this, EventArgs.Empty);
     }
 
     private void lbStations_Enter(object sender, EventArgs e)

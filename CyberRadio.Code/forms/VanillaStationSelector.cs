@@ -44,7 +44,7 @@ namespace RadioExt_Helper.forms
                 
             lbVanillaStations.DataSource = null;
             lbVanillaStations.DataSource = AudioManager.Instance.VanillaStations.Except(stationsAlreadyReplaced).ToList();
-            lbVanillaStations.DisplayMember = "StationName";
+            lbVanillaStations.DisplayMember = "ToString";
         }
 
         private void PopulateListView(VanillaStation station)
