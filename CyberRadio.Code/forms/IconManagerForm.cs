@@ -1,18 +1,20 @@
-﻿// IconManagerForm.cs : RadioExt-Helper
-// Copyright (C) 2025  Ethan Hann
-// 
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-// 
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-// 
-// You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+﻿// // IconManagerForm.cs : RadioExt-Helper
+// // Copyright (C) 2025  Ethan Hann
+// //
+// // This program is free software: you can redistribute it and/or modify
+// // it under the terms of the GNU General Public License as published by
+// // the Free Software Foundation, either version 3 of the License, or
+// // (at your option) any later version.
+// //
+// // This program is distributed in the hope that it will be useful,
+// // but WITHOUT ANY WARRANTY; without even the implied warranty of
+// // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// // GNU General Public License for more details.
+// //
+// // You should have received a copy of the GNU General Public License
+// // along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+#region
 
 using AetherUtils.Core.Logging;
 using RadioExt_Helper.models;
@@ -20,6 +22,8 @@ using RadioExt_Helper.Properties;
 using RadioExt_Helper.user_controls;
 using RadioExt_Helper.utility;
 using WIG.Lib.Models;
+
+#endregion
 
 namespace RadioExt_Helper.forms;
 
@@ -125,7 +129,7 @@ public partial class IconManagerForm : Form
     }
 
     /// <summary>
-    /// Gets the correct icon editor from the station manager based on the station's ID and the icon selected.
+    ///     Gets the correct icon editor from the station manager based on the station's ID and the icon selected.
     /// </summary>
     /// <param name="icon">The icon associated with the editor.</param>
     private void SelectIconEditor(TrackableObject<WolvenIcon>? icon)
@@ -264,7 +268,7 @@ public partial class IconManagerForm : Form
     }
 
     /// <summary>
-    /// Ensures the icon that was copied or linked is added to the listbox and the editor is displayed in the control.
+    ///     Ensures the icon that was copied or linked is added to the listbox and the editor is displayed in the control.
     /// </summary>
     /// <param name="icon">The icon that was copied or linked from another station.</param>
     private void AddNewIconFromCopy(TrackableObject<WolvenIcon> icon)
@@ -408,11 +412,15 @@ public partial class IconManagerForm : Form
     }
 
     /// <summary>
-    /// Checks if the archive already exists in the staging's icons folder and whether it is already associated with one or more stations.
-    /// If it exists, prompts the user to either reuse the icon or create a new copy.
+    ///     Checks if the archive already exists in the staging's icons folder and whether it is already associated with one or
+    ///     more stations.
+    ///     If it exists, prompts the user to either reuse the icon or create a new copy.
     /// </summary>
     /// <param name="path">The path to the icon to check.</param>
-    /// <returns>A reference to the newly copied or linked icon, whether the copy was performed, and whether the caller should break their function flow; or <c>null</c> if the user did not copy or link the icon or an error occurred.</returns>
+    /// <returns>
+    ///     A reference to the newly copied or linked icon, whether the copy was performed, and whether the caller should
+    ///     break their function flow; or <c>null</c> if the user did not copy or link the icon or an error occurred.
+    /// </returns>
     /// <exception cref="InvalidOperationException"></exception>
     private (TrackableObject<WolvenIcon>? icon, bool performedCopy, bool shouldBreak) CheckForCopy(string path)
     {
@@ -493,7 +501,7 @@ public partial class IconManagerForm : Form
 
     private void btnAddIcon_Click(object sender, EventArgs e)
     {
-        var icon = new TrackableObject<WolvenIcon>(new WolvenIcon());
+        TrackableObject<WolvenIcon> icon = new(new WolvenIcon());
         AddNewIcon(icon, false, false);
     }
 

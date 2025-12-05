@@ -1,38 +1,41 @@
-﻿// SplashScreen.cs : RadioExt-Helper
-// Copyright (C) 2025  Ethan Hann
-// 
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-// 
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-// 
-// You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+﻿// // SplashScreen.cs : RadioExt-Helper
+// // Copyright (C) 2025  Ethan Hann
+// //
+// // This program is free software: you can redistribute it and/or modify
+// // it under the terms of the GNU General Public License as published by
+// // the Free Software Foundation, either version 3 of the License, or
+// // (at your option) any later version.
+// //
+// // This program is distributed in the hope that it will be useful,
+// // but WITHOUT ANY WARRANTY; without even the implied warranty of
+// // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// // GNU General Public License for more details.
+// //
+// // You should have received a copy of the GNU General Public License
+// // along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+#region
 
 using System.Reflection;
 using System.Text;
 using AetherUtils.Core.Extensions;
 using AetherUtils.Core.Logging;
-using RadioExt_Helper.custom_controls;
 using RadioExt_Helper.migration;
 using RadioExt_Helper.utility;
 using WIG.Lib.Utility;
 using PathHelper = RadioExt_Helper.utility.PathHelper;
 
+#endregion
+
 namespace RadioExt_Helper.forms;
 
 /// <summary>
-/// Represents the splash screen for the application.
+///     Represents the splash screen for the application.
 /// </summary>
 public partial class SplashScreen : Form
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="SplashScreen"/> class.
+    ///     Initializes a new instance of the <see cref="SplashScreen" /> class.
     /// </summary>
     public SplashScreen()
     {
@@ -44,7 +47,7 @@ public partial class SplashScreen : Form
     }
 
     /// <summary>
-    /// Handles the Load event of the splash screen. Starts the background tasks.
+    ///     Handles the Load event of the splash screen. Starts the background tasks.
     /// </summary>
     /// <param name="sender">The event sender.</param>
     /// <param name="e">The event arguments.</param>
@@ -64,12 +67,12 @@ public partial class SplashScreen : Form
     }
 
     /// <summary>
-    /// Performs background tasks such as migrating settings and checking for updates.
+    ///     Performs background tasks such as migrating settings and checking for updates.
     /// </summary>
     /// <returns>A list of status messages generated during the tasks.</returns>
     private async Task<List<string>> PerformBackgroundTasks()
     {
-        var statusMessages = new List<string>();
+        List<string> statusMessages = new();
 
         // Migrate settings (if needed)
         UpdateStatus(Strings.SplashScreen_CheckingSettings);
@@ -109,7 +112,7 @@ public partial class SplashScreen : Form
             statusMessages.Add(reason ?? "Staging path was invalid. Reset it to an empty string.");
             isStagingPathValid = false;
 
-            var text = new StringBuilder();
+            StringBuilder text = new();
             text.AppendLine(string.Format(Strings.StagingPathForbidden, stagingPath));
             text.AppendLine();
             text.AppendLine(reason);
@@ -209,7 +212,7 @@ public partial class SplashScreen : Form
     }
 
     /// <summary>
-    /// Updates the status message on the splash screen.
+    ///     Updates the status message on the splash screen.
     /// </summary>
     /// <param name="message">The status message to display.</param>
     public void UpdateStatus(string message)
@@ -221,7 +224,7 @@ public partial class SplashScreen : Form
     }
 
     /// <summary>
-    /// Sets the version label on the splash screen.
+    ///     Sets the version label on the splash screen.
     /// </summary>
     /// <param name="version">The version to display.</param>
     private void SetVersionLabel(Version? version)

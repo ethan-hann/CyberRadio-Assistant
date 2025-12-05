@@ -1,22 +1,41 @@
-﻿// ReplacementStationListBox.cs : RadioExt-Helper
-// Copyright (C) 2025  Ethan Hann
-//
-// GPL-3.0-or-later
+﻿// // ReplacementStationListBox.cs : RadioExt-Helper
+// // Copyright (C) 2025  Ethan Hann
+// //
+// // This program is free software: you can redistribute it and/or modify
+// // it under the terms of the GNU General Public License as published by
+// // the Free Software Foundation, either version 3 of the License, or
+// // (at your option) any later version.
+// //
+// // This program is distributed in the hope that it will be useful,
+// // but WITHOUT ANY WARRANTY; without even the implied warranty of
+// // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// // GNU General Public License for more details.
+// //
+// // You should have received a copy of the GNU General Public License
+// // along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+#region
 
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
+using System.Runtime.CompilerServices;
+using System.Text;
 using AetherUtils.Core.Files;
 using AetherUtils.Core.Logging;
 using RadioExt_Helper.models;
+using RadioExt_Helper.Properties;
 using RadioExt_Helper.utility;
+
+#endregion
 
 namespace RadioExt_Helper.custom_controls;
 
 /// <summary>
-/// Represents a custom ListBox control for displaying stations.
-/// Original mode: status icons + text (replacement stations).
-/// Extended mode: image from Resources.resx + text (vanilla stations).
+///     Represents a custom ListBox control for displaying stations.
+///     Original mode: status icons + text (replacement stations).
+///     Extended mode: image from Resources.resx + text (vanilla stations).
 /// </summary>
 public sealed partial class ReplacementStationListBox : ListBox
 {
@@ -30,7 +49,43 @@ public sealed partial class ReplacementStationListBox : ListBox
         ImageAndText = 1
     }
 
+    // ------------------- NEW: Image sizing for vanilla mode -------------------
+    private static int _imageEdge = 48;
+
+    // ------------------- NEW: thumbnail cache (vanilla mode) -------------------
+    private static readonly Dictionary<object, Image> _thumbCache = new(ReferenceEqualityComparer.Instance);
+
+    // ------------------- ORIGINAL fields (kept) -------------------
+    private string _disabledIconKey = "disabled";
+    private Color _duplicateStationsColor = Color.Red;
+    private Font _duplicateStationsFont = new(DefaultFont, FontStyle.Italic);
+    private string _editedStationIconKey = "edited_station";
+    private string _enabledIconKey = "enabled";
+    private ImageList _imageList;
+    private Color _newStationColor = Color.Green;
+    private Font _newStationFont = new(DefaultFont, FontStyle.Bold);
+
     private ItemRenderMode _renderMode = ItemRenderMode.ReplacementStatusIcons;
+    private string _savedStationIconKey = "saved_station";
+    private Color _songsMissingColor = Color.Orange;
+    private Font _songsMissingFont = new(DefaultFont, FontStyle.Bold);
+
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="ReplacementStationListBox" /> class.
+    /// </summary>
+    public ReplacementStationListBox()
+    {
+        SetValues();
+        _imageList ??= new ImageList();
+
+        // Defaults for vanilla mode
+        base.Padding = new Padding(8, 6, 8, 6);
+
+        // Enable drag and drop (original replacement flow)
+        AllowDrop = true;
+        DragEnter += ReplacementStationListBox_DragEnter;
+        DragDrop += ReplacementStationListBox_DragDrop;
+    }
 
     [Browsable(true)]
     [Category("Behavior")]
@@ -46,29 +101,29 @@ public sealed partial class ReplacementStationListBox : ListBox
             // Switch draw modes appropriately
             if (_renderMode == ItemRenderMode.ImageAndText)
             {
-                base.DrawMode = DrawMode.OwnerDrawVariable;
+                DrawMode = DrawMode.OwnerDrawVariable;
                 if (_imageEdge < 16) _imageEdge = 40;
             }
             else
             {
-                base.DrawMode = DrawMode.OwnerDrawFixed;
+                DrawMode = DrawMode.OwnerDrawFixed;
                 ItemHeight = 16;
             }
+
             Invalidate();
         }
     }
 
     // ------------------- NEW: Delegates for vanilla rendering -------------------
     /// <summary>Returns the display text for the item (vanilla mode). If null, ToString() is used.</summary>
-    [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    [Browsable(false)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public static Func<object, string>? TextSelector { get; set; }
 
     /// <summary>Returns the Resources.resx key for the item's image (vanilla mode). If null, sanitation fallback is used.</summary>
-    [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    [Browsable(false)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public static Func<object, string>? ResourceKeySelector { get; set; }
-
-    // ------------------- NEW: Image sizing for vanilla mode -------------------
-    private static int _imageEdge = 48;
 
     [Browsable(true)]
     [Category("Appearance")]
@@ -105,39 +160,6 @@ public sealed partial class ReplacementStationListBox : ListBox
         }
     }
 
-    // ------------------- ORIGINAL fields (kept) -------------------
-    private string _disabledIconKey = "disabled";
-    private Color _duplicateStationsColor = Color.Red;
-    private Font _duplicateStationsFont = new(DefaultFont, FontStyle.Italic);
-    private string _editedStationIconKey = "edited_station";
-    private string _enabledIconKey = "enabled";
-    private ImageList _imageList;
-    private Color _newStationColor = Color.Green;
-    private Font _newStationFont = new(DefaultFont, FontStyle.Bold);
-    private string _savedStationIconKey = "saved_station";
-    private Color _songsMissingColor = Color.Orange;
-    private Font _songsMissingFont = new(DefaultFont, FontStyle.Bold);
-
-    // ------------------- NEW: thumbnail cache (vanilla mode) -------------------
-    private static readonly Dictionary<object, Image> _thumbCache = new(ReferenceEqualityComparer.Instance);
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="ReplacementStationListBox"/> class.
-    /// </summary>
-    public ReplacementStationListBox()
-    {
-        SetValues();
-        _imageList ??= new ImageList();
-
-        // Defaults for vanilla mode
-        base.Padding = new Padding(8, 6, 8, 6);
-
-        // Enable drag and drop (original replacement flow)
-        AllowDrop = true;
-        DragEnter += ReplacementStationListBox_DragEnter;
-        DragDrop += ReplacementStationListBox_DragDrop;
-    }
-
     // ------------------- ORIGINAL public properties (kept) -------------------
     [Browsable(true)]
     [Category("Icons")]
@@ -158,7 +180,11 @@ public sealed partial class ReplacementStationListBox : ListBox
     public string EnabledIconKey
     {
         get => _enabledIconKey;
-        set { _enabledIconKey = value; Invalidate(); }
+        set
+        {
+            _enabledIconKey = value;
+            Invalidate();
+        }
     }
 
     [Browsable(true)]
@@ -167,7 +193,11 @@ public sealed partial class ReplacementStationListBox : ListBox
     public string DisabledIconKey
     {
         get => _disabledIconKey;
-        set { _disabledIconKey = value; Invalidate(); }
+        set
+        {
+            _disabledIconKey = value;
+            Invalidate();
+        }
     }
 
     [Browsable(true)]
@@ -176,7 +206,11 @@ public sealed partial class ReplacementStationListBox : ListBox
     public string EditedStationIconKey
     {
         get => _editedStationIconKey;
-        set { _editedStationIconKey = value; Invalidate(); }
+        set
+        {
+            _editedStationIconKey = value;
+            Invalidate();
+        }
     }
 
     [Browsable(true)]
@@ -185,7 +219,11 @@ public sealed partial class ReplacementStationListBox : ListBox
     public string SavedStationIconKey
     {
         get => _savedStationIconKey;
-        set { _savedStationIconKey = value; Invalidate(); }
+        set
+        {
+            _savedStationIconKey = value;
+            Invalidate();
+        }
     }
 
     [Browsable(true)]
@@ -194,7 +232,11 @@ public sealed partial class ReplacementStationListBox : ListBox
     public Color SongsMissingColor
     {
         get => _songsMissingColor;
-        set { _songsMissingColor = value; Invalidate(); }
+        set
+        {
+            _songsMissingColor = value;
+            Invalidate();
+        }
     }
 
     [Browsable(true)]
@@ -203,7 +245,11 @@ public sealed partial class ReplacementStationListBox : ListBox
     public Color DuplicateColor
     {
         get => _duplicateStationsColor;
-        set { _duplicateStationsColor = value; Invalidate(); }
+        set
+        {
+            _duplicateStationsColor = value;
+            Invalidate();
+        }
     }
 
     [Browsable(true)]
@@ -212,7 +258,11 @@ public sealed partial class ReplacementStationListBox : ListBox
     public Color NewStationColor
     {
         get => _newStationColor;
-        set { _newStationColor = value; Invalidate(); }
+        set
+        {
+            _newStationColor = value;
+            Invalidate();
+        }
     }
 
     [Browsable(true)]
@@ -221,7 +271,11 @@ public sealed partial class ReplacementStationListBox : ListBox
     public Font SongsMissingFont
     {
         get => _songsMissingFont;
-        set { _songsMissingFont = value; Invalidate(); }
+        set
+        {
+            _songsMissingFont = value;
+            Invalidate();
+        }
     }
 
     [Browsable(true)]
@@ -230,7 +284,11 @@ public sealed partial class ReplacementStationListBox : ListBox
     public Font DuplicateFont
     {
         get => _duplicateStationsFont;
-        set { _duplicateStationsFont = value; Invalidate(); }
+        set
+        {
+            _duplicateStationsFont = value;
+            Invalidate();
+        }
     }
 
     [Browsable(true)]
@@ -239,12 +297,16 @@ public sealed partial class ReplacementStationListBox : ListBox
     public Font NewStationFont
     {
         get => _newStationFont;
-        set { _newStationFont = value; Invalidate(); }
+        set
+        {
+            _newStationFont = value;
+            Invalidate();
+        }
     }
 
     /// <summary>
-    /// Occurs whenever the station is imported from a .zip or .rar file.
-    /// (Replacement flow only; irrelevant but harmless in vanilla mode.)
+    ///     Occurs whenever the station is imported from a .zip or .rar file.
+    ///     (Replacement flow only; irrelevant but harmless in vanilla mode.)
     /// </summary>
     public event EventHandler<List<Guid?>>? ReplacementStationsImported;
 
@@ -281,7 +343,7 @@ public sealed partial class ReplacementStationListBox : ListBox
     /// <summary>Sets default values for the control.</summary>
     private void SetValues()
     {
-        base.DrawMode = DrawMode.OwnerDrawFixed;
+        DrawMode = DrawMode.OwnerDrawFixed;
         DoubleBuffered = true;
         ItemHeight = 16;
         BorderStyle = BorderStyle.FixedSingle;
@@ -304,18 +366,18 @@ public sealed partial class ReplacementStationListBox : ListBox
         }
 
         var item = Items[e.Index];
-        string text = (TextSelector?.Invoke(item)) ?? item?.ToString() ?? string.Empty;
+        var text = TextSelector?.Invoke(item) ?? item?.ToString() ?? string.Empty;
 
-        int left = Padding.Left + _imageEdge + ImageTextGap;
-        int right = Math.Max(0, e.ItemWidth - Padding.Right);
-        int textWidth = Math.Max(10, right - left);
+        var left = Padding.Left + _imageEdge + ImageTextGap;
+        var right = Math.Max(0, e.ItemWidth - Padding.Right);
+        var textWidth = Math.Max(10, right - left);
 
         using var g = CreateGraphics();
         var textSize = TextRenderer.MeasureText(g, text, Font,
             new Size(textWidth, int.MaxValue),
             TextFormatFlags.WordBreak | TextFormatFlags.NoPadding);
 
-        int contentHeight = Math.Max(_imageEdge, textSize.Height);
+        var contentHeight = Math.Max(_imageEdge, textSize.Height);
         e.ItemHeight = Math.Max(contentHeight + Padding.Vertical, 20);
     }
 
@@ -329,13 +391,9 @@ public sealed partial class ReplacementStationListBox : ListBox
             e.DrawBackground();
 
             if (_renderMode == ItemRenderMode.ReplacementStatusIcons)
-            {
                 DrawReplacementStatusItem(e);
-            }
             else
-            {
                 DrawImageAndTextItem(e);
-            }
 
             e.DrawFocusRectangle();
         }
@@ -361,8 +419,9 @@ public sealed partial class ReplacementStationListBox : ListBox
             }
 
             // Secondary icon (edited/new vs saved)
-            var secondaryIconKey = (station.IsPendingSave | StationManager.Instance.IsNewStation(station.Id))
-                ? _editedStationIconKey : _savedStationIconKey;
+            var secondaryIconKey = station.IsPendingSave | StationManager.Instance.IsNewStation(station.Id)
+                ? _editedStationIconKey
+                : _savedStationIconKey;
 
             var iconX = e.Bounds.Right - 16 - 4;
             if (_imageList.Images.ContainsKey(secondaryIconKey))
@@ -372,7 +431,7 @@ public sealed partial class ReplacementStationListBox : ListBox
             }
 
             // Text
-            var textRect = new Rectangle(e.Bounds.Left + 20, e.Bounds.Top,
+            Rectangle textRect = new(e.Bounds.Left + 20, e.Bounds.Top,
                 e.Bounds.Width - 40 - 4, e.Bounds.Height);
 
             TextRenderer.DrawText(e.Graphics, station.TrackedObject.DisplayName, GetItemFont(station),
@@ -386,21 +445,24 @@ public sealed partial class ReplacementStationListBox : ListBox
         var item = Items[e.Index];
 
         // Colors
-        bool selected = (e.State & DrawItemState.Selected) == DrawItemState.Selected;
-        Color back = selected ? SystemColors.Highlight : e.BackColor;
-        using (var backBrush = new SolidBrush(back))
+        var selected = (e.State & DrawItemState.Selected) == DrawItemState.Selected;
+        var back = selected ? SystemColors.Highlight : e.BackColor;
+        using (SolidBrush backBrush = new(back))
+        {
             e.Graphics.FillRectangle(backBrush, e.Bounds);
-        Color fore = selected ? SystemColors.HighlightText : e.ForeColor;
+        }
+
+        var fore = selected ? SystemColors.HighlightText : e.ForeColor;
 
         // Layout
-        Rectangle bounds = Rectangle.Inflate(e.Bounds, -1, -1);
+        var bounds = Rectangle.Inflate(e.Bounds, -1, -1);
 
-        var imgRect = new Rectangle(
+        Rectangle imgRect = new(
             bounds.Left + Padding.Left,
             bounds.Top + Padding.Top,
             _imageEdge, _imageEdge);
 
-        var textRect = new Rectangle(
+        Rectangle textRect = new(
             imgRect.Right + ImageTextGap,
             bounds.Top + Padding.Top,
             Math.Max(10, bounds.Right - Padding.Right - (imgRect.Right + ImageTextGap)),
@@ -418,9 +480,10 @@ public sealed partial class ReplacementStationListBox : ListBox
         }
 
         // Draw text
-        string text = (TextSelector?.Invoke(item)) ?? item?.ToString() ?? string.Empty;
+        var text = TextSelector?.Invoke(item) ?? item?.ToString() ?? string.Empty;
         TextRenderer.DrawText(e.Graphics, text, Font, textRect, fore,
-            TextFormatFlags.Left | TextFormatFlags.VerticalCenter | TextFormatFlags.WordBreak | TextFormatFlags.EndEllipsis);
+            TextFormatFlags.Left | TextFormatFlags.VerticalCenter | TextFormatFlags.WordBreak |
+            TextFormatFlags.EndEllipsis);
     }
 
     // ------------------- Helpers: replacement mode coloring -------------------
@@ -432,7 +495,8 @@ public sealed partial class ReplacementStationListBox : ListBox
             returnColor = CombineColors(returnColor, _songsMissingColor);
 
         if (Items.OfType<TrackableObject<ReplacementStation>>().Count(s =>
-                s.TrackedObject.DisplayName.Equals(station.TrackedObject.DisplayName, StringComparison.OrdinalIgnoreCase)) > 1)
+                s.TrackedObject.DisplayName.Equals(station.TrackedObject.DisplayName,
+                    StringComparison.OrdinalIgnoreCase)) > 1)
             returnColor = CombineColors(returnColor, _duplicateStationsColor);
 
         if (StationManager.Instance.IsNewStation(station.Id))
@@ -449,7 +513,8 @@ public sealed partial class ReplacementStationListBox : ListBox
             font = _songsMissingFont;
 
         else if (Items.OfType<TrackableObject<ReplacementStation>>().Count(s =>
-                     s.TrackedObject.DisplayName.Equals(station.TrackedObject.DisplayName, StringComparison.OrdinalIgnoreCase)) > 1)
+                     s.TrackedObject.DisplayName.Equals(station.TrackedObject.DisplayName,
+                         StringComparison.OrdinalIgnoreCase)) > 1)
             font = _duplicateStationsFont;
 
         else if (StationManager.Instance.IsNewStation(station.Id))
@@ -483,12 +548,12 @@ public sealed partial class ReplacementStationListBox : ListBox
             if (img == null)
             {
                 // No logo found: create initials avatar from text (nice fallback).
-                var text = (TextSelector?.Invoke(item)) ?? item?.ToString() ?? "?";
+                var text = TextSelector?.Invoke(item) ?? item?.ToString() ?? "?";
                 img = CreateAvatar(text, _imageEdge);
             }
 
             // Cache a scaled copy to the configured edge
-            var thumb = new Bitmap(_imageEdge, _imageEdge, System.Drawing.Imaging.PixelFormat.Format32bppPArgb);
+            Bitmap thumb = new(_imageEdge, _imageEdge, PixelFormat.Format32bppPArgb);
             using (var g = Graphics.FromImage(thumb))
             {
                 g.SmoothingMode = SmoothingMode.AntiAlias;
@@ -519,42 +584,40 @@ public sealed partial class ReplacementStationListBox : ListBox
 
     private static string ToUnderscoreKey(string s)
     {
-        var sb = new System.Text.StringBuilder(s.Length);
+        StringBuilder sb = new(s.Length);
         foreach (var ch in s.Trim())
-        {
             if (char.IsWhiteSpace(ch) || ch is '-' or '.' or '/')
                 sb.Append('_');
             else if (char.IsLetterOrDigit(ch))
                 sb.Append(ch);
             else
                 sb.Append('_');
-        }
         return sb.ToString();
     }
 
     private static Rectangle GetContainedRect(Size content, Rectangle dest, float paddingRatio)
     {
-        int pad = (int)(Math.Min(dest.Width, dest.Height) * paddingRatio);
+        var pad = (int)(Math.Min(dest.Width, dest.Height) * paddingRatio);
         var inner = Rectangle.Inflate(dest, -pad, -pad);
 
-        float wr = (float)inner.Width / content.Width;
-        float hr = (float)inner.Height / content.Height;
-        float scale = Math.Min(wr, hr);
+        var wr = (float)inner.Width / content.Width;
+        var hr = (float)inner.Height / content.Height;
+        var scale = Math.Min(wr, hr);
 
-        int w = (int)Math.Round(content.Width * scale);
-        int h = (int)Math.Round(content.Height * scale);
+        var w = (int)Math.Round(content.Width * scale);
+        var h = (int)Math.Round(content.Height * scale);
 
-        int x = inner.Left + (inner.Width - w) / 2;
-        int y = inner.Top + (inner.Height - h) / 2;
+        var x = inner.Left + (inner.Width - w) / 2;
+        var y = inner.Top + (inner.Height - h) / 2;
         return new Rectangle(x, y, w, h);
     }
 
     private static void DrawImageContained(Graphics g, Image img, Rectangle target)
     {
         var fit = GetContainedRect(img.Size, target, 0.08f);
-        using var gp = new GraphicsPath();
+        using GraphicsPath gp = new();
         gp.AddRectangle(target);
-        using var clip = new Region(gp);
+        using Region clip = new(gp);
         var old = g.Clip;
         g.Clip = clip;
         g.DrawImage(img, fit);
@@ -563,18 +626,18 @@ public sealed partial class ReplacementStationListBox : ListBox
 
     private static Image CreateAvatar(string text, int edge)
     {
-        string initials = GetInitials(text, 2);
-        var bmp = new Bitmap(edge, edge, System.Drawing.Imaging.PixelFormat.Format32bppPArgb);
+        var initials = GetInitials(text, 2);
+        Bitmap bmp = new(edge, edge, PixelFormat.Format32bppPArgb);
         using var g = Graphics.FromImage(bmp);
         g.SmoothingMode = SmoothingMode.AntiAlias;
-        using var bg = new SolidBrush(AvatarColorFor(text));
-        using var fg = new SolidBrush(Color.White);
+        using SolidBrush bg = new(AvatarColorFor(text));
+        using SolidBrush fg = new(Color.White);
         g.FillEllipse(bg, 0, 0, edge - 1, edge - 1);
 
-        float fontSize = edge * 0.42f;
-        using var f = new Font("Segoe UI", fontSize, FontStyle.Bold, GraphicsUnit.Pixel);
+        var fontSize = edge * 0.42f;
+        using Font f = new("Segoe UI", fontSize, FontStyle.Bold, GraphicsUnit.Pixel);
         var sz = g.MeasureString(initials, f);
-        var pt = new PointF((edge - sz.Width) / 2f, (edge - sz.Height) / 2f - 1);
+        PointF pt = new((edge - sz.Width) / 2f, (edge - sz.Height) / 2f - 1);
         g.DrawString(initials, f, fg, pt);
         g.DrawEllipse(Pens.Transparent, 0, 0, edge - 1, edge - 1);
         return bmp;
@@ -584,13 +647,14 @@ public sealed partial class ReplacementStationListBox : ListBox
     {
         if (string.IsNullOrWhiteSpace(s)) return "?";
         var parts = s.Trim().Split(new[] { ' ', '\t', '-', '_', '.' }, StringSplitOptions.RemoveEmptyEntries);
-        var buf = new List<char>(max);
+        List<char> buf = new(max);
         foreach (var p in parts)
         {
             var c = char.ToUpperInvariant(p[0]);
             if (char.IsLetterOrDigit(c)) buf.Add(c);
             if (buf.Count == max) break;
         }
+
         if (buf.Count == 0) buf.Add(char.ToUpperInvariant(s[0]));
         return new string(buf.ToArray());
     }
@@ -599,26 +663,57 @@ public sealed partial class ReplacementStationListBox : ListBox
     {
         unchecked
         {
-            int h = 17;
-            foreach (char c in key) h = h * 31 + c;
+            var h = 17;
+            foreach (var c in key) h = h * 31 + c;
             int[] hues = { 200, 15, 260, 120, 340, 45, 180, 300, 95, 25 };
-            int hue = hues[Math.Abs(h) % hues.Length];
+            var hue = hues[Math.Abs(h) % hues.Length];
             return HsvToColor(hue, 0.55f, 0.75f);
         }
     }
 
     private static Color HsvToColor(int h, float s, float v)
     {
-        float C = v * s;
-        float X = C * (1 - Math.Abs(((h / 60f) % 2) - 1));
-        float m = v - C;
+        var C = v * s;
+        var X = C * (1 - Math.Abs(h / 60f % 2 - 1));
+        var m = v - C;
         float r = 0, g = 0, b = 0;
-        if (h < 60) { r = C; g = X; b = 0; }
-        else if (h < 120) { r = X; g = C; b = 0; }
-        else if (h < 180) { r = 0; g = C; b = X; }
-        else if (h < 240) { r = 0; g = X; b = C; }
-        else if (h < 300) { r = X; g = 0; b = C; }
-        else { r = C; g = 0; b = X; }
+        if (h < 60)
+        {
+            r = C;
+            g = X;
+            b = 0;
+        }
+        else if (h < 120)
+        {
+            r = X;
+            g = C;
+            b = 0;
+        }
+        else if (h < 180)
+        {
+            r = 0;
+            g = C;
+            b = X;
+        }
+        else if (h < 240)
+        {
+            r = 0;
+            g = X;
+            b = C;
+        }
+        else if (h < 300)
+        {
+            r = X;
+            g = 0;
+            b = C;
+        }
+        else
+        {
+            r = C;
+            g = 0;
+            b = X;
+        }
+
         return Color.FromArgb(
             255,
             (int)((r + m) * 255),
@@ -633,20 +728,31 @@ public sealed partial class ReplacementStationListBox : ListBox
         object? obj = null;
         try
         {
-            obj = global::RadioExt_Helper.Properties.Resources.ResourceManager.GetObject(key);
+            obj = Resources.ResourceManager.GetObject(key);
         }
-        catch { /* ignore */ }
+        catch
+        {
+            /* ignore */
+        }
 
         return obj as Image;
     }
 
     /// <summary>
-    /// Reference equality comparer for cache keys (items).
+    ///     Reference equality comparer for cache keys (items).
     /// </summary>
     private sealed class ReferenceEqualityComparer : IEqualityComparer<object>
     {
         public static readonly ReferenceEqualityComparer Instance = new();
-        public new bool Equals(object x, object y) => ReferenceEquals(x, y);
-        public int GetHashCode(object obj) => System.Runtime.CompilerServices.RuntimeHelpers.GetHashCode(obj);
+
+        public new bool Equals(object x, object y)
+        {
+            return ReferenceEquals(x, y);
+        }
+
+        public int GetHashCode(object obj)
+        {
+            return RuntimeHelpers.GetHashCode(obj);
+        }
     }
 }

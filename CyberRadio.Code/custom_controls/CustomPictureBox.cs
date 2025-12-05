@@ -1,23 +1,27 @@
-﻿// CustomPictureBox.cs : RadioExt-Helper
-// Copyright (C) 2025  Ethan Hann
-// 
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-// 
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-// 
-// You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+﻿// // CustomPictureBox.cs : RadioExt-Helper
+// // Copyright (C) 2025  Ethan Hann
+// //
+// // This program is free software: you can redistribute it and/or modify
+// // it under the terms of the GNU General Public License as published by
+// // the Free Software Foundation, either version 3 of the License, or
+// // (at your option) any later version.
+// //
+// // This program is distributed in the hope that it will be useful,
+// // but WITHOUT ANY WARRANTY; without even the implied warranty of
+// // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// // GNU General Public License for more details.
+// //
+// // You should have received a copy of the GNU General Public License
+// // along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+#region
 
 using AetherUtils.Core.Logging;
 using RadioExt_Helper.models;
 using RadioExt_Helper.Properties;
 using WIG.Lib.Utility;
+
+#endregion
 
 namespace RadioExt_Helper.custom_controls;
 
@@ -69,8 +73,8 @@ internal class CustomPictureBox : PictureBox
 
         // Create the checkered background pattern
         const int tileSize = 10; // Size of each checkered tile
-        using var lightBrush = new SolidBrush(lightColor);
-        using var darkBrush = new SolidBrush(darkColor);
+        using SolidBrush lightBrush = new(lightColor);
+        using SolidBrush darkBrush = new(darkColor);
         for (var y = 0; y < Height; y += tileSize)
         for (var x = 0; x < Width; x += tileSize)
         {
@@ -128,7 +132,7 @@ internal class CustomPictureBox : PictureBox
     {
         if (Image == null) return false;
 
-        var bmp = new Bitmap(Image);
+        Bitmap bmp = new(Image);
         var lightPixelCount = 0;
         var pixelCount = 0;
 
@@ -193,7 +197,7 @@ internal class CustomPictureBox : PictureBox
     }
 
     /// <summary>
-    /// Clear the image and image path from the picture box.
+    ///     Clear the image and image path from the picture box.
     /// </summary>
     public void ClearImage()
     {
@@ -214,7 +218,7 @@ internal class CustomPictureBox : PictureBox
     }
 
     /// <summary>
-    /// Set the image to display in the picture box from the given file path using lazy loading (background thread).
+    ///     Set the image to display in the picture box from the given file path using lazy loading (background thread).
     /// </summary>
     /// <param name="imagePath">The path to the image to load.</param>
     public void SetImage(string? imagePath)
@@ -234,7 +238,7 @@ internal class CustomPictureBox : PictureBox
     }
 
     /// <summary>
-    /// Set the image to display in the picture box from the given bitmap resource using lazy loading (background thread).
+    ///     Set the image to display in the picture box from the given bitmap resource using lazy loading (background thread).
     /// </summary>
     /// <param name="image">The image to load into the picture box.</param>
     public void SetImageFromBitmap(Bitmap image)
@@ -254,7 +258,7 @@ internal class CustomPictureBox : PictureBox
     }
 
     /// <summary>
-    /// Set the size mode based on the aspect ratio of the image and the control.
+    ///     Set the size mode based on the aspect ratio of the image and the control.
     /// </summary>
     private void SetSizeMode()
     {

@@ -1,18 +1,20 @@
-﻿// StationEditor.cs : RadioExt-Helper
-// Copyright (C) 2025  Ethan Hann
-// 
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-// 
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-// 
-// You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+﻿// // StationEditor.cs : RadioExt-Helper
+// // Copyright (C) 2025  Ethan Hann
+// //
+// // This program is free software: you can redistribute it and/or modify
+// // it under the terms of the GNU General Public License as published by
+// // the Free Software Foundation, either version 3 of the License, or
+// // (at your option) any later version.
+// //
+// // This program is distributed in the hope that it will be useful,
+// // but WITHOUT ANY WARRANTY; without even the implied warranty of
+// // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// // GNU General Public License for more details.
+// //
+// // You should have received a copy of the GNU General Public License
+// // along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+#region
 
 using System.Globalization;
 using AetherUtils.Core.Logging;
@@ -24,10 +26,12 @@ using RadioExt_Helper.utility;
 using WIG.Lib.Models;
 using ApplicationContext = RadioExt_Helper.utility.ApplicationContext;
 
+#endregion
+
 namespace RadioExt_Helper.user_controls;
 
 /// <summary>
-/// Represents a user control for editing a station.
+///     Represents a user control for editing a station.
 /// </summary>
 public sealed partial class StationEditor : UserControl, IEditor
 {
@@ -38,7 +42,7 @@ public sealed partial class StationEditor : UserControl, IEditor
     private readonly ImageList _tabImages = new();
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="StationEditor"/> class.
+    ///     Initializes a new instance of the <see cref="StationEditor" /> class.
     /// </summary>
     /// <param name="station">The trackable station object.</param>
     public StationEditor(TrackableObject<AdditionalStation> station)
@@ -62,12 +66,12 @@ public sealed partial class StationEditor : UserControl, IEditor
     }
 
     /// <summary>
-    /// Gets the trackable station object.
+    ///     Gets the trackable station object.
     /// </summary>
     public TrackableObject<AdditionalStation> Station { get; }
 
     /// <summary>
-    /// Gets the trackable replacement station object, if applicable.
+    ///     Gets the trackable replacement station object, if applicable.
     /// </summary>
     public TrackableObject<ReplacementStation>? ReplacedStation => null;
 
@@ -75,7 +79,7 @@ public sealed partial class StationEditor : UserControl, IEditor
     public EditorType Type { get; set; } = EditorType.StationEditor;
 
     /// <summary>
-    /// Translates the user control to the current language.
+    ///     Translates the user control to the current language.
     /// </summary>
     public void Translate()
     {
@@ -114,7 +118,7 @@ public sealed partial class StationEditor : UserControl, IEditor
     }
 
     /// <summary>
-    /// Event that is raised when the station is updated.
+    ///     Event that is raised when the station is updated.
     /// </summary>
     public event EventHandler? StationUpdated;
 
@@ -127,7 +131,7 @@ public sealed partial class StationEditor : UserControl, IEditor
     }
 
     /// <summary>
-    /// Gets the music player associated with the station.
+    ///     Gets the music player associated with the station.
     /// </summary>
     /// <returns>The music player.</returns>
     public MusicPlayer GetMusicPlayer()
@@ -136,7 +140,7 @@ public sealed partial class StationEditor : UserControl, IEditor
     }
 
     /// <summary>
-    /// Occurs when the control is loaded.
+    ///     Occurs when the control is loaded.
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
@@ -154,7 +158,7 @@ public sealed partial class StationEditor : UserControl, IEditor
     }
 
     /// <summary>
-    /// Sets the images for the tabs.
+    ///     Sets the images for the tabs.
     /// </summary>
     private void SetTabImages()
     {
@@ -168,7 +172,7 @@ public sealed partial class StationEditor : UserControl, IEditor
     #region Display and Icon Tab
 
     /// <summary>
-    /// Set the values for the display tab based on the station's data.
+    ///     Set the values for the display tab based on the station's data.
     /// </summary>
     private void SetDisplayTabValues()
     {
@@ -221,7 +225,7 @@ public sealed partial class StationEditor : UserControl, IEditor
     }
 
     /// <summary>
-    /// Reset the UI values to the defaults for the station.
+    ///     Reset the UI values to the defaults for the station.
     /// </summary>
     public void ResetUi()
     {
@@ -231,7 +235,7 @@ public sealed partial class StationEditor : UserControl, IEditor
     }
 
     /// <summary>
-    /// Forces an update to the station's custom data grid view.
+    ///     Forces an update to the station's custom data grid view.
     /// </summary>
     public void UpdateCustomDataView()
     {
@@ -265,7 +269,8 @@ public sealed partial class StationEditor : UserControl, IEditor
     }
 
     /// <summary>
-    /// Get the array of indices in the data grid view pertaining to the icon's custom data. This data is always non-editable for the user.
+    ///     Get the array of indices in the data grid view pertaining to the icon's custom data. This data is always
+    ///     non-editable for the user.
     /// </summary>
     /// <returns>The array of indices or an empty array if an exception occured or no icon custom data.</returns>
     private int[] GetCustomIconDataRowIndices()
@@ -288,7 +293,7 @@ public sealed partial class StationEditor : UserControl, IEditor
     }
 
     /// <summary>
-    /// Sets the custom data view rows to be readonly.
+    ///     Sets the custom data view rows to be readonly.
     /// </summary>
     /// <param name="rowIndices">The indices of the rows to set to read-only.</param>
     private void SetReadOnlyDataViewRows(params int[] rowIndices)
@@ -301,7 +306,7 @@ public sealed partial class StationEditor : UserControl, IEditor
     }
 
     /// <summary>
-    /// Sets the custom data view rows to be editable.
+    ///     Sets the custom data view rows to be editable.
     /// </summary>
     /// <param name="rowIndices">The indices of the rows to set to editable.</param>
     private void SetEditableDataViewRows(params int[] rowIndices)
@@ -314,7 +319,7 @@ public sealed partial class StationEditor : UserControl, IEditor
     }
 
     /// <summary>
-    /// Updates the station's display name. Mainly used when the main form detects a duplication.
+    ///     Updates the station's display name. Mainly used when the main form detects a duplication.
     /// </summary>
     /// <param name="newName">The new station name.</param>
     public void UpdateStationName(string newName)
@@ -401,7 +406,7 @@ public sealed partial class StationEditor : UserControl, IEditor
     }
 
     /// <summary>
-    /// Occurs when the display name text box is changed.
+    ///     Occurs when the display name text box is changed.
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
@@ -412,7 +417,7 @@ public sealed partial class StationEditor : UserControl, IEditor
     }
 
     /// <summary>
-    /// Occurs when the display name text box loses focus.
+    ///     Occurs when the display name text box loses focus.
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
@@ -424,7 +429,7 @@ public sealed partial class StationEditor : UserControl, IEditor
     }
 
     /// <summary>
-    /// Occurs when the UI icon combo box selection is changed.
+    ///     Occurs when the UI icon combo box selection is changed.
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
@@ -436,7 +441,7 @@ public sealed partial class StationEditor : UserControl, IEditor
     }
 
     /// <summary>
-    /// Occurs when the custom icon radio button "Yes" is checked.
+    ///     Occurs when the custom icon radio button "Yes" is checked.
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
@@ -472,7 +477,7 @@ public sealed partial class StationEditor : UserControl, IEditor
     }
 
     /// <summary>
-    /// Occurs when the custom icon radio button "No" is checked.
+    ///     Occurs when the custom icon radio button "No" is checked.
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
@@ -498,7 +503,7 @@ public sealed partial class StationEditor : UserControl, IEditor
     }
 
     /// <summary>
-    /// Occurs when the ink atlas path text is changed.
+    ///     Occurs when the ink atlas path text is changed.
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
@@ -530,7 +535,7 @@ public sealed partial class StationEditor : UserControl, IEditor
     }
 
     /// <summary>
-    /// Occurs when the ink atlas part text is changed.
+    ///     Occurs when the ink atlas part text is changed.
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
@@ -547,7 +552,7 @@ public sealed partial class StationEditor : UserControl, IEditor
     }
 
     /// <summary>
-    /// Occurs when the FM number is changed.
+    ///     Occurs when the FM number is changed.
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
@@ -559,7 +564,7 @@ public sealed partial class StationEditor : UserControl, IEditor
     }
 
     /// <summary>
-    /// Occurs when the volume slider is scrolled.
+    ///     Occurs when the volume slider is scrolled.
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
@@ -571,7 +576,7 @@ public sealed partial class StationEditor : UserControl, IEditor
     }
 
     /// <summary>
-    /// Occurs when the volume value label is double-clicked.
+    ///     Occurs when the volume value label is double-clicked.
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
@@ -581,7 +586,7 @@ public sealed partial class StationEditor : UserControl, IEditor
     }
 
     /// <summary>
-    /// Occurs when the volume label is double-clicked.
+    ///     Occurs when the volume label is double-clicked.
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
@@ -596,7 +601,7 @@ public sealed partial class StationEditor : UserControl, IEditor
     }
 
     /// <summary>
-    /// Occurs when a key is held down in the volume text box.
+    ///     Occurs when a key is held down in the volume text box.
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
@@ -626,7 +631,7 @@ public sealed partial class StationEditor : UserControl, IEditor
     }
 
     /// <summary>
-    /// Occurs when a key is pressed in the volume text box.
+    ///     Occurs when a key is pressed in the volume text box.
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
@@ -696,7 +701,7 @@ public sealed partial class StationEditor : UserControl, IEditor
     #region Music Tab
 
     /// <summary>
-    /// Sets the values for the music tab based on the station's data.
+    ///     Sets the values for the music tab based on the station's data.
     /// </summary>
     private void SetMusicTabValues()
     {
@@ -709,7 +714,7 @@ public sealed partial class StationEditor : UserControl, IEditor
     }
 
     /// <summary>
-    /// Occurs when the use stream radio button "Yes" is checked.
+    ///     Occurs when the use stream radio button "Yes" is checked.
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
@@ -721,7 +726,7 @@ public sealed partial class StationEditor : UserControl, IEditor
     }
 
     /// <summary>
-    /// Occurs when the use stream radio button "No" is checked.
+    ///     Occurs when the use stream radio button "No" is checked.
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
@@ -733,7 +738,7 @@ public sealed partial class StationEditor : UserControl, IEditor
     }
 
     /// <summary>
-    /// Occurs when the stream URL text box is changed.
+    ///     Occurs when the stream URL text box is changed.
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
@@ -745,26 +750,26 @@ public sealed partial class StationEditor : UserControl, IEditor
     }
 
     /// <summary>
-    /// Occurs when the "Get from Radio Garden" button is clicked.
+    ///     Occurs when the "Get from Radio Garden" button is clicked.
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
     private void BtnGetFromRadioGarden_Click(object sender, EventArgs e)
     {
-        var radioGardenForm = new RadioGardenInput();
+        RadioGardenInput radioGardenForm = new();
         radioGardenForm.UrlParsed += RadioGardenFormOnUrlParsed;
         radioGardenForm.ShowDialog();
         radioGardenForm.UrlParsed -= RadioGardenFormOnUrlParsed;
     }
 
     /// <summary>
-    /// Retrieve the stream URL from the input box and validate it.
+    ///     Retrieve the stream URL from the input box and validate it.
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
     private async void RadioGardenFormOnUrlParsed(object? sender, string e)
     {
-        var streamChecker = new AudioStreamChecker(TimeSpan.FromSeconds(5));
+        AudioStreamChecker streamChecker = new(TimeSpan.FromSeconds(5));
 
         var streamUrl = AudioStreamChecker.ConvertRadioGardenUrl(e);
         var isValid = await streamChecker.IsAudioStreamValidAsync(streamUrl);
@@ -774,7 +779,7 @@ public sealed partial class StationEditor : UserControl, IEditor
     }
 
     /// <summary>
-    /// Toggle the stream controls on or off.
+    ///     Toggle the stream controls on or off.
     /// </summary>
     /// <param name="onOff"></param>
     private void ToggleStreamControls(bool onOff)
@@ -795,7 +800,7 @@ public sealed partial class StationEditor : UserControl, IEditor
     #region Hover Help
 
     /// <summary>
-    /// Occurs when the mouse enters the display name label.
+    ///     Occurs when the mouse enters the display name label.
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
@@ -805,7 +810,7 @@ public sealed partial class StationEditor : UserControl, IEditor
     }
 
     /// <summary>
-    /// Occurs when the mouse enters the icon label.
+    ///     Occurs when the mouse enters the icon label.
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
@@ -815,7 +820,7 @@ public sealed partial class StationEditor : UserControl, IEditor
     }
 
     /// <summary>
-    /// Occurs when the mouse enters the custom picture box.
+    ///     Occurs when the mouse enters the custom picture box.
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
@@ -825,7 +830,7 @@ public sealed partial class StationEditor : UserControl, IEditor
     }
 
     /// <summary>
-    /// Occurs when the mouse enters the using custom icon label.
+    ///     Occurs when the mouse enters the using custom icon label.
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
@@ -835,7 +840,7 @@ public sealed partial class StationEditor : UserControl, IEditor
     }
 
     /// <summary>
-    /// Occurs when the mouse enters the open icon manager button.
+    ///     Occurs when the mouse enters the open icon manager button.
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
@@ -845,7 +850,7 @@ public sealed partial class StationEditor : UserControl, IEditor
     }
 
     /// <summary>
-    /// Occurs when the mouse enters the ink path label.
+    ///     Occurs when the mouse enters the ink path label.
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
@@ -855,7 +860,7 @@ public sealed partial class StationEditor : UserControl, IEditor
     }
 
     /// <summary>
-    /// Occurs when the mouse enters the ink part label.
+    ///     Occurs when the mouse enters the ink part label.
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
@@ -865,7 +870,7 @@ public sealed partial class StationEditor : UserControl, IEditor
     }
 
     /// <summary>
-    /// Occurs when the mouse enters the FM label.
+    ///     Occurs when the mouse enters the FM label.
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
@@ -875,7 +880,7 @@ public sealed partial class StationEditor : UserControl, IEditor
     }
 
     /// <summary>
-    /// Occurs when the mouse enters the volume label.
+    ///     Occurs when the mouse enters the volume label.
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
@@ -885,7 +890,7 @@ public sealed partial class StationEditor : UserControl, IEditor
     }
 
     /// <summary>
-    /// Occurs when the mouse enters the volume value label.
+    ///     Occurs when the mouse enters the volume value label.
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
@@ -895,7 +900,7 @@ public sealed partial class StationEditor : UserControl, IEditor
     }
 
     /// <summary>
-    /// Occurs when the mouse enters the use stream label.
+    ///     Occurs when the mouse enters the use stream label.
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
@@ -905,7 +910,7 @@ public sealed partial class StationEditor : UserControl, IEditor
     }
 
     /// <summary>
-    /// Occurs when the mouse enters the stream URL label.
+    ///     Occurs when the mouse enters the stream URL label.
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
@@ -925,7 +930,7 @@ public sealed partial class StationEditor : UserControl, IEditor
     }
 
     /// <summary>
-    /// Set the status text to the given text.
+    ///     Set the status text to the given text.
     /// </summary>
     /// <param name="text">The text to set.</param>
     private void SetStatusText(string text)
@@ -934,7 +939,7 @@ public sealed partial class StationEditor : UserControl, IEditor
     }
 
     /// <summary>
-    /// Set the status text to the default text.
+    ///     Set the status text to the default text.
     /// </summary>
     private void ResetStatusText()
     {
@@ -942,7 +947,7 @@ public sealed partial class StationEditor : UserControl, IEditor
     }
 
     /// <summary>
-    /// Occurs when the mouse leaves a label.
+    ///     Occurs when the mouse leaves a label.
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>

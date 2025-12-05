@@ -1,18 +1,20 @@
-﻿// UpdateBox.cs : RadioExt-Helper
-// Copyright (C) 2025  Ethan Hann
-// 
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-// 
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-// 
-// You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+﻿// // UpdateBox.cs : RadioExt-Helper
+// // Copyright (C) 2025  Ethan Hann
+// //
+// // This program is free software: you can redistribute it and/or modify
+// // it under the terms of the GNU General Public License as published by
+// // the Free Software Foundation, either version 3 of the License, or
+// // (at your option) any later version.
+// //
+// // This program is distributed in the hope that it will be useful,
+// // but WITHOUT ANY WARRANTY; without even the implied warranty of
+// // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// // GNU General Public License for more details.
+// //
+// // You should have received a copy of the GNU General Public License
+// // along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+#region
 
 using System.ComponentModel;
 using System.Diagnostics;
@@ -21,6 +23,8 @@ using AetherUtils.Core.Extensions;
 using AetherUtils.Core.Files;
 using AetherUtils.Core.Logging;
 using RadioExt_Helper.utility;
+
+#endregion
 
 namespace RadioExt_Helper.forms;
 
@@ -129,8 +133,8 @@ public partial class UpdateBox : Form
         var canReportProgress = totalBytes != -1L;
 
         await using var contentStream = await response.Content.ReadAsStreamAsync();
-        await using var fileStream =
-            new FileStream(tempFilePath, FileMode.Create, FileAccess.Write, FileShare.None, 8192, true);
+        await using FileStream fileStream =
+            new(tempFilePath, FileMode.Create, FileAccess.Write, FileShare.None, 8192, true);
 
         var totalBytesRead = 0L;
         var buffer = new byte[8192];
@@ -193,7 +197,7 @@ public partial class UpdateBox : Form
 
         if (Directory.GetParent(filePath) is not { } parent) return;
 
-        var startInfo = new ProcessStartInfo("explorer.exe")
+        ProcessStartInfo startInfo = new("explorer.exe")
         {
             Arguments = parent.FullName,
             UseShellExecute = true

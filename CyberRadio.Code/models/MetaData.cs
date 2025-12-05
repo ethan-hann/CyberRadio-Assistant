@@ -1,22 +1,26 @@
-﻿// MetaData.cs : RadioExt-Helper
-// Copyright (C) 2025  Ethan Hann
-// 
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-// 
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-// 
-// You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+﻿// // MetaData.cs : RadioExt-Helper
+// // Copyright (C) 2025  Ethan Hann
+// //
+// // This program is free software: you can redistribute it and/or modify
+// // it under the terms of the GNU General Public License as published by
+// // the Free Software Foundation, either version 3 of the License, or
+// // (at your option) any later version.
+// //
+// // This program is distributed in the hope that it will be useful,
+// // but WITHOUT ANY WARRANTY; without even the implied warranty of
+// // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// // GNU General Public License for more details.
+// //
+// // You should have received a copy of the GNU General Public License
+// // along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+#region
 
 using System.ComponentModel;
 using AetherUtils.Core.Utility;
 using Newtonsoft.Json;
+
+#endregion
 
 namespace RadioExt_Helper.models;
 
@@ -152,7 +156,7 @@ public sealed class MetaData : INotifyPropertyChanged, ICloneable, IEquatable<Me
     }
 
     /// <summary>
-    /// A dictionary of custom data that can be used to store additional information about the station.
+    ///     A dictionary of custom data that can be used to store additional information about the station.
     /// </summary>
     [JsonProperty("custom_data")]
     public SerializableDictionary<string, object> CustomData
@@ -167,7 +171,7 @@ public sealed class MetaData : INotifyPropertyChanged, ICloneable, IEquatable<Me
 
     public object Clone()
     {
-        var m = new MetaData
+        MetaData m = new()
         {
             DisplayName = DisplayName,
             Fm = Fm,

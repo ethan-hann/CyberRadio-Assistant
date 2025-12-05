@@ -1,18 +1,20 @@
-﻿// ConfigForm.cs : RadioExt-Helper
-// Copyright (C) 2025  Ethan Hann
-// 
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-// 
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-// 
-// You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+﻿// // ConfigForm.cs : RadioExt-Helper
+// // Copyright (C) 2025  Ethan Hann
+// //
+// // This program is free software: you can redistribute it and/or modify
+// // it under the terms of the GNU General Public License as published by
+// // the Free Software Foundation, either version 3 of the License, or
+// // (at your option) any later version.
+// //
+// // This program is distributed in the hope that it will be useful,
+// // but WITHOUT ANY WARRANTY; without even the implied warranty of
+// // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// // GNU General Public License for more details.
+// //
+// // You should have received a copy of the GNU General Public License
+// // along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+#region
 
 using AetherUtils.Core.Extensions;
 using AetherUtils.Core.Logging;
@@ -20,6 +22,8 @@ using RadioExt_Helper.config;
 using RadioExt_Helper.nexus_api;
 using RadioExt_Helper.Properties;
 using RadioExt_Helper.utility;
+
+#endregion
 
 namespace RadioExt_Helper.forms;
 
@@ -34,7 +38,7 @@ public sealed partial class ConfigForm : Form
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="ConfigForm" /> class.
-    /// <param name="tabName">The initial tab to open. If empty, or invalid, defaults to first tab.</param>
+    ///     <param name="tabName">The initial tab to open. If empty, or invalid, defaults to first tab.</param>
     /// </summary>
     public ConfigForm(string tabName)
     {
@@ -47,17 +51,17 @@ public sealed partial class ConfigForm : Form
     }
 
     /// <summary>
-    /// Occurs when the configuration is saved to disk.
+    ///     Occurs when the configuration is saved to disk.
     /// </summary>
     public event EventHandler? ConfigSaved;
 
     /// <summary>
-    /// Occurs whenever the game path is changed.
+    ///     Occurs whenever the game path is changed.
     /// </summary>
     public event EventHandler? GamePathChanged;
 
     /// <summary>
-    /// Occurs whenever the staging path is changed.
+    ///     Occurs whenever the staging path is changed.
     /// </summary>
     public event EventHandler? StagingPathChanged;
 
@@ -181,7 +185,7 @@ public sealed partial class ConfigForm : Form
             }
 
             // Create and add item to the ListView
-            var item = new ListViewItem(keyword.Keyword)
+            ListViewItem item = new(keyword.Keyword)
             {
                 Checked = keyword.IsForbidden,
                 Group = group,
@@ -204,7 +208,7 @@ public sealed partial class ConfigForm : Form
             }
 
             // Create and add item to the ListView (don't add tag as it's not a config item)
-            var item = new ListViewItem(keyword.Keyword)
+            ListViewItem item = new(keyword.Keyword)
             {
                 Checked = keyword.IsForbidden,
                 Group = group
@@ -239,7 +243,7 @@ public sealed partial class ConfigForm : Form
         }
 
         // Add the new keyword to the list view
-        var item = new ListViewItem(e.Keyword)
+        ListViewItem item = new(e.Keyword)
         {
             Checked = e.IsForbidden,
             Group = group,
@@ -293,7 +297,7 @@ public sealed partial class ConfigForm : Form
     }
 
     /// <summary>
-    /// Add the available compression levels to the combo box.
+    ///     Add the available compression levels to the combo box.
     /// </summary>
     private void AddCompressionOptions()
     {
@@ -311,9 +315,9 @@ public sealed partial class ConfigForm : Form
     }
 
     /// <summary>
-    /// Get the localized name for the backup compression level.
+    ///     Get the localized name for the backup compression level.
     /// </summary>
-    /// <param name="level">The <see cref="CompressionLevel"/> to localize.</param>
+    /// <param name="level">The <see cref="CompressionLevel" /> to localize.</param>
     /// <returns>A string localized into the current UI culture.</returns>
     private string GetLocalizedName(CompressionLevel level)
     {
@@ -455,7 +459,7 @@ public sealed partial class ConfigForm : Form
     /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
     private void BtnEditPaths_Click(object sender, EventArgs e)
     {
-        var pathDialog = new PathSettings();
+        PathSettings pathDialog = new();
         pathDialog.GameBasePathChanged += (_, _) => GamePathChanged?.Invoke(this, EventArgs.Empty);
         pathDialog.StagingPathChanged += (_, _) => StagingPathChanged?.Invoke(this, EventArgs.Empty);
         pathDialog.ShowDialog(this);
@@ -586,7 +590,7 @@ public sealed partial class ConfigForm : Form
     }
 
     /// <summary>
-    /// Checks if there are unsaved changes to the API key.
+    ///     Checks if there are unsaved changes to the API key.
     /// </summary>
     /// <returns><c>true</c> if there are no unsaved changes; <c>false</c> otherwise.</returns>
     private bool NoUnsavedApiChanges()

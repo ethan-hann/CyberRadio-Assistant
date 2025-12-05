@@ -1,27 +1,39 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿// // StationType.cs : RadioExt-Helper
+// // Copyright (C) 2025  Ethan Hann
+// //
+// // This program is free software: you can redistribute it and/or modify
+// // it under the terms of the GNU General Public License as published by
+// // the Free Software Foundation, either version 3 of the License, or
+// // (at your option) any later version.
+// //
+// // This program is distributed in the hope that it will be useful,
+// // but WITHOUT ANY WARRANTY; without even the implied warranty of
+// // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// // GNU General Public License for more details.
+// //
+// // You should have received a copy of the GNU General Public License
+// // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace RadioExt_Helper.utility;
 
 /// <summary>
-/// Represents the type of station, indicating whether it replaces an existing station or is an additional
-/// station.
+///     Represents the type of station, indicating whether it replaces an existing station or is an additional
+///     station.
 /// </summary>
-/// <remarks>This enumeration is used to distinguish between stations that serve as replacements for
-/// existing vanilla stations  and those that are added as new stations without replacing any existing
-/// ones.</remarks>
+/// <remarks>
+///     This enumeration is used to distinguish between stations that serve as replacements for
+///     existing vanilla stations  and those that are added as new stations without replacing any existing
+///     ones.
+/// </remarks>
 public enum StationType
 {
     /// <summary>
-    /// Specifies that the station is a replacement for an existing vanilla station.
+    ///     Specifies that the station is a replacement for an existing vanilla station.
     /// </summary>
     Replacement,
 
     /// <summary>
-    /// Specifies that the station is an additional station that does not replace any existing vanilla station.
+    ///     Specifies that the station is an additional station that does not replace any existing vanilla station.
     /// </summary>
     Additional
 }

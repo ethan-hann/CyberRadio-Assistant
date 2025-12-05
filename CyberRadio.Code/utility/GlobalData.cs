@@ -1,18 +1,20 @@
-﻿// GlobalData.cs : RadioExt-Helper
-// Copyright (C) 2025  Ethan Hann
-// 
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-// 
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-// 
-// You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+﻿// // GlobalData.cs : RadioExt-Helper
+// // Copyright (C) 2025  Ethan Hann
+// //
+// // This program is free software: you can redistribute it and/or modify
+// // it under the terms of the GNU General Public License as published by
+// // the Free Software Foundation, either version 3 of the License, or
+// // (at your option) any later version.
+// //
+// // This program is distributed in the hope that it will be useful,
+// // but WITHOUT ANY WARRANTY; without even the implied warranty of
+// // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// // GNU General Public License for more details.
+// //
+// // You should have received a copy of the GNU General Public License
+// // along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+#region
 
 using System.ComponentModel;
 using System.Globalization;
@@ -22,6 +24,8 @@ using AetherUtils.Core.Configuration;
 using AetherUtils.Core.Logging;
 using RadioExt_Helper.config;
 using RadioExt_Helper.forms;
+
+#endregion
 
 namespace RadioExt_Helper.utility;
 
@@ -36,7 +40,7 @@ public static class GlobalData
     private const string DefaultLanguage = "English (en)";
 
     /// <summary>
-    /// The version of the application.
+    ///     The version of the application.
     /// </summary>
     public static readonly Version AppVersion =
         Assembly.GetExecutingAssembly().GetName().Version is { } v
@@ -44,7 +48,7 @@ public static class GlobalData
             : new Version(0, 0, 0); //This should never happen, but just in case!
 
     /// <summary>
-    /// Get the resource manager for accessing string resources.
+    ///     Get the resource manager for accessing string resources.
     /// </summary>
     public static readonly ResourceManager Strings = new("RadioExt_Helper.Strings", typeof(MainForm).Assembly);
 
@@ -60,7 +64,7 @@ public static class GlobalData
     private static bool _uiIconsInitialized;
 
     /// <summary>
-    /// Get the configuration manager responsible for managing the application configuration.
+    ///     Get the configuration manager responsible for managing the application configuration.
     /// </summary>
     public static ConfigManager<ApplicationConfig> ConfigManager { get; private set; } = null!;
 
@@ -110,7 +114,7 @@ public static class GlobalData
     }
 
     /// <summary>
-    /// Initializes the ComboBox template with default properties.
+    ///     Initializes the ComboBox template with default properties.
     /// </summary>
     public static void InitializeComboBoxTemplate()
     {
@@ -130,7 +134,7 @@ public static class GlobalData
     }
 
     /// <summary>
-    /// Retrieves the full path to the most recent log file.
+    ///     Retrieves the full path to the most recent log file.
     /// </summary>
     /// <returns>The full path to the most recent log file, or null if no log files are found.</returns>
     public static string GetLogFilePath()
@@ -174,8 +178,8 @@ public static class GlobalData
     }
 
     /// <summary>
-    /// Creates a ComboBox template with default properties. Data source is set to
-    /// <see cref="GlobalData.UiIcons" />
+    ///     Creates a ComboBox template with default properties. Data source is set to
+    ///     <see cref="GlobalData.UiIcons" />
     /// </summary>
     /// <returns>
     ///     A ComboBox instance with the following properties:

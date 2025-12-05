@@ -1,19 +1,24 @@
-// MainForm.cs : RadioExt-Helper
-// Copyright (C) 2025  Ethan Hann
-// 
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-// 
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-// 
-// You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+// // MainForm.cs : RadioExt-Helper
+// // Copyright (C) 2025  Ethan Hann
+// //
+// // This program is free software: you can redistribute it and/or modify
+// // it under the terms of the GNU General Public License as published by
+// // the Free Software Foundation, either version 3 of the License, or
+// // (at your option) any later version.
+// //
+// // This program is distributed in the hope that it will be useful,
+// // but WITHOUT ANY WARRANTY; without even the implied warranty of
+// // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// // GNU General Public License for more details.
+// //
+// // You should have received a copy of the GNU General Public License
+// // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+#region
+
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Timers;
 using AetherUtils.Core.Extensions;
 using AetherUtils.Core.Files;
 using AetherUtils.Core.Logging;
@@ -25,15 +30,14 @@ using RadioExt_Helper.nexus_api;
 using RadioExt_Helper.Properties;
 using RadioExt_Helper.user_controls;
 using RadioExt_Helper.utility;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Timers;
 using WIG.Lib.Models;
 using WIG.Lib.Models.Audio;
 using WIG.Lib.Utility;
 using ApplicationContext = RadioExt_Helper.utility.ApplicationContext;
 using PathHelper = RadioExt_Helper.utility.PathHelper;
 using Timer = System.Timers.Timer;
+
+#endregion
 
 namespace RadioExt_Helper.forms;
 
@@ -55,17 +59,11 @@ public sealed partial class MainForm : Form
     private bool _ignoreSelectedIndexChanged;
 
     private bool _isAppClosing;
-    private bool _isHardClosing;
     private bool _isExportInProgress;
     private bool _isSyncInProgress;
-    private bool _mainStationListBoxSelected;
     private bool _isVanillaGroupCollapsed;
+    private bool _mainStationListBoxSelected;
     private int _previousSplitterHeight;
-
-    /// <summary>
-    /// Get a value indicating whether the application is in the process of closing because of invalid configuration or a critical error.
-    /// </summary>
-    public bool IsHardClosing => _isHardClosing;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="MainForm" /> class.
@@ -116,7 +114,9 @@ public sealed partial class MainForm : Form
         // If the configuration is not valid, and it's not the first run, show an error message and open the configuration form
         if (!validConfig && !isFirstRun)
         {
-            AuLogger.GetCurrentLogger<MainForm>().Error("The configuration file was invalid. Ensure the game base path and the staging directory exist.");
+            AuLogger.GetCurrentLogger<MainForm>()
+                .Error(
+                    "The configuration file was invalid. Ensure the game base path and the staging directory exist.");
             MessageBox.Show(this, Strings.InvalidGamePath, Strings.InitializationError, MessageBoxButtons.OK);
 
             //Show the configuration form to allow the user to set the paths
@@ -135,9 +135,11 @@ public sealed partial class MainForm : Form
 
             if (!validConfig)
             {
-                AuLogger.GetCurrentLogger<MainForm>().Fatal("The configuration is still invalid after showing the configuration form. The application will now exit.");
+                AuLogger.GetCurrentLogger<MainForm>()
+                    .Fatal(
+                        "The configuration is still invalid after showing the configuration form. The application will now exit.");
                 MessageBox.Show(this, Strings.InvalidConfigExit, Strings.InitializationError, MessageBoxButtons.OK);
-                _isHardClosing = true;
+                IsHardClosing = true;
                 Close();
             }
         }
@@ -146,6 +148,12 @@ public sealed partial class MainForm : Form
 
         _previousSplitterHeight = splitContainer2.SplitterDistance;
     }
+
+    /// <summary>
+    ///     Get a value indicating whether the application is in the process of closing because of invalid configuration or a
+    ///     critical error.
+    /// </summary>
+    public bool IsHardClosing { get; }
 
     /// <summary>
     ///     Gets the base path of the game from the configuration.
@@ -217,7 +225,7 @@ public sealed partial class MainForm : Form
     }
 
     /// <summary>
-    /// Set the flag indicating whether the application is currently performing an export operation.
+    ///     Set the flag indicating whether the application is currently performing an export operation.
     /// </summary>
     /// <param name="isInProgress"></param>
     public void SetExportInProgress(bool isInProgress)
@@ -325,8 +333,8 @@ public sealed partial class MainForm : Form
     }
 
     /// <summary>
-    /// Set's up and starts (or stops) the directory watcher based on the configuration.
-    /// The directory watcher is used to watch for changes in the game's radios directory.
+    ///     Set's up and starts (or stops) the directory watcher based on the configuration.
+    ///     The directory watcher is used to watch for changes in the game's radios directory.
     /// </summary>
     private void SetupDirectoryWatcher()
     {
@@ -525,9 +533,9 @@ public sealed partial class MainForm : Form
     }
 
     /// <summary>
-    /// Show the "no stations" panel only when neither listbox has a selection.
-    /// Never clears/re-adds controls unless we're actually switching content,
-    /// which avoids the visible flash.
+    ///     Show the "no stations" panel only when neither listbox has a selection.
+    ///     Never clears/re-adds controls unless we're actually switching content,
+    ///     which avoids the visible flash.
     /// </summary>
     private void HandleNoStationsSelected()
     {
@@ -544,7 +552,7 @@ public sealed partial class MainForm : Form
             }
             finally
             {
-                splitContainer1.Panel2.ResumeLayout(performLayout: true);
+                splitContainer1.Panel2.ResumeLayout(true);
             }
         }
 
@@ -552,13 +560,13 @@ public sealed partial class MainForm : Form
     }
 
     /// <summary>
-    /// Queue a post-message-loop check so we don't show the "no stations"
-    /// control during the brief handoff between listboxes.
+    ///     Queue a post-message-loop check so we don't show the "no stations"
+    ///     control during the brief handoff between listboxes.
     /// </summary>
     private void PostSelectionCoalesceCheck()
     {
         // Schedule after current events (Enter/SelectedIndexChanged) finish.
-        BeginInvoke((Action)(HandleNoStationsSelected));
+        BeginInvoke((Action)HandleNoStationsSelected);
     }
 
     private void CopyOodleToIconManager()
@@ -618,14 +626,16 @@ public sealed partial class MainForm : Form
     }
 
     /// <summary>
-    /// Selects a listbox item from the station listboxes based on the index. Also, updates the station editor and title bar.
-    /// Chooses which listbox to use based on the <see cref="_mainStationListBoxSelected"/> flag.
+    ///     Selects a listbox item from the station listboxes based on the index. Also, updates the station editor and title
+    ///     bar.
+    ///     Chooses which listbox to use based on the <see cref="_mainStationListBoxSelected" /> flag.
     /// </summary>
     /// <param name="index">The index to select in the listbox.</param>
     /// <param name="userDriven">Indicate whether the selection was driven by the user.</param>
     private void SelectListBoxItem(int index, bool userDriven)
     {
-        if (index < 0 || index >= (_mainStationListBoxSelected ? lbStations.Items.Count : lbReplacedStations.Items.Count)) return;
+        if (index < 0 ||
+            index >= (_mainStationListBoxSelected ? lbStations.Items.Count : lbReplacedStations.Items.Count)) return;
 
         if (userDriven)
         {
@@ -658,7 +668,8 @@ public sealed partial class MainForm : Form
     }
 
     /// <summary>
-    ///     Refreshes the UI after the paths have changed from the <see cref="PathSettings" /> or the <see cref="ConfigForm"/>.
+    ///     Refreshes the UI after the paths have changed from the <see cref="PathSettings" /> or the <see cref="ConfigForm" />
+    ///     .
     ///     <param name="sender">The event sender.</param>
     ///     <param name="e">The event arguments.</param>
     /// </summary>
@@ -751,7 +762,8 @@ public sealed partial class MainForm : Form
             //We only want to revert the changes if there is a pending save. Otherwise, the wrong icon is drawn in the list box.
             if (!station.IsPendingSave) return;
 
-            if (StationManager.Instance.IsNewStation(station.Id)) return; //Don't allow reverting changes on new stations.
+            if (StationManager.Instance.IsNewStation(station.Id))
+                return; //Don't allow reverting changes on new stations.
 
             station.DeclineChanges(); // Revert the changes made to the station's properties since the last save.
 
@@ -766,7 +778,8 @@ public sealed partial class MainForm : Form
 
             if (!station.IsPendingSave) return;
 
-            if (StationManager.Instance.IsNewStation(station.Id)) return; //Don't allow reverting changes on new stations.
+            if (StationManager.Instance.IsNewStation(station.Id))
+                return; //Don't allow reverting changes on new stations.
 
             station.DeclineChanges(); // Revert the changes made to the station's properties since the last save.
 
@@ -775,7 +788,6 @@ public sealed partial class MainForm : Form
             OnVanillaStationUpdated(sender, station.Id); //Update the UI to reflect the changes.
             SelectReplacementStationEditor(station.Id); //Update the editor to reflect the changes.
         }
-
     }
 
     /// <summary>
@@ -840,7 +852,7 @@ public sealed partial class MainForm : Form
     }
 
     /// <summary>
-    /// Sets the status of the station(s) to the new status.
+    ///     Sets the status of the station(s) to the new status.
     /// </summary>
     /// <param name="newStatus">The new status to change the station to: <c>true</c> = enabled; <c>false</c> = disabled</param>
     /// <param name="setAllStations">Indicate whether to set all stations to the same status.</param>
@@ -882,7 +894,6 @@ public sealed partial class MainForm : Form
                     StationManager.Instance.CheckVanillaSaveStatus(stationId);
                 }
             }
-
         }
 
         if (_mainStationListBoxSelected)
@@ -922,7 +933,7 @@ public sealed partial class MainForm : Form
         if (GameBasePath.Equals(string.Empty) || StagingPath.Equals(string.Empty))
             return;
 
-        var openFileDialog = new OpenFileDialog
+        OpenFileDialog openFileDialog = new()
         {
             Filter = Strings.MainForm_FromZipImportFilter + @"|*.zip;*.rar",
             Title = Strings.MainForm_FromZipImportTitle,
@@ -952,7 +963,7 @@ public sealed partial class MainForm : Form
     }
 
     /// <summary>
-    /// Stops all music players and updates the UI with the correct station editor based on the station's ID.
+    ///     Stops all music players and updates the UI with the correct station editor based on the station's ID.
     /// </summary>
     /// <param name="stationId">The ID of the station to get the editor of.</param>
     private void SelectStationEditor(Guid? stationId)
@@ -972,7 +983,7 @@ public sealed partial class MainForm : Form
     }
 
     /// <summary>
-    /// Updates the title bar with the app name followed by the relative path to the station.
+    ///     Updates the title bar with the app name followed by the relative path to the station.
     /// </summary>
     /// <param name="stationId"></param>
     private void UpdateTitleBar(Guid? stationId)
@@ -1014,7 +1025,8 @@ public sealed partial class MainForm : Form
     }
 
     /// <summary>
-    ///     Handles the station updated event. Checks for pending save status on a station, duplication in station names, and updates the list box.
+    ///     Handles the station updated event. Checks for pending save status on a station, duplication in station names, and
+    ///     updates the list box.
     /// </summary>
     /// <param name="sender">The event sender.</param>
     /// <param name="stationId">The event arguments.</param>
@@ -1060,7 +1072,7 @@ public sealed partial class MainForm : Form
             UpdateEnabledStationCount();
             HandleUserControlVisibility();
 
-            if (lbReplacedStations.Items.Count <= 0 & lbStations.Items.Count <= 0)
+            if ((lbReplacedStations.Items.Count <= 0) & (lbStations.Items.Count <= 0))
                 UpdateTitleBar(null);
 
             if (lbReplacedStations.Items.Count > 0) return;
@@ -1070,7 +1082,6 @@ public sealed partial class MainForm : Form
             lbStations.SelectedIndex = 0;
             SelectListBoxItem(0, false);
         }
-
     }
 
     private void CmbLanguageSelect_SelectedIndexChanged(object? sender, EventArgs e)
@@ -1098,7 +1109,9 @@ public sealed partial class MainForm : Form
     {
         if (e.Button != MouseButtons.Right) return;
 
-        var index = _mainStationListBoxSelected ? lbStations.IndexFromPoint(e.Location) : lbReplacedStations.IndexFromPoint(e.Location);
+        var index = _mainStationListBoxSelected
+            ? lbStations.IndexFromPoint(e.Location)
+            : lbReplacedStations.IndexFromPoint(e.Location);
 
         if (lbStations.SelectedIndex == index)
             cmsRevertStationChanges.Show(Cursor.Position);
@@ -1148,7 +1161,7 @@ public sealed partial class MainForm : Form
                 return;
         }
 
-        var exportWindow = new ExportWindow();
+        ExportWindow exportWindow = new();
         exportWindow.OnExportToStagingComplete += (_, _) => { PopulateStations(); };
         exportWindow.ShowDialog(this);
     }
@@ -1160,7 +1173,7 @@ public sealed partial class MainForm : Form
 
     private void OpenConfigForm(string tabName)
     {
-        var configForm = new ConfigForm(tabName);
+        ConfigForm configForm = new(tabName);
         //configForm.ConfigSaved += SetApiStatus; //TODO: Re-enable this when the API feature is fully implemented
         configForm.StagingPathChanged += OnPathsChanged;
 
@@ -1209,7 +1222,7 @@ public sealed partial class MainForm : Form
 
     private void PathsToolStripMenuItem_Click(object sender, EventArgs e)
     {
-        var pathDialog = new PathSettings();
+        PathSettings pathDialog = new();
         pathDialog.StagingPathChanged += PathDialog_StagingPathChanged;
         pathDialog.ShowDialog(this);
     }
@@ -1241,9 +1254,13 @@ public sealed partial class MainForm : Form
     }
 
     /// <summary>
-    /// Start the station synchronization operation. Displays a message to the user to confirm the operation depending on the context.
+    ///     Start the station synchronization operation. Displays a message to the user to confirm the operation depending on
+    ///     the context.
     /// </summary>
-    /// <param name="userInitiated">Indicate whether the sync operation was initiated from user interaction or the file system watcher.</param>
+    /// <param name="userInitiated">
+    ///     Indicate whether the sync operation was initiated from user interaction or the file system
+    ///     watcher.
+    /// </param>
     private void StartStationSync(bool userInitiated)
     {
         if (string.IsNullOrEmpty(StagingPath)) return;
@@ -1338,7 +1355,7 @@ public sealed partial class MainForm : Form
     private void BackupStagingFolderToolStripMenuItem_Click(object sender, EventArgs e)
     {
         if (string.IsNullOrEmpty(StagingPath)) return;
-        if (lbStations.Items.Count <= 0 & lbReplacedStations.Items.Count <= 0) return;
+        if ((lbStations.Items.Count <= 0) & (lbReplacedStations.Items.Count <= 0)) return;
 
         //Check for sync in progress to prevent backup during sync
         if (_isSyncInProgress)
@@ -1376,7 +1393,7 @@ public sealed partial class MainForm : Form
                     MessageBoxIcon.Warning) == DialogResult.No)
                 return;
 
-        var fileBrowser = new OpenFileDialog
+        OpenFileDialog fileBrowser = new()
         {
             Filter = Strings.MainForm_RestoreFileBrowserFilter + @"|*.zip",
             Title = Strings.MainForm_RestoreFileBrowserTitle
@@ -1395,7 +1412,7 @@ public sealed partial class MainForm : Form
     {
         _isExportInProgress = true; //to prevent directory watcher from firing events.
 
-        var restoreWindow = new RestoreForm(backupFile, StagingPath);
+        RestoreForm restoreWindow = new(backupFile, StagingPath);
         restoreWindow.RestoreCompleted += (_, _) =>
         {
             _isExportInProgress = false;
@@ -1479,10 +1496,12 @@ public sealed partial class MainForm : Form
     }
 
     /// <summary>
-    /// Get a value indicating if there are stations pending save and the user confirmed to quit the application.
+    ///     Get a value indicating if there are stations pending save and the user confirmed to quit the application.
     /// </summary>
-    /// <returns><c>true</c> if there are pending saves or the user denied exit;
-    /// <c>false</c> if there are no pending changes or the user confirmed exit.</returns>
+    /// <returns>
+    ///     <c>true</c> if there are pending saves or the user denied exit;
+    ///     <c>false</c> if there are no pending changes or the user confirmed exit.
+    /// </returns>
     private bool CheckForPendingSaveStations()
     {
         var pendingSaveDict = StationManager.Instance.CheckPendingSave();
@@ -1492,7 +1511,7 @@ public sealed partial class MainForm : Form
         //var pendingAny = pendingSave.Values.All(p => p != true);
         //pendingAny &= pendingVanillaSave.Values.All(p => p != true);
 
-        var count = (pendingSave + pendingVanillaSave);
+        var count = pendingSave + pendingVanillaSave;
         var pendingAny = count > 0;
         var text = string.Format(Strings.ConfirmExit, count);
 
@@ -1515,7 +1534,7 @@ public sealed partial class MainForm : Form
         if (e.CloseReason is CloseReason.TaskManagerClosing or CloseReason.WindowsShutDown) return;
 
         // If the application is hard closing (e.g., because of invalid config checks), skip the pending save check
-        if (_isHardClosing)
+        if (IsHardClosing)
         {
             CleanupEvents();
         }
@@ -1537,7 +1556,7 @@ public sealed partial class MainForm : Form
     }
 
     /// <summary>
-    /// Show the Icon Manager form for the selected station.
+    ///     Show the Icon Manager form for the selected station.
     /// </summary>
     /// <param name="station">The station to associate with the icon manager form.</param>
     public void ShowIconManagerForm(TrackableObject<AdditionalStation> station)
@@ -1546,7 +1565,8 @@ public sealed partial class MainForm : Form
     }
 
     /// <summary>
-    /// Show the Icon Manager form for the selected station. If a new icon image path is provided, it will be used to create a new icon immediately.
+    ///     Show the Icon Manager form for the selected station. If a new icon image path is provided, it will be used to
+    ///     create a new icon immediately.
     /// </summary>
     /// <param name="station">The station to associate with the icon manager form.</param>
     /// <param name="newIconImagePath">The path to the .png icon used to create a new icon immediately.</param>
@@ -1601,7 +1621,7 @@ public sealed partial class MainForm : Form
     private void audioConverterToolStripMenuItem_Click(object sender, EventArgs e)
     {
         //Open the Audio Converter form with no input files and no station.
-        var audioConverterForm = new AudioConverterForm([], null);
+        AudioConverterForm audioConverterForm = new([], null);
         audioConverterForm.Show(this);
     }
 
@@ -1610,7 +1630,7 @@ public sealed partial class MainForm : Form
         if (GameBasePath.Equals(string.Empty) || StagingPath.Equals(string.Empty))
             return;
 
-        var vanillaStationSelector = new VanillaStationSelector();
+        VanillaStationSelector vanillaStationSelector = new();
         vanillaStationSelector.OnStationSelected += OnVanillaStationAdded;
         vanillaStationSelector.ShowDialog(this);
     }
@@ -1618,17 +1638,17 @@ public sealed partial class MainForm : Form
     private void OnVanillaStationAdded(object? sender, VanillaStation e)
     {
         lbStations.ClearSelected();
-        var replacementStation = new ReplacementStation()
+        ReplacementStation replacementStation = new()
         {
             VanillaStation = e,
             DisplayName = $"[Replaced] {e.StationName}",
             IsActive = true
         };
 
-        var station = new TrackableObject<ReplacementStation>(replacementStation);
+        TrackableObject<ReplacementStation> station = new(replacementStation);
 
         var id = StationManager.Instance.AddVanillaStation(station, false);
-        
+
         SelectReplacementStationEditor(id);
         UpdateEnabledStationCount();
         HandleUserControlVisibility();
@@ -1684,7 +1704,8 @@ public sealed partial class MainForm : Form
         splitContainer2.IsSplitterFixed = _isVanillaGroupCollapsed;
         grpVanillaStations.Visible = !_isVanillaGroupCollapsed;
 
-        btnCollapseVanillaSection.Text = _isVanillaGroupCollapsed ? Strings.ShowVanillaStations : Strings.HideVanillaStations;
+        btnCollapseVanillaSection.Text =
+            _isVanillaGroupCollapsed ? Strings.ShowVanillaStations : Strings.HideVanillaStations;
         btnCollapseVanillaSection.Image = _isVanillaGroupCollapsed ? Resources.up__16x16 : Resources.down__16x16;
 
         //Deselect stations in vanilla group

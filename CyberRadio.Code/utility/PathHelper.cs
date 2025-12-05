@@ -1,18 +1,20 @@
-﻿// PathHelper.cs : RadioExt-Helper
-// Copyright (C) 2025  Ethan Hann
-// 
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-// 
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-// 
-// You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+﻿// // PathHelper.cs : RadioExt-Helper
+// // Copyright (C) 2025  Ethan Hann
+// //
+// // This program is free software: you can redistribute it and/or modify
+// // it under the terms of the GNU General Public License as published by
+// // the Free Software Foundation, either version 3 of the License, or
+// // (at your option) any later version.
+// //
+// // This program is distributed in the hope that it will be useful,
+// // but WITHOUT ANY WARRANTY; without even the implied warranty of
+// // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// // GNU General Public License for more details.
+// //
+// // You should have received a copy of the GNU General Public License
+// // along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+#region
 
 using System.Security.AccessControl;
 using System.Security.Principal;
@@ -29,17 +31,20 @@ using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using Image = SixLabors.ImageSharp.Image;
 
+#endregion
+
 namespace RadioExt_Helper.utility;
 
 /// <summary>
-///     Helper class to get the various paths associated with the game and provides some helper methods for working with paths.
+///     Helper class to get the various paths associated with the game and provides some helper methods for working with
+///     paths.
 /// </summary>
 public static partial class PathHelper
 {
     private static readonly Regex _oodlePattern = OodleRegex();
 
     /// <summary>
-    ///    The list of paths that are always forbidden for use as the staging path.
+    ///     The list of paths that are always forbidden for use as the staging path.
     /// </summary>
     private static readonly List<string> AlwaysForbiddenPaths =
     [
@@ -55,7 +60,8 @@ public static partial class PathHelper
     private static partial Regex OodleRegex();
 
     /// <summary>
-    /// Retrieves the base game path (the folder containing <c>bin</c>) from the Cyberpunk 2077 executable by showing a file dialog.
+    ///     Retrieves the base game path (the folder containing <c>bin</c>) from the Cyberpunk 2077 executable by showing a
+    ///     file dialog.
     /// </summary>
     /// <returns>The base path of the game or <see cref="string.Empty" /> if path couldn't be determined.</returns>
     public static string GetGamePath()
@@ -64,7 +70,8 @@ public static partial class PathHelper
     }
 
     /// <summary>
-    /// Retrieves the base game path (the folder containing <c>bin</c>) from the Cyberpunk 2077 executable. Optionally, indicate if the dialog should loop until a valid file is selected.
+    ///     Retrieves the base game path (the folder containing <c>bin</c>) from the Cyberpunk 2077 executable. Optionally,
+    ///     indicate if the dialog should loop until a valid file is selected.
     /// </summary>
     /// <param name="shouldLoop">Indicates whether the file dialog should continue showing until a valid file is selected.</param>
     /// <returns>The base path of the game or <see cref="string.Empty" /> if path couldn't be determined.</returns>
@@ -111,7 +118,8 @@ public static partial class PathHelper
     }
 
     /// <summary>
-    /// Retrieves the staging path (the folder containing radio stations before copied to the game) by showing a folder dialog.
+    ///     Retrieves the staging path (the folder containing radio stations before copied to the game) by showing a folder
+    ///     dialog.
     /// </summary>
     /// <returns>The base path of the game or <see cref="string.Empty" /> if path couldn't be determined.</returns>
     public static string GetStagingPath()
@@ -120,7 +128,8 @@ public static partial class PathHelper
     }
 
     /// <summary>
-    ///     Retrieves the staging path (the folder containing radio stations before copied to the game). Optionally, indicate if the dialog should loop until a valid file is selected.
+    ///     Retrieves the staging path (the folder containing radio stations before copied to the game). Optionally, indicate
+    ///     if the dialog should loop until a valid file is selected.
     /// </summary>
     /// <param name="shouldLoop">Indicates whether the file dialog should continue showing until a valid file is selected.</param>
     /// <returns>The base path of the game or <see cref="string.Empty" /> if path couldn't be determined.</returns>
@@ -183,7 +192,7 @@ public static partial class PathHelper
     }
 
     /// <summary>
-    /// Determines if a path is a sub-path (i.e., starts with) of another path.
+    ///     Determines if a path is a sub-path (i.e., starts with) of another path.
     /// </summary>
     /// <param name="basePath">The base path to check against.</param>
     /// <param name="subPath">The path to check against the base path.</param>
@@ -214,7 +223,7 @@ public static partial class PathHelper
     }
 
     /// <summary>
-    /// Get a relative path to the <paramref name="fullPath"/> from the <paramref name="stagingPath"/>.
+    ///     Get a relative path to the <paramref name="fullPath" /> from the <paramref name="stagingPath" />.
     /// </summary>
     /// <param name="fullPath">The full path.</param>
     /// <param name="stagingPath">The path to the staging folder.</param>
@@ -245,7 +254,8 @@ public static partial class PathHelper
     }
 
     /// <summary>
-    /// Get a value indicating whether the specified file is a valid audio file based on the extension and <see cref="models.ValidAudioFiles"/>.
+    ///     Get a value indicating whether the specified file is a valid audio file based on the extension and
+    ///     <see cref="models.ValidAudioFiles" />.
     /// </summary>
     /// <param name="filePath">The path to the file to check.</param>
     /// <returns><c>true</c> if the file is a valid audio file; <c>false</c> otherwise.</returns>
@@ -256,7 +266,8 @@ public static partial class PathHelper
     }
 
     /// <summary>
-    /// Get a value indicating whether the specified file is a valid archive file based on the extension and <see cref="models.ValidArchiveFiles"/>.
+    ///     Get a value indicating whether the specified file is a valid archive file based on the extension and
+    ///     <see cref="models.ValidArchiveFiles" />.
     /// </summary>
     /// <param name="filePath">The path to the file to check.</param>
     /// <returns><c>true</c> if the file is a valid archive file; <c>false</c> otherwise.</returns>
@@ -267,7 +278,8 @@ public static partial class PathHelper
     }
 
     /// <summary>
-    /// Get a value indicating whether the specified file is a valid image file based on the extension and <see cref="models.ValidImageFiles"/>.
+    ///     Get a value indicating whether the specified file is a valid image file based on the extension and
+    ///     <see cref="models.ValidImageFiles" />.
     /// </summary>
     /// <param name="filePath">The path to the file to check.</param>
     /// <returns><c>true</c> if the file is a valid image file; <c>false</c> otherwise.</returns>
@@ -278,7 +290,8 @@ public static partial class PathHelper
     }
 
     /// <summary>
-    /// Replaces invalid path characters and specific characters (like the apostrophe (') which can causing issues with pathing.
+    ///     Replaces invalid path characters and specific characters (like the apostrophe (') which can causing issues with
+    ///     pathing.
     /// </summary>
     /// <param name="path">The path to sanitize.</param>
     /// <returns>The sanitized path.</returns>
@@ -299,9 +312,10 @@ public static partial class PathHelper
     }
 
     /// <summary>
-    /// Get the list of always forbidden paths as a list of <see cref="ForbiddenKeyword"/> objects. These paths are the system directories and program files directories.
+    ///     Get the list of always forbidden paths as a list of <see cref="ForbiddenKeyword" /> objects. These paths are the
+    ///     system directories and program files directories.
     /// </summary>
-    /// <returns>A list of <see cref="ForbiddenKeyword"/> objects defining the path.</returns>
+    /// <returns>A list of <see cref="ForbiddenKeyword" /> objects defining the path.</returns>
     public static List<ForbiddenKeyword> GetAlwaysForbiddenPaths()
     {
         return AlwaysForbiddenPaths.Select(path => new ForbiddenKeyword
@@ -309,19 +323,19 @@ public static partial class PathHelper
     }
 
     /// <summary>
-    /// Download a file from the specified URL to the specified destination file path.
+    ///     Download a file from the specified URL to the specified destination file path.
     /// </summary>
     /// <param name="fileUrl">The URL of the file to download.</param>
     /// <param name="destinationFilePath">The path to save the file on disk, including file name.</param>
     /// <returns>A task that represents the current async operation.</returns>
     public static async Task DownloadFileAsync(string fileUrl, string destinationFilePath)
     {
-        using var client = new HttpClient();
+        using HttpClient client = new();
         using var response = await client.GetAsync(fileUrl, HttpCompletionOption.ResponseHeadersRead);
         response.EnsureSuccessStatusCode();
 
         await using var contentStream = await response.Content.ReadAsStreamAsync();
-        var fileStream = new FileStream(destinationFilePath, FileMode.Create, FileAccess.Write, FileShare.None, 8192,
+        FileStream fileStream = new(destinationFilePath, FileMode.Create, FileAccess.Write, FileShare.None, 8192,
             true);
         await using var stream = fileStream.ConfigureAwait(false);
 
@@ -329,16 +343,19 @@ public static partial class PathHelper
     }
 
     /// <summary>
-    /// Download an image from the specified URL and convert it to a <see cref="Bitmap"/>.
+    ///     Download an image from the specified URL and convert it to a <see cref="Bitmap" />.
     /// </summary>
     /// <param name="imageUrl">The URL of the image to download.</param>
-    /// <returns>A task, that when completed, contains the downloaded image as a bitmap or the default missing image if the image could not be downloaded.</returns>
+    /// <returns>
+    ///     A task, that when completed, contains the downloaded image as a bitmap or the default missing image if the
+    ///     image could not be downloaded.
+    /// </returns>
     public static async Task<Bitmap> DownloadImageAsync(string imageUrl)
     {
         if (string.IsNullOrWhiteSpace(imageUrl))
             return ConvertToBitmap(null);
 
-        using var client = new HttpClient();
+        using HttpClient client = new();
         using var response = await client.GetAsync(imageUrl, HttpCompletionOption.ResponseHeadersRead);
         response.EnsureSuccessStatusCode();
 
@@ -348,17 +365,19 @@ public static partial class PathHelper
     }
 
     /// <summary>
-    /// Convert a <see cref="Image"/> to a <see cref="Bitmap"/>.
+    ///     Convert a <see cref="Image" /> to a <see cref="Bitmap" />.
     /// </summary>
-    /// <param name="image">The <see cref="Image"/> to convert.</param>
-    /// <returns>If <paramref name="image"/> is <c>null</c>, returns the default missing image;
-    /// otherwise, returns a <see cref="Bitmap"/> representing the <see cref="Image"/>.</returns>
+    /// <param name="image">The <see cref="Image" /> to convert.</param>
+    /// <returns>
+    ///     If <paramref name="image" /> is <c>null</c>, returns the default missing image;
+    ///     otherwise, returns a <see cref="Bitmap" /> representing the <see cref="Image" />.
+    /// </returns>
     public static Bitmap ConvertToBitmap(Image<Rgba32>? image)
     {
         if (image == null)
             return Resources.missing_16x16;
 
-        using var memoryStream = new MemoryStream();
+        using MemoryStream memoryStream = new();
 
         image.SaveAsBmp(memoryStream);
         memoryStream.Seek(0, SeekOrigin.Begin);
@@ -366,13 +385,16 @@ public static partial class PathHelper
     }
 
     /// <summary>
-    /// Extract a <c>.zip</c> file to the specified destination directory.
+    ///     Extract a <c>.zip</c> file to the specified destination directory.
     /// </summary>
     /// <param name="zipFilePath">The fully qualified path to a <c>.zip</c> file.</param>
     /// <param name="destinationDirectory">The directory to extract the contents of the <c>.zip</c> file into.</param>
     /// <returns></returns>
-    /// <exception cref="ArgumentNullException">If the <paramref name="zipFilePath"/> or the <paramref name="destinationDirectory"/> is <c>null</c> or empty.</exception>
-    /// <exception cref="FileNotFoundException">If the <paramref name="zipFilePath"/> did not exist on the filesystem.</exception>
+    /// <exception cref="ArgumentNullException">
+    ///     If the <paramref name="zipFilePath" /> or the
+    ///     <paramref name="destinationDirectory" /> is <c>null</c> or empty.
+    /// </exception>
+    /// <exception cref="FileNotFoundException">If the <paramref name="zipFilePath" /> did not exist on the filesystem.</exception>
     public static async Task ExtractZipFileAsync(string zipFilePath, string destinationDirectory)
     {
         if (string.IsNullOrEmpty(zipFilePath)) throw new ArgumentNullException(nameof(zipFilePath));
@@ -402,7 +424,7 @@ public static partial class PathHelper
     }
 
     /// <summary>
-    /// Clear all files and folders from the specified directory.
+    ///     Clear all files and folders from the specified directory.
     /// </summary>
     /// <param name="directoryPath">The path to the directory clear.</param>
     public static void ClearDirectory(string directoryPath)
@@ -437,14 +459,15 @@ public static partial class PathHelper
     }
 
     /// <summary>
-    /// Grant's access to the path specified by the filepath. Used mainly for accessing the log folder and reading the log file.
+    ///     Grant's access to the path specified by the filepath. Used mainly for accessing the log folder and reading the log
+    ///     file.
     /// </summary>
     /// <param name="filePath">The path to grant access on.</param>
     public static void GrantAccess(string filePath)
     {
         try
         {
-            var fileInfo = new FileInfo(filePath);
+            FileInfo fileInfo = new(filePath);
             var directoryInfo = fileInfo.Directory;
 
             if (directoryInfo == null) return;
@@ -465,10 +488,10 @@ public static partial class PathHelper
     }
 
     /// <summary>
-    /// Checks if the specified path is a forbidden path and thus invalid for the staging folder (or other purposes).
+    ///     Checks if the specified path is a forbidden path and thus invalid for the staging folder (or other purposes).
     /// </summary>
     /// <param name="stagingPath">The proposed staging path.</param>
-    /// <returns>A <see cref="ForbiddenPathResult"/> specifying the reason why the path was forbidden or not.</returns>
+    /// <returns>A <see cref="ForbiddenPathResult" /> specifying the reason why the path was forbidden or not.</returns>
     public static ForbiddenPathResult IsForbiddenPath(string stagingPath)
     {
         // Check if the staging path is empty or null (not forbidden)
@@ -504,7 +527,7 @@ public static partial class PathHelper
     }
 
     /// <summary>
-    /// Checks if the specified path is the root of any drive.
+    ///     Checks if the specified path is the root of any drive.
     /// </summary>
     /// <param name="path">The path to check.</param>
     /// <returns>True if the path is a root directory, otherwise false.</returns>
@@ -531,7 +554,7 @@ public static partial class PathHelper
     }
 
     /// <summary>
-    /// Recursively checks if the specified path or any of its parent directories contains the Vortex marker file.
+    ///     Recursively checks if the specified path or any of its parent directories contains the Vortex marker file.
     /// </summary>
     /// <param name="path">The path to check.</param>
     /// <returns>True if the Vortex marker file is found, otherwise false.</returns>
@@ -540,7 +563,7 @@ public static partial class PathHelper
         const string vortexMarkerFile = "__vortex_staging_folder";
         try
         {
-            var directory = new DirectoryInfo(path);
+            DirectoryInfo? directory = new(path);
             while (directory != null)
             {
                 // Check if the Vortex marker file exists in the current directory
@@ -564,7 +587,7 @@ public static partial class PathHelper
     }
 
     /// <summary>
-    /// Recursively checks if the marker file exists in any child directories of the given directory.
+    ///     Recursively checks if the marker file exists in any child directories of the given directory.
     /// </summary>
     /// <param name="directory">The directory to search in.</param>
     /// <returns>True if the marker file is found in any child directory, otherwise false.</returns>
@@ -590,11 +613,14 @@ public static partial class PathHelper
     }
 
     /// <summary>
-    /// Check if the specified base path contains the Oodle DLL used for compression of game files.
-    /// <para>This DLL is used by WolvenKit and may cause problems with icon generation if it's missing.</para>
+    ///     Check if the specified base path contains the Oodle DLL used for compression of game files.
+    ///     <para>This DLL is used by WolvenKit and may cause problems with icon generation if it's missing.</para>
     /// </summary>
     /// <param name="basePath">The base path to check.</param>
-    /// <returns>A tuple containing whether the DLL exists and the full path of the file that was found. If the DLL did not exist, the filePath is <c>null</c>.</returns>
+    /// <returns>
+    ///     A tuple containing whether the DLL exists and the full path of the file that was found. If the DLL did not
+    ///     exist, the filePath is <c>null</c>.
+    /// </returns>
     public static (bool exists, string? filePath) ContainsOodleDll(string? basePath)
     {
         try

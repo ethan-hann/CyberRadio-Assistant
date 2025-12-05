@@ -1,23 +1,27 @@
-﻿// IconListBox.cs : RadioExt-Helper
-// Copyright (C) 2025  Ethan Hann
-// 
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-// 
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-// 
-// You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+﻿// // IconListBox.cs : RadioExt-Helper
+// // Copyright (C) 2025  Ethan Hann
+// //
+// // This program is free software: you can redistribute it and/or modify
+// // it under the terms of the GNU General Public License as published by
+// // the Free Software Foundation, either version 3 of the License, or
+// // (at your option) any later version.
+// //
+// // This program is distributed in the hope that it will be useful,
+// // but WITHOUT ANY WARRANTY; without even the implied warranty of
+// // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// // GNU General Public License for more details.
+// //
+// // You should have received a copy of the GNU General Public License
+// // along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+#region
 
 using System.ComponentModel;
 using AetherUtils.Core.Logging;
 using RadioExt_Helper.models;
 using WIG.Lib.Models;
+
+#endregion
 
 namespace RadioExt_Helper.custom_controls;
 
@@ -139,7 +143,7 @@ public sealed partial class IconListBox : ListBox
                 }
 
                 // Draw the text
-                var textRect = new Rectangle(e.Bounds.Left + 20, e.Bounds.Top, e.Bounds.Width - 40 - 4,
+                Rectangle textRect = new(e.Bounds.Left + 20, e.Bounds.Top, e.Bounds.Width - 40 - 4,
                     e.Bounds.Height);
 
                 TextRenderer.DrawText(e.Graphics, icon.ToString(), Font, textRect, ForeColor, TextFormatFlags.Left);
@@ -154,7 +158,7 @@ public sealed partial class IconListBox : ListBox
     }
 
     /// <summary>
-    /// Handles the measurement of an item in the ListBox.
+    ///     Handles the measurement of an item in the ListBox.
     /// </summary>
     /// <param name="e">The event data.</param>
     protected override void OnMeasureItem(MeasureItemEventArgs e)

@@ -1,18 +1,20 @@
-﻿// ExportWindow.cs : RadioExt-Helper
-// Copyright (C) 2025  Ethan Hann
-// 
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-// 
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-// 
-// You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+﻿// // ExportWindow.cs : RadioExt-Helper
+// // Copyright (C) 2025  Ethan Hann
+// //
+// // This program is free software: you can redistribute it and/or modify
+// // it under the terms of the GNU General Public License as published by
+// // the Free Software Foundation, either version 3 of the License, or
+// // (at your option) any later version.
+// //
+// // This program is distributed in the hope that it will be useful,
+// // but WITHOUT ANY WARRANTY; without even the implied warranty of
+// // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// // GNU General Public License for more details.
+// //
+// // You should have received a copy of the GNU General Public License
+// // along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+#region
 
 using System.ComponentModel;
 using System.Diagnostics;
@@ -25,6 +27,8 @@ using RadioExt_Helper.utility;
 using WIG.Lib.Models;
 using WIG.Lib.Utility;
 using PathHelper = RadioExt_Helper.utility.PathHelper;
+
+#endregion
 
 namespace RadioExt_Helper.forms;
 
@@ -369,15 +373,16 @@ public partial class ExportWindow : Form
     }
 
     /// <summary>
-    /// Maps song directories to the station directories. Used to keep track of where the songs are located, in case the station name is updated.
+    ///     Maps song directories to the station directories. Used to keep track of where the songs are located, in case the
+    ///     station name is updated.
     /// </summary>
     /// <param name="existingDirectories">The existing station directories in the staging folder.</param>
-    /// <param name="stations">The list of <see cref="TrackableObject{Station}"/> stations to use for mapping.</param>
+    /// <param name="stations">The list of <see cref="TrackableObject{Station}" /> stations to use for mapping.</param>
     /// <returns>A dictionary containing the directory-song mappings.</returns>
     private static Dictionary<string, string> MapSongsToDirectories(List<string> existingDirectories,
         List<TrackableObject<AdditionalStation>> stations)
     {
-        var songDirectoryMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        Dictionary<string, string> songDirectoryMap = new(StringComparer.OrdinalIgnoreCase);
 
         foreach (var station in stations)
         foreach (var song in station.TrackedObject.Songs)
@@ -392,7 +397,7 @@ public partial class ExportWindow : Form
     }
 
     /// <summary>
-    /// Copy song files from the old station directory to the new station directory.
+    ///     Copy song files from the old station directory to the new station directory.
     /// </summary>
     /// <param name="songDirectoryMap">A dictionary containing the mapping between the old station name and the song.</param>
     /// <param name="newStationPath">The path to the new station's directory.</param>
@@ -432,15 +437,15 @@ public partial class ExportWindow : Form
     }
 
     /// <summary>
-    /// Get a value indicating whether the specified file is in the specified directory.
+    ///     Get a value indicating whether the specified file is in the specified directory.
     /// </summary>
     /// <param name="filePath">The file path to check.</param>
     /// <param name="directoryPath">The directory path to check against.</param>
     /// <returns><c>true</c> if the file is in the directory; <c>false</c> otherwise.</returns>
     private static bool IsFileInDirectory(string filePath, string directoryPath)
     {
-        var fileUri = new Uri(filePath);
-        var directoryUri = new Uri(directoryPath);
+        Uri fileUri = new(filePath);
+        Uri directoryUri = new(directoryPath);
 
         return fileUri.AbsolutePath.StartsWith(directoryUri.AbsolutePath, StringComparison.OrdinalIgnoreCase);
     }
@@ -450,7 +455,7 @@ public partial class ExportWindow : Form
     /// </summary>
     private void RemoveDeletedStations(List<string> existingDirectories)
     {
-        var stationNames = new HashSet<string>(
+        HashSet<string> stationNames = new(
             _stationsToExport.Select(station => station.TrackedObject.MetaData.DisplayName),
             StringComparer.OrdinalIgnoreCase);
 
@@ -522,7 +527,7 @@ public partial class ExportWindow : Form
         var iconPath = Path.Combine(stationPath, "icons.icls");
 
         //Convert our trackable object list into a normal list for serialization
-        var iconList = new List<WolvenIcon>();
+        List<WolvenIcon> iconList = new();
         foreach (var icon in station.TrackedObject.Icons)
             iconList.Add(icon.TrackedObject);
 
@@ -697,7 +702,7 @@ public partial class ExportWindow : Form
     }
 
     /// <summary>
-    /// Copy the icons from the staging directory (if present and the hash matches) to the game directory.
+    ///     Copy the icons from the staging directory (if present and the hash matches) to the game directory.
     /// </summary>
     /// <param name="activeStations">The list of active stations to copy the icons of.</param>
     private void CopyIconsToGame(List<TrackableObject<AdditionalStation>> activeStations)
@@ -765,9 +770,9 @@ public partial class ExportWindow : Form
     }
 
     /// <summary>
-    /// Delete all icons in <paramref name="stationIcons"/> from the game directory. This is the case when no active icon
-    /// is selected for a station (i.e., <see cref="CustomIcon.UseCustom"/> is false. This will NOT delete previously
-    /// generated icons present in the staging directory.
+    ///     Delete all icons in <paramref name="stationIcons" /> from the game directory. This is the case when no active icon
+    ///     is selected for a station (i.e., <see cref="CustomIcon.UseCustom" /> is false. This will NOT delete previously
+    ///     generated icons present in the staging directory.
     /// </summary>
     /// <param name="stationIcons"></param>
     private void DeleteAllStationIconsFromGame(List<TrackableObject<WolvenIcon>> stationIcons)
@@ -809,9 +814,9 @@ public partial class ExportWindow : Form
     }
 
     /// <summary>
-    /// Delete the active station's inactive icons from the game directory (if present and the hash matches).
-    /// This is different from <see cref="DeleteInactiveStationIconsFromGame(List{TrackableObject{AdditionalStation}})"/> 
-    /// in that this deletes ACTIVE station's inactive icons from the game.
+    ///     Delete the active station's inactive icons from the game directory (if present and the hash matches).
+    ///     This is different from <see cref="DeleteInactiveStationIconsFromGame(List{TrackableObject{AdditionalStation}})" />
+    ///     in that this deletes ACTIVE station's inactive icons from the game.
     /// </summary>
     /// <param name="activeStations">The list of active stations to delete inactive icons of.</param>
     private void DeleteActiveStationInactiveIconsFromGame(List<TrackableObject<AdditionalStation>> activeStations)
@@ -875,7 +880,7 @@ public partial class ExportWindow : Form
     }
 
     /// <summary>
-    /// Remove the icons of inactive stations from the game directory.
+    ///     Remove the icons of inactive stations from the game directory.
     /// </summary>
     /// <param name="inactiveStations">The list of inactive stations to remove icons of.</param>
     private void DeleteInactiveStationIconsFromGame(List<TrackableObject<AdditionalStation>> inactiveStations)

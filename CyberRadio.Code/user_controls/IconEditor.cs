@@ -1,18 +1,20 @@
-﻿// IconEditor.cs : RadioExt-Helper
-// Copyright (C) 2025  Ethan Hann
-// 
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-// 
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-// 
-// You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+﻿// // IconEditor.cs : RadioExt-Helper
+// // Copyright (C) 2025  Ethan Hann
+// //
+// // This program is free software: you can redistribute it and/or modify
+// // it under the terms of the GNU General Public License as published by
+// // the Free Software Foundation, either version 3 of the License, or
+// // (at your option) any later version.
+// //
+// // This program is distributed in the hope that it will be useful,
+// // but WITHOUT ANY WARRANTY; without even the implied warranty of
+// // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// // GNU General Public License for more details.
+// //
+// // You should have received a copy of the GNU General Public License
+// // along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+#region
 
 using System.Globalization;
 using System.Text.RegularExpressions;
@@ -24,6 +26,8 @@ using RadioExt_Helper.utility;
 using WIG.Lib.Models;
 using WIG.Lib.Utility;
 
+#endregion
+
 namespace RadioExt_Helper.user_controls;
 
 public sealed partial class IconEditor : UserControl, IEditor
@@ -34,18 +38,18 @@ public sealed partial class IconEditor : UserControl, IEditor
     private CancellationTokenSource _cancellationTokenSource;
 
     private string _iconPath = string.Empty;
-    private string? _lastStatusText;
     private bool _isExtracting;
 
     private bool _isImporting;
     private bool _isReadOnly;
+    private string? _lastStatusText;
 
     /// <summary>
-    /// Create a new icon editor.
+    ///     Create a new icon editor.
     /// </summary>
     /// <param name="station">The station associated with the editor.</param>
     /// <param name="icon">The icon to initialize the editor with.</param>
-    /// <param name="type">The <see cref="IconEditorType"/> to set the initial state of the editor.</param>
+    /// <param name="type">The <see cref="IconEditorType" /> to set the initial state of the editor.</param>
     public IconEditor(TrackableObject<AdditionalStation> station, TrackableObject<WolvenIcon> icon, IconEditorType type)
     {
         InitializeComponent();
@@ -76,7 +80,7 @@ public sealed partial class IconEditor : UserControl, IEditor
     public IconEditorType IconEditorType { get; set; }
 
     /// <summary>
-    /// The icon that is being edited.
+    ///     The icon that is being edited.
     /// </summary>
     public TrackableObject<WolvenIcon> Icon { get; }
 
@@ -84,12 +88,12 @@ public sealed partial class IconEditor : UserControl, IEditor
     public EditorType Type { get; set; } = EditorType.IconEditor;
 
     /// <summary>
-    /// The station that the icon is associated with.
+    ///     The station that the icon is associated with.
     /// </summary>
     public TrackableObject<AdditionalStation> Station { get; }
 
     /// <summary>
-    /// Null for this editor type.
+    ///     Null for this editor type.
     /// </summary>
     public TrackableObject<ReplacementStation>? ReplacedStation => null;
 
@@ -122,27 +126,27 @@ public sealed partial class IconEditor : UserControl, IEditor
     }
 
     /// <summary>
-    /// Event that occurs when the icon is updated.
+    ///     Event that occurs when the icon is updated.
     /// </summary>
     public event EventHandler<TrackableObject<WolvenIcon>>? IconUpdated;
 
     /// <summary>
-    /// Event that occurs when an icon import has started.
+    ///     Event that occurs when an icon import has started.
     /// </summary>
     public event EventHandler? IconImportStarted;
 
     /// <summary>
-    /// Event that occurs when an icon import has finished.
+    ///     Event that occurs when an icon import has finished.
     /// </summary>
     public event EventHandler? IconImportFinished;
 
     /// <summary>
-    /// Event that occurs when an icon extraction has started.
+    ///     Event that occurs when an icon extraction has started.
     /// </summary>
     public event EventHandler? IconExtractStarted;
 
     /// <summary>
-    /// Event that occurs when an icon extraction has finished.
+    ///     Event that occurs when an icon extraction has finished.
     /// </summary>
     public event EventHandler? IconExtractFinished;
 
@@ -153,7 +157,8 @@ public sealed partial class IconEditor : UserControl, IEditor
     }
 
     /// <summary>
-    /// Set the log identifier for the log viewer based on whether the icon is valid and whether it is from an archive or a .png originally.
+    ///     Set the log identifier for the log viewer based on whether the icon is valid and whether it is from an archive or a
+    ///     .png originally.
     /// </summary>
     public void SetLogIdentifier()
     {
@@ -336,7 +341,7 @@ public sealed partial class IconEditor : UserControl, IEditor
         lblStatus.Text = Strings.ImportingIcon;
 
         const int maxValue = 250;
-        var progress = new Progress<int>(value =>
+        Progress<int> progress = new(value =>
         {
             // Scale progress to fit between 0 and 100
             var scaledValue = value * 100 / maxValue;
@@ -413,7 +418,7 @@ public sealed partial class IconEditor : UserControl, IEditor
         lblStatus.Text = Strings.ExtractingIcon;
 
         const int maxValue = 250;
-        var progress = new Progress<int>(value =>
+        Progress<int> progress = new(value =>
         {
             // Scale progress to fit between 0 and max value (250)
             var scaledValue = value * 100 / maxValue;
@@ -472,7 +477,7 @@ public sealed partial class IconEditor : UserControl, IEditor
     }
 
     /// <summary>
-    /// Copy the icon's .archive and .png file to the staging directory.
+    ///     Copy the icon's .archive and .png file to the staging directory.
     /// </summary>
     /// <param name="iconArchivePath">The path to the final .archive generated with Wolven Icon Generator.</param>
     /// <param name="imagePath">The path to .png image file for the icon.</param>
@@ -537,7 +542,7 @@ public sealed partial class IconEditor : UserControl, IEditor
     }
 
     /// <summary>
-    /// Set the initial properties of the picture box image based on the icon for the editor.
+    ///     Set the initial properties of the picture box image based on the icon for the editor.
     /// </summary>
     private void SetImagePreviewProperties()
     {
@@ -545,9 +550,13 @@ public sealed partial class IconEditor : UserControl, IEditor
     }
 
     /// <summary>
-    /// Set the initial properties of the picture box image based on the icon for the editor. Optionally, set the properties differently if the editor was created from an .archive file.
+    ///     Set the initial properties of the picture box image based on the icon for the editor. Optionally, set the
+    ///     properties differently if the editor was created from an .archive file.
     /// </summary>
-    /// <param name="fromInitialArchive">Indicates whether this editor was created from an .archive file. In this case, the initial properties are set differently.</param>
+    /// <param name="fromInitialArchive">
+    ///     Indicates whether this editor was created from an .archive file. In this case, the
+    ///     initial properties are set differently.
+    /// </param>
     private void SetImagePreviewProperties(bool fromInitialArchive)
     {
         this.SafeInvoke(() =>

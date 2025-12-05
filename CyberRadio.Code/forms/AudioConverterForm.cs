@@ -1,18 +1,20 @@
-﻿// AudioConverterForm.cs : RadioExt-Helper
-// Copyright (C) 2025  Ethan Hann
-// 
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-// 
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-// 
-// You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+﻿// // AudioConverterForm.cs : RadioExt-Helper
+// // Copyright (C) 2025  Ethan Hann
+// //
+// // This program is free software: you can redistribute it and/or modify
+// // it under the terms of the GNU General Public License as published by
+// // the Free Software Foundation, either version 3 of the License, or
+// // (at your option) any later version.
+// //
+// // This program is distributed in the hope that it will be useful,
+// // but WITHOUT ANY WARRANTY; without even the implied warranty of
+// // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// // GNU General Public License for more details.
+// //
+// // You should have received a copy of the GNU General Public License
+// // along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+#region
 
 using System.ComponentModel;
 using AetherUtils.Core.Extensions;
@@ -21,15 +23,17 @@ using RadioExt_Helper.models;
 using RadioExt_Helper.Properties;
 using RadioExt_Helper.utility;
 
+#endregion
+
 namespace RadioExt_Helper.forms;
 
 /// <summary>
-/// Represents the form used for audio conversion.
+///     Represents the form used for audio conversion.
 /// </summary>
 public partial class AudioConverterForm : Form
 {
     /// <summary>
-    /// The list of conversion candidates. Each candidate represents a file to be converted and its target format.
+    ///     The list of conversion candidates. Each candidate represents a file to be converted and its target format.
     /// </summary>
     private readonly BindingList<ConvertCandidate> _candidates = [];
 
@@ -37,49 +41,49 @@ public partial class AudioConverterForm : Form
                                                 Environment.GetFolderPath(Environment.SpecialFolder.MyMusic);
 
     /// <summary>
-    /// The list of input file paths to be converted.
+    ///     The list of input file paths to be converted.
     /// </summary>
     private readonly List<string> _inputFiles;
 
     /// <summary>
-    /// The radio station context for the conversion, if any.
+    ///     The radio station context for the conversion, if any.
     /// </summary>
     private readonly TrackableObject<AdditionalStation>? _station;
 
     /// <summary>
-    /// The list of checked items in the listbox that are to be converted.
+    ///     The list of checked items in the listbox that are to be converted.
     /// </summary>
     private List<ConvertCandidate> _checkedItems = [];
 
     /// <summary>
-    /// The number of files that have been converted so far.
+    ///     The number of files that have been converted so far.
     /// </summary>
     private int _conversionCounter;
 
     private CancellationTokenSource? _cts;
 
     /// <summary>
-    /// Indicates the user has cancelled the running conversion.
+    ///     Indicates the user has cancelled the running conversion.
     /// </summary>
     private bool _isCancelling;
 
     /// <summary>
-    /// Indicates whether a conversion is currently in progress.
+    ///     Indicates whether a conversion is currently in progress.
     /// </summary>
     private bool _isConverting;
 
     /// <summary>
-    /// The total number of files to convert.
+    ///     The total number of files to convert.
     /// </summary>
     private int _totalToConvert;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="AudioConverterForm"/> class.
+    ///     Initializes a new instance of the <see cref="AudioConverterForm" /> class.
     /// </summary>
     /// <param name="inputFiles">A list of input file paths to be converted.</param>
     /// <param name="station">
-    /// An optional <see cref="TrackableObject{Station}"/> representing the radio station context for the conversion.
-    /// If <c>null</c>, the conversion is not associated with a specific station.
+    ///     An optional <see cref="TrackableObject{Station}" /> representing the radio station context for the conversion.
+    ///     If <c>null</c>, the conversion is not associated with a specific station.
     /// </param>
     public AudioConverterForm(List<string> inputFiles, TrackableObject<AdditionalStation>? station)
     {
@@ -93,12 +97,12 @@ public partial class AudioConverterForm : Form
     }
 
     /// <summary>
-    /// Event that is raised when the conversion process is completed. Event data is a list of converted file paths.
+    ///     Event that is raised when the conversion process is completed. Event data is a list of converted file paths.
     /// </summary>
     public event EventHandler<List<string>>? ConversionCompleted;
 
     /// <summary>
-    /// Handles the form load event. Initializes UI, sets up the ListView, and subscribes to conversion events.
+    ///     Handles the form load event. Initializes UI, sets up the ListView, and subscribes to conversion events.
     /// </summary>
     private void AudioConverterForm_Load(object sender, EventArgs e)
     {
@@ -119,7 +123,7 @@ public partial class AudioConverterForm : Form
     }
 
     /// <summary>
-    /// Translates the UI elements to the current language.
+    ///     Translates the UI elements to the current language.
     /// </summary>
     private void Translate()
     {
@@ -144,7 +148,7 @@ public partial class AudioConverterForm : Form
     }
 
     /// <summary>
-    /// Sets up the ListView with columns and populates it with the input files.
+    ///     Sets up the ListView with columns and populates it with the input files.
     /// </summary>
     private void SetupListBox()
     {
@@ -183,7 +187,7 @@ public partial class AudioConverterForm : Form
             toolStrip.Items.Clear();
 
             //Add custom button
-            var changeOutputPathBtn = new ToolStripButton(Strings.ChangeOutputDirectory, Resources.folder__16x16);
+            ToolStripButton changeOutputPathBtn = new(Strings.ChangeOutputDirectory, Resources.folder__16x16);
             pgConvertCandidate.AddButton("change_path", changeOutputPathBtn);
             changeOutputPathBtn.Click += ChangeOutputPathBtn_Click;
 
@@ -228,7 +232,7 @@ public partial class AudioConverterForm : Form
             outputPath = Path.Combine(_defaultMusicPath, "converted");
         }
 
-        var convertCandidate = new ConvertCandidate(fileName, ValidAudioFiles.Mp3, outputPath);
+        ConvertCandidate convertCandidate = new(fileName, ValidAudioFiles.Mp3, outputPath);
         _candidates.Add(convertCandidate);
 
         // Set the last item as checked
@@ -243,7 +247,7 @@ public partial class AudioConverterForm : Form
     }
 
     /// <summary>
-    /// Handles the Check All button click event. Checks all items in the ListView.
+    ///     Handles the Check All button click event. Checks all items in the ListView.
     /// </summary>
     private void btnCheckAll_Click(object sender, EventArgs e)
     {
@@ -258,7 +262,7 @@ public partial class AudioConverterForm : Form
     }
 
     /// <summary>
-    /// Handles the Uncheck All button click event. Unchecks all items in the ListView.
+    ///     Handles the Uncheck All button click event. Unchecks all items in the ListView.
     /// </summary>
     private void btnUncheckAll_Click(object sender, EventArgs e)
     {
@@ -273,7 +277,7 @@ public partial class AudioConverterForm : Form
     }
 
     /// <summary>
-    /// Handles the Add Files button click event. Opens a file dialog to add new files to the ListBox.
+    ///     Handles the Add Files button click event. Opens a file dialog to add new files to the ListBox.
     /// </summary>
     private void btnAddFiles_Click(object sender, EventArgs e)
     {
@@ -295,7 +299,7 @@ public partial class AudioConverterForm : Form
     }
 
     /// <summary>
-    /// Handles the Remove Files button click event. Removes selected files from the ListBox.
+    ///     Handles the Remove Files button click event. Removes selected files from the ListBox.
     /// </summary>
     private void btnRemoveFiles_Click(object sender, EventArgs e)
     {
@@ -338,7 +342,7 @@ public partial class AudioConverterForm : Form
     }
 
     /// <summary>
-    /// Handles the Start Conversion button click event. Begins the conversion process for checked files.
+    ///     Handles the Start Conversion button click event. Begins the conversion process for checked files.
     /// </summary>
     private async void btnStartConversion_Click(object sender, EventArgs e)
     {
@@ -455,7 +459,7 @@ public partial class AudioConverterForm : Form
     }
 
     /// <summary>
-    /// Invokes the <see cref="ConversionCompleted"/> event and resets the form state after conversion.
+    ///     Invokes the <see cref="ConversionCompleted" /> event and resets the form state after conversion.
     /// </summary>
     private void InvokeConversionComplete()
     {
@@ -487,7 +491,7 @@ public partial class AudioConverterForm : Form
     }
 
     /// <summary>
-    /// Handles the ConversionCompleted event from the AudioConverter. Updates UI and logs the result.
+    ///     Handles the ConversionCompleted event from the AudioConverter. Updates UI and logs the result.
     /// </summary>
     private void OnConversionCompleted(object? sender, (string file, bool success, string messageOrOutputPath) e)
     {
@@ -515,7 +519,7 @@ public partial class AudioConverterForm : Form
     }
 
     /// <summary>
-    /// Handles the ConversionProgress event from the AudioConverter. Updates the progress bar and log.
+    ///     Handles the ConversionProgress event from the AudioConverter. Updates the progress bar and log.
     /// </summary>
     private void OnConversionProgress(object? sender, (string file, int percent) e)
     {
@@ -530,7 +534,7 @@ public partial class AudioConverterForm : Form
     }
 
     /// <summary>
-    /// Handles the ConversionStarted event from the AudioConverter. Updates the status label and log.
+    ///     Handles the ConversionStarted event from the AudioConverter. Updates the status label and log.
     /// </summary>
     private void OnConversionStarted(object? sender, string e)
     {
@@ -553,7 +557,7 @@ public partial class AudioConverterForm : Form
     }
 
     /// <summary>
-    /// Adds a line of text to the conversion log RichTextBox.
+    ///     Adds a line of text to the conversion log RichTextBox.
     /// </summary>
     /// <param name="text">The text to add to the log.</param>
     private void AddLogLine(string text)
@@ -568,7 +572,7 @@ public partial class AudioConverterForm : Form
     }
 
     /// <summary>
-    /// Handles the FormClosing event. Prevents closing the form if a conversion is in progress.
+    ///     Handles the FormClosing event. Prevents closing the form if a conversion is in progress.
     /// </summary>
     private void AudioConverterForm_FormClosing(object sender, FormClosingEventArgs e)
     {
@@ -579,7 +583,7 @@ public partial class AudioConverterForm : Form
     }
 
     /// <summary>
-    /// Sets the enabled state of the main action buttons based on state of the current action.
+    ///     Sets the enabled state of the main action buttons based on state of the current action.
     /// </summary>
     private void SetUiEnabledStates()
     {
@@ -598,7 +602,7 @@ public partial class AudioConverterForm : Form
     }
 
     /// <summary>
-    /// Runs the specified action on the UI thread.
+    ///     Runs the specified action on the UI thread.
     /// </summary>
     /// <param name="action">The action to run on the UI thread.</param>
     private void RunOnUI(Action action)

@@ -1,18 +1,20 @@
-﻿// MigrationHelper.cs : RadioExt-Helper
-// Copyright (C) 2025  Ethan Hann
-// 
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-// 
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-// 
-// You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+﻿// // MigrationHelper.cs : RadioExt-Helper
+// // Copyright (C) 2025  Ethan Hann
+// //
+// // This program is free software: you can redistribute it and/or modify
+// // it under the terms of the GNU General Public License as published by
+// // the Free Software Foundation, either version 3 of the License, or
+// // (at your option) any later version.
+// //
+// // This program is distributed in the hope that it will be useful,
+// // but WITHOUT ANY WARRANTY; without even the implied warranty of
+// // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// // GNU General Public License for more details.
+// //
+// // You should have received a copy of the GNU General Public License
+// // along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+#region
 
 using System.Xml;
 using AetherUtils.Core.Files;
@@ -21,12 +23,16 @@ using Newtonsoft.Json.Linq;
 using RadioExt_Helper.config;
 using RadioExt_Helper.models;
 
+#endregion
+
 namespace RadioExt_Helper.migration;
 
 /// <summary>
-/// This class helps with migrating from the old user.config file to the new config.yml file. The previous application version used the
-/// built-in .NET settings file to handle application settings but is too limited for our needs. The new version uses a custom YAML file that
-/// can be extended more easily across application versions.
+///     This class helps with migrating from the old user.config file to the new config.yml file. The previous application
+///     version used the
+///     built-in .NET settings file to handle application settings but is too limited for our needs. The new version uses a
+///     custom YAML file that
+///     can be extended more easily across application versions.
 /// </summary>
 public static class MigrationHelper
 {
@@ -37,9 +43,11 @@ public static class MigrationHelper
     #region Settings Migration
 
     /// <summary>
-    /// Migrate the settings from the old user.config file to the new config.yml file. This method will look for all user.config files in the
-    /// old application data directory and parse the most recent one. The settings will then be migrated to a new <see cref="ApplicationConfig"/> object
-    /// and returned. If no user.config files are found, the method will return null.
+    ///     Migrate the settings from the old user.config file to the new config.yml file. This method will look for all
+    ///     user.config files in the
+    ///     old application data directory and parse the most recent one. The settings will then be migrated to a new
+    ///     <see cref="ApplicationConfig" /> object
+    ///     and returned. If no user.config files are found, the method will return null.
     /// </summary>
     /// <returns>The migrated configuration; or <c>null</c> if no previous setting files were found.</returns>
     public static ApplicationConfig? MigrateSettings()
@@ -77,7 +85,7 @@ public static class MigrationHelper
     }
 
     /// <summary>
-    /// Recursively finds all user.config files in the specified directory and its subdirectories.
+    ///     Recursively finds all user.config files in the specified directory and its subdirectories.
     /// </summary>
     /// <param name="baseDirectory">The base directory to search for user.config files.</param>
     /// <returns>A list of paths to user.config files.</returns>
@@ -98,7 +106,7 @@ public static class MigrationHelper
     }
 
     /// <summary>
-    /// Gets the most recent user.config file from the list of user.config paths.
+    ///     Gets the most recent user.config file from the list of user.config paths.
     /// </summary>
     /// <param name="userConfigPaths">The list of user.config paths.</param>
     /// <returns>The path to the most recent user.config file; or <c>null</c> if an error occurred.</returns>
@@ -106,8 +114,8 @@ public static class MigrationHelper
     {
         try
         {
-            return userConfigPaths.MaxBy(
-                path => Directory.GetLastWriteTime(Path.GetDirectoryName(path) ?? string.Empty));
+            return userConfigPaths.MaxBy(path =>
+                Directory.GetLastWriteTime(Path.GetDirectoryName(path) ?? string.Empty));
         }
         catch (Exception e)
         {
@@ -118,10 +126,10 @@ public static class MigrationHelper
     }
 
     /// <summary>
-    /// Parses the user.config file and creates an <see cref="ApplicationConfig"/> object.
+    ///     Parses the user.config file and creates an <see cref="ApplicationConfig" /> object.
     /// </summary>
     /// <param name="userConfigPath">The path to the user.config file.</param>
-    /// <returns>The parsed <see cref="ApplicationConfig"/> object; or <c>null</c> if an error occurred.</returns>
+    /// <returns>The parsed <see cref="ApplicationConfig" /> object; or <c>null</c> if an error occurred.</returns>
     private static ApplicationConfig? ParseUserConfig(string userConfigPath)
     {
         try
@@ -129,7 +137,7 @@ public static class MigrationHelper
             XmlDocument xmlDoc = new();
             xmlDoc.Load(userConfigPath);
 
-            var config = new ApplicationConfig
+            ApplicationConfig config = new()
             {
                 Language = xmlDoc.SelectSingleNode("//setting[@name='SelectedLanguage']/value")?.InnerText ??
                            "English (en)",
@@ -156,7 +164,7 @@ public static class MigrationHelper
     }
 
     /// <summary>
-    /// Cleans up the old settings by deleting unnecessary directories and files.
+    ///     Cleans up the old settings by deleting unnecessary directories and files.
     /// </summary>
     private static void CleanOldSettings()
     {
@@ -190,13 +198,13 @@ public static class MigrationHelper
     #region Song JSON Migration
 
     /// <summary>
-    /// Migrate the songs.sgls files from the old JSON format to the new <see cref="Song"/> object format.
+    ///     Migrate the songs.sgls files from the old JSON format to the new <see cref="Song" /> object format.
     /// </summary>
     /// <param name="stagingPath">The path to the staging folder.</param>
     /// <returns>A list of status messages.</returns>
     public static List<string> MigrateSongs(string stagingPath)
     {
-        var statusMessages = new List<string>();
+        List<string> statusMessages = new();
 
         if (stagingPath.Equals(string.Empty))
         {
@@ -264,7 +272,7 @@ public static class MigrationHelper
     }
 
     /// <summary>
-    /// Find all <c>songs.sgls</c> files in the specified directory and its subdirectories.
+    ///     Find all <c>songs.sgls</c> files in the specified directory and its subdirectories.
     /// </summary>
     /// <param name="baseDirectory">The base directory to search.</param>
     /// <returns>A list of paths to <c>songs.sgls</c> files.</returns>
@@ -274,7 +282,7 @@ public static class MigrationHelper
     }
 
     /// <summary>
-    /// Check if the song file is already in the new format.
+    ///     Check if the song file is already in the new format.
     /// </summary>
     /// <param name="jsonPath">The path to the songs.sgls JSON file to check.</param>
     /// <returns><c>true</c> if the file is already in new format; <c>false</c> otherwise.</returns>

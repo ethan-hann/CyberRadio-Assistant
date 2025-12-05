@@ -1,18 +1,20 @@
-﻿// CustomMusicCtl.cs : RadioExt-Helper
-// Copyright (C) 2025  Ethan Hann
-// 
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-// 
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-// 
-// You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+﻿// // CustomMusicCtl.cs : RadioExt-Helper
+// // Copyright (C) 2025  Ethan Hann
+// //
+// // This program is free software: you can redistribute it and/or modify
+// // it under the terms of the GNU General Public License as published by
+// // the Free Software Foundation, either version 3 of the License, or
+// // (at your option) any later version.
+// //
+// // This program is distributed in the hope that it will be useful,
+// // but WITHOUT ANY WARRANTY; without even the implied warranty of
+// // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// // GNU General Public License for more details.
+// //
+// // You should have received a copy of the GNU General Public License
+// // along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+#region
 
 using System.Diagnostics;
 using AetherUtils.Core.Extensions;
@@ -24,6 +26,8 @@ using RadioExt_Helper.Properties;
 using RadioExt_Helper.utility;
 using ListView = System.Windows.Forms.ListView;
 
+#endregion
+
 namespace RadioExt_Helper.user_controls;
 
 public sealed partial class CustomMusicCtl : UserControl, IUserControl
@@ -31,12 +35,12 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
     private readonly ImageList _songListViewImages = new();
 
     /// <summary>
-    /// Image list for the tab images.
+    ///     Image list for the tab images.
     /// </summary>
     private readonly ImageList _tabImages = new();
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="CustomMusicCtl"/> class.
+    ///     Initializes a new instance of the <see cref="CustomMusicCtl" /> class.
     /// </summary>
     /// <param name="station">The trackable station object.</param>
     public CustomMusicCtl(TrackableObject<AdditionalStation> station)
@@ -52,12 +56,12 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
     }
 
     /// <summary>
-    /// Gets the trackable station object associated with the control.
+    ///     Gets the trackable station object associated with the control.
     /// </summary>
     public TrackableObject<AdditionalStation> Station { get; }
 
     /// <summary>
-    /// Translates the control's text to the appropriate language.
+    ///     Translates the control's text to the appropriate language.
     /// </summary>
     public void Translate()
     {
@@ -89,7 +93,7 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
     }
 
     /// <summary>
-    /// Event that is triggered when the station is updated.
+    ///     Event that is triggered when the station is updated.
     /// </summary>
     public event EventHandler? StationUpdated;
 
@@ -111,7 +115,7 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
     }
 
     /// <summary>
-    /// Reset the UI values to the defaults for the station.
+    ///     Reset the UI values to the defaults for the station.
     /// </summary>
     public void ResetUi()
     {
@@ -142,7 +146,7 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
     }
 
     /// <summary>
-    /// Sets the images for the tabs.
+    ///     Sets the images for the tabs.
     /// </summary>
     private void SetTabImages()
     {
@@ -161,7 +165,7 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
     }
 
     /// <summary>
-    /// Populates the song list view with the songs from the station.
+    ///     Populates the song list view with the songs from the station.
     /// </summary>
     private void PopulateListView()
     {
@@ -185,7 +189,7 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
     }
 
     /// <summary>
-    /// Determines whether a song can be added to the station. Checks if the song is already in the station.
+    ///     Determines whether a song can be added to the station. Checks if the song is already in the station.
     /// </summary>
     /// <param name="song">The song to check.</param>
     /// <returns>True if the song can be added; otherwise, false.</returns>
@@ -238,12 +242,13 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
 
             //Ask the user if they want to convert the files
             var result = MessageBox.Show(this,
-                string.Format(pluralPrompt ? Strings.AudioConverterPrompt : Strings.AudioConverterPrompt_Single, needConversion.Count), Strings.Confirm,
+                string.Format(pluralPrompt ? Strings.AudioConverterPrompt : Strings.AudioConverterPrompt_Single,
+                    needConversion.Count), Strings.Confirm,
                 MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (result == DialogResult.Yes)
             {
                 // Show the audio converter form
-                var audioConverterForm = new AudioConverterForm(needConversion, Station);
+                AudioConverterForm audioConverterForm = new(needConversion, Station);
                 audioConverterForm.ConversionCompleted += AudioConverterForm_ConversionCompleted;
                 audioConverterForm.ShowDialog(this);
             }
@@ -344,7 +349,7 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
 
     private void locateAllMissingSongsToolStripMenuItem_Click(object sender, EventArgs e)
     {
-        using var folderDialog = new FolderBrowserDialog();
+        using FolderBrowserDialog folderDialog = new();
         folderDialog.Description = Strings.LocateAllMissingSongsDesc;
         folderDialog.UseDescriptionForTitle = true;
 
@@ -422,7 +427,7 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
     }
 
     /// <summary>
-    /// Updates the song list view, the order list view, and synchronizes the song order.
+    ///     Updates the song list view, the order list view, and synchronizes the song order.
     /// </summary>
     private void UpdateListsAndViews()
     {
@@ -439,7 +444,7 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
     }
 
     /// <summary>
-    /// Synchronizes the song order list view with the station's song list.
+    ///     Synchronizes the song order list view with the station's song list.
     /// </summary>
     private void SynchronizeSongOrder()
     {
@@ -532,7 +537,7 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
     #region Song Order
 
     /// <summary>
-    /// Populates the song order list box with the songs from the binding list.
+    ///     Populates the song order list box with the songs from the binding list.
     /// </summary>
     private void PopulateSongListBox()
     {
@@ -572,7 +577,7 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
     }
 
     /// <summary>
-    /// Adds a song to the order list view.
+    ///     Adds a song to the order list view.
     /// </summary>
     /// <param name="song">The song to add.</param>
     /// <param name="updateOrderedList">Indicates whether to update the ordered list.</param>
@@ -615,7 +620,7 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
     }
 
     /// <summary>
-    /// Updates the order column numbers in the song order list view.
+    ///     Updates the order column numbers in the song order list view.
     /// </summary>
     private void UpdateOrderColumn()
     {
@@ -624,7 +629,7 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
     }
 
     /// <summary>
-    /// Sets the ordered list of songs based on the station's metadata.
+    ///     Sets the ordered list of songs based on the station's metadata.
     /// </summary>
     private void SetOrderedList()
     {
@@ -639,7 +644,7 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
     }
 
     /// <summary>
-    /// Updates the ordered list of songs in the station with the items in the list view.
+    ///     Updates the ordered list of songs in the station with the items in the list view.
     /// </summary>
     private void UpdateOrderedList()
     {
@@ -702,9 +707,9 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
     }
 
     /// <summary>
-    /// Selects all the items in a <see cref="ListView"/>.
+    ///     Selects all the items in a <see cref="ListView" />.
     /// </summary>
-    /// <param name="listView">The <see cref="ListView"/> to select items of.</param>
+    /// <param name="listView">The <see cref="ListView" /> to select items of.</param>
     private static void SelectAllItems(ListView listView)
     {
         listView.BeginUpdate();

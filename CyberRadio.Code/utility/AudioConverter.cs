@@ -1,18 +1,20 @@
-﻿// AudioConverter.cs : RadioExt-Helper
-// Copyright (C) 2025  Ethan Hann
-// 
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-// 
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-// 
-// You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+﻿// // AudioConverter.cs : RadioExt-Helper
+// // Copyright (C) 2025  Ethan Hann
+// //
+// // This program is free software: you can redistribute it and/or modify
+// // it under the terms of the GNU General Public License as published by
+// // the Free Software Foundation, either version 3 of the License, or
+// // (at your option) any later version.
+// //
+// // This program is distributed in the hope that it will be useful,
+// // but WITHOUT ANY WARRANTY; without even the implied warranty of
+// // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// // GNU General Public License for more details.
+// //
+// // You should have received a copy of the GNU General Public License
+// // along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+#region
 
 using AetherUtils.Core.Extensions;
 using AetherUtils.Core.Logging;
@@ -20,11 +22,13 @@ using RadioExt_Helper.models;
 using Xabe.FFmpeg;
 using Xabe.FFmpeg.Downloader;
 
+#endregion
+
 namespace RadioExt_Helper.utility;
 
 /// <summary>
-/// Provides methods for converting audio/video files to supported formats
-/// using FFmpeg (via Xabe.FFmpeg) with cancellation support.
+///     Provides methods for converting audio/video files to supported formats
+///     using FFmpeg (via Xabe.FFmpeg) with cancellation support.
 /// </summary>
 public sealed class AudioConverter
 {
@@ -36,7 +40,7 @@ public sealed class AudioConverter
     }
 
     /// <summary>
-    /// Singleton instance of AudioConverter.
+    ///     Singleton instance of AudioConverter.
     /// </summary>
     public static AudioConverter Instance
     {
@@ -50,17 +54,17 @@ public sealed class AudioConverter
     }
 
     /// <summary>
-    /// The directory where FFmpeg binaries are stored.
+    ///     The directory where FFmpeg binaries are stored.
     /// </summary>
     public string? WorkingDirectory { get; private set; }
 
     /// <summary>
-    /// The directory where converted files are saved.
+    ///     The directory where converted files are saved.
     /// </summary>
     public string? ConvertedDirectory { get; private set; }
 
     /// <summary>
-    /// True if FFmpeg binaries are downloaded and paths are set.
+    ///     True if FFmpeg binaries are downloaded and paths are set.
     /// </summary>
     public bool IsInitialized { get; private set; }
 
@@ -71,16 +75,16 @@ public sealed class AudioConverter
     public event EventHandler<(string file, int percent)>? ConversionProgress;
 
     /// <summary>
-    /// Fired when done or failed (arg = (input path, success, output path or error)).
+    ///     Fired when done or failed (arg = (input path, success, output path or error)).
     /// </summary>
     public event EventHandler<(string file, bool success, string messageOrOutputPath)>? ConversionCompleted;
 
     /// <summary>
-    /// Ensures FFmpeg binaries are downloaded & paths are set.
+    ///     Ensures FFmpeg binaries are downloaded & paths are set.
     /// </summary>
     public async Task<List<string>> InitializeAsync()
     {
-        var messages = new List<string>();
+        List<string> messages = new();
         if (IsInitialized) return messages;
 
         var logger = AuLogger.GetCurrentLogger<AudioConverter>("InitializeAsync");
@@ -114,7 +118,7 @@ public sealed class AudioConverter
 
     private List<string> SetupRequiredPaths()
     {
-        var messages = new List<string>();
+        List<string> messages = new();
         try
         {
             WorkingDirectory = Path.Combine(
@@ -142,7 +146,7 @@ public sealed class AudioConverter
     }
 
     /// <summary>
-    /// Returns true if the file is not already a supported audio format.
+    ///     Returns true if the file is not already a supported audio format.
     /// </summary>
     public static bool NeedsConversion(string inputPath)
     {
@@ -150,7 +154,7 @@ public sealed class AudioConverter
     }
 
     /// <summary>
-    /// Returns true if the file is not already a supported audio format.
+    ///     Returns true if the file is not already a supported audio format.
     /// </summary>
     /// <param name="inputPath">The input file to check.</param>
     /// <param name="targetExtension">The target extension that the file should be.</param>
@@ -161,23 +165,25 @@ public sealed class AudioConverter
     }
 
     /// <summary>
-    /// Converts a file to the specified target format based on the conversion candidate.
+    ///     Converts a file to the specified target format based on the conversion candidate.
     /// </summary>
-    /// <param name="candidate">The <see cref="ConvertCandidate"/> to use for this conversion.</param>
+    /// <param name="candidate">The <see cref="ConvertCandidate" /> to use for this conversion.</param>
     /// <param name="cancellationToken">An optional token to support cancellation.</param>
-    /// <param name="byPassNeedsConversionCheck">If true, will bypass the <c>NeedsConversion</c> check and convert the file anyway.</param>
+    /// <param name="byPassNeedsConversionCheck">
+    ///     If true, will bypass the <c>NeedsConversion</c> check and convert the file
+    ///     anyway.
+    /// </param>
     /// <returns></returns>
-    public async Task<string?> ConvertAsync(ConvertCandidate candidate, bool byPassNeedsConversionCheck, CancellationToken cancellationToken = default)
+    public async Task<string?> ConvertAsync(ConvertCandidate candidate, bool byPassNeedsConversionCheck,
+        CancellationToken cancellationToken = default)
     {
         if (candidate is null)
             throw new ArgumentNullException(nameof(candidate));
 
         if (!byPassNeedsConversionCheck)
-        {
             // skip if already correct extension
             if (!NeedsConversion(candidate.InputPath, candidate.TargetFormat.ToDescriptionString()))
                 return candidate.InputPath;
-        }
 
         // ensure we have ffmpeg/ffprobe
         await InitializeAsync().ConfigureAwait(false);

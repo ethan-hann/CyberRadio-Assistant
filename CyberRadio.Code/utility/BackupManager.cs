@@ -1,33 +1,38 @@
-﻿// BackupManager.cs : RadioExt-Helper
-// Copyright (C) 2025  Ethan Hann
-// 
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-// 
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-// 
-// You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+﻿// // BackupManager.cs : RadioExt-Helper
+// // Copyright (C) 2025  Ethan Hann
+// //
+// // This program is free software: you can redistribute it and/or modify
+// // it under the terms of the GNU General Public License as published by
+// // the Free Software Foundation, either version 3 of the License, or
+// // (at your option) any later version.
+// //
+// // This program is distributed in the hope that it will be useful,
+// // but WITHOUT ANY WARRANTY; without even the implied warranty of
+// // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// // GNU General Public License for more details.
+// //
+// // You should have received a copy of the GNU General Public License
+// // along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+#region
 
 using System.IO.Compression;
 using System.Text;
 using AetherUtils.Core.Files;
 using AetherUtils.Core.Logging;
 
+#endregion
+
 namespace RadioExt_Helper.utility;
 
 /// <summary>
-/// Represents a class for managing the backup of files and folders. Subscribe to the event handlers to track the backup operation.
+///     Represents a class for managing the backup of files and folders. Subscribe to the event handlers to track the
+///     backup operation.
 /// </summary>
 public class BackupManager(CompressionLevel level)
 {
     /// <summary>
-    /// Dictionary containing the mapping between compression levels and their corresponding compression ratios.
+    ///     Dictionary containing the mapping between compression levels and their corresponding compression ratios.
     /// </summary>
     private readonly Dictionary<CompressionLevel, double> _compressionRatios = new()
     {
@@ -46,66 +51,78 @@ public class BackupManager(CompressionLevel level)
     private bool _isCancelling;
 
     /// <summary>
-    /// Get or set the compression level used for the backup operation.
+    ///     Get or set the compression level used for the backup operation.
     /// </summary>
     public CompressionLevel BackupCompressionLevel { get; } = level;
 
     /// <summary>
-    /// Occurs whenever the progress of the backup operation changes.
-    /// <para>Event data includes the current progress percentage.</para>
+    ///     Occurs whenever the progress of the backup operation changes.
+    ///     <para>Event data includes the current progress percentage.</para>
     /// </summary>
     public event Action<int>? ProgressChanged;
 
     /// <summary>
-    /// Occurs whenever the status of the backup operation changes.
-    /// <para>Event data includes a message describing the current status.</para>
+    ///     Occurs whenever the status of the backup operation changes.
+    ///     <para>Event data includes a message describing the current status.</para>
     /// </summary>
     public event Action<string>? StatusChanged;
 
     /// <summary>
-    /// Occurs whenever the backup operation is completed.
-    /// <para>Event data includes a flag indicating success, the path to the backup folder, and backup file name.</para>
+    ///     Occurs whenever the backup operation is completed.
+    ///     <para>Event data includes a flag indicating success, the path to the backup folder, and backup file name.</para>
     /// </summary>
     public event Action<bool, string, string>? BackupCompleted;
 
     /// <summary>
-    /// Occurs whenever the restore operation is completed.
-    /// <para>Event data includes a flag indicating success and the restore path.</para>
+    ///     Occurs whenever the restore operation is completed.
+    ///     <para>Event data includes a flag indicating success and the restore path.</para>
     /// </summary>
     public event Action<bool, string>? RestoreCompleted;
 
     /// <summary>
-    /// Occurs whenever the progress of the backup preview or restore preview operation changes.
-    /// <para>Event data includes the current progress percentage.</para>
+    ///     Occurs whenever the progress of the backup preview or restore preview operation changes.
+    ///     <para>Event data includes the current progress percentage.</para>
     /// </summary>
     public event Action<int>? PreviewProgressChanged;
 
     /// <summary>
-    /// Occurs whenever the status of the backup preview operation changes.
-    /// <para>Event data is a tuple containing the current <see cref="FilePreview"/> object and the current estimated backup size, in bytes.</para>
+    ///     Occurs whenever the status of the backup preview operation changes.
+    ///     <para>
+    ///         Event data is a tuple containing the current <see cref="FilePreview" /> object and the current estimated
+    ///         backup size, in bytes.
+    ///     </para>
     /// </summary>
     public event Action<(FilePreview, long)>? PreviewStatusChanged;
 
     /// <summary>
-    /// Occurs whenever the status of the restore preview operation changes.
-    /// <para>Event data is a tuple containing the current <see cref="FilePreview"/> object and the current estimated restore size, in bytes.</para>
+    ///     Occurs whenever the status of the restore preview operation changes.
+    ///     <para>
+    ///         Event data is a tuple containing the current <see cref="FilePreview" /> object and the current estimated
+    ///         restore size, in bytes.
+    ///     </para>
     /// </summary>
     public event Action<(List<FilePreview>, long)>? RestorePreviewCompleted;
 
     /// <summary>
-    /// Occurs whenever the backup preview operation is completed.
-    /// <para>Event data is a tuple with the list of previews, the total size of the files, and the estimated compressed size.</para>
+    ///     Occurs whenever the backup preview operation is completed.
+    ///     <para>
+    ///         Event data is a tuple with the list of previews, the total size of the files, and the estimated compressed
+    ///         size.
+    ///     </para>
     /// </summary>
     public event Action<(List<FilePreview> Previews, long TotalSize, long EstimatedCompressedSize)>?
         BackupPreviewCompleted;
 
     /// <summary>
-    /// Asynchronously get a preview of the files that will be backed up from the staging folder.
-    /// <para>The preview includes a list of <see cref="FilePreview"/> objects, the total size of the files, and the estimated compressed size.</para>
+    ///     Asynchronously get a preview of the files that will be backed up from the staging folder.
+    ///     <para>
+    ///         The preview includes a list of <see cref="FilePreview" /> objects, the total size of the files, and the
+    ///         estimated compressed size.
+    ///     </para>
     /// </summary>
     /// <param name="stagingPath">The path to preview the backup of.</param>
     /// <returns>A task representing the asynchronous operation.</returns>
-    /// <exception cref="ArgumentNullException">Occurs if the <paramref name="stagingPath"/> is <c>null</c> or empty.</exception>
+    /// <exception cref="ArgumentNullException">Occurs if the <paramref name="stagingPath" /> is <c>null</c> or empty.</exception>
     public async Task GetBackupPreviewAsync(string stagingPath)
     {
         if (string.IsNullOrEmpty(stagingPath))
@@ -118,7 +135,7 @@ public class BackupManager(CompressionLevel level)
 
         var files = FileHelper.SafeEnumerateFiles(stagingPath, "*.*", SearchOption.AllDirectories).ToArray();
 
-        var previews = new List<FilePreview>();
+        List<FilePreview> previews = new();
         var totalSize = 0L;
 
         await Task.Run(() =>
@@ -127,7 +144,7 @@ public class BackupManager(CompressionLevel level)
             {
                 if (_isCancelling) return;
 
-                var fileInfo = new FileInfo(file);
+                FileInfo fileInfo = new(file);
                 previews.Add(new FilePreview
                 {
                     FileName = file[(stagingPath.Length + 1)..],
@@ -149,13 +166,19 @@ public class BackupManager(CompressionLevel level)
     }
 
     /// <summary>
-    /// Asynchronously backs up the contents of the staging folder to a zip file in the backup folder.
+    ///     Asynchronously backs up the contents of the staging folder to a zip file in the backup folder.
     /// </summary>
     /// <param name="stagingPath">The path to the staging folder.</param>
     /// <param name="backupPath">The path to a backup folder.</param>
-    /// <param name="shouldCopySongFiles">Indicate whether the actual song files should be included in the backed up file or not.</param>
-    /// <returns>A <see cref="Task"/> representing the backup operation.</returns>
-    /// <exception cref="ArgumentNullException">If either <paramref name="stagingPath"/> or <paramref name="backupPath"/> are <c>null</c> or empty.</exception>
+    /// <param name="shouldCopySongFiles">
+    ///     Indicate whether the actual song files should be included in the backed up file or
+    ///     not.
+    /// </param>
+    /// <returns>A <see cref="Task" /> representing the backup operation.</returns>
+    /// <exception cref="ArgumentNullException">
+    ///     If either <paramref name="stagingPath" /> or <paramref name="backupPath" /> are
+    ///     <c>null</c> or empty.
+    /// </exception>
     /// <exception cref="ArgumentException">If the backup path is the same as the staging path.</exception>
     /// <exception cref="ArgumentException">If the compression level is not between 0 and 9.</exception>
     public async Task BackupStagingFolderAsync(string stagingPath, string backupPath, bool shouldCopySongFiles)
@@ -175,7 +198,7 @@ public class BackupManager(CompressionLevel level)
             {
                 if (_isCancelling) return;
 
-                var songPathMappings = new Dictionary<string, string>();
+                Dictionary<string, string> songPathMappings = new();
                 var files = shouldCopySongFiles ? GetFilesIncludingSongs(stagingPath) : GetFilesOnly(stagingPath);
 
                 using var zipArchive = ZipFile.Open(backupFileName, ZipArchiveMode.Create, Encoding.UTF8);
@@ -226,7 +249,7 @@ public class BackupManager(CompressionLevel level)
 
                 if (songPathMappings.Count > 0)
                 {
-                    var songPathsContent = new StringBuilder();
+                    StringBuilder songPathsContent = new();
                     foreach (var kvp in songPathMappings) songPathsContent.AppendLine($"{kvp.Key}|{kvp.Value}");
 
                     var songPathsBytes = Encoding.UTF8.GetBytes(songPathsContent.ToString());
@@ -270,19 +293,19 @@ public class BackupManager(CompressionLevel level)
     }
 
     /// <summary>
-    /// Asynchronously get a preview of the files that will be restored to the staging folder.
-    /// <para>The preview includes a list of <see cref="FilePreview"/> objects and the total size of the files.</para>
+    ///     Asynchronously get a preview of the files that will be restored to the staging folder.
+    ///     <para>The preview includes a list of <see cref="FilePreview" /> objects and the total size of the files.</para>
     /// </summary>
     /// <param name="backupFilePath">The path of the backed up .zip to preview.</param>
     /// <returns>A task representing the asynchronous operation.</returns>
-    /// <exception cref="ArgumentNullException">Occurs if the <paramref name="backupFilePath"/> is <c>null</c> or empty.</exception>
+    /// <exception cref="ArgumentNullException">Occurs if the <paramref name="backupFilePath" /> is <c>null</c> or empty.</exception>
     public async Task GetRestorePreviewAsync(string backupFilePath)
     {
         if (string.IsNullOrEmpty(backupFilePath)) throw new ArgumentNullException(nameof(backupFilePath));
         if (!File.Exists(backupFilePath))
             throw new FileNotFoundException("Backup file not found.", backupFilePath);
 
-        var previews = new List<FilePreview>();
+        List<FilePreview> previews = new();
         var totalSize = 0L;
 
         await Task.Run(() =>
@@ -295,7 +318,7 @@ public class BackupManager(CompressionLevel level)
                 // Skip directories
                 if (string.IsNullOrEmpty(entry.Name)) continue;
 
-                var preview = new FilePreview
+                FilePreview preview = new()
                 {
                     FileName = entry.FullName,
                     Size = entry.Length
@@ -318,7 +341,8 @@ public class BackupManager(CompressionLevel level)
     }
 
     /// <summary>
-    /// Asynchronously restores the contents of a backup zip file to the specified restore path, handling external song files.
+    ///     Asynchronously restores the contents of a backup zip file to the specified restore path, handling external song
+    ///     files.
     /// </summary>
     /// <param name="backupFilePath">The path to the backup zip file.</param>
     /// <param name="restorePath">The path to the directory the .zip file should be restored to.</param>
@@ -337,7 +361,7 @@ public class BackupManager(CompressionLevel level)
             {
                 if (_isCancelling) return;
 
-                var externalSongMappings = new Dictionary<string, string>();
+                Dictionary<string, string> externalSongMappings = new();
 
                 using var zipArchive = ZipFile.OpenRead(backupFilePath);
 
@@ -353,7 +377,7 @@ public class BackupManager(CompressionLevel level)
 
                     if (entryName.StartsWith("externalPaths.txt"))
                     {
-                        using var reader = new StreamReader(entry.Open(), Encoding.UTF8);
+                        using StreamReader reader = new(entry.Open(), Encoding.UTF8);
                         while (!reader.EndOfStream)
                         {
                             var line = reader.ReadLine();
@@ -447,7 +471,7 @@ public class BackupManager(CompressionLevel level)
     }
 
     /// <summary>
-    /// Retrieve the files from the staging folder, excluding audio files.
+    ///     Retrieve the files from the staging folder, excluding audio files.
     /// </summary>
     /// <param name="stagingPath">The staging path.</param>
     /// <returns>An array of file paths.</returns>

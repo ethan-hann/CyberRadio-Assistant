@@ -1,38 +1,42 @@
-﻿// RoundedPictureBox.cs : RadioExt-Helper
-// Copyright (C) 2025  Ethan Hann
-// 
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-// 
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-// 
-// You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+﻿// // RoundedPictureBox.cs : RadioExt-Helper
+// // Copyright (C) 2025  Ethan Hann
+// //
+// // This program is free software: you can redistribute it and/or modify
+// // it under the terms of the GNU General Public License as published by
+// // the Free Software Foundation, either version 3 of the License, or
+// // (at your option) any later version.
+// //
+// // This program is distributed in the hope that it will be useful,
+// // but WITHOUT ANY WARRANTY; without even the implied warranty of
+// // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// // GNU General Public License for more details.
+// //
+// // You should have received a copy of the GNU General Public License
+// // along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+#region
 
 using System.ComponentModel;
 using System.Drawing.Drawing2D;
 
+#endregion
+
 namespace RadioExt_Helper.custom_controls;
 
 /// <summary>
-/// Represents a picture box control with rounded corners and customizable border.
+///     Represents a picture box control with rounded corners and customizable border.
 /// </summary>
 public sealed class RoundedPictureBox : PictureBox
 {
     private string _imageKey = string.Empty;
 
     /// <summary>
-    /// The image list containing the images.
+    ///     The image list containing the images.
     /// </summary>
     private ImageList? _imageList;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="RoundedPictureBox"/> class.
+    ///     Initializes a new instance of the <see cref="RoundedPictureBox" /> class.
     /// </summary>
     public RoundedPictureBox()
     {
@@ -46,7 +50,7 @@ public sealed class RoundedPictureBox : PictureBox
     }
 
     /// <summary>
-    /// Gets or sets the radius of the rounded corners. Set to 0 to disable rounded corners.
+    ///     Gets or sets the radius of the rounded corners. Set to 0 to disable rounded corners.
     /// </summary>
     [Browsable(true)]
     [Category("Rounded Image")]
@@ -54,7 +58,7 @@ public sealed class RoundedPictureBox : PictureBox
     public int BorderRadius { get; set; } = 20;
 
     /// <summary>
-    /// Gets or sets whether to include a border around the button.
+    ///     Gets or sets whether to include a border around the button.
     /// </summary>
     [Browsable(true)]
     [Category("Rounded Image")]
@@ -62,7 +66,7 @@ public sealed class RoundedPictureBox : PictureBox
     public bool IncludeBorder { get; set; } = true;
 
     /// <summary>
-    /// Gets or sets the color of the border.
+    ///     Gets or sets the color of the border.
     /// </summary>
     [Browsable(true)]
     [Category("Rounded Image")]
@@ -70,7 +74,7 @@ public sealed class RoundedPictureBox : PictureBox
     public Color BorderColor { get; set; } = Color.Transparent;
 
     /// <summary>
-    /// Gets or sets the width of the border.
+    ///     Gets or sets the width of the border.
     /// </summary>
     [Browsable(true)]
     [Category("Appearance")]
@@ -78,7 +82,7 @@ public sealed class RoundedPictureBox : PictureBox
     public int BorderWidth { get; set; } = 2;
 
     /// <summary>
-    /// Gets or sets the image list containing the images.
+    ///     Gets or sets the image list containing the images.
     /// </summary>
     [Browsable(true)]
     [Category("Rounded Image")]
@@ -94,7 +98,7 @@ public sealed class RoundedPictureBox : PictureBox
     }
 
     /// <summary>
-    /// Gets or sets the key of the image to display.
+    ///     Gets or sets the key of the image to display.
     /// </summary>
     [Browsable(true)]
     [Category("Rounded Image")]
@@ -110,7 +114,7 @@ public sealed class RoundedPictureBox : PictureBox
     }
 
     /// <summary>
-    /// Updates the image displayed in the picture box.
+    ///     Updates the image displayed in the picture box.
     /// </summary>
     private void UpdateImage()
     {
@@ -119,7 +123,7 @@ public sealed class RoundedPictureBox : PictureBox
     }
 
     /// <summary>
-    /// Event handler for the MouseEnter event.
+    ///     Event handler for the MouseEnter event.
     /// </summary>
     /// <param name="e">The event data that contains the event specifics.</param>
     protected override void OnMouseEnter(EventArgs e)
@@ -129,7 +133,7 @@ public sealed class RoundedPictureBox : PictureBox
     }
 
     /// <summary>
-    /// Event handler for the MouseLeave event.
+    ///     Event handler for the MouseLeave event.
     /// </summary>
     /// <param name="e">The event data that contains the event specifics.</param>
     protected override void OnMouseLeave(EventArgs e)
@@ -139,7 +143,7 @@ public sealed class RoundedPictureBox : PictureBox
     }
 
     /// <summary>
-    /// Event handler for the MouseDown event.
+    ///     Event handler for the MouseDown event.
     /// </summary>
     /// <param name="mevent">A MouseEventArgs that contains the event data.</param>
     protected override void OnMouseDown(MouseEventArgs mevent)
@@ -149,7 +153,7 @@ public sealed class RoundedPictureBox : PictureBox
     }
 
     /// <summary>
-    /// Event handler for the MouseUp event.
+    ///     Event handler for the MouseUp event.
     /// </summary>
     /// <param name="mevent">The MouseEventArgs that contains the event data.</param>
     protected override void OnMouseUp(MouseEventArgs mevent)
@@ -160,14 +164,14 @@ public sealed class RoundedPictureBox : PictureBox
     }
 
     /// <summary>
-    /// Paints the control.
+    ///     Paints the control.
     /// </summary>
     /// <param name="pe">A PaintEventArgs that contains the event data.</param>
     protected override void OnPaint(PaintEventArgs pe)
     {
         pe.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
 
-        using var path = new GraphicsPath();
+        using GraphicsPath path = new();
 
         if (BorderRadius > 0)
         {
@@ -193,12 +197,12 @@ public sealed class RoundedPictureBox : PictureBox
         if (!IncludeBorder || BorderRadius <= 0) return;
 
         // Draw the border
-        using var pen = new Pen(BorderColor, BorderWidth);
+        using Pen pen = new(BorderColor, BorderWidth);
         pe.Graphics.DrawPath(pen, path);
     }
 
     /// <summary>
-    /// Overrides the OnPaintBackground method to prevent painting the background.
+    ///     Overrides the OnPaintBackground method to prevent painting the background.
     /// </summary>
     /// <param name="pevent">A PaintEventArgs that contains the event data.</param>
     protected override void OnPaintBackground(PaintEventArgs pevent)
@@ -207,7 +211,7 @@ public sealed class RoundedPictureBox : PictureBox
     }
 
     /// <summary>
-    /// Handles the event when the parent control's back color changes.
+    ///     Handles the event when the parent control's back color changes.
     /// </summary>
     /// <param name="e">The event data that contains the event specifics.</param>
     protected override void OnParentBackColorChanged(EventArgs e)

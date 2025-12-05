@@ -1,24 +1,28 @@
-﻿// Station.cs : RadioExt-Helper
-// Copyright (C) 2025  Ethan Hann
-// 
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-// 
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-// 
-// You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+﻿// // AdditionalStation.cs : RadioExt-Helper
+// // Copyright (C) 2025  Ethan Hann
+// //
+// // This program is free software: you can redistribute it and/or modify
+// // it under the terms of the GNU General Public License as published by
+// // the Free Software Foundation, either version 3 of the License, or
+// // (at your option) any later version.
+// //
+// // This program is distributed in the hope that it will be useful,
+// // but WITHOUT ANY WARRANTY; without even the implied warranty of
+// // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// // GNU General Public License for more details.
+// //
+// // You should have received a copy of the GNU General Public License
+// // along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+#region
 
 using System.ComponentModel;
 using AetherUtils.Core.Logging;
 using Newtonsoft.Json;
 using RadioExt_Helper.utility;
 using WIG.Lib.Models;
+
+#endregion
 
 namespace RadioExt_Helper.models;
 
@@ -30,12 +34,6 @@ public sealed class AdditionalStation : IStation, INotifyPropertyChanged, IClone
     private List<TrackableObject<WolvenIcon>> _icons = [];
     private MetaData _metaData = new();
     private List<Song> _songs = [];
-
-    /// <inheritdoc />
-    public List<string> Tags { get; set; } = [];
-
-    /// <inheritdoc />
-    public StationType StationType => StationType.Additional;
 
     /// <summary>
     ///     The metadata associated with this station.
@@ -128,6 +126,12 @@ public sealed class AdditionalStation : IStation, INotifyPropertyChanged, IClone
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
+    /// <inheritdoc />
+    public List<string> Tags { get; set; } = [];
+
+    /// <inheritdoc />
+    public StationType StationType => StationType.Additional;
+
     /// <summary>
     ///     Get a value indicating if this station is active in game or not.
     /// </summary>
@@ -138,9 +142,10 @@ public sealed class AdditionalStation : IStation, INotifyPropertyChanged, IClone
     }
 
     /// <summary>
-    /// Add an icon to this station if it is not already associated. A station can have any number of icons but only one can be active at a time.
+    ///     Add an icon to this station if it is not already associated. A station can have any number of icons but only one
+    ///     can be active at a time.
     /// </summary>
-    /// <param name="icon">The <see cref="Icon"/> to add to the station.</param>
+    /// <param name="icon">The <see cref="Icon" /> to add to the station.</param>
     /// <returns><c>true</c> if the icon was added successfully; <c>false</c> otherwise.</returns>
     public bool AddIcon(TrackableObject<WolvenIcon> icon)
     {
@@ -148,10 +153,11 @@ public sealed class AdditionalStation : IStation, INotifyPropertyChanged, IClone
     }
 
     /// <summary>
-    /// Add an icon to this station if it is not already associated. A station can have any number of icons but only one can be active at a time.
-    /// Optionally, make the icon active.
+    ///     Add an icon to this station if it is not already associated. A station can have any number of icons but only one
+    ///     can be active at a time.
+    ///     Optionally, make the icon active.
     /// </summary>
-    /// <param name="icon">The <see cref="Icon"/> to add to the station.</param>
+    /// <param name="icon">The <see cref="Icon" /> to add to the station.</param>
     /// <param name="makeActive">Indicates whether to make the newly added icon active for the station.</param>
     /// <returns><c>true</c> if the icon was added successfully; <c>false</c> otherwise.</returns>
     public bool AddIcon(TrackableObject<WolvenIcon> icon, bool makeActive)
@@ -167,9 +173,9 @@ public sealed class AdditionalStation : IStation, INotifyPropertyChanged, IClone
     }
 
     /// <summary>
-    /// Remove an icon from the station, if it exists.
+    ///     Remove an icon from the station, if it exists.
     /// </summary>
-    /// <param name="icon">The <see cref="Icon"/> to remove.</param>
+    /// <param name="icon">The <see cref="Icon" /> to remove.</param>
     /// <returns><c>true</c> if the icon was removed successfully; <c>false</c> otherwise.</returns>
     public bool RemoveIcon(TrackableObject<WolvenIcon> icon)
     {
@@ -181,7 +187,7 @@ public sealed class AdditionalStation : IStation, INotifyPropertyChanged, IClone
     }
 
     /// <summary>
-    /// Remove all icons from the station.
+    ///     Remove all icons from the station.
     /// </summary>
     /// <returns></returns>
     public void RemoveAllIcons()
@@ -191,9 +197,9 @@ public sealed class AdditionalStation : IStation, INotifyPropertyChanged, IClone
     }
 
     /// <summary>
-    /// Get the active <see cref="Icon"/> for the station.
+    ///     Get the active <see cref="Icon" /> for the station.
     /// </summary>
-    /// <returns>The active <see cref="Icon"/> or <c>null</c> if no active icons or there was more than 1 active icon.</returns>
+    /// <returns>The active <see cref="Icon" /> or <c>null</c> if no active icons or there was more than 1 active icon.</returns>
     /// <exception cref="InvalidOperationException">Occurs when there is more than 1 active icon in the station.</exception>
     public TrackableObject<WolvenIcon>? GetActiveIcon()
     {
@@ -213,8 +219,10 @@ public sealed class AdditionalStation : IStation, INotifyPropertyChanged, IClone
     }
 
     /// <summary>
-    /// Ensures the active icon (if any) is valid for the station. A valid active icon has been imported and has its archive file present.
-    /// This should be the case when either the icon is generated from a PNG or imported from a .zip file containing a station.
+    ///     Ensures the active icon (if any) is valid for the station. A valid active icon has been imported and has its
+    ///     archive file present.
+    ///     This should be the case when either the icon is generated from a PNG or imported from a .zip file containing a
+    ///     station.
     /// </summary>
     /// <returns><c>true</c> if the active icon is valid. <c>false</c> otherwise or there were no active icons.</returns>
     /// <exception cref="InvalidOperationException">Occurs when there is more than 1 active icon in the station.</exception>
@@ -237,7 +245,7 @@ public sealed class AdditionalStation : IStation, INotifyPropertyChanged, IClone
     }
 
     /// <summary>
-    /// Add custom data to the station. If the key already exists, the value will be updated.
+    ///     Add custom data to the station. If the key already exists, the value will be updated.
     /// </summary>
     /// <param name="key">The key of the data to add.</param>
     /// <param name="value">The data contents to add with the specified key.</param>
@@ -258,7 +266,7 @@ public sealed class AdditionalStation : IStation, INotifyPropertyChanged, IClone
     }
 
     /// <summary>
-    /// Remove the custom data associated with the specified key.
+    ///     Remove the custom data associated with the specified key.
     /// </summary>
     /// <param name="key">The key of the data to remove.</param>
     public void RemoveCustomData(string? key)
@@ -278,7 +286,7 @@ public sealed class AdditionalStation : IStation, INotifyPropertyChanged, IClone
     }
 
     /// <summary>
-    /// Get a value indicating if the station's custom data contains the specified key.
+    ///     Get a value indicating if the station's custom data contains the specified key.
     /// </summary>
     /// <param name="key">The key of the data to check existence of.</param>
     /// <returns><c>true</c> if the key was present in the custom data; <c>false</c> otherwise.</returns>
@@ -298,10 +306,10 @@ public sealed class AdditionalStation : IStation, INotifyPropertyChanged, IClone
     }
 
     /// <summary>
-    /// Get the custom data specified by the key in the station.
+    ///     Get the custom data specified by the key in the station.
     /// </summary>
     /// <param name="key">The key of the data to get.</param>
-    /// <returns>A data object referenced with the specified key or a blank, new <see cref="object"/> if an error occurred.</returns>
+    /// <returns>A data object referenced with the specified key or a blank, new <see cref="object" /> if an error occurred.</returns>
     public object GetCustomData(string key)
     {
         try

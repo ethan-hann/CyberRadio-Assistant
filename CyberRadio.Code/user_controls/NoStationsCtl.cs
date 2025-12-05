@@ -1,32 +1,36 @@
-﻿// NoStationsCtl.cs : RadioExt-Helper
-// Copyright (C) 2025  Ethan Hann
-// 
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-// 
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-// 
-// You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+﻿// // NoStationsCtl.cs : RadioExt-Helper
+// // Copyright (C) 2025  Ethan Hann
+// //
+// // This program is free software: you can redistribute it and/or modify
+// // it under the terms of the GNU General Public License as published by
+// // the Free Software Foundation, either version 3 of the License, or
+// // (at your option) any later version.
+// //
+// // This program is distributed in the hope that it will be useful,
+// // but WITHOUT ANY WARRANTY; without even the implied warranty of
+// // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// // GNU General Public License for more details.
+// //
+// // You should have received a copy of the GNU General Public License
+// // along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+#region
 
 using RadioExt_Helper.forms;
 using RadioExt_Helper.models;
 using RadioExt_Helper.utility;
 
+#endregion
+
 namespace RadioExt_Helper.user_controls;
 
 /// <summary>
-/// Represents the user control for displaying "No Stations" information.
+///     Represents the user control for displaying "No Stations" information.
 /// </summary>
 public sealed partial class NoStationsCtl : UserControl, IUserControl
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="NoStationsCtl"/> class.
+    ///     Initializes a new instance of the <see cref="NoStationsCtl" /> class.
     /// </summary>
     public NoStationsCtl()
     {
@@ -35,12 +39,12 @@ public sealed partial class NoStationsCtl : UserControl, IUserControl
     }
 
     /// <summary>
-    /// Gets the trackable object for the station.
+    ///     Gets the trackable object for the station.
     /// </summary>
     public TrackableObject<AdditionalStation> Station => new(new AdditionalStation());
 
     /// <summary>
-    /// Translates the text of the control to the current language.
+    ///     Translates the text of the control to the current language.
     /// </summary>
     public void Translate()
     {
@@ -54,17 +58,17 @@ public sealed partial class NoStationsCtl : UserControl, IUserControl
     }
 
     /// <summary>
-    /// Event that is raised when the paths are set.
+    ///     Event that is raised when the paths are set.
     /// </summary>
     public event EventHandler? PathsSet;
 
     /// <summary>
-    /// Event that is raised when the user wants to restore from a backup.
+    ///     Event that is raised when the user wants to restore from a backup.
     /// </summary>
     public event EventHandler<string>? RestoringFromBackup;
 
     /// <summary>
-    /// Occurs when the control is loaded.
+    ///     Occurs when the control is loaded.
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
@@ -75,7 +79,7 @@ public sealed partial class NoStationsCtl : UserControl, IUserControl
     }
 
     /// <summary>
-    /// Checks the staging and game paths and displays the appropriate message.
+    ///     Checks the staging and game paths and displays the appropriate message.
     /// </summary>
     private void CheckPaths()
     {
@@ -95,7 +99,7 @@ public sealed partial class NoStationsCtl : UserControl, IUserControl
     }
 
     /// <summary>
-    /// Toggles the visibility of the controls based on the availability of the game and staging paths.
+    ///     Toggles the visibility of the controls based on the availability of the game and staging paths.
     /// </summary>
     /// <param name="gamePath">Whether the game path is set.</param>
     /// <param name="stagePath">Whether the staging path is set.</param>
@@ -112,13 +116,13 @@ public sealed partial class NoStationsCtl : UserControl, IUserControl
     }
 
     /// <summary>
-    /// Occurs when the paths button is clicked.
+    ///     Occurs when the paths button is clicked.
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
     private void BtnPaths_Click(object sender, EventArgs e)
     {
-        var pathDialog = new PathSettings();
+        PathSettings pathDialog = new();
         pathDialog.GameBasePathChanged += (_, _) => CheckPaths();
         pathDialog.StagingPathChanged += (_, _) => CheckPaths();
         pathDialog.ShowDialog(this);
@@ -126,7 +130,7 @@ public sealed partial class NoStationsCtl : UserControl, IUserControl
 
     private void BtnRestoreFromBackup_Click(object sender, EventArgs e)
     {
-        var fileBrowser = new OpenFileDialog
+        OpenFileDialog fileBrowser = new()
         {
             Filter = Strings.MainForm_RestoreFileBrowserFilter + @"|*.zip",
             Title = Strings.MainForm_RestoreFileBrowserTitle

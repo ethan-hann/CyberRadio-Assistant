@@ -1,18 +1,20 @@
-﻿// StationListBox.cs : RadioExt-Helper
-// Copyright (C) 2025  Ethan Hann
-// 
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-// 
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-// 
-// You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+﻿// // StationListBox.cs : RadioExt-Helper
+// // Copyright (C) 2025  Ethan Hann
+// //
+// // This program is free software: you can redistribute it and/or modify
+// // it under the terms of the GNU General Public License as published by
+// // the Free Software Foundation, either version 3 of the License, or
+// // (at your option) any later version.
+// //
+// // This program is distributed in the hope that it will be useful,
+// // but WITHOUT ANY WARRANTY; without even the implied warranty of
+// // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// // GNU General Public License for more details.
+// //
+// // You should have received a copy of the GNU General Public License
+// // along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+#region
 
 using System.ComponentModel;
 using AetherUtils.Core.Files;
@@ -20,12 +22,14 @@ using AetherUtils.Core.Logging;
 using RadioExt_Helper.models;
 using RadioExt_Helper.utility;
 
+#endregion
+
 namespace RadioExt_Helper.custom_controls;
 
 /// <summary>
-/// Represents a custom ListBox control for displaying stations.
-/// This listbox has support for displaying icons; one for the station's active status (enabled/disabled)
-/// and one for the station's save status (saved/edited).
+///     Represents a custom ListBox control for displaying stations.
+///     This listbox has support for displaying icons; one for the station's active status (enabled/disabled)
+///     and one for the station's save status (saved/edited).
 /// </summary>
 public sealed partial class StationListBox : ListBox
 {
@@ -47,7 +51,7 @@ public sealed partial class StationListBox : ListBox
     private Font _songsMissingFont = new(DefaultFont, FontStyle.Bold);
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="StationListBox"/> class.
+    ///     Initializes a new instance of the <see cref="StationListBox" /> class.
     /// </summary>
     public StationListBox()
     {
@@ -61,7 +65,7 @@ public sealed partial class StationListBox : ListBox
     }
 
     /// <summary>
-    /// Gets or sets the ImageList containing the icons for the list box.
+    ///     Gets or sets the ImageList containing the icons for the list box.
     /// </summary>
     [Browsable(true)]
     [Category("Icons")]
@@ -141,7 +145,7 @@ public sealed partial class StationListBox : ListBox
     }
 
     /// <summary>
-    /// Gets or sets the color used to highlight stations with missing songs.
+    ///     Gets or sets the color used to highlight stations with missing songs.
     /// </summary>
     [Browsable(true)]
     [Category("Colors")]
@@ -157,7 +161,7 @@ public sealed partial class StationListBox : ListBox
     }
 
     /// <summary>
-    /// Gets or sets the color used to highlight duplicate station names.
+    ///     Gets or sets the color used to highlight duplicate station names.
     /// </summary>
     [Browsable(true)]
     [Category("Colors")]
@@ -225,7 +229,7 @@ public sealed partial class StationListBox : ListBox
     }
 
     /// <summary>
-    /// Occurs whenever the station is imported from a .zip or .rar file.
+    ///     Occurs whenever the station is imported from a .zip or .rar file.
     /// </summary>
     public event EventHandler<List<Guid?>>? StationsImported;
 
@@ -261,7 +265,7 @@ public sealed partial class StationListBox : ListBox
     }
 
     /// <summary>
-    /// Sets the default values for the control.
+    ///     Sets the default values for the control.
     /// </summary>
     private void SetValues()
     {
@@ -271,9 +275,15 @@ public sealed partial class StationListBox : ListBox
     }
 
     /// <summary>
-    /// Handles the drawing of an item in the ListBox.
-    /// <para>An item is drawn like so: <c>(left-aligned){active status icon} {Station Name} {save status icon}(right-aligned)</c></para>
-    /// <para>It's font and color are styled appropriately depending on whether it's a duplicate station or has missing songs.</para>
+    ///     Handles the drawing of an item in the ListBox.
+    ///     <para>
+    ///         An item is drawn like so:
+    ///         <c>(left-aligned){active status icon} {Station Name} {save status icon}(right-aligned)</c>
+    ///     </para>
+    ///     <para>
+    ///         It's font and color are styled appropriately depending on whether it's a duplicate station or has missing
+    ///         songs.
+    ///     </para>
     /// </summary>
     /// <param name="e">The event data.</param>
     protected override void OnDrawItem(DrawItemEventArgs e)
@@ -297,8 +307,10 @@ public sealed partial class StationListBox : ListBox
                 }
 
                 // Determine the secondary icon (changes pending/saved)
-                var secondaryIconKey = station.IsPendingSave | 
-                                       StationManager.Instance.IsNewStation(station.Id) ? _editedStationIconKey : _savedStationIconKey;
+                var secondaryIconKey = station.IsPendingSave |
+                                       StationManager.Instance.IsNewStation(station.Id)
+                    ? _editedStationIconKey
+                    : _savedStationIconKey;
 
                 // Calculate the position for the secondary icon at the right edge
                 var iconX = e.Bounds.Right - 16 - 4; // 16 is the icon width, 4 is some padding from the edge
@@ -311,7 +323,7 @@ public sealed partial class StationListBox : ListBox
                 }
 
                 // Draw the text
-                var textRect = new Rectangle(e.Bounds.Left + 20, e.Bounds.Top, e.Bounds.Width - 40 - 4,
+                Rectangle textRect = new(e.Bounds.Left + 20, e.Bounds.Top, e.Bounds.Width - 40 - 4,
                     e.Bounds.Height); // Adjust width to leave space for the secondary icon
 
                 TextRenderer.DrawText(e.Graphics, station.TrackedObject.MetaData.DisplayName, GetItemFont(station),
@@ -329,11 +341,14 @@ public sealed partial class StationListBox : ListBox
     }
 
     /// <summary>
-    /// Retrieves the appropriate color for the item based on its properties.
+    ///     Retrieves the appropriate color for the item based on its properties.
     /// </summary>
     /// <param name="station">A station to get the color of.</param>
-    /// <returns>If the station has no missing songs, is not a duplicate name, and is not a new station, returns the original fore color. Otherwise, returns a
-    /// blend of colors depending on whether the station is missing songs, is a duplicate, and/or is a new station.</returns>
+    /// <returns>
+    ///     If the station has no missing songs, is not a duplicate name, and is not a new station, returns the original fore
+    ///     color. Otherwise, returns a
+    ///     blend of colors depending on whether the station is missing songs, is a duplicate, and/or is a new station.
+    /// </returns>
     private Color GetItemColor(TrackableObject<AdditionalStation> station)
     {
         var returnColor = ForeColor;
@@ -377,7 +392,7 @@ public sealed partial class StationListBox : ListBox
     }
 
     /// <summary>
-    /// Handles the measurement of an item in the ListBox.
+    ///     Handles the measurement of an item in the ListBox.
     /// </summary>
     /// <param name="e">The event data.</param>
     protected override void OnMeasureItem(MeasureItemEventArgs e)

@@ -1,24 +1,28 @@
-﻿// BackupPreview.cs : RadioExt-Helper
-// Copyright (C) 2025  Ethan Hann
-// 
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-// 
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-// 
-// You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+﻿// // BackupPreview.cs : RadioExt-Helper
+// // Copyright (C) 2025  Ethan Hann
+// //
+// // This program is free software: you can redistribute it and/or modify
+// // it under the terms of the GNU General Public License as published by
+// // the Free Software Foundation, either version 3 of the License, or
+// // (at your option) any later version.
+// //
+// // This program is distributed in the hope that it will be useful,
+// // but WITHOUT ANY WARRANTY; without even the implied warranty of
+// // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// // GNU General Public License for more details.
+// //
+// // You should have received a copy of the GNU General Public License
+// // along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+#region
 
 using System.Diagnostics;
 using AetherUtils.Core.Extensions;
 using AetherUtils.Core.Logging;
 using RadioExt_Helper.Properties;
 using RadioExt_Helper.utility;
+
+#endregion
 
 namespace RadioExt_Helper.forms;
 
@@ -44,7 +48,7 @@ public sealed partial class BackupPreview : Form
         _backupManager.ProgressChanged += OnBackupProgressChanged;
         _backupManager.BackupCompleted += OnBackupCompleted;
 
-        var treeImages = new ImageList();
+        ImageList treeImages = new();
         treeImages.Images.Add("folder", Resources.folder__16x16);
         treeImages.Images.Add("png_file", Resources.png_file_16x16);
         treeImages.Images.Add("music_file", Resources.music_file_16x16);
@@ -56,7 +60,7 @@ public sealed partial class BackupPreview : Form
     }
 
     /// <summary>
-    /// Destructor responsible for cleaning up resources.
+    ///     Destructor responsible for cleaning up resources.
     /// </summary>
     ~BackupPreview()
     {
@@ -69,7 +73,7 @@ public sealed partial class BackupPreview : Form
     }
 
     /// <summary>
-    /// Form load event which will start asynchronously loading the backup preview.
+    ///     Form load event which will start asynchronously loading the backup preview.
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
@@ -83,7 +87,7 @@ public sealed partial class BackupPreview : Form
     }
 
     /// <summary>
-    /// Translate the form and its controls into the current language.
+    ///     Translate the form and its controls into the current language.
     /// </summary>
     private void Translate()
     {
@@ -99,7 +103,7 @@ public sealed partial class BackupPreview : Form
     }
 
     /// <summary>
-    /// Load the backup preview asynchronously.
+    ///     Load the backup preview asynchronously.
     /// </summary>
     /// <returns>A task representing the asynchronous operation.</returns>
     private async Task StartPreviewLoading()
@@ -128,7 +132,7 @@ public sealed partial class BackupPreview : Form
     }
 
     /// <summary>
-    /// Occurs whenever the backup preview progress changes.
+    ///     Occurs whenever the backup preview progress changes.
     /// </summary>
     /// <param name="progress">The current progress percentage.</param>
     private void OnPreviewProgressChanged(int progress)
@@ -145,9 +149,12 @@ public sealed partial class BackupPreview : Form
     }
 
     /// <summary>
-    /// Occurs whenever the backup preview status changes.
+    ///     Occurs whenever the backup preview status changes.
     /// </summary>
-    /// <param name="previewTuple">A tuple containing the current <see cref="FilePreview"/> and the total size up to this point.</param>
+    /// <param name="previewTuple">
+    ///     A tuple containing the current <see cref="FilePreview" /> and the total size up to this
+    ///     point.
+    /// </param>
     private void OnPreviewStatusChanged((FilePreview, long) previewTuple)
     {
         try
@@ -167,10 +174,16 @@ public sealed partial class BackupPreview : Form
     }
 
     /// <summary>
-    /// Occurs whenever the backup preview is completed.
+    ///     Occurs whenever the backup preview is completed.
     /// </summary>
-    /// <param name="previewTuple">A tuple containing the list of <see cref="FilePreview"/>s, the total size of the files, and the total estimated compressed size.</param>
-    /// <exception cref="InvalidOperationException">Thrown if the values for the previews, the total size, or the estimated compressed size do not match this classes tracked values.</exception>
+    /// <param name="previewTuple">
+    ///     A tuple containing the list of <see cref="FilePreview" />s, the total size of the files, and
+    ///     the total estimated compressed size.
+    /// </param>
+    /// <exception cref="InvalidOperationException">
+    ///     Thrown if the values for the previews, the total size, or the estimated
+    ///     compressed size do not match this classes tracked values.
+    /// </exception>
     private void OnBackupPreviewCompleted(
         (List<FilePreview> Previews, long TotalSize, long EstimatedCompressedSize) previewTuple)
     {
@@ -199,7 +212,7 @@ public sealed partial class BackupPreview : Form
     }
 
     /// <summary>
-    /// Handles the click event for the start backup button.
+    ///     Handles the click event for the start backup button.
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
@@ -243,7 +256,7 @@ public sealed partial class BackupPreview : Form
     }
 
     /// <summary>
-    /// Starts the backup process asynchronously.
+    ///     Starts the backup process asynchronously.
     /// </summary>
     /// <param name="stagingPath">The staging path.</param>
     /// <param name="backupPath">The backup path.</param>
@@ -276,7 +289,7 @@ public sealed partial class BackupPreview : Form
     }
 
     /// <summary>
-    /// Occurs whenever the backup progress changes.
+    ///     Occurs whenever the backup progress changes.
     /// </summary>
     /// <param name="progress">The current backup progress.</param>
     private void OnBackupProgressChanged(int progress)
@@ -293,7 +306,7 @@ public sealed partial class BackupPreview : Form
     }
 
     /// <summary>
-    /// Occurs whenever the backup status changes.
+    ///     Occurs whenever the backup status changes.
     /// </summary>
     /// <param name="status">The current backup status.</param>
     private void OnBackupStatusChanged(string status)
@@ -310,7 +323,7 @@ public sealed partial class BackupPreview : Form
     }
 
     /// <summary>
-    /// Occurs whenever the backup is completed.
+    ///     Occurs whenever the backup is completed.
     /// </summary>
     /// <param name="isSuccess">A flag indicating if the operation was completed successfully.</param>
     /// <param name="backupPath">The path to the backup folder.</param>
@@ -341,7 +354,7 @@ public sealed partial class BackupPreview : Form
     }
 
     /// <summary>
-    /// Shows a folder browser dialog to select a folder to save the backup to.
+    ///     Shows a folder browser dialog to select a folder to save the backup to.
     /// </summary>
     /// <returns>The full path to the backup folder.</returns>
     private static string GetBackupPath()
@@ -357,9 +370,9 @@ public sealed partial class BackupPreview : Form
     }
 
     /// <summary>
-    /// Safely add a <see cref="FilePreview"/> item to the tree view from a different thread.
+    ///     Safely add a <see cref="FilePreview" /> item to the tree view from a different thread.
     /// </summary>
-    /// <param name="preview">The <see cref="FilePreview"/> to add.</param>
+    /// <param name="preview">The <see cref="FilePreview" /> to add.</param>
     private void AddItemToTreeView(FilePreview preview)
     {
         this.SafeInvoke(() =>
@@ -378,7 +391,7 @@ public sealed partial class BackupPreview : Form
                 {
                     var isRoot = currentNode == null;
                     var imageKey = GetImageKey(part, isRoot);
-                    var node = new TreeNode(part)
+                    TreeNode node = new(part)
                     {
                         Tag = new List<FilePreview>(),
                         ImageKey = imageKey,
@@ -404,9 +417,9 @@ public sealed partial class BackupPreview : Form
     }
 
     /// <summary>
-    /// Safely populates the list view with file previews from a different thread.
+    ///     Safely populates the list view with file previews from a different thread.
     /// </summary>
-    /// <param name="node">The <see cref="TreeNode"/> to use when populating the list view.</param>
+    /// <param name="node">The <see cref="TreeNode" /> to use when populating the list view.</param>
     private void PopulateListView(TreeNode? node)
     {
         this.SafeInvoke(() =>
@@ -440,7 +453,7 @@ public sealed partial class BackupPreview : Form
     }
 
     /// <summary>
-    /// Safely sets the size labels from a different thread.
+    ///     Safely sets the size labels from a different thread.
     /// </summary>
     private void SetSizeLabels()
     {
@@ -452,10 +465,13 @@ public sealed partial class BackupPreview : Form
     }
 
     /// <summary>
-    /// Get the correct image key for the file preview based on the file name.
+    ///     Get the correct image key for the file preview based on the file name.
     /// </summary>
     /// <param name="fileName">The file name to get the image of.</param>
-    /// <param name="isRoot">Indicates whether the file preview we are getting an image of is a root node in the <see cref="TreeView"/>.</param>
+    /// <param name="isRoot">
+    ///     Indicates whether the file preview we are getting an image of is a root node in the
+    ///     <see cref="TreeView" />.
+    /// </param>
     /// <returns></returns>
     private static string GetImageKey(string fileName, bool isRoot)
     {
@@ -468,7 +484,7 @@ public sealed partial class BackupPreview : Form
     }
 
     /// <summary>
-    /// Handles sorting the list view when a column is clicked.
+    ///     Handles sorting the list view when a column is clicked.
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
@@ -487,7 +503,8 @@ public sealed partial class BackupPreview : Form
     }
 
     /// <summary>
-    /// Populates the list view with file previews when a node is selected in the tree view; only populates the list view if the selected node is a root node.
+    ///     Populates the list view with file previews when a node is selected in the tree view; only populates the list view
+    ///     if the selected node is a root node.
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>

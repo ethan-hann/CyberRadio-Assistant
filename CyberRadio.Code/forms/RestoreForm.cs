@@ -1,23 +1,27 @@
-﻿// RestoreForm.cs : RadioExt-Helper
-// Copyright (C) 2025  Ethan Hann
-// 
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-// 
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-// 
-// You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+﻿// // RestoreForm.cs : RadioExt-Helper
+// // Copyright (C) 2025  Ethan Hann
+// //
+// // This program is free software: you can redistribute it and/or modify
+// // it under the terms of the GNU General Public License as published by
+// // the Free Software Foundation, either version 3 of the License, or
+// // (at your option) any later version.
+// //
+// // This program is distributed in the hope that it will be useful,
+// // but WITHOUT ANY WARRANTY; without even the implied warranty of
+// // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// // GNU General Public License for more details.
+// //
+// // You should have received a copy of the GNU General Public License
+// // along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+#region
 
 using AetherUtils.Core.Extensions;
 using AetherUtils.Core.Logging;
 using RadioExt_Helper.Properties;
 using RadioExt_Helper.utility;
+
+#endregion
 
 namespace RadioExt_Helper.forms;
 
@@ -48,7 +52,7 @@ public partial class RestoreForm : Form
         _backupManager.RestoreCompleted += OnBackupRestoreCompleted;
 
         //Setup UI
-        var treeImages = new ImageList();
+        ImageList treeImages = new();
         treeImages.Images.Add("folder", Resources.folder__16x16);
         treeImages.Images.Add("png_file", Resources.png_file_16x16);
         treeImages.Images.Add("music_file", Resources.music_file_16x16);
@@ -60,8 +64,8 @@ public partial class RestoreForm : Form
     }
 
     /// <summary>
-    /// Occurs when the restore operation is completed.
-    /// <para>Event data is a flag indicating success and the restored path.</para>
+    ///     Occurs when the restore operation is completed.
+    ///     <para>Event data is a flag indicating success and the restored path.</para>
     /// </summary>
     public event EventHandler<(bool, string)>? RestoreCompleted;
 
@@ -139,7 +143,7 @@ public partial class RestoreForm : Form
     }
 
     /// <summary>
-    /// Occurs whenever the restore preview progress changes.
+    ///     Occurs whenever the restore preview progress changes.
     /// </summary>
     /// <param name="progress">The current progress percentage.</param>
     private void OnPreviewProgressChanged(int progress)
@@ -228,9 +232,9 @@ public partial class RestoreForm : Form
     }
 
     /// <summary>
-    /// Safely add a <see cref="FilePreview"/> item to the tree view from a different thread.
+    ///     Safely add a <see cref="FilePreview" /> item to the tree view from a different thread.
     /// </summary>
-    /// <param name="preview">The <see cref="FilePreview"/> to add.</param>
+    /// <param name="preview">The <see cref="FilePreview" /> to add.</param>
     private void AddItemToTreeView(FilePreview preview)
     {
         this.SafeInvoke(() =>
@@ -249,7 +253,7 @@ public partial class RestoreForm : Form
                 {
                     var isRoot = currentNode == null;
                     var imageKey = GetImageKey(part, isRoot);
-                    var node = new TreeNode(part)
+                    TreeNode node = new(part)
                     {
                         Tag = new List<FilePreview>(),
                         ImageKey = imageKey,
@@ -275,9 +279,9 @@ public partial class RestoreForm : Form
     }
 
     /// <summary>
-    /// Safely populates the list view with file previews from a different thread.
+    ///     Safely populates the list view with file previews from a different thread.
     /// </summary>
-    /// <param name="node">The <see cref="TreeNode"/> to use when populating the list view.</param>
+    /// <param name="node">The <see cref="TreeNode" /> to use when populating the list view.</param>
     private void PopulateListView(TreeNode? node)
     {
         this.SafeInvoke(() =>
@@ -311,7 +315,7 @@ public partial class RestoreForm : Form
     }
 
     /// <summary>
-    /// Safely sets the size labels from a different thread.
+    ///     Safely sets the size labels from a different thread.
     /// </summary>
     private void SetSizeLabels()
     {
@@ -323,10 +327,13 @@ public partial class RestoreForm : Form
     }
 
     /// <summary>
-    /// Get the correct image key for the file preview based on the file name.
+    ///     Get the correct image key for the file preview based on the file name.
     /// </summary>
     /// <param name="fileName">The file name to get the image of.</param>
-    /// <param name="isRoot">Indicates whether the file preview we are getting an image of is a root node in the <see cref="TreeView"/>.</param>
+    /// <param name="isRoot">
+    ///     Indicates whether the file preview we are getting an image of is a root node in the
+    ///     <see cref="TreeView" />.
+    /// </param>
     /// <returns></returns>
     private static string GetImageKey(string fileName, bool isRoot)
     {
@@ -339,7 +346,7 @@ public partial class RestoreForm : Form
     }
 
     /// <summary>
-    /// Handles sorting the list view when a column is clicked.
+    ///     Handles sorting the list view when a column is clicked.
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
@@ -358,7 +365,8 @@ public partial class RestoreForm : Form
     }
 
     /// <summary>
-    /// Populates the list view with file previews when a node is selected in the tree view; only populates the list view if the selected node is a root node.
+    ///     Populates the list view with file previews when a node is selected in the tree view; only populates the list view
+    ///     if the selected node is a root node.
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>

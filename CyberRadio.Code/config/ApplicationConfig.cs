@@ -1,23 +1,27 @@
-// ApplicationConfig.cs : RadioExt-Helper
-// Copyright (C) 2025  Ethan Hann
-// 
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-// 
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-// 
-// You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+// // ApplicationConfig.cs : RadioExt-Helper
+// // Copyright (C) 2025  Ethan Hann
+// //
+// // This program is free software: you can redistribute it and/or modify
+// // it under the terms of the GNU General Public License as published by
+// // the Free Software Foundation, either version 3 of the License, or
+// // (at your option) any later version.
+// //
+// // This program is distributed in the hope that it will be useful,
+// // but WITHOUT ANY WARRANTY; without even the implied warranty of
+// // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// // GNU General Public License for more details.
+// //
+// // You should have received a copy of the GNU General Public License
+// // along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+#region
 
 using System.ComponentModel;
 using AetherUtils.Core.Attributes;
 using AetherUtils.Core.Configuration;
 using RadioExt_Helper.utility;
+
+#endregion
 
 namespace RadioExt_Helper.config;
 
@@ -28,7 +32,7 @@ namespace RadioExt_Helper.config;
 public sealed class ApplicationConfig
 {
     /// <summary>
-    ///   Specifies whether the application should automatically check for updates on startup.
+    ///     Specifies whether the application should automatically check for updates on startup.
     /// </summary>
     [Config("autoCheckForUpdates",
         "Specifies whether the application should automatically check for updates on startup.", true)]
@@ -36,14 +40,15 @@ public sealed class ApplicationConfig
     public bool AutoCheckForUpdates { get; set; }
 
     /// <summary>
-    ///   Specifies whether the application is running for the first time.
+    ///     Specifies whether the application is running for the first time.
     /// </summary>
     [Config("isFirstRun", "Specifies whether the application is running for the first time.", true)]
     [Description("IsFirstRunOptionHelp")]
     public bool IsFirstRun { get; set; }
 
     /// <summary>
-    ///  Specifies whether the application should automatically export the stations to the game directory after exporting to staging.
+    ///     Specifies whether the application should automatically export the stations to the game directory after exporting to
+    ///     staging.
     /// </summary>
     [Config("autoExportToGame",
         "Specifies whether the application should automatically export the stations to the game directory after exporting to staging.")]
@@ -51,7 +56,7 @@ public sealed class ApplicationConfig
     public bool AutoExportToGame { get; set; }
 
     /// <summary>
-    ///  Specifies whether the application should automatically watch for changes in the game's radios directory.
+    ///     Specifies whether the application should automatically watch for changes in the game's radios directory.
     /// </summary>
     [Config("watchForGameChanges",
         "Specifies whether the application should automatically watch for changes in the game's radios directory.",
@@ -60,7 +65,8 @@ public sealed class ApplicationConfig
     public bool WatchForGameChanges { get; set; }
 
     /// <summary>
-    ///  Specifies whether the application should automatically copy the song files when creating a backup of the staging folder.
+    ///     Specifies whether the application should automatically copy the song files when creating a backup of the staging
+    ///     folder.
     /// </summary>
     [Config("copySongFilesToBackup",
         "Specifies whether the application should copy the song files when creating a backup of the staging folder.",
@@ -69,7 +75,7 @@ public sealed class ApplicationConfig
     public bool CopySongFilesToBackup { get; set; }
 
     /// <summary>
-    ///  Specifies the default location for song files that have been imported from a station .zip or .rar file.
+    ///     Specifies the default location for song files that have been imported from a station .zip or .rar file.
     /// </summary>
     [Config("defaultSongLocation",
         "Specifies the default location for song files that have been imported from a station .zip or .rar file.")]
@@ -77,7 +83,7 @@ public sealed class ApplicationConfig
     public string DefaultSongLocation { get; set; } = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic);
 
     /// <summary>
-    /// Specifies the backup compression level to use when zipping the staging folder.
+    ///     Specifies the backup compression level to use when zipping the staging folder.
     /// </summary>
     [Config("backupCompressionLevel", "Specifies the backup compression level to use when zipping the staging folder.",
         CompressionLevel.Normal)]
@@ -85,37 +91,37 @@ public sealed class ApplicationConfig
     public CompressionLevel BackupCompressionLevel { get; set; } = CompressionLevel.Normal;
 
     /// <summary>
-    /// Specifies the path to the staging directory where the radio stations are temporarily stored.
+    ///     Specifies the path to the staging directory where the radio stations are temporarily stored.
     /// </summary>
     [Config("stagingPath", "The path to the staging directory where the radio stations are temporarily stored.", "")]
     public string StagingPath { get; set; } = string.Empty;
 
     /// <summary>
-    /// Specifies the path to the game directory where the radio stations are exported.
+    ///     Specifies the path to the game directory where the radio stations are exported.
     /// </summary>
     [Config("gameBasePath", "The path to the game directory where the radio stations are exported.", "")]
     public string GameBasePath { get; set; } = string.Empty;
 
     /// <summary>
-    /// The currently selected language for the application.
+    ///     The currently selected language for the application.
     /// </summary>
     [Config("language", "The currently selected language for the application.", "English (en)")]
     public string Language { get; set; } = "English (en)";
 
     /// <summary>
-    /// The window size of the application.
+    ///     The window size of the application.
     /// </summary>
     [Config("windowSize", "The window size of the application.")]
     public WindowSize WindowSize { get; set; } = new();
 
     /// <summary>
-    /// The encrypted API key for accessing the Nexus API.
+    ///     The encrypted API key for accessing the Nexus API.
     /// </summary>
     [Config("nexusApiKey", "The encrypted API key for accessing the Nexus API.", "")]
     public string NexusApiKey { get; set; } = string.Empty;
 
     /// <summary>
-    /// The list of forbidden keywords and whether they are enabled or not.
+    ///     The list of forbidden keywords and whether they are enabled or not.
     /// </summary>
     [Config("forbiddenKeywords", "The list of forbidden keywords and whether they are enabled or not.")]
     [Description("ForbiddenPathsHelp")]
@@ -143,7 +149,7 @@ public sealed class ApplicationConfig
     ];
 
     /// <summary>
-    /// The log options for the application.
+    ///     The log options for the application.
     /// </summary>
     [Config("logOptions", "The log options for the application.")]
     public LogOptions LogOptions { get; set; } = new()

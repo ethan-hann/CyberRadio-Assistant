@@ -33,7 +33,7 @@
             tabControl = new TabControl();
             tabDisplay = new TabPage();
             groupBox1 = new GroupBox();
-            tinyMce1 = new RadioExt_Helper.custom_controls.TinyMce();
+            tinyEditor = new RadioExt_Helper.custom_controls.TinyMce();
             grpDisplay = new GroupBox();
             tlpDisplayTable = new TableLayoutPanel();
             lblIcon = new Label();
@@ -102,7 +102,7 @@
             // groupBox1
             // 
             groupBox1.BackColor = Color.White;
-            groupBox1.Controls.Add(tinyMce1);
+            groupBox1.Controls.Add(tinyEditor);
             groupBox1.Dock = DockStyle.Fill;
             groupBox1.Font = new Font("Segoe UI Variable Display", 9.75F, FontStyle.Bold);
             groupBox1.Location = new Point(3, 208);
@@ -112,13 +112,16 @@
             groupBox1.TabStop = false;
             groupBox1.Text = "Notes";
             // 
-            // tinyMce1
+            // tinyEditor
             // 
-            tinyMce1.Dock = DockStyle.Fill;
-            tinyMce1.Location = new Point(3, 21);
-            tinyMce1.Name = "tinyMce1";
-            tinyMce1.Size = new Size(965, 344);
-            tinyMce1.TabIndex = 0;
+            tinyEditor.BackColor = Color.White;
+            tinyEditor.Dock = DockStyle.Fill;
+            tinyEditor.Language = "en";
+            tinyEditor.Location = new Point(3, 21);
+            tinyEditor.Margin = new Padding(0);
+            tinyEditor.Name = "tinyEditor";
+            tinyEditor.Size = new Size(965, 344);
+            tinyEditor.TabIndex = 0;
             // 
             // grpDisplay
             // 
@@ -274,6 +277,6 @@
         private Label lblIcon;
         private PictureBox pbStationIcon;
         private GroupBox groupBox1;
-        private custom_controls.TinyMce tinyMce1;
+        private custom_controls.TinyMce tinyEditor;
     }
 }

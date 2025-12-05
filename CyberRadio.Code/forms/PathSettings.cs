@@ -1,18 +1,20 @@
-﻿// PathSettings.cs : RadioExt-Helper
-// Copyright (C) 2025  Ethan Hann
-// 
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-// 
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-// 
-// You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+﻿// // PathSettings.cs : RadioExt-Helper
+// // Copyright (C) 2025  Ethan Hann
+// //
+// // This program is free software: you can redistribute it and/or modify
+// // it under the terms of the GNU General Public License as published by
+// // the Free Software Foundation, either version 3 of the License, or
+// // (at your option) any later version.
+// //
+// // This program is distributed in the hope that it will be useful,
+// // but WITHOUT ANY WARRANTY; without even the implied warranty of
+// // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// // GNU General Public License for more details.
+// //
+// // You should have received a copy of the GNU General Public License
+// // along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+#region
 
 using System.Text;
 using AetherUtils.Core.Extensions;
@@ -20,6 +22,8 @@ using AetherUtils.Core.Logging;
 using RadioExt_Helper.utility;
 using WIG.Lib.Utility;
 using PathHelper = RadioExt_Helper.utility.PathHelper;
+
+#endregion
 
 namespace RadioExt_Helper.forms;
 
@@ -50,12 +54,12 @@ public partial class PathSettings : Form
     private static string StagingPath => GlobalData.ConfigManager.Get("stagingPath") as string ?? string.Empty;
 
     /// <summary>
-    /// Occurs whenever the game base path is changed.
+    ///     Occurs whenever the game base path is changed.
     /// </summary>
     public event EventHandler? GameBasePathChanged;
 
     /// <summary>
-    /// Occurs whenever the staging path is changed.
+    ///     Occurs whenever the staging path is changed.
     /// </summary>
     public event EventHandler? StagingPathChanged;
 
@@ -199,7 +203,7 @@ public partial class PathSettings : Form
                 return;
             }
 
-            var text = new StringBuilder();
+            StringBuilder text = new();
             text.AppendLine(string.Format(Strings.StagingPathForbidden, stagingPath));
             text.AppendLine();
             text.AppendLine(reason);

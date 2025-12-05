@@ -1,32 +1,37 @@
-﻿// ForbiddenKeywordInput.cs : RadioExt-Helper
-// Copyright (C) 2025  Ethan Hann
-// 
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-// 
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-// 
-// You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+﻿// // ForbiddenKeywordInput.cs : RadioExt-Helper
+// // Copyright (C) 2025  Ethan Hann
+// //
+// // This program is free software: you can redistribute it and/or modify
+// // it under the terms of the GNU General Public License as published by
+// // the Free Software Foundation, either version 3 of the License, or
+// // (at your option) any later version.
+// //
+// // This program is distributed in the hope that it will be useful,
+// // but WITHOUT ANY WARRANTY; without even the implied warranty of
+// // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// // GNU General Public License for more details.
+// //
+// // You should have received a copy of the GNU General Public License
+// // along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+#region
 
 using RadioExt_Helper.config;
+
+#endregion
 
 namespace RadioExt_Helper.forms;
 
 /// <summary>
-/// Form for inputting a forbidden keyword.
+///     Form for inputting a forbidden keyword.
 /// </summary>
 public partial class ForbiddenKeywordInput : Form
 {
     private readonly List<ListViewGroup> _currentGroups = [];
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="ForbiddenKeywordInput"/> class with the current groups in the list view.
+    ///     Initializes a new instance of the <see cref="ForbiddenKeywordInput" /> class with the current groups in the list
+    ///     view.
     /// </summary>
     /// <param name="currentGroups"></param>
     public ForbiddenKeywordInput(ListViewGroupCollection currentGroups)
@@ -52,7 +57,7 @@ public partial class ForbiddenKeywordInput : Form
     }
 
     /// <summary>
-    /// Event that is raised when a forbidden keyword is added.
+    ///     Event that is raised when a forbidden keyword is added.
     /// </summary>
     public event EventHandler<ForbiddenKeyword>? ForbiddenKeywordAdded;
 
@@ -109,7 +114,7 @@ public partial class ForbiddenKeywordInput : Form
 
         var keyword = txtKeyword.Text;
         var isForbidden = chkIsForbidden.Checked;
-        var forbiddenKeyword = new ForbiddenKeyword(group.Header, keyword, isForbidden);
+        ForbiddenKeyword forbiddenKeyword = new(group.Header, keyword, isForbidden);
         ForbiddenKeywordAdded?.Invoke(this, forbiddenKeyword);
     }
 
