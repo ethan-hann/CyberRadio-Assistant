@@ -18,6 +18,7 @@ using System.Reflection;
 using System.Text;
 using AetherUtils.Core.Extensions;
 using AetherUtils.Core.Logging;
+using RadioExt_Helper.custom_controls;
 using RadioExt_Helper.migration;
 using RadioExt_Helper.utility;
 using WIG.Lib.Utility;
@@ -169,6 +170,21 @@ public partial class SplashScreen : Form
         statusMessages.Add(AudioManager.Instance.IsInitialized
             ? "Audio Manager initialized successfully."
             : "Audio Manager initialization failed.");
+
+        //Setup TinyMCE
+        UpdateStatus("Downloading TinyMCE...");
+        await TinyMceInstaller.EnsureInstalledAsync("https://tortal.xyz/RNlB9");
+        await Task.Delay(200);
+        statusMessages.Add(!TinyMceInstaller.IsInstalled()
+            ? "Failed to install TinyMCE or already installed."
+            : "TinyMCE installation successful.");
+
+        UpdateStatus("Downloading TinyMCE Languages...");
+        await TinyMceInstaller.EnsureLanguagesInstalled("https://tortal.xyz/jf9dJ");
+        await Task.Delay(500);
+        statusMessages.Add(!TinyMceInstaller.IsLanguagesInstalled()
+            ? "Failed to install TinyMCE Languages or already installed."
+            : "TinyMCE Languages installation successful.");
 
         //TODO: Add Nexus API key authentication when feature is implemented
         //var nexusApiKey = GlobalData.ConfigManager.Get("nexusApiKey") as string ?? string.Empty;

@@ -70,6 +70,7 @@ namespace RadioExt_Helper.user_controls
             //todo: implement translation
 
             lblStatus.Text = Strings.Ready;
+            tinyMce1.Translate();
         }
 
         private void SetDisplayTabValues()

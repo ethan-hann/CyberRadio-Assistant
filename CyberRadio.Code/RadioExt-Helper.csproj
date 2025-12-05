@@ -72,6 +72,7 @@
 
     <ItemGroup>
         <PackageReference Include="AetherUtils.Core" Version="1.0.15" />
+        <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.3595.46" />
         <PackageReference Include="NAudio" Version="2.2.1" />
         <PackageReference Include="Pathoschild.FluentNexus" Version="1.0.5" />
         <PackageReference Include="SharpCompress" Version="0.42.0" />

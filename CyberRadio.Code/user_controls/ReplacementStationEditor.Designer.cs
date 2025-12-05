@@ -32,18 +32,21 @@
             lblStatus = new ToolStripStatusLabel();
             tabControl = new TabControl();
             tabDisplay = new TabPage();
+            groupBox1 = new GroupBox();
+            tinyMce1 = new RadioExt_Helper.custom_controls.TinyMce();
             grpDisplay = new GroupBox();
             tlpDisplayTable = new TableLayoutPanel();
+            lblIcon = new Label();
             txtDisplayName = new TextBox();
             lblDisplayName = new Label();
             lblVanillaName = new Label();
             txtVanillaStationName = new TextBox();
-            tabMusic = new TabPage();
-            lblIcon = new Label();
             pbStationIcon = new PictureBox();
+            tabMusic = new TabPage();
             statusStrip1.SuspendLayout();
             tabControl.SuspendLayout();
             tabDisplay.SuspendLayout();
+            groupBox1.SuspendLayout();
             grpDisplay.SuspendLayout();
             tlpDisplayTable.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pbStationIcon).BeginInit();
@@ -85,6 +88,7 @@
             // 
             tabDisplay.BackColor = Color.White;
             tabDisplay.BorderStyle = BorderStyle.FixedSingle;
+            tabDisplay.Controls.Add(groupBox1);
             tabDisplay.Controls.Add(grpDisplay);
             tabDisplay.Font = new Font("Microsoft Sans Serif", 9.749999F, FontStyle.Regular, GraphicsUnit.Point, 0);
             tabDisplay.ImageIndex = 0;
@@ -94,6 +98,27 @@
             tabDisplay.Size = new Size(979, 581);
             tabDisplay.TabIndex = 0;
             tabDisplay.Text = "Main Info";
+            // 
+            // groupBox1
+            // 
+            groupBox1.BackColor = Color.White;
+            groupBox1.Controls.Add(tinyMce1);
+            groupBox1.Dock = DockStyle.Fill;
+            groupBox1.Font = new Font("Segoe UI Variable Display", 9.75F, FontStyle.Bold);
+            groupBox1.Location = new Point(3, 208);
+            groupBox1.Name = "groupBox1";
+            groupBox1.Size = new Size(971, 368);
+            groupBox1.TabIndex = 4;
+            groupBox1.TabStop = false;
+            groupBox1.Text = "Notes";
+            // 
+            // tinyMce1
+            // 
+            tinyMce1.Dock = DockStyle.Fill;
+            tinyMce1.Location = new Point(3, 21);
+            tinyMce1.Name = "tinyMce1";
+            tinyMce1.Size = new Size(965, 344);
+            tinyMce1.TabIndex = 0;
             // 
             // grpDisplay
             // 
@@ -128,6 +153,17 @@
             tlpDisplayTable.RowStyles.Add(new RowStyle(SizeType.Absolute, 111F));
             tlpDisplayTable.Size = new Size(965, 181);
             tlpDisplayTable.TabIndex = 0;
+            // 
+            // lblIcon
+            // 
+            lblIcon.Anchor = AnchorStyles.Right;
+            lblIcon.AutoSize = true;
+            lblIcon.Font = new Font("Segoe UI Variable Text", 9F);
+            lblIcon.Location = new Point(59, 117);
+            lblIcon.Name = "lblIcon";
+            lblIcon.Size = new Size(73, 16);
+            lblIcon.TabIndex = 4;
+            lblIcon.Text = "Station Icon:";
             // 
             // txtDisplayName
             // 
@@ -176,6 +212,16 @@
             txtVanillaStationName.Size = new Size(824, 23);
             txtVanillaStationName.TabIndex = 1;
             // 
+            // pbStationIcon
+            // 
+            pbStationIcon.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
+            pbStationIcon.Location = new Point(138, 72);
+            pbStationIcon.Name = "pbStationIcon";
+            pbStationIcon.Size = new Size(143, 106);
+            pbStationIcon.SizeMode = PictureBoxSizeMode.CenterImage;
+            pbStationIcon.TabIndex = 5;
+            pbStationIcon.TabStop = false;
+            // 
             // tabMusic
             // 
             tabMusic.BackColor = Color.White;
@@ -188,26 +234,6 @@
             tabMusic.TabIndex = 1;
             tabMusic.Text = "Tracks";
             tabMusic.ToolTipText = "Change the music this radio station will play.";
-            // 
-            // lblIcon
-            // 
-            lblIcon.Anchor = AnchorStyles.Right;
-            lblIcon.AutoSize = true;
-            lblIcon.Font = new Font("Segoe UI Variable Text", 9F);
-            lblIcon.Location = new Point(59, 117);
-            lblIcon.Name = "lblIcon";
-            lblIcon.Size = new Size(73, 16);
-            lblIcon.TabIndex = 4;
-            lblIcon.Text = "Station Icon:";
-            // 
-            // pbStationIcon
-            // 
-            pbStationIcon.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
-            pbStationIcon.Location = new Point(138, 72);
-            pbStationIcon.Name = "pbStationIcon";
-            pbStationIcon.Size = new Size(143, 106);
-            pbStationIcon.TabIndex = 5;
-            pbStationIcon.TabStop = false;
             // 
             // ReplacementStationEditor
             // 
@@ -223,6 +249,7 @@
             statusStrip1.PerformLayout();
             tabControl.ResumeLayout(false);
             tabDisplay.ResumeLayout(false);
+            groupBox1.ResumeLayout(false);
             grpDisplay.ResumeLayout(false);
             tlpDisplayTable.ResumeLayout(false);
             tlpDisplayTable.PerformLayout();
@@ -246,5 +273,7 @@
         private TextBox txtDisplayName;
         private Label lblIcon;
         private PictureBox pbStationIcon;
+        private GroupBox groupBox1;
+        private custom_controls.TinyMce tinyMce1;
     }
 }
