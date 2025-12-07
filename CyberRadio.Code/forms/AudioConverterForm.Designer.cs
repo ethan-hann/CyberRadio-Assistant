@@ -85,7 +85,7 @@ namespace RadioExt_Helper.forms
             // 
             // lblStatus
             // 
-            lblStatus.Image = Properties.Resources.status__16x16;
+            lblStatus.Image = Properties.Resources.info__16x16;
             lblStatus.Margin = new Padding(5, 3, 0, 2);
             lblStatus.Name = "lblStatus";
             lblStatus.Padding = new Padding(2);
@@ -95,7 +95,7 @@ namespace RadioExt_Helper.forms
             // toolStripStatusLabel1
             // 
             toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            toolStripStatusLabel1.Size = new Size(714, 20);
+            toolStripStatusLabel1.Size = new Size(683, 20);
             toolStripStatusLabel1.Spring = true;
             // 
             // progressBar

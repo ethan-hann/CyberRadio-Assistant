@@ -199,6 +199,7 @@ public partial class TinyMce : UserControl, IUserControl
             padding: 0;
             overflow: hidden;
             font-family: Arial, sans-serif;
+            background-color: #FFFFFF
         }}
         #editor-container {{
             height: 100%;
@@ -242,6 +243,7 @@ public partial class TinyMce : UserControl, IUserControl
             toolbar: 'undo redo | formatselect | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
             license_key: 'gpl',
             height: '100%',
+            width: '100%',
             resize: false,
             promotion: false,
             setup: function (editor) {{

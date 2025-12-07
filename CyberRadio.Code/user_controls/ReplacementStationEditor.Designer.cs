@@ -32,8 +32,8 @@
             lblStatus = new ToolStripStatusLabel();
             tabControl = new TabControl();
             tabDisplay = new TabPage();
-            groupBox1 = new GroupBox();
             tinyEditor = new RadioExt_Helper.custom_controls.TinyMce();
+            groupBox1 = new GroupBox();
             grpDisplay = new GroupBox();
             tlpDisplayTable = new TableLayoutPanel();
             lblIcon = new Label();
@@ -99,6 +99,17 @@
             tabDisplay.TabIndex = 0;
             tabDisplay.Text = "Main Info";
             // 
+            // tinyEditor
+            // 
+            tinyEditor.BackColor = Color.White;
+            tinyEditor.Dock = DockStyle.Fill;
+            tinyEditor.Language = "en";
+            tinyEditor.Location = new Point(3, 21);
+            tinyEditor.Margin = new Padding(0);
+            tinyEditor.Name = "tinyEditor";
+            tinyEditor.Size = new Size(965, 344);
+            tinyEditor.TabIndex = 0;
+            // 
             // groupBox1
             // 
             groupBox1.BackColor = Color.White;
@@ -111,17 +122,6 @@
             groupBox1.TabIndex = 4;
             groupBox1.TabStop = false;
             groupBox1.Text = "Notes";
-            // 
-            // tinyEditor
-            // 
-            tinyEditor.BackColor = Color.White;
-            tinyEditor.Dock = DockStyle.Fill;
-            tinyEditor.Language = "en";
-            tinyEditor.Location = new Point(3, 21);
-            tinyEditor.Margin = new Padding(0);
-            tinyEditor.Name = "tinyEditor";
-            tinyEditor.Size = new Size(965, 344);
-            tinyEditor.TabIndex = 0;
             // 
             // grpDisplay
             // 
@@ -220,8 +220,8 @@
             pbStationIcon.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
             pbStationIcon.Location = new Point(138, 72);
             pbStationIcon.Name = "pbStationIcon";
-            pbStationIcon.Size = new Size(143, 106);
-            pbStationIcon.SizeMode = PictureBoxSizeMode.CenterImage;
+            pbStationIcon.Size = new Size(163, 106);
+            pbStationIcon.SizeMode = PictureBoxSizeMode.Zoom;
             pbStationIcon.TabIndex = 5;
             pbStationIcon.TabStop = false;
             // 
@@ -240,8 +240,8 @@
             // 
             // ReplacementStationEditor
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
-            AutoScaleMode = AutoScaleMode.Font;
+            AutoScaleDimensions = new SizeF(96F, 96F);
+            AutoScaleMode = AutoScaleMode.Dpi;
             BackColor = Color.White;
             Controls.Add(tabControl);
             Controls.Add(statusStrip1);
