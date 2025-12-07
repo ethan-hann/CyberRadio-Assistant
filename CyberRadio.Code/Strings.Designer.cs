@@ -1154,6 +1154,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Display.
+        /// </summary>
+        internal static string DisplaySettings {
+            get {
+                return ResourceManager.GetString("DisplaySettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Download Radio Mods.
         /// </summary>
         internal static string DownloadRadioMods {
@@ -2986,6 +2995,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Notes.
+        /// </summary>
+        internal static string Notes {
+            get {
+                return ResourceManager.GetString("Notes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You are on the latest version. No update available..
         /// </summary>
         internal static string NoUpdateAvailable {
@@ -4201,11 +4219,56 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Display Name:.
+        /// </summary>
+        internal static string VanillaStationDisplayName {
+            get {
+                return ResourceManager.GetString("VanillaStationDisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The name of the station in CRA. Has no effect in game..
         /// </summary>
         internal static string VanillaStationDisplayNameHelp {
             get {
                 return ResourceManager.GetString("VanillaStationDisplayNameHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Station Icon:.
+        /// </summary>
+        internal static string VanillaStationIcon {
+            get {
+                return ResourceManager.GetString("VanillaStationIcon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The icon of the station in game..
+        /// </summary>
+        internal static string VanillaStationIconHelp {
+            get {
+                return ResourceManager.GetString("VanillaStationIconHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Main Info.
+        /// </summary>
+        internal static string VanillaStationMainInfoTab {
+            get {
+                return ResourceManager.GetString("VanillaStationMainInfoTab", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vanilla Station Name:.
+        /// </summary>
+        internal static string VanillaStationName {
+            get {
+                return ResourceManager.GetString("VanillaStationName", resourceCulture);
             }
         }
         
@@ -4233,6 +4296,15 @@ namespace RadioExt_Helper {
         internal static string VanillaStationSelector_NoStationSelectedMessage {
             get {
                 return ResourceManager.GetString("VanillaStationSelector_NoStationSelectedMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tracks.
+        /// </summary>
+        internal static string VanillaStationTracksTab {
+            get {
+                return ResourceManager.GetString("VanillaStationTracksTab", resourceCulture);
             }
         }
         

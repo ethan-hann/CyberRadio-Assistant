@@ -31,9 +31,9 @@
             statusStrip1 = new StatusStrip();
             lblStatus = new ToolStripStatusLabel();
             tabControl = new TabControl();
-            tabDisplay = new TabPage();
+            tabMainInfo = new TabPage();
+            grpNotes = new GroupBox();
             tinyEditor = new RadioExt_Helper.custom_controls.TinyMce();
-            groupBox1 = new GroupBox();
             grpDisplay = new GroupBox();
             tlpDisplayTable = new TableLayoutPanel();
             lblIcon = new Label();
@@ -45,8 +45,8 @@
             tabMusic = new TabPage();
             statusStrip1.SuspendLayout();
             tabControl.SuspendLayout();
-            tabDisplay.SuspendLayout();
-            groupBox1.SuspendLayout();
+            tabMainInfo.SuspendLayout();
+            grpNotes.SuspendLayout();
             grpDisplay.SuspendLayout();
             tlpDisplayTable.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pbStationIcon).BeginInit();
@@ -74,7 +74,7 @@
             // 
             // tabControl
             // 
-            tabControl.Controls.Add(tabDisplay);
+            tabControl.Controls.Add(tabMainInfo);
             tabControl.Controls.Add(tabMusic);
             tabControl.Dock = DockStyle.Fill;
             tabControl.Font = new Font("Segoe UI", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
@@ -84,20 +84,33 @@
             tabControl.Size = new Size(987, 614);
             tabControl.TabIndex = 10;
             // 
-            // tabDisplay
+            // tabMainInfo
             // 
-            tabDisplay.BackColor = Color.White;
-            tabDisplay.BorderStyle = BorderStyle.FixedSingle;
-            tabDisplay.Controls.Add(groupBox1);
-            tabDisplay.Controls.Add(grpDisplay);
-            tabDisplay.Font = new Font("Microsoft Sans Serif", 9.749999F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            tabDisplay.ImageIndex = 0;
-            tabDisplay.Location = new Point(4, 29);
-            tabDisplay.Name = "tabDisplay";
-            tabDisplay.Padding = new Padding(3);
-            tabDisplay.Size = new Size(979, 581);
-            tabDisplay.TabIndex = 0;
-            tabDisplay.Text = "Main Info";
+            tabMainInfo.BackColor = Color.White;
+            tabMainInfo.BorderStyle = BorderStyle.FixedSingle;
+            tabMainInfo.Controls.Add(grpNotes);
+            tabMainInfo.Controls.Add(grpDisplay);
+            tabMainInfo.Font = new Font("Microsoft Sans Serif", 9.749999F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            tabMainInfo.ImageIndex = 0;
+            tabMainInfo.Location = new Point(4, 29);
+            tabMainInfo.Name = "tabMainInfo";
+            tabMainInfo.Padding = new Padding(3);
+            tabMainInfo.Size = new Size(979, 581);
+            tabMainInfo.TabIndex = 0;
+            tabMainInfo.Text = "Main Info";
+            // 
+            // grpNotes
+            // 
+            grpNotes.BackColor = Color.White;
+            grpNotes.Controls.Add(tinyEditor);
+            grpNotes.Dock = DockStyle.Fill;
+            grpNotes.Font = new Font("Segoe UI Variable Display", 9.75F, FontStyle.Bold);
+            grpNotes.Location = new Point(3, 208);
+            grpNotes.Name = "grpNotes";
+            grpNotes.Size = new Size(971, 368);
+            grpNotes.TabIndex = 4;
+            grpNotes.TabStop = false;
+            grpNotes.Text = "Notes";
             // 
             // tinyEditor
             // 
@@ -109,19 +122,6 @@
             tinyEditor.Name = "tinyEditor";
             tinyEditor.Size = new Size(965, 344);
             tinyEditor.TabIndex = 0;
-            // 
-            // groupBox1
-            // 
-            groupBox1.BackColor = Color.White;
-            groupBox1.Controls.Add(tinyEditor);
-            groupBox1.Dock = DockStyle.Fill;
-            groupBox1.Font = new Font("Segoe UI Variable Display", 9.75F, FontStyle.Bold);
-            groupBox1.Location = new Point(3, 208);
-            groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(971, 368);
-            groupBox1.TabIndex = 4;
-            groupBox1.TabStop = false;
-            groupBox1.Text = "Notes";
             // 
             // grpDisplay
             // 
@@ -167,6 +167,8 @@
             lblIcon.Size = new Size(73, 16);
             lblIcon.TabIndex = 4;
             lblIcon.Text = "Station Icon:";
+            lblIcon.MouseEnter += lblIcon_MouseEnter;
+            lblIcon.MouseLeave += Lbl_MouseLeave;
             // 
             // txtDisplayName
             // 
@@ -251,8 +253,8 @@
             statusStrip1.ResumeLayout(false);
             statusStrip1.PerformLayout();
             tabControl.ResumeLayout(false);
-            tabDisplay.ResumeLayout(false);
-            groupBox1.ResumeLayout(false);
+            tabMainInfo.ResumeLayout(false);
+            grpNotes.ResumeLayout(false);
             grpDisplay.ResumeLayout(false);
             tlpDisplayTable.ResumeLayout(false);
             tlpDisplayTable.PerformLayout();
@@ -266,7 +268,7 @@
         private StatusStrip statusStrip1;
         private ToolStripStatusLabel lblStatus;
         private TabControl tabControl;
-        private TabPage tabDisplay;
+        private TabPage tabMainInfo;
         private TabPage tabMusic;
         private GroupBox grpDisplay;
         private TableLayoutPanel tlpDisplayTable;
@@ -276,7 +278,7 @@
         private TextBox txtDisplayName;
         private Label lblIcon;
         private PictureBox pbStationIcon;
-        private GroupBox groupBox1;
+        private GroupBox grpNotes;
         private custom_controls.TinyMce tinyEditor;
     }
 }

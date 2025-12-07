@@ -1547,4 +1547,28 @@ Please be patient. You can cancel at any time using the "Cancel Action" button. 
   <data name="VanillaStationDisplayNameHelp" xml:space="preserve">
     <value>The name of the station in CRA. Has no effect in game.</value>
   </data>
+  <data name="VanillaStationName" xml:space="preserve">
+    <value>Vanilla Station Name:</value>
+  </data>
+  <data name="VanillaStationDisplayName" xml:space="preserve">
+    <value>Display Name:</value>
+  </data>
+  <data name="VanillaStationIcon" xml:space="preserve">
+    <value>Station Icon:</value>
+  </data>
+  <data name="DisplaySettings" xml:space="preserve">
+    <value>Display</value>
+  </data>
+  <data name="Notes" xml:space="preserve">
+    <value>Notes</value>
+  </data>
+  <data name="VanillaStationIconHelp" xml:space="preserve">
+    <value>The icon of the station in game.</value>
+  </data>
+  <data name="VanillaStationMainInfoTab" xml:space="preserve">
+    <value>Main Info</value>
+  </data>
+  <data name="VanillaStationTracksTab" xml:space="preserve">
+    <value>Tracks</value>
+  </data>
 </root>

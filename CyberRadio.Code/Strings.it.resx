@@ -1541,4 +1541,34 @@ Si prega di essere paziente. È possibile annullare in qualsiasi momento utilizz
   <data name="ReplacementStations" xml:space="preserve">
     <value>Stazioni alla vaniglia</value>
   </data>
+  <data name="DisplaySettings" xml:space="preserve">
+    <value>Display</value>
+  </data>
+  <data name="VanillaStationNameHelp" xml:space="preserve">
+    <value>Il nome della stazione nel gioco. Non può essere modificato.</value>
+  </data>
+  <data name="VanillaStationDisplayNameHelp" xml:space="preserve">
+    <value>Il nome della stazione in CRA. Non ha alcun effetto nel gioco.</value>
+  </data>
+  <data name="VanillaStationName" xml:space="preserve">
+    <value>Nome della stazione di vaniglia:</value>
+  </data>
+  <data name="VanillaStationDisplayName" xml:space="preserve">
+    <value>Nome da visualizzare:</value>
+  </data>
+  <data name="VanillaStationIcon" xml:space="preserve">
+    <value>Icona della stazione:</value>
+  </data>
+  <data name="Notes" xml:space="preserve">
+    <value>Note</value>
+  </data>
+  <data name="VanillaStationIconHelp" xml:space="preserve">
+    <value>L'icona della stazione nel gioco.</value>
+  </data>
+  <data name="VanillaStationMainInfoTab" xml:space="preserve">
+    <value>Informazioni principali</value>
+  </data>
+  <data name="VanillaStationTracksTab" xml:space="preserve">
+    <value>Tracce</value>
+  </data>
 </root>

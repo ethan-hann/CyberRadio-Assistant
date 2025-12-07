@@ -60,6 +60,15 @@ public sealed partial class ReplacementStationEditor : UserControl, IEditor
     public void Translate()
     {
         //todo: implement translation
+        lblVanillaName.Text = Strings.VanillaStationName;
+        lblDisplayName.Text = Strings.VanillaStationDisplayName;
+        lblIcon.Text = Strings.VanillaStationIcon;
+
+        grpDisplay.Text = Strings.DisplaySettings;
+        grpNotes.Text = Strings.Notes;
+
+        tabMainInfo.Text = Strings.VanillaStationMainInfoTab;
+        tabMusic.Text = Strings.VanillaStationTracksTab;
 
         lblStatus.Text = Strings.Ready;
         tinyEditor.Translate();
@@ -89,7 +98,7 @@ public sealed partial class ReplacementStationEditor : UserControl, IEditor
         _tabImages.Images.Add("display", Resources.display_frame);
         _tabImages.Images.Add("music", Resources.sound_waves);
         tabControl.ImageList = _tabImages;
-        tabDisplay.ImageKey = @"display";
+        tabMainInfo.ImageKey = @"display";
         tabMusic.ImageKey = @"music";
     }
 
@@ -141,6 +150,11 @@ public sealed partial class ReplacementStationEditor : UserControl, IEditor
     private void lblDisplayName_MouseEnter(object sender, EventArgs e)
     {
         lblStatus.Text = Strings.VanillaStationDisplayNameHelp;
+    }
+
+    private void lblIcon_MouseEnter(object sender, EventArgs e)
+    {
+        lblStatus.Text = Strings.VanillaStationIconHelp;
     }
 
     /// <summary>

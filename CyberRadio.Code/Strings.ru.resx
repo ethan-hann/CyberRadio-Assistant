@@ -1541,4 +1541,34 @@
   <data name="ReplacementStations" xml:space="preserve">
     <value>Ванильные станции</value>
   </data>
+  <data name="DisplaySettings" xml:space="preserve">
+    <value>Отображать</value>
+  </data>
+  <data name="VanillaStationNameHelp" xml:space="preserve">
+    <value>Название станции в игре. Невозможно изменить.</value>
+  </data>
+  <data name="VanillaStationDisplayNameHelp" xml:space="preserve">
+    <value>Название станции в CRA. Не имеет эффекта в игре.</value>
+  </data>
+  <data name="VanillaStationName" xml:space="preserve">
+    <value>Название ванильной станции:</value>
+  </data>
+  <data name="VanillaStationDisplayName" xml:space="preserve">
+    <value>Отображаемое имя:</value>
+  </data>
+  <data name="VanillaStationIcon" xml:space="preserve">
+    <value>Значок станции:</value>
+  </data>
+  <data name="Notes" xml:space="preserve">
+    <value>Примечания</value>
+  </data>
+  <data name="VanillaStationIconHelp" xml:space="preserve">
+    <value>Иконка станции в игре.</value>
+  </data>
+  <data name="VanillaStationMainInfoTab" xml:space="preserve">
+    <value>Основная информация</value>
+  </data>
+  <data name="VanillaStationTracksTab" xml:space="preserve">
+    <value>Треки</value>
+  </data>
 </root>

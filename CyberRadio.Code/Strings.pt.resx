@@ -1541,4 +1541,34 @@ Por favor, seja paciente. Você pode cancelar a qualquer momento usando o botão
   <data name="ReplacementStations" xml:space="preserve">
     <value>Estações de baunilha</value>
   </data>
+  <data name="DisplaySettings" xml:space="preserve">
+    <value>Mostrar</value>
+  </data>
+  <data name="VanillaStationNameHelp" xml:space="preserve">
+    <value>O nome da estação no jogo. Não pode ser alterado.</value>
+  </data>
+  <data name="VanillaStationDisplayNameHelp" xml:space="preserve">
+    <value>O nome da estação no CRA. Não tem efeito no jogo.</value>
+  </data>
+  <data name="VanillaStationName" xml:space="preserve">
+    <value>Nome da estação Vanilla:</value>
+  </data>
+  <data name="VanillaStationDisplayName" xml:space="preserve">
+    <value>Nome de exibição:</value>
+  </data>
+  <data name="VanillaStationIcon" xml:space="preserve">
+    <value>Ícone da estação:</value>
+  </data>
+  <data name="Notes" xml:space="preserve">
+    <value>Notas</value>
+  </data>
+  <data name="VanillaStationIconHelp" xml:space="preserve">
+    <value>O ícone da estação no jogo.</value>
+  </data>
+  <data name="VanillaStationMainInfoTab" xml:space="preserve">
+    <value>Informações principais</value>
+  </data>
+  <data name="VanillaStationTracksTab" xml:space="preserve">
+    <value>Faixas</value>
+  </data>
 </root>

@@ -1541,4 +1541,34 @@ Bitte sei geduldig. Sie können jederzeit mit der Schaltfläche "Action abbreche
   <data name="ReplacementStations" xml:space="preserve">
     <value>Vanillestationen</value>
   </data>
+  <data name="DisplaySettings" xml:space="preserve">
+    <value>Anzeige</value>
+  </data>
+  <data name="VanillaStationNameHelp" xml:space="preserve">
+    <value>Der Name der Station im Spiel. Kann nicht geändert werden.</value>
+  </data>
+  <data name="VanillaStationDisplayNameHelp" xml:space="preserve">
+    <value>Der Name der Station in CRA. Hat keine Auswirkung im Spiel.</value>
+  </data>
+  <data name="VanillaStationName" xml:space="preserve">
+    <value>Name der Vanilla-Station:</value>
+  </data>
+  <data name="VanillaStationDisplayName" xml:space="preserve">
+    <value>Anzeigename:</value>
+  </data>
+  <data name="VanillaStationIcon" xml:space="preserve">
+    <value>Stationssymbol:</value>
+  </data>
+  <data name="Notes" xml:space="preserve">
+    <value>Notizen</value>
+  </data>
+  <data name="VanillaStationIconHelp" xml:space="preserve">
+    <value>Das Symbol der Station im Spiel.</value>
+  </data>
+  <data name="VanillaStationMainInfoTab" xml:space="preserve">
+    <value>Hauptinfo</value>
+  </data>
+  <data name="VanillaStationTracksTab" xml:space="preserve">
+    <value>Spuren</value>
+  </data>
 </root>
