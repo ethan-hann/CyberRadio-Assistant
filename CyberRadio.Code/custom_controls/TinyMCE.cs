@@ -430,7 +430,7 @@ public partial class TinyMce : UserControl, IUserControl
 
     /// <summary>
     ///     Changes the TinyMCE UI language at runtime.
-    ///     This reinitializes the editor with the specified language and preserves the current content.
+    ///     This re-initializes the editor with the specified language and preserves the current content.
     /// </summary>
     /// <param name="languageCode">Language code, e.g., ""en_US"", ""fr_FR"" (must match a .js file in the langs folder).</param>
     public async Task SetLanguageAsync(string languageCode)

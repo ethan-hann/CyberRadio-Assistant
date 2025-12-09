@@ -43,6 +43,17 @@
             txtVanillaStationName = new TextBox();
             pbStationIcon = new PictureBox();
             tabMusic = new TabPage();
+            splitContainer1 = new SplitContainer();
+            lvTracks = new ListView();
+            colReplaced = new ColumnHeader();
+            colTrackName = new ColumnHeader();
+            colTrackArtist = new ColumnHeader();
+            colTrackDuration = new ColumnHeader();
+            tableLayoutPanel1 = new TableLayoutPanel();
+            btnRemoveReplacedTrack = new Button();
+            btnReplaceTrack = new Button();
+            splitContainer2 = new SplitContainer();
+            lbReplacedTracks = new ListBox();
             statusStrip1.SuspendLayout();
             tabControl.SuspendLayout();
             tabMainInfo.SuspendLayout();
@@ -50,6 +61,15 @@
             grpDisplay.SuspendLayout();
             tlpDisplayTable.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pbStationIcon).BeginInit();
+            tabMusic.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
+            splitContainer1.Panel1.SuspendLayout();
+            splitContainer1.Panel2.SuspendLayout();
+            splitContainer1.SuspendLayout();
+            tableLayoutPanel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)splitContainer2).BeginInit();
+            splitContainer2.Panel1.SuspendLayout();
+            splitContainer2.SuspendLayout();
             SuspendLayout();
             // 
             // statusStrip1
@@ -231,6 +251,7 @@
             // 
             tabMusic.BackColor = Color.White;
             tabMusic.BorderStyle = BorderStyle.FixedSingle;
+            tabMusic.Controls.Add(splitContainer1);
             tabMusic.ImageIndex = 1;
             tabMusic.Location = new Point(4, 29);
             tabMusic.Name = "tabMusic";
@@ -239,6 +260,137 @@
             tabMusic.TabIndex = 1;
             tabMusic.Text = "Tracks";
             tabMusic.ToolTipText = "Change the music this radio station will play.";
+            // 
+            // splitContainer1
+            // 
+            splitContainer1.Dock = DockStyle.Fill;
+            splitContainer1.Font = new Font("Segoe UI", 9F);
+            splitContainer1.Location = new Point(3, 3);
+            splitContainer1.Name = "splitContainer1";
+            splitContainer1.Orientation = Orientation.Horizontal;
+            // 
+            // splitContainer1.Panel1
+            // 
+            splitContainer1.Panel1.Controls.Add(lvTracks);
+            splitContainer1.Panel1.Controls.Add(tableLayoutPanel1);
+            // 
+            // splitContainer1.Panel2
+            // 
+            splitContainer1.Panel2.Controls.Add(splitContainer2);
+            splitContainer1.Size = new Size(971, 573);
+            splitContainer1.SplitterDistance = 276;
+            splitContainer1.TabIndex = 0;
+            // 
+            // lvTracks
+            // 
+            lvTracks.Columns.AddRange(new ColumnHeader[] { colReplaced, colTrackName, colTrackArtist, colTrackDuration });
+            lvTracks.Dock = DockStyle.Fill;
+            lvTracks.FullRowSelect = true;
+            lvTracks.GridLines = true;
+            lvTracks.Location = new Point(0, 0);
+            lvTracks.MultiSelect = false;
+            lvTracks.Name = "lvTracks";
+            lvTracks.ShowGroups = false;
+            lvTracks.Size = new Size(971, 239);
+            lvTracks.TabIndex = 1;
+            lvTracks.UseCompatibleStateImageBehavior = false;
+            lvTracks.View = View.Details;
+            // 
+            // colReplaced
+            // 
+            colReplaced.Text = "Is Replaced?";
+            // 
+            // colTrackName
+            // 
+            colTrackName.Text = "Track Title";
+            colTrackName.Width = 120;
+            // 
+            // colTrackArtist
+            // 
+            colTrackArtist.Text = "Track Artist";
+            colTrackArtist.Width = 120;
+            // 
+            // colTrackDuration
+            // 
+            colTrackDuration.Text = "Track Duration";
+            colTrackDuration.Width = 120;
+            // 
+            // tableLayoutPanel1
+            // 
+            tableLayoutPanel1.ColumnCount = 2;
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tableLayoutPanel1.Controls.Add(btnRemoveReplacedTrack, 1, 0);
+            tableLayoutPanel1.Controls.Add(btnReplaceTrack, 0, 0);
+            tableLayoutPanel1.Dock = DockStyle.Bottom;
+            tableLayoutPanel1.Location = new Point(0, 239);
+            tableLayoutPanel1.Name = "tableLayoutPanel1";
+            tableLayoutPanel1.RowCount = 1;
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tableLayoutPanel1.Size = new Size(971, 37);
+            tableLayoutPanel1.TabIndex = 0;
+            // 
+            // btnRemoveReplacedTrack
+            // 
+            btnRemoveReplacedTrack.BackColor = Color.Yellow;
+            btnRemoveReplacedTrack.Dock = DockStyle.Fill;
+            btnRemoveReplacedTrack.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
+            btnRemoveReplacedTrack.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
+            btnRemoveReplacedTrack.FlatStyle = FlatStyle.Flat;
+            btnRemoveReplacedTrack.Font = new Font("Segoe UI Variable Display Semib", 9.75F, FontStyle.Bold);
+            btnRemoveReplacedTrack.Image = Properties.Resources.delete__16x16;
+            btnRemoveReplacedTrack.Location = new Point(488, 3);
+            btnRemoveReplacedTrack.Name = "btnRemoveReplacedTrack";
+            btnRemoveReplacedTrack.Size = new Size(480, 31);
+            btnRemoveReplacedTrack.TabIndex = 2;
+            btnRemoveReplacedTrack.Text = "Remove Replaced Track";
+            btnRemoveReplacedTrack.TextAlign = ContentAlignment.MiddleRight;
+            btnRemoveReplacedTrack.TextImageRelation = TextImageRelation.ImageBeforeText;
+            btnRemoveReplacedTrack.UseVisualStyleBackColor = false;
+            btnRemoveReplacedTrack.Click += btnRemoveReplacedTrack_Click;
+            // 
+            // btnReplaceTrack
+            // 
+            btnReplaceTrack.BackColor = Color.Yellow;
+            btnReplaceTrack.Dock = DockStyle.Fill;
+            btnReplaceTrack.FlatAppearance.MouseDownBackColor = Color.FromArgb(0, 122, 255);
+            btnReplaceTrack.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
+            btnReplaceTrack.FlatStyle = FlatStyle.Flat;
+            btnReplaceTrack.Font = new Font("Segoe UI Variable Display Semib", 9.75F, FontStyle.Bold);
+            btnReplaceTrack.Image = Properties.Resources.add__16x16;
+            btnReplaceTrack.Location = new Point(3, 3);
+            btnReplaceTrack.Name = "btnReplaceTrack";
+            btnReplaceTrack.Size = new Size(479, 31);
+            btnReplaceTrack.TabIndex = 1;
+            btnReplaceTrack.Text = "Replace Selected Track";
+            btnReplaceTrack.TextAlign = ContentAlignment.MiddleRight;
+            btnReplaceTrack.TextImageRelation = TextImageRelation.ImageBeforeText;
+            btnReplaceTrack.UseVisualStyleBackColor = false;
+            btnReplaceTrack.Click += btnReplaceTrack_Click;
+            // 
+            // splitContainer2
+            // 
+            splitContainer2.Dock = DockStyle.Fill;
+            splitContainer2.Location = new Point(0, 0);
+            splitContainer2.Name = "splitContainer2";
+            // 
+            // splitContainer2.Panel1
+            // 
+            splitContainer2.Panel1.Controls.Add(lbReplacedTracks);
+            splitContainer2.Size = new Size(971, 293);
+            splitContainer2.SplitterDistance = 323;
+            splitContainer2.TabIndex = 1;
+            // 
+            // lbReplacedTracks
+            // 
+            lbReplacedTracks.Dock = DockStyle.Fill;
+            lbReplacedTracks.FormattingEnabled = true;
+            lbReplacedTracks.ItemHeight = 15;
+            lbReplacedTracks.Location = new Point(0, 0);
+            lbReplacedTracks.Name = "lbReplacedTracks";
+            lbReplacedTracks.Size = new Size(323, 293);
+            lbReplacedTracks.TabIndex = 0;
+            lbReplacedTracks.SelectedIndexChanged += lbReplacedTracks_SelectedIndexChanged;
             // 
             // ReplacementStationEditor
             // 
@@ -259,6 +411,15 @@
             tlpDisplayTable.ResumeLayout(false);
             tlpDisplayTable.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)pbStationIcon).EndInit();
+            tabMusic.ResumeLayout(false);
+            splitContainer1.Panel1.ResumeLayout(false);
+            splitContainer1.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
+            splitContainer1.ResumeLayout(false);
+            tableLayoutPanel1.ResumeLayout(false);
+            splitContainer2.Panel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)splitContainer2).EndInit();
+            splitContainer2.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -280,5 +441,16 @@
         private PictureBox pbStationIcon;
         private GroupBox grpNotes;
         private custom_controls.TinyMce tinyEditor;
+        private SplitContainer splitContainer1;
+        private TableLayoutPanel tableLayoutPanel1;
+        private Button btnRemoveReplacedTrack;
+        private Button btnReplaceTrack;
+        private SplitContainer splitContainer2;
+        private ListBox lbReplacedTracks;
+        private ListView lvTracks;
+        private ColumnHeader colTrackName;
+        private ColumnHeader colTrackArtist;
+        private ColumnHeader colTrackDuration;
+        private ColumnHeader colReplaced;
     }
 }
