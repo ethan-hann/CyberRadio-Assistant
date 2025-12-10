@@ -1571,4 +1571,52 @@ Si prega di essere paziente. È possibile annullare in qualsiasi momento utilizz
   <data name="VanillaStationTracksTab" xml:space="preserve">
     <value>Tracce</value>
   </data>
+  <data name="RemoveReplacedTrack" xml:space="preserve">
+    <value>Rimuovi la traccia sostituita</value>
+  </data>
+  <data name="ReplaceTrack" xml:space="preserve">
+    <value>Sostituisci la traccia selezionata</value>
+  </data>
+  <data name="ReplaceAllTracks" xml:space="preserve">
+    <value>Sostituisci tutte le tracce</value>
+  </data>
+  <data name="VanillaStationSelector_Title" xml:space="preserve">
+    <value>Seleziona Stazione Vaniglia</value>
+  </data>
+  <data name="VanillaStationSelector_Instructions" xml:space="preserve">
+    <value>Fare clic sul nome di una stazione di seguito per visualizzare le tracce, quindi fare clic sul pulsante per aggiungerlo a CRA.</value>
+  </data>
+  <data name="VanillaStationSelector_SelectStationButton" xml:space="preserve">
+    <value>Sostituisci la stazione selezionata</value>
+  </data>
+  <data name="VanillaStationSelector_Column_TrackName" xml:space="preserve">
+    <value>Titolo della traccia</value>
+  </data>
+  <data name="VanillaStationSelector_Column_TrackArtist" xml:space="preserve">
+    <value>Artista della traccia</value>
+  </data>
+  <data name="VanillaStationSelector_Column_TrackDuration" xml:space="preserve">
+    <value>Durata traccia</value>
+  </data>
+  <data name="ListView_Column_IsReplaced" xml:space="preserve">
+    <value>Viene sostituito?</value>
+  </data>
+  <data name="ReplaceTrackHelp" xml:space="preserve">
+    <value>Aggiungi la traccia Vanilla selezionata sopra all'elenco seguente da sostituire.</value>
+  </data>
+  <data name="RemoveReplacedTrackHelp" xml:space="preserve">
+    <value>Rimuovi la traccia Vanilla selezionata sopra dall'elenco delle tracce sostitutive.</value>
+  </data>
+  <data name="ReplacedTracksListHelp" xml:space="preserve">
+    <value>Mostra l'elenco delle tracce che verranno sostituite. Seleziona una traccia per visualizzare le proprietà.</value>
+  </data>
+  <data name="ReplaceAllTracksHelp" xml:space="preserve">
+    <value>Aggiungi tutte le tracce Vanilla sopra all'elenco di sostituzione qui sotto.</value>
+  </data>
+  <data name="RemoveAllReplacedTracksHelp" xml:space="preserve">
+    <value>Rimuovi tutte le tracce Vanilla di seguito dall'elenco di sostituzione riportato di seguito.</value>
+  </data>
+  <data name="RemoveAllReplacedTracks" xml:space="preserve">
+    <value>Rimuovi tutte le tracce</value>
+  </data>
 </root>

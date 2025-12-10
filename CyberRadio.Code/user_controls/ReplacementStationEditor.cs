@@ -75,11 +75,21 @@ public sealed partial class ReplacementStationEditor : UserControl, IEditor
         lblDisplayName.Text = Strings.VanillaStationDisplayName;
         lblIcon.Text = Strings.VanillaStationIcon;
 
+        btnRemoveReplacedTrack.Text = Strings.RemoveReplacedTrack;
+        btnReplaceTrack.Text = Strings.ReplaceTrack;
+        btnReplaceAllTracks.Text = Strings.ReplaceAllTracks;
+        btnRemoveAllTracks.Text = Strings.RemoveAllReplacedTracks;
+
         grpDisplay.Text = Strings.DisplaySettings;
         grpNotes.Text = Strings.Notes;
 
         tabMainInfo.Text = Strings.VanillaStationMainInfoTab;
         tabMusic.Text = Strings.VanillaStationTracksTab;
+
+        colReplaced.Text = Strings.ListView_Column_IsReplaced;
+        colTrackArtist.Text = Strings.VanillaStationSelector_Column_TrackArtist;
+        colTrackDuration.Text = Strings.VanillaStationSelector_Column_TrackDuration;
+        colTrackName.Text = Strings.VanillaStationSelector_Column_TrackName;
 
         lblStatus.Text = Strings.Ready;
         tinyEditor.Translate();
@@ -294,12 +304,29 @@ public sealed partial class ReplacementStationEditor : UserControl, IEditor
         lblStatus.Text = Strings.VanillaStationIconHelp;
     }
 
-    /// <summary>
-    ///     Set the status text to the default text.
-    /// </summary>
-    private void ResetStatusText()
+    private void btnReplaceTrack_MouseEnter(object sender, EventArgs e)
     {
-        lblStatus.Text = Strings.Ready;
+        lblStatus.Text = Strings.ReplaceTrackHelp;
+    }
+
+    private void btnRemoveReplacedTrack_MouseEnter(object sender, EventArgs e)
+    {
+        lblStatus.Text = Strings.RemoveReplacedTrackHelp;
+    }
+
+    private void lbReplacedTracks_MouseEnter(object sender, EventArgs e)
+    {
+        lblStatus.Text = Strings.ReplacedTracksListHelp;
+    }
+
+    private void btnReplaceAllTracks_MouseEnter(object sender, EventArgs e)
+    {
+        lblStatus.Text = Strings.ReplaceAllTracksHelp;
+    }
+
+    private void btnRemoveAllTracks_MouseEnter(object sender, EventArgs e)
+    {
+        lblStatus.Text = Strings.RemoveAllReplacedTracksHelp;
     }
 
     /// <summary>

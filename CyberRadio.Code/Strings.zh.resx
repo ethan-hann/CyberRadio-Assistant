@@ -1571,4 +1571,52 @@
   <data name="VanillaStationTracksTab" xml:space="preserve">
     <value>曲目</value>
   </data>
+  <data name="RemoveReplacedTrack" xml:space="preserve">
+    <value>删除替换的轨道</value>
+  </data>
+  <data name="ReplaceTrack" xml:space="preserve">
+    <value>替换选定的曲目</value>
+  </data>
+  <data name="ReplaceAllTracks" xml:space="preserve">
+    <value>替换所有曲目</value>
+  </data>
+  <data name="VanillaStationSelector_Title" xml:space="preserve">
+    <value>选择香草站</value>
+  </data>
+  <data name="VanillaStationSelector_Instructions" xml:space="preserve">
+    <value>单击下面的电台名称可查看曲目，然后单击按钮将其添加到 CRA。</value>
+  </data>
+  <data name="VanillaStationSelector_SelectStationButton" xml:space="preserve">
+    <value>替换选定的电台</value>
+  </data>
+  <data name="VanillaStationSelector_Column_TrackName" xml:space="preserve">
+    <value>曲目标题</value>
+  </data>
+  <data name="VanillaStationSelector_Column_TrackArtist" xml:space="preserve">
+    <value>田径艺术家</value>
+  </data>
+  <data name="VanillaStationSelector_Column_TrackDuration" xml:space="preserve">
+    <value>赛道时长</value>
+  </data>
+  <data name="ListView_Column_IsReplaced" xml:space="preserve">
+    <value>被替换了吗？</value>
+  </data>
+  <data name="ReplaceTrackHelp" xml:space="preserve">
+    <value>将上面选定的原版轨道添加到下面的列表中进行替换。</value>
+  </data>
+  <data name="RemoveReplacedTrackHelp" xml:space="preserve">
+    <value>从替换曲目列表中删除上面选定的原版曲目。</value>
+  </data>
+  <data name="ReplacedTracksListHelp" xml:space="preserve">
+    <value>显示将被替换的曲目列表。选择一个轨道以查看属性。</value>
+  </data>
+  <data name="ReplaceAllTracksHelp" xml:space="preserve">
+    <value>将上面的所有原版曲目添加到下面的替换列表中。</value>
+  </data>
+  <data name="RemoveAllReplacedTracksHelp" xml:space="preserve">
+    <value>从下面的替换列表中删除下面的所有原版曲目。</value>
+  </data>
+  <data name="RemoveAllReplacedTracks" xml:space="preserve">
+    <value>删除所有曲目</value>
+  </data>
 </root>

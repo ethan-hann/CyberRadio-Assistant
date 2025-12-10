@@ -19,7 +19,7 @@ namespace RadioExt_Helper {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Strings {
@@ -2458,6 +2458,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Is Replaced?.
+        /// </summary>
+        internal static string ListView_Column_IsReplaced {
+            get {
+                return ResourceManager.GetString("ListView_Column_IsReplaced", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Locate All Missing Songs....
         /// </summary>
         internal static string LocateAllMissingSongs {
@@ -3238,6 +3247,24 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove All Tracks.
+        /// </summary>
+        internal static string RemoveAllReplacedTracks {
+            get {
+                return ResourceManager.GetString("RemoveAllReplacedTracks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove all vanilla tracks below from replacement list below..
+        /// </summary>
+        internal static string RemoveAllReplacedTracksHelp {
+            get {
+                return ResourceManager.GetString("RemoveAllReplacedTracksHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Removes ALL songs from the station. Does not delete files on disk..
         /// </summary>
         internal static string RemoveAllSongsHelp {
@@ -3252,6 +3279,24 @@ namespace RadioExt_Helper {
         internal static string RemoveFromOrderHelp {
             get {
                 return ResourceManager.GetString("RemoveFromOrderHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove Replaced Track.
+        /// </summary>
+        internal static string RemoveReplacedTrack {
+            get {
+                return ResourceManager.GetString("RemoveReplacedTrack", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove the selected vanilla track above from the list of replacement tracks..
+        /// </summary>
+        internal static string RemoveReplacedTrackHelp {
+            get {
+                return ResourceManager.GetString("RemoveReplacedTrackHelp", resourceCulture);
             }
         }
         
@@ -3283,11 +3328,56 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Replace All Tracks.
+        /// </summary>
+        internal static string ReplaceAllTracks {
+            get {
+                return ResourceManager.GetString("ReplaceAllTracks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add all vanilla tracks above to the replacement list below..
+        /// </summary>
+        internal static string ReplaceAllTracksHelp {
+            get {
+                return ResourceManager.GetString("ReplaceAllTracksHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shows the list of tracks that will be replaced. Select a track to view properties..
+        /// </summary>
+        internal static string ReplacedTracksListHelp {
+            get {
+                return ResourceManager.GetString("ReplacedTracksListHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Vanilla Stations.
         /// </summary>
         internal static string ReplacementStations {
             get {
                 return ResourceManager.GetString("ReplacementStations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Replace Selected Track.
+        /// </summary>
+        internal static string ReplaceTrack {
+            get {
+                return ResourceManager.GetString("ReplaceTrack", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add the selected vanilla track above to the list below to replace..
+        /// </summary>
+        internal static string ReplaceTrackHelp {
+            get {
+                return ResourceManager.GetString("ReplaceTrackHelp", resourceCulture);
             }
         }
         
@@ -4282,6 +4372,42 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Track Artist.
+        /// </summary>
+        internal static string VanillaStationSelector_Column_TrackArtist {
+            get {
+                return ResourceManager.GetString("VanillaStationSelector_Column_TrackArtist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Track Duration.
+        /// </summary>
+        internal static string VanillaStationSelector_Column_TrackDuration {
+            get {
+                return ResourceManager.GetString("VanillaStationSelector_Column_TrackDuration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Track Title.
+        /// </summary>
+        internal static string VanillaStationSelector_Column_TrackName {
+            get {
+                return ResourceManager.GetString("VanillaStationSelector_Column_TrackName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Click a station name below to view tracks and then click the button to add it to CRA..
+        /// </summary>
+        internal static string VanillaStationSelector_Instructions {
+            get {
+                return ResourceManager.GetString("VanillaStationSelector_Instructions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No Station Selected.
         /// </summary>
         internal static string VanillaStationSelector_NoStationSelected {
@@ -4296,6 +4422,24 @@ namespace RadioExt_Helper {
         internal static string VanillaStationSelector_NoStationSelectedMessage {
             get {
                 return ResourceManager.GetString("VanillaStationSelector_NoStationSelectedMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Replace Selected Station.
+        /// </summary>
+        internal static string VanillaStationSelector_SelectStationButton {
+            get {
+                return ResourceManager.GetString("VanillaStationSelector_SelectStationButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select Vanilla Station.
+        /// </summary>
+        internal static string VanillaStationSelector_Title {
+            get {
+                return ResourceManager.GetString("VanillaStationSelector_Title", resourceCulture);
             }
         }
         

@@ -1464,12 +1464,12 @@ public sealed partial class MainForm : Form
 
     private void HowToUseToolStripMenuItem_Click(object sender, EventArgs e)
     {
-        "https://ethan-hann.github.io/CyberRadio-Assistant/index.html".OpenUrl();
+        "https://tortal.tech/CyberRadio-Assistant/index.html".OpenUrl();
     }
 
     private void MainForm_HelpButtonClicked(object sender, CancelEventArgs e)
     {
-        "https://ethan-hann.github.io/CyberRadio-Assistant/index.html".OpenUrl();
+        "https://tortal.tech/CyberRadio-Assistant/index.html".OpenUrl();
     }
 
     private void AboutToolStripMenuItem_Click(object sender, EventArgs e)

@@ -1571,4 +1571,52 @@ Bitte sei geduldig. Sie können jederzeit mit der Schaltfläche "Action abbreche
   <data name="VanillaStationTracksTab" xml:space="preserve">
     <value>Spuren</value>
   </data>
+  <data name="RemoveReplacedTrack" xml:space="preserve">
+    <value>Ersetzte Spur entfernen</value>
+  </data>
+  <data name="ReplaceTrack" xml:space="preserve">
+    <value>Ausgewählten Titel ersetzen</value>
+  </data>
+  <data name="ReplaceAllTracks" xml:space="preserve">
+    <value>Alle Titel ersetzen</value>
+  </data>
+  <data name="VanillaStationSelector_Title" xml:space="preserve">
+    <value>Wählen Sie Vanilla Station</value>
+  </data>
+  <data name="VanillaStationSelector_Instructions" xml:space="preserve">
+    <value>Klicken Sie unten auf einen Stationsnamen, um die Gleise anzuzeigen, und klicken Sie dann auf die Schaltfläche, um sie zu CRA hinzuzufügen.</value>
+  </data>
+  <data name="VanillaStationSelector_SelectStationButton" xml:space="preserve">
+    <value>Ausgewählte Station ersetzen</value>
+  </data>
+  <data name="VanillaStationSelector_Column_TrackName" xml:space="preserve">
+    <value>Tracktitel</value>
+  </data>
+  <data name="VanillaStationSelector_Column_TrackArtist" xml:space="preserve">
+    <value>Track-Künstler</value>
+  </data>
+  <data name="VanillaStationSelector_Column_TrackDuration" xml:space="preserve">
+    <value>Verfolgen Sie die Dauer</value>
+  </data>
+  <data name="ListView_Column_IsReplaced" xml:space="preserve">
+    <value>Wird ersetzt?</value>
+  </data>
+  <data name="ReplaceTrackHelp" xml:space="preserve">
+    <value>Fügen Sie den oben ausgewählten Vanilla-Track zur Liste unten hinzu, um ihn zu ersetzen.</value>
+  </data>
+  <data name="RemoveReplacedTrackHelp" xml:space="preserve">
+    <value>Entfernen Sie den oben ausgewählten Vanilla-Track aus der Liste der Ersatztracks.</value>
+  </data>
+  <data name="ReplacedTracksListHelp" xml:space="preserve">
+    <value>Zeigt die Liste der Titel an, die ersetzt werden. Wählen Sie eine Spur aus, um die Eigenschaften anzuzeigen.</value>
+  </data>
+  <data name="ReplaceAllTracksHelp" xml:space="preserve">
+    <value>Fügen Sie alle Vanilla-Tracks oben zur Ersatzliste unten hinzu.</value>
+  </data>
+  <data name="RemoveAllReplacedTracksHelp" xml:space="preserve">
+    <value>Entfernen Sie alle Vanilla-Tracks unten aus der Ersatzliste unten.</value>
+  </data>
+  <data name="RemoveAllReplacedTracks" xml:space="preserve">
+    <value>Alle Spuren entfernen</value>
+  </data>
 </root>

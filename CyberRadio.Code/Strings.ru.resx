@@ -1571,4 +1571,52 @@
   <data name="VanillaStationTracksTab" xml:space="preserve">
     <value>Треки</value>
   </data>
+  <data name="RemoveReplacedTrack" xml:space="preserve">
+    <value>Удалить замененный трек</value>
+  </data>
+  <data name="ReplaceTrack" xml:space="preserve">
+    <value>Заменить выбранный трек</value>
+  </data>
+  <data name="ReplaceAllTracks" xml:space="preserve">
+    <value>Заменить все треки</value>
+  </data>
+  <data name="VanillaStationSelector_Title" xml:space="preserve">
+    <value>Выберите ванильную станцию</value>
+  </data>
+  <data name="VanillaStationSelector_Instructions" xml:space="preserve">
+    <value>Нажмите на название станции ниже, чтобы просмотреть треки, а затем нажмите кнопку, чтобы добавить ее в CRA.</value>
+  </data>
+  <data name="VanillaStationSelector_SelectStationButton" xml:space="preserve">
+    <value>Заменить выбранную станцию</value>
+  </data>
+  <data name="VanillaStationSelector_Column_TrackName" xml:space="preserve">
+    <value>Название трека</value>
+  </data>
+  <data name="VanillaStationSelector_Column_TrackArtist" xml:space="preserve">
+    <value>Трек-исполнитель</value>
+  </data>
+  <data name="VanillaStationSelector_Column_TrackDuration" xml:space="preserve">
+    <value>Продолжительность трека</value>
+  </data>
+  <data name="ListView_Column_IsReplaced" xml:space="preserve">
+    <value>Заменено?</value>
+  </data>
+  <data name="ReplaceTrackHelp" xml:space="preserve">
+    <value>Добавьте выбранный выше ванильный трек в список ниже, чтобы заменить его.</value>
+  </data>
+  <data name="RemoveReplacedTrackHelp" xml:space="preserve">
+    <value>Удалите выбранный выше ванильный трек из списка заменяющих треков.</value>
+  </data>
+  <data name="ReplacedTracksListHelp" xml:space="preserve">
+    <value>Показывает список треков, которые будут заменены. Выберите трек, чтобы просмотреть свойства.</value>
+  </data>
+  <data name="ReplaceAllTracksHelp" xml:space="preserve">
+    <value>Добавьте все ванильные треки выше в список замены ниже.</value>
+  </data>
+  <data name="RemoveAllReplacedTracksHelp" xml:space="preserve">
+    <value>Удалите все ванильные треки ниже из списка замены ниже.</value>
+  </data>
+  <data name="RemoveAllReplacedTracks" xml:space="preserve">
+    <value>Удалить все треки</value>
+  </data>
 </root>

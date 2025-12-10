@@ -1,4 +1,6 @@
-﻿namespace RadioExt_Helper.user_controls
+﻿using AetherUtils.Core.WinForms.Controls;
+
+namespace RadioExt_Helper.user_controls
 {
     sealed partial class ReplacementStationEditor
     {
@@ -28,6 +30,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             statusStrip1 = new StatusStrip();
             lblStatus = new ToolStripStatusLabel();
             tabControl = new TabControl();
@@ -50,10 +53,14 @@
             colTrackArtist = new ColumnHeader();
             colTrackDuration = new ColumnHeader();
             tableLayoutPanel1 = new TableLayoutPanel();
-            btnRemoveReplacedTrack = new Button();
-            btnReplaceTrack = new Button();
+            btnRemoveReplacedTrack = new SplitButton();
+            btnReplaceTrack = new SplitButton();
+            ctxReplaceMenu = new ContextMenuStrip(components);
+            btnReplaceAllTracks = new ToolStripMenuItem();
             splitContainer2 = new SplitContainer();
             lbReplacedTracks = new ListBox();
+            ctxRemoveMenu = new ContextMenuStrip(components);
+            btnRemoveAllTracks = new ToolStripMenuItem();
             statusStrip1.SuspendLayout();
             tabControl.SuspendLayout();
             tabMainInfo.SuspendLayout();
@@ -67,9 +74,11 @@
             splitContainer1.Panel2.SuspendLayout();
             splitContainer1.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
+            ctxReplaceMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer2).BeginInit();
             splitContainer2.Panel1.SuspendLayout();
             splitContainer2.SuspendLayout();
+            ctxRemoveMenu.SuspendLayout();
             SuspendLayout();
             // 
             // statusStrip1
@@ -340,14 +349,18 @@
             btnRemoveReplacedTrack.Font = new Font("Segoe UI Variable Display Semib", 9.75F, FontStyle.Bold);
             btnRemoveReplacedTrack.Image = Properties.Resources.delete__16x16;
             btnRemoveReplacedTrack.Location = new Point(488, 3);
+            btnRemoveReplacedTrack.Menu = ctxRemoveMenu;
             btnRemoveReplacedTrack.Name = "btnRemoveReplacedTrack";
             btnRemoveReplacedTrack.Size = new Size(480, 31);
+            btnRemoveReplacedTrack.SplitWidth = 35;
             btnRemoveReplacedTrack.TabIndex = 2;
             btnRemoveReplacedTrack.Text = "Remove Replaced Track";
             btnRemoveReplacedTrack.TextAlign = ContentAlignment.MiddleRight;
             btnRemoveReplacedTrack.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnRemoveReplacedTrack.UseVisualStyleBackColor = false;
             btnRemoveReplacedTrack.Click += btnRemoveReplacedTrack_Click;
+            btnRemoveReplacedTrack.MouseEnter += btnRemoveReplacedTrack_MouseEnter;
+            btnRemoveReplacedTrack.MouseLeave += Lbl_MouseLeave;
             // 
             // btnReplaceTrack
             // 
@@ -359,14 +372,33 @@
             btnReplaceTrack.Font = new Font("Segoe UI Variable Display Semib", 9.75F, FontStyle.Bold);
             btnReplaceTrack.Image = Properties.Resources.add__16x16;
             btnReplaceTrack.Location = new Point(3, 3);
+            btnReplaceTrack.Menu = ctxReplaceMenu;
             btnReplaceTrack.Name = "btnReplaceTrack";
             btnReplaceTrack.Size = new Size(479, 31);
+            btnReplaceTrack.SplitWidth = 35;
             btnReplaceTrack.TabIndex = 1;
             btnReplaceTrack.Text = "Replace Selected Track";
             btnReplaceTrack.TextAlign = ContentAlignment.MiddleRight;
             btnReplaceTrack.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnReplaceTrack.UseVisualStyleBackColor = false;
             btnReplaceTrack.Click += btnReplaceTrack_Click;
+            btnReplaceTrack.MouseEnter += btnReplaceTrack_MouseEnter;
+            btnReplaceTrack.MouseLeave += Lbl_MouseLeave;
+            // 
+            // ctxReplaceMenu
+            // 
+            ctxReplaceMenu.Items.AddRange(new ToolStripItem[] { btnReplaceAllTracks });
+            ctxReplaceMenu.Name = "ctxReplaceMenu";
+            ctxReplaceMenu.Size = new Size(169, 26);
+            // 
+            // btnReplaceAllTracks
+            // 
+            btnReplaceAllTracks.Image = Properties.Resources.down__16x16;
+            btnReplaceAllTracks.Name = "btnReplaceAllTracks";
+            btnReplaceAllTracks.Size = new Size(168, 22);
+            btnReplaceAllTracks.Text = "Replace All Tracks";
+            btnReplaceAllTracks.MouseEnter += btnReplaceAllTracks_MouseEnter;
+            btnReplaceAllTracks.MouseLeave += Lbl_MouseLeave;
             // 
             // splitContainer2
             // 
@@ -391,6 +423,23 @@
             lbReplacedTracks.Size = new Size(323, 293);
             lbReplacedTracks.TabIndex = 0;
             lbReplacedTracks.SelectedIndexChanged += lbReplacedTracks_SelectedIndexChanged;
+            lbReplacedTracks.MouseEnter += lbReplacedTracks_MouseEnter;
+            lbReplacedTracks.MouseLeave += Lbl_MouseLeave;
+            // 
+            // ctxRemoveMenu
+            // 
+            ctxRemoveMenu.Items.AddRange(new ToolStripItem[] { btnRemoveAllTracks });
+            ctxRemoveMenu.Name = "ctxReplaceMenu";
+            ctxRemoveMenu.Size = new Size(181, 48);
+            // 
+            // btnRemoveAllTracks
+            // 
+            btnRemoveAllTracks.Image = Properties.Resources.up__16x16;
+            btnRemoveAllTracks.Name = "btnRemoveAllTracks";
+            btnRemoveAllTracks.Size = new Size(180, 22);
+            btnRemoveAllTracks.Text = "Remove All Tracks";
+            btnRemoveAllTracks.MouseEnter += btnRemoveAllTracks_MouseEnter;
+            btnRemoveAllTracks.MouseLeave += Lbl_MouseLeave;
             // 
             // ReplacementStationEditor
             // 
@@ -417,9 +466,11 @@
             ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
             splitContainer1.ResumeLayout(false);
             tableLayoutPanel1.ResumeLayout(false);
+            ctxReplaceMenu.ResumeLayout(false);
             splitContainer2.Panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)splitContainer2).EndInit();
             splitContainer2.ResumeLayout(false);
+            ctxRemoveMenu.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -443,8 +494,8 @@
         private custom_controls.TinyMce tinyEditor;
         private SplitContainer splitContainer1;
         private TableLayoutPanel tableLayoutPanel1;
-        private Button btnRemoveReplacedTrack;
-        private Button btnReplaceTrack;
+        private SplitButton btnRemoveReplacedTrack;
+        private SplitButton btnReplaceTrack;
         private SplitContainer splitContainer2;
         private ListBox lbReplacedTracks;
         private ListView lvTracks;
@@ -452,5 +503,9 @@
         private ColumnHeader colTrackArtist;
         private ColumnHeader colTrackDuration;
         private ColumnHeader colReplaced;
+        private ContextMenuStrip ctxReplaceMenu;
+        private ToolStripMenuItem btnReplaceAllTracks;
+        private ContextMenuStrip ctxRemoveMenu;
+        private ToolStripMenuItem btnRemoveAllTracks;
     }
 }

@@ -1571,4 +1571,52 @@ Please be patient. You can cancel at any time using the "Cancel Action" button. 
   <data name="VanillaStationTracksTab" xml:space="preserve">
     <value>Tracks</value>
   </data>
+  <data name="RemoveReplacedTrack" xml:space="preserve">
+    <value>Remove Replaced Track</value>
+  </data>
+  <data name="ReplaceTrack" xml:space="preserve">
+    <value>Replace Selected Track</value>
+  </data>
+  <data name="ReplaceAllTracks" xml:space="preserve">
+    <value>Replace All Tracks</value>
+  </data>
+  <data name="VanillaStationSelector_Title" xml:space="preserve">
+    <value>Select Vanilla Station</value>
+  </data>
+  <data name="VanillaStationSelector_Instructions" xml:space="preserve">
+    <value>Click a station name below to view tracks and then click the button to add it to CRA.</value>
+  </data>
+  <data name="VanillaStationSelector_SelectStationButton" xml:space="preserve">
+    <value>Replace Selected Station</value>
+  </data>
+  <data name="VanillaStationSelector_Column_TrackName" xml:space="preserve">
+    <value>Track Title</value>
+  </data>
+  <data name="VanillaStationSelector_Column_TrackArtist" xml:space="preserve">
+    <value>Track Artist</value>
+  </data>
+  <data name="VanillaStationSelector_Column_TrackDuration" xml:space="preserve">
+    <value>Track Duration</value>
+  </data>
+  <data name="ListView_Column_IsReplaced" xml:space="preserve">
+    <value>Is Replaced?</value>
+  </data>
+  <data name="ReplaceTrackHelp" xml:space="preserve">
+    <value>Add the selected vanilla track above to the list below to replace.</value>
+  </data>
+  <data name="RemoveReplacedTrackHelp" xml:space="preserve">
+    <value>Remove the selected vanilla track above from the list of replacement tracks.</value>
+  </data>
+  <data name="ReplacedTracksListHelp" xml:space="preserve">
+    <value>Shows the list of tracks that will be replaced. Select a track to view properties.</value>
+  </data>
+  <data name="ReplaceAllTracksHelp" xml:space="preserve">
+    <value>Add all vanilla tracks above to the replacement list below.</value>
+  </data>
+  <data name="RemoveAllReplacedTracksHelp" xml:space="preserve">
+    <value>Remove all vanilla tracks below from replacement list below.</value>
+  </data>
+  <data name="RemoveAllReplacedTracks" xml:space="preserve">
+    <value>Remove All Tracks</value>
+  </data>
 </root>

@@ -1571,4 +1571,52 @@ Por favor, sea paciente. Puede cancelar en cualquier momento usando el botón "C
   <data name="VanillaStationTracksTab" xml:space="preserve">
     <value>Pistas</value>
   </data>
+  <data name="RemoveReplacedTrack" xml:space="preserve">
+    <value>Quitar pista reemplazada</value>
+  </data>
+  <data name="ReplaceTrack" xml:space="preserve">
+    <value>Reemplazar pista seleccionada</value>
+  </data>
+  <data name="ReplaceAllTracks" xml:space="preserve">
+    <value>Reemplazar todas las pistas</value>
+  </data>
+  <data name="VanillaStationSelector_Title" xml:space="preserve">
+    <value>Seleccione la estación vainilla</value>
+  </data>
+  <data name="VanillaStationSelector_Instructions" xml:space="preserve">
+    <value>Haga clic en el nombre de una estación a continuación para ver las pistas y luego haga clic en el botón para agregarla a CRA.</value>
+  </data>
+  <data name="VanillaStationSelector_SelectStationButton" xml:space="preserve">
+    <value>Reemplazar estación seleccionada</value>
+  </data>
+  <data name="VanillaStationSelector_Column_TrackName" xml:space="preserve">
+    <value>Título de la pista</value>
+  </data>
+  <data name="VanillaStationSelector_Column_TrackArtist" xml:space="preserve">
+    <value>Artista de pista</value>
+  </data>
+  <data name="VanillaStationSelector_Column_TrackDuration" xml:space="preserve">
+    <value>Duración de la pista</value>
+  </data>
+  <data name="ListView_Column_IsReplaced" xml:space="preserve">
+    <value>¿Se reemplaza?</value>
+  </data>
+  <data name="ReplaceTrackHelp" xml:space="preserve">
+    <value>Agregue la pista básica seleccionada arriba a la lista a continuación para reemplazarla.</value>
+  </data>
+  <data name="RemoveReplacedTrackHelp" xml:space="preserve">
+    <value>Elimina la pista básica seleccionada arriba de la lista de pistas de reemplazo.</value>
+  </data>
+  <data name="ReplacedTracksListHelp" xml:space="preserve">
+    <value>Muestra la lista de pistas que serán reemplazadas. Seleccione una pista para ver las propiedades.</value>
+  </data>
+  <data name="ReplaceAllTracksHelp" xml:space="preserve">
+    <value>Agregue todas las pistas básicas anteriores a la lista de reemplazo a continuación.</value>
+  </data>
+  <data name="RemoveAllReplacedTracksHelp" xml:space="preserve">
+    <value>Elimine todas las pistas básicas a continuación de la lista de reemplazo a continuación.</value>
+  </data>
+  <data name="RemoveAllReplacedTracks" xml:space="preserve">
+    <value>Eliminar todas las pistas</value>
+  </data>
 </root>

@@ -43,8 +43,19 @@ public partial class VanillaStationSelector : Form
 
     private void VanillaStationSelector_Load(object sender, EventArgs e)
     {
+        Translate();
         // Populate the list box with vanilla stations
         PopulateListBox();
+    }
+
+    private void Translate()
+    {
+        Text = Strings.VanillaStationSelector_Title;
+        lblHelp.Text = Strings.VanillaStationSelector_Instructions;
+        btnSelectStation.Text = Strings.VanillaStationSelector_SelectStationButton;
+        colTrackName.Text = Strings.VanillaStationSelector_Column_TrackName;
+        colTrackArtist.Text = Strings.VanillaStationSelector_Column_TrackArtist;
+        colTrackDuration.Text = Strings.VanillaStationSelector_Column_TrackDuration;
     }
 
     private void PopulateListBox()

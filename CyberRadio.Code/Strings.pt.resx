@@ -1571,4 +1571,52 @@ Por favor, seja paciente. Você pode cancelar a qualquer momento usando o botão
   <data name="VanillaStationTracksTab" xml:space="preserve">
     <value>Faixas</value>
   </data>
+  <data name="RemoveReplacedTrack" xml:space="preserve">
+    <value>Remover trilha substituída</value>
+  </data>
+  <data name="ReplaceTrack" xml:space="preserve">
+    <value>Substituir faixa selecionada</value>
+  </data>
+  <data name="ReplaceAllTracks" xml:space="preserve">
+    <value>Substitua todas as faixas</value>
+  </data>
+  <data name="VanillaStationSelector_Title" xml:space="preserve">
+    <value>Selecione Estação Vanilla</value>
+  </data>
+  <data name="VanillaStationSelector_Instructions" xml:space="preserve">
+    <value>Clique no nome de uma estação abaixo para visualizar as trilhas e, em seguida, clique no botão para adicioná-la ao CRA.</value>
+  </data>
+  <data name="VanillaStationSelector_SelectStationButton" xml:space="preserve">
+    <value>Substituir estação selecionada</value>
+  </data>
+  <data name="VanillaStationSelector_Column_TrackName" xml:space="preserve">
+    <value>Título da faixa</value>
+  </data>
+  <data name="VanillaStationSelector_Column_TrackArtist" xml:space="preserve">
+    <value>Artista da faixa</value>
+  </data>
+  <data name="VanillaStationSelector_Column_TrackDuration" xml:space="preserve">
+    <value>Duração da trilha</value>
+  </data>
+  <data name="ListView_Column_IsReplaced" xml:space="preserve">
+    <value>Foi substituído?</value>
+  </data>
+  <data name="ReplaceTrackHelp" xml:space="preserve">
+    <value>Adicione a faixa vanilla selecionada acima à lista abaixo para substituí-la.</value>
+  </data>
+  <data name="RemoveReplacedTrackHelp" xml:space="preserve">
+    <value>Remova a faixa vanilla selecionada acima da lista de faixas de substituição.</value>
+  </data>
+  <data name="ReplacedTracksListHelp" xml:space="preserve">
+    <value>Mostra a lista de faixas que serão substituídas. Selecione uma trilha para visualizar as propriedades.</value>
+  </data>
+  <data name="ReplaceAllTracksHelp" xml:space="preserve">
+    <value>Adicione todas as faixas vanilla acima à lista de substituição abaixo.</value>
+  </data>
+  <data name="RemoveAllReplacedTracksHelp" xml:space="preserve">
+    <value>Remova todas as faixas vanilla abaixo da lista de substituição abaixo.</value>
+  </data>
+  <data name="RemoveAllReplacedTracks" xml:space="preserve">
+    <value>Remover todas as faixas</value>
+  </data>
 </root>
