@@ -187,7 +187,7 @@ public sealed partial class ReplacementStationEditor : UserControl, IEditor
 
         lbReplacedTracks.DataSource = null;
         lbReplacedTracks.DataSource = _replacedTracks;
-        lbReplacedTracks.DisplayMember = "TrackName";
+        lbReplacedTracks.DisplayMember = "ToString";
 
         lvTracks.Invalidate();
         lvTracks.EndUpdate();
