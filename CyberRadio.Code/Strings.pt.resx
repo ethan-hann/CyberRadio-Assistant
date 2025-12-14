@@ -340,9 +340,6 @@ Por favor, defina agora.</value>
   <data name="AddSelected" xml:space="preserve">
     <value>Adicione selecionado  </value>
   </data>
-  <data name="RemoveSelected" xml:space="preserve">
-    <value>  Remova selecionada</value>
-  </data>
   <data name="Order" xml:space="preserve">
     <value>Ordem</value>
   </data>
@@ -1574,9 +1571,6 @@ Por favor, seja paciente. Você pode cancelar a qualquer momento usando o botão
   <data name="RemoveReplacedTrack" xml:space="preserve">
     <value>Remover trilha substituída</value>
   </data>
-  <data name="ReplaceTrack" xml:space="preserve">
-    <value>Substituir faixa selecionada</value>
-  </data>
   <data name="ReplaceAllTracks" xml:space="preserve">
     <value>Substitua todas as faixas</value>
   </data>
@@ -1601,9 +1595,6 @@ Por favor, seja paciente. Você pode cancelar a qualquer momento usando o botão
   <data name="ListView_Column_IsReplaced" xml:space="preserve">
     <value>Foi substituído?</value>
   </data>
-  <data name="ReplaceTrackHelp" xml:space="preserve">
-    <value>Adicione a faixa vanilla selecionada acima à lista abaixo para substituí-la.</value>
-  </data>
   <data name="RemoveReplacedTrackHelp" xml:space="preserve">
     <value>Remova a faixa vanilla selecionada acima da lista de faixas de substituição.</value>
   </data>
@@ -1618,5 +1609,45 @@ Por favor, seja paciente. Você pode cancelar a qualquer momento usando o botão
   </data>
   <data name="RemoveAllReplacedTracks" xml:space="preserve">
     <value>Remover todas as faixas</value>
+  </data>
+  <data name="RemoveSelected" xml:space="preserve">
+    <value>Remover selecionado</value>
+  </data>
+  <data name="ReplacedTracksGroupBox" xml:space="preserve">
+    <value>Faixas para substituir</value>
+  </data>
+  <data name="VanillaTracksGroupBox" xml:space="preserve">
+    <value>Faixas de baunilha</value>
+  </data>
+  <data name="ReplacedTrackProperties" xml:space="preserve">
+    <value>Propriedades</value>
+  </data>
+  <data name="ReplaceWemId" xml:space="preserve">
+    <value>Substituir</value>
+  </data>
+  <data name="WEMIdHelp" xml:space="preserve">
+    <value>Selecione os IDs WEM abaixo e clique em "Substituir" para selecionar o novo arquivo de áudio.
+Você pode substituir todos os IDs desta faixa ou apenas um específico.</value>
+  </data>
+  <data name="ReplacedWemIdsGroupBox" xml:space="preserve">
+    <value>IDs substituídos</value>
+  </data>
+  <data name="WemId" xml:space="preserve">
+    <value>ID do MAE</value>
+  </data>
+  <data name="ReplacedWithFile" xml:space="preserve">
+    <value>Substituído por arquivo</value>
+  </data>
+  <data name="RemoveReplacedWemId" xml:space="preserve">
+    <value>Remover substituição</value>
+  </data>
+  <data name="ReplaceAllWemIds" xml:space="preserve">
+    <value>Substitua tudo pela mesma música</value>
+  </data>
+  <data name="RemoveAllWemIds" xml:space="preserve">
+    <value>Remover todas as substituições</value>
+  </data>
+  <data name="ReplaceTrack" xml:space="preserve">
+    <value>Substituir faixa selecionada</value>
   </data>
 </root>

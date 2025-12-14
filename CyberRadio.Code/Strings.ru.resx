@@ -340,9 +340,6 @@
   <data name="AddSelected" xml:space="preserve">
     <value>Добавить выбранный  </value>
   </data>
-  <data name="RemoveSelected" xml:space="preserve">
-    <value>  Удалить выбранные</value>
-  </data>
   <data name="Order" xml:space="preserve">
     <value>Заказ</value>
   </data>
@@ -1161,9 +1158,6 @@
   <data name="AddToOrderHelp" xml:space="preserve">
     <value>Добавляет песню в список песен на станции.</value>
   </data>
-  <data name="RemoveSongsHelp" xml:space="preserve">
-    <value>Удаляет все выбранные песни со станции. Не удаляет файлы на диске.</value>
-  </data>
   <data name="RemoveAllSongsHelp" xml:space="preserve">
     <value>Удаляет все песни со станции. Не удаляет файлы на диске.</value>
   </data>
@@ -1574,9 +1568,6 @@
   <data name="RemoveReplacedTrack" xml:space="preserve">
     <value>Удалить замененный трек</value>
   </data>
-  <data name="ReplaceTrack" xml:space="preserve">
-    <value>Заменить выбранный трек</value>
-  </data>
   <data name="ReplaceAllTracks" xml:space="preserve">
     <value>Заменить все треки</value>
   </data>
@@ -1601,9 +1592,6 @@
   <data name="ListView_Column_IsReplaced" xml:space="preserve">
     <value>Заменено?</value>
   </data>
-  <data name="ReplaceTrackHelp" xml:space="preserve">
-    <value>Добавьте выбранный выше ванильный трек в список ниже, чтобы заменить его.</value>
-  </data>
   <data name="RemoveReplacedTrackHelp" xml:space="preserve">
     <value>Удалите выбранный выше ванильный трек из списка заменяющих треков.</value>
   </data>
@@ -1618,5 +1606,48 @@
   </data>
   <data name="RemoveAllReplacedTracks" xml:space="preserve">
     <value>Удалить все треки</value>
+  </data>
+  <data name="RemoveSelected" xml:space="preserve">
+    <value>Удалить выбранное</value>
+  </data>
+  <data name="ReplacedTracksGroupBox" xml:space="preserve">
+    <value>Треки для замены</value>
+  </data>
+  <data name="VanillaTracksGroupBox" xml:space="preserve">
+    <value>Ванильные треки</value>
+  </data>
+  <data name="ReplacedTrackProperties" xml:space="preserve">
+    <value>Характеристики</value>
+  </data>
+  <data name="RemoveSongsHelp" xml:space="preserve">
+    <value>Удаляет все выбранные песни со станции. Не удаляет файлы на диске.</value>
+  </data>
+  <data name="ReplaceWemId" xml:space="preserve">
+    <value>Заменять</value>
+  </data>
+  <data name="WEMIdHelp" xml:space="preserve">
+    <value>Выберите идентификаторы WEM ниже и нажмите «Заменить», чтобы выбрать новый аудиофайл.
+Вы можете заменить все идентификаторы для этого трека или только определенный.</value>
+  </data>
+  <data name="ReplacedWemIdsGroupBox" xml:space="preserve">
+    <value>Замененные идентификаторы</value>
+  </data>
+  <data name="WemId" xml:space="preserve">
+    <value>WEM-идентификатор</value>
+  </data>
+  <data name="ReplacedWithFile" xml:space="preserve">
+    <value>Заменено файлом</value>
+  </data>
+  <data name="RemoveReplacedWemId" xml:space="preserve">
+    <value>Удалить замену</value>
+  </data>
+  <data name="ReplaceAllWemIds" xml:space="preserve">
+    <value>Заменить все той же песней</value>
+  </data>
+  <data name="RemoveAllWemIds" xml:space="preserve">
+    <value>Удалить все замены</value>
+  </data>
+  <data name="ReplaceTrack" xml:space="preserve">
+    <value>Заменить выбранный трек</value>
   </data>
 </root>

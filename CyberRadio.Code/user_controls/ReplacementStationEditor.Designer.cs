@@ -47,6 +47,7 @@ namespace RadioExt_Helper.user_controls
             pbStationIcon = new PictureBox();
             tabMusic = new TabPage();
             splitContainer1 = new SplitContainer();
+            grpVanillaTracks = new GroupBox();
             lvTracks = new ListView();
             colReplaced = new ColumnHeader();
             colTrackName = new ColumnHeader();
@@ -54,13 +55,19 @@ namespace RadioExt_Helper.user_controls
             colTrackDuration = new ColumnHeader();
             tableLayoutPanel1 = new TableLayoutPanel();
             btnRemoveReplacedTrack = new SplitButton();
+            ctxRemoveMenu = new ContextMenuStrip(components);
+            btnRemoveAllTracks = new ToolStripMenuItem();
             btnReplaceTrack = new SplitButton();
             ctxReplaceMenu = new ContextMenuStrip(components);
             btnReplaceAllTracks = new ToolStripMenuItem();
             splitContainer2 = new SplitContainer();
+            grpReplacedTracks = new GroupBox();
             lbReplacedTracks = new ListBox();
-            ctxRemoveMenu = new ContextMenuStrip(components);
-            btnRemoveAllTracks = new ToolStripMenuItem();
+            grpTrackProperties = new GroupBox();
+            lvReplacementTracks = new ListView();
+            colWemId = new ColumnHeader();
+            colReplacedFilePath = new ColumnHeader();
+            pnlTrackProperties = new Panel();
             statusStrip1.SuspendLayout();
             tabControl.SuspendLayout();
             tabMainInfo.SuspendLayout();
@@ -73,21 +80,25 @@ namespace RadioExt_Helper.user_controls
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
             splitContainer1.SuspendLayout();
+            grpVanillaTracks.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
+            ctxRemoveMenu.SuspendLayout();
             ctxReplaceMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer2).BeginInit();
             splitContainer2.Panel1.SuspendLayout();
+            splitContainer2.Panel2.SuspendLayout();
             splitContainer2.SuspendLayout();
-            ctxRemoveMenu.SuspendLayout();
+            grpReplacedTracks.SuspendLayout();
+            grpTrackProperties.SuspendLayout();
             SuspendLayout();
             // 
             // statusStrip1
             // 
             statusStrip1.BackColor = Color.Transparent;
             statusStrip1.Items.AddRange(new ToolStripItem[] { lblStatus });
-            statusStrip1.Location = new Point(0, 614);
+            statusStrip1.Location = new Point(0, 807);
             statusStrip1.Name = "statusStrip1";
-            statusStrip1.Size = new Size(987, 25);
+            statusStrip1.Size = new Size(1234, 25);
             statusStrip1.SizingGrip = false;
             statusStrip1.TabIndex = 8;
             statusStrip1.Text = "statusStrip1";
@@ -110,7 +121,7 @@ namespace RadioExt_Helper.user_controls
             tabControl.Location = new Point(0, 0);
             tabControl.Name = "tabControl";
             tabControl.SelectedIndex = 0;
-            tabControl.Size = new Size(987, 614);
+            tabControl.Size = new Size(1234, 807);
             tabControl.TabIndex = 10;
             // 
             // tabMainInfo
@@ -124,7 +135,7 @@ namespace RadioExt_Helper.user_controls
             tabMainInfo.Location = new Point(4, 29);
             tabMainInfo.Name = "tabMainInfo";
             tabMainInfo.Padding = new Padding(3);
-            tabMainInfo.Size = new Size(979, 581);
+            tabMainInfo.Size = new Size(1226, 774);
             tabMainInfo.TabIndex = 0;
             tabMainInfo.Text = "Main Info";
             // 
@@ -136,7 +147,7 @@ namespace RadioExt_Helper.user_controls
             grpNotes.Font = new Font("Segoe UI Variable Display", 9.75F, FontStyle.Bold);
             grpNotes.Location = new Point(3, 208);
             grpNotes.Name = "grpNotes";
-            grpNotes.Size = new Size(971, 368);
+            grpNotes.Size = new Size(1218, 561);
             grpNotes.TabIndex = 4;
             grpNotes.TabStop = false;
             grpNotes.Text = "Notes";
@@ -149,7 +160,7 @@ namespace RadioExt_Helper.user_controls
             tinyEditor.Location = new Point(3, 21);
             tinyEditor.Margin = new Padding(0);
             tinyEditor.Name = "tinyEditor";
-            tinyEditor.Size = new Size(965, 344);
+            tinyEditor.Size = new Size(1212, 537);
             tinyEditor.TabIndex = 0;
             // 
             // grpDisplay
@@ -160,7 +171,7 @@ namespace RadioExt_Helper.user_controls
             grpDisplay.Font = new Font("Segoe UI Variable Display", 9.75F, FontStyle.Bold);
             grpDisplay.Location = new Point(3, 3);
             grpDisplay.Name = "grpDisplay";
-            grpDisplay.Size = new Size(971, 205);
+            grpDisplay.Size = new Size(1218, 205);
             grpDisplay.TabIndex = 3;
             grpDisplay.TabStop = false;
             grpDisplay.Text = "Display";
@@ -183,7 +194,7 @@ namespace RadioExt_Helper.user_controls
             tlpDisplayTable.RowStyles.Add(new RowStyle(SizeType.Percent, 44.3038F));
             tlpDisplayTable.RowStyles.Add(new RowStyle(SizeType.Percent, 55.6962F));
             tlpDisplayTable.RowStyles.Add(new RowStyle(SizeType.Absolute, 111F));
-            tlpDisplayTable.Size = new Size(965, 181);
+            tlpDisplayTable.Size = new Size(1212, 181);
             tlpDisplayTable.TabIndex = 0;
             // 
             // lblIcon
@@ -191,7 +202,7 @@ namespace RadioExt_Helper.user_controls
             lblIcon.Anchor = AnchorStyles.Right;
             lblIcon.AutoSize = true;
             lblIcon.Font = new Font("Segoe UI Variable Text", 9F);
-            lblIcon.Location = new Point(59, 117);
+            lblIcon.Location = new Point(93, 117);
             lblIcon.Name = "lblIcon";
             lblIcon.Size = new Size(73, 16);
             lblIcon.TabIndex = 4;
@@ -203,9 +214,9 @@ namespace RadioExt_Helper.user_controls
             // 
             txtDisplayName.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             txtDisplayName.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            txtDisplayName.Location = new Point(138, 38);
+            txtDisplayName.Location = new Point(172, 38);
             txtDisplayName.Name = "txtDisplayName";
-            txtDisplayName.Size = new Size(824, 23);
+            txtDisplayName.Size = new Size(1037, 23);
             txtDisplayName.TabIndex = 3;
             txtDisplayName.TextChanged += txtDisplayName_TextChanged;
             // 
@@ -214,7 +225,7 @@ namespace RadioExt_Helper.user_controls
             lblDisplayName.Anchor = AnchorStyles.Right;
             lblDisplayName.AutoSize = true;
             lblDisplayName.Font = new Font("Segoe UI Variable Text", 9F);
-            lblDisplayName.Location = new Point(50, 42);
+            lblDisplayName.Location = new Point(84, 42);
             lblDisplayName.Name = "lblDisplayName";
             lblDisplayName.Size = new Size(82, 16);
             lblDisplayName.TabIndex = 2;
@@ -227,7 +238,7 @@ namespace RadioExt_Helper.user_controls
             lblVanillaName.Anchor = AnchorStyles.Right;
             lblVanillaName.AutoSize = true;
             lblVanillaName.Font = new Font("Segoe UI Variable Text", 9F);
-            lblVanillaName.Location = new Point(14, 7);
+            lblVanillaName.Location = new Point(48, 7);
             lblVanillaName.Name = "lblVanillaName";
             lblVanillaName.Size = new Size(118, 16);
             lblVanillaName.TabIndex = 0;
@@ -240,16 +251,16 @@ namespace RadioExt_Helper.user_controls
             txtVanillaStationName.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             txtVanillaStationName.Enabled = false;
             txtVanillaStationName.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            txtVanillaStationName.Location = new Point(138, 4);
+            txtVanillaStationName.Location = new Point(172, 4);
             txtVanillaStationName.Name = "txtVanillaStationName";
             txtVanillaStationName.ReadOnly = true;
-            txtVanillaStationName.Size = new Size(824, 23);
+            txtVanillaStationName.Size = new Size(1037, 23);
             txtVanillaStationName.TabIndex = 1;
             // 
             // pbStationIcon
             // 
             pbStationIcon.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
-            pbStationIcon.Location = new Point(138, 72);
+            pbStationIcon.Location = new Point(172, 72);
             pbStationIcon.Name = "pbStationIcon";
             pbStationIcon.Size = new Size(163, 106);
             pbStationIcon.SizeMode = PictureBoxSizeMode.Zoom;
@@ -265,7 +276,7 @@ namespace RadioExt_Helper.user_controls
             tabMusic.Location = new Point(4, 29);
             tabMusic.Name = "tabMusic";
             tabMusic.Padding = new Padding(3);
-            tabMusic.Size = new Size(979, 581);
+            tabMusic.Size = new Size(1226, 774);
             tabMusic.TabIndex = 1;
             tabMusic.Text = "Tracks";
             tabMusic.ToolTipText = "Change the music this radio station will play.";
@@ -280,15 +291,28 @@ namespace RadioExt_Helper.user_controls
             // 
             // splitContainer1.Panel1
             // 
-            splitContainer1.Panel1.Controls.Add(lvTracks);
+            splitContainer1.Panel1.Controls.Add(grpVanillaTracks);
             splitContainer1.Panel1.Controls.Add(tableLayoutPanel1);
             // 
             // splitContainer1.Panel2
             // 
             splitContainer1.Panel2.Controls.Add(splitContainer2);
-            splitContainer1.Size = new Size(971, 573);
-            splitContainer1.SplitterDistance = 276;
+            splitContainer1.Size = new Size(1218, 766);
+            splitContainer1.SplitterDistance = 303;
+            splitContainer1.SplitterWidth = 8;
             splitContainer1.TabIndex = 0;
+            // 
+            // grpVanillaTracks
+            // 
+            grpVanillaTracks.Controls.Add(lvTracks);
+            grpVanillaTracks.Dock = DockStyle.Fill;
+            grpVanillaTracks.Font = new Font("Segoe UI Variable Display", 9.75F, FontStyle.Bold);
+            grpVanillaTracks.Location = new Point(0, 0);
+            grpVanillaTracks.Name = "grpVanillaTracks";
+            grpVanillaTracks.Size = new Size(1218, 266);
+            grpVanillaTracks.TabIndex = 2;
+            grpVanillaTracks.TabStop = false;
+            grpVanillaTracks.Text = "Vanilla Tracks";
             // 
             // lvTracks
             // 
@@ -296,11 +320,11 @@ namespace RadioExt_Helper.user_controls
             lvTracks.Dock = DockStyle.Fill;
             lvTracks.FullRowSelect = true;
             lvTracks.GridLines = true;
-            lvTracks.Location = new Point(0, 0);
+            lvTracks.Location = new Point(3, 21);
             lvTracks.MultiSelect = false;
             lvTracks.Name = "lvTracks";
             lvTracks.ShowGroups = false;
-            lvTracks.Size = new Size(971, 239);
+            lvTracks.Size = new Size(1212, 242);
             lvTracks.TabIndex = 1;
             lvTracks.UseCompatibleStateImageBehavior = false;
             lvTracks.View = View.Details;
@@ -332,11 +356,11 @@ namespace RadioExt_Helper.user_controls
             tableLayoutPanel1.Controls.Add(btnRemoveReplacedTrack, 1, 0);
             tableLayoutPanel1.Controls.Add(btnReplaceTrack, 0, 0);
             tableLayoutPanel1.Dock = DockStyle.Bottom;
-            tableLayoutPanel1.Location = new Point(0, 239);
+            tableLayoutPanel1.Location = new Point(0, 266);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 1;
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel1.Size = new Size(971, 37);
+            tableLayoutPanel1.Size = new Size(1218, 37);
             tableLayoutPanel1.TabIndex = 0;
             // 
             // btnRemoveReplacedTrack
@@ -347,11 +371,11 @@ namespace RadioExt_Helper.user_controls
             btnRemoveReplacedTrack.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
             btnRemoveReplacedTrack.FlatStyle = FlatStyle.Flat;
             btnRemoveReplacedTrack.Font = new Font("Segoe UI Variable Display Semib", 9.75F, FontStyle.Bold);
-            btnRemoveReplacedTrack.Image = Properties.Resources.delete__16x16;
-            btnRemoveReplacedTrack.Location = new Point(488, 3);
+            btnRemoveReplacedTrack.Image = Properties.Resources.up__16x16;
+            btnRemoveReplacedTrack.Location = new Point(612, 3);
             btnRemoveReplacedTrack.Menu = ctxRemoveMenu;
             btnRemoveReplacedTrack.Name = "btnRemoveReplacedTrack";
-            btnRemoveReplacedTrack.Size = new Size(480, 31);
+            btnRemoveReplacedTrack.Size = new Size(603, 31);
             btnRemoveReplacedTrack.SplitWidth = 35;
             btnRemoveReplacedTrack.TabIndex = 2;
             btnRemoveReplacedTrack.Text = "Remove Replaced Track";
@@ -362,6 +386,22 @@ namespace RadioExt_Helper.user_controls
             btnRemoveReplacedTrack.MouseEnter += btnRemoveReplacedTrack_MouseEnter;
             btnRemoveReplacedTrack.MouseLeave += Lbl_MouseLeave;
             // 
+            // ctxRemoveMenu
+            // 
+            ctxRemoveMenu.Items.AddRange(new ToolStripItem[] { btnRemoveAllTracks });
+            ctxRemoveMenu.Name = "ctxReplaceMenu";
+            ctxRemoveMenu.Size = new Size(170, 26);
+            // 
+            // btnRemoveAllTracks
+            // 
+            btnRemoveAllTracks.Image = Properties.Resources.up__16x16;
+            btnRemoveAllTracks.Name = "btnRemoveAllTracks";
+            btnRemoveAllTracks.Size = new Size(169, 22);
+            btnRemoveAllTracks.Text = "Remove All Tracks";
+            btnRemoveAllTracks.Click += btnRemoveAllTracks_Click;
+            btnRemoveAllTracks.MouseEnter += btnRemoveAllTracks_MouseEnter;
+            btnRemoveAllTracks.MouseLeave += Lbl_MouseLeave;
+            // 
             // btnReplaceTrack
             // 
             btnReplaceTrack.BackColor = Color.Yellow;
@@ -370,11 +410,11 @@ namespace RadioExt_Helper.user_controls
             btnReplaceTrack.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
             btnReplaceTrack.FlatStyle = FlatStyle.Flat;
             btnReplaceTrack.Font = new Font("Segoe UI Variable Display Semib", 9.75F, FontStyle.Bold);
-            btnReplaceTrack.Image = Properties.Resources.add__16x16;
+            btnReplaceTrack.Image = Properties.Resources.down__16x16;
             btnReplaceTrack.Location = new Point(3, 3);
             btnReplaceTrack.Menu = ctxReplaceMenu;
             btnReplaceTrack.Name = "btnReplaceTrack";
-            btnReplaceTrack.Size = new Size(479, 31);
+            btnReplaceTrack.Size = new Size(603, 31);
             btnReplaceTrack.SplitWidth = 35;
             btnReplaceTrack.TabIndex = 1;
             btnReplaceTrack.Text = "Replace Selected Track";
@@ -382,21 +422,21 @@ namespace RadioExt_Helper.user_controls
             btnReplaceTrack.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnReplaceTrack.UseVisualStyleBackColor = false;
             btnReplaceTrack.Click += btnReplaceTrack_Click;
-            btnReplaceTrack.MouseEnter += btnReplaceTrack_MouseEnter;
             btnReplaceTrack.MouseLeave += Lbl_MouseLeave;
             // 
             // ctxReplaceMenu
             // 
             ctxReplaceMenu.Items.AddRange(new ToolStripItem[] { btnReplaceAllTracks });
             ctxReplaceMenu.Name = "ctxReplaceMenu";
-            ctxReplaceMenu.Size = new Size(169, 26);
+            ctxReplaceMenu.Size = new Size(168, 26);
             // 
             // btnReplaceAllTracks
             // 
             btnReplaceAllTracks.Image = Properties.Resources.down__16x16;
             btnReplaceAllTracks.Name = "btnReplaceAllTracks";
-            btnReplaceAllTracks.Size = new Size(168, 22);
+            btnReplaceAllTracks.Size = new Size(167, 22);
             btnReplaceAllTracks.Text = "Replace All Tracks";
+            btnReplaceAllTracks.Click += btnReplaceAllTracks_Click;
             btnReplaceAllTracks.MouseEnter += btnReplaceAllTracks_MouseEnter;
             btnReplaceAllTracks.MouseLeave += Lbl_MouseLeave;
             // 
@@ -408,38 +448,85 @@ namespace RadioExt_Helper.user_controls
             // 
             // splitContainer2.Panel1
             // 
-            splitContainer2.Panel1.Controls.Add(lbReplacedTracks);
-            splitContainer2.Size = new Size(971, 293);
-            splitContainer2.SplitterDistance = 323;
+            splitContainer2.Panel1.Controls.Add(grpReplacedTracks);
+            // 
+            // splitContainer2.Panel2
+            // 
+            splitContainer2.Panel2.Controls.Add(grpTrackProperties);
+            splitContainer2.Size = new Size(1218, 455);
+            splitContainer2.SplitterDistance = 242;
             splitContainer2.TabIndex = 1;
+            // 
+            // grpReplacedTracks
+            // 
+            grpReplacedTracks.Controls.Add(lbReplacedTracks);
+            grpReplacedTracks.Dock = DockStyle.Fill;
+            grpReplacedTracks.Font = new Font("Segoe UI Variable Display", 9.75F, FontStyle.Bold);
+            grpReplacedTracks.Location = new Point(0, 0);
+            grpReplacedTracks.Name = "grpReplacedTracks";
+            grpReplacedTracks.Size = new Size(242, 455);
+            grpReplacedTracks.TabIndex = 1;
+            grpReplacedTracks.TabStop = false;
+            grpReplacedTracks.Text = "Tracks to Replace";
             // 
             // lbReplacedTracks
             // 
             lbReplacedTracks.Dock = DockStyle.Fill;
+            lbReplacedTracks.Font = new Font("Segoe UI Variable Text", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
             lbReplacedTracks.FormattingEnabled = true;
-            lbReplacedTracks.ItemHeight = 15;
-            lbReplacedTracks.Location = new Point(0, 0);
+            lbReplacedTracks.ItemHeight = 17;
+            lbReplacedTracks.Location = new Point(3, 21);
             lbReplacedTracks.Name = "lbReplacedTracks";
-            lbReplacedTracks.Size = new Size(323, 293);
+            lbReplacedTracks.Size = new Size(236, 431);
             lbReplacedTracks.TabIndex = 0;
             lbReplacedTracks.SelectedIndexChanged += lbReplacedTracks_SelectedIndexChanged;
             lbReplacedTracks.MouseEnter += lbReplacedTracks_MouseEnter;
             lbReplacedTracks.MouseLeave += Lbl_MouseLeave;
             // 
-            // ctxRemoveMenu
+            // grpTrackProperties
             // 
-            ctxRemoveMenu.Items.AddRange(new ToolStripItem[] { btnRemoveAllTracks });
-            ctxRemoveMenu.Name = "ctxReplaceMenu";
-            ctxRemoveMenu.Size = new Size(181, 48);
+            grpTrackProperties.Controls.Add(pnlTrackProperties);
+            grpTrackProperties.Dock = DockStyle.Fill;
+            grpTrackProperties.Font = new Font("Segoe UI Variable Display", 9.75F, FontStyle.Bold);
+            grpTrackProperties.Location = new Point(0, 0);
+            grpTrackProperties.Name = "grpTrackProperties";
+            grpTrackProperties.Size = new Size(972, 455);
+            grpTrackProperties.TabIndex = 0;
+            grpTrackProperties.TabStop = false;
+            grpTrackProperties.Text = "Properties";
             // 
-            // btnRemoveAllTracks
+            // lvReplacementTracks
             // 
-            btnRemoveAllTracks.Image = Properties.Resources.up__16x16;
-            btnRemoveAllTracks.Name = "btnRemoveAllTracks";
-            btnRemoveAllTracks.Size = new Size(180, 22);
-            btnRemoveAllTracks.Text = "Remove All Tracks";
-            btnRemoveAllTracks.MouseEnter += btnRemoveAllTracks_MouseEnter;
-            btnRemoveAllTracks.MouseLeave += Lbl_MouseLeave;
+            lvReplacementTracks.Columns.AddRange(new ColumnHeader[] { colWemId, colReplacedFilePath });
+            lvReplacementTracks.Dock = DockStyle.Fill;
+            lvReplacementTracks.FullRowSelect = true;
+            lvReplacementTracks.GridLines = true;
+            lvReplacementTracks.Location = new Point(3, 21);
+            lvReplacementTracks.MultiSelect = false;
+            lvReplacementTracks.Name = "lvReplacementTracks";
+            lvReplacementTracks.ShowGroups = false;
+            lvReplacementTracks.Size = new Size(954, 226);
+            lvReplacementTracks.TabIndex = 5;
+            lvReplacementTracks.UseCompatibleStateImageBehavior = false;
+            lvReplacementTracks.View = View.Details;
+            // 
+            // colWemId
+            // 
+            colWemId.Text = "WEM ID";
+            colWemId.Width = 120;
+            // 
+            // colReplacedFilePath
+            // 
+            colReplacedFilePath.Text = "Replaced With File";
+            colReplacedFilePath.Width = 150;
+            // 
+            // pnlTrackProperties
+            // 
+            pnlTrackProperties.Dock = DockStyle.Fill;
+            pnlTrackProperties.Location = new Point(3, 21);
+            pnlTrackProperties.Name = "pnlTrackProperties";
+            pnlTrackProperties.Size = new Size(966, 431);
+            pnlTrackProperties.TabIndex = 0;
             // 
             // ReplacementStationEditor
             // 
@@ -449,7 +536,7 @@ namespace RadioExt_Helper.user_controls
             Controls.Add(tabControl);
             Controls.Add(statusStrip1);
             Name = "ReplacementStationEditor";
-            Size = new Size(987, 639);
+            Size = new Size(1234, 832);
             Load += ReplacementStationEditor_Load;
             statusStrip1.ResumeLayout(false);
             statusStrip1.PerformLayout();
@@ -465,12 +552,16 @@ namespace RadioExt_Helper.user_controls
             splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
             splitContainer1.ResumeLayout(false);
+            grpVanillaTracks.ResumeLayout(false);
             tableLayoutPanel1.ResumeLayout(false);
+            ctxRemoveMenu.ResumeLayout(false);
             ctxReplaceMenu.ResumeLayout(false);
             splitContainer2.Panel1.ResumeLayout(false);
+            splitContainer2.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)splitContainer2).EndInit();
             splitContainer2.ResumeLayout(false);
-            ctxRemoveMenu.ResumeLayout(false);
+            grpReplacedTracks.ResumeLayout(false);
+            grpTrackProperties.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -507,5 +598,13 @@ namespace RadioExt_Helper.user_controls
         private ToolStripMenuItem btnReplaceAllTracks;
         private ContextMenuStrip ctxRemoveMenu;
         private ToolStripMenuItem btnRemoveAllTracks;
+        private GroupBox grpReplacedTracks;
+        private GroupBox grpTrackProperties;
+        private GroupBox grpVanillaTracks;
+        private GroupBox groupBox1;
+        private ListView lvReplacementTracks;
+        private ColumnHeader colWemId;
+        private ColumnHeader colReplacedFilePath;
+        private Panel pnlTrackProperties;
     }
 }

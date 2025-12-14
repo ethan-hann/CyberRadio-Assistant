@@ -3274,6 +3274,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove All Replacements.
+        /// </summary>
+        internal static string RemoveAllWemIds {
+            get {
+                return ResourceManager.GetString("RemoveAllWemIds", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Removes the song from the station&apos;s ordered song list. Does not remove the song from the station..
         /// </summary>
         internal static string RemoveFromOrderHelp {
@@ -3301,7 +3310,16 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to   Remove Selected.
+        ///   Looks up a localized string similar to Remove Replacement.
+        /// </summary>
+        internal static string RemoveReplacedWemId {
+            get {
+                return ResourceManager.GetString("RemoveReplacedWemId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove Selected.
         /// </summary>
         internal static string RemoveSelected {
             get {
@@ -3346,11 +3364,56 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Replace All with Same Song.
+        /// </summary>
+        internal static string ReplaceAllWemIds {
+            get {
+                return ResourceManager.GetString("ReplaceAllWemIds", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Properties.
+        /// </summary>
+        internal static string ReplacedTrackProperties {
+            get {
+                return ResourceManager.GetString("ReplacedTrackProperties", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tracks to Replace.
+        /// </summary>
+        internal static string ReplacedTracksGroupBox {
+            get {
+                return ResourceManager.GetString("ReplacedTracksGroupBox", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Shows the list of tracks that will be replaced. Select a track to view properties..
         /// </summary>
         internal static string ReplacedTracksListHelp {
             get {
                 return ResourceManager.GetString("ReplacedTracksListHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Replaced Ids.
+        /// </summary>
+        internal static string ReplacedWemIdsGroupBox {
+            get {
+                return ResourceManager.GetString("ReplacedWemIdsGroupBox", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Replaced With File.
+        /// </summary>
+        internal static string ReplacedWithFile {
+            get {
+                return ResourceManager.GetString("ReplacedWithFile", resourceCulture);
             }
         }
         
@@ -3373,20 +3436,20 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add the selected vanilla track above to the list below to replace..
-        /// </summary>
-        internal static string ReplaceTrackHelp {
-            get {
-                return ResourceManager.GetString("ReplaceTrackHelp", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Replace Vanilla Station....
         /// </summary>
         internal static string ReplaceVanillaStation {
             get {
                 return ResourceManager.GetString("ReplaceVanillaStation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Replace.
+        /// </summary>
+        internal static string ReplaceWemId {
+            get {
+                return ResourceManager.GetString("ReplaceWemId", resourceCulture);
             }
         }
         
@@ -4453,6 +4516,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Vanilla Tracks.
+        /// </summary>
+        internal static string VanillaTracksGroupBox {
+            get {
+                return ResourceManager.GetString("VanillaTracksGroupBox", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Volume:.
         /// </summary>
         internal static string Volume {
@@ -4494,6 +4566,25 @@ namespace RadioExt_Helper {
         internal static string WatchForChangesOption {
             get {
                 return ResourceManager.GetString("WatchForChangesOption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to WEM ID.
+        /// </summary>
+        internal static string WemId {
+            get {
+                return ResourceManager.GetString("WemId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select WEM IDs below and click &quot;Replace&quot; to select new audio file.
+        ///You can replace all IDs for this track or only a specific one..
+        /// </summary>
+        internal static string WEMIdHelp {
+            get {
+                return ResourceManager.GetString("WEMIdHelp", resourceCulture);
             }
         }
         

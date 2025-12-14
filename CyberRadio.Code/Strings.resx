@@ -341,7 +341,7 @@ Please set it now.</value>
     <value>Add Selected  </value>
   </data>
   <data name="RemoveSelected" xml:space="preserve">
-    <value>  Remove Selected</value>
+    <value>Remove Selected</value>
   </data>
   <data name="Order" xml:space="preserve">
     <value>Order</value>
@@ -1574,9 +1574,6 @@ Please be patient. You can cancel at any time using the "Cancel Action" button. 
   <data name="RemoveReplacedTrack" xml:space="preserve">
     <value>Remove Replaced Track</value>
   </data>
-  <data name="ReplaceTrack" xml:space="preserve">
-    <value>Replace Selected Track</value>
-  </data>
   <data name="ReplaceAllTracks" xml:space="preserve">
     <value>Replace All Tracks</value>
   </data>
@@ -1601,9 +1598,6 @@ Please be patient. You can cancel at any time using the "Cancel Action" button. 
   <data name="ListView_Column_IsReplaced" xml:space="preserve">
     <value>Is Replaced?</value>
   </data>
-  <data name="ReplaceTrackHelp" xml:space="preserve">
-    <value>Add the selected vanilla track above to the list below to replace.</value>
-  </data>
   <data name="RemoveReplacedTrackHelp" xml:space="preserve">
     <value>Remove the selected vanilla track above from the list of replacement tracks.</value>
   </data>
@@ -1618,5 +1612,42 @@ Please be patient. You can cancel at any time using the "Cancel Action" button. 
   </data>
   <data name="RemoveAllReplacedTracks" xml:space="preserve">
     <value>Remove All Tracks</value>
+  </data>
+  <data name="ReplacedTracksGroupBox" xml:space="preserve">
+    <value>Tracks to Replace</value>
+  </data>
+  <data name="VanillaTracksGroupBox" xml:space="preserve">
+    <value>Vanilla Tracks</value>
+  </data>
+  <data name="ReplacedTrackProperties" xml:space="preserve">
+    <value>Properties</value>
+  </data>
+  <data name="ReplaceWemId" xml:space="preserve">
+    <value>Replace</value>
+  </data>
+  <data name="WEMIdHelp" xml:space="preserve">
+    <value>Select WEM IDs below and click "Replace" to select new audio file.
+You can replace all IDs for this track or only a specific one.</value>
+  </data>
+  <data name="ReplacedWemIdsGroupBox" xml:space="preserve">
+    <value>Replaced Ids</value>
+  </data>
+  <data name="WemId" xml:space="preserve">
+    <value>WEM ID</value>
+  </data>
+  <data name="ReplacedWithFile" xml:space="preserve">
+    <value>Replaced With File</value>
+  </data>
+  <data name="RemoveReplacedWemId" xml:space="preserve">
+    <value>Remove Replacement</value>
+  </data>
+  <data name="ReplaceAllWemIds" xml:space="preserve">
+    <value>Replace All with Same Song</value>
+  </data>
+  <data name="RemoveAllWemIds" xml:space="preserve">
+    <value>Remove All Replacements</value>
+  </data>
+  <data name="ReplaceTrack" xml:space="preserve">
+    <value>Replace Selected Track</value>
   </data>
 </root>

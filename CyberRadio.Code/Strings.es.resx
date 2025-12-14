@@ -337,9 +337,6 @@ Por favor configúrelo ahora.</value>
   <data name="SongOrder" xml:space="preserve">
     <value>Orden de las canciones</value>
   </data>
-  <data name="RemoveSelected" xml:space="preserve">
-    <value>  Quitar Seleccionado</value>
-  </data>
   <data name="AddSelected" xml:space="preserve">
     <value>Agregar seleccionado  </value>
   </data>
@@ -1574,9 +1571,6 @@ Por favor, sea paciente. Puede cancelar en cualquier momento usando el botón "C
   <data name="RemoveReplacedTrack" xml:space="preserve">
     <value>Quitar pista reemplazada</value>
   </data>
-  <data name="ReplaceTrack" xml:space="preserve">
-    <value>Reemplazar pista seleccionada</value>
-  </data>
   <data name="ReplaceAllTracks" xml:space="preserve">
     <value>Reemplazar todas las pistas</value>
   </data>
@@ -1601,9 +1595,6 @@ Por favor, sea paciente. Puede cancelar en cualquier momento usando el botón "C
   <data name="ListView_Column_IsReplaced" xml:space="preserve">
     <value>¿Se reemplaza?</value>
   </data>
-  <data name="ReplaceTrackHelp" xml:space="preserve">
-    <value>Agregue la pista básica seleccionada arriba a la lista a continuación para reemplazarla.</value>
-  </data>
   <data name="RemoveReplacedTrackHelp" xml:space="preserve">
     <value>Elimina la pista básica seleccionada arriba de la lista de pistas de reemplazo.</value>
   </data>
@@ -1618,5 +1609,45 @@ Por favor, sea paciente. Puede cancelar en cualquier momento usando el botón "C
   </data>
   <data name="RemoveAllReplacedTracks" xml:space="preserve">
     <value>Eliminar todas las pistas</value>
+  </data>
+  <data name="RemoveSelected" xml:space="preserve">
+    <value>Eliminar seleccionado</value>
+  </data>
+  <data name="ReplacedTracksGroupBox" xml:space="preserve">
+    <value>Pistas para reemplazar</value>
+  </data>
+  <data name="VanillaTracksGroupBox" xml:space="preserve">
+    <value>Pistas de vainilla</value>
+  </data>
+  <data name="ReplacedTrackProperties" xml:space="preserve">
+    <value>Propiedades</value>
+  </data>
+  <data name="ReplaceWemId" xml:space="preserve">
+    <value>Reemplazar</value>
+  </data>
+  <data name="WEMIdHelp" xml:space="preserve">
+    <value>Seleccione los ID de WEM a continuación y haga clic en "Reemplazar" para seleccionar un nuevo archivo de audio.
+Puedes reemplazar todos los ID de esta pista o solo uno específico.</value>
+  </data>
+  <data name="ReplacedWemIdsGroupBox" xml:space="preserve">
+    <value>Identificaciones reemplazadas</value>
+  </data>
+  <data name="WemId" xml:space="preserve">
+    <value>ID WEM</value>
+  </data>
+  <data name="ReplacedWithFile" xml:space="preserve">
+    <value>Reemplazado con archivo</value>
+  </data>
+  <data name="RemoveReplacedWemId" xml:space="preserve">
+    <value>Quitar reemplazo</value>
+  </data>
+  <data name="ReplaceAllWemIds" xml:space="preserve">
+    <value>Reemplazar todo con la misma canción</value>
+  </data>
+  <data name="RemoveAllWemIds" xml:space="preserve">
+    <value>Eliminar todos los reemplazos</value>
+  </data>
+  <data name="ReplaceTrack" xml:space="preserve">
+    <value>Reemplazar pista seleccionada</value>
   </data>
 </root>

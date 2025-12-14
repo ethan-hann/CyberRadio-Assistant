@@ -21,7 +21,6 @@ using RadioExt_Helper.custom_controls;
 using RadioExt_Helper.models;
 using RadioExt_Helper.Properties;
 using RadioExt_Helper.utility;
-using System.Windows.Forms;
 using AetherUtils.Core.Extensions;
 using WIG.Lib.Models.Audio;
 
@@ -39,6 +38,8 @@ public sealed partial class ReplacementStationEditor : UserControl, IEditor
 
     private readonly BindingList<AudioTrack> _replacedTracks = [];
 
+    private readonly Dictionary<AudioTrack, ReplacedTrackPropertiesCtl?> _replacementTrackMap = [];
+
     /// <summary>
     ///     Create a new ReplacementStationEditor for the specified replacement station.
     /// </summary>
@@ -54,7 +55,10 @@ public sealed partial class ReplacementStationEditor : UserControl, IEditor
         ReplacedStation = station;
     }
 
+    /// <inheritdoc />
     public Guid Id { get; set; } = Guid.NewGuid();
+
+    /// <inheritdoc />
     public EditorType Type { get; set; } = EditorType.StationEditor;
 
     /// <summary>
@@ -82,6 +86,9 @@ public sealed partial class ReplacementStationEditor : UserControl, IEditor
 
         grpDisplay.Text = Strings.DisplaySettings;
         grpNotes.Text = Strings.Notes;
+        grpReplacedTracks.Text = Strings.ReplacedTracksGroupBox;
+        grpVanillaTracks.Text = Strings.VanillaTracksGroupBox;
+        grpTrackProperties.Text = Strings.ReplacedTrackProperties;
 
         tabMainInfo.Text = Strings.VanillaStationMainInfoTab;
         tabMusic.Text = Strings.VanillaStationTracksTab;
@@ -93,6 +100,10 @@ public sealed partial class ReplacementStationEditor : UserControl, IEditor
 
         lblStatus.Text = Strings.Ready;
         tinyEditor.Translate();
+
+        //Translate track properties editors
+        foreach (var editor in _replacementTrackMap.Values)
+            editor?.Translate();
     }
 
     /// <summary>
@@ -161,10 +172,12 @@ public sealed partial class ReplacementStationEditor : UserControl, IEditor
 
     private void SetDisplayTabValues()
     {
-        txtVanillaStationName.Text = ReplacedStation?.TrackedObject?.VanillaStation?.StationName ?? "Unknown Station";
-        txtDisplayName.Text = ReplacedStation?.TrackedObject?.DisplayName ?? "New Replacement Station";
+        txtVanillaStationName.Text = ReplacedStation?.TrackedObject.VanillaStation?.StationName ?? "Unknown Station";
+        txtDisplayName.Text = ReplacedStation?.TrackedObject.DisplayName ?? "New Replacement Station";
 
-        pbStationIcon.Image = ReplacementStationListBox.GetOrCreateThumb(ReplacedStation.TrackedObject.VanillaStation);
+        var vanillaStation = ReplacedStation?.TrackedObject.VanillaStation;
+        if (vanillaStation != null)
+            pbStationIcon.Image = ReplacementStationListBox.GetOrCreateThumb(vanillaStation);
     }
 
     private void SetMusicTabValues()
@@ -173,14 +186,17 @@ public sealed partial class ReplacementStationEditor : UserControl, IEditor
         lbReplacedTracks.BeginUpdate();
 
         _replacedTracks.Clear();
+        _replacementTrackMap.Clear();
+
         if (ReplacedStation == null) return;
 
-        var vanillaTracks = ReplacedStation.TrackedObject.VanillaStation.Tracks;
+        var vanillaTracks = ReplacedStation.TrackedObject.VanillaStation?.Tracks;
         foreach (var matchingVanillaTrack in ReplacedStation.TrackedObject.Tracks
-                     .Select(track => vanillaTracks
+                     .Select(track => vanillaTracks?
                          .FirstOrDefault(t => t.TrackName.Equals(track.VanillaTrackName))).OfType<AudioTrack>())
         {
             _replacedTracks.Add(matchingVanillaTrack);
+            _replacementTrackMap.Add(matchingVanillaTrack, new ReplacedTrackPropertiesCtl(ReplacedStation, matchingVanillaTrack.TrackName));
         }
 
         PopulateListView();
@@ -191,6 +207,7 @@ public sealed partial class ReplacementStationEditor : UserControl, IEditor
 
         lvTracks.Invalidate();
         lvTracks.EndUpdate();
+
         lbReplacedTracks.EndUpdate();
     }
 
@@ -198,9 +215,10 @@ public sealed partial class ReplacementStationEditor : UserControl, IEditor
     {
         lvTracks.SuspendLayout();
         lvTracks.Items.Clear();
-        if (ReplacedStation == null) return;
 
-        var vanillaTracks = ReplacedStation.TrackedObject.VanillaStation.Tracks;
+        var vanillaTracks = ReplacedStation?.TrackedObject.VanillaStation?.Tracks;
+        if (vanillaTracks == null) return;
+
         foreach (var song in vanillaTracks)
         {
             var durations = song.TrackDuration.Select(d => TimeSpan.FromSeconds(d).ToString("g")).ToList();
@@ -234,15 +252,54 @@ public sealed partial class ReplacementStationEditor : UserControl, IEditor
         SetMusicTabValues();
     }
 
+    private void SelectTrackInListBox(AudioTrack track)
+    {
+        if (!_replacedTracks.Contains(track)) return;
+
+        lbReplacedTracks.SelectedItem = track;
+        SwapPropertiesControl(track);
+    }
+
     private void btnReplaceTrack_Click(object sender, EventArgs e)
     {
         if (lvTracks.SelectedItems.Count <= 0) return;
+        if (ReplacedStation == null) return;
 
         // Add the selected track to the replaced tracks list if it does not already exist
         if (lvTracks.SelectedItems[0].Tag is not AudioTrack track) return;
         if (_replacedTracks.Contains(track)) return;
 
         _replacedTracks.Add(track);
+        TryAddPropertiesControl(track);
+        SelectTrackInListBox(track);
+
+        lvTracks.BeginUpdate();
+        lvTracks.Invalidate(); // Refresh the ListView to update the icon
+        lvTracks.EndUpdate();
+    }
+
+    private void btnReplaceAllTracks_Click(object sender, EventArgs e)
+    {
+        lbReplacedTracks.BeginUpdate();
+
+        lbReplacedTracks.DataSource = null;
+        _replacedTracks.Clear();
+
+        if (ReplacedStation == null) return;
+
+        var tracks = lvTracks.Items.Cast<ListViewItem>().ToList();
+        foreach (var item in tracks)
+        {
+            if (item.Tag is not AudioTrack track) continue;
+            _replacedTracks.Add(track);
+            TryAddPropertiesControl(track);
+        }
+
+        lbReplacedTracks.DataSource = _replacedTracks;
+        lbReplacedTracks.DisplayMember = "ToString";
+        lbReplacedTracks.EndUpdate();
+
+        SelectTrackInListBox(_replacedTracks.Last());
 
         lvTracks.BeginUpdate();
         lvTracks.Invalidate(); // Refresh the ListView to update the icon
@@ -254,14 +311,41 @@ public sealed partial class ReplacementStationEditor : UserControl, IEditor
         if (lbReplacedTracks.SelectedItems.Count <= 0) return;
 
         // Remove the selected track from the replaced tracks list if it exists and re-enable it in the main list
-        if (lvTracks.SelectedItems[0].Tag is not AudioTrack track) return;
+        if (lbReplacedTracks.SelectedItems[0] is not AudioTrack track) return;
 
         _replacedTracks.Remove(track);
+        _replacementTrackMap.Remove(track);
+
+        if (_replacedTracks.Count > 0)
+            SelectTrackInListBox(_replacedTracks.Last()); // Select the last track in the list after removal
+        else
+            ResetPropertiesUi(); //No tracks in the listbox, remove properties UI
 
         lvTracks.BeginUpdate();
         lvTracks.Invalidate(); // Refresh the ListView to update the icon
         lvTracks.EndUpdate();
     }
+
+    private void btnRemoveAllTracks_Click(object sender, EventArgs e)
+    {
+        lbReplacedTracks.BeginUpdate();
+        lbReplacedTracks.DataSource = null;
+        _replacedTracks.Clear();
+        _replacementTrackMap.Clear();
+
+        ResetPropertiesUi();
+
+        lbReplacedTracks.DataSource = _replacedTracks;
+        lbReplacedTracks.DisplayMember = "ToString";
+
+        lbReplacedTracks.EndUpdate();
+
+        lvTracks.BeginUpdate();
+        lvTracks.Invalidate(); // Refresh the ListView to update the icon
+        lvTracks.EndUpdate();
+    }
+
+    private void ResetPropertiesUi() => pnlTrackProperties.Controls.Clear();
 
     /// <summary>
     ///     Updates the station's display name. Does not affect the in-game name. Mainly used when the main form detects a
@@ -285,6 +369,33 @@ public sealed partial class ReplacementStationEditor : UserControl, IEditor
         if (lbReplacedTracks.SelectedIndex < 0) return;
         //TODO: add track editing functionality
         //TODO: add replace all button
+
+        if (lbReplacedTracks.SelectedItem is not AudioTrack selectedTrack) return;
+
+        if (SwapPropertiesControl(selectedTrack)) return;
+
+        // This should never happen, but just in case, add a new control and swap again
+        TryAddPropertiesControl(selectedTrack);
+        SwapPropertiesControl(selectedTrack);
+    }
+
+    private void TryAddPropertiesControl(AudioTrack track)
+    {
+        if (ReplacedStation == null) return;
+
+        if (!_replacementTrackMap.ContainsKey(track))
+            _replacementTrackMap.Add(track, new ReplacedTrackPropertiesCtl(ReplacedStation, track.TrackName));
+    }
+
+    private bool SwapPropertiesControl(AudioTrack track)
+    {
+        ResetPropertiesUi();
+        if (!_replacementTrackMap.TryGetValue(track, out var trackPropertiesCtl) || trackPropertiesCtl == null) 
+            return trackPropertiesCtl != null;
+
+        trackPropertiesCtl.Dock = DockStyle.Fill;
+        pnlTrackProperties.Controls.Add(trackPropertiesCtl);
+        return true;
     }
 
     #region Hover Help
@@ -302,11 +413,6 @@ public sealed partial class ReplacementStationEditor : UserControl, IEditor
     private void lblIcon_MouseEnter(object sender, EventArgs e)
     {
         lblStatus.Text = Strings.VanillaStationIconHelp;
-    }
-
-    private void btnReplaceTrack_MouseEnter(object sender, EventArgs e)
-    {
-        lblStatus.Text = Strings.ReplaceTrackHelp;
     }
 
     private void btnRemoveReplacedTrack_MouseEnter(object sender, EventArgs e)

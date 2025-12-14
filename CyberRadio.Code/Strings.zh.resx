@@ -340,9 +340,6 @@
   <data name="AddSelected" xml:space="preserve">
     <value>添加选定的  </value>
   </data>
-  <data name="RemoveSelected" xml:space="preserve">
-    <value>  删除选定的</value>
-  </data>
   <data name="Order" xml:space="preserve">
     <value>命令</value>
   </data>
@@ -1574,9 +1571,6 @@
   <data name="RemoveReplacedTrack" xml:space="preserve">
     <value>删除替换的轨道</value>
   </data>
-  <data name="ReplaceTrack" xml:space="preserve">
-    <value>替换选定的曲目</value>
-  </data>
   <data name="ReplaceAllTracks" xml:space="preserve">
     <value>替换所有曲目</value>
   </data>
@@ -1601,9 +1595,6 @@
   <data name="ListView_Column_IsReplaced" xml:space="preserve">
     <value>被替换了吗？</value>
   </data>
-  <data name="ReplaceTrackHelp" xml:space="preserve">
-    <value>将上面选定的原版轨道添加到下面的列表中进行替换。</value>
-  </data>
   <data name="RemoveReplacedTrackHelp" xml:space="preserve">
     <value>从替换曲目列表中删除上面选定的原版曲目。</value>
   </data>
@@ -1618,5 +1609,45 @@
   </data>
   <data name="RemoveAllReplacedTracks" xml:space="preserve">
     <value>删除所有曲目</value>
+  </data>
+  <data name="RemoveSelected" xml:space="preserve">
+    <value>删除所选内容</value>
+  </data>
+  <data name="ReplacedTracksGroupBox" xml:space="preserve">
+    <value>要替换的曲目</value>
+  </data>
+  <data name="VanillaTracksGroupBox" xml:space="preserve">
+    <value>香草曲目</value>
+  </data>
+  <data name="ReplacedTrackProperties" xml:space="preserve">
+    <value>特性</value>
+  </data>
+  <data name="ReplaceWemId" xml:space="preserve">
+    <value>代替</value>
+  </data>
+  <data name="WEMIdHelp" xml:space="preserve">
+    <value>选择下面的 WEM ID，然后单击“替换”以选择新的音频文件。
+您可以替换该轨道的所有 ID，也可以仅替换特定的 ID。</value>
+  </data>
+  <data name="ReplacedWemIdsGroupBox" xml:space="preserve">
+    <value>替换的 ID</value>
+  </data>
+  <data name="WemId" xml:space="preserve">
+    <value>WEM ID</value>
+  </data>
+  <data name="ReplacedWithFile" xml:space="preserve">
+    <value>替换为文件</value>
+  </data>
+  <data name="RemoveReplacedWemId" xml:space="preserve">
+    <value>移除替换件</value>
+  </data>
+  <data name="ReplaceAllWemIds" xml:space="preserve">
+    <value>全部替换为同一首歌曲</value>
+  </data>
+  <data name="RemoveAllWemIds" xml:space="preserve">
+    <value>删除所有替换项</value>
+  </data>
+  <data name="ReplaceTrack" xml:space="preserve">
+    <value>替换选定的曲目</value>
   </data>
 </root>
