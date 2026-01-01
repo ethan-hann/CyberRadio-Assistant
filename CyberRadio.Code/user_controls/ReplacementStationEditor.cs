@@ -1,28 +1,28 @@
-﻿// // ReplacementStationEditor.cs : RadioExt-Helper
-// // Copyright (C) 2025  Ethan Hann
-// //
-// // This program is free software: you can redistribute it and/or modify
-// // it under the terms of the GNU General Public License as published by
-// // the Free Software Foundation, either version 3 of the License, or
-// // (at your option) any later version.
-// //
-// // This program is distributed in the hope that it will be useful,
-// // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// // GNU General Public License for more details.
-// //
-// // You should have received a copy of the GNU General Public License
-// // along with this program.  If not, see <https://www.gnu.org/licenses/>.
+﻿// ReplacementStationEditor.cs : RadioExt-Helper
+// Copyright (C) 2026  Ethan Hann
+// 
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+// 
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// 
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #region
 
 using System.ComponentModel;
+using AetherUtils.Core.Extensions;
+using AetherUtils.Core.Logging;
 using RadioExt_Helper.custom_controls;
 using RadioExt_Helper.models;
 using RadioExt_Helper.Properties;
 using RadioExt_Helper.utility;
-using AetherUtils.Core.Extensions;
-using AetherUtils.Core.Logging;
 using WIG.Lib.Models.Audio;
 
 #endregion
@@ -34,12 +34,12 @@ namespace RadioExt_Helper.user_controls;
 /// </summary>
 public sealed partial class ReplacementStationEditor : UserControl, IEditor
 {
-    private readonly ImageList _tabImages = new();
     private readonly ImageList _imageList = new();
 
     private readonly BindingList<AudioTrack> _replacedTracks = [];
 
     private readonly Dictionary<AudioTrack, ReplacedTrackPropertiesCtl?> _replacementTrackMap = [];
+    private readonly ImageList _tabImages = new();
 
     /// <summary>
     ///     Create a new ReplacementStationEditor for the specified replacement station.
@@ -145,7 +145,8 @@ public sealed partial class ReplacementStationEditor : UserControl, IEditor
 
             var replacedTracks = lbReplacedTracks.Items.Cast<AudioTrack>().ToList();
 
-            var image = lvTracks.SmallImageList.Images[replacedTracks.Find(t => t.TrackName.Equals(track.TrackName)) != null ? "enabled" : "disabled"];
+            var image = lvTracks.SmallImageList.Images[
+                replacedTracks.Find(t => t.TrackName.Equals(track.TrackName)) != null ? "enabled" : "disabled"];
             if (image == null) return;
 
             // Calculate the position to center the image in the cell
@@ -197,7 +198,8 @@ public sealed partial class ReplacementStationEditor : UserControl, IEditor
                          .FirstOrDefault(t => t.TrackName.Equals(track.VanillaTrackName))).OfType<AudioTrack>())
         {
             _replacedTracks.Add(matchingVanillaTrack);
-            _replacementTrackMap.Add(matchingVanillaTrack, new ReplacedTrackPropertiesCtl(ReplacedStation, matchingVanillaTrack.TrackName));
+            _replacementTrackMap.Add(matchingVanillaTrack,
+                new ReplacedTrackPropertiesCtl(ReplacedStation, matchingVanillaTrack.TrackName));
         }
 
         PopulateListView();
@@ -230,12 +232,12 @@ public sealed partial class ReplacementStationEditor : UserControl, IEditor
                 durationString = durations.FirstOrDefault() ?? "Unknown";
 
             ListViewItem lvItem = new([
-                string.Empty, // Placeholder for icon
+                    string.Empty, // Placeholder for icon
                     song.TrackName,
                     song.TrackArtist,
                     durationString
-            ])
-            { Tag = song };
+                ])
+                { Tag = song };
 
             lvTracks.Items.Add(lvItem);
         }
@@ -360,7 +362,10 @@ public sealed partial class ReplacementStationEditor : UserControl, IEditor
         lvTracks.EndUpdate();
     }
 
-    private void ResetPropertiesUi() => pnlTrackProperties.Controls.Clear();
+    private void ResetPropertiesUi()
+    {
+        pnlTrackProperties.Controls.Clear();
+    }
 
     /// <summary>
     ///     Updates the station's display name. Does not affect the in-game name. Mainly used when the main form detects a
@@ -406,13 +411,14 @@ public sealed partial class ReplacementStationEditor : UserControl, IEditor
     private void OnTrackChanged(object? sender, string e)
     {
         if (ReplacedStation == null) return;
-        AuLogger.GetCurrentLogger<ReplacementStationEditor>("OnTrackChanged").Info($"Track updated: {(ReplacedStation.TrackedObject.VanillaStation.Tracks).FirstOrDefault(n => n.TrackName.Equals(e))}");
+        AuLogger.GetCurrentLogger<ReplacementStationEditor>("OnTrackChanged").Info(
+            $"Track updated: {ReplacedStation.TrackedObject.VanillaStation.Tracks.FirstOrDefault(n => n.TrackName.Equals(e))}");
     }
 
     private bool SwapPropertiesControl(AudioTrack track)
     {
         ResetPropertiesUi();
-        if (!_replacementTrackMap.TryGetValue(track, out var trackPropertiesCtl) || trackPropertiesCtl == null) 
+        if (!_replacementTrackMap.TryGetValue(track, out var trackPropertiesCtl) || trackPropertiesCtl == null)
             return trackPropertiesCtl != null;
 
         trackPropertiesCtl.Dock = DockStyle.Fill;
