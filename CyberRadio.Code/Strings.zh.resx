@@ -1650,4 +1650,17 @@
   <data name="ReplaceTrack" xml:space="preserve">
     <value>替换选定的曲目</value>
   </data>
+  <data name="WEMIdDisclaimer" xml:space="preserve">
+    <value>建议替换所选站点的所有 WEM ID。
+目前尚不清楚所有 WEM ID 在游戏中的具体用途。</value>
+  </data>
+  <data name="AddReplacementTrackTitle" xml:space="preserve">
+    <value>选择一个文件来替换原版轨道</value>
+  </data>
+  <data name="TrackNotReplacedYet" xml:space="preserve">
+    <value>还没有更换</value>
+  </data>
+  <data name="ConfirmRemoveAllReplacementTracks" xml:space="preserve">
+    <value>您确定要删除下面所有替换的曲目吗？</value>
+  </data>
 </root>

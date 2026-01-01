@@ -1650,4 +1650,17 @@ Sie können alle IDs für diesen Track oder nur eine bestimmte ersetzen.</value>
   <data name="ReplaceTrack" xml:space="preserve">
     <value>Ausgewählten Titel ersetzen</value>
   </data>
+  <data name="WEMIdDisclaimer" xml:space="preserve">
+    <value>Es wird empfohlen, alle WEM-IDs für eine ausgewählte Station zu ersetzen.
+Es ist nicht bekannt, wo genau alle WEM-IDs im Spiel verwendet werden.</value>
+  </data>
+  <data name="AddReplacementTrackTitle" xml:space="preserve">
+    <value>Wählen Sie eine Datei aus, durch die der Vanilla-Track ersetzt werden soll</value>
+  </data>
+  <data name="TrackNotReplacedYet" xml:space="preserve">
+    <value>Noch nicht ersetzt</value>
+  </data>
+  <data name="ConfirmRemoveAllReplacementTracks" xml:space="preserve">
+    <value>Sind Sie sicher, dass Sie alle ersetzten Titel unten entfernen möchten?</value>
+  </data>
 </root>

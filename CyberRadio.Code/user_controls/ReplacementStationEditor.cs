@@ -411,8 +411,7 @@ public sealed partial class ReplacementStationEditor : UserControl, IEditor
     private void OnTrackChanged(object? sender, string e)
     {
         if (ReplacedStation == null) return;
-        AuLogger.GetCurrentLogger<ReplacementStationEditor>("OnTrackChanged").Info(
-            $"Track updated: {ReplacedStation.TrackedObject.VanillaStation.Tracks.FirstOrDefault(n => n.TrackName.Equals(e))}");
+        StationUpdated?.Invoke(this, EventArgs.Empty);
     }
 
     private bool SwapPropertiesControl(AudioTrack track)
