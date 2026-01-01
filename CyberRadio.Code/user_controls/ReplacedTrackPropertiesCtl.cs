@@ -99,9 +99,9 @@ public partial class ReplacedTrackPropertiesCtl : UserControl, IEditor
 
         if (wemIds is null)
         {
-            AuLogger.GetCurrentLogger<ReplacedTrackPropertiesCtl>()
-                .Warn(
-                    $"No WEM IDs found for track '{_trackName}' in vanilla station associated with replacement station '{ReplacedStation.TrackedObject.DisplayName}'.");
+            AuLogger.GetCurrentLogger<ReplacedTrackPropertiesCtl>("PopulateListView")
+                .Error(
+                    $"No WEM IDs found for track '{_trackName}' in vanilla station associated with replacement station '{ReplacedStation.TrackedObject.DisplayName}'. This indicates that the Google sheet was not parsed correctly!");
             return;
         }
 
