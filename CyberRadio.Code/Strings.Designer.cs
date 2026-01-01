@@ -143,6 +143,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select a file to replace vanilla track with.
+        /// </summary>
+        internal static string AddReplacementTrackTitle {
+            get {
+                return ResourceManager.GetString("AddReplacementTrackTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add Selected  .
         /// </summary>
         internal static string AddSelected {
@@ -796,6 +805,15 @@ namespace RadioExt_Helper {
         internal static string ConfirmRefreshStations {
             get {
                 return ResourceManager.GetString("ConfirmRefreshStations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to remove all replaced tracks below?.
+        /// </summary>
+        internal static string ConfirmRemoveAllReplacementTracks {
+            get {
+                return ResourceManager.GetString("ConfirmRemoveAllReplacementTracks", resourceCulture);
             }
         }
         
@@ -4174,6 +4192,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Not replaced yet.
+        /// </summary>
+        internal static string TrackNotReplacedYet {
+            get {
+                return ResourceManager.GetString("TrackNotReplacedYet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ultimate.
         /// </summary>
         internal static string Ultimate {
@@ -4575,6 +4602,16 @@ namespace RadioExt_Helper {
         internal static string WemId {
             get {
                 return ResourceManager.GetString("WemId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to It is recommended to replace all WEM IDs for a selected station.
+        ///It is unknown where exactly all the WEM IDs are used in-game..
+        /// </summary>
+        internal static string WEMIdDisclaimer {
+            get {
+                return ResourceManager.GetString("WEMIdDisclaimer", resourceCulture);
             }
         }
         

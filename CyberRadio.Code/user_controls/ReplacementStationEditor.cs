@@ -22,6 +22,7 @@ using RadioExt_Helper.models;
 using RadioExt_Helper.Properties;
 using RadioExt_Helper.utility;
 using AetherUtils.Core.Extensions;
+using AetherUtils.Core.Logging;
 using WIG.Lib.Models.Audio;
 
 #endregion
@@ -316,6 +317,10 @@ public sealed partial class ReplacementStationEditor : UserControl, IEditor
         _replacedTracks.Remove(track);
         _replacementTrackMap.Remove(track);
 
+        //Remove the replacement track from the station as well.
+        ReplacedStation?.TrackedObject.Tracks.Remove(
+            ReplacedStation.TrackedObject.Tracks.First(t => t.VanillaTrackName.Equals(track.TrackName)));
+
         if (_replacedTracks.Count > 0)
             SelectTrackInListBox(_replacedTracks.Last()); // Select the last track in the list after removal
         else
@@ -328,10 +333,20 @@ public sealed partial class ReplacementStationEditor : UserControl, IEditor
 
     private void btnRemoveAllTracks_Click(object sender, EventArgs e)
     {
+        //Confirm with dialog before removing all tracks
+        var caption = Strings.Confirm;
+        var text = Strings.ConfirmRemoveAllReplacementTracks;
+
+        if (MessageBox.Show(text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
+            return;
+
         lbReplacedTracks.BeginUpdate();
         lbReplacedTracks.DataSource = null;
         _replacedTracks.Clear();
         _replacementTrackMap.Clear();
+
+        //Clear all replacement tracks from the station.
+        ReplacedStation?.TrackedObject.Tracks.Clear();
 
         ResetPropertiesUi();
 
@@ -367,8 +382,6 @@ public sealed partial class ReplacementStationEditor : UserControl, IEditor
     private void lbReplacedTracks_SelectedIndexChanged(object sender, EventArgs e)
     {
         if (lbReplacedTracks.SelectedIndex < 0) return;
-        //TODO: add track editing functionality
-        //TODO: add replace all button
 
         if (lbReplacedTracks.SelectedItem is not AudioTrack selectedTrack) return;
 
@@ -383,8 +396,17 @@ public sealed partial class ReplacementStationEditor : UserControl, IEditor
     {
         if (ReplacedStation == null) return;
 
-        if (!_replacementTrackMap.ContainsKey(track))
-            _replacementTrackMap.Add(track, new ReplacedTrackPropertiesCtl(ReplacedStation, track.TrackName));
+        if (_replacementTrackMap.ContainsKey(track)) return;
+
+        var propertiesCtl = new ReplacedTrackPropertiesCtl(ReplacedStation, track.TrackName);
+        propertiesCtl.TrackChanged += OnTrackChanged;
+        _replacementTrackMap.Add(track, propertiesCtl);
+    }
+
+    private void OnTrackChanged(object? sender, string e)
+    {
+        if (ReplacedStation == null) return;
+        AuLogger.GetCurrentLogger<ReplacementStationEditor>("OnTrackChanged").Info($"Track updated: {(ReplacedStation.TrackedObject.VanillaStation.Tracks).FirstOrDefault(n => n.TrackName.Equals(e))}");
     }
 
     private bool SwapPropertiesControl(AudioTrack track)
