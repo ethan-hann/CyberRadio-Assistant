@@ -106,6 +106,7 @@ public sealed class AdditionalStation : IStation, INotifyPropertyChanged, IClone
         }
     }
 
+    /// <inheritdoc />
     public object Clone()
     {
         return new AdditionalStation
@@ -116,6 +117,7 @@ public sealed class AdditionalStation : IStation, INotifyPropertyChanged, IClone
         };
     }
 
+    /// <inheritdoc />
     public bool Equals(AdditionalStation? other)
     {
         if (other == null) return false;
@@ -124,6 +126,7 @@ public sealed class AdditionalStation : IStation, INotifyPropertyChanged, IClone
                Icons.SequenceEqual(other.Icons);
     }
 
+    /// <inheritdoc />
     public event PropertyChangedEventHandler? PropertyChanged;
 
     /// <inheritdoc />

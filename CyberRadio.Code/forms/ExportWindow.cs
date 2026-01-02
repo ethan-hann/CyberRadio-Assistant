@@ -43,6 +43,7 @@ public partial class ExportWindow : Form
     private readonly Json<MetaData> _metaDataJson = new();
     private readonly Json<List<Song>> _songListJson = new();
     private readonly List<TrackableObject<AdditionalStation>> _stationsToExport;
+    private readonly List<TrackableObject<ReplacementStation>> _replacementStationsToExport;
 
     private readonly string _statusString = Strings.ExportingStationStatus;
 
@@ -58,6 +59,7 @@ public partial class ExportWindow : Form
     {
         InitializeComponent();
         _stationsToExport = StationManager.Instance.StationsAsList;
+        _replacementStationsToExport = StationManager.Instance.ReplacementStationsAsList;
 
         SetImageList();
     }
@@ -68,7 +70,20 @@ public partial class ExportWindow : Form
 
     private static bool ShouldAutoExportToGame => (bool)(GlobalData.ConfigManager.Get("autoExportToGame") ?? false);
 
+    /// <summary>
+    /// Occurs when the export operation to the staging area has completed.
+    /// </summary>
+    /// <remarks>Subscribers can use this event to perform actions after data has been exported to staging.
+    /// The event is raised regardless of whether the export was successful or failed; check event arguments for details
+    /// if provided.</remarks>
     public event EventHandler? OnExportToStagingComplete;
+
+    /// <summary>
+    /// Occurs when the export operation to the game has completed.
+    /// </summary>
+    /// <remarks>Subscribers can use this event to perform actions after the export process finishes, such as
+    /// updating the user interface or notifying the user. The event is raised regardless of whether the export
+    /// succeeded or failed; check event arguments for details if available.</remarks>
     public event EventHandler? OnExportToGameComplete;
 
     /// <summary>
@@ -85,7 +100,11 @@ public partial class ExportWindow : Form
         lvStations.DrawColumnHeader += (_, args) => args.DrawDefault = true;
         lvStations.DrawSubItem += LvStations_DrawSubItem;
 
-        PopulateListView();
+        lvReplacedStations.OwnerDraw = true;
+        lvReplacedStations.DrawColumnHeader += (_, args) => args.DrawDefault = true;
+        lvReplacedStations.DrawSubItem += LvReplacedStations_DrawSubItem;
+
+        PopulateListViews();
         ConfigureButtons();
     }
 
@@ -95,6 +114,7 @@ public partial class ExportWindow : Form
         _imageList.Images.Add("disabled", Resources.disabled);
         _imageList.ImageSize = new Size(16, 16);
         lvStations.SmallImageList = _imageList;
+        lvReplacedStations.SmallImageList = _imageList;
     }
 
     /// <summary>
@@ -113,6 +133,26 @@ public partial class ExportWindow : Form
             if (image == null) return;
 
             // Calculate the position to center the image in the cell
+            var iconX = e.Bounds.Left + (e.Bounds.Width - image.Width) / 2;
+            var iconY = e.Bounds.Top + (e.Bounds.Height - image.Height) / 2;
+            e.Graphics.DrawImage(image, iconX, iconY);
+        }
+        else
+        {
+            e.DrawDefault = true;
+        }
+    }
+
+    private void LvReplacedStations_DrawSubItem(object? sender, DrawListViewSubItemEventArgs e)
+    {
+        if (e.ColumnIndex == 0)
+        {
+            if (e.Item == null || lvReplacedStations.SmallImageList == null ||
+                e.Item.Tag is not TrackableObject<ReplacementStation> replacedStation) return;
+
+            var image = lvReplacedStations.SmallImageList.Images[replacedStation.TrackedObject.IsActive ? "enabled" : "disabled"];
+            if (image == null) return;
+
             var iconX = e.Bounds.Left + (e.Bounds.Width - image.Width) / 2;
             var iconY = e.Bounds.Top + (e.Bounds.Height - image.Height) / 2;
             e.Graphics.DrawImage(image, iconX, iconY);
@@ -143,45 +183,72 @@ public partial class ExportWindow : Form
         lvStations.Columns[3].Text = Strings.LVSongCount;
         lvStations.Columns[4].Text = Strings.LVStreamURL;
         lvStations.Columns[5].Text = Strings.LVProposedPath;
+
+        lvReplacedStations.Columns[0].Text = Strings.LVStationStatus;
+        lvReplacedStations.Columns[1].Text = Strings.LVDisplayName;
+        lvReplacedStations.Columns[2].Text = Strings.LVReplacedTracksCount;
+        lvReplacedStations.Columns[3].Text = Strings.LVProposedPath;
     }
 
     /// <summary>
     ///     Populates the ListView with the stations to be exported.
     /// </summary>
-    private void PopulateListView()
+    private void PopulateListViews()
     {
         var radioExtPath = PathHelper.GetRadiosPath(GameBasePath);
+        var modArchivePath = PathHelper.GetModArchivePath(GameBasePath);
 
         lvStations.SuspendLayout();
         foreach (var lvItem in from station in _stationsToExport
-                 let isActive = station.TrackedObject.GetStatus()
-                 let customIconString = station.TrackedObject.CustomIcon.UseCustom
-                     ? Strings.CustomIcon
-                     : station.TrackedObject.MetaData.Icon
-                 let songString = station.TrackedObject.MetaData.StreamInfo.IsStream
-                     ? Strings.IsStream
-                     : station.TrackedObject.Songs.Count.ToString()
-                 let streamString = station.TrackedObject.MetaData.StreamInfo.IsStream
-                     ? station.TrackedObject.MetaData.StreamInfo.StreamUrl
-                     : Strings.UsingSongs
-                 let proposedPath = isActive
-                     ? Path.Combine(radioExtPath, station.TrackedObject.MetaData.DisplayName)
-                     : Strings.DisabledStation
-                 select new ListViewItem([
-                     string.Empty, // Placeholder for the icon column
+                               let isActive = station.TrackedObject.GetStatus()
+                               let customIconString = station.TrackedObject.CustomIcon.UseCustom
+                                   ? Strings.CustomIcon
+                                   : station.TrackedObject.MetaData.Icon
+                               let songString = station.TrackedObject.MetaData.StreamInfo.IsStream
+                                   ? Strings.IsStream
+                                   : station.TrackedObject.Songs.Count.ToString()
+                               let streamString = station.TrackedObject.MetaData.StreamInfo.IsStream
+                                   ? station.TrackedObject.MetaData.StreamInfo.StreamUrl
+                                   : Strings.UsingSongs
+                               let proposedPath = isActive
+                                   ? Path.Combine(radioExtPath, station.TrackedObject.MetaData.DisplayName)
+                                   : Strings.DisabledStation
+                               select new ListViewItem([
+                                   string.Empty, // Placeholder for the icon column
                      station.TrackedObject.MetaData.DisplayName,
                      customIconString ?? string.Empty,
                      songString ?? string.Empty,
                      streamString ?? string.Empty,
                      proposedPath ?? string.Empty
-                 ])
-                 {
-                     Tag = station
-                 })
+                               ])
+                               {
+                                   Tag = station
+                               })
             lvStations.Items.Add(lvItem);
 
         lvStations.ResizeColumns();
         lvStations.ResumeLayout();
+
+        lvReplacedStations.SuspendLayout();
+        foreach (var lvItem in from replacedStation in _replacementStationsToExport
+                               let isActive = replacedStation.TrackedObject.IsActive
+                               let replacedTracksCount = replacedStation.TrackedObject.Tracks.Count
+                               let proposedPath = isActive
+                                   ? Path.Combine(modArchivePath, $"{replacedStation.TrackedObject.VanillaStation.StationName}.archive")
+                                   : Strings.DisabledStation
+                               select new ListViewItem([
+                                   string.Empty, // Placeholder for the icon column
+                     replacedStation.TrackedObject?.VanillaStation?.StationName ?? replacedStation.TrackedObject.DisplayName,
+                     replacedTracksCount.ToString(),
+                     proposedPath ?? string.Empty
+                               ])
+                               {
+                                   Tag = replacedStation
+                               })
+            lvReplacedStations.Items.Add(lvItem);
+
+        lvReplacedStations.ResizeColumns();
+        lvReplacedStations.ResumeLayout();
     }
 
     /// <summary>
@@ -205,6 +272,10 @@ public partial class ExportWindow : Form
     {
         if (!bgWorkerExport.CancellationPending && !bgWorkerExport.IsBusy)
             bgWorkerExport.RunWorkerAsync();
+
+        // Export replaced stations as well
+        if (!bgWorkerExportReplacedStations.CancellationPending && !bgWorkerExportReplacedStations.IsBusy)
+            bgWorkerExportReplacedStations.RunWorkerAsync();
     }
 
     /// <summary>
@@ -214,13 +285,13 @@ public partial class ExportWindow : Form
     /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
     private void BtnExportToGame_Click(object sender, EventArgs e)
     {
-        if (ShowNoModDialogIfRequired() && !bgWorkerExportGame.CancellationPending && !bgWorkerExportGame.IsBusy)
-        {
-            var mainForm = Owner as MainForm;
-            mainForm?.SetExportInProgress(true);
+        if (!ShowNoModDialogIfRequired() || bgWorkerExportGame.CancellationPending || bgWorkerExportGame.IsBusy ||
+            bgWorkerExportReplacedStationsGame.CancellationPending || bgWorkerExportReplacedStationsGame.IsBusy) return;
 
-            bgWorkerExportGame.RunWorkerAsync();
-        }
+        var mainForm = Owner as MainForm;
+        mainForm?.SetExportInProgress(true);
+
+        bgWorkerExportGame.RunWorkerAsync();
     }
 
     /// <summary>
@@ -236,10 +307,24 @@ public partial class ExportWindow : Form
             bgWorkerExport.CancelAsync();
         }
 
-        if (bgWorkerExportGame.CancellationPending || !bgWorkerExportGame.IsBusy) return;
+        if (!bgWorkerExportGame.CancellationPending && bgWorkerExportGame.IsBusy)
+        {
+            _isCancelling = true;
+            bgWorkerExportGame.CancelAsync();
+        }
 
-        _isCancelling = true;
-        bgWorkerExportGame.CancelAsync();
+        if (!bgWorkerExportReplacedStations.CancellationPending && bgWorkerExportReplacedStations.IsBusy)
+        {
+            _isCancelling = true;
+            bgWorkerExportReplacedStations.CancelAsync();
+        }
+
+        if (!bgWorkerExportReplacedStationsGame.CancellationPending &&
+            bgWorkerExportReplacedStationsGame.IsBusy)
+        {
+            _isCancelling = true;
+            bgWorkerExportReplacedStationsGame.CancelAsync();
+        }
     }
 
     /// <summary>
@@ -385,13 +470,13 @@ public partial class ExportWindow : Form
         Dictionary<string, string> songDirectoryMap = new(StringComparer.OrdinalIgnoreCase);
 
         foreach (var station in stations)
-        foreach (var song in station.TrackedObject.Songs)
-        {
-            var songDirectory = existingDirectories
-                .FirstOrDefault(dir => song.FilePath.StartsWith(dir, StringComparison.OrdinalIgnoreCase));
+            foreach (var song in station.TrackedObject.Songs)
+            {
+                var songDirectory = existingDirectories
+                    .FirstOrDefault(dir => song.FilePath.StartsWith(dir, StringComparison.OrdinalIgnoreCase));
 
-            if (!string.IsNullOrEmpty(songDirectory)) songDirectoryMap[song.FilePath] = songDirectory;
-        }
+                if (!string.IsNullOrEmpty(songDirectory)) songDirectoryMap[song.FilePath] = songDirectory;
+            }
 
         return songDirectoryMap;
     }
@@ -709,7 +794,7 @@ public partial class ExportWindow : Form
     {
         try
         {
-            var looseArchiveGamePath = Path.Combine(GameBasePath, "archive", "pc", "mod");
+            var looseArchiveGamePath = PathHelper.GetModArchivePath(GameBasePath);
             var looseArchiveStagingPath = Path.Combine(StagingPath, "icons");
 
             if (!StationManager.Instance.IsProtectedFolder(looseArchiveStagingPath))
@@ -989,6 +1074,36 @@ public partial class ExportWindow : Form
 
             OnExportToGameComplete?.Invoke(this, EventArgs.Empty);
         }
+    }
+
+    private void bgWorkerExportReplacedStations_DoWork(object sender, DoWorkEventArgs e)
+    {
+
+    }
+
+    private void bgWorkerExportReplacedStations_ProgressChanged(object sender, ProgressChangedEventArgs e)
+    {
+
+    }
+
+    private void bgWorkerExportReplacedStations_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+    {
+
+    }
+
+    private void bgWorkerExportReplacedStationsGame_DoWork(object sender, DoWorkEventArgs e)
+    {
+
+    }
+
+    private void bgWorkerExportReplacedStationsGame_ProgressChanged(object sender, ProgressChangedEventArgs e)
+    {
+
+    }
+
+    private void bgWorkerExportReplacedStationsGame_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+    {
+
     }
 
     /// <summary>

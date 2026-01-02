@@ -30,7 +30,7 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ExportWindow));
             lvStations = new ListView();
-            colIsActive = new ColumnHeader();
+            colsActive = new ColumnHeader();
             colStationName = new ColumnHeader();
             colIcon = new ColumnHeader();
             colSongCount = new ColumnHeader();
@@ -47,36 +47,49 @@
             btnOpenGameFolder = new Button();
             bgWorkerExportGame = new System.ComponentModel.BackgroundWorker();
             splitContainer1 = new SplitContainer();
+            tabsStationsToExport = new TabControl();
+            tabAdditionalStations = new TabPage();
+            tabReplacementStations = new TabPage();
+            lvReplacedStations = new ListView();
+            colsReplActive = new ColumnHeader();
+            colsReplDisplayName = new ColumnHeader();
+            colsReplTracksCount = new ColumnHeader();
+            colsReplProposedPath = new ColumnHeader();
             tableLayoutPanel1 = new TableLayoutPanel();
             panel1 = new Panel();
             lblTip = new Label();
             btnCancel = new Button();
+            bgWorkerExportReplacedStations = new System.ComponentModel.BackgroundWorker();
+            bgWorkerExportReplacedStationsGame = new System.ComponentModel.BackgroundWorker();
             statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
             splitContainer1.SuspendLayout();
+            tabsStationsToExport.SuspendLayout();
+            tabAdditionalStations.SuspendLayout();
+            tabReplacementStations.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
             panel1.SuspendLayout();
             SuspendLayout();
             // 
             // lvStations
             // 
-            lvStations.Columns.AddRange(new ColumnHeader[] { colIsActive, colStationName, colIcon, colSongCount, colStreamURL, colProposedPath });
+            lvStations.Columns.AddRange(new ColumnHeader[] { colsActive, colStationName, colIcon, colSongCount, colStreamURL, colProposedPath });
             lvStations.Dock = DockStyle.Fill;
             lvStations.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            lvStations.Location = new Point(0, 0);
+            lvStations.Location = new Point(3, 3);
             lvStations.MultiSelect = false;
             lvStations.Name = "lvStations";
-            lvStations.Size = new Size(927, 420);
+            lvStations.Size = new Size(913, 385);
             lvStations.Sorting = SortOrder.Ascending;
             lvStations.TabIndex = 0;
             lvStations.UseCompatibleStateImageBehavior = false;
             lvStations.View = View.Details;
             // 
-            // colIsActive
+            // colsActive
             // 
-            colIsActive.Text = "Enabled In Game?";
+            colsActive.Text = "Enabled In Game?";
             // 
             // colStationName
             // 
@@ -115,7 +128,7 @@
             // 
             // lblStatus
             // 
-            lblStatus.Image = Properties.Resources.status__16x16;
+            lblStatus.Image = Properties.Resources.info__16x16;
             lblStatus.Margin = new Padding(5, 3, 0, 2);
             lblStatus.Name = "lblStatus";
             lblStatus.Size = new Size(55, 17);
@@ -234,7 +247,7 @@
             // 
             // splitContainer1.Panel1
             // 
-            splitContainer1.Panel1.Controls.Add(lvStations);
+            splitContainer1.Panel1.Controls.Add(tabsStationsToExport);
             // 
             // splitContainer1.Panel2
             // 
@@ -242,6 +255,72 @@
             splitContainer1.Size = new Size(1204, 420);
             splitContainer1.SplitterDistance = 927;
             splitContainer1.TabIndex = 11;
+            // 
+            // tabsStationsToExport
+            // 
+            tabsStationsToExport.Controls.Add(tabAdditionalStations);
+            tabsStationsToExport.Controls.Add(tabReplacementStations);
+            tabsStationsToExport.Dock = DockStyle.Fill;
+            tabsStationsToExport.Location = new Point(0, 0);
+            tabsStationsToExport.Name = "tabsStationsToExport";
+            tabsStationsToExport.SelectedIndex = 0;
+            tabsStationsToExport.Size = new Size(927, 420);
+            tabsStationsToExport.TabIndex = 1;
+            // 
+            // tabAdditionalStations
+            // 
+            tabAdditionalStations.Controls.Add(lvStations);
+            tabAdditionalStations.Location = new Point(4, 25);
+            tabAdditionalStations.Name = "tabAdditionalStations";
+            tabAdditionalStations.Padding = new Padding(3);
+            tabAdditionalStations.Size = new Size(919, 391);
+            tabAdditionalStations.TabIndex = 0;
+            tabAdditionalStations.Text = "New Stations";
+            tabAdditionalStations.UseVisualStyleBackColor = true;
+            // 
+            // tabReplacementStations
+            // 
+            tabReplacementStations.Controls.Add(lvReplacedStations);
+            tabReplacementStations.Location = new Point(4, 25);
+            tabReplacementStations.Name = "tabReplacementStations";
+            tabReplacementStations.Padding = new Padding(3);
+            tabReplacementStations.Size = new Size(919, 391);
+            tabReplacementStations.TabIndex = 1;
+            tabReplacementStations.Text = "Replaced Vanilla Stations";
+            tabReplacementStations.UseVisualStyleBackColor = true;
+            // 
+            // lvReplacedStations
+            // 
+            lvReplacedStations.Columns.AddRange(new ColumnHeader[] { colsReplActive, colsReplDisplayName, colsReplTracksCount, colsReplProposedPath });
+            lvReplacedStations.Dock = DockStyle.Fill;
+            lvReplacedStations.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lvReplacedStations.Location = new Point(3, 3);
+            lvReplacedStations.MultiSelect = false;
+            lvReplacedStations.Name = "lvReplacedStations";
+            lvReplacedStations.Size = new Size(913, 385);
+            lvReplacedStations.Sorting = SortOrder.Ascending;
+            lvReplacedStations.TabIndex = 1;
+            lvReplacedStations.UseCompatibleStateImageBehavior = false;
+            lvReplacedStations.View = View.Details;
+            // 
+            // colsReplActive
+            // 
+            colsReplActive.Text = "Enabled In Game?";
+            // 
+            // colsReplDisplayName
+            // 
+            colsReplDisplayName.Text = "Display Name";
+            colsReplDisplayName.Width = 120;
+            // 
+            // colsReplTracksCount
+            // 
+            colsReplTracksCount.Text = "Replaced Tracks Count";
+            colsReplTracksCount.Width = 150;
+            // 
+            // colsReplProposedPath
+            // 
+            colsReplProposedPath.Text = "Proposed Path";
+            colsReplProposedPath.Width = 200;
             // 
             // tableLayoutPanel1
             // 
@@ -310,6 +389,22 @@
             btnCancel.Visible = false;
             btnCancel.Click += BtnCancel_Click;
             // 
+            // bgWorkerExportReplacedStations
+            // 
+            bgWorkerExportReplacedStations.WorkerReportsProgress = true;
+            bgWorkerExportReplacedStations.WorkerSupportsCancellation = true;
+            bgWorkerExportReplacedStations.DoWork += bgWorkerExportReplacedStations_DoWork;
+            bgWorkerExportReplacedStations.ProgressChanged += bgWorkerExportReplacedStations_ProgressChanged;
+            bgWorkerExportReplacedStations.RunWorkerCompleted += bgWorkerExportReplacedStations_RunWorkerCompleted;
+            // 
+            // bgWorkerExportReplacedStationsGame
+            // 
+            bgWorkerExportReplacedStationsGame.WorkerReportsProgress = true;
+            bgWorkerExportReplacedStationsGame.WorkerSupportsCancellation = true;
+            bgWorkerExportReplacedStationsGame.DoWork += bgWorkerExportReplacedStationsGame_DoWork;
+            bgWorkerExportReplacedStationsGame.ProgressChanged += bgWorkerExportReplacedStationsGame_ProgressChanged;
+            bgWorkerExportReplacedStationsGame.RunWorkerCompleted += bgWorkerExportReplacedStationsGame_RunWorkerCompleted;
+            // 
             // ExportWindow
             // 
             AutoScaleDimensions = new SizeF(96F, 96F);
@@ -336,6 +431,9 @@
             splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
             splitContainer1.ResumeLayout(false);
+            tabsStationsToExport.ResumeLayout(false);
+            tabAdditionalStations.ResumeLayout(false);
+            tabReplacementStations.ResumeLayout(false);
             tableLayoutPanel1.ResumeLayout(false);
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
@@ -362,9 +460,19 @@
         private System.ComponentModel.BackgroundWorker bgWorkerExportGame;
         private SplitContainer splitContainer1;
         private TableLayoutPanel tableLayoutPanel1;
-        private ColumnHeader colIsActive;
+        private ColumnHeader colsActive;
         private Panel panel1;
         private Button btnCancel;
         private Label lblTip;
+        private TabControl tabsStationsToExport;
+        private TabPage tabAdditionalStations;
+        private TabPage tabReplacementStations;
+        private ListView lvReplacedStations;
+        private ColumnHeader colsReplActive;
+        private ColumnHeader colsReplDisplayName;
+        private ColumnHeader colsReplTracksCount;
+        private ColumnHeader colsReplProposedPath;
+        private System.ComponentModel.BackgroundWorker bgWorkerExportReplacedStations;
+        private System.ComponentModel.BackgroundWorker bgWorkerExportReplacedStationsGame;
     }
 }

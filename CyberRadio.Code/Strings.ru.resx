@@ -1650,10 +1650,6 @@
   <data name="ReplaceTrack" xml:space="preserve">
     <value>Заменить выбранный трек</value>
   </data>
-  <data name="WEMIdDisclaimer" xml:space="preserve">
-    <value>Рекомендуется заменить все WEM ID выбранной станции.
-Неизвестно, где именно в игре используются все WEM ID.</value>
-  </data>
   <data name="AddReplacementTrackTitle" xml:space="preserve">
     <value>Выберите файл, на который хотите заменить ванильный трек.</value>
   </data>
@@ -1662,5 +1658,12 @@
   </data>
   <data name="ConfirmRemoveAllReplacementTracks" xml:space="preserve">
     <value>Вы уверены, что хотите удалить все замененные треки ниже?</value>
+  </data>
+  <data name="WEMIdDisclaimer" xml:space="preserve">
+    <value>Рекомендуется заменить все WEM ID для выбранного трека.
+Неизвестно, где именно в игре используются все WEM ID.</value>
+  </data>
+  <data name="LVReplacedTracksCount" xml:space="preserve">
+    <value>Количество замененных треков</value>
   </data>
 </root>

@@ -1650,10 +1650,6 @@ Vous pouvez remplacer tous les identifiants de cette piste ou seulement un ident
   <data name="ReplaceTrack" xml:space="preserve">
     <value>Remplacer la piste sélectionnée</value>
   </data>
-  <data name="WEMIdDisclaimer" xml:space="preserve">
-    <value>Il est recommandé de remplacer tous les ID WEM pour une station sélectionnée.
-On ne sait pas exactement où tous les identifiants WEM sont utilisés dans le jeu.</value>
-  </data>
   <data name="AddReplacementTrackTitle" xml:space="preserve">
     <value>Sélectionnez un fichier pour remplacer la piste Vanilla par</value>
   </data>
@@ -1662,5 +1658,12 @@ On ne sait pas exactement où tous les identifiants WEM sont utilisés dans le j
   </data>
   <data name="ConfirmRemoveAllReplacementTracks" xml:space="preserve">
     <value>Êtes-vous sûr de vouloir supprimer toutes les pistes remplacées ci-dessous ?</value>
+  </data>
+  <data name="WEMIdDisclaimer" xml:space="preserve">
+    <value>Il est recommandé de remplacer tous les ID WEM pour une piste sélectionnée.
+On ne sait pas exactement où tous les identifiants WEM sont utilisés dans le jeu.</value>
+  </data>
+  <data name="LVReplacedTracksCount" xml:space="preserve">
+    <value>Nombre de pistes remplacées</value>
   </data>
 </root>

@@ -1,16 +1,16 @@
 ﻿// TinyMCE.cs : RadioExt-Helper
 // Copyright (C) 2026  Ethan Hann
-// 
+//
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-// 
+//
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
@@ -41,6 +41,9 @@ public partial class TinyMce : UserControl, IUserControl
     private string _language = "en";
     private string? _pendingHtml;
     private WebView2? _webView;
+
+    // Deduping so you don't raise ContentChanged repeatedly for identical HTML
+    private string _lastRaisedHtml = string.Empty;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="TinyMce" /> control.
@@ -85,7 +88,6 @@ public partial class TinyMce : UserControl, IUserControl
         var currentCulture = CultureInfo.CurrentUICulture;
         var langCode = ResolveTinyMceLanguageCode(currentCulture.Name);
 
-        // fire and forget; you already don't await it
         _ = SetLanguageAsync(langCode);
     }
 
@@ -93,6 +95,11 @@ public partial class TinyMce : UserControl, IUserControl
     ///     Raised when TinyMCE has finished initializing and is ready for use.
     /// </summary>
     public event EventHandler? EditorReady;
+
+    /// <summary>
+    /// Occurs when the content changes (text OR markup/styling changes). The content is HTML.
+    /// </summary>
+    public event EventHandler<string>? ContentChanged;
 
     private void InitializeWebViewControl()
     {
@@ -161,20 +168,84 @@ public partial class TinyMce : UserControl, IUserControl
     {
         try
         {
-            var message = e.TryGetWebMessageAsString();
-            if (!string.Equals(message, "editor-ready", StringComparison.OrdinalIgnoreCase)) return;
+            var raw = e.TryGetWebMessageAsString();
+            if (string.IsNullOrWhiteSpace(raw))
+                return;
 
-            IsEditorReady = true;
+            if (string.Equals(raw, "editor-ready", StringComparison.OrdinalIgnoreCase))
+            {
+                OnEditorReadyFromWeb();
+                return;
+            }
 
-            if (!string.IsNullOrEmpty(_pendingHtml))
-                _ = SendSetContentMessageAsync(_pendingHtml);
+            // Primary path: JSON envelope
+            if (raw[0] != '{')
+                return;
 
-            EditorReady?.Invoke(this, EventArgs.Empty);
+            using var doc = JsonDocument.Parse(raw);
+            if (!doc.RootElement.TryGetProperty("type", out var typeEl))
+                return;
+
+            var type = typeEl.GetString();
+            if (string.IsNullOrWhiteSpace(type))
+                return;
+
+            switch (type)
+            {
+                case "editor-ready":
+                    OnEditorReadyFromWeb();
+                    return;
+
+                case "content-changed":
+                {
+                    var html = string.Empty;
+                    if (doc.RootElement.TryGetProperty("html", out var htmlEl) && htmlEl.ValueKind == JsonValueKind.String)
+                        html = htmlEl.GetString() ?? string.Empty;
+
+                    // Keep internal cache in sync
+                    _pendingHtml = html;
+
+                    // Dedup identical content
+                    if (string.Equals(_lastRaisedHtml, html, StringComparison.Ordinal))
+                        return;
+
+                    _lastRaisedHtml = html;
+
+                    RaiseOnUiThread(() => ContentChanged?.Invoke(this, html));
+                    return;
+                }
+            }
         }
-        catch
+        catch (Exception ex)
         {
-            // Ignore; worst case, editor ready event is lost
+            AuLogger.GetCurrentLogger<TinyMce>("WebMessageReceived")
+                .Warn(ex, "Failed to process WebView2 message from TinyMCE.");
         }
+    }
+
+    private void OnEditorReadyFromWeb()
+    {
+        IsEditorReady = true;
+
+        if (!string.IsNullOrEmpty(_pendingHtml))
+            _ = SendSetContentMessageAsync(_pendingHtml);
+
+        RaiseOnUiThread(() => EditorReady?.Invoke(this, EventArgs.Empty));
+    }
+
+    private void RaiseOnUiThread(Action action)
+    {
+        if (IsDisposed)
+            return;
+
+        if (InvokeRequired)
+        {
+            try { BeginInvoke(action); }
+            catch { /* ignore during shutdown */ }
+            return;
+        }
+
+        action();
     }
 
     private string BuildTinyMceHtmlPage()
@@ -220,17 +291,44 @@ public partial class TinyMce : UserControl, IUserControl
     var defaultLanguage = '{initialLanguage}';
     var currentLanguage = defaultLanguage;
 
+    // Debounce window for change notifications
+    var __notifyTimer = null;
+    var __suppressNotify = false;
+
     function isEnglish(lang) {{
         if (!lang) return true;
-            lang = lang.toLowerCase();
+        lang = lang.toLowerCase();
         if (lang === 'en') return true;
         return lang.startsWith('en_') || lang.startsWith('en-');
     }}
 
-    function notifyHostEditorReady() {{
+    function postJson(obj) {{
         if (window.chrome && window.chrome.webview && window.chrome.webview.postMessage) {{
-            window.chrome.webview.postMessage('editor-ready');
+            window.chrome.webview.postMessage(JSON.stringify(obj));
         }}
+    }}
+
+    function notifyHostEditorReady() {{
+        postJson({{ type: 'editor-ready' }});
+    }}
+
+    function scheduleContentChanged(editor, reason) {{
+        if (__suppressNotify) return;
+        if (!editor) return;
+
+        if (__notifyTimer) {{
+            clearTimeout(__notifyTimer);
+            __notifyTimer = null;
+        }}
+
+        __notifyTimer = setTimeout(function() {{
+            try {{
+                var html = editor.getContent({{ format: 'html' }}) || '';
+                postJson({{ type: 'content-changed', reason: reason || '', html: html }});
+            }} catch (e) {{
+                // ignore
+            }}
+        }}, 150);
     }}
 
     function initTinyMCE(initialContent, lang) {{
@@ -247,11 +345,41 @@ public partial class TinyMce : UserControl, IUserControl
             resize: false,
             promotion: false,
             setup: function (editor) {{
+                // Core init
                 editor.on('init', function () {{
-                    if (initialContent) {{
-                        editor.setContent(initialContent);
+                    __suppressNotify = true;
+                    try {{
+                        if (initialContent) {{
+                            editor.setContent(initialContent);
+                        }}
+                    }} finally {{
+                        __suppressNotify = false;
                     }}
                     notifyHostEditorReady();
+                }});
+
+                // TEXT INPUT PATHS
+                editor.on('input', function () {{ scheduleContentChanged(editor, 'input'); }});
+                editor.on('keyup', function () {{ scheduleContentChanged(editor, 'keyup'); }});
+                editor.on('paste', function () {{ scheduleContentChanged(editor, 'paste'); }});
+                editor.on('cut', function () {{ scheduleContentChanged(editor, 'cut'); }});
+
+                // TINYMCE CONTENT/MODEL CHANGES
+                editor.on('change', function () {{ scheduleContentChanged(editor, 'change'); }});
+                editor.on('Undo', function () {{ scheduleContentChanged(editor, 'undo'); }});
+                editor.on('Redo', function () {{ scheduleContentChanged(editor, 'redo'); }});
+                editor.on('SetContent', function () {{ scheduleContentChanged(editor, 'setcontent'); }});
+
+                // FORMATTING / COMMAND-DRIVEN CHANGES (bold, align, lists, etc.)
+                editor.on('ExecCommand', function (e) {{
+                    // Most toolbar actions come through here
+                    scheduleContentChanged(editor, 'exec:' + (e && e.command ? e.command : ''));
+                }});
+                editor.on('FormatApply', function (e) {{
+                    scheduleContentChanged(editor, 'format-apply:' + (e && e.format ? e.format : ''));
+                }});
+                editor.on('FormatRemove', function (e) {{
+                    scheduleContentChanged(editor, 'format-remove:' + (e && e.format ? e.format : ''));
                 }});
             }}
         }};
@@ -275,14 +403,26 @@ public partial class TinyMce : UserControl, IUserControl
 
             if (message.type === 'set-content') {{
                 if (tinymce.activeEditor) {{
-                    tinymce.activeEditor.setContent(message.html || '');
+                    __suppressNotify = true;
+                    try {{
+                        tinymce.activeEditor.setContent(message.html || '');
+                    }} finally {{
+                        __suppressNotify = false;
+                    }}
+                    // Host-initiated setContent can still be relevant; notify once
+                    scheduleContentChanged(tinymce.activeEditor, 'host:set-content');
                 }}
             }} else if (message.type === 'set-language') {{
                 var newLang = message.language || defaultLanguage;
                 var content = '';
                 if (tinymce.activeEditor) {{
-                    content = tinymce.activeEditor.getContent({{ format: 'html' }});
-                    tinymce.activeEditor.remove();
+                    __suppressNotify = true;
+                    try {{
+                        content = tinymce.activeEditor.getContent({{ format: 'html' }});
+                        tinymce.activeEditor.remove();
+                    }} finally {{
+                        __suppressNotify = false;
+                    }}
                 }}
                 initTinyMCE(content, newLang);
             }}
@@ -432,7 +572,7 @@ public partial class TinyMce : UserControl, IUserControl
     ///     Changes the TinyMCE UI language at runtime.
     ///     This re-initializes the editor with the specified language and preserves the current content.
     /// </summary>
-    /// <param name="languageCode">Language code, e.g., ""en_US"", ""fr_FR"" (must match a .js file in the langs folder).</param>
+    /// <param name="languageCode">Language code, e.g., "en_US", "fr_FR" (must match a .js file in the langs folder).</param>
     public async Task SetLanguageAsync(string languageCode)
     {
         if (string.IsNullOrWhiteSpace(languageCode))

@@ -56,6 +56,14 @@ public sealed partial class ReplacementStationEditor : UserControl, IEditor
         ReplacedStation = station;
     }
 
+    /// <summary>
+    /// Finalizes an instance of the ReplacementStationEditor class and performs cleanup operations before the object is
+    /// reclaimed by garbage collection.
+    /// </summary>
+    /// <remarks>This destructor unsubscribes from the ContentChanged event to help prevent memory leaks. It
+    /// is called automatically by the garbage collector and should not be invoked directly.</remarks>
+    ~ReplacementStationEditor() => tinyEditor.ContentChanged -= TinyEditor_ContentChanged;
+
     /// <inheritdoc />
     public Guid Id { get; set; } = Guid.NewGuid();
 
@@ -174,12 +182,30 @@ public sealed partial class ReplacementStationEditor : UserControl, IEditor
 
     private void SetDisplayTabValues()
     {
-        txtVanillaStationName.Text = ReplacedStation?.TrackedObject.VanillaStation?.StationName ?? "Unknown Station";
-        txtDisplayName.Text = ReplacedStation?.TrackedObject.DisplayName ?? "New Replacement Station";
+        if (ReplacedStation == null) return;
 
-        var vanillaStation = ReplacedStation?.TrackedObject.VanillaStation;
+        txtVanillaStationName.Text = ReplacedStation.TrackedObject.VanillaStation?.StationName ?? "Unknown Station";
+        txtDisplayName.Text = ReplacedStation.TrackedObject.DisplayName;
+
+        var vanillaStation = ReplacedStation.TrackedObject.VanillaStation;
         if (vanillaStation != null)
             pbStationIcon.Image = ReplacementStationListBox.GetOrCreateThumb(vanillaStation);
+
+        // Set the notes in the TinyMCE editor
+        _ = tinyEditor.SetHtmlAsync(ReplacedStation.TrackedObject.Notes);
+        tinyEditor.ContentChanged += TinyEditor_ContentChanged;
+    }
+
+    private void TinyEditor_ContentChanged(object? sender, string e)
+    {
+        if (ReplacedStation == null) return;
+        ReplacedStation.TrackedObject.Notes = e;
+        StationUpdated?.Invoke(this, EventArgs.Empty);
+
+        AuLogger.GetCurrentLogger<ReplacementStationEditor>()
+            .Info($"Notes updated for replacement station '{ReplacedStation.TrackedObject.DisplayName}'.");
+        AuLogger.GetCurrentLogger<ReplacementStationEditor>()
+            .Debug($"New notes content: {e}");
     }
 
     private void SetMusicTabValues()

@@ -2611,6 +2611,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Replaced Tracks Count.
+        /// </summary>
+        internal static string LVReplacedTracksCount {
+            get {
+                return ResourceManager.GetString("LVReplacedTracksCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Song Count.
         /// </summary>
         internal static string LVSongCount {
@@ -4606,7 +4615,7 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to It is recommended to replace all WEM IDs for a selected station.
+        ///   Looks up a localized string similar to It is recommended to replace all WEM IDs for a selected track.
         ///It is unknown where exactly all the WEM IDs are used in-game..
         /// </summary>
         internal static string WEMIdDisclaimer {

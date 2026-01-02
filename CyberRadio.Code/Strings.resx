@@ -1651,7 +1651,7 @@ You can replace all IDs for this track or only a specific one.</value>
     <value>Replace Selected Track</value>
   </data>
   <data name="WEMIdDisclaimer" xml:space="preserve">
-    <value>It is recommended to replace all WEM IDs for a selected station.
+    <value>It is recommended to replace all WEM IDs for a selected track.
 It is unknown where exactly all the WEM IDs are used in-game.</value>
   </data>
   <data name="AddReplacementTrackTitle" xml:space="preserve">
@@ -1662,5 +1662,8 @@ It is unknown where exactly all the WEM IDs are used in-game.</value>
   </data>
   <data name="ConfirmRemoveAllReplacementTracks" xml:space="preserve">
     <value>Are you sure you want to remove all replaced tracks below?</value>
+  </data>
+  <data name="LVReplacedTracksCount" xml:space="preserve">
+    <value>Replaced Tracks Count</value>
   </data>
 </root>

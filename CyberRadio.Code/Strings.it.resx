@@ -1650,10 +1650,6 @@ Puoi sostituire tutti gli ID per questa traccia o solo uno specifico.</value>
   <data name="ReplaceTrack" xml:space="preserve">
     <value>Sostituisci la traccia selezionata</value>
   </data>
-  <data name="WEMIdDisclaimer" xml:space="preserve">
-    <value>Si consiglia di sostituire tutti gli ID WEM per una stazione selezionata.
-Non è noto dove vengano utilizzati esattamente tutti gli ID WEM nel gioco.</value>
-  </data>
   <data name="AddReplacementTrackTitle" xml:space="preserve">
     <value>Seleziona un file con cui sostituire la traccia Vanilla</value>
   </data>
@@ -1662,5 +1658,12 @@ Non è noto dove vengano utilizzati esattamente tutti gli ID WEM nel gioco.</val
   </data>
   <data name="ConfirmRemoveAllReplacementTracks" xml:space="preserve">
     <value>Sei sicuro di voler rimuovere tutte le tracce sostituite di seguito?</value>
+  </data>
+  <data name="WEMIdDisclaimer" xml:space="preserve">
+    <value>Si consiglia di sostituire tutti gli ID WEM per una traccia selezionata.
+Non è noto dove vengano utilizzati esattamente tutti gli ID WEM nel gioco.</value>
+  </data>
+  <data name="LVReplacedTracksCount" xml:space="preserve">
+    <value>Conteggio tracce sostituite</value>
   </data>
 </root>

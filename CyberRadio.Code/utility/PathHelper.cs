@@ -192,6 +192,16 @@ public static partial class PathHelper
     }
 
     /// <summary>
+    /// Gets the full path to the mod archive directory for the specified game base path.
+    /// </summary>
+    /// <param name="gameBasePath">The root directory of the game installation. Cannot be null or empty.</param>
+    /// <returns>A string containing the full path to the mod archive directory under the specified game base path.</returns>
+    public static string GetModArchivePath(string gameBasePath)
+    {
+        return Path.Combine(gameBasePath, "archive", "pc", "mod");
+    }
+
+    /// <summary>
     ///     Determines if a path is a sub-path (i.e., starts with) of another path.
     /// </summary>
     /// <param name="basePath">The base path to check against.</param>

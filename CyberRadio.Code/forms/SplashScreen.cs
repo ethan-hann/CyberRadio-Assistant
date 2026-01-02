@@ -41,7 +41,7 @@ public partial class SplashScreen : Form
     {
         InitializeComponent();
 
-        var version = Assembly.GetExecutingAssembly().GetName()?.Version;
+        var version = Assembly.GetExecutingAssembly().GetName().Version;
 
         SetVersionLabel(version);
     }
@@ -53,17 +53,25 @@ public partial class SplashScreen : Form
     /// <param name="e">The event arguments.</param>
     private async void SplashScreen_Load(object sender, EventArgs e)
     {
-        UpdateStatus(Strings.SplashScreen_Starting);
-
-        var statusMessages = await PerformBackgroundTasks();
-        statusMessages.ForEach(msg =>
+        try
         {
-            if (msg.Contains("Error", StringComparison.CurrentCultureIgnoreCase))
-                AuLogger.GetCurrentLogger<SplashScreen>().Error(msg);
-            else
-                AuLogger.GetCurrentLogger<SplashScreen>().Info(msg);
-        });
-        Close();
+            UpdateStatus(Strings.SplashScreen_Starting);
+
+            var statusMessages = await PerformBackgroundTasks();
+            statusMessages.ForEach(msg =>
+            {
+                if (msg.Contains("Error", StringComparison.CurrentCultureIgnoreCase))
+                    AuLogger.GetCurrentLogger<SplashScreen>().Error(msg);
+                else
+                    AuLogger.GetCurrentLogger<SplashScreen>().Info(msg);
+            });
+            Close();
+        }
+        catch (Exception ex)
+        {
+            AuLogger.GetCurrentLogger<SplashScreen>()
+                .Fatal("An unhandled exception occurred during splash screen initialization.", ex);
+        }
     }
 
     /// <summary>
@@ -72,7 +80,7 @@ public partial class SplashScreen : Form
     /// <returns>A list of status messages generated during the tasks.</returns>
     private async Task<List<string>> PerformBackgroundTasks()
     {
-        List<string> statusMessages = new();
+        List<string> statusMessages = [];
 
         // Migrate settings (if needed)
         UpdateStatus(Strings.SplashScreen_CheckingSettings);
