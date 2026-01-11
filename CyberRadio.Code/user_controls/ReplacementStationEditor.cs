@@ -201,11 +201,6 @@ public sealed partial class ReplacementStationEditor : UserControl, IEditor
         if (ReplacedStation == null) return;
         ReplacedStation.TrackedObject.Notes = e;
         StationUpdated?.Invoke(this, EventArgs.Empty);
-
-        AuLogger.GetCurrentLogger<ReplacementStationEditor>()
-            .Info($"Notes updated for replacement station '{ReplacedStation.TrackedObject.DisplayName}'.");
-        AuLogger.GetCurrentLogger<ReplacementStationEditor>()
-            .Debug($"New notes content: {e}");
     }
 
     private void SetMusicTabValues()

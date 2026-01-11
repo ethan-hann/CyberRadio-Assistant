@@ -17,6 +17,7 @@
 #region
 
 using System.ComponentModel;
+using AetherUtils.Core.Files;
 using AetherUtils.Core.Logging;
 using Newtonsoft.Json;
 using RadioExt_Helper.utility;
@@ -156,15 +157,35 @@ public sealed class ReplacementStation : IStation, INotifyPropertyChanged, IClon
     /// <returns>true if the track was successfully replaced; otherwise, false.</returns>
     public bool ReplaceTrack(string trackName, string wemId, string replacementFile)
     {
+        var stagingFolder = GlobalData.ConfigManager?.CurrentConfig?.StagingPath;
+
+        if (string.IsNullOrEmpty(stagingFolder))
+        {
+            AuLogger.GetCurrentLogger<ReplacementStation>("ReplaceTrack").Error("The staging path was empty! This shouldn't be the case at this point!!!");
+            throw new InvalidOperationException("Staging path was empty during program execution at a point where it shouldn't be!");
+        }
+
         var originalTrack = Tracks.FirstOrDefault(t => t.VanillaTrackName.Equals(trackName) && t.WemId.Equals(wemId));
-        var newTrack = new ReplacementTrack(trackName, wemId, replacementFile);
+
+        //Copy file to staging
+        var stationFolder = Path.Combine(stagingFolder, "audio", VanillaStation.StationName);
+        Directory.CreateDirectory(stationFolder);
+
+        var extension = Path.GetExtension(replacementFile);
+        var newPath = Path.Combine(stationFolder, $"{wemId}{extension}");
+
+        var newTrack = new ReplacementTrack(trackName, wemId, newPath);
         if (originalTrack == null)
         {
             AuLogger.GetCurrentLogger<ReplacementStation>("ReplaceTrack")
                 .Info(
                     $"No replacement track found for track '{trackName}' in replacement station '{DisplayName}' for WEM ID '{wemId}'. Creating a new one...");
             Tracks.Add(newTrack);
-            return Tracks.Contains(newTrack);
+            var success = Tracks.Contains(newTrack);
+            if (success)
+                File.Copy(replacementFile, newPath, true);
+            
+            return success;
         }
 
         //Track was already replaced; we are updating the file path so we remove and add the new one. The ReplacementTrack class is immutable.
@@ -173,6 +194,7 @@ public sealed class ReplacementStation : IStation, INotifyPropertyChanged, IClon
         if (Tracks.Remove(originalTrack))
         {
             Tracks.Add(newTrack);
+            File.Copy(replacementFile, newPath, true);
         }
         else
         {
@@ -181,6 +203,8 @@ public sealed class ReplacementStation : IStation, INotifyPropertyChanged, IClon
                     $"Failed to remove original track '{trackName}' from replacement station '{DisplayName}'.");
             return false;
         }
+
+        SyncStagingFolder(stagingFolder);
 
         return true;
     }
@@ -196,6 +220,14 @@ public sealed class ReplacementStation : IStation, INotifyPropertyChanged, IClon
     /// <returns>true if a matching replacement track was found and removed; otherwise, false.</returns>
     public bool RemoveReplacedTrack(string trackName, string wemId)
     {
+        var stagingFolder = GlobalData.ConfigManager?.CurrentConfig?.StagingPath;
+
+        if (string.IsNullOrEmpty(stagingFolder))
+        {
+            AuLogger.GetCurrentLogger<ReplacementStation>("ReplaceTrack").Error("The staging path was empty! This shouldn't be the case at this point!!!");
+            throw new InvalidOperationException("Staging path was empty during program execution at a point where it shouldn't be!");
+        }
+
         var trackToRemove = Tracks.FirstOrDefault(t => t.VanillaTrackName.Equals(trackName) && t.WemId.Equals(wemId));
         if (trackToRemove == null)
         {
@@ -208,7 +240,45 @@ public sealed class ReplacementStation : IStation, INotifyPropertyChanged, IClon
         AuLogger.GetCurrentLogger<ReplacementStation>("RemoveReplacedTrack")
             .Info(
                 $"Removing replacement track for track '{trackName}' in replacement station '{DisplayName}' for WEM ID '{wemId}'.");
-        return Tracks.Remove(trackToRemove);
+
+        //Delete file from staging
+        var stationFolder = Path.Combine(stagingFolder, "audio", VanillaStation.StationName);
+        Directory.CreateDirectory(stationFolder);
+        var filePath = FileHelper.SafeEnumerateFiles(stationFolder).FirstOrDefault(s => s.Contains(wemId));
+
+        if (!string.IsNullOrEmpty(filePath))
+            FileHelper.DeleteFile(filePath);
+        var fileCount = FileHelper.SafeEnumerateFiles(stationFolder).Count();
+        if (fileCount <= 0)
+            Directory.Delete(stationFolder, true);
+        
+        var success = Tracks.Remove(trackToRemove);
+        SyncStagingFolder(stagingFolder);
+
+        return success;
+    }
+
+    /// <summary>
+    /// Ensures the files from the tracks are in the staging folder.
+    /// </summary>
+    /// <param name="stagingFolder">The path to the staging folder.</param>
+    private void SyncStagingFolder(string stagingFolder)
+    {
+        ////Syncs the tracks in this replacement station to the staging folder's audio folder
+        ////Check if folder exists; create it if not
+        //var proposedFolder = Path.Combine(stagingFolder, VanillaStation.StationName);
+        //if (!FileHelper.DoesFolderExist(proposedFolder))
+        //    FileHelper.CreateDirectories(proposedFolder);
+
+        //var currentFiles = FileHelper.SafeEnumerateFiles(proposedFolder).ToList();
+        //if (currentFiles.Count >= 0)
+        //    currentFiles.ForEach(f => FileHelper.DeleteFile(f));
+
+        ////Copy current station tracks to folder and rename based on WEM id
+        //foreach (var track in Tracks)
+        //{
+        //    saskj
+        //}
     }
 
     /// <inheritdoc />
