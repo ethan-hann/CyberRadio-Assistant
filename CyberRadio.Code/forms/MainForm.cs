@@ -97,8 +97,8 @@ public sealed partial class MainForm : Form
         //Add the icons folder to the protected folders list
         StationManager.Instance.AddProtectedFolder(Path.Combine(StagingPath, "icons"));
 
-        //Add the audio folder to the protected folders list
-        StationManager.Instance.AddProtectedFolder(Path.Combine(StagingPath, "audio"));
+        //Add the replacement station folder to the protected folders list
+        StationManager.Instance.AddProtectedFolder(Path.Combine(StagingPath, "replaced-stations"));
 
         //Ensure the configuration is valid
         var validConfig = GlobalData.ConfigManager.ConfigExists;
@@ -1158,6 +1158,19 @@ public sealed partial class MainForm : Form
             var result = MessageBox.Show(this, text, Strings.SongsMissingPaths, MessageBoxButtons.YesNo,
                 MessageBoxIcon.Warning);
             if (result == DialogResult.No)
+                return;
+        }
+
+        var missingReplacementSongs = StationManager.Instance.CheckForVanillaMissingSongs();
+        if (missingReplacementSongs.Values.Any(p => p.Key))
+        {
+            var count = missingReplacementSongs.Count(p => p.Value.Key);
+            var totalSongCount = missingReplacementSongs.Values.Where(p => p.Key).Sum(p => p.Value);
+            var text = string.Format(Strings.ExportToGameMissingReplacementSongs, count, totalSongCount);
+
+            var result = MessageBox.Show(this, text, Strings.SongsMissingReplacementPaths, MessageBoxButtons.OK,
+                MessageBoxIcon.Warning);
+            if (result != DialogResult.OK)
                 return;
         }
 

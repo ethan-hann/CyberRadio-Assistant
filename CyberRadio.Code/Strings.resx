@@ -1666,4 +1666,10 @@ It is unknown where exactly all the WEM IDs are used in-game.</value>
   <data name="LVReplacedTracksCount" xml:space="preserve">
     <value>Replaced Tracks Count</value>
   </data>
+  <data name="ExportToGameMissingReplacementSongs" xml:space="preserve">
+    <value>There are {0} replacement station(s) with a total of {1} invalid song path(s). Do you want to continue exporting?</value>
+  </data>
+  <data name="SongsMissingReplacementPaths" xml:space="preserve">
+    <value>Songs Missing Replacement Paths</value>
+  </data>
 </root>

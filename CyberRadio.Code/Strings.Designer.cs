@@ -1428,6 +1428,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There are {0} replacement station(s) with a total of {1} invalid song path(s). Do you want to continue exporting?.
+        /// </summary>
+        internal static string ExportToGameMissingReplacementSongs {
+            get {
+                return ResourceManager.GetString("ExportToGameMissingReplacementSongs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to There are {0} station(s) with a total of {1} invalid song path(s). Do you want to continue exporting?.
         /// </summary>
         internal static string ExportToGameMissingSongs {
@@ -3756,6 +3765,15 @@ namespace RadioExt_Helper {
         internal static string SongsMissingPaths {
             get {
                 return ResourceManager.GetString("SongsMissingPaths", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Songs Missing Replacement Paths.
+        /// </summary>
+        internal static string SongsMissingReplacementPaths {
+            get {
+                return ResourceManager.GetString("SongsMissingReplacementPaths", resourceCulture);
             }
         }
         

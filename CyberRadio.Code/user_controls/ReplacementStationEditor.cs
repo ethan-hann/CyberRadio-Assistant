@@ -300,58 +300,82 @@ public sealed partial class ReplacementStationEditor : UserControl, IEditor
         lvTracks.BeginUpdate();
         lvTracks.Invalidate(); // Refresh the ListView to update the icon
         lvTracks.EndUpdate();
+
+        ReplacedStation?.TrackedObject.SyncStagingFolder(GlobalData.ConfigManager.CurrentConfig.StagingPath);
     }
 
     private void btnReplaceAllTracks_Click(object sender, EventArgs e)
     {
-        lbReplacedTracks.BeginUpdate();
-
-        lbReplacedTracks.DataSource = null;
-        _replacedTracks.Clear();
-
-        if (ReplacedStation == null) return;
-
-        var tracks = lvTracks.Items.Cast<ListViewItem>().ToList();
-        foreach (var item in tracks)
+        try
         {
-            if (item.Tag is not AudioTrack track) continue;
-            _replacedTracks.Add(track);
-            TryAddPropertiesControl(track);
+            lbReplacedTracks.BeginUpdate();
+
+            lbReplacedTracks.DataSource = null;
+            _replacedTracks.Clear();
+
+            if (ReplacedStation == null) return;
+
+            var tracks = lvTracks.Items.Cast<ListViewItem>().ToList();
+            foreach (var item in tracks)
+            {
+                if (item.Tag is not AudioTrack track) continue;
+                _replacedTracks.Add(track);
+                TryAddPropertiesControl(track);
+            }
+
+            lbReplacedTracks.DataSource = _replacedTracks;
+            lbReplacedTracks.DisplayMember = "ToString";
+            lbReplacedTracks.EndUpdate();
+
+            SelectTrackInListBox(_replacedTracks.Last());
+
+            lvTracks.BeginUpdate();
+            lvTracks.Invalidate(); // Refresh the ListView to update the icon
+            lvTracks.EndUpdate();
+
+            ReplacedStation?.TrackedObject.SyncStagingFolder(GlobalData.ConfigManager.CurrentConfig.StagingPath);
         }
-
-        lbReplacedTracks.DataSource = _replacedTracks;
-        lbReplacedTracks.DisplayMember = "ToString";
-        lbReplacedTracks.EndUpdate();
-
-        SelectTrackInListBox(_replacedTracks.Last());
-
-        lvTracks.BeginUpdate();
-        lvTracks.Invalidate(); // Refresh the ListView to update the icon
-        lvTracks.EndUpdate();
+        catch (Exception ex)
+        {
+            AuLogger.GetCurrentLogger<ReplacementStationEditor>("btnReplaceAllTracks_Click")
+                .Error("An error occurred while replacing all tracks.", ex);
+        }
     }
 
     private void btnRemoveReplacedTrack_Click(object sender, EventArgs e)
     {
-        if (lbReplacedTracks.SelectedItems.Count <= 0) return;
+        try
+        {
+            if (lbReplacedTracks.SelectedItems.Count <= 0) return;
 
-        // Remove the selected track from the replaced tracks list if it exists and re-enable it in the main list
-        if (lbReplacedTracks.SelectedItems[0] is not AudioTrack track) return;
+            // Remove the selected track from the replaced tracks list if it exists and re-enable it in the main list
+            if (lbReplacedTracks.SelectedItems[0] is not AudioTrack track) return;
 
-        _replacedTracks.Remove(track);
-        _replacementTrackMap.Remove(track);
+            _replacedTracks.Remove(track);
+            _replacementTrackMap.Remove(track);
 
-        //Remove the replacement track from the station as well.
-        ReplacedStation?.TrackedObject.Tracks.Remove(
-            ReplacedStation.TrackedObject.Tracks.First(t => t.VanillaTrackName.Equals(track.TrackName)));
+            if (_replacedTracks.Count > 0)
+                SelectTrackInListBox(_replacedTracks.Last()); // Select the last track in the list after removal
+            else
+                ResetPropertiesUi(); //No tracks in the listbox, remove properties UI
 
-        if (_replacedTracks.Count > 0)
-            SelectTrackInListBox(_replacedTracks.Last()); // Select the last track in the list after removal
-        else
-            ResetPropertiesUi(); //No tracks in the listbox, remove properties UI
+            lvTracks.BeginUpdate();
+            lvTracks.Invalidate(); // Refresh the ListView to update the icon
+            lvTracks.EndUpdate();
 
-        lvTracks.BeginUpdate();
-        lvTracks.Invalidate(); // Refresh the ListView to update the icon
-        lvTracks.EndUpdate();
+            //Remove the replacement track from the station as well
+            if (ReplacedStation?.TrackedObject.Tracks.Count <= 0)
+                return;
+
+            ReplacedStation?.TrackedObject.Tracks.Remove(ReplacedStation.TrackedObject.Tracks.First(t => t.VanillaTrackName.Equals(track.TrackName)));
+
+            ReplacedStation?.TrackedObject.SyncStagingFolder(GlobalData.ConfigManager.CurrentConfig.StagingPath);
+        }
+        catch (Exception ex)
+        {
+            AuLogger.GetCurrentLogger<ReplacementStationEditor>("btnRemoveReplacedTrack_Click")
+                .Error("An error occurred while removing the replaced track.", ex);
+        }
     }
 
     private void btnRemoveAllTracks_Click(object sender, EventArgs e)
@@ -381,6 +405,8 @@ public sealed partial class ReplacementStationEditor : UserControl, IEditor
         lvTracks.BeginUpdate();
         lvTracks.Invalidate(); // Refresh the ListView to update the icon
         lvTracks.EndUpdate();
+
+        ReplacedStation?.TrackedObject.SyncStagingFolder(GlobalData.ConfigManager.CurrentConfig.StagingPath);
     }
 
     private void ResetPropertiesUi()

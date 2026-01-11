@@ -42,6 +42,8 @@ public partial class ExportWindow : Form
 
     private readonly Json<MetaData> _metaDataJson = new();
     private readonly Json<List<Song>> _songListJson = new();
+    private readonly Json<ReplacementStation> _replacementJson = new();
+
     private readonly List<TrackableObject<AdditionalStation>> _stationsToExport;
     private readonly List<TrackableObject<ReplacementStation>> _replacementStationsToExport;
 
@@ -59,6 +61,14 @@ public partial class ExportWindow : Form
     {
         InitializeComponent();
         _stationsToExport = StationManager.Instance.StationsAsList;
+
+        //Inactivate replacement stations that have no tracks
+        foreach (var station in StationManager.Instance.ReplacementStationsAsBindingList)
+        {
+            if (station.TrackedObject.Tracks.Count <= 0)
+                station.TrackedObject.IsActive = false;
+        }
+
         _replacementStationsToExport = StationManager.Instance.ReplacementStationsAsList;
 
         SetImageList();
@@ -564,6 +574,35 @@ public partial class ExportWindow : Form
     }
 
     /// <summary>
+    /// Removes deleted replacement station directories from the staging path.
+    /// </summary>
+    /// <param name="existingDirectories"></param>
+    private void RemoveDeletedReplacementStations(List<string> existingDirectories)
+    {
+        HashSet<string> stationNames = new(
+            _replacementStationsToExport.Select(station => station.TrackedObject.VanillaStation.StationName),
+            StringComparer.OrdinalIgnoreCase);
+
+        var directoriesToDelete = existingDirectories
+            .Where(dir => !stationNames.Contains(Path.GetFileName(dir)))
+            .Where(dir => !StationManager.Instance.IsProtectedFolder(dir))
+            .ToList();
+
+        foreach (var directory in directoriesToDelete)
+            try
+            {
+                Directory.Delete(directory, true);
+                AuLogger.GetCurrentLogger<ExportWindow>("RemoveDeletedReplacedStations")
+                    .Info($"Deleted replaced station directory: {directory}");
+            }
+            catch (Exception ex)
+            {
+                AuLogger.GetCurrentLogger<ExportWindow>("RemoveDeletedReplacedStations")
+                    .Error(ex, $"Failed to delete {directory}.");
+            }
+    }
+
+    /// <summary>
     ///     Creates the station directory in the staging path for the specified <see cref="AdditionalStation" />.
     /// </summary>
     /// <param name="station">The station to create the directory for.</param>
@@ -573,6 +612,19 @@ public partial class ExportWindow : Form
         if (string.IsNullOrEmpty(StagingPath)) return string.Empty;
 
         var safeStationPath = Path.Combine(StagingPath, station.TrackedObject.MetaData.DisplayName);
+        FileHelper.CreateDirectories(safeStationPath);
+        return safeStationPath;
+    }
+
+    private static string CreateStationDirectoryReplacement(TrackableObject<ReplacementStation> station)
+    {
+        if (string.IsNullOrEmpty(StagingPath)) return string.Empty;
+
+        var safeStationPath = Path.Combine(StagingPath, "replaced-stations",
+            station.TrackedObject.VanillaStation.StationName);
+        if (!Directory.Exists(safeStationPath))
+            return string.Empty;
+        
         FileHelper.CreateDirectories(safeStationPath);
         return safeStationPath;
     }
@@ -587,6 +639,18 @@ public partial class ExportWindow : Form
     {
         var mdPath = Path.Combine(stationPath, "metadata.json");
         return _metaDataJson.SaveJson(mdPath, station.TrackedObject.MetaData);
+    }
+
+    /// <summary>
+    /// Creates a JSON metadata file for the specified replacement station.
+    /// </summary>
+    /// <param name="stationPath">The directory path where the replacement station's metadata file will be created.</param>
+    /// <param name="station">A trackable object containing the replacement station data to serialize to JSON.</param>
+    /// <returns>true if the JSON file was successfully created; otherwise, false.</returns>
+    private bool CreateReplacementStationJson(string stationPath, TrackableObject<ReplacementStation> station)
+    {
+        var path = Path.Combine(stationPath, "replaced.json");
+        return _replacementJson.SaveJson(path, station.TrackedObject);
     }
 
     /// <summary>
@@ -643,17 +707,10 @@ public partial class ExportWindow : Form
         }
         else
         {
-            _exportToStagingComplete = true;
-            pgExportProgress.Value = 100;
-            ToggleButtons();
-            UpdateStatus(Strings.ExportCompleteStatus);
+            //_exportToStagingComplete = true; TODO: maybe don't need this flag anymore here since it's handled in the replacement stations worker?
+            pgExportProgress.Value = 0;
             _stationsToExport.ForEach(s => s.AcceptChanges());
             StationManager.Instance.ResetNewStations();
-
-            OnExportToStagingComplete?.Invoke(this, EventArgs.Empty);
-
-            if (ShouldAutoExportToGame)
-                BtnExportToGame_Click(this, EventArgs.Empty);
         }
     }
 
@@ -1078,17 +1135,76 @@ public partial class ExportWindow : Form
 
     private void bgWorkerExportReplacedStations_DoWork(object sender, DoWorkEventArgs e)
     {
+        try
+        {
+            ToggleButtons();
+            var existingDirectories = FileHelper.SafeEnumerateDirectories(Path.Combine(StagingPath, "replaced-stations")).ToList();
+            existingDirectories.RemoveAll(dir => StationManager.Instance.IsProtectedFolder(dir));
 
+            for (var i = 0; i < _replacementStationsToExport.Count; i++)
+            {
+                if (bgWorkerExportReplacedStations.CancellationPending)
+                {
+                    e.Cancel = true;
+                    return;
+                }
+
+                var station = _replacementStationsToExport[i];
+                try
+                {
+                    UpdateStatus(string.Format(_statusString, station.TrackedObject.DisplayName));
+                    bgWorkerExportReplacedStations.ReportProgress((int)(i / (float)_replacementStationsToExport.Count *
+                                                                        100));
+
+                    var stationPath = CreateStationDirectoryReplacement(station);
+                    if (string.IsNullOrEmpty(stationPath))
+                        continue;
+
+                    if (!CreateReplacementStationJson(stationPath, station))
+                        AuLogger.GetCurrentLogger<ExportWindow>("BG_ExportReplacedStations")
+                            .Error(
+                                $"Failed to create replacement station JSON for station: {station.TrackedObject.DisplayName}");
+                }
+                catch (Exception ex)
+                {
+                    AuLogger.GetCurrentLogger<ExportWindow>("BG_ExportReplacedStations")
+                        .Error(ex,
+                            $"Failed to export replacement station: {station.TrackedObject.DisplayName}");
+                }
+            }
+
+            RemoveDeletedReplacementStations(existingDirectories);
+            AuLogger.GetCurrentLogger<ExportWindow>("BG_ExportReplacedStations")
+                .Info(
+                    $"Exported {_replacementStationsToExport.Count} replacement stations to staging directory: {StagingPath}");
+        }
+        catch (Exception ex)
+        {
+            AuLogger.GetCurrentLogger<ExportWindow>("BG_ExportReplacedStations")
+                .Error(ex, "An error occurred while exporting replacement stations to staging directory.");
+        }
     }
 
     private void bgWorkerExportReplacedStations_ProgressChanged(object sender, ProgressChangedEventArgs e)
     {
-
+        if (pgExportProgress.Value != e.ProgressPercentage)
+            pgExportProgress.Value = e.ProgressPercentage;
     }
 
     private void bgWorkerExportReplacedStations_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
     {
+        if (_isCancelling)
+            Reset();
+        else
+        {
+            _exportToStagingComplete = true;
+            pgExportProgress.Value = 100;
+            ToggleButtons();
+            UpdateStatus(Strings.ExportCompleteStatus);
+            _replacementStationsToExport.ForEach(s => s.AcceptChanges());
 
+            OnExportToStagingComplete?.Invoke(this, EventArgs.Empty);
+        }
     }
 
     private void bgWorkerExportReplacedStationsGame_DoWork(object sender, DoWorkEventArgs e)

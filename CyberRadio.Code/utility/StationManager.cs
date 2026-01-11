@@ -69,7 +69,16 @@ public partial class StationManager : IDisposable
                 // Check if the `.vanilla` file is present in the directory indicating it's a vanilla replacement station
                 var vanillaFilePath = Path.Combine(d, ".vanilla");
                 if (FileHelper.DoesFileExist(vanillaFilePath))
-                    ProcessVanillaDirectory(d, true);
+                {
+                    var validVanillaFile = File.ReadAllBytes(vanillaFilePath)[0] == 0x56; // 'V' for Vanilla
+                    if (validVanillaFile)
+                        ProcessVanillaDirectory(d, true);
+                    else
+                    {
+                        AuLogger.GetCurrentLogger<StationManager>()
+                            .Warn($".vanilla file in directory {d} is not valid. Skipping vanilla station load.");
+                    }
+                }
                 else
                     ProcessDirectory(d, d, false);
             }
@@ -103,7 +112,11 @@ public partial class StationManager : IDisposable
             {
                 // Check if the `.vanilla` file is present in the directory indicating it's a vanilla replacement station
                 var vanillaFilePath = Path.Combine(directory, ".vanilla");
-                return FileHelper.DoesFileExist(vanillaFilePath)
+                var validVanillaFile = false;
+                if (FileHelper.DoesFileExist(vanillaFilePath))
+                    validVanillaFile = File.ReadAllBytes(vanillaFilePath)[0] == 0x56; // 'V' for Vanilla
+
+                return validVanillaFile
                     ? ProcessVanillaDirectory(directory, treatAsNewStation)
                     : ProcessDirectory(directory, songDirectory, treatAsNewStation);
             }
@@ -730,7 +743,7 @@ public partial class StationManager : IDisposable
                 _replacementStations.Remove(stationId);
                 _newStations.Remove(stationId);
                 StationPaths.Remove(stationId);
-
+                
                 ReplacementStationsAsBindingList.Remove(ReplacementStationsAsBindingList.First(s => s.Id == stationId));
 
                 VanillaStationRemoved?.Invoke(this, stationId);
@@ -1778,7 +1791,8 @@ public partial class StationManager : IDisposable
                 Tracks = stationData.Tracks,
                 IsActive = stationData.IsActive,
                 Notes = stationData.Notes,
-                DisplayName = stationData.DisplayName
+                DisplayName = stationData.DisplayName,
+                Tags = stationData.Tags
             };
 
             TrackableObject<ReplacementStation> trackedStation = new(station);

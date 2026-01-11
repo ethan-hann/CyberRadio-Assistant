@@ -168,8 +168,8 @@ public sealed class ReplacementStation : IStation, INotifyPropertyChanged, IClon
         var originalTrack = Tracks.FirstOrDefault(t => t.VanillaTrackName.Equals(trackName) && t.WemId.Equals(wemId));
 
         //Copy file to staging
-        var stationFolder = Path.Combine(stagingFolder, "audio", VanillaStation.StationName);
-        Directory.CreateDirectory(stationFolder);
+        var stationFolder = Path.Combine(stagingFolder, "replaced-stations", VanillaStation.StationName);
+        Directory.CreateDirectory(stationFolder); //TODO: Move folder/file operations to export window
 
         var extension = Path.GetExtension(replacementFile);
         var newPath = Path.Combine(stationFolder, $"{wemId}{extension}");
@@ -242,7 +242,7 @@ public sealed class ReplacementStation : IStation, INotifyPropertyChanged, IClon
                 $"Removing replacement track for track '{trackName}' in replacement station '{DisplayName}' for WEM ID '{wemId}'.");
 
         //Delete file from staging
-        var stationFolder = Path.Combine(stagingFolder, "audio", VanillaStation.StationName);
+        var stationFolder = Path.Combine(stagingFolder, "replaced-stations", VanillaStation.StationName);
         Directory.CreateDirectory(stationFolder);
         var filePath = FileHelper.SafeEnumerateFiles(stationFolder).FirstOrDefault(s => s.Contains(wemId));
 
@@ -259,26 +259,69 @@ public sealed class ReplacementStation : IStation, INotifyPropertyChanged, IClon
     }
 
     /// <summary>
-    /// Ensures the files from the tracks are in the staging folder.
+    /// Removes the station's replacement folder from the specified staging directory if it exists.
+    /// </summary>
+    /// <remarks>If the replacement folder for the station does not exist within the specified staging
+    /// directory, no action is taken. This method logs informational messages indicating whether the folder was found
+    /// and deleted or did not exist.</remarks>
+    /// <param name="stagingFolder">The path to the staging folder containing the replacement station directories. Cannot be null or empty.</param>
+    /// <exception cref="InvalidOperationException">Thrown if stagingFolder is null or empty.</exception>
+    public void RemoveStationFolder(string stagingFolder)
+    {
+        if (string.IsNullOrEmpty(stagingFolder))
+            throw new InvalidOperationException("Staging folder was empty at a point where it shouldn't be!");
+
+        var proposedFolder = Path.Combine(stagingFolder, "replaced-stations", VanillaStation.StationName);
+        if (Directory.Exists(proposedFolder))
+        {
+            AuLogger.GetCurrentLogger<ReplacementStation>("SyncStagingFolder").Info($"No replacement tracks for station '{DisplayName}'. Deleting directory only: {proposedFolder}");
+            Directory.Delete(proposedFolder, true);
+        }
+        else
+        {
+            AuLogger.GetCurrentLogger<ReplacementStation>("SyncStagingFolder").Info($"Nothing to delete. '{proposedFolder}' does not exist.");
+        }
+    }
+
+    /// <summary>
+    /// Ensures the files from the replacement tracks for this station are in the staging folder.
     /// </summary>
     /// <param name="stagingFolder">The path to the staging folder.</param>
-    private void SyncStagingFolder(string stagingFolder)
+    public void SyncStagingFolder(string stagingFolder)
     {
-        ////Syncs the tracks in this replacement station to the staging folder's audio folder
-        ////Check if folder exists; create it if not
-        //var proposedFolder = Path.Combine(stagingFolder, VanillaStation.StationName);
-        //if (!FileHelper.DoesFolderExist(proposedFolder))
-        //    FileHelper.CreateDirectories(proposedFolder);
+        if (string.IsNullOrEmpty(stagingFolder))
+            throw new InvalidOperationException("Staging folder was empty at a point where it shouldn't be!");
 
-        //var currentFiles = FileHelper.SafeEnumerateFiles(proposedFolder).ToList();
-        //if (currentFiles.Count >= 0)
-        //    currentFiles.ForEach(f => FileHelper.DeleteFile(f));
+        var proposedFolder = Path.Combine(stagingFolder, "replaced-stations", VanillaStation.StationName);
 
-        ////Copy current station tracks to folder and rename based on WEM id
-        //foreach (var track in Tracks)
-        //{
-        //    saskj
-        //}
+        try
+        {
+            if (!Directory.Exists(proposedFolder))
+                Directory.CreateDirectory(proposedFolder);
+
+            //Ensure .vanilla file exists
+            var vanillaFilePath = Path.Combine(proposedFolder, ".vanilla");
+            if (!File.Exists(vanillaFilePath))
+                File.WriteAllBytes(vanillaFilePath, [0x56]); //ASCII 'V' for vanilla
+
+            var currentFiles = FileHelper.SafeEnumerateFiles(proposedFolder).ToList();
+
+            //Ensure all files in Tracks are present in the staging folder
+            foreach (var track in Tracks)
+            {
+                var extension = Path.GetExtension(track.ReplacementFilePath);
+                var expectedFilePath = Path.Combine(proposedFolder, $"{track.WemId}{extension}");
+                if (!currentFiles.Contains(expectedFilePath))
+                {
+                    File.Copy(track.ReplacementFilePath, expectedFilePath, true);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            AuLogger.GetCurrentLogger<ReplacementStation>("SyncStagingFolder")
+                .Error("An error occurred while syncing the staging folder: " + ex.Message);
+        }
     }
 
     /// <inheritdoc />
