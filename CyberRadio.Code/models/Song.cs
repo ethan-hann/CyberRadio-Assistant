@@ -207,7 +207,8 @@ public sealed partial class Song : IEquatable<Song>, ICloneable
             // Avoid hanging the UI on weird files by using a small timeout.
             using var timeoutCts = new CancellationTokenSource(TimeSpan.FromSeconds(3));
 
-            return await FFmpeg.GetMediaInfo(filePath, timeoutCts.Token)?.Duration;
+            var mediaInfo = await FFmpeg.GetMediaInfo(filePath, timeoutCts.Token);
+            return mediaInfo?.Duration;
         }
         catch
         {
