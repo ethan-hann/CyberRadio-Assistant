@@ -243,7 +243,7 @@ public sealed partial class ReplacementStationEditor : UserControl, IEditor
         var vanillaTracks = ReplacedStation?.TrackedObject.VanillaStation?.Tracks;
         if (vanillaTracks == null) return;
 
-        foreach (var song in vanillaTracks)
+        foreach (var song in vanillaTracks) //TODO: Error here because the track durations are null for the vanilla station tracks on replaced stations
         {
             var durations = song.TrackDuration.Select(d => TimeSpan.FromSeconds(d).ToString("g")).ToList();
             string durationString;
@@ -258,7 +258,7 @@ public sealed partial class ReplacementStationEditor : UserControl, IEditor
                     song.TrackArtist,
                     durationString
                 ])
-                { Tag = song };
+            { Tag = song };
 
             lvTracks.Items.Add(lvItem);
         }
@@ -302,6 +302,7 @@ public sealed partial class ReplacementStationEditor : UserControl, IEditor
         lvTracks.EndUpdate();
 
         ReplacedStation?.TrackedObject.SyncStagingFolder(GlobalData.ConfigManager.CurrentConfig.StagingPath);
+        StationUpdated?.Invoke(this, EventArgs.Empty);
     }
 
     private void btnReplaceAllTracks_Click(object sender, EventArgs e)
@@ -334,6 +335,7 @@ public sealed partial class ReplacementStationEditor : UserControl, IEditor
             lvTracks.EndUpdate();
 
             ReplacedStation?.TrackedObject.SyncStagingFolder(GlobalData.ConfigManager.CurrentConfig.StagingPath);
+            StationUpdated?.Invoke(this, EventArgs.Empty);
         }
         catch (Exception ex)
         {
@@ -370,6 +372,7 @@ public sealed partial class ReplacementStationEditor : UserControl, IEditor
             ReplacedStation?.TrackedObject.Tracks.Remove(ReplacedStation.TrackedObject.Tracks.First(t => t.VanillaTrackName.Equals(track.TrackName)));
 
             ReplacedStation?.TrackedObject.SyncStagingFolder(GlobalData.ConfigManager.CurrentConfig.StagingPath);
+            StationUpdated?.Invoke(this, EventArgs.Empty);
         }
         catch (Exception ex)
         {
@@ -407,7 +410,10 @@ public sealed partial class ReplacementStationEditor : UserControl, IEditor
         lvTracks.EndUpdate();
 
         ReplacedStation?.TrackedObject.SyncStagingFolder(GlobalData.ConfigManager.CurrentConfig.StagingPath);
+        StationUpdated?.Invoke(this, EventArgs.Empty);
     }
+
+    private void lvTracks_DoubleClick(object sender, EventArgs e) => btnReplaceTrack.PerformClick();
 
     private void ResetPropertiesUi()
     {

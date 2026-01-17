@@ -51,6 +51,8 @@ public partial class ExportWindow : Form
 
     private DirectoryCopier? _dirCopier;
     private bool _exportToGameComplete;
+    private bool _exportNewStationsToStagingComplete;
+    private bool _exportAdditionalStationsToStagingComplete;
     private bool _exportToStagingComplete;
     private bool _isCancelling;
 
@@ -70,7 +72,6 @@ public partial class ExportWindow : Form
         }
 
         _replacementStationsToExport = StationManager.Instance.ReplacementStationsAsList;
-
         SetImageList();
     }
 
@@ -87,6 +88,13 @@ public partial class ExportWindow : Form
     /// The event is raised regardless of whether the export was successful or failed; check event arguments for details
     /// if provided.</remarks>
     public event EventHandler? OnExportToStagingComplete;
+
+    /// <summary>
+    /// Occurs when the process of exporting additional stations to the staging area has completed.
+    /// </summary>
+    /// <remarks>Subscribers can use this event to perform actions after the export operation finishes. The
+    /// event is raised regardless of whether the export succeeded or failed.</remarks>
+    public event EventHandler? OnExportAdditionalStationsToStagingComplete;
 
     /// <summary>
     /// Occurs when the export operation to the game has completed.
@@ -282,10 +290,6 @@ public partial class ExportWindow : Form
     {
         if (!bgWorkerExport.CancellationPending && !bgWorkerExport.IsBusy)
             bgWorkerExport.RunWorkerAsync();
-
-        // Export replaced stations as well
-        if (!bgWorkerExportReplacedStations.CancellationPending && !bgWorkerExportReplacedStations.IsBusy)
-            bgWorkerExportReplacedStations.RunWorkerAsync();
     }
 
     /// <summary>
@@ -618,15 +622,7 @@ public partial class ExportWindow : Form
 
     private static string CreateStationDirectoryReplacement(TrackableObject<ReplacementStation> station)
     {
-        if (string.IsNullOrEmpty(StagingPath)) return string.Empty;
-
-        var safeStationPath = Path.Combine(StagingPath, "replaced-stations",
-            station.TrackedObject.VanillaStation.StationName);
-        if (!Directory.Exists(safeStationPath))
-            return string.Empty;
-        
-        FileHelper.CreateDirectories(safeStationPath);
-        return safeStationPath;
+        return string.IsNullOrEmpty(StagingPath) ? string.Empty : station.TrackedObject.SyncStagingFolder(StagingPath);
     }
 
     /// <summary>
@@ -707,10 +703,16 @@ public partial class ExportWindow : Form
         }
         else
         {
-            //_exportToStagingComplete = true; TODO: maybe don't need this flag anymore here since it's handled in the replacement stations worker?
+            _exportNewStationsToStagingComplete = true;
+            _exportToStagingComplete = _exportNewStationsToStagingComplete && _exportAdditionalStationsToStagingComplete;
             pgExportProgress.Value = 0;
+            OnExportToStagingComplete?.Invoke(this, EventArgs.Empty);
+
             _stationsToExport.ForEach(s => s.AcceptChanges());
-            StationManager.Instance.ResetNewStations();
+        
+            // Export replaced stations as well next
+            if (!bgWorkerExportReplacedStations.CancellationPending && !bgWorkerExportReplacedStations.IsBusy)
+                bgWorkerExportReplacedStations.RunWorkerAsync();
         }
     }
 
@@ -803,6 +805,7 @@ public partial class ExportWindow : Form
         // Delete songs not present in the .sgls file
         var existingFiles = Directory.GetFiles(targetPath)
             .Where(file => !Path.GetExtension(file).Equals(".sgls"))
+            .Where(file => !Path.GetExtension(file).Equals(".icls"))
             .Where(file => !Path.GetExtension(file).Equals(".json"));
 
         foreach (var file in existingFiles)
@@ -1025,11 +1028,11 @@ public partial class ExportWindow : Form
     ///     Remove the icons of inactive stations from the game directory.
     /// </summary>
     /// <param name="inactiveStations">The list of inactive stations to remove icons of.</param>
-    private void DeleteInactiveStationIconsFromGame(List<TrackableObject<AdditionalStation>> inactiveStations)
+    private static void DeleteInactiveStationIconsFromGame(List<TrackableObject<AdditionalStation>> inactiveStations)
     {
         try
         {
-            var looseArchiveGamePath = Path.Combine(GameBasePath, "archive", "pc", "mod");
+            var looseArchiveGamePath = PathHelper.GetModArchivePath(GameBasePath);
 
             //Get the icons for each station and remove each one from the game directory
             foreach (var station in inactiveStations)
@@ -1161,9 +1164,33 @@ public partial class ExportWindow : Form
                         continue;
 
                     if (!CreateReplacementStationJson(stationPath, station))
+                    {
                         AuLogger.GetCurrentLogger<ExportWindow>("BG_ExportReplacedStations")
                             .Error(
                                 $"Failed to create replacement station JSON for station: {station.TrackedObject.DisplayName}");
+                        bgWorkerExportReplacedStations.CancelAsync();
+                    }
+                    
+                    //Create archive file for station from staging folder
+                    if (bgWorkerExportReplacedStations.CancellationPending)
+                        return;
+
+                    var archive = AudioManager.Instance.GenerateAudioArchiveAsync(station.TrackedObject.VanillaStation.StationName,
+                        station.TrackedObject.Tracks).Result;
+                    if (archive == null)
+                    {
+                        AuLogger.GetCurrentLogger<ExportWindow>("BG_ExportReplacedStations")
+                            .Error($"Failed to create audio archive for replacement station: {station.TrackedObject.DisplayName}");
+                        bgWorkerExportReplacedStations.CancelAsync();
+                        return;
+                    }
+                    
+                    //Copy archive to station directory
+                    var archivePath = Path.Combine(stationPath, $"{station.TrackedObject.VanillaStation.StationName}.archive");
+                    File.Copy(archive.ArchivePath, archivePath, true);
+
+                    AuLogger.GetCurrentLogger<ExportWindow>("BG_ExportReplacedStations")
+                        .Info($"Created audio archive for replacement station: {station.TrackedObject.DisplayName}");
                 }
                 catch (Exception ex)
                 {
@@ -1197,13 +1224,20 @@ public partial class ExportWindow : Form
             Reset();
         else
         {
-            _exportToStagingComplete = true;
+            _exportAdditionalStationsToStagingComplete = true;
+            _exportToStagingComplete = _exportNewStationsToStagingComplete && _exportAdditionalStationsToStagingComplete;
             pgExportProgress.Value = 100;
             ToggleButtons();
             UpdateStatus(Strings.ExportCompleteStatus);
             _replacementStationsToExport.ForEach(s => s.AcceptChanges());
+            StationManager.Instance.ResetNewStations();
 
+            _isCancelling = false;
+            OnExportAdditionalStationsToStagingComplete?.Invoke(this, EventArgs.Empty);
             OnExportToStagingComplete?.Invoke(this, EventArgs.Empty);
+
+            if (ShouldAutoExportToGame)
+                btnExportToGame.PerformClick();
         }
     }
 

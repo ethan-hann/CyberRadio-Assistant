@@ -46,6 +46,16 @@ public partial class AudioConverterForm : Form
     private readonly List<string> _inputFiles;
 
     /// <summary>
+    /// A hash set to track log lines and prevent duplicates.
+    /// </summary>
+    private readonly HashSet<string> _logLines = new(StringComparer.Ordinal);
+
+    /// <summary>
+    /// Gate to ensure thread-safe appending to the log.
+    /// </summary>
+    private readonly SemaphoreSlim _logAppendGate = new(1, 1);
+
+    /// <summary>
     ///     The radio station context for the conversion, if any.
     /// </summary>
     private readonly TrackableObject<AdditionalStation>? _station;
@@ -204,18 +214,21 @@ public partial class AudioConverterForm : Form
         var outputPath = fdlgChangeOutput.SelectedPath;
         if (string.IsNullOrEmpty(outputPath)) return;
 
-        // Update the path of the selected item
         if (lbCandidates.SelectedItem is not ConvertCandidate selectedItem) return;
 
-        selectedItem.OutputPath = Path.Combine(outputPath,
-            $"{Path.GetFileNameWithoutExtension(selectedItem.InputPath)}{selectedItem.TargetFormat.ToDescriptionString()}");
-        pgConvertCandidate.Invalidate();
-        pgConvertCandidate.Update();
+        selectedItem.OutputPath = PathHelper.SanitizeFilePath(Path.Combine(outputPath,
+            $"{Path.GetFileNameWithoutExtension(selectedItem.InputPath)}{selectedItem.TargetFormat.ToDescriptionString()}"));
+
+        // Force PropertyGrid to refresh its cached values for the selected object
+        pgConvertCandidate.SelectedObject = null;
+        pgConvertCandidate.SelectedObject = selectedItem;
+
+        pgConvertCandidate.Refresh();
     }
 
     private void AddFileToListBox(string fileName)
     {
-        string outputPath;
+        string sanitizedOutputPath;
         if (_station != null)
         {
             // If a station is provided, we use its display name (which should be the folder name as well) in the staging folder.
@@ -224,15 +237,16 @@ public partial class AudioConverterForm : Form
             if (string.IsNullOrEmpty(stagingFolder))
                 stagingFolder = _defaultMusicPath;
 
-            outputPath = Path.Combine(stagingFolder, stationName);
+            sanitizedOutputPath = PathHelper.SanitizePath(Path.Combine(stagingFolder, stationName));
         }
         else
         {
             // If no station is provided, we use the default music path.
-            outputPath = Path.Combine(_defaultMusicPath, "converted");
+            sanitizedOutputPath = PathHelper.SanitizePath(Path.Combine(_defaultMusicPath, "converted"));
         }
 
-        ConvertCandidate convertCandidate = new(fileName, ValidAudioFiles.Mp3, outputPath);
+        var sanitizedName = PathHelper.SanitizePath(fileName);
+        ConvertCandidate convertCandidate = new(sanitizedName, ValidAudioFiles.Mp3, sanitizedOutputPath);
         _candidates.Add(convertCandidate);
 
         // Set the last item as checked
@@ -293,7 +307,6 @@ public partial class AudioConverterForm : Form
                 continue;
             AddFileToListBox(file);
         }
-
 
         SetUiEnabledStates();
     }
@@ -394,16 +407,20 @@ public partial class AudioConverterForm : Form
                     if (_cts.IsCancellationRequested)
                         break;
 
-                    if (!AudioConverter.NeedsConversion(item.InputPath))
+                    if (_station != null) //Only check that files need conversion if converting for a station
                     {
-                        AddLogLine($"{item.InputPath} => {Strings.NoConversionNeeded}");
-                        _totalToConvert--;
-                        continue;
+                        if (!AudioConverter.NeedsConversion(item.InputPath))
+                        {
+                            AddLogLine($"{item.InputPath} => {Strings.NoConversionNeeded}");
+                            continue;
+                        }
                     }
 
                     RunOnUI(() => { lbCandidates.SelectedItem = item; });
 
-                    await AudioConverter.Instance.ConvertAsync(item, false, _cts.Token);
+                    var output = await AudioConverter.Instance.ConvertAsync(item, false, _cts.Token);
+                    if (!string.IsNullOrEmpty(output))
+                        _conversionCounter++;
                 }
 
                 if (_totalToConvert <= 0)
@@ -426,9 +443,6 @@ public partial class AudioConverterForm : Form
             }
             finally
             {
-                AuLogger.GetCurrentLogger<AudioConverterForm>("btnStartConversion_Click")
-                    .Info("Conversion Log:\n" + rtbConversionLog.Text);
-
                 AuLogger.GetCurrentLogger<AudioConverterForm>("btnStartConversion_Click")
                     .Info($"Conversion process completed. Converted {_conversionCounter} of {_totalToConvert} files.");
 
@@ -467,7 +481,6 @@ public partial class AudioConverterForm : Form
             .Select(item => item.OutputPath)
             .ToList();
 
-        // We only want to notify if the conversion was successful and not cancelled.
         if (!_isCancelling)
             ConversionCompleted?.Invoke(this, convertedFiles);
 
@@ -481,6 +494,7 @@ public partial class AudioConverterForm : Form
             SetUiEnabledStates();
             pgConvertCandidate.Enabled = true;
             lbCandidates.Enabled = true;
+            progressBar.Value = 0;
             btnStartConversion.Text = Strings.StartConversion;
             lblTotalConversions.Text =
                 string.Format(Strings.TotalConversionsLabel, _conversionCounter, _totalToConvert);
@@ -488,6 +502,13 @@ public partial class AudioConverterForm : Form
             _inputFiles.Clear();
             SetupListBox();
         });
+    }
+
+    private void ClearConversionLog()
+    {
+        _logLines.Clear();
+        rtbConversionLog.Clear();
+        progressBar.Value = 0;
     }
 
     /// <summary>
@@ -501,6 +522,24 @@ public partial class AudioConverterForm : Form
 
         void ProcessCompletion()
         {
+            if (e.success)
+            {
+                var candidate = _candidates.FirstOrDefault(x =>
+                    x.InputPath.Equals(e.file, StringComparison.OrdinalIgnoreCase));
+
+                if (candidate != null)
+                {
+                    candidate.OutputPath = e.messageOrOutputPath;
+
+                    if (ReferenceEquals(pgConvertCandidate.SelectedObject, candidate))
+                    {
+                        pgConvertCandidate.SelectedObject = null;
+                        pgConvertCandidate.SelectedObject = candidate;
+                        pgConvertCandidate.Refresh();
+                    }
+                }
+            }
+
             var text = e.success ? $"{e.file} => {e.messageOrOutputPath}" : $"{Strings.Error}: {e.messageOrOutputPath}";
             AddLogLine(text);
             progressBar.Value = 0;
@@ -557,18 +596,48 @@ public partial class AudioConverterForm : Form
     }
 
     /// <summary>
-    ///     Adds a line of text to the conversion log RichTextBox.
+    ///     Adds a line of text to the conversion log RichTextBox. De-duplicates lines to prevent log spam.
+    ///     Ensures serialized appends so lines remain in chronological call order.
     /// </summary>
     /// <param name="text">The text to add to the log.</param>
     private void AddLogLine(string text)
     {
-        RunOnUI(() =>
+        if (string.IsNullOrWhiteSpace(text))
+            return;
+
+        text = text.TrimEnd('\r', '\n');
+
+        if (!_logLines.Add(text))
+            return;
+
+        AuLogger.GetCurrentLogger<AudioConverterForm>("ConversionLog").Info(text);
+
+        var line = $"[{DateTime.Now:HH:mm:ss.fff}] {text}";
+        _ = AppendLogLineAsync(line);
+    }
+
+    private async Task AppendLogLineAsync(string line)
+    {
+        try
         {
-            rtbConversionLog.AppendText(text + Environment.NewLine);
-            rtbConversionLog.SelectionStart = rtbConversionLog.Text.Length;
-            rtbConversionLog.ScrollToCaret();
-            rtbConversionLog.Refresh();
-        });
+            await _logAppendGate.WaitAsync().ConfigureAwait(false);
+
+            RunOnUI(() =>
+            {
+                rtbConversionLog.AppendText(line + Environment.NewLine);
+                rtbConversionLog.SelectionStart = rtbConversionLog.Text.Length;
+                rtbConversionLog.ScrollToCaret();
+            });
+        }
+        catch (ObjectDisposedException)
+        {
+            AuLogger.GetCurrentLogger<AudioConverterForm>("AppendLogLineAsync")
+                .Warn("Attempted to append to log after form was disposed.");
+        }
+        finally
+        {
+            _logAppendGate.Release();
+        }
     }
 
     /// <summary>
@@ -576,10 +645,16 @@ public partial class AudioConverterForm : Form
     /// </summary>
     private void AudioConverterForm_FormClosing(object sender, FormClosingEventArgs e)
     {
-        if (!_isConverting) return;
+        if (_isConverting)
+        {
+            MessageBox.Show(Strings.ConversionOngoing, Strings.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            e.Cancel = true;
+            return;
+        }
 
-        MessageBox.Show(Strings.ConversionOngoing, Strings.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
-        e.Cancel = true;
+        AudioConverter.Instance.ConversionStarted -= OnConversionStarted;
+        AudioConverter.Instance.ConversionProgress -= OnConversionProgress;
+        AudioConverter.Instance.ConversionCompleted -= OnConversionCompleted;
     }
 
     /// <summary>
@@ -609,14 +684,23 @@ public partial class AudioConverterForm : Form
     {
         try
         {
+            if (IsDisposed)
+                return;
+
             if (InvokeRequired)
                 Invoke(action);
             else
                 action();
         }
-        catch (Exception)
+        catch (ObjectDisposedException)
         {
-            // ignored to prevent log spam
+            AuLogger.GetCurrentLogger<AudioConverterForm>("RunOnUI")
+                .Warn("UI invoke attempted after form was disposed.");
+        }
+        catch (InvalidOperationException ex)
+        {
+            AuLogger.GetCurrentLogger<AudioConverterForm>("RunOnUI")
+                .Warn(ex, "UI invoke failed.");
         }
     }
 

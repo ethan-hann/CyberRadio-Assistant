@@ -108,14 +108,14 @@ public partial class ReplacedTrackPropertiesCtl : UserControl, IEditor
         //Each WEM ID should be treated as its own entry in the list view and display the replaced file for the WEM ID and track combo
 
         foreach (var lvItem in from wemId in wemIds
-                 let replacedFile = ReplacedStation.TrackedObject.Tracks
-                     .FirstOrDefault(rt => rt.VanillaTrackName.Equals(_trackName) && rt.WemId.Equals(wemId))?
-                     .ReplacementFilePath ?? Strings.TrackNotReplacedYet
-                 select new ListViewItem([
-                         wemId,
+                               let replacedFile = ReplacedStation.TrackedObject.Tracks
+                                   .FirstOrDefault(rt => rt.VanillaTrackName.Equals(_trackName) && rt.WemId.Equals(wemId))?
+                                   .ReplacementFilePath ?? Strings.TrackNotReplacedYet
+                               select new ListViewItem([
+                                       wemId,
                          replacedFile
-                     ])
-                     { Tag = wemId })
+                                   ])
+                               { Tag = wemId })
             lvTracks.Items.Add(lvItem);
 
         lvTracks.ResizeColumns();
@@ -198,4 +198,6 @@ public partial class ReplacedTrackPropertiesCtl : UserControl, IEditor
         PopulateListView();
         TrackChanged?.Invoke(this, _trackName);
     }
+
+    private void lvTracks_DoubleClick(object sender, EventArgs e) => btnReplace.PerformClick();
 }

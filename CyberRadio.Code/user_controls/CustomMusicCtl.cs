@@ -222,7 +222,7 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
         needConversion.RemoveAll(f => alreadyInStation.Contains(f));
 
         // Add songs that don't require conversion first
-        foreach (var song in noConversionNeeded.Select(Song.FromFile).OfType<Song>().Where(CanSongBeAdded))
+        foreach (var song in noConversionNeeded.Select(Song.FromFileAsync).OfType<Song>().Where(CanSongBeAdded))
             Station.TrackedObject.Songs.Add(song);
 
         if (needConversion.Count > 0)
@@ -260,7 +260,7 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
 
     private void AudioConverterForm_ConversionCompleted(object? sender, List<string> e)
     {
-        foreach (var song in e.Select(Song.FromFile).OfType<Song>().Where(CanSongBeAdded))
+        foreach (var song in e.Select(Song.FromFileAsync).OfType<Song>().Where(CanSongBeAdded))
             Station.TrackedObject.Songs.Add(song);
 
         UpdateListsAndViews();

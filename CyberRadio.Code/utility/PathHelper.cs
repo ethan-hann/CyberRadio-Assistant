@@ -16,8 +16,10 @@
 
 #region
 
+using System.Globalization;
 using System.Security.AccessControl;
 using System.Security.Principal;
+using System.Text;
 using System.Text.RegularExpressions;
 using AetherUtils.Core.Files;
 using AetherUtils.Core.Logging;
@@ -318,6 +320,119 @@ public static partial class PathHelper
             AuLogger.GetCurrentLogger("PathHelper.SanitizePath")
                 .Error(ex, "An error occurred while sanitizing the path.");
             return path;
+        }
+    }
+
+     /// <summary>
+    ///     Sanitizes a file name by replacing invalid characters and specific characters (like apostrophes) that can cause issues.
+    /// </summary>
+    public static string SanitizeFileName(string fileName)
+    {
+        try
+        {
+            if (string.IsNullOrEmpty(fileName))
+                return fileName;
+
+            // Normalize Unicode to reduce weird composed/compatibility characters
+            fileName = fileName.Normalize(NormalizationForm.FormKC);
+
+            // Remove control/format characters (e.g., zero-width spaces) that can confuse tools like ffmpeg
+            Span<char> buffer = stackalloc char[fileName.Length];
+            var length = 0;
+
+            foreach (var ch in fileName)
+            {
+                var cat = char.GetUnicodeCategory(ch);
+                if (cat is UnicodeCategory.Control or UnicodeCategory.Format or UnicodeCategory.Surrogate or UnicodeCategory.OtherNotAssigned)
+                    continue;
+
+                buffer[length++] = ch;
+            }
+
+            fileName = new string(buffer[..length]);
+
+            // Replace Windows-invalid filename characters
+            fileName = Path.GetInvalidFileNameChars().Aggregate(fileName, (current, c) => current.Replace(c, '_'));
+
+            // Replace specific characters causing issues
+            fileName = fileName.Replace("'", "_");
+
+            // Collapse repeated whitespace
+            fileName = Regex.Replace(fileName, @"\s{2,}", " ").Trim();
+
+            // Windows doesn't like trailing dots/spaces on names
+            fileName = fileName.TrimEnd(' ', '.');
+
+            // Keep names reasonably sized (avoid MAX_PATH and tool edge cases)
+            const int maxFileNameLength = 180;
+            if (fileName.Length > maxFileNameLength)
+                fileName = fileName[..maxFileNameLength].TrimEnd(' ', '.');
+
+            return fileName;
+        }
+        catch (Exception ex)
+        {
+            AuLogger.GetCurrentLogger("PathHelper.SanitizeFileName")
+                .Error(ex, "An error occurred while sanitizing the file name.");
+            return fileName;
+        }
+    }
+
+    /// <summary>
+    ///     Sanitizes a directory path by sanitizing each directory segment (keeps the drive/root intact).
+    /// </summary>
+    public static string SanitizeDirectoryPath(string directoryPath)
+    {
+        try
+        {
+            if (string.IsNullOrEmpty(directoryPath))
+                return directoryPath;
+
+            var full = Path.GetFullPath(directoryPath);
+
+            var root = Path.GetPathRoot(full) ?? string.Empty;
+            var tail = full[root.Length..];
+
+            var parts = tail.Split(new[] { Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar },
+                StringSplitOptions.RemoveEmptyEntries);
+
+            for (var i = 0; i < parts.Length; i++)
+                parts[i] = SanitizeFileName(parts[i]);
+
+            return Path.Combine([root, .. parts]);
+        }
+        catch (Exception ex)
+        {
+            AuLogger.GetCurrentLogger("PathHelper.SanitizeDirectoryPath")
+                .Error(ex, "An error occurred while sanitizing the directory path.");
+            return directoryPath;
+        }
+    }
+
+    /// <summary>
+    ///     Sanitizes a full file path by sanitizing both the directory path and the file name.
+    ///     Intended for generating safe paths (temp/output), not renaming files in-place.
+    /// </summary>
+    public static string SanitizeFilePath(string filePath)
+    {
+        try
+        {
+            if (string.IsNullOrEmpty(filePath))
+                return filePath;
+
+            var directory = Path.GetDirectoryName(filePath) ?? string.Empty;
+            var fileName = Path.GetFileName(filePath);
+
+            var sanitizedDirectory = SanitizeDirectoryPath(directory);
+            var sanitizedFileName = SanitizeFileName(fileName);
+
+            return Path.Combine(sanitizedDirectory, sanitizedFileName);
+        }
+        catch (Exception ex)
+        {
+            AuLogger.GetCurrentLogger("PathHelper.SanitizeFilePath")
+                .Error(ex, "An error occurred while sanitizing the file path.");
+            return filePath;
         }
     }
 

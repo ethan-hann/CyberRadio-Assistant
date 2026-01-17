@@ -64,10 +64,10 @@ namespace RadioExt_Helper.user_controls
             grpReplacedTracks = new GroupBox();
             lbReplacedTracks = new ListBox();
             grpTrackProperties = new GroupBox();
+            pnlTrackProperties = new Panel();
             lvReplacementTracks = new ListView();
             colWemId = new ColumnHeader();
             colReplacedFilePath = new ColumnHeader();
-            pnlTrackProperties = new Panel();
             statusStrip1.SuspendLayout();
             tabControl.SuspendLayout();
             tabMainInfo.SuspendLayout();
@@ -328,6 +328,7 @@ namespace RadioExt_Helper.user_controls
             lvTracks.TabIndex = 1;
             lvTracks.UseCompatibleStateImageBehavior = false;
             lvTracks.View = View.Details;
+            lvTracks.DoubleClick += lvTracks_DoubleClick;
             // 
             // colReplaced
             // 
@@ -495,6 +496,14 @@ namespace RadioExt_Helper.user_controls
             grpTrackProperties.TabStop = false;
             grpTrackProperties.Text = "Properties";
             // 
+            // pnlTrackProperties
+            // 
+            pnlTrackProperties.Dock = DockStyle.Fill;
+            pnlTrackProperties.Location = new Point(3, 21);
+            pnlTrackProperties.Name = "pnlTrackProperties";
+            pnlTrackProperties.Size = new Size(966, 431);
+            pnlTrackProperties.TabIndex = 0;
+            // 
             // lvReplacementTracks
             // 
             lvReplacementTracks.Columns.AddRange(new ColumnHeader[] { colWemId, colReplacedFilePath });
@@ -519,14 +528,6 @@ namespace RadioExt_Helper.user_controls
             // 
             colReplacedFilePath.Text = "Replaced With File";
             colReplacedFilePath.Width = 150;
-            // 
-            // pnlTrackProperties
-            // 
-            pnlTrackProperties.Dock = DockStyle.Fill;
-            pnlTrackProperties.Location = new Point(3, 21);
-            pnlTrackProperties.Name = "pnlTrackProperties";
-            pnlTrackProperties.Size = new Size(966, 431);
-            pnlTrackProperties.TabIndex = 0;
             // 
             // ReplacementStationEditor
             // 

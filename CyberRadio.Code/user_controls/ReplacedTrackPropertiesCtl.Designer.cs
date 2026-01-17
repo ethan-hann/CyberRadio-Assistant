@@ -111,6 +111,7 @@
             lvTracks.TabIndex = 2;
             lvTracks.UseCompatibleStateImageBehavior = false;
             lvTracks.View = View.Details;
+            lvTracks.DoubleClick += lvTracks_DoubleClick;
             // 
             // colWemId
             // 

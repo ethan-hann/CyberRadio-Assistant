@@ -19,6 +19,7 @@
 using AetherUtils.Core.Extensions;
 using AetherUtils.Core.Logging;
 using RadioExt_Helper.models;
+using System;
 using Xabe.FFmpeg;
 using Xabe.FFmpeg.Downloader;
 
@@ -84,7 +85,7 @@ public sealed class AudioConverter
     /// </summary>
     public async Task<List<string>> InitializeAsync()
     {
-        List<string> messages = new();
+        List<string> messages = [];
         if (IsInitialized) return messages;
 
         var logger = AuLogger.GetCurrentLogger<AudioConverter>("InitializeAsync");
@@ -174,42 +175,97 @@ public sealed class AudioConverter
     ///     anyway.
     /// </param>
     /// <returns></returns>
-    public async Task<string?> ConvertAsync(ConvertCandidate candidate, bool byPassNeedsConversionCheck,
+        public async Task<string?> ConvertAsync(ConvertCandidate candidate, bool byPassNeedsConversionCheck,
         CancellationToken cancellationToken = default)
     {
-        if (candidate is null)
-            throw new ArgumentNullException(nameof(candidate));
+        ArgumentNullException.ThrowIfNull(candidate);
 
         if (!byPassNeedsConversionCheck)
-            // skip if already correct extension
             if (!NeedsConversion(candidate.InputPath, candidate.TargetFormat.ToDescriptionString()))
                 return candidate.InputPath;
 
-        // ensure we have ffmpeg/ffprobe
         await InitializeAsync().ConfigureAwait(false);
+
+        var logger = AuLogger.GetCurrentLogger<AudioConverter>("ConvertAsync");
 
         ConversionStarted?.Invoke(this, candidate.InputPath);
 
-        var conversion = await FFmpeg.Conversions
-            .FromSnippet.Convert(candidate.InputPath, candidate.OutputPath);
+        string? tempInputPath = null;
 
-        conversion.SetOverwriteOutput(true);
-
-        conversion.OnProgress += (_, prog) =>
-            ConversionProgress?.Invoke(this, (candidate.InputPath, prog.Percent));
+        var normalizedOutputPath = PathHelper.SanitizeFilePath(candidate.OutputPath);
 
         try
         {
-            await conversion.Start(cancellationToken).ConfigureAwait(false);
-
-            if (File.Exists(candidate.OutputPath))
+            if (!File.Exists(candidate.InputPath))
             {
-                ConversionCompleted?.Invoke(this, (candidate.InputPath, true, candidate.OutputPath));
-                return candidate.OutputPath;
+                ConversionCompleted?.Invoke(this, (candidate.InputPath, false, "Input file not found."));
+                return null;
             }
 
-            const string msg = "Output file not found.";
-            ConversionCompleted?.Invoke(this, (candidate.InputPath, false, msg));
+            if (ConvertedDirectory is null)
+            {
+                ConversionCompleted?.Invoke(this, (candidate.InputPath, false, "ConvertedDirectory is null."));
+                return null;
+            }
+
+            if (!TryGetTargetExtension(candidate, out var targetExtension, out var extensionError))
+            {
+                ConversionCompleted?.Invoke(this, (candidate.InputPath, false, extensionError));
+                return null;
+            }
+
+            var outputDir = Path.GetDirectoryName(normalizedOutputPath);
+            if (!string.IsNullOrEmpty(outputDir))
+                Directory.CreateDirectory(outputDir);
+
+            var tempInputDir = Path.Combine(ConvertedDirectory, "input-temp");
+            Directory.CreateDirectory(tempInputDir);
+
+            var originalFileName = Path.GetFileName(candidate.InputPath);
+            var uniqueSuffix = Guid.NewGuid().ToString("N");
+            var extension = Path.GetExtension(originalFileName);
+            var baseName = Path.GetFileNameWithoutExtension(originalFileName);
+
+            var proposedTempFileName = $"{baseName}_{uniqueSuffix}{extension}";
+            var proposedTempFullPath = Path.Combine(tempInputDir, proposedTempFileName);
+
+            tempInputPath = PathHelper.SanitizeFilePath(proposedTempFullPath);
+
+            File.Copy(candidate.InputPath, tempInputPath, true);
+            var inputPathForFfmpeg = tempInputPath;
+
+            // Ensure output path matches the requested extension
+            if (!normalizedOutputPath.EndsWith(targetExtension, StringComparison.OrdinalIgnoreCase))
+            {
+                var outDir = Path.GetDirectoryName(normalizedOutputPath) ?? string.Empty;
+                var outName = Path.GetFileNameWithoutExtension(normalizedOutputPath);
+                normalizedOutputPath = Path.Combine(outDir, outName + targetExtension);
+                normalizedOutputPath = PathHelper.SanitizeFilePath(normalizedOutputPath);
+            }
+
+            var conversion = FFmpeg.Conversions.New();
+
+            // Robust defaults:
+            // - disable video (important for mkv/mp4)
+            // - explicitly select audio codec per target
+            conversion.AddParameter($"-vn -i \"{inputPathForFfmpeg}\"", ParameterPosition.PreInput);
+            ApplyAudioEncodingParameters(ref conversion, candidate.TargetFormat);
+
+            conversion.SetOutput(normalizedOutputPath);
+            conversion.SetOverwriteOutput(true);
+
+            conversion.OnProgress += (_, prog) =>
+                ConversionProgress?.Invoke(this, (candidate.InputPath, prog.Percent));
+
+            await conversion.Start(cancellationToken).ConfigureAwait(false);
+
+            if (File.Exists(normalizedOutputPath))
+            {
+                ConversionCompleted?.Invoke(this, (candidate.InputPath, true, normalizedOutputPath));
+                return normalizedOutputPath;
+            }
+
+            ConversionCompleted?.Invoke(this, (candidate.InputPath, false, "Output file not found."));
             return null;
         }
         catch (OperationCanceledException)
@@ -219,8 +275,84 @@ public sealed class AudioConverter
         }
         catch (Exception ex)
         {
+            logger.Error(ex, "ConvertAsync");
             ConversionCompleted?.Invoke(this, (candidate.InputPath, false, ex.Message));
             return null;
+        }
+        finally
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(tempInputPath) && File.Exists(tempInputPath))
+                    File.Delete(tempInputPath);
+            }
+            catch (Exception ex)
+            {
+                logger.Warn($"Failed to delete temp input file: {tempInputPath}. {ex.Message}");
+            }
+        }
+    }
+
+    private static bool TryGetTargetExtension(ConvertCandidate candidate, out string extension, out string error)
+    {
+        extension = candidate.TargetFormat.ToDescriptionString();
+        error = string.Empty;
+
+        if (string.IsNullOrWhiteSpace(extension) || !extension.StartsWith('.'))
+        {
+            error = "Target extension is invalid.";
+            return false;
+        }
+
+        if (string.Equals(extension, ".wem", StringComparison.OrdinalIgnoreCase))
+        {
+            error = "WEM conversion is not supported.";
+            return false;
+        }
+
+        return true;
+    }
+
+    private static void ApplyAudioEncodingParameters(ref IConversion conversion, ValidAudioFiles targetFormat)
+    {
+        // Note: If you need "exact" radioExt expectations, you can tighten (sample rate/channels/bitrate) per format.
+        switch (targetFormat)
+        {
+            case ValidAudioFiles.Wav:
+                // Force PCM encoder explicitly (otherwise FFmpeg can end up with codec none)
+                conversion.AddParameter("-c:a pcm_s16le -ar 44100 -ac 2");
+                break;
+
+            case ValidAudioFiles.Mp3:
+                conversion.AddParameter("-c:a libmp3lame -q:a 2");
+                break;
+
+            case ValidAudioFiles.Ogg:
+                // Use Opus inside OGG for best availability; if Vorbis is needed specifically, swap to libvorbis.
+                conversion.AddParameter("-c:a libvorbis -b:a 192k");
+                break;
+
+            case ValidAudioFiles.Flac:
+                conversion.AddParameter("-c:a flac");
+                break;
+
+            case ValidAudioFiles.Mp2:
+                conversion.AddParameter("-c:a mp2 -b:a 192k -ar 44100 -ac 2");
+                break;
+
+            case ValidAudioFiles.Wma:
+            case ValidAudioFiles.Wax:
+                // Use WMAV2 in ASF container (wma/wax)
+                conversion.AddParameter("-f asf -c:a wmav2 -b:a 192k -ar 44100 -ac 2 -af aresample=async=1");
+                break;
+
+            case ValidAudioFiles.Wem:
+                // excluded by TryGetTargetExtension
+                break;
+
+            default:
+                conversion.AddParameter("-c:a pcm_s16le -ar 44100 -ac 2");
+                break;
         }
     }
 }

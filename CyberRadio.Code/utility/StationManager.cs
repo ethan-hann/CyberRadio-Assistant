@@ -26,6 +26,7 @@ using RadioExt_Helper.models;
 using RadioExt_Helper.user_controls;
 using SharpCompress.Archives;
 using WIG.Lib.Models;
+using WIG.Lib.Utility;
 
 #endregion
 
@@ -64,19 +65,23 @@ public partial class StationManager : IDisposable
         try
         {
             ClearStations();
-            foreach (var d in FileHelper.SafeEnumerateDirectories(directory))
+            var dirs = FileHelper.SafeEnumerateDirectories(directory);
+            foreach (var d in dirs)
             {
-                // Check if the `.vanilla` file is present in the directory indicating it's a vanilla replacement station
-                var vanillaFilePath = Path.Combine(d, ".vanilla");
-                if (FileHelper.DoesFileExist(vanillaFilePath))
+                // Check if the `.vanilla` file is present in the directories
+                if (d.EndsWith("replaced-stations"))
                 {
-                    var validVanillaFile = File.ReadAllBytes(vanillaFilePath)[0] == 0x56; // 'V' for Vanilla
-                    if (validVanillaFile)
-                        ProcessVanillaDirectory(d, true);
-                    else
+                    var subd = FileHelper.SafeEnumerateDirectories(d);
+                    foreach (var subdir in subd)
                     {
-                        AuLogger.GetCurrentLogger<StationManager>()
-                            .Warn($".vanilla file in directory {d} is not valid. Skipping vanilla station load.");
+                        var vanillaFilePath = Path.Combine(subdir, ".vanilla");
+                        if (!FileHelper.DoesFileExist(vanillaFilePath)) continue;
+
+                        var validVanillaFile = File.ReadAllBytes(vanillaFilePath)[0] == 0x56; // 'V' for Vanilla
+                        if (validVanillaFile)
+                            ProcessVanillaDirectory(d, false);
+                        else
+                            AuLogger.GetCurrentLogger<StationManager>().Warn($".vanilla file in directory {d} is not valid. Skipping vanilla station load.");
                     }
                 }
                 else
@@ -1708,7 +1713,7 @@ public partial class StationManager : IDisposable
             if (songList.Count == 0)
                 songFiles.ForEach(path =>
                 {
-                    var song = Song.FromFile(path);
+                    var song = Song.FromFileAsync(path).Result;
                     if (song != null)
                         songList.Add(song);
                 });
@@ -1785,9 +1790,20 @@ public partial class StationManager : IDisposable
 
             if (stationData == null) return null;
 
+            //Map the "actual" vanilla stations (retrieved from the Excel online) to the vanilla station for this station
+            //This should fix the issue where the "TrackDuration" is null for stations that are replaced on disk.
+            if (stationData.VanillaStation == null)
+            {
+                AuLogger.GetCurrentLogger<StationManager>("ProcessVanillaDirectory")
+                    .Error("Vanilla station data is null in replaced.json.");
+                return null;
+            }
+
+            var vanillaStation = AudioManager.Instance.GetVanillaStationByName(stationData.VanillaStation.StationName);
+
             ReplacementStation station = new()
             {
-                VanillaStation = stationData.VanillaStation,
+                VanillaStation = vanillaStation,
                 Tracks = stationData.Tracks,
                 IsActive = stationData.IsActive,
                 Notes = stationData.Notes,

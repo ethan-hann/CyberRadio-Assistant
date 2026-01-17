@@ -18,6 +18,7 @@
 
 using System.ComponentModel;
 using AetherUtils.Core.Extensions;
+using RadioExt_Helper.utility;
 using RadioExt_Helper.utility.localization;
 
 #endregion
@@ -52,9 +53,11 @@ public class ConvertCandidate
     {
         InputPath = inputPath ?? throw new ArgumentNullException(nameof(inputPath));
         TargetFormat = targetFormat;
+
         var ext = TargetFormat.ToDescriptionString();
         var name = Path.GetFileNameWithoutExtension(inputPath) + ext;
-        OutputPath = Path.Combine(outputDirectory, name);
+
+        OutputPath = PathHelper.SanitizeFilePath(Path.Combine(outputDirectory, name));
     }
 
     /// <summary>
@@ -83,7 +86,9 @@ public class ConvertCandidate
             _targetFormat = value;
             var ext = _targetFormat.ToDescriptionString();
             var name = Path.GetFileNameWithoutExtension(InputPath) + ext;
-            OutputPath = Path.Combine(Path.GetDirectoryName(OutputPath) ?? string.Empty, name);
+
+            OutputPath = PathHelper.SanitizeFilePath(
+                Path.Combine(Path.GetDirectoryName(OutputPath) ?? string.Empty, name));
         }
     }
 
