@@ -1124,15 +1124,10 @@ public partial class ExportWindow : Form
         }
         else
         {
-            _exportToGameComplete = true;
-            pgExportProgress.Value = 100;
-            ToggleButtons();
-            UpdateStatus(Strings.ExportToGameComplete);
+            pgExportProgress.Value = 0;
 
-            var mainForm = Owner as MainForm;
-            mainForm?.SetExportInProgress(false);
-
-            OnExportToGameComplete?.Invoke(this, EventArgs.Empty);
+            if (!bgWorkerExportReplacedStationsGame.CancellationPending && !bgWorkerExportReplacedStationsGame.IsBusy)
+                bgWorkerExportReplacedStationsGame.RunWorkerAsync();
         }
     }
 
@@ -1243,17 +1238,103 @@ public partial class ExportWindow : Form
 
     private void bgWorkerExportReplacedStationsGame_DoWork(object sender, DoWorkEventArgs e)
     {
+        try
+        {
+            ToggleButtons();
 
+            var gameArchivePath = PathHelper.GetModArchivePath(GameBasePath);
+            var stagingReplacementPath = Path.Combine(StagingPath, "replaced-stations");
+
+            if (!Directory.Exists(gameArchivePath))
+                Directory.CreateDirectory(gameArchivePath);
+
+            for (var i = 0; i < _replacementStationsToExport.Count; i++)
+            {
+                if (bgWorkerExportReplacedStationsGame.CancellationPending)
+                {
+                    e.Cancel = true;
+                    return;
+                }
+
+                var station = _replacementStationsToExport[i];
+                var stationName = station.TrackedObject.VanillaStation?.StationName ?? string.Empty;
+                if (string.IsNullOrEmpty(stationName))
+                    continue;
+
+                bgWorkerExportReplacedStationsGame.ReportProgress(
+                    (int)(i / (float)_replacementStationsToExport.Count * 100), station.TrackedObject.DisplayName);
+
+                var stagedArchivePath = Path.Combine(stagingReplacementPath, stationName, $"{stationName}.archive");
+                var gameArchiveFilePath = Path.Combine(gameArchivePath, $"{stationName}.archive");
+
+                try
+                {
+                    if (station.TrackedObject.IsActive)
+                    {
+                        if (!File.Exists(stagedArchivePath))
+                        {
+                            AuLogger.GetCurrentLogger<ExportWindow>("BG_ExportReplacedStationsGame")
+                                .Warn($"Archive file was not found in staging for replacement station: {station.TrackedObject.DisplayName}");
+                            continue;
+                        }
+
+                        File.Copy(stagedArchivePath, gameArchiveFilePath, true);
+                        AuLogger.GetCurrentLogger<ExportWindow>("BG_ExportReplacedStationsGame")
+                            .Info($"Copied replacement archive: {stagedArchivePath} to {gameArchiveFilePath}");
+                    }
+                    else if (File.Exists(gameArchiveFilePath))
+                    {
+                        File.Delete(gameArchiveFilePath);
+                        AuLogger.GetCurrentLogger<ExportWindow>("BG_ExportReplacedStationsGame")
+                            .Info($"Deleted disabled replacement archive: {gameArchiveFilePath}");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    AuLogger.GetCurrentLogger<ExportWindow>("BG_ExportReplacedStationsGame")
+                        .Error(ex,
+                            $"Failed to export replacement station archive to game: {station.TrackedObject.DisplayName}");
+                }
+            }
+
+            var activeReplacementCount = _replacementStationsToExport.Count(s => s.TrackedObject.IsActive);
+            AuLogger.GetCurrentLogger<ExportWindow>("BG_ExportReplacedStationsGame")
+                .Info($"Exported {activeReplacementCount} replacement station archives to game directory: {gameArchivePath}");
+        }
+        catch (Exception ex)
+        {
+            AuLogger.GetCurrentLogger<ExportWindow>("BG_ExportReplacedStationsGame")
+                .Error(ex, "An error occurred while exporting replacement station archives to game directory.");
+        }
     }
 
     private void bgWorkerExportReplacedStationsGame_ProgressChanged(object sender, ProgressChangedEventArgs e)
     {
+        if (pgExportProgress.Value != e.ProgressPercentage)
+            pgExportProgress.Value = e.ProgressPercentage;
 
+        if (e.UserState is string stationName && !string.IsNullOrEmpty(stationName))
+            UpdateStatus(string.Format(_statusString, stationName));
     }
 
     private void bgWorkerExportReplacedStationsGame_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
     {
+        if (_isCancelling)
+        {
+            Reset();
+        }
+        else
+        {
+            _exportToGameComplete = true;
+            pgExportProgress.Value = 100;
+            ToggleButtons();
+            UpdateStatus(Strings.ExportToGameComplete);
 
+            var mainForm = Owner as MainForm;
+            mainForm?.SetExportInProgress(false);
+
+            OnExportToGameComplete?.Invoke(this, EventArgs.Empty);
+        }
     }
 
     /// <summary>
@@ -1263,9 +1344,12 @@ public partial class ExportWindow : Form
     {
         this.SafeInvoke(() =>
         {
-            btnExportToGame.Enabled = !bgWorkerExport.IsBusy && _exportToStagingComplete && !_exportToGameComplete;
-            btnExportToStaging.Enabled = !bgWorkerExport.IsBusy && !_exportToStagingComplete;
-            btnCancel.Visible = bgWorkerExport.IsBusy || bgWorkerExportGame.IsBusy;
+            var isStagingExportBusy = bgWorkerExport.IsBusy || bgWorkerExportReplacedStations.IsBusy;
+            var isGameExportBusy = bgWorkerExportGame.IsBusy || bgWorkerExportReplacedStationsGame.IsBusy;
+
+            btnExportToGame.Enabled = !isStagingExportBusy && !isGameExportBusy && _exportToStagingComplete && !_exportToGameComplete;
+            btnExportToStaging.Enabled = !isStagingExportBusy && !isGameExportBusy && !_exportToStagingComplete;
+            btnCancel.Visible = isStagingExportBusy || isGameExportBusy;
         });
     }
 

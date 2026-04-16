@@ -79,9 +79,9 @@ public partial class StationManager : IDisposable
 
                         var validVanillaFile = File.ReadAllBytes(vanillaFilePath)[0] == 0x56; // 'V' for Vanilla
                         if (validVanillaFile)
-                            ProcessVanillaDirectory(d, false);
+                            ProcessVanillaDirectory(subdir, false);
                         else
-                            AuLogger.GetCurrentLogger<StationManager>().Warn($".vanilla file in directory {d} is not valid. Skipping vanilla station load.");
+                            AuLogger.GetCurrentLogger<StationManager>().Warn($".vanilla file in directory {subdir} is not valid. Skipping vanilla station load.");
                     }
                 }
                 else

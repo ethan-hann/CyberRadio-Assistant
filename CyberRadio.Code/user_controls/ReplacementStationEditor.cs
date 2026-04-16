@@ -208,31 +208,53 @@ public sealed partial class ReplacementStationEditor : UserControl, IEditor
         lvTracks.BeginUpdate();
         lbReplacedTracks.BeginUpdate();
 
-        _replacedTracks.Clear();
-        _replacementTrackMap.Clear();
-
-        if (ReplacedStation == null) return;
-
-        var vanillaTracks = ReplacedStation.TrackedObject.VanillaStation?.Tracks;
-        foreach (var matchingVanillaTrack in ReplacedStation.TrackedObject.Tracks
-                     .Select(track => vanillaTracks?
-                         .FirstOrDefault(t => t.TrackName.Equals(track.VanillaTrackName))).OfType<AudioTrack>())
+        try
         {
-            _replacedTracks.Add(matchingVanillaTrack);
-            _replacementTrackMap.Add(matchingVanillaTrack,
-                new ReplacedTrackPropertiesCtl(ReplacedStation, matchingVanillaTrack.TrackName));
+            _replacedTracks.Clear();
+            _replacementTrackMap.Clear();
+
+            if (ReplacedStation == null) return;
+
+            var vanillaTracks = ReplacedStation.TrackedObject.VanillaStation?.Tracks;
+            if (vanillaTracks == null)
+                return;
+
+            // A replacement station can have multiple replacement entries for the same vanilla track
+            // (one per WEM ID). The editor is track-name based, so we only add one UI entry per track name.
+            var replacedTrackNames = ReplacedStation.TrackedObject.Tracks
+                .Select(track => track.VanillaTrackName)
+                .Distinct(StringComparer.OrdinalIgnoreCase);
+
+            foreach (var replacedTrackName in replacedTrackNames)
+            {
+                var matchingVanillaTrack = vanillaTracks
+                    .FirstOrDefault(t => t.TrackName.Equals(replacedTrackName, StringComparison.OrdinalIgnoreCase));
+                if (matchingVanillaTrack == null)
+                    continue;
+
+                _replacedTracks.Add(matchingVanillaTrack);
+
+                if (_replacementTrackMap.Keys.Any(t =>
+                        t.TrackName.Equals(matchingVanillaTrack.TrackName, StringComparison.OrdinalIgnoreCase)))
+                    continue;
+
+                _replacementTrackMap.Add(matchingVanillaTrack,
+                    new ReplacedTrackPropertiesCtl(ReplacedStation, matchingVanillaTrack.TrackName));
+            }
+
+            PopulateListView();
+
+            lbReplacedTracks.DataSource = null;
+            lbReplacedTracks.DataSource = _replacedTracks;
+            lbReplacedTracks.DisplayMember = "ToString";
+
+            lvTracks.Invalidate();
         }
-
-        PopulateListView();
-
-        lbReplacedTracks.DataSource = null;
-        lbReplacedTracks.DataSource = _replacedTracks;
-        lbReplacedTracks.DisplayMember = "ToString";
-
-        lvTracks.Invalidate();
-        lvTracks.EndUpdate();
-
-        lbReplacedTracks.EndUpdate();
+        finally
+        {
+            lvTracks.EndUpdate();
+            lbReplacedTracks.EndUpdate();
+        }
     }
 
     private void PopulateListView()
@@ -455,6 +477,8 @@ public sealed partial class ReplacementStationEditor : UserControl, IEditor
         if (ReplacedStation == null) return;
 
         if (_replacementTrackMap.ContainsKey(track)) return;
+        if (_replacementTrackMap.Keys.Any(t => t.TrackName.Equals(track.TrackName, StringComparison.OrdinalIgnoreCase)))
+            return;
 
         var propertiesCtl = new ReplacedTrackPropertiesCtl(ReplacedStation, track.TrackName);
         propertiesCtl.TrackChanged += OnTrackChanged;
@@ -470,8 +494,14 @@ public sealed partial class ReplacementStationEditor : UserControl, IEditor
     private bool SwapPropertiesControl(AudioTrack track)
     {
         ResetPropertiesUi();
-        if (!_replacementTrackMap.TryGetValue(track, out var trackPropertiesCtl) || trackPropertiesCtl == null)
-            return trackPropertiesCtl != null;
+
+        if (!_replacementTrackMap.TryGetValue(track, out var trackPropertiesCtl))
+            trackPropertiesCtl = _replacementTrackMap
+                .FirstOrDefault(kvp => kvp.Key.TrackName.Equals(track.TrackName, StringComparison.OrdinalIgnoreCase))
+                .Value;
+
+        if (trackPropertiesCtl == null)
+            return false;
 
         trackPropertiesCtl.Dock = DockStyle.Fill;
         pnlTrackProperties.Controls.Add(trackPropertiesCtl);
