@@ -709,7 +709,7 @@ public partial class ExportWindow : Form
             OnExportToStagingComplete?.Invoke(this, EventArgs.Empty);
 
             _stationsToExport.ForEach(s => s.AcceptChanges());
-        
+
             // Export replaced stations as well next
             if (!bgWorkerExportReplacedStations.CancellationPending && !bgWorkerExportReplacedStations.IsBusy)
                 bgWorkerExportReplacedStations.RunWorkerAsync();
@@ -1165,7 +1165,7 @@ public partial class ExportWindow : Form
                                 $"Failed to create replacement station JSON for station: {station.TrackedObject.DisplayName}");
                         bgWorkerExportReplacedStations.CancelAsync();
                     }
-                    
+
                     //Create archive file for station from staging folder
                     if (bgWorkerExportReplacedStations.CancellationPending)
                         return;
@@ -1179,7 +1179,7 @@ public partial class ExportWindow : Form
                         bgWorkerExportReplacedStations.CancelAsync();
                         return;
                     }
-                    
+
                     //Copy archive to station directory
                     var archivePath = Path.Combine(stationPath, $"{station.TrackedObject.VanillaStation.StationName}.archive");
                     File.Copy(archive.ArchivePath, archivePath, true);
@@ -1335,6 +1335,30 @@ public partial class ExportWindow : Form
 
             OnExportToGameComplete?.Invoke(this, EventArgs.Empty);
         }
+    }
+
+    private void ExportWindow_FormClosing(object sender, FormClosingEventArgs e)
+    {
+        if (e.CloseReason is CloseReason.TaskManagerClosing or CloseReason.WindowsShutDown)
+            return;
+
+        var workers = new[]
+        {
+            bgWorkerExport,
+            bgWorkerExportReplacedStations,
+            bgWorkerExportGame,
+            bgWorkerExportReplacedStationsGame
+        };
+
+        var isExportInProgress = workers.Any(worker => worker.IsBusy);
+        var isExportCancelling = workers.Any(worker => worker.CancellationPending);
+
+        if (!isExportInProgress && !isExportCancelling)
+            return;
+
+        MessageBox.Show(this, Strings.ExportInProgress, Strings.Export, MessageBoxButtons.OK,
+            MessageBoxIcon.Information);
+        e.Cancel = true;
     }
 
     /// <summary>

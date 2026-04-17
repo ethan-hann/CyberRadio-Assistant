@@ -15,7 +15,9 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 using AetherUtils.Core.Extensions;
+using AetherUtils.Core.Files;
 using AetherUtils.Core.Logging;
+using RadioExt_Helper.forms;
 using RadioExt_Helper.models;
 using RadioExt_Helper.utility;
 
@@ -125,15 +127,11 @@ public partial class ReplacedTrackPropertiesCtl : UserControl, IEditor
     private void btnReplace_Click(object sender, EventArgs e)
     {
         if (ReplacedStation is null) return;
-
         if (lvTracks.SelectedItems.Count <= 0) return;
         if (lvTracks.SelectedItems[0].Tag is not string selectedWemId) return;
-        if (fdlgSelectFile.ShowDialog() != DialogResult.OK) return;
+        if (!TryGetReplacementFilePath(out var filePath)) return;
 
-        if (!ReplacedStation.TrackedObject.ReplaceTrack(
-                _trackName,
-                selectedWemId,
-                fdlgSelectFile.FileName)) return;
+        if (!ReplacedStation.TrackedObject.ReplaceTrack(_trackName, selectedWemId, filePath)) return;
 
         PopulateListView();
         TrackChanged?.Invoke(this, _trackName);
@@ -142,10 +140,10 @@ public partial class ReplacedTrackPropertiesCtl : UserControl, IEditor
     private void btnReplaceAll_Click(object sender, EventArgs e)
     {
         if (ReplacedStation is null) return;
-        if (fdlgSelectFile.ShowDialog() != DialogResult.OK) return;
-        var wemIds = ReplacedStation.TrackedObject.VanillaStation?.Tracks
-            .FirstOrDefault(t => t.TrackName.Equals(_trackName))?.WemIds;
-        if (wemIds is null)
+        if (!TryGetTrackWemIds(out var wemIds)) return;
+        if (!TryGetReplacementFilePath(out var filePath)) return;
+
+        if (wemIds == null)
         {
             AuLogger.GetCurrentLogger<ReplacedTrackPropertiesCtl>("btnReplaceAll_Click")
                 .Error(
@@ -154,10 +152,9 @@ public partial class ReplacedTrackPropertiesCtl : UserControl, IEditor
         }
 
         foreach (var wemId in wemIds)
-            ReplacedStation.TrackedObject.ReplaceTrack(
-                _trackName,
-                wemId,
-                fdlgSelectFile.FileName);
+        {
+            ReplacedStation.TrackedObject.ReplaceTrack(_trackName, wemId, filePath);
+        }
 
         PopulateListView();
         TrackChanged?.Invoke(this, _trackName);
@@ -200,4 +197,96 @@ public partial class ReplacedTrackPropertiesCtl : UserControl, IEditor
     }
 
     private void lvTracks_DoubleClick(object sender, EventArgs e) => btnReplace.PerformClick();
+
+    private bool TryGetTrackWemIds(out HashSet<string>? wemIds)
+    {
+        wemIds = [];
+
+        if (ReplacedStation is null) return false;
+
+        var ids = ReplacedStation.TrackedObject.VanillaStation?.Tracks
+            .FirstOrDefault(t => t.TrackName.Equals(_trackName))?.WemIds;
+
+        if (ids is null)
+        {
+            AuLogger.GetCurrentLogger<ReplacedTrackPropertiesCtl>(nameof(TryGetTrackWemIds))
+                .Error(
+                    $"No WEM IDs found for track '{_trackName}' in vanilla station associated with replacement station '{ReplacedStation.TrackedObject.DisplayName}'. This indicates that the Google sheet was not parsed correctly!");
+            return false;
+        }
+
+        wemIds = ids;
+        return true;
+    }
+
+    private bool TryGetReplacementFilePath(out string filePath)
+    {
+        filePath = string.Empty;
+
+        if (fdlgSelectFile.ShowDialog() != DialogResult.OK) return false;
+
+        filePath = fdlgSelectFile.FileName;
+        return TryConvertToWavIfNeeded(ref filePath);
+    }
+
+    private bool TryConvertToWavIfNeeded(ref string filePath)
+    {
+        if (Path.GetExtension(filePath)?.ToLowerInvariant() == ".wav") return true;
+
+        var title = Strings.ReplaceTrackConvertToWavTitle;
+        var message = string.Format(Strings.ReplaceTrackConvertToWavMessage, Path.GetFileName(filePath));
+
+        if (MessageBox.Show(message, title, MessageBoxButtons.OKCancel, MessageBoxIcon.Information) != DialogResult.OK)
+            return false;
+
+        try
+        {
+            var outputPath = AudioConverter.Instance.ConvertedDirectory
+                ?? Directory.GetParent(filePath)?.FullName ?? Path.GetDirectoryName(filePath);
+
+            if (outputPath == null)
+            {
+                AuLogger.GetCurrentLogger<ReplacedTrackPropertiesCtl>(nameof(TryConvertToWavIfNeeded))
+                    .Error($"Could not determine the output path for audio conversion. Aborting...: {filePath}");
+                MessageBox.Show(
+                    string.Format(Strings.ReplaceTrackConvertFailedMessage, Path.GetFileName(filePath)),
+                    Strings.ReplaceTrackConvertFailedTitle,
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                return false;
+            }
+
+            var convertCandidate = new ConvertCandidate(filePath, ValidAudioFiles.Wav, outputPath);
+            AuLogger.GetCurrentLogger<ReplacedTrackPropertiesCtl>(nameof(TryConvertToWavIfNeeded))
+                .Info($"Converting file '{filePath}' to WAV format for track replacement...");
+
+            var convertedFilePath = Task.Run(() => AudioConverter.Instance.ConvertAsync(convertCandidate, true))
+                .GetAwaiter()
+                .GetResult();
+
+            if (convertedFilePath is null)
+            {
+                AuLogger.GetCurrentLogger<ReplacedTrackPropertiesCtl>(nameof(TryConvertToWavIfNeeded))
+                    .Error($"Audio conversion failed for file '{filePath}'. No output file was generated.");
+                MessageBox.Show(
+                    string.Format(Strings.ReplaceTrackConvertFailedMessage, Path.GetFileName(filePath)),
+                    Strings.ReplaceTrackConvertFailedTitle,
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                return false;
+            }
+
+            AuLogger.GetCurrentLogger<ReplacedTrackPropertiesCtl>(nameof(TryConvertToWavIfNeeded))
+                .Info($"Successfully converted file '{filePath}' to WAV format at '{convertedFilePath}'.");
+
+            filePath = convertedFilePath;
+            return true;
+        }
+        catch (Exception ex)
+        {
+            AuLogger.GetCurrentLogger<ReplacedTrackPropertiesCtl>(nameof(TryConvertToWavIfNeeded))
+                .Error($"Error converting audio file '{filePath}' to WAV: {ex.Message}");
+            return false;
+        }
+    }
 }

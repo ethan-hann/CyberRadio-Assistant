@@ -212,7 +212,7 @@
             // 
             // lblStatus
             // 
-            lblStatus.Image = Properties.Resources.status__16x16;
+            lblStatus.Image = Properties.Resources.info;
             lblStatus.Name = "lblStatus";
             lblStatus.Size = new Size(121, 17);
             lblStatus.Text = "Creating preview...";
@@ -220,7 +220,7 @@
             // toolStripStatusLabel2
             // 
             toolStripStatusLabel2.Name = "toolStripStatusLabel2";
-            toolStripStatusLabel2.Size = new Size(686, 17);
+            toolStripStatusLabel2.Size = new Size(655, 17);
             toolStripStatusLabel2.Spring = true;
             // 
             // pgProgress

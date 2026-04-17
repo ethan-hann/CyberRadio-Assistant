@@ -80,6 +80,8 @@ public sealed class AudioConverter
     /// </summary>
     public event EventHandler<(string file, bool success, string messageOrOutputPath)>? ConversionCompleted;
 
+    private int _initializeAttempts = 1;
+
     /// <summary>
     ///     Ensures FFmpeg binaries are downloaded & paths are set.
     /// </summary>
@@ -88,10 +90,17 @@ public sealed class AudioConverter
         List<string> messages = [];
         if (IsInitialized) return messages;
 
+        if (_initializeAttempts > 5)
+        {
+            messages.Add("Reached max number of attempts during initialize of AudioConvertor. This means FFMpeg might not have downloaded correctly.");
+            messages.Add("Make sure you have an internet connection and try again.");
+            return messages;
+        }
+        
         var logger = AuLogger.GetCurrentLogger<AudioConverter>("InitializeAsync");
         try
         {
-            logger.Info("Initializing FFmpeg...");
+            logger.Info($"[Attempt {_initializeAttempts}] Initializing FFmpeg...");
             messages.AddRange(SetupRequiredPaths());
 
             if (WorkingDirectory is null)
@@ -110,8 +119,10 @@ public sealed class AudioConverter
         }
         catch (Exception ex)
         {
-            messages.Add($"Failed to initialize FFmpeg: {ex.Message}");
+            messages.Add($"[Attempt {_initializeAttempts}] Failed to initialize FFmpeg: {ex.Message}");
             logger.Error(ex, "InitializeAsync");
+            _initializeAttempts++;
+            await InitializeAsync();
         }
 
         return messages;

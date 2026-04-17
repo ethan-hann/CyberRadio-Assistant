@@ -3472,6 +3472,44 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to File {0} failed to convert to .wav format. The log file will have more information..
+        /// </summary>
+        internal static string ReplaceTrackConvertFailedMessage {
+            get {
+                return ResourceManager.GetString("ReplaceTrackConvertFailedMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Conversion Failed.
+        /// </summary>
+        internal static string ReplaceTrackConvertFailedTitle {
+            get {
+                return ResourceManager.GetString("ReplaceTrackConvertFailedTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Selected file needs to be converted:
+        ///{0}
+        ///Only .wav files can be converted to WEM. Would you like to convert now?.
+        /// </summary>
+        internal static string ReplaceTrackConvertToWavMessage {
+            get {
+                return ResourceManager.GetString("ReplaceTrackConvertToWavMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Need Conversion.
+        /// </summary>
+        internal static string ReplaceTrackConvertToWavTitle {
+            get {
+                return ResourceManager.GetString("ReplaceTrackConvertToWavTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Replace Vanilla Station....
         /// </summary>
         internal static string ReplaceVanillaStation {

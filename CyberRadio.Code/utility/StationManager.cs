@@ -1840,7 +1840,7 @@ public partial class StationManager : IDisposable
 
             Directory.CreateDirectory(tempDir);
 
-            using var archive = ArchiveFactory.Open(filePath);
+            using var archive = ArchiveFactory.OpenArchive(filePath);
 
             foreach (var entry in archive.Entries)
             {

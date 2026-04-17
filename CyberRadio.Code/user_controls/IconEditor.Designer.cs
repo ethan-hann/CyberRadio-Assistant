@@ -528,7 +528,7 @@ namespace RadioExt_Helper.user_controls
             // 
             // lblStatus
             // 
-            lblStatus.Image = (Image)resources.GetObject("lblStatus.Image");
+            lblStatus.Image = Properties.Resources.info;
             lblStatus.Name = "lblStatus";
             lblStatus.Size = new Size(55, 17);
             lblStatus.Text = "Ready";

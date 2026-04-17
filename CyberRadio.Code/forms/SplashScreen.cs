@@ -210,6 +210,45 @@ public partial class SplashScreen : Form
         //}
         //------------------------------------------------------------------------------------------------------------
 
+        //Log all final paths for debugging purposes
+        var finalStagingPath = GlobalData.ConfigManager.Get("stagingPath") as string ?? string.Empty;
+        var finalGamePath = GlobalData.ConfigManager.Get("gameBasePath") as string ?? string.Empty;
+        var iconManagerWorkingDirectory = IconManager.Instance.WorkingDirectory;
+        var iconManagerWolvenKitTempDirectory = IconManager.Instance.WolvenKitTempDirectory;
+        var iconManagerImageImportDirectory = IconManager.Instance.ImageImportDirectory;
+        var iconManagerImageExportDirectory = IconManager.Instance.ImageExportDirectory;
+        var iconManagerImportedWorkingDirectory = IconManager.Instance.ImportedWorkingDirectory;
+        var iconManagerExtractedWorkingDirectory = IconManager.Instance.ExtractedWorkingDirectory;
+        var audioManagerWorkingDirectory = AudioManager.Instance.WorkingDirectory;
+        var audioManagerSound2WemDirectory = AudioManager.Instance.Sound2WemDirectory;
+        var audioManagerWwiseToolsDirectory = AudioManager.Instance.WwiseToolsDirectory;
+        var audioManagerFfmpegDirectory = AudioManager.Instance.FfmpegDirectory;
+        var audioManagerAudioImportDirectory = AudioManager.Instance.AudioImportDirectory;
+        var audioManagerImportedWorkingDirectory = AudioManager.Instance.ImportedWorkingDirectory;
+        var audioConvertorWorkingDirectory = AudioConverter.Instance.WorkingDirectory;
+        var audioConvertorConvertedDirectory = AudioConverter.Instance.ConvertedDirectory;
+
+        statusMessages.Add("================== Initialization Complete! ==================");
+        statusMessages.Add($"Staging Path: {finalStagingPath}");
+        statusMessages.Add($"Game Path: {finalGamePath}");
+        statusMessages.Add($"Icon Manager WolvenKit Tools Directory: {iconManagerWolvenKitTempDirectory}");
+        statusMessages.Add($"Icon Manager Working Directory: {iconManagerWorkingDirectory}");
+        statusMessages.Add($"Icon Manager Image Import Directory: {iconManagerImageImportDirectory}");
+        statusMessages.Add($"Icon Manager Image Export Directory: {iconManagerImageExportDirectory}");
+        statusMessages.Add($"Icon Manager Imported Working Directory: {iconManagerImportedWorkingDirectory}");
+        statusMessages.Add($"Icon Manager Extracted Working Directory: {iconManagerExtractedWorkingDirectory}");
+        statusMessages.Add($"Audio Manager Working Directory: {audioManagerWorkingDirectory}");
+        statusMessages.Add($"Audio Manager Sound2Wem Directory: {audioManagerSound2WemDirectory}");
+        statusMessages.Add($"Audio Manager Wwise Tools Directory: {audioManagerWwiseToolsDirectory}");
+        statusMessages.Add($"Audio Manager Audio Import Directory: {audioManagerAudioImportDirectory}");
+        statusMessages.Add($"Audio Manager Imported Working Directory: {audioManagerImportedWorkingDirectory}");
+        statusMessages.Add($"Audio Manager Ffmpeg Directory: {audioManagerFfmpegDirectory}");
+        statusMessages.Add($"Audio Convertor Working Directory: {audioConvertorWorkingDirectory}");
+        statusMessages.Add($"Audio Convertor Converted Directory: {audioConvertorConvertedDirectory}");
+
+        statusMessages.Add("If any paths above are empty, you may have issues with some functionality of CRA!");
+        statusMessages.Add("================== Initialization Complete! ==================");
+
         UpdateStatus(Strings.SplashScreen_Finalizing);
         GlobalData.ConfigManager.Set("isFirstRun", false);
         await GlobalData.ConfigManager.SaveAsync();

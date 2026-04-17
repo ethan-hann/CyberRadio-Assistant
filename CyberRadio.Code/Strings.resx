@@ -1672,4 +1672,18 @@ It is unknown where exactly all the WEM IDs are used in-game.</value>
   <data name="SongsMissingReplacementPaths" xml:space="preserve">
     <value>Songs Missing Replacement Paths</value>
   </data>
+  <data name="ReplaceTrackConvertToWavTitle" xml:space="preserve">
+    <value>Need Conversion</value>
+  </data>
+  <data name="ReplaceTrackConvertToWavMessage" xml:space="preserve">
+    <value>Selected file needs to be converted:
+{0}
+Only .wav files can be converted to WEM. Would you like to convert now?</value>
+  </data>
+  <data name="ReplaceTrackConvertFailedMessage" xml:space="preserve">
+    <value>File {0} failed to convert to .wav format. The log file will have more information.</value>
+  </data>
+  <data name="ReplaceTrackConvertFailedTitle" xml:space="preserve">
+    <value>Conversion Failed</value>
+  </data>
 </root>

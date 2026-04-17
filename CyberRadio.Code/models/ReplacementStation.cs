@@ -255,14 +255,18 @@ public sealed class ReplacementStation : IStation, INotifyPropertyChanged, IClon
             foreach (var file in filesToDelete)
                 File.Delete(file);
 
-            foreach (var track in Tracks)
+            var tracksSnapshot = Tracks.ToList();
+            foreach (var track in tracksSnapshot)
             {
                 var extension = Path.GetExtension(track.ReplacementFilePath);
                 var expectedFilePath = Path.Combine(proposedFolder, $"{track.WemId}{extension}");
-                if (!files.Contains(expectedFilePath))
-                {
-                    File.Copy(track.ReplacementFilePath, expectedFilePath, true);
-                }
+                if (files.Contains(expectedFilePath)) continue;
+
+                File.Copy(track.ReplacementFilePath, expectedFilePath, true);
+
+                //Update the track's replacement file path to the staging folder path so that when we export, we are exporting from the staging folder and not the original file location.
+                //This also ensures that if the user changes the original file after syncing, it won't affect the exported file since we've copied it to the staging folder.
+                ReplaceTrack(track.VanillaTrackName, track.WemId, expectedFilePath);
             }
         }
         catch (Exception ex)

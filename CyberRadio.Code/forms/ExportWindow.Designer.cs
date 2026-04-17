@@ -424,6 +424,7 @@
             Text = "Export";
             TopMost = true;
             HelpButtonClicked += ExportWindow_HelpButtonClicked;
+            FormClosing += ExportWindow_FormClosing;
             Load += ExportWindow_Load;
             statusStrip1.ResumeLayout(false);
             statusStrip1.PerformLayout();
