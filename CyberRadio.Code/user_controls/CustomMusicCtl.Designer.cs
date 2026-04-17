@@ -514,7 +514,7 @@
             // 
             cmsSongRightClick.Items.AddRange(new ToolStripItem[] { locateToolStripMenuItem, locateAllMissingSongsToolStripMenuItem });
             cmsSongRightClick.Name = "cmsSongRightClick";
-            cmsSongRightClick.Size = new Size(215, 70);
+            cmsSongRightClick.Size = new Size(215, 48);
             // 
             // locateToolStripMenuItem
             // 

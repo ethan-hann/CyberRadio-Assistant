@@ -195,10 +195,9 @@ public sealed partial class MainForm : Form
         var importedIconNames = string.Join(", ", stationIds.Select(stationId =>
             StationManager.Instance.GetStation(stationId)?.Key.TrackedObject.MetaData.DisplayName));
 
-        MessageBox.Show(string.Format(Strings.MainForm_FromZipImportDesc, stationIds.Count, importedIconNames),
-            Strings.MainForm_FromZipStationsImportedTitle,
-            MessageBoxButtons.OK,
-            MessageBoxIcon.Information);
+        ToastNotification.Show(this,
+            $"{Strings.MainForm_FromZipStationsImportedTitle}: {string.Format(Strings.MainForm_FromZipImportDesc, stationIds.Count, importedIconNames)}",
+            ToastType.Success);
 
         //Select the first station imported in the listbox
         var firstStationId = stationIds.First();
@@ -220,6 +219,7 @@ public sealed partial class MainForm : Form
         var firstStationId = stationIds.First();
         lbReplacedStations.SelectedItem = StationManager.Instance.GetVanillaStation(firstStationId)?.Key;
         SelectReplacementStationEditor(firstStationId);
+        ToastNotification.Show(this, $"Imported {stationIds.Count} replacement station(s).", ToastType.Success);
         UpdateEnabledStationCount();
         HandleUserControlVisibility();
     }

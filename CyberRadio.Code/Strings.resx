@@ -1686,4 +1686,10 @@ Only .wav files can be converted to WEM. Would you like to convert now?</value>
   <data name="ReplaceTrackConvertFailedTitle" xml:space="preserve">
     <value>Conversion Failed</value>
   </data>
+  <data name="CopyWemIdContextMenu" xml:space="preserve">
+    <value>Copy WEM Id</value>
+  </data>
+  <data name="OpenPathToReplacementFileContextMenu" xml:space="preserve">
+    <value>Open in Explorer...</value>
+  </data>
 </root>

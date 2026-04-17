@@ -31,7 +31,6 @@ namespace RadioExt_Helper.user_controls
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(IconEditor));
-            models.ImageProperties imageProperties1 = new models.ImageProperties();
             tableLayoutPanel3 = new TableLayoutPanel();
             tableLayoutPanel10 = new TableLayoutPanel();
             btnCopyIconPart = new Button();
@@ -68,7 +67,6 @@ namespace RadioExt_Helper.user_controls
             editorSplitContainer = new SplitContainer();
             splitContainer1 = new SplitContainer();
             grpIconPreview = new GroupBox();
-            picStationIcon = new CustomPictureBox();
             tblWarning = new TableLayoutPanel();
             lblImageStatus = new Label();
             tableLayoutPanel1 = new TableLayoutPanel();
@@ -101,7 +99,6 @@ namespace RadioExt_Helper.user_controls
             splitContainer1.Panel2.SuspendLayout();
             splitContainer1.SuspendLayout();
             grpIconPreview.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)picStationIcon).BeginInit();
             tblWarning.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
             grpIconProperties.SuspendLayout();
@@ -600,7 +597,6 @@ namespace RadioExt_Helper.user_controls
             // 
             // grpIconPreview
             // 
-            grpIconPreview.Controls.Add(picStationIcon);
             grpIconPreview.Controls.Add(tblWarning);
             grpIconPreview.Controls.Add(tableLayoutPanel1);
             grpIconPreview.Dock = DockStyle.Fill;
@@ -611,24 +607,6 @@ namespace RadioExt_Helper.user_controls
             grpIconPreview.TabIndex = 0;
             grpIconPreview.TabStop = false;
             grpIconPreview.Text = "Preview";
-            // 
-            // picStationIcon
-            // 
-            picStationIcon.AllowDrop = true;
-            picStationIcon.Dock = DockStyle.Fill;
-            imageProperties1.Height = 0;
-            imageProperties1.ImageFormat = null;
-            imageProperties1.PixelFormat = System.Drawing.Imaging.PixelFormat.DontCare;
-            imageProperties1.Width = 0;
-            picStationIcon.ImageProperties = imageProperties1;
-            picStationIcon.Location = new Point(3, 41);
-            picStationIcon.Name = "picStationIcon";
-            picStationIcon.Size = new Size(373, 171);
-            picStationIcon.TabIndex = 4;
-            picStationIcon.TabStop = false;
-            picStationIcon.DragDrop += picStationIcon_DragDrop;
-            picStationIcon.MouseEnter += picStationIcon_MouseEnter;
-            picStationIcon.MouseLeave += LblMouseLeave;
             // 
             // tblWarning
             // 
@@ -849,7 +827,6 @@ namespace RadioExt_Helper.user_controls
             ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
             splitContainer1.ResumeLayout(false);
             grpIconPreview.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)picStationIcon).EndInit();
             tblWarning.ResumeLayout(false);
             tblWarning.PerformLayout();
             tableLayoutPanel1.ResumeLayout(false);

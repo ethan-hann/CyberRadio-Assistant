@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             btnRemove = new Button();
             lblWEMIdHelp = new Label();
             grpReplacedTrack = new GroupBox();
@@ -43,6 +44,9 @@
             lblWemIdDisclaimer = new Label();
             tableLayoutPanel2 = new TableLayoutPanel();
             fdlgSelectFile = new OpenFileDialog();
+            cmsTracksRightClick = new ContextMenuStrip(components);
+            copyWemIDToolStripMenuItem = new ToolStripMenuItem();
+            openPathToReplacementFileToolStripMenuItem = new ToolStripMenuItem();
             grpReplacedTrack.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
@@ -51,6 +55,7 @@
             splitContainer1.SuspendLayout();
             tableLayoutPanel3.SuspendLayout();
             tableLayoutPanel2.SuspendLayout();
+            cmsTracksRightClick.SuspendLayout();
             SuspendLayout();
             // 
             // btnRemove
@@ -112,6 +117,7 @@
             lvTracks.UseCompatibleStateImageBehavior = false;
             lvTracks.View = View.Details;
             lvTracks.DoubleClick += lvTracks_DoubleClick;
+            lvTracks.MouseDown += lvTracks_MouseDown;
             // 
             // colWemId
             // 
@@ -256,6 +262,28 @@
             tableLayoutPanel2.Size = new Size(328, 190);
             tableLayoutPanel2.TabIndex = 0;
             // 
+            // cmsTracksRightClick
+            // 
+            cmsTracksRightClick.Items.AddRange(new ToolStripItem[] { copyWemIDToolStripMenuItem, openPathToReplacementFileToolStripMenuItem });
+            cmsTracksRightClick.Name = "lvContextMenu";
+            cmsTracksRightClick.Size = new Size(181, 70);
+            // 
+            // copyWemIDToolStripMenuItem
+            // 
+            copyWemIDToolStripMenuItem.Image = Properties.Resources.copy_alt_16x16;
+            copyWemIDToolStripMenuItem.Name = "copyWemIDToolStripMenuItem";
+            copyWemIDToolStripMenuItem.Size = new Size(180, 22);
+            copyWemIDToolStripMenuItem.Text = "Copy Wem Id";
+            copyWemIDToolStripMenuItem.Click += copyWemIDToolStripMenuItem_Click;
+            // 
+            // openPathToReplacementFileToolStripMenuItem
+            // 
+            openPathToReplacementFileToolStripMenuItem.Image = Properties.Resources.folder__16x16;
+            openPathToReplacementFileToolStripMenuItem.Name = "openPathToReplacementFileToolStripMenuItem";
+            openPathToReplacementFileToolStripMenuItem.Size = new Size(180, 22);
+            openPathToReplacementFileToolStripMenuItem.Text = "Open in Explorer...";
+            openPathToReplacementFileToolStripMenuItem.Click += openPathToReplacementFileToolStripMenuItem_Click;
+            // 
             // ReplacedTrackPropertiesCtl
             // 
             AutoScaleDimensions = new SizeF(96F, 96F);
@@ -276,6 +304,7 @@
             tableLayoutPanel3.ResumeLayout(false);
             tableLayoutPanel3.PerformLayout();
             tableLayoutPanel2.ResumeLayout(false);
+            cmsTracksRightClick.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -295,5 +324,8 @@
         private TableLayoutPanel tableLayoutPanel3;
         private Label lblWemIdDisclaimer;
         private OpenFileDialog fdlgSelectFile;
+        private ContextMenuStrip cmsTracksRightClick;
+        private ToolStripMenuItem copyWemIDToolStripMenuItem;
+        private ToolStripMenuItem openPathToReplacementFileToolStripMenuItem;
     }
 }

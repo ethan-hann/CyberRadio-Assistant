@@ -17,9 +17,11 @@
 using AetherUtils.Core.Extensions;
 using AetherUtils.Core.Files;
 using AetherUtils.Core.Logging;
+using Org.BouncyCastle.Utilities;
 using RadioExt_Helper.forms;
 using RadioExt_Helper.models;
 using RadioExt_Helper.utility;
+using WIG.Lib.Models.Audio;
 
 namespace RadioExt_Helper.user_controls;
 
@@ -73,6 +75,9 @@ public partial class ReplacedTrackPropertiesCtl : UserControl, IEditor
         btnRemove.Text = Strings.RemoveReplacedWemId;
         btnReplaceAll.Text = Strings.ReplaceAllWemIds;
         btnRemoveAll.Text = Strings.RemoveAllWemIds;
+
+        copyWemIDToolStripMenuItem.Text = Strings.CopyWemIdContextMenu;
+        openPathToReplacementFileToolStripMenuItem.Text = Strings.OpenPathToReplacementFileContextMenu;
 
         fdlgSelectFile.Title = Strings.AddReplacementTrackTitle;
         fdlgSelectFile.Filter =
@@ -248,11 +253,9 @@ public partial class ReplacedTrackPropertiesCtl : UserControl, IEditor
             {
                 AuLogger.GetCurrentLogger<ReplacedTrackPropertiesCtl>(nameof(TryConvertToWavIfNeeded))
                     .Error($"Could not determine the output path for audio conversion. Aborting...: {filePath}");
-                MessageBox.Show(
-                    string.Format(Strings.ReplaceTrackConvertFailedMessage, Path.GetFileName(filePath)),
-                    Strings.ReplaceTrackConvertFailedTitle,
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
+                ToastNotification.Show(this,
+                    $"{Strings.ReplaceTrackConvertFailedTitle}: {string.Format(Strings.ReplaceTrackConvertFailedMessage, Path.GetFileName(filePath))}",
+                    ToastType.Error);
                 return false;
             }
 
@@ -268,11 +271,9 @@ public partial class ReplacedTrackPropertiesCtl : UserControl, IEditor
             {
                 AuLogger.GetCurrentLogger<ReplacedTrackPropertiesCtl>(nameof(TryConvertToWavIfNeeded))
                     .Error($"Audio conversion failed for file '{filePath}'. No output file was generated.");
-                MessageBox.Show(
-                    string.Format(Strings.ReplaceTrackConvertFailedMessage, Path.GetFileName(filePath)),
-                    Strings.ReplaceTrackConvertFailedTitle,
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
+                ToastNotification.Show(this,
+                    $"{Strings.ReplaceTrackConvertFailedTitle}: {string.Format(Strings.ReplaceTrackConvertFailedMessage, Path.GetFileName(filePath))}",
+                    ToastType.Error);
                 return false;
             }
 
@@ -280,13 +281,39 @@ public partial class ReplacedTrackPropertiesCtl : UserControl, IEditor
                 .Info($"Successfully converted file '{filePath}' to WAV format at '{convertedFilePath}'.");
 
             filePath = convertedFilePath;
+            ToastNotification.Show(this, $"Converted to WAV: {Path.GetFileName(filePath)}", ToastType.Success);
             return true;
         }
         catch (Exception ex)
         {
             AuLogger.GetCurrentLogger<ReplacedTrackPropertiesCtl>(nameof(TryConvertToWavIfNeeded))
                 .Error($"Error converting audio file '{filePath}' to WAV: {ex.Message}");
+            ToastNotification.Show(this,
+                $"{Strings.ReplaceTrackConvertFailedTitle}: {string.Format(Strings.ReplaceTrackConvertFailedMessage, Path.GetFileName(filePath))}",
+                ToastType.Error);
             return false;
         }
+    }
+
+    private void copyWemIDToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        if (lvTracks.SelectedItems.Count <= 0) return;
+        var selectedTrack = lvTracks.SelectedItems[0];
+        if (selectedTrack.Tag is not string selectedWemId) return;
+
+        Clipboard.SetText(selectedWemId);
+        ToastNotification.Show(this, $"{Strings.CopyWemIdContextMenu}: {selectedWemId}", ToastType.Success);
+    }
+
+    private void openPathToReplacementFileToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+
+    }
+
+    private void lvTracks_MouseDown(object sender, MouseEventArgs e)
+    {
+        if (e.Button != MouseButtons.Right) return;
+        if (lvTracks.SelectedItems is [{ Tag: string }])
+            cmsTracksRightClick.Show(Cursor.Position);
     }
 }

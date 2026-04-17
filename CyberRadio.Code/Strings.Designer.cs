@@ -956,6 +956,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Copy WEM Id.
+        /// </summary>
+        internal static string CopyWemIdContextMenu {
+            get {
+                return ResourceManager.GetString("CopyWemIdContextMenu", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Created from Archive.
         /// </summary>
         internal static string CreatedFromArchive {
@@ -3117,6 +3126,15 @@ namespace RadioExt_Helper {
         internal static string OpenLogFolder {
             get {
                 return ResourceManager.GetString("OpenLogFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open in Explorer....
+        /// </summary>
+        internal static string OpenPathToReplacementFileContextMenu {
+            get {
+                return ResourceManager.GetString("OpenPathToReplacementFileContextMenu", resourceCulture);
             }
         }
         
