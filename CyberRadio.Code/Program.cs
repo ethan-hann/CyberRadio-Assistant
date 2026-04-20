@@ -16,6 +16,8 @@
 
 #region
 
+using System.Diagnostics;
+using System.Threading;
 using RadioExt_Helper.forms;
 using RadioExt_Helper.utility;
 
@@ -29,8 +31,14 @@ internal static class Program
     ///     The main entry point for the application.
     /// </summary>
     [STAThread]
-    private static void Main()
+    private static void Main(string[] args)
     {
+        if (args.Contains("--cleanup-temp"))
+        {
+            RunCleanupMode(args);
+            return;
+        }
+
         Application.EnableVisualStyles();
         Application.SetCompatibleTextRenderingDefault(false);
 
@@ -51,5 +59,101 @@ internal static class Program
             return;
 
         Application.Run(mainForm);
+    }
+
+    private static void RunCleanupMode(string[] args)
+    {
+        var waitPid = GetArgumentIntValue(args, "--wait-pid");
+
+        if (waitPid > 0)
+            WaitForProcessExit(waitPid);
+
+        CleanupTemporaryToolData();
+
+        Process.Start(new ProcessStartInfo
+        {
+            FileName = Application.ExecutablePath,
+            WorkingDirectory = AppContext.BaseDirectory,
+            UseShellExecute = true
+        });
+    }
+
+    private static int GetArgumentIntValue(string[] args, string key)
+    {
+        var index = Array.IndexOf(args, key);
+        if (index < 0 || index + 1 >= args.Length) return 0;
+
+        return int.TryParse(args[index + 1], out var value) ? value : 0;
+    }
+
+    private static void WaitForProcessExit(int pid)
+    {
+        try
+        {
+            using var process = Process.GetProcessById(pid);
+            process.WaitForExit(30000);
+        }
+        catch
+        {
+            // Process already exited
+        }
+    }
+
+    private static void CleanupTemporaryToolData()
+    {
+        var wigPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+            "Wolven Icon Generator");
+        DeleteDirectoryWithRetry(wigPath);
+
+        var craPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+            "RadioExt-Helper");
+        if (!Directory.Exists(craPath)) return;
+
+        foreach (var item in Directory.EnumerateFileSystemEntries(craPath))
+        {
+            var fileName = Path.GetFileName(item);
+            if (fileName.Equals("logs", StringComparison.OrdinalIgnoreCase) ||
+                fileName.Equals("config.yml", StringComparison.OrdinalIgnoreCase))
+                continue;
+
+            if (Directory.Exists(item))
+                DeleteDirectoryWithRetry(item);
+            else if (File.Exists(item))
+                DeleteFileWithRetry(item);
+        }
+    }
+
+    private static void DeleteDirectoryWithRetry(string path, int maxAttempts = 8)
+    {
+        for (var attempt = 1; attempt <= maxAttempts; attempt++)
+        {
+            try
+            {
+                if (Directory.Exists(path))
+                    Directory.Delete(path, true);
+                return;
+            }
+            catch when (attempt < maxAttempts)
+            {
+                Thread.Sleep(300);
+            }
+        }
+    }
+
+    private static void DeleteFileWithRetry(string path, int maxAttempts = 8)
+    {
+        for (var attempt = 1; attempt <= maxAttempts; attempt++)
+        {
+            try
+            {
+                if (File.Exists(path))
+                    File.Delete(path);
+                return;
+            }
+            catch when (attempt < maxAttempts)
+            {
+                Thread.Sleep(300);
+            }
+        }
     }
 }

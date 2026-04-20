@@ -1698,4 +1698,30 @@ Only .wav files can be converted to WEM. Would you like to convert now?</value>
   <data name="ErrorOpeningReplacementFileDirectory" xml:space="preserve">
     <value>Error opening directory: '{0}'</value>
   </data>
+  <data name="ConfirmClearTempData" xml:space="preserve">
+    <value>**DESTRUCTIVE OPERATION**
+
+This will permanently delete temporary CRA and Wolven Icon Generator data from AppData (Roaming and Local).
+
+Configuration files and logs will be preserved.
+Station data in staging and game files will not be modified.
+
+If you have replacement stations with pending, un-exported changes, their converted files in AppData may be removed, which can leave those stations in a broken state until reconverted and exported.
+
+CRA will restart after clearing data. Temporary tool data will be re-acquired automatically on CRA startup.
+
+Are you sure you want to clear all temporary data?</value>
+  </data>
+  <data name="ClearAllTemporaryData" xml:space="preserve">
+    <value>Clear All Temporary Data!</value>
+  </data>
+  <data name="ClearTempWIGDataFailed" xml:space="preserve">
+    <value>An error occurred while clearing temporary data from the Wolven Icon Generator.</value>
+  </data>
+  <data name="ClearTempCRADataFailed" xml:space="preserve">
+    <value>An error occurred while clearing temporary data from Cyber Radio Assistant.</value>
+  </data>
+  <data name="ClearTempDataSuccess" xml:space="preserve">
+    <value>Temporary data removed successfully. CRA will now restart in 3 seconds...</value>
+  </data>
 </root>

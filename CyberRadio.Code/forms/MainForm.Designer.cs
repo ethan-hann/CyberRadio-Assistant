@@ -108,6 +108,7 @@ namespace RadioExt_Helper.forms
             pgBackupProgress = new ToolStripProgressBar();
             lblSpring2 = new ToolStripStatusLabel();
             statusStripBackup = new StatusStrip();
+            clearAllTemporaryDataToolStripMenuItem = new ToolStripMenuItem();
             menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
@@ -154,7 +155,7 @@ namespace RadioExt_Helper.forms
             // 
             // stationsToolStripMenuItem
             // 
-            stationsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { exportToGameToolStripMenuItem, refreshStationsToolStripMenuItem, synchronizeStationsToolStripMenuItem, toolStripSeparator5, clearAllDataToolStripMenuItem });
+            stationsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { exportToGameToolStripMenuItem, refreshStationsToolStripMenuItem, synchronizeStationsToolStripMenuItem, toolStripSeparator5, clearAllTemporaryDataToolStripMenuItem, clearAllDataToolStripMenuItem });
             stationsToolStripMenuItem.Image = Properties.Resources.radio_16x16;
             stationsToolStripMenuItem.Name = "stationsToolStripMenuItem";
             stationsToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Alt | Keys.S;
@@ -195,10 +196,12 @@ namespace RadioExt_Helper.forms
             // 
             // clearAllDataToolStripMenuItem
             // 
+            clearAllDataToolStripMenuItem.BackColor = Color.FromArgb(255, 224, 192);
+            clearAllDataToolStripMenuItem.ForeColor = Color.Black;
             clearAllDataToolStripMenuItem.Image = Properties.Resources.delete__16x16;
             clearAllDataToolStripMenuItem.Name = "clearAllDataToolStripMenuItem";
             clearAllDataToolStripMenuItem.Size = new Size(266, 22);
-            clearAllDataToolStripMenuItem.Text = "Clear All Data!";
+            clearAllDataToolStripMenuItem.Text = "Clear All Station Data!";
             clearAllDataToolStripMenuItem.Click += ClearAllDataToolStripMenuItem_Click;
             // 
             // toolStripSeparator2
@@ -907,6 +910,14 @@ namespace RadioExt_Helper.forms
             statusStripBackup.Text = "statusStrip2";
             statusStripBackup.Visible = false;
             // 
+            // clearAllTemporaryDataToolStripMenuItem
+            // 
+            clearAllTemporaryDataToolStripMenuItem.Image = Properties.Resources.delete;
+            clearAllTemporaryDataToolStripMenuItem.Name = "clearAllTemporaryDataToolStripMenuItem";
+            clearAllTemporaryDataToolStripMenuItem.Size = new Size(266, 22);
+            clearAllTemporaryDataToolStripMenuItem.Text = "Clear All Temporary Data!";
+            clearAllTemporaryDataToolStripMenuItem.Click += clearAllTemporaryDataToolStripMenuItem_Click;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(96F, 96F);
@@ -1039,5 +1050,6 @@ namespace RadioExt_Helper.forms
         private Button btnCollapseVanillaSection;
         private SplitContainer splitContainer2;
         private ReplacementStationListBox lbReplacedStations;
+        private ToolStripMenuItem clearAllTemporaryDataToolStripMenuItem;
     }
 }

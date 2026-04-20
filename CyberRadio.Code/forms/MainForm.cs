@@ -106,9 +106,9 @@ public sealed partial class MainForm : Form
         var isFirstRun = GlobalData.ConfigManager.GetConfig()?.IsFirstRun ?? false;
         var stagingPath = GlobalData.ConfigManager.GetConfig()?.StagingPath;
 
-        if (stagingPath != null)
+        if (!string.IsNullOrEmpty(stagingPath))
             validConfig &= FileHelper.DoesFolderExist(stagingPath);
-        if (gameBasePath != null)
+        if (!string.IsNullOrEmpty(gameBasePath))
             validConfig &= FileHelper.DoesFolderExist(gameBasePath);
 
         // If the configuration is not valid, and it's not the first run, show an error message and open the configuration form
@@ -128,9 +128,9 @@ public sealed partial class MainForm : Form
             gameBasePath = GlobalData.ConfigManager.GetConfig()?.GameBasePath;
             stagingPath = GlobalData.ConfigManager.GetConfig()?.StagingPath;
 
-            if (stagingPath != null)
+            if (!string.IsNullOrEmpty(stagingPath))
                 validConfig &= FileHelper.DoesFolderExist(stagingPath);
-            if (gameBasePath != null)
+            if (!string.IsNullOrEmpty(gameBasePath))
                 validConfig &= FileHelper.DoesFolderExist(gameBasePath);
 
             if (!validConfig)
@@ -493,6 +493,7 @@ public sealed partial class MainForm : Form
         replaceVanillaStationToolStripMenuItem.Text = Strings.ReplaceVanillaStation;
         exitToolStripMenuItem.Text = Strings.Exit;
         clearAllDataToolStripMenuItem.Text = Strings.ClearAllData;
+        clearAllTemporaryDataToolStripMenuItem.Text = Strings.ClearAllTemporaryData;
         modsToolStripMenuItem.Text = Strings.Mods;
 
         backupToolStripMenuItem.Text = Strings.BackupRestoreMenuItem;
@@ -1463,6 +1464,51 @@ public sealed partial class MainForm : Form
 
         //Populate the (what should be the empty) stations list.
         PopulateStations();
+    }
+
+    private async void clearAllTemporaryDataToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        //Check for sync in progress to prevent restore during sync
+        if (_isSyncInProgress)
+        {
+            MessageBox.Show(this, Strings.SyncInProgress, Strings.SyncAbbrev, MessageBoxButtons.OK,
+                MessageBoxIcon.Warning);
+            return;
+        }
+
+        if (_isExportInProgress)
+        {
+            MessageBox.Show(this, Strings.ExportInProgress, Strings.ExportCaption, MessageBoxButtons.OK,
+                MessageBoxIcon.Warning);
+            return;
+        }
+
+        if (MessageBox.Show(this, Strings.ConfirmClearTempData, Strings.Confirm, MessageBoxButtons.YesNo,
+                MessageBoxIcon.Warning) == DialogResult.No)
+            return;
+
+        ToastNotification.Show(Strings.ClearTempDataSuccess, ToastType.Success);
+        await Task.Delay(3000);
+
+        try
+        {
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = Application.ExecutablePath,
+                Arguments = $"--cleanup-temp --wait-pid {Environment.ProcessId}",
+                WorkingDirectory = AppContext.BaseDirectory,
+                UseShellExecute = true
+            });
+        }
+        catch (Exception ex)
+        {
+            ToastNotification.Show(Strings.ClearTempCRADataFailed, ToastType.Error);
+            AuLogger.GetCurrentLogger<MainForm>("ClearTempDataToolStripMenuItem_Click")
+                .Error(ex, "An error occurred while starting the temporary data cleanup process.");
+            return;
+        }
+
+        Environment.Exit(0);
     }
 
     private void RadioExtHelpToolStripMenuItem_Click(object sender, EventArgs e)

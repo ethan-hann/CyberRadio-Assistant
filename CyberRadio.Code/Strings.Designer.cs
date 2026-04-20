@@ -696,6 +696,42 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Clear All Temporary Data!.
+        /// </summary>
+        internal static string ClearAllTemporaryData {
+            get {
+                return ResourceManager.GetString("ClearAllTemporaryData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An error occurred while clearing temporary data from Cyber Radio Assistant..
+        /// </summary>
+        internal static string ClearTempCRADataFailed {
+            get {
+                return ResourceManager.GetString("ClearTempCRADataFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Temporary data removed successfully. CRA will now restart in 3 seconds....
+        /// </summary>
+        internal static string ClearTempDataSuccess {
+            get {
+                return ResourceManager.GetString("ClearTempDataSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An error occurred while clearing temporary data from the Wolven Icon Generator..
+        /// </summary>
+        internal static string ClearTempWIGDataFailed {
+            get {
+                return ResourceManager.GetString("ClearTempWIGDataFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The configuration file was invalid or could not be read. A default config will be used..
         /// </summary>
         internal static string ConfigError {
@@ -785,6 +821,24 @@ namespace RadioExt_Helper {
         internal static string ConfirmClearAllData {
             get {
                 return ResourceManager.GetString("ConfirmClearAllData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to **DESTRUCTIVE OPERATION**
+        ///
+        ///This will permanently delete temporary CRA and Wolven Icon Generator data from AppData (Roaming and Local).
+        ///
+        ///Configuration files and logs will be preserved.
+        ///Station data in staging and game files will not be modified.
+        ///
+        ///If you have replacement stations with pending, un-exported changes, their converted files in AppData may be removed, which can leave those stations in a broken state until reconverted and exported.
+        ///
+        ///CRA will restart after clearing data. Temporary tool data  [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string ConfirmClearTempData {
+            get {
+                return ResourceManager.GetString("ConfirmClearTempData", resourceCulture);
             }
         }
         
