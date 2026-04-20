@@ -14,10 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-using System.Runtime.InteropServices;
-using Microsoft.Windows.AppNotifications;
-using Microsoft.Windows.AppNotifications.Builder;
-
 namespace RadioExt_Helper.utility;
 
 public enum ToastType
@@ -31,12 +27,11 @@ public enum ToastType
 public static class ToastNotification
 {
     private const int DefaultDurationMs = 3500;
-    private const int MaxNotificationTextLength = 220;
+    private const int MaxNotificationTextLength = 255;
     private const string AppDisplayName = "Cyber Radio Assistant";
-    private const string AppUserModelId = "CyberRadioAssistant.Desktop";
 
     private static readonly Lock Sync = new();
-    private static bool _notificationsAvailable = true;
+    private static NotifyIcon? _notifyIcon;
     private static bool _initialized;
 
     public static void Show(Control? owner, string message, ToastType type = ToastType.Info,
@@ -51,18 +46,20 @@ public static class ToastNotification
             return;
         }
 
-        EnsureInitialized();
-        if (!_notificationsAvailable) return;
-
         var title = GetStyledTitle(type);
         var body = Truncate(message, MaxNotificationTextLength);
-        var appNotification = new AppNotificationBuilder()
-            .AddText(AppDisplayName)
-            .AddText(title)
-            .AddText(body)
-            .BuildNotification();
 
-        AppNotificationManager.Default.Show(appNotification);
+        EnsureInitialized();
+
+        lock (Sync)
+        {
+            if (_notifyIcon is null) return;
+
+            _notifyIcon.BalloonTipIcon = GetBalloonIcon(type);
+            _notifyIcon.BalloonTipTitle = title;
+            _notifyIcon.BalloonTipText = body;
+            _notifyIcon.ShowBalloonTip(Math.Max(1000, durationMs));
+        }
     }
 
     public static void Show(string message, ToastType type = ToastType.Info, int durationMs = DefaultDurationMs)
@@ -75,29 +72,6 @@ public static class ToastNotification
         if (owner is { IsDisposed: false }) return owner;
         if (ApplicationContext.MainFormInstance is { IsDisposed: false } mainForm) return mainForm;
         return Form.ActiveForm;
-    }
-
-    private static void EnsureInitialized()
-    {
-        if (_initialized) return;
-
-        lock (Sync)
-        {
-            if (_initialized) return;
-
-            _ = SetCurrentProcessExplicitAppUserModelID(AppUserModelId);
-
-            try
-            {
-                _ = AppNotificationManager.Default;
-            }
-            catch (COMException)
-            {
-                _notificationsAvailable = false;
-            }
-
-            _initialized = true;
-        }
     }
 
     private static string GetStyledTitle(ToastType type)
@@ -117,6 +91,46 @@ public static class ToastNotification
         return $"{text[..(maxLength - 3)]}...";
     }
 
-    [DllImport("Shell32.dll", CharSet = CharSet.Unicode)]
-    private static extern int SetCurrentProcessExplicitAppUserModelID(string appId);
+    private static void EnsureInitialized()
+    {
+        if (_initialized) return;
+
+        lock (Sync)
+        {
+            if (_initialized) return;
+
+            var icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath) ?? SystemIcons.Application;
+
+            _notifyIcon = new NotifyIcon
+            {
+                Icon = icon,
+                Text = AppDisplayName,
+                Visible = true
+            };
+
+            Application.ApplicationExit += (_, _) =>
+            {
+                lock (Sync)
+                {
+                    if (_notifyIcon is null) return;
+                    _notifyIcon.Visible = false;
+                    _notifyIcon.Dispose();
+                    _notifyIcon = null;
+                }
+            };
+
+            _initialized = true;
+        }
+    }
+
+    private static ToolTipIcon GetBalloonIcon(ToastType type)
+    {
+        return type switch
+        {
+            ToastType.Error => ToolTipIcon.Error,
+            ToastType.Warning => ToolTipIcon.Warning,
+            _ => ToolTipIcon.Info
+        };
+    }
+
 }

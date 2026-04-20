@@ -14,6 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+using System.Diagnostics;
 using AetherUtils.Core.Extensions;
 using AetherUtils.Core.Files;
 using AetherUtils.Core.Logging;
@@ -307,7 +308,35 @@ public partial class ReplacedTrackPropertiesCtl : UserControl, IEditor
 
     private void openPathToReplacementFileToolStripMenuItem_Click(object sender, EventArgs e)
     {
+        if (lvTracks.SelectedItems.Count <= 0) return;
+        if (ReplacedStation is null) return;
 
+        var selectedTrack = lvTracks.SelectedItems[0];
+        var path = ReplacedStation.TrackedObject.Tracks.FirstOrDefault(rt =>
+            rt.VanillaTrackName.Equals(_trackName) && rt.WemId.Equals(selectedTrack.Tag))?.ReplacementFilePath;
+
+        var directory = Path.GetDirectoryName(path);
+
+        if (!Directory.Exists(directory))
+        {
+            ToastNotification.Show(this, string.Format(Strings.ReplacementFileDirectoryNotFound, directory), ToastType.Error);
+            return;
+        }
+
+        try
+        {
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = directory,
+                UseShellExecute = true,
+                Verb = "open"
+            });
+        } catch (Exception ex)
+        {
+            AuLogger.GetCurrentLogger<ReplacedTrackPropertiesCtl>(nameof(openPathToReplacementFileToolStripMenuItem_Click))
+                .Error($"Error opening directory '{directory}': {ex.Message}");
+            ToastNotification.Show(this, string.Format(Strings.ErrorOpeningReplacementFileDirectory, directory), ToastType.Error);
+        } 
     }
 
     private void lvTracks_MouseDown(object sender, MouseEventArgs e)

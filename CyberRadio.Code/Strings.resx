@@ -1692,4 +1692,10 @@ Only .wav files can be converted to WEM. Would you like to convert now?</value>
   <data name="OpenPathToReplacementFileContextMenu" xml:space="preserve">
     <value>Open in Explorer...</value>
   </data>
+  <data name="ReplacementFileDirectoryNotFound" xml:space="preserve">
+    <value>Directory not found: '{0}'</value>
+  </data>
+  <data name="ErrorOpeningReplacementFileDirectory" xml:space="preserve">
+    <value>Error opening directory: '{0}'</value>
+  </data>
 </root>

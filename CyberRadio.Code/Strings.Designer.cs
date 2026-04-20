@@ -1289,6 +1289,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error opening directory: &apos;{0}&apos;.
+        /// </summary>
+        internal static string ErrorOpeningReplacementFileDirectory {
+            get {
+                return ResourceManager.GetString("ErrorOpeningReplacementFileDirectory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error pausing stream: {0}.
         /// </summary>
         internal static string ErrorPausingStream {
@@ -3468,6 +3477,15 @@ namespace RadioExt_Helper {
         internal static string ReplacedWithFile {
             get {
                 return ResourceManager.GetString("ReplacedWithFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Directory not found: &apos;{0}&apos;.
+        /// </summary>
+        internal static string ReplacementFileDirectoryNotFound {
+            get {
+                return ResourceManager.GetString("ReplacementFileDirectoryNotFound", resourceCulture);
             }
         }
         
