@@ -239,7 +239,7 @@ public sealed partial class ReplacementStationEditor : UserControl, IEditor
                     continue;
 
                 _replacementTrackMap.Add(matchingVanillaTrack,
-                    new ReplacedTrackPropertiesCtl(ReplacedStation, matchingVanillaTrack.TrackName));
+                    CreateTrackPropertiesControl(matchingVanillaTrack.TrackName));
             }
 
             PopulateListView();
@@ -480,9 +480,15 @@ public sealed partial class ReplacementStationEditor : UserControl, IEditor
         if (_replacementTrackMap.Keys.Any(t => t.TrackName.Equals(track.TrackName, StringComparison.OrdinalIgnoreCase)))
             return;
 
-        var propertiesCtl = new ReplacedTrackPropertiesCtl(ReplacedStation, track.TrackName);
-        propertiesCtl.TrackChanged += OnTrackChanged;
+        var propertiesCtl = CreateTrackPropertiesControl(track.TrackName);
         _replacementTrackMap.Add(track, propertiesCtl);
+    }
+
+    private ReplacedTrackPropertiesCtl CreateTrackPropertiesControl(string trackName)
+    {
+        var propertiesCtl = new ReplacedTrackPropertiesCtl(ReplacedStation!, trackName);
+        propertiesCtl.TrackChanged += OnTrackChanged;
+        return propertiesCtl;
     }
 
     private void OnTrackChanged(object? sender, string e)

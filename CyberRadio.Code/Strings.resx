@@ -1033,7 +1033,8 @@ Are you sure you want to clear all station data?</value>
     <value>Start Restore</value>
   </data>
   <data name="RestoreDescription" xml:space="preserve">
-    <value>The following files will be restored to the staging folder.</value>
+    <value>Review the files to be restored below. When ready, click "Start Restore".
+Audio files will restore to their original locations if included in backup.</value>
   </data>
   <data name="EstimatedRestoreSizeFormat" xml:space="preserve">
     <value>Estimated Restore Size: {0}</value>
@@ -1723,5 +1724,29 @@ Are you sure you want to clear all temporary data?</value>
   </data>
   <data name="ClearTempDataSuccess" xml:space="preserve">
     <value>Temporary data removed successfully. CRA will now restart in 3 seconds...</value>
+  </data>
+  <data name="CopySongFilesToBackupDisabled" xml:space="preserve">
+    <value>"Copy Song Files to Backup?" config option is false. This will result in replacement station audio files not being backed up.
+If this is unintended, cancel the backup and set this configuration option first.
+
+Do you want to continue the backup operation?</value>
+  </data>
+  <data name="ExportReplacementStationsPackWarning" xml:space="preserve">
+    <value>You appear to be replacing vanilla stations.
+
+The export to staging will pack your replacement station into an '.archive' file that can then be deployed to the game.
+
+This operation could take a minute depending on the speed of your computer.
+
+Please be patient.</value>
+  </data>
+  <data name="Warning" xml:space="preserve">
+    <value>Warning</value>
+  </data>
+  <data name="ExportTabs_NewStations" xml:space="preserve">
+    <value>New Stations</value>
+  </data>
+  <data name="ExportTabs_ReplacedStations" xml:space="preserve">
+    <value>Replaced Vanilla Stations</value>
   </data>
 </root>

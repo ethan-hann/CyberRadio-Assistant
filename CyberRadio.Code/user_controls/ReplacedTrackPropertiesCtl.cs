@@ -87,6 +87,8 @@ public partial class ReplacedTrackPropertiesCtl : UserControl, IEditor
 
     private void ReplacedTrackPropertiesCtl_Load(object sender, EventArgs e)
     {
+        Translate();
+
         fdlgSelectFile.Title = Strings.AddReplacementTrackTitle;
         fdlgSelectFile.Filter =
             @"Audio Files|*.mp3;*.wav;*.ogg;*.flac;*.mp2;*.wax;*.wma;*.wem";

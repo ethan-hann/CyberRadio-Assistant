@@ -1029,9 +1029,6 @@ Assurez-vous de créer une sauvegarde de vos stations avant de nettoyer les donn
   <data name="StartRestore" xml:space="preserve">
     <value>Commencer à restaurer</value>
   </data>
-  <data name="RestoreDescription" xml:space="preserve">
-    <value>Les fichiers suivants seront restaurés dans le dossier de stadification.</value>
-  </data>
   <data name="EstimatedRestoreSizeFormat" xml:space="preserve">
     <value>Taille de restauration estimée: {0}</value>
   </data>
@@ -1665,5 +1662,91 @@ On ne sait pas exactement où tous les identifiants WEM sont utilisés dans le j
   </data>
   <data name="LVReplacedTracksCount" xml:space="preserve">
     <value>Nombre de pistes remplacées</value>
+  </data>
+  <data name="RestoreDescription" xml:space="preserve">
+    <value>Passez en revue les fichiers à restaurer ci-dessous. Lorsque vous êtes prêt, cliquez sur "Démarrer la restauration".
+Les fichiers audio seront restaurés à leur emplacement d'origine s'ils sont inclus dans la sauvegarde.</value>
+  </data>
+  <data name="ExportToGameMissingReplacementSongs" xml:space="preserve">
+    <value>Il existe {0} station(s) de remplacement avec un total de {1} chemin(s) de chanson invalide(s). Vous souhaitez continuer à exporter ?</value>
+  </data>
+  <data name="SongsMissingReplacementPaths" xml:space="preserve">
+    <value>Chansons manquant des chemins de remplacement</value>
+  </data>
+  <data name="ReplaceTrackConvertToWavTitle" xml:space="preserve">
+    <value>Besoin de conversion</value>
+  </data>
+  <data name="ReplaceTrackConvertToWavMessage" xml:space="preserve">
+    <value>Le fichier sélectionné doit être converti :
+{0}
+Seuls les fichiers .wav peuvent être convertis en WEM. Souhaitez-vous vous convertir maintenant ?</value>
+  </data>
+  <data name="ReplaceTrackConvertFailedMessage" xml:space="preserve">
+    <value>Le fichier {0} n'a pas pu être converti au format .wav. Le fichier journal contiendra plus d'informations.</value>
+  </data>
+  <data name="ReplaceTrackConvertFailedTitle" xml:space="preserve">
+    <value>Échec de la conversion</value>
+  </data>
+  <data name="CopyWemIdContextMenu" xml:space="preserve">
+    <value>Copier l'identifiant WEM</value>
+  </data>
+  <data name="OpenPathToReplacementFileContextMenu" xml:space="preserve">
+    <value>Ouvrir dans l'Explorateur...</value>
+  </data>
+  <data name="ReplacementFileDirectoryNotFound" xml:space="preserve">
+    <value>Répertoire introuvable : '{0}'</value>
+  </data>
+  <data name="ErrorOpeningReplacementFileDirectory" xml:space="preserve">
+    <value>Erreur lors de l'ouverture du répertoire : '{0}'</value>
+  </data>
+  <data name="ConfirmClearTempData" xml:space="preserve">
+    <value>**OPÉRATION DESTRUCTIVE**
+
+Cela supprimera définitivement les données temporaires de l'ARC et du Wolven Icon Generator d'AppData (roaming et local).
+
+Les fichiers de configuration et les journaux seront conservés.
+Les données de la station dans les fichiers de préparation et de jeu ne seront pas modifiées.
+
+Si vous disposez de stations de remplacement avec des modifications en attente et non exportées, leurs fichiers convertis dans AppData peuvent être supprimés, ce qui peut laisser ces stations dans un état défectueux jusqu'à ce qu'elles soient reconverties et exportées.
+
+L'ARC redémarrera après avoir effacé les données. Les données temporaires de l'outil seront réacquises automatiquement au démarrage de l'ARC.
+
+Êtes-vous sûr de vouloir effacer toutes les données temporaires ?</value>
+  </data>
+  <data name="ClearAllTemporaryData" xml:space="preserve">
+    <value>Effacez toutes les données temporaires !</value>
+  </data>
+  <data name="ClearTempWIGDataFailed" xml:space="preserve">
+    <value>Une erreur s'est produite lors de la suppression des données temporaires du générateur d'icônes Wolven.</value>
+  </data>
+  <data name="ClearTempCRADataFailed" xml:space="preserve">
+    <value>Une erreur s'est produite lors de la suppression des données temporaires de Cyber ​​Radio Assistant.</value>
+  </data>
+  <data name="ClearTempDataSuccess" xml:space="preserve">
+    <value>Données temporaires supprimées avec succès. L'ARC va maintenant redémarrer dans 3 secondes...</value>
+  </data>
+  <data name="CopySongFilesToBackupDisabled" xml:space="preserve">
+    <value>« Copier les fichiers de chansons dans la sauvegarde ? » l'option de configuration est fausse. Cela entraînera la non-sauvegarde des fichiers audio de la station de remplacement.
+Si cela n'est pas intentionnel, annulez la sauvegarde et définissez d'abord cette option de configuration.
+
+Voulez-vous continuer l'opération de sauvegarde ?</value>
+  </data>
+  <data name="ExportReplacementStationsPackWarning" xml:space="preserve">
+    <value>Vous semblez remplacer les stations vanille.
+
+L'exportation vers le staging regroupera votre station de remplacement dans un fichier « .archive » qui pourra ensuite être déployé dans le jeu.
+
+Cette opération peut prendre une minute selon la vitesse de votre ordinateur.
+
+S'il vous plaît soyez patient.</value>
+  </data>
+  <data name="Warning" xml:space="preserve">
+    <value>Avertissement</value>
+  </data>
+  <data name="ExportTabs_NewStations" xml:space="preserve">
+    <value>Nouvelles gares</value>
+  </data>
+  <data name="ExportTabs_ReplacedStations" xml:space="preserve">
+    <value>Stations Vanilla remplacées</value>
   </data>
 </root>

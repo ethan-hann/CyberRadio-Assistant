@@ -1029,9 +1029,6 @@
   <data name="StartRestore" xml:space="preserve">
     <value>Начните восстановить</value>
   </data>
-  <data name="RestoreDescription" xml:space="preserve">
-    <value>Следующие файлы будут восстановлены в папке.</value>
-  </data>
   <data name="EstimatedRestoreSizeFormat" xml:space="preserve">
     <value>Расчетный размер восстановления: {0}</value>
   </data>
@@ -1665,5 +1662,91 @@
   </data>
   <data name="LVReplacedTracksCount" xml:space="preserve">
     <value>Количество замененных треков</value>
+  </data>
+  <data name="RestoreDescription" xml:space="preserve">
+    <value>Просмотрите файлы, которые необходимо восстановить, ниже. Когда будете готовы, нажмите «Начать восстановление».
+Аудиофайлы восстановятся в исходное местоположение, если они включены в резервную копию.</value>
+  </data>
+  <data name="ExportToGameMissingReplacementSongs" xml:space="preserve">
+    <value>Есть запасные станции: {0}, в общей сложности {1} недействительных дорожек песен. Хотите продолжить экспорт?</value>
+  </data>
+  <data name="SongsMissingReplacementPaths" xml:space="preserve">
+    <value>В песнях отсутствуют пути замены</value>
+  </data>
+  <data name="ReplaceTrackConvertToWavTitle" xml:space="preserve">
+    <value>Нужна конверсия</value>
+  </data>
+  <data name="ReplaceTrackConvertToWavMessage" xml:space="preserve">
+    <value>Выбранный файл необходимо преобразовать:
+{0}
+В WEM можно конвертировать только файлы .wav. Хотите конвертировать сейчас?</value>
+  </data>
+  <data name="ReplaceTrackConvertFailedMessage" xml:space="preserve">
+    <value>Файл {0} не удалось преобразовать в формат .wav. Файл журнала будет содержать дополнительную информацию.</value>
+  </data>
+  <data name="ReplaceTrackConvertFailedTitle" xml:space="preserve">
+    <value>Конвертация не удалась</value>
+  </data>
+  <data name="CopyWemIdContextMenu" xml:space="preserve">
+    <value>Скопировать WEM-идентификатор</value>
+  </data>
+  <data name="OpenPathToReplacementFileContextMenu" xml:space="preserve">
+    <value>Открыть в проводнике...</value>
+  </data>
+  <data name="ReplacementFileDirectoryNotFound" xml:space="preserve">
+    <value>Каталог не найден: '{0}'</value>
+  </data>
+  <data name="ErrorOpeningReplacementFileDirectory" xml:space="preserve">
+    <value>Ошибка открытия каталога: '{0}'</value>
+  </data>
+  <data name="ConfirmClearTempData" xml:space="preserve">
+    <value>**РАЗРУШИТЕЛЬНАЯ ОПЕРАЦИЯ**
+
+Это приведет к безвозвратному удалению временных данных CRA и Wolven Icon Generator из AppData (роуминг и локальный доступ).
+
+Файлы конфигурации и журналы будут сохранены.
+Данные станции в файлах подготовки и игры не будут изменены.
+
+Если у вас есть замещающие станции с ожидающими неэкспортированными изменениями, их преобразованные файлы в AppData могут быть удалены, в результате чего эти станции могут остаться в сломанном состоянии до тех пор, пока они не будут повторно преобразованы и экспортированы.
+
+CRA перезапустится после очистки данных. Временные данные инструмента будут повторно получены автоматически при запуске CRA.
+
+Вы уверены, что хотите удалить все временные данные?</value>
+  </data>
+  <data name="ClearAllTemporaryData" xml:space="preserve">
+    <value>Очистите все временные данные!</value>
+  </data>
+  <data name="ClearTempWIGDataFailed" xml:space="preserve">
+    <value>Произошла ошибка при удалении временных данных из генератора значков Wolven.</value>
+  </data>
+  <data name="ClearTempCRADataFailed" xml:space="preserve">
+    <value>Произошла ошибка при удалении временных данных из Cyber ​​Radio Assistant.</value>
+  </data>
+  <data name="ClearTempDataSuccess" xml:space="preserve">
+    <value>Временные данные успешно удалены. CRA теперь перезапустится через 3 секунды...</value>
+  </data>
+  <data name="CopySongFilesToBackupDisabled" xml:space="preserve">
+    <value>«Копировать файлы песен в резервную копию?» параметр конфигурации имеет значение false. Это приведет к тому, что аудиофайлы заменяющей станции не будут скопированы.
+Если это непреднамеренно, отмените резервное копирование и сначала установите этот параметр конфигурации.
+
+Хотите продолжить операцию резервного копирования?</value>
+  </data>
+  <data name="ExportReplacementStationsPackWarning" xml:space="preserve">
+    <value>Похоже, вы заменяете ванильные станции.
+
+При экспорте в промежуточный формат ваша заменяющая станция будет упакована в файл «.archive», который затем можно будет развернуть в игре.
+
+Эта операция может занять минуту в зависимости от скорости вашего компьютера.
+
+Пожалуйста, будьте терпеливы.</value>
+  </data>
+  <data name="Warning" xml:space="preserve">
+    <value>Предупреждение</value>
+  </data>
+  <data name="ExportTabs_NewStations" xml:space="preserve">
+    <value>Новые станции</value>
+  </data>
+  <data name="ExportTabs_ReplacedStations" xml:space="preserve">
+    <value>Заменены ванильные станции</value>
   </data>
 </root>

@@ -1033,22 +1033,26 @@ public sealed partial class MainForm : Form
     /// <param name="stationId">The event arguments.</param>
     private void OnStationUpdated(object? sender, Guid stationId)
     {
-        if (lbStations.SelectedItem is not TrackableObject<AdditionalStation> station) return;
-
-        StationManager.Instance.OnStationUpdated(station.Id);
-        lbStations.BeginUpdate();
-        lbStations.Invalidate();
-        lbStations.EndUpdate();
+        this.SafeInvoke(() =>
+        {
+            StationManager.Instance.OnStationUpdated(stationId);
+            lbStations.BeginUpdate();
+            lbStations.Invalidate();
+            lbStations.EndUpdate();
+            lbStations.Refresh();
+        });
     }
 
     private void OnVanillaStationUpdated(object? sender, Guid stationId)
     {
-        if (lbReplacedStations.SelectedItem is not TrackableObject<ReplacementStation> station) return;
-
-        StationManager.Instance.OnVanillaStationUpdated(station.Id);
-        lbReplacedStations.BeginUpdate();
-        lbReplacedStations.Invalidate();
-        lbReplacedStations.EndUpdate();
+        this.SafeInvoke(() =>
+        {
+            StationManager.Instance.OnVanillaStationUpdated(stationId);
+            lbReplacedStations.BeginUpdate();
+            lbReplacedStations.Invalidate();
+            lbReplacedStations.EndUpdate();
+            lbReplacedStations.Refresh();
+        });
     }
 
     private void BtnDeleteStation_Click(object sender, EventArgs e)
@@ -1320,7 +1324,11 @@ public sealed partial class MainForm : Form
         }
         finally
         {
+            _isSyncInProgress = false;
             _isExportInProgress = false;
+
+            if (!_isAppClosing)
+                this.SafeInvoke(() => statusStripBackup.Visible = false);
         }
     }
 
@@ -1426,13 +1434,16 @@ public sealed partial class MainForm : Form
     {
         _isExportInProgress = true; //to prevent directory watcher from firing events.
 
-        RestoreForm restoreWindow = new(backupFile, StagingPath);
-        restoreWindow.RestoreCompleted += (_, _) =>
+        try
+        {
+            RestoreForm restoreWindow = new(backupFile, StagingPath);
+            restoreWindow.RestoreCompleted += (_, _) => { PopulateStations(); };
+            restoreWindow.ShowDialog(this);
+        }
+        finally
         {
             _isExportInProgress = false;
-            PopulateStations();
-        };
-        restoreWindow.ShowDialog(this);
+        }
     }
 
     private void ClearAllDataToolStripMenuItem_Click(object sender, EventArgs e)

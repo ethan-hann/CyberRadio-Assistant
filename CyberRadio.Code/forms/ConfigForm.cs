@@ -128,6 +128,8 @@ public sealed partial class ConfigForm : Form
         btnResetToDefault.Text = Strings.ResetToDefaults;
         btnCancel.Text = Strings.Cancel;
 
+        lblHelpText.Text = Strings.Ready;
+
         //TODO: Add translations for new "Nexus API" tab when feature is fully implemented.
     }
 

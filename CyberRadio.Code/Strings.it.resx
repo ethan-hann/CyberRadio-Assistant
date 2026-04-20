@@ -985,9 +985,6 @@ Se un'icona è stata inclusa nella stazione, è stata aggiunta anche. Tuttavia, 
   <data name="ClearAllData" xml:space="preserve">
     <value>Cancella tutti i dati!</value>
   </data>
-  <data name="BackupRestoreMenuItem" xml:space="preserve">
-    <value>Backup/Restore</value>
-  </data>
   <data name="RestoreBackupMenuItem" xml:space="preserve">
     <value>Ripristina la cartella Staging</value>
   </data>
@@ -1028,9 +1025,6 @@ Sei sicuro di voler cancellare tutti i dati della stazione?</value>
   </data>
   <data name="StartRestore" xml:space="preserve">
     <value>Inizia a ripristinare</value>
-  </data>
-  <data name="RestoreDescription" xml:space="preserve">
-    <value>I seguenti file verranno ripristinati nella cartella Staging.</value>
   </data>
   <data name="EstimatedRestoreSizeFormat" xml:space="preserve">
     <value>Dimensione del ripristino stimata: {0}</value>
@@ -1665,5 +1659,94 @@ Non è noto dove vengano utilizzati esattamente tutti gli ID WEM nel gioco.</val
   </data>
   <data name="LVReplacedTracksCount" xml:space="preserve">
     <value>Conteggio tracce sostituite</value>
+  </data>
+  <data name="RestoreDescription" xml:space="preserve">
+    <value>Esamina i file da ripristinare di seguito. Quando sei pronto, fai clic su "Avvia ripristino".
+I file audio verranno ripristinati nelle posizioni originali se inclusi nel backup.</value>
+  </data>
+  <data name="ExportToGameMissingReplacementSongs" xml:space="preserve">
+    <value>Sono presenti {0} stazioni sostitutive con un totale di {1} percorsi di brani non validi. Vuoi continuare ad esportare?</value>
+  </data>
+  <data name="SongsMissingReplacementPaths" xml:space="preserve">
+    <value>Canzoni con percorsi sostitutivi mancanti</value>
+  </data>
+  <data name="ReplaceTrackConvertToWavTitle" xml:space="preserve">
+    <value>Hai bisogno di conversione</value>
+  </data>
+  <data name="ReplaceTrackConvertToWavMessage" xml:space="preserve">
+    <value>Il file selezionato deve essere convertito:
+{0}
+Solo i file .wav possono essere convertiti in WEM. Desideri effettuare la conversione adesso?</value>
+  </data>
+  <data name="ReplaceTrackConvertFailedMessage" xml:space="preserve">
+    <value>Impossibile convertire il file {0} nel formato .wav. Il file di registro conterrà ulteriori informazioni.</value>
+  </data>
+  <data name="ReplaceTrackConvertFailedTitle" xml:space="preserve">
+    <value>Conversione non riuscita</value>
+  </data>
+  <data name="CopyWemIdContextMenu" xml:space="preserve">
+    <value>Copia ID WEM</value>
+  </data>
+  <data name="OpenPathToReplacementFileContextMenu" xml:space="preserve">
+    <value>Apri in Esplora risorse...</value>
+  </data>
+  <data name="ReplacementFileDirectoryNotFound" xml:space="preserve">
+    <value>Directory non trovata: '{0}'</value>
+  </data>
+  <data name="ErrorOpeningReplacementFileDirectory" xml:space="preserve">
+    <value>Errore durante l'apertura della directory: '{0}'</value>
+  </data>
+  <data name="ConfirmClearTempData" xml:space="preserve">
+    <value>**OPERAZIONE DISTRUTTIVA**
+
+Ciò eliminerà permanentemente i dati temporanei di CRA e Wolven Icon Generator da AppData (Roaming e Locale).
+
+I file di configurazione e i registri verranno conservati.
+I dati della stazione nei file di staging e di gioco non verranno modificati.
+
+Se disponi di stazioni sostitutive con modifiche in sospeso e non esportate, i relativi file convertiti in AppData potrebbero essere rimossi, il che può lasciare tali stazioni in uno stato interrotto finché non vengono riconvertite ed esportate.
+
+CRA si riavvierà dopo aver cancellato i dati. I dati dello strumento temporaneo verranno riacquisiti automaticamente all'avvio del CRA.
+
+Sei sicuro di voler cancellare tutti i dati temporanei?</value>
+  </data>
+  <data name="ClearAllTemporaryData" xml:space="preserve">
+    <value>Cancella tutti i dati temporanei!</value>
+  </data>
+  <data name="ClearTempWIGDataFailed" xml:space="preserve">
+    <value>Si è verificato un errore durante la cancellazione dei dati temporanei dal Wolven Icon Generator.</value>
+  </data>
+  <data name="ClearTempCRADataFailed" xml:space="preserve">
+    <value>Si è verificato un errore durante la cancellazione dei dati temporanei da Cyber ​​Radio Assistant.</value>
+  </data>
+  <data name="ClearTempDataSuccess" xml:space="preserve">
+    <value>Dati temporanei rimossi correttamente. Il CRA si riavvierà tra 3 secondi...</value>
+  </data>
+  <data name="CopySongFilesToBackupDisabled" xml:space="preserve">
+    <value>"Copiare i file dei brani nel backup?" l'opzione di configurazione è falsa. Ciò comporterà il mancato backup dei file audio della stazione sostitutiva.
+Se ciò non è previsto, annullare il backup e impostare prima questa opzione di configurazione.
+
+Vuoi continuare l'operazione di backup?</value>
+  </data>
+  <data name="ExportReplacementStationsPackWarning" xml:space="preserve">
+    <value>Sembra che tu stia sostituendo le stazioni Vanilla.
+
+L'esportazione in staging comprimerà la tua stazione sostitutiva in un file ".archive" che potrà quindi essere distribuito nel gioco.
+
+Questa operazione potrebbe richiedere un minuto a seconda della velocità del tuo computer.
+
+Per favore sii paziente.</value>
+  </data>
+  <data name="Warning" xml:space="preserve">
+    <value>Avvertimento</value>
+  </data>
+  <data name="ExportTabs_NewStations" xml:space="preserve">
+    <value>Nuove stazioni</value>
+  </data>
+  <data name="ExportTabs_ReplacedStations" xml:space="preserve">
+    <value>Stazioni Vanilla sostituite</value>
+  </data>
+  <data name="BackupRestoreMenuItem" xml:space="preserve">
+    <value>Backup/Ripristino</value>
   </data>
 </root>

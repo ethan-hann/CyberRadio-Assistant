@@ -1029,9 +1029,6 @@
   <data name="StartRestore" xml:space="preserve">
     <value>开始还原</value>
   </data>
-  <data name="RestoreDescription" xml:space="preserve">
-    <value>以下文件将恢复到登台文件夹。</value>
-  </data>
   <data name="EstimatedRestoreSizeFormat" xml:space="preserve">
     <value>估计还原尺寸：{0}</value>
   </data>
@@ -1665,5 +1662,91 @@
   </data>
   <data name="LVReplacedTracksCount" xml:space="preserve">
     <value>替换曲目数</value>
+  </data>
+  <data name="RestoreDescription" xml:space="preserve">
+    <value>查看下面要恢复的文件。准备好后，单击“开始恢复”。
+如果音频文件包含在备份中，则音频文件将恢复到其原始位置。</value>
+  </data>
+  <data name="ExportToGameMissingReplacementSongs" xml:space="preserve">
+    <value>有 {0} 个替换电台，总共有 {1} 个无效歌曲路径。您想继续出口吗？</value>
+  </data>
+  <data name="SongsMissingReplacementPaths" xml:space="preserve">
+    <value>歌曲缺少替换路径</value>
+  </data>
+  <data name="ReplaceTrackConvertToWavTitle" xml:space="preserve">
+    <value>需要转换</value>
+  </data>
+  <data name="ReplaceTrackConvertToWavMessage" xml:space="preserve">
+    <value>所选文件需要转换：
+{0}
+只有 .wav 文件可以转换为 WEM。您想立即转换吗？</value>
+  </data>
+  <data name="ReplaceTrackConvertFailedMessage" xml:space="preserve">
+    <value>文件 {0} 无法转换为 .wav 格式。日志文件将包含更多信息。</value>
+  </data>
+  <data name="ReplaceTrackConvertFailedTitle" xml:space="preserve">
+    <value>转换失败</value>
+  </data>
+  <data name="CopyWemIdContextMenu" xml:space="preserve">
+    <value>复制 WEM ID</value>
+  </data>
+  <data name="OpenPathToReplacementFileContextMenu" xml:space="preserve">
+    <value>在资源管理器中打开...</value>
+  </data>
+  <data name="ReplacementFileDirectoryNotFound" xml:space="preserve">
+    <value>未找到目录：“{0}”</value>
+  </data>
+  <data name="ErrorOpeningReplacementFileDirectory" xml:space="preserve">
+    <value>打开目录时出错：“{0}”</value>
+  </data>
+  <data name="ConfirmClearTempData" xml:space="preserve">
+    <value>**破坏性操作**
+
+这将从 AppData（漫游和本地）中永久删除临时 CRA 和 Wolven Icon Generator 数据。
+
+配置文件和日志将被保留。
+暂存和游戏文件中的车站数据不会被修改。
+
+如果您的替换站有待处理、未导出的更改，则它们在 AppData 中的已转换文件可能会被删除，这可能会使这些站处于损坏状态，直到重新转换和导出为止。
+
+清除数据后CRA将重新启动。 CRA 启动时将自动重新获取临时工具数据。
+
+您确定要清除所有临时数据吗？</value>
+  </data>
+  <data name="ClearAllTemporaryData" xml:space="preserve">
+    <value>清除所有临时数据！</value>
+  </data>
+  <data name="ClearTempWIGDataFailed" xml:space="preserve">
+    <value>从 Wolven 图标生成器清除临时数据时发生错误。</value>
+  </data>
+  <data name="ClearTempCRADataFailed" xml:space="preserve">
+    <value>从 Cyber​​ Radio Assistant 清除临时数据时发生错误。</value>
+  </data>
+  <data name="ClearTempDataSuccess" xml:space="preserve">
+    <value>临时数据已成功删除。 CRA 现在将在 3 秒后重新启动...</value>
+  </data>
+  <data name="CopySongFilesToBackupDisabled" xml:space="preserve">
+    <value>“将歌曲文件复制到备份吗？”配置选项为 false。这将导致替换电台音频文件无法备份。
+如果这是意外情况，请取消备份并首先设置此配置选项。
+
+您想继续备份操作吗？</value>
+  </data>
+  <data name="ExportReplacementStationsPackWarning" xml:space="preserve">
+    <value>您似乎正在更换原版电台。
+
+导出到暂存会将您的替换站打包到“.archive”文件中，然后可以将该文件部署到游戏中。
+
+此操作可能需要一分钟时间，具体取决于计算机的速度。
+
+请耐心等待。</value>
+  </data>
+  <data name="Warning" xml:space="preserve">
+    <value>警告</value>
+  </data>
+  <data name="ExportTabs_NewStations" xml:space="preserve">
+    <value>新站</value>
+  </data>
+  <data name="ExportTabs_ReplacedStations" xml:space="preserve">
+    <value>替换原版站</value>
   </data>
 </root>

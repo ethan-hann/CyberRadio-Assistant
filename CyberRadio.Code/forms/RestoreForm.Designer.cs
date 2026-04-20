@@ -31,7 +31,6 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RestoreForm));
             btnCancel = new Button();
             tableLayoutPanel2 = new TableLayoutPanel();
-            lblRestoreSize = new Label();
             btnStartRestore = new Button();
             lblDescription = new Label();
             splitContainer1 = new SplitContainer();
@@ -43,6 +42,7 @@
             lblStatus = new ToolStripStatusLabel();
             toolStripStatusLabel2 = new ToolStripStatusLabel();
             pgProgress = new ToolStripProgressBar();
+            lblRestoreSize = new ToolStripStatusLabel();
             tableLayoutPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
@@ -60,9 +60,9 @@
             btnCancel.FlatAppearance.MouseOverBackColor = Color.FromArgb(2, 215, 242);
             btnCancel.FlatStyle = FlatStyle.Flat;
             btnCancel.Image = Properties.Resources.cancel_16x16;
-            btnCancel.Location = new Point(807, 41);
+            btnCancel.Location = new Point(807, 38);
             btnCancel.Name = "btnCancel";
-            btnCancel.Size = new Size(226, 31);
+            btnCancel.Size = new Size(226, 30);
             btnCancel.TabIndex = 10;
             btnCancel.Text = "Cancel";
             btnCancel.TextAlign = ContentAlignment.MiddleRight;
@@ -75,7 +75,6 @@
             tableLayoutPanel2.ColumnCount = 2;
             tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 232F));
-            tableLayoutPanel2.Controls.Add(lblRestoreSize, 0, 1);
             tableLayoutPanel2.Controls.Add(btnCancel, 1, 1);
             tableLayoutPanel2.Controls.Add(btnStartRestore, 1, 0);
             tableLayoutPanel2.Controls.Add(lblDescription, 0, 0);
@@ -84,20 +83,9 @@
             tableLayoutPanel2.Name = "tableLayoutPanel2";
             tableLayoutPanel2.RowCount = 2;
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 37F));
-            tableLayoutPanel2.Size = new Size(1036, 75);
+            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 36F));
+            tableLayoutPanel2.Size = new Size(1036, 71);
             tableLayoutPanel2.TabIndex = 3;
-            // 
-            // lblRestoreSize
-            // 
-            lblRestoreSize.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            lblRestoreSize.AutoSize = true;
-            lblRestoreSize.Font = new Font("Segoe UI Variable Small Semibol", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblRestoreSize.Location = new Point(3, 48);
-            lblRestoreSize.Name = "lblRestoreSize";
-            lblRestoreSize.Size = new Size(798, 17);
-            lblRestoreSize.TabIndex = 12;
-            lblRestoreSize.Text = "Restored Size: {0}";
             // 
             // btnStartRestore
             // 
@@ -112,7 +100,7 @@
             btnStartRestore.Location = new Point(807, 2);
             btnStartRestore.Margin = new Padding(3, 2, 3, 2);
             btnStartRestore.Name = "btnStartRestore";
-            btnStartRestore.Size = new Size(226, 34);
+            btnStartRestore.Size = new Size(226, 31);
             btnStartRestore.TabIndex = 8;
             btnStartRestore.Text = "Start Restore";
             btnStartRestore.TextAlign = ContentAlignment.MiddleRight;
@@ -122,20 +110,22 @@
             // 
             // lblDescription
             // 
-            lblDescription.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             lblDescription.AutoSize = true;
+            lblDescription.Dock = DockStyle.Fill;
             lblDescription.Font = new Font("Segoe UI Variable Display", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblDescription.Location = new Point(3, 9);
+            lblDescription.Location = new Point(3, 0);
             lblDescription.Name = "lblDescription";
-            lblDescription.Size = new Size(798, 20);
+            tableLayoutPanel2.SetRowSpan(lblDescription, 2);
+            lblDescription.Size = new Size(798, 71);
             lblDescription.TabIndex = 11;
-            lblDescription.Text = "Review the files to be restored below. When ready, click \"Start Restore\".";
+            lblDescription.Text = "Review the files to be restored below. When ready, click \"Start Restore\".\r\nAudio files will restore to their original locations if included in backup.";
+            lblDescription.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // splitContainer1
             // 
             splitContainer1.BorderStyle = BorderStyle.Fixed3D;
             splitContainer1.Dock = DockStyle.Fill;
-            splitContainer1.Location = new Point(0, 75);
+            splitContainer1.Location = new Point(0, 71);
             splitContainer1.Name = "splitContainer1";
             // 
             // splitContainer1.Panel1
@@ -145,7 +135,7 @@
             // splitContainer1.Panel2
             // 
             splitContainer1.Panel2.Controls.Add(lvFilePreviews);
-            splitContainer1.Size = new Size(1036, 675);
+            splitContainer1.Size = new Size(1036, 679);
             splitContainer1.SplitterDistance = 339;
             splitContainer1.TabIndex = 7;
             // 
@@ -154,7 +144,7 @@
             tvFiles.Dock = DockStyle.Fill;
             tvFiles.Location = new Point(0, 0);
             tvFiles.Name = "tvFiles";
-            tvFiles.Size = new Size(335, 671);
+            tvFiles.Size = new Size(335, 675);
             tvFiles.TabIndex = 5;
             tvFiles.AfterSelect += tvFiles_AfterSelect;
             // 
@@ -164,7 +154,7 @@
             lvFilePreviews.Dock = DockStyle.Fill;
             lvFilePreviews.Location = new Point(0, 0);
             lvFilePreviews.Name = "lvFilePreviews";
-            lvFilePreviews.Size = new Size(689, 671);
+            lvFilePreviews.Size = new Size(689, 675);
             lvFilePreviews.TabIndex = 0;
             lvFilePreviews.UseCompatibleStateImageBehavior = false;
             lvFilePreviews.View = View.Details;
@@ -181,7 +171,7 @@
             // statusStrip1
             // 
             statusStrip1.BackColor = Color.Transparent;
-            statusStrip1.Items.AddRange(new ToolStripItem[] { lblStatus, toolStripStatusLabel2, pgProgress });
+            statusStrip1.Items.AddRange(new ToolStripItem[] { lblStatus, toolStripStatusLabel2, pgProgress, lblRestoreSize });
             statusStrip1.Location = new Point(0, 750);
             statusStrip1.Name = "statusStrip1";
             statusStrip1.Size = new Size(1036, 22);
@@ -191,7 +181,7 @@
             // 
             // lblStatus
             // 
-            lblStatus.Image = Properties.Resources.status__16x16;
+            lblStatus.Image = Properties.Resources.info;
             lblStatus.Name = "lblStatus";
             lblStatus.Size = new Size(55, 17);
             lblStatus.Text = "Ready";
@@ -199,13 +189,19 @@
             // toolStripStatusLabel2
             // 
             toolStripStatusLabel2.Name = "toolStripStatusLabel2";
-            toolStripStatusLabel2.Size = new Size(664, 17);
+            toolStripStatusLabel2.Size = new Size(575, 17);
             toolStripStatusLabel2.Spring = true;
             // 
             // pgProgress
             // 
             pgProgress.Name = "pgProgress";
             pgProgress.Size = new Size(300, 16);
+            // 
+            // lblRestoreSize
+            // 
+            lblRestoreSize.Name = "lblRestoreSize";
+            lblRestoreSize.Size = new Size(89, 17);
+            lblRestoreSize.Text = "Restore Size: {0}";
             // 
             // RestoreForm
             // 
@@ -253,6 +249,6 @@
         private ToolStripStatusLabel toolStripStatusLabel2;
         private ToolStripProgressBar pgProgress;
         private Label lblDescription;
-        private Label lblRestoreSize;
+        private ToolStripStatusLabel lblRestoreSize;
     }
 }

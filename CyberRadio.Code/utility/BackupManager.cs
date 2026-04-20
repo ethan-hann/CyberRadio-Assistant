@@ -17,6 +17,7 @@
 #region
 
 using System.IO.Compression;
+using System.Security.Cryptography;
 using System.Text;
 using AetherUtils.Core.Files;
 using AetherUtils.Core.Logging;
@@ -31,6 +32,11 @@ namespace RadioExt_Helper.utility;
 /// </summary>
 public class BackupManager(CompressionLevel level)
 {
+    private const string ExternalPathsEntryName = "externalPaths.txt";
+    private const string DeduplicationMapEntryName = "deduplicationMap.txt";
+
+    private readonly System.IO.Compression.CompressionLevel _zipCompressionLevel = MapZipCompressionLevel(level);
+
     /// <summary>
     ///     Dictionary containing the mapping between compression levels and their corresponding compression ratios.
     /// </summary>
@@ -54,6 +60,44 @@ public class BackupManager(CompressionLevel level)
     ///     Get or set the compression level used for the backup operation.
     /// </summary>
     public CompressionLevel BackupCompressionLevel { get; } = level;
+
+    private static System.IO.Compression.CompressionLevel MapZipCompressionLevel(CompressionLevel level)
+    {
+        return level switch
+        {
+            CompressionLevel.None => System.IO.Compression.CompressionLevel.NoCompression,
+            CompressionLevel.Fastest or CompressionLevel.Fast or CompressionLevel.SuperFast =>
+                System.IO.Compression.CompressionLevel.Fastest,
+            CompressionLevel.Normal or CompressionLevel.High or CompressionLevel.Maximum =>
+                System.IO.Compression.CompressionLevel.Optimal,
+            CompressionLevel.Ultra or CompressionLevel.Extreme or CompressionLevel.Ultimate =>
+                System.IO.Compression.CompressionLevel.SmallestSize,
+            _ => System.IO.Compression.CompressionLevel.Optimal
+        };
+    }
+
+    private static string NormalizeEntryPath(string entryPath)
+    {
+        return entryPath.Replace('\\', '/');
+    }
+
+    private static string ComputeFileHash(string filePath)
+    {
+        using var fileStream = File.OpenRead(filePath);
+        var hashBytes = SHA256.HashData(fileStream);
+        return Convert.ToHexString(hashBytes);
+    }
+
+    private static string ResolveDeduplicatedEntryPath(string entryPath, IReadOnlyDictionary<string, string> deduplicationMap)
+    {
+        var current = NormalizeEntryPath(entryPath);
+        HashSet<string> visited = new(StringComparer.OrdinalIgnoreCase);
+
+        while (deduplicationMap.TryGetValue(current, out var mapped) && visited.Add(current))
+            current = NormalizeEntryPath(mapped);
+
+        return current;
+    }
 
     /// <summary>
     ///     Occurs whenever the progress of the backup operation changes.
@@ -200,6 +244,7 @@ public class BackupManager(CompressionLevel level)
 
                 Dictionary<string, string> songPathMappings = new();
                 var files = shouldCopySongFiles ? GetFilesIncludingSongs(stagingPath) : GetFilesOnly(stagingPath);
+                var replacedStationsPath = Path.Combine(stagingPath, "replaced-stations");
 
                 using var zipArchive = ZipFile.Open(backupFileName, ZipArchiveMode.Create, Encoding.UTF8);
 
@@ -222,7 +267,9 @@ public class BackupManager(CompressionLevel level)
                         }
                         else if (file.EndsWith(".archive", StringComparison.OrdinalIgnoreCase))
                         {
-                            entryName = Path.Combine("icons", Path.GetFileName(file));
+                            entryName = PathHelper.IsSubPath(replacedStationsPath, file)
+                                ? file[(stagingPath.Length + 1)..]
+                                : Path.Combine("icons", Path.GetFileName(file));
                         }
                         else
                         {
@@ -231,13 +278,22 @@ public class BackupManager(CompressionLevel level)
                     }
                     else
                     {
-                        entryName = Path.Combine("external", Path.GetFileName(file));
-                        songPathMappings[Path.GetFileName(file)] = file;
+                        var externalFileName = Path.GetFileName(file);
+                        var externalEntryPath = Path.Combine("external", externalFileName);
+
+                        while (songPathMappings.ContainsKey(externalEntryPath))
+                        {
+                            externalFileName =
+                                $"{Path.GetFileNameWithoutExtension(file)}-{Guid.NewGuid():N}{Path.GetExtension(file)}";
+                            externalEntryPath = Path.Combine("external", externalFileName);
+                        }
+
+                        entryName = externalEntryPath;
+                        songPathMappings[externalEntryPath] = file;
                     }
 
                     entryName = PathHelper.SanitizePath(entryName);
-                    zipArchive.CreateEntryFromFile(file, entryName,
-                        System.IO.Compression.CompressionLevel.SmallestSize);
+                    zipArchive.CreateEntryFromFile(file, entryName, _zipCompressionLevel);
 
                     fileCount++;
                     var progress = (int)((float)fileCount / files.Length * 100);
@@ -310,6 +366,9 @@ public class BackupManager(CompressionLevel level)
 
         await Task.Run(() =>
         {
+            Dictionary<string, string> deduplicationMap = new(StringComparer.OrdinalIgnoreCase);
+            Dictionary<string, long> entrySizes = new(StringComparer.OrdinalIgnoreCase);
+
             using var zipArchive = ZipFile.OpenRead(backupFilePath);
             foreach (var entry in zipArchive.Entries)
             {
@@ -317,6 +376,25 @@ public class BackupManager(CompressionLevel level)
 
                 // Skip directories
                 if (string.IsNullOrEmpty(entry.Name)) continue;
+
+                var normalizedEntryName = NormalizeEntryPath(entry.FullName);
+                entrySizes[normalizedEntryName] = entry.Length;
+
+                if (normalizedEntryName.Equals(DeduplicationMapEntryName, StringComparison.OrdinalIgnoreCase))
+                {
+                    using StreamReader reader = new(entry.Open(), Encoding.UTF8);
+                    while (!reader.EndOfStream)
+                    {
+                        var line = reader.ReadLine();
+                        if (string.IsNullOrWhiteSpace(line)) continue;
+
+                        var parts = line.Split('|', 2);
+                        if (parts.Length == 2)
+                            deduplicationMap[NormalizeEntryPath(parts[0])] = NormalizeEntryPath(parts[1]);
+                    }
+
+                    continue;
+                }
 
                 FilePreview preview = new()
                 {
@@ -334,6 +412,25 @@ public class BackupManager(CompressionLevel level)
                 StatusChanged?.Invoke(string.Format(Strings.RestoreBackupLoadingPreview, progress));
 
                 if (_isCancelling) return;
+            }
+
+            foreach (var (deduplicatedEntry, sourceEntry) in deduplicationMap)
+            {
+                if (_isCancelling) return;
+
+                if (entrySizes.ContainsKey(deduplicatedEntry)) continue;
+
+                var resolvedSource = ResolveDeduplicatedEntryPath(sourceEntry, deduplicationMap);
+                entrySizes.TryGetValue(resolvedSource, out var sourceSize);
+
+                FilePreview preview = new()
+                {
+                    FileName = deduplicatedEntry,
+                    Size = sourceSize
+                };
+
+                previews.Add(preview);
+                totalSize += sourceSize;
             }
         });
 
@@ -361,29 +458,52 @@ public class BackupManager(CompressionLevel level)
             {
                 if (_isCancelling) return;
 
-                Dictionary<string, string> externalSongMappings = new();
+                Dictionary<string, string> externalSongMappings = new(StringComparer.OrdinalIgnoreCase);
+                Dictionary<string, string> deduplicationMap = new(StringComparer.OrdinalIgnoreCase);
 
                 using var zipArchive = ZipFile.OpenRead(backupFilePath);
+                var totalStagingEntries = zipArchive.Entries.Count(entry =>
+                    !string.IsNullOrEmpty(entry.Name) &&
+                    !entry.FullName.Replace('\\', '/').StartsWith("external/", StringComparison.OrdinalIgnoreCase) &&
+                    !entry.FullName.Equals(ExternalPathsEntryName, StringComparison.OrdinalIgnoreCase) &&
+                    !entry.FullName.Equals(DeduplicationMapEntryName, StringComparison.OrdinalIgnoreCase));
+                var restoredEntries = 0;
 
                 foreach (var entry in zipArchive.Entries)
                 {
                     if (_isCancelling) return;
 
                     var entryName = entry.FullName;
+                    var normalizedEntryName = entryName.Replace('\\', '/');
 
                     // Skip directories and external directory
                     if (string.IsNullOrEmpty(entry.Name)) continue;
-                    if (entryName.StartsWith("external\\")) continue;
+                    if (normalizedEntryName.StartsWith("external/", StringComparison.OrdinalIgnoreCase)) continue;
 
-                    if (entryName.StartsWith("externalPaths.txt"))
+                    if (entryName.Equals(ExternalPathsEntryName, StringComparison.OrdinalIgnoreCase))
                     {
                         using StreamReader reader = new(entry.Open(), Encoding.UTF8);
                         while (!reader.EndOfStream)
                         {
                             var line = reader.ReadLine();
-                            if (line == null) continue;
-                            var parts = line.Split('|');
-                            if (parts.Length == 2) externalSongMappings[parts[0]] = parts[1];
+                            if (string.IsNullOrWhiteSpace(line)) continue;
+                            var parts = line.Split('|', 2);
+                            if (parts.Length == 2) externalSongMappings[NormalizeEntryPath(parts[0])] = parts[1];
+                        }
+
+                        continue;
+                    }
+
+                    if (entryName.Equals(DeduplicationMapEntryName, StringComparison.OrdinalIgnoreCase))
+                    {
+                        using StreamReader reader = new(entry.Open(), Encoding.UTF8);
+                        while (!reader.EndOfStream)
+                        {
+                            var line = reader.ReadLine();
+                            if (string.IsNullOrWhiteSpace(line)) continue;
+                            var parts = line.Split('|', 2);
+                            if (parts.Length == 2)
+                                deduplicationMap[NormalizeEntryPath(parts[0])] = NormalizeEntryPath(parts[1]);
                         }
 
                         continue;
@@ -399,7 +519,10 @@ public class BackupManager(CompressionLevel level)
                     if (destinationDirectory != null && !Directory.Exists(destinationDirectory))
                         Directory.CreateDirectory(destinationDirectory);
 
-                    var progress = (int)((float)zipArchive.Entries.Count / zipArchive.Entries.Count * 100);
+                    restoredEntries++;
+                    var progress = totalStagingEntries == 0
+                        ? 100
+                        : (int)((float)restoredEntries / totalStagingEntries * 100);
                     ProgressChanged?.Invoke(progress);
                     var status = string.Format(Strings.RestoreProgressChanged, entryName);
                     StatusChanged?.Invoke(status);
@@ -407,25 +530,62 @@ public class BackupManager(CompressionLevel level)
                     entry.ExtractToFile(destinationPath, true);
                 }
 
-                // Restore external songs
-                foreach (var (songFileName, originalPath) in externalSongMappings)
+                var fullRestoreBasePath = Path.GetFullPath(restorePath + Path.DirectorySeparatorChar);
+                foreach (var (deduplicatedEntryPath, sourceEntryPath) in deduplicationMap)
                 {
-                    var entry = zipArchive.GetEntry(Path.Combine("external", songFileName));
+                    if (_isCancelling) return;
+                    if (deduplicatedEntryPath.StartsWith("external/", StringComparison.OrdinalIgnoreCase)) continue;
 
-                    if (entry == null) continue;
+                    var resolvedSourcePath = ResolveDeduplicatedEntryPath(sourceEntryPath, deduplicationMap);
 
-                    var destinationPath = Path.GetFullPath(Path.Combine(originalPath));
-                    var fullOriginalPath = Path.GetFullPath(originalPath + Path.DirectorySeparatorChar);
-                    if (!fullOriginalPath.StartsWith(destinationPath))
+                    var destinationPath = Path.GetFullPath(Path.Combine(restorePath, deduplicatedEntryPath));
+                    if (!destinationPath.StartsWith(fullRestoreBasePath))
                         throw new InvalidOperationException("Entry is outside the target dir: " + destinationPath);
+
+                    var sourcePath = Path.GetFullPath(Path.Combine(restorePath, resolvedSourcePath));
+                    if (!sourcePath.StartsWith(fullRestoreBasePath))
+                        throw new InvalidOperationException("Entry is outside the target dir: " + sourcePath);
 
                     var destinationDirectory = Path.GetDirectoryName(destinationPath);
                     if (destinationDirectory != null && !Directory.Exists(destinationDirectory))
                         Directory.CreateDirectory(destinationDirectory);
 
-                    var progress = (int)((float)externalSongMappings.Count / externalSongMappings.Count * 100);
+                    if (File.Exists(sourcePath))
+                    {
+                        File.Copy(sourcePath, destinationPath, true);
+                        continue;
+                    }
+
+                    var sourceEntry = zipArchive.GetEntry(resolvedSourcePath) ??
+                                      zipArchive.GetEntry(resolvedSourcePath.Replace('/', '\\'));
+                    sourceEntry?.ExtractToFile(destinationPath, true);
+                }
+
+                // Restore external songs
+                var processedExternalSongs = 0;
+                foreach (var (externalEntryPath, originalPath) in externalSongMappings)
+                {
+                    var resolvedEntryPath = ResolveDeduplicatedEntryPath(externalEntryPath, deduplicationMap);
+                    var entry = zipArchive.GetEntry(resolvedEntryPath) ??
+                                zipArchive.GetEntry(resolvedEntryPath.Replace('/', '\\'));
+                    processedExternalSongs++;
+                    var songFileName = Path.GetFileName(externalEntryPath);
+
+                    var progress = externalSongMappings.Count == 0
+                        ? 100
+                        : (int)((float)processedExternalSongs / externalSongMappings.Count * 100);
                     ProgressChanged?.Invoke(progress);
                     StatusChanged?.Invoke(string.Format(Strings.RestoreSongProgressChanged, songFileName));
+
+                    if (entry == null) continue;
+
+                    if (string.IsNullOrWhiteSpace(originalPath)) continue;
+
+                    var destinationPath = Path.GetFullPath(originalPath);
+
+                    var destinationDirectory = Path.GetDirectoryName(destinationPath);
+                    if (destinationDirectory != null && !Directory.Exists(destinationDirectory))
+                        Directory.CreateDirectory(destinationDirectory);
 
                     entry.ExtractToFile(destinationPath, true);
                 }
@@ -467,7 +627,19 @@ public class BackupManager(CompressionLevel level)
                 });
         });
 
-        return [.. files];
+        StationManager.Instance.ReplacementStationsAsList.ForEach(station =>
+        {
+            if (station.TrackedObject.Tracks.Count > 0)
+                station.TrackedObject.Tracks.ForEach(track =>
+                {
+                    if (string.IsNullOrEmpty(track.ReplacementFilePath)) return;
+
+                    if (File.Exists(track.ReplacementFilePath))
+                        files.Add(track.ReplacementFilePath);
+                });
+        });
+
+        return [.. files.Distinct(StringComparer.OrdinalIgnoreCase)];
     }
 
     /// <summary>
@@ -479,8 +651,12 @@ public class BackupManager(CompressionLevel level)
     {
         try
         {
+            var replacedStationsPath = Path.Combine(stagingPath, "replaced-stations");
+
             return FileHelper.SafeEnumerateFiles(stagingPath, "*.*", SearchOption.AllDirectories)
-                .Where(file => !StationManager.Instance.ValidAudioExtensions.Contains(Path.GetExtension(file)))
+                .Where(file =>
+                    PathHelper.IsSubPath(replacedStationsPath, file) ||
+                    !StationManager.Instance.ValidAudioExtensions.Contains(Path.GetExtension(file)))
                 .ToArray();
         }
         catch (Exception ex)

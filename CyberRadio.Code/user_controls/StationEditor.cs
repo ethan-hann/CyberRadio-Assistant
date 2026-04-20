@@ -611,9 +611,13 @@ public sealed partial class StationEditor : UserControl, IEditor
 
         var maxVol = volumeSlider.Maximum * 0.1f;
         var minVol = volumeSlider.Minimum * 0.1f;
+        var volumeText = txtVolumeEdit.Text.Trim();
 
-        if (!float.TryParse(txtVolumeEdit.Text, NumberStyles.Float, CultureInfo.InvariantCulture,
-                out var newVolume)) return;
+        if (!float.TryParse(volumeText, NumberStyles.Float, CultureInfo.CurrentCulture, out var newVolume) &&
+            !float.TryParse(volumeText, NumberStyles.Float, CultureInfo.InvariantCulture, out newVolume) &&
+            !float.TryParse(volumeText.Replace(',', '.'), NumberStyles.Float, CultureInfo.InvariantCulture,
+                out newVolume))
+            return;
 
         if (newVolume > maxVol || newVolume < minVol)
         {
@@ -621,7 +625,7 @@ public sealed partial class StationEditor : UserControl, IEditor
         }
         else
         {
-            lblSelectedVolume.Text = txtVolumeEdit.Text;
+            lblSelectedVolume.Text = newVolume.ToString("F1");
             txtVolumeEdit.Visible = false;
             volumeSlider.Enabled = true;
             volumeSlider.Value = (int)(newVolume / 0.1f);
@@ -637,13 +641,32 @@ public sealed partial class StationEditor : UserControl, IEditor
     /// <param name="e"></param>
     private void TxtVolumeEdit_KeyPress(object sender, KeyPressEventArgs e)
     {
-        // Allow control characters, digits, decimal point, and minus sign
-        if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && e.KeyChar != '.')
-            e.Handled = true;
+        var textBox = (TextBox)sender;
+        var decimalSeparator = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
+        var alternateSeparator = decimalSeparator == "." ? "," : ".";
 
-        // Allow only one decimal point
-        if (e.KeyChar == '.' && ((TextBox)sender).Text.IndexOf('.') > -1)
+        if (char.IsControl(e.KeyChar) || char.IsDigit(e.KeyChar))
+            return;
+
+        if (e.KeyChar != '.' && e.KeyChar != ',')
+        {
             e.Handled = true;
+            return;
+        }
+
+        if (textBox.Text.Contains(decimalSeparator) || textBox.Text.Contains(alternateSeparator))
+        {
+            e.Handled = true;
+            return;
+        }
+
+        if (e.KeyChar.ToString() == decimalSeparator)
+            return;
+
+        var selectionStart = textBox.SelectionStart;
+        textBox.SelectedText = decimalSeparator;
+        textBox.SelectionStart = selectionStart + decimalSeparator.Length;
+        e.Handled = true;
     }
 
     private void DgvMetadata_UserAddedRow(object sender, DataGridViewRowEventArgs e)

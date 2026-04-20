@@ -35,6 +35,9 @@ public sealed partial class BackupPreview : Form
     private List<FilePreview> _previews = [];
     private long _totalSize;
 
+    //TODO: need to harden the logic for checking if song files should be included in backup
+    //we should ensure we respect the config option (except in the case of replacement stations; those audio files must be copied into the backup to ensure the station doesn't break.
+
     public BackupPreview(CompressionLevel compressionLevel)
     {
         InitializeComponent();
@@ -247,6 +250,17 @@ public sealed partial class BackupPreview : Form
             return;
         }
 
+        //Warn if config has "copySongFilesToBackup" disabled since this means replacement stations will not have their song files backed up
+        var shouldBackupSongs = GlobalData.ConfigManager.Get("copySongFilesToBackup") as bool? ?? true;
+        if (!shouldBackupSongs)
+        {
+            if (MessageBox.Show(this, Strings.CopySongFilesToBackupDisabled, Strings.Backup, MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Warning) == DialogResult.No)
+            {
+                return;
+            }
+        }
+
         pgProgress.Value = 0;
         pgProgress.Visible = true;
         btnStartBackup.Enabled = false;
@@ -384,13 +398,15 @@ public sealed partial class BackupPreview : Form
             TreeNode? currentNode = null;
             var currentNodeCollection = tvFiles.Nodes;
 
-            foreach (var part in parts)
+            for (var i = 0; i < parts.Length; i++)
             {
+                var part = parts[i];
                 var existingNode = currentNodeCollection.Cast<TreeNode>().FirstOrDefault(n => n.Text.Equals(part));
                 if (existingNode == null)
                 {
                     var isRoot = currentNode == null;
-                    var imageKey = GetImageKey(part, isRoot);
+                    var isDirectory = i < parts.Length - 1;
+                    var imageKey = GetImageKey(part, isRoot, isDirectory);
                     TreeNode node = new(part)
                     {
                         Tag = new List<FilePreview>(),
@@ -409,7 +425,16 @@ public sealed partial class BackupPreview : Form
                 currentNodeCollection = currentNode.Nodes;
             }
 
-            if (currentNode?.Parent?.Tag is List<FilePreview> previews)
+            TreeNode? targetNode = currentNode?.Parent;
+            if (parts.Length >= 3 && parts[0].Equals("replaced-stations", StringComparison.OrdinalIgnoreCase))
+            {
+                var replacedStationsNode = tvFiles.Nodes.Cast<TreeNode>()
+                    .FirstOrDefault(n => n.Text.Equals(parts[0], StringComparison.OrdinalIgnoreCase));
+                targetNode = replacedStationsNode?.Nodes.Cast<TreeNode>()
+                    .FirstOrDefault(n => n.Text.Equals(parts[1], StringComparison.OrdinalIgnoreCase));
+            }
+
+            if (targetNode?.Tag is List<FilePreview> previews)
                 previews.Add(preview);
 
             tvFiles.EndUpdate();
@@ -434,8 +459,11 @@ public sealed partial class BackupPreview : Form
                 {
                     if (preview == null) continue;
 
-                    // Remove the root directory from the file name
-                    var displayFileName = preview.FileName?.Replace(node.Text + Path.DirectorySeparatorChar, "");
+                    var displayFileName = preview.FileName;
+                    var nodePrefix = node.FullPath + Path.DirectorySeparatorChar;
+                    if (!string.IsNullOrEmpty(displayFileName) &&
+                        displayFileName.StartsWith(nodePrefix, StringComparison.OrdinalIgnoreCase))
+                        displayFileName = displayFileName[nodePrefix.Length..];
 
                     var size = ((ulong)preview.Size).FormatSize();
 
@@ -473,9 +501,9 @@ public sealed partial class BackupPreview : Form
     ///     <see cref="TreeView" />.
     /// </param>
     /// <returns></returns>
-    private static string GetImageKey(string fileName, bool isRoot)
+    private static string GetImageKey(string fileName, bool isRoot, bool isDirectory)
     {
-        if (isRoot)
+        if (isRoot || isDirectory)
             return "folder";
 
         return PathHelper.IsValidAudioFile(fileName) ? "music_file" :
@@ -510,7 +538,13 @@ public sealed partial class BackupPreview : Form
     /// <param name="e"></param>
     private void TvFiles_AfterSelect(object sender, TreeViewEventArgs e)
     {
-        if (e.Node?.Parent == null)
+        var isRootNode = e.Node?.Parent == null;
+        var isReplacementStationRoot = e.Node?.Parent != null &&
+                                     e.Node.Parent.Parent == null &&
+                                     e.Node.Parent.Text.Equals("replaced-stations",
+                                         StringComparison.OrdinalIgnoreCase);
+
+        if (isRootNode || isReplacementStationRoot)
             PopulateListView(e.Node);
     }
 

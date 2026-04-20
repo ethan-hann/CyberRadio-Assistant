@@ -992,6 +992,18 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &quot;Copy Song Files to Backup?&quot; config option is false. This will result in replacement station audio files not being backed up.
+        ///If this is unintended, cancel the backup and set this configuration option first.
+        ///
+        ///Do you want to continue the backup operation?.
+        /// </summary>
+        internal static string CopySongFilesToBackupDisabled {
+            get {
+                return ResourceManager.GetString("CopySongFilesToBackupDisabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to If checked, indicates that song files (including external) should be included in the backup .zip file for the stations..
         /// </summary>
         internal static string CopySongFilesToBackupHelp {
@@ -1473,11 +1485,44 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You appear to be replacing vanilla stations.
+        ///
+        ///The export to staging will pack your replacement station into an &apos;.archive&apos; file that can then be deployed to the game.
+        ///
+        ///This operation could take a minute depending on the speed of your computer.
+        ///
+        ///Please be patient..
+        /// </summary>
+        internal static string ExportReplacementStationsPackWarning {
+            get {
+                return ResourceManager.GetString("ExportReplacementStationsPackWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Export Stations.
         /// </summary>
         internal static string ExportStations {
             get {
                 return ResourceManager.GetString("ExportStations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New Stations.
+        /// </summary>
+        internal static string ExportTabs_NewStations {
+            get {
+                return ResourceManager.GetString("ExportTabs_NewStations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Replaced Vanilla Stations.
+        /// </summary>
+        internal static string ExportTabs_ReplacedStations {
+            get {
+                return ResourceManager.GetString("ExportTabs_ReplacedStations", resourceCulture);
             }
         }
         
@@ -3654,7 +3699,8 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The following files will be restored to the staging folder..
+        ///   Looks up a localized string similar to Review the files to be restored below. When ready, click &quot;Start Restore&quot;.
+        ///Audio files will restore to their original locations if included in backup..
         /// </summary>
         internal static string RestoreDescription {
             get {
@@ -4730,6 +4776,15 @@ namespace RadioExt_Helper {
         internal static string VolumeValHelp {
             get {
                 return ResourceManager.GetString("VolumeValHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Warning.
+        /// </summary>
+        internal static string Warning {
+            get {
+                return ResourceManager.GetString("Warning", resourceCulture);
             }
         }
         

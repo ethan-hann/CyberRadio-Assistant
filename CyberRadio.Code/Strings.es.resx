@@ -1029,9 +1029,6 @@ Asegúrese de crear una copia de seguridad de sus estaciones antes de borrar los
   <data name="StartRestore" xml:space="preserve">
     <value>Empiece a restaurar</value>
   </data>
-  <data name="RestoreDescription" xml:space="preserve">
-    <value>Los siguientes archivos se restaurarán a la carpeta de estadificación.</value>
-  </data>
   <data name="EstimatedRestoreSizeFormat" xml:space="preserve">
     <value>Tamaño de restauración estimado: {0}</value>
   </data>
@@ -1665,5 +1662,91 @@ Se desconoce dónde se utilizan exactamente todos los ID de WEM en el juego.</va
   </data>
   <data name="LVReplacedTracksCount" xml:space="preserve">
     <value>Recuento de pistas reemplazadas</value>
+  </data>
+  <data name="RestoreDescription" xml:space="preserve">
+    <value>Revise los archivos que se restaurarán a continuación. Cuando esté listo, haga clic en "Iniciar restauración".
+Los archivos de audio se restaurarán a sus ubicaciones originales si se incluyen en la copia de seguridad.</value>
+  </data>
+  <data name="ExportToGameMissingReplacementSongs" xml:space="preserve">
+    <value>Hay {0} estaciones de reemplazo con un total de {1} rutas de canciones no válidas. ¿Quieres seguir exportando?</value>
+  </data>
+  <data name="SongsMissingReplacementPaths" xml:space="preserve">
+    <value>Canciones a las que les faltan rutas de reemplazo</value>
+  </data>
+  <data name="ReplaceTrackConvertToWavTitle" xml:space="preserve">
+    <value>Necesita conversión</value>
+  </data>
+  <data name="ReplaceTrackConvertToWavMessage" xml:space="preserve">
+    <value>El archivo seleccionado debe convertirse:
+{0}
+Sólo los archivos .wav se pueden convertir a WEM. ¿Quieres convertirte ahora?</value>
+  </data>
+  <data name="ReplaceTrackConvertFailedMessage" xml:space="preserve">
+    <value>El archivo {0} no pudo convertirse al formato .wav. El archivo de registro tendrá más información.</value>
+  </data>
+  <data name="ReplaceTrackConvertFailedTitle" xml:space="preserve">
+    <value>Error de conversión</value>
+  </data>
+  <data name="CopyWemIdContextMenu" xml:space="preserve">
+    <value>Copiar ID de WEM</value>
+  </data>
+  <data name="OpenPathToReplacementFileContextMenu" xml:space="preserve">
+    <value>Abrir en el Explorador...</value>
+  </data>
+  <data name="ReplacementFileDirectoryNotFound" xml:space="preserve">
+    <value>Directorio no encontrado: '{0}'</value>
+  </data>
+  <data name="ErrorOpeningReplacementFileDirectory" xml:space="preserve">
+    <value>Error al abrir el directorio: '{0}'</value>
+  </data>
+  <data name="ConfirmClearTempData" xml:space="preserve">
+    <value>**OPERACIÓN DESTRUCTIVA**
+
+Esto eliminará permanentemente los datos temporales de CRA y Wolven Icon Generator de AppData (roaming y local).
+
+Se conservarán los archivos y registros de configuración.
+Los datos de la estación en los archivos de preparación y del juego no se modificarán.
+
+Si tiene estaciones de reemplazo con cambios pendientes y no exportados, sus archivos convertidos en AppData pueden eliminarse, lo que puede dejar esas estaciones en un estado roto hasta que se reconviertan y exporten.
+
+CRA se reiniciará después de borrar los datos. Los datos temporales de la herramienta se volverán a adquirir automáticamente al iniciar CRA.
+
+¿Está seguro de que desea borrar todos los datos temporales?</value>
+  </data>
+  <data name="ClearAllTemporaryData" xml:space="preserve">
+    <value>¡Borrar todos los datos temporales!</value>
+  </data>
+  <data name="ClearTempWIGDataFailed" xml:space="preserve">
+    <value>Se produjo un error al borrar datos temporales del Wolven Icon Generator.</value>
+  </data>
+  <data name="ClearTempCRADataFailed" xml:space="preserve">
+    <value>Se produjo un error al borrar datos temporales de Cyber ​​Radio Assistant.</value>
+  </data>
+  <data name="ClearTempDataSuccess" xml:space="preserve">
+    <value>Los datos temporales se eliminaron correctamente. CRA ahora se reiniciará en 3 segundos...</value>
+  </data>
+  <data name="CopySongFilesToBackupDisabled" xml:space="preserve">
+    <value>"¿Copiar archivos de canciones a la copia de seguridad?" La opción de configuración es falsa. Esto resultará en que no se realice una copia de seguridad de los archivos de audio de la estación de reemplazo.
+Si esto no es intencionado, cancele la copia de seguridad y configure esta opción de configuración primero.
+
+¿Quiere continuar con la operación de copia de seguridad?</value>
+  </data>
+  <data name="ExportReplacementStationsPackWarning" xml:space="preserve">
+    <value>Parece que estás reemplazando estaciones básicas.
+
+La exportación a prueba empaquetará tu estación de reemplazo en un archivo '.archive' que luego se puede implementar en el juego.
+
+Esta operación podría tardar un minuto dependiendo de la velocidad de su computadora.
+
+Por favor tenga paciencia.</value>
+  </data>
+  <data name="Warning" xml:space="preserve">
+    <value>Advertencia</value>
+  </data>
+  <data name="ExportTabs_NewStations" xml:space="preserve">
+    <value>Nuevas estaciones</value>
+  </data>
+  <data name="ExportTabs_ReplacedStations" xml:space="preserve">
+    <value>Estaciones vainilla reemplazadas</value>
   </data>
 </root>

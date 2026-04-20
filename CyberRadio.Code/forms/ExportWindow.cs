@@ -288,6 +288,12 @@ public partial class ExportWindow : Form
     /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
     private void BtnExportToStaging_Click(object sender, EventArgs e)
     {
+        if (lvReplacedStations.Items.Count > 0)
+        {
+            var result = MessageBox.Show(this, Strings.ExportReplacementStationsPackWarning, Strings.Warning, MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
+            if (result != DialogResult.OK) return;
+        }
+
         if (!bgWorkerExport.CancellationPending && !bgWorkerExport.IsBusy)
             bgWorkerExport.RunWorkerAsync();
     }

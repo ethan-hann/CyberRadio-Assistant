@@ -1218,11 +1218,17 @@ public partial class StationManager : IDisposable
     /// <param name="stationId">The <see cref="Guid" /> of the station that was updated.</param>
     public void OnStationUpdated(Guid stationId)
     {
-        var newName = CheckForDuplicateStation(stationId);
-        CheckSaveStatus(stationId);
+        try
+        {
+            var newName = CheckForDuplicateStation(stationId);
+            CheckSaveStatus(stationId);
 
-        ((StationEditor)_stations[stationId].Value.First(e => e.Type == EditorType.StationEditor))
-            .UpdateStationName(newName);
+            ((StationEditor)_stations[stationId].Value.First(e => e.Type == EditorType.StationEditor))
+                .UpdateStationName(newName);
+        } catch (Exception ex)
+        {
+            AuLogger.GetCurrentLogger<StationManager>("OnStationUpdated").Error(ex, "An error occurred while updating station name in UI.");
+        }
     }
 
     /// <summary>
@@ -1231,11 +1237,17 @@ public partial class StationManager : IDisposable
     /// <param name="stationId">The <see cref="Guid" /> of the replacement station that was updated.</param>
     public void OnVanillaStationUpdated(Guid stationId)
     {
-        var newName = CheckForDuplicateVanillaStation(stationId);
-        CheckVanillaSaveStatus(stationId);
+        try
+        {
+            var newName = CheckForDuplicateVanillaStation(stationId);
+            CheckVanillaSaveStatus(stationId);
 
-        ((ReplacementStationEditor)_replacementStations[stationId].Value
-            .First(e => e.Type == EditorType.StationEditor)).UpdateStationName(newName);
+            ((ReplacementStationEditor)_replacementStations[stationId].Value
+                .First(e => e.Type == EditorType.StationEditor)).UpdateStationName(newName);
+        } catch (Exception ex)
+        {
+            AuLogger.GetCurrentLogger<StationManager>("OnVanillaStationUpdated").Error(ex, "An error occured while updating vanilla station name in UI.");
+        }
     }
 
     /// <summary>
@@ -1936,12 +1948,22 @@ public partial class StationManager : IDisposable
         if (match.Success)
         {
             currentName = currentName[match.Length..].TrimStart();
-            if (float.TryParse(match.Value, CultureInfo.InvariantCulture, out var fmNumberParsed) &&
-                optionalFmVal == null)
-                fmNumber = fmNumberParsed;
+
+            if (optionalFmVal == null)
+            {
+                var matchValue = match.Value.Trim();
+                if (float.TryParse(matchValue, NumberStyles.Float, CultureInfo.CurrentCulture, out var fmNumberParsed) ||
+                    float.TryParse(matchValue, NumberStyles.Float, CultureInfo.InvariantCulture, out fmNumberParsed) ||
+                    float.TryParse(matchValue.Replace(',', '.'), NumberStyles.Float, CultureInfo.InvariantCulture,
+                        out fmNumberParsed))
+                    fmNumber = fmNumberParsed;
+            }
         }
 
-        station.TrackedObject.MetaData.DisplayName = @$"{fmNumber} {currentName}";
+        var formattedFm = fmNumber.ToString("0.###", CultureInfo.InvariantCulture);
+        station.TrackedObject.MetaData.DisplayName = string.IsNullOrWhiteSpace(currentName)
+            ? formattedFm
+            : $"{formattedFm} {currentName}";
         station.TrackedObject.MetaData.Fm = fmNumber;
         return fmNumber;
     }
@@ -2225,7 +2247,7 @@ public partial class StationManager : IDisposable
     ///     Regular expression that matches a display name with an optional FM number at the start.
     /// </summary>
     /// <returns></returns>
-    [GeneratedRegex(@"^\d+(\.\d+)?\s*")]
+    [GeneratedRegex(@"^\d+([\.,]\d+)?\s*")]
     private static partial Regex DisplayNameRegex();
 
     #endregion

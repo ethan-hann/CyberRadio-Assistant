@@ -37,23 +37,23 @@ public sealed class ApplicationConfig
     [Config("autoCheckForUpdates",
         "Specifies whether the application should automatically check for updates on startup.", true)]
     [Description("CheckForUpdatesOptionHelp")]
-    public bool AutoCheckForUpdates { get; set; }
+    public bool AutoCheckForUpdates { get; set; } = true;
 
     /// <summary>
     ///     Specifies whether the application is running for the first time.
     /// </summary>
     [Config("isFirstRun", "Specifies whether the application is running for the first time.", true)]
     [Description("IsFirstRunOptionHelp")]
-    public bool IsFirstRun { get; set; }
+    public bool IsFirstRun { get; set; } = true;
 
     /// <summary>
     ///     Specifies whether the application should automatically export the stations to the game directory after exporting to
     ///     staging.
     /// </summary>
     [Config("autoExportToGame",
-        "Specifies whether the application should automatically export the stations to the game directory after exporting to staging.")]
+        "Specifies whether the application should automatically export the stations to the game directory after exporting to staging.", false)]
     [Description("AutoExportOptionHelp")]
-    public bool AutoExportToGame { get; set; }
+    public bool AutoExportToGame { get; set; } = false;
 
     /// <summary>
     ///     Specifies whether the application should automatically watch for changes in the game's radios directory.
@@ -62,7 +62,7 @@ public sealed class ApplicationConfig
         "Specifies whether the application should automatically watch for changes in the game's radios directory.",
         true)]
     [Description("WatchForChangesHelp")]
-    public bool WatchForGameChanges { get; set; }
+    public bool WatchForGameChanges { get; set; } = true;
 
     /// <summary>
     ///     Specifies whether the application should automatically copy the song files when creating a backup of the staging
@@ -72,7 +72,7 @@ public sealed class ApplicationConfig
         "Specifies whether the application should copy the song files when creating a backup of the staging folder.",
         true)]
     [Description("CopySongFilesToBackupHelp")]
-    public bool CopySongFilesToBackup { get; set; }
+    public bool CopySongFilesToBackup { get; set; } = true;
 
     /// <summary>
     ///     Specifies the default location for song files that have been imported from a station .zip or .rar file.

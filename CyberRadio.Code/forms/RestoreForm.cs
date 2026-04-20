@@ -29,7 +29,7 @@ public partial class RestoreForm : Form
 {
     private readonly string _backupFilePath;
 
-    // Backup manager instance; used to restore backups.
+    // Backup manager instance; used to restore backups. Compression level doesn't matter here since we're only restoring, but we need to specify it to create the instance.
     private readonly BackupManager _backupManager = new(CompressionLevel.Normal);
     private readonly string _restorePath;
     private bool _isRestoreInProgress;
@@ -240,19 +240,20 @@ public partial class RestoreForm : Form
         this.SafeInvoke(() =>
         {
             tvFiles.BeginUpdate();
-            var parts = preview.FileName?.Split(Path.DirectorySeparatorChar);
+            var parts = preview.FileName?.Split(['\\', '/'], StringSplitOptions.RemoveEmptyEntries);
             if (parts == null) return;
 
             TreeNode? currentNode = null;
             var currentNodeCollection = tvFiles.Nodes;
 
-            foreach (var part in parts)
+            for (var i = 0; i < parts.Length; i++)
             {
+                var part = parts[i];
                 var existingNode = currentNodeCollection.Cast<TreeNode>().FirstOrDefault(n => n.Text.Equals(part));
                 if (existingNode == null)
                 {
-                    var isRoot = currentNode == null;
-                    var imageKey = GetImageKey(part, isRoot);
+                    var isDirectory = i < parts.Length - 1;
+                    var imageKey = GetImageKey(part, isDirectory);
                     TreeNode node = new(part)
                     {
                         Tag = new List<FilePreview>(),
@@ -330,14 +331,14 @@ public partial class RestoreForm : Form
     ///     Get the correct image key for the file preview based on the file name.
     /// </summary>
     /// <param name="fileName">The file name to get the image of.</param>
-    /// <param name="isRoot">
-    ///     Indicates whether the file preview we are getting an image of is a root node in the
+    /// <param name="isDirectory">
+    ///     Indicates whether the file preview we are getting an image of is a directory node in the
     ///     <see cref="TreeView" />.
     /// </param>
     /// <returns></returns>
-    private static string GetImageKey(string fileName, bool isRoot)
+    private static string GetImageKey(string fileName, bool isDirectory)
     {
-        if (isRoot)
+        if (isDirectory)
             return "folder";
 
         return PathHelper.IsValidAudioFile(fileName) ? "music_file" :
