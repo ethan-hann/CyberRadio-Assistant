@@ -135,6 +135,8 @@ public partial class LogViewerControl : UserControl, IUserControl
             MessageBox.Show(
                 string.Format(Strings.LogViewerControl_DisplayLastLines_Failed_to_display_log_lines___0_, ex.Message),
                 Strings.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            AuLogger.GetCurrentLogger<LogViewerControl>("DisplayLastLines")
+                .Error(ex, "Couldn't display log lines.");
         }
     }
 
@@ -143,7 +145,7 @@ public partial class LogViewerControl : UserControl, IUserControl
         var searchQuery = txtSearch.Text.ToLower();
         foreach (DataGridViewRow row in dgvLogs.Rows)
         {
-            var isVisible = row.Cells[1]?.Value?.ToString()?.ToLower().Contains(searchQuery);
+            var isVisible = row.Cells[1]?.Value?.ToString()?.ToLower().Contains(searchQuery, StringComparison.CurrentCultureIgnoreCase);
             row.Visible = isVisible ?? false;
         }
     }
