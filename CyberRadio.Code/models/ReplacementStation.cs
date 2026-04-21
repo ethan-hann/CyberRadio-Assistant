@@ -219,11 +219,12 @@ public sealed class ReplacementStation : IStation, INotifyPropertyChanged, IClon
     
     /// <summary>
     /// Ensures the files from the replacement tracks for this station are in the staging folder.
-    /// This method also removes tracks from the staging folder that are no longer being replaced.
+    /// Optionally removes tracks from the staging folder that are no longer being replaced.
     /// </summary>
     /// <param name="stagingFolder">The path to the staging folder.</param>
+    /// <param name="removeStaleFiles">True to delete stale replacement files from staging; otherwise, false.</param>
     /// <returns>The path to the staging folder for this replacement station.</returns>
-    public string SyncStagingFolder(string stagingFolder)
+    public string SyncStagingFolder(string stagingFolder, bool removeStaleFiles = false)
     {
         if (string.IsNullOrEmpty(stagingFolder))
             throw new InvalidOperationException("Staging folder was empty at a point where it shouldn't be!");
@@ -245,15 +246,18 @@ public sealed class ReplacementStation : IStation, INotifyPropertyChanged, IClon
             var ignoredFiles = currentFiles.Where(f => ignoredExtensions.Contains(FileHelper.GetExtension(f)));
             var files = currentFiles.Except(ignoredFiles).ToList();
 
-            //Delete files that are no longer needed
             var expectedFiles = Tracks.Select(track =>
             {
                 var extension = Path.GetExtension(track.ReplacementFilePath);
                 return Path.Combine(proposedFolder, $"{track.WemId}{extension}");
             }).ToList();
-            var filesToDelete = files.Except(expectedFiles).ToList();
-            foreach (var file in filesToDelete)
-                File.Delete(file);
+
+            if (removeStaleFiles)
+            {
+                var filesToDelete = files.Except(expectedFiles).ToList();
+                foreach (var file in filesToDelete)
+                    File.Delete(file);
+            }
 
             var tracksSnapshot = Tracks.ToList();
             foreach (var track in tracksSnapshot)

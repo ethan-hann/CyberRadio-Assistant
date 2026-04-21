@@ -1520,9 +1520,6 @@ Por favor, seja paciente. Você pode cancelar a qualquer momento usando o botão
   <data name="VanillaStationSelector_NoStationSelectedMessage" xml:space="preserve">
     <value>Selecione uma estação primeiro.</value>
   </data>
-  <data name="VanillaStationSelector_NoStationSelected" xml:space="preserve">
-    <value>Nenhuma estação selecionada</value>
-  </data>
   <data name="EnabledVanillaStationsCount" xml:space="preserve">
     <value>Estações de baunilha ativadas: {0} / {1}</value>
   </data>
@@ -1793,5 +1790,11 @@ Por favor, seja paciente.</value>
   </data>
   <data name="SplashScreen_DownloadingTinyMCELanguages" xml:space="preserve">
     <value>Baixando idiomas TinyMCE...</value>
+  </data>
+  <data name="FatalConfigLoadError" xml:space="preserve">
+    <value>Falha ao ler o arquivo de configuração.</value>
+  </data>
+  <data name="VanillaStationSelector_NoStationSelected" xml:space="preserve">
+    <value>Nada selecionado</value>
   </data>
 </root>

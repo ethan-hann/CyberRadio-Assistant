@@ -223,7 +223,12 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
         {
             if (fdlgOpenSongs.ShowDialog() != DialogResult.OK) return;
 
-            if (GlobalData.ConfigManager.GetConfig() == null) return;
+            if (GlobalData.ConfigManager.GetConfig() == null)
+            {
+                AuLogger.GetCurrentLogger<CustomMusicCtl>("BtnAddSongs_Click").Fatal("Configuration is null in a place it shouldn't be!");
+                ToastNotification.Show(this, Strings.FatalConfigLoadError, ToastType.Error);
+                return;
+            }
 
             // Check if the selected files are valid audio files
             List<string> needConversion = [];

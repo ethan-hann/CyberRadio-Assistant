@@ -613,10 +613,13 @@ public partial class ExportWindow : Form
     }
 
     /// <summary>
-    ///     Creates the station directory in the staging path for the specified <see cref="AdditionalStation" />.
+    /// Creates a directory for the specified station within the staging path and returns the full path to the created
+    /// directory.
     /// </summary>
-    /// <param name="station">The station to create the directory for.</param>
-    /// <returns>The path to the station's directory.</returns>
+    /// <remarks>If the staging path is not set or is empty, no directory is created and an empty string is
+    /// returned. The directory is created using the station's display name from its metadata.</remarks>
+    /// <param name="station">A trackable object containing the station metadata used to determine the directory name. Cannot be null.</param>
+    /// <returns>The full path to the created station directory if the staging path is set; otherwise, an empty string.</returns>
     private static string CreateStationDirectory(TrackableObject<AdditionalStation> station)
     {
         if (string.IsNullOrEmpty(StagingPath)) return string.Empty;
@@ -626,9 +629,16 @@ public partial class ExportWindow : Form
         return safeStationPath;
     }
 
+    /// <summary>
+    /// Creates a replacement directory for the specified station in the staging path, if available.
+    /// </summary>
+    /// <remarks>If the staging path is not specified, the method returns an empty string. The directory is
+    /// created using the tracked object's synchronization logic.</remarks>
+    /// <param name="station">A trackable wrapper containing the replacement station for which to create the directory.</param>
+    /// <returns>The path to the created station directory if the staging path is set; otherwise, an empty string.</returns>
     private static string CreateStationDirectoryReplacement(TrackableObject<ReplacementStation> station)
     {
-        return string.IsNullOrEmpty(StagingPath) ? string.Empty : station.TrackedObject.SyncStagingFolder(StagingPath);
+        return string.IsNullOrEmpty(StagingPath) ? string.Empty : station.TrackedObject.SyncStagingFolder(StagingPath, true);
     }
 
     /// <summary>

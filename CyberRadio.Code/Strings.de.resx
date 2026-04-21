@@ -1520,9 +1520,6 @@ Bitte sei geduldig. Sie können jederzeit mit der Schaltfläche "Action abbreche
   <data name="VanillaStationSelector_NoStationSelectedMessage" xml:space="preserve">
     <value>Bitte wählen Sie zuerst eine Station aus.</value>
   </data>
-  <data name="VanillaStationSelector_NoStationSelected" xml:space="preserve">
-    <value>Keine Station ausgewählt</value>
-  </data>
   <data name="EnabledVanillaStationsCount" xml:space="preserve">
     <value>Aktivierte Vanillestationen: {0} / {1}</value>
   </data>
@@ -1793,5 +1790,11 @@ Bitte haben Sie etwas Geduld.</value>
   </data>
   <data name="SplashScreen_DownloadingTinyMCELanguages" xml:space="preserve">
     <value>TinyMCE-Sprachen werden heruntergeladen...</value>
+  </data>
+  <data name="FatalConfigLoadError" xml:space="preserve">
+    <value>Die Konfigurationsdatei konnte nicht gelesen werden.</value>
+  </data>
+  <data name="VanillaStationSelector_NoStationSelected" xml:space="preserve">
+    <value>Nichts ausgewählt</value>
   </data>
 </root>

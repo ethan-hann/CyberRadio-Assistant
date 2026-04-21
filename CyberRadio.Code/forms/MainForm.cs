@@ -25,7 +25,6 @@ using AetherUtils.Core.Logging;
 using AetherUtils.Core.WinForms.Controls;
 using AetherUtils.Core.WinForms.Models;
 using RadioExt_Helper.config;
-using RadioExt_Helper.custom_controls;
 using RadioExt_Helper.models;
 using RadioExt_Helper.nexus_api;
 using RadioExt_Helper.Properties;
@@ -517,6 +516,9 @@ public sealed partial class MainForm : Form
         btnCollapseVanillaSection.Text = Strings.HideVanillaStations;
 
         UpdateEnabledStationCount();
+
+        _noStationSelectedCtrl.Translate();
+        _noStationsCtrl.Translate();
     }
 
     /// <summary>
@@ -559,6 +561,7 @@ public sealed partial class MainForm : Form
             }
         }
 
+        _noStationSelectedCtrl.Translate();
         _noStationSelectedCtrl.Visible = true;
     }
 
@@ -1102,6 +1105,7 @@ public sealed partial class MainForm : Form
 
         StationManager.Instance.TranslateEditors();
         _noStationsCtrl.Translate();
+        _noStationSelectedCtrl.Translate();
 
         //translate log viewer (if open)
         foreach (var form in Application.OpenForms)

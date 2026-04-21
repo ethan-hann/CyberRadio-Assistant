@@ -39,19 +39,19 @@ namespace RadioExt_Helper.forms
         public void Translate()
         {
             Text = Strings.LiveLog_Title;
-            liveLogViewer1.Translate();
+            liveLogViewer.Translate();
         }
 
         private void LogWindow_Load(object? sender, EventArgs e)
         {
             Translate();
 
-            liveLogViewer1.Start(_logFilePath ?? GlobalData.GetLogFilePath());
+            liveLogViewer.Start(_logFilePath ?? GlobalData.GetLogFilePath());
         }
 
         private void LogWindow_FormClosing(object? sender, FormClosingEventArgs e)
         {
-            liveLogViewer1.Stop();
+            liveLogViewer.Stop();
         }
     }
 }

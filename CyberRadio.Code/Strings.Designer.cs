@@ -1618,6 +1618,15 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to read config file..
+        /// </summary>
+        internal static string FatalConfigLoadError {
+            get {
+                return ResourceManager.GetString("FatalConfigLoadError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to File.
         /// </summary>
         internal static string File {
@@ -4834,7 +4843,7 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No Station Selected.
+        ///   Looks up a localized string similar to Nothing Selected.
         /// </summary>
         internal static string VanillaStationSelector_NoStationSelected {
             get {

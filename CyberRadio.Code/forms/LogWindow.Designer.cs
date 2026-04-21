@@ -1,4 +1,6 @@
-﻿namespace RadioExt_Helper.forms
+﻿using RadioExt_Helper.user_controls;
+
+namespace RadioExt_Helper.forms
 {
     partial class LogWindow
     {
@@ -29,16 +31,16 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LogWindow));
-            liveLogViewer1 = new RadioExt_Helper.custom_controls.LiveLogViewer();
+            liveLogViewer = new LiveLogViewer();
             SuspendLayout();
             // 
-            // liveLogViewer1
+            // liveLogViewer
             // 
-            liveLogViewer1.Dock = DockStyle.Fill;
-            liveLogViewer1.Location = new Point(0, 0);
-            liveLogViewer1.Name = "liveLogViewer1";
-            liveLogViewer1.Size = new Size(992, 558);
-            liveLogViewer1.TabIndex = 0;
+            liveLogViewer.Dock = DockStyle.Fill;
+            liveLogViewer.Location = new Point(0, 0);
+            liveLogViewer.Name = "liveLogViewer";
+            liveLogViewer.Size = new Size(992, 558);
+            liveLogViewer.TabIndex = 0;
             // 
             // LogWindow
             // 
@@ -46,7 +48,7 @@
             AutoScaleMode = AutoScaleMode.Dpi;
             BackColor = Color.White;
             ClientSize = new Size(992, 558);
-            Controls.Add(liveLogViewer1);
+            Controls.Add(liveLogViewer);
             Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
             MinimizeBox = false;
@@ -59,6 +61,6 @@
         }
 
         #endregion
-        private custom_controls.LiveLogViewer liveLogViewer1;
+        private LiveLogViewer liveLogViewer;
     }
 }

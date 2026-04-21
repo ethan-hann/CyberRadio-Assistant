@@ -41,6 +41,8 @@ public sealed partial class ReplacementStationEditor : UserControl, IEditor
     private readonly Dictionary<AudioTrack, ReplacedTrackPropertiesCtl?> _replacementTrackMap = [];
     private readonly ImageList _tabImages = new();
 
+    private readonly NoStationSelectedCtl _noSelectionControl = new() { Dock = DockStyle.Fill };
+
     /// <summary>
     ///     Create a new ReplacementStationEditor for the specified replacement station.
     /// </summary>
@@ -109,6 +111,7 @@ public sealed partial class ReplacementStationEditor : UserControl, IEditor
 
         lblStatus.Text = Strings.Ready;
         tinyEditor.Translate();
+        _noSelectionControl.Translate();
 
         //Translate track properties editors
         foreach (var editor in _replacementTrackMap.Values)
@@ -213,17 +216,18 @@ public sealed partial class ReplacementStationEditor : UserControl, IEditor
             _replacedTracks.Clear();
             _replacementTrackMap.Clear();
 
-            if (ReplacedStation == null) return;
-
-            var vanillaTracks = ReplacedStation.TrackedObject.VanillaStation?.Tracks;
+            var vanillaTracks = ReplacedStation?.TrackedObject.VanillaStation?.Tracks;
             if (vanillaTracks == null)
                 return;
 
             // A replacement station can have multiple replacement entries for the same vanilla track
             // (one per WEM ID). The editor is track-name based, so we only add one UI entry per track name.
-            var replacedTrackNames = ReplacedStation.TrackedObject.Tracks
+            var replacedTrackNames = ReplacedStation?.TrackedObject.Tracks
                 .Select(track => track.VanillaTrackName)
                 .Distinct(StringComparer.OrdinalIgnoreCase);
+
+            if (replacedTrackNames == null)
+                return;
 
             foreach (var replacedTrackName in replacedTrackNames)
             {
@@ -263,10 +267,8 @@ public sealed partial class ReplacementStationEditor : UserControl, IEditor
     private void AddNoSelectionControl()
     {
         pnlTrackProperties.Controls.Clear();
-        pnlTrackProperties.Controls.Add(new NoStationSelectedCtl
-        {
-            Dock = DockStyle.Fill
-        });
+        pnlTrackProperties.Controls.Add(_noSelectionControl);
+        _noSelectionControl.Translate();
     }
 
     private void PopulateListView()
@@ -277,7 +279,7 @@ public sealed partial class ReplacementStationEditor : UserControl, IEditor
         var vanillaTracks = ReplacedStation?.TrackedObject.VanillaStation?.Tracks;
         if (vanillaTracks == null) return;
 
-        foreach (var song in vanillaTracks) //TODO: Error here because the track durations are null for the vanilla station tracks on replaced stations
+        foreach (var song in vanillaTracks)
         {
             var durations = song.TrackDuration.Select(d => TimeSpan.FromSeconds(d).ToString("g")).ToList();
             string durationString;
@@ -335,8 +337,7 @@ public sealed partial class ReplacementStationEditor : UserControl, IEditor
         lvTracks.Invalidate(); // Refresh the ListView to update the icon
         lvTracks.EndUpdate();
 
-        ReplacedStation?.TrackedObject.SyncStagingFolder(GlobalData.ConfigManager.CurrentConfig.StagingPath);
-        StationUpdated?.Invoke(this, EventArgs.Empty);
+        SyncAndUpdate();
     }
 
     private void btnReplaceAllTracks_Click(object sender, EventArgs e)
@@ -368,8 +369,7 @@ public sealed partial class ReplacementStationEditor : UserControl, IEditor
             lvTracks.Invalidate(); // Refresh the ListView to update the icon
             lvTracks.EndUpdate();
 
-            ReplacedStation?.TrackedObject.SyncStagingFolder(GlobalData.ConfigManager.CurrentConfig.StagingPath);
-            StationUpdated?.Invoke(this, EventArgs.Empty);
+            SyncAndUpdate();
         }
         catch (Exception ex)
         {
@@ -392,10 +392,9 @@ public sealed partial class ReplacementStationEditor : UserControl, IEditor
 
             if (_replacedTracks.Count > 0)
                 SelectTrackInListBox(_replacedTracks.Last()); // Select the last track in the list after removal
-            else
-            {
+
+            if (lbReplacedTracks.Items.Count <= 0 || lbReplacedTracks.SelectedItem == null)
                 AddNoSelectionControl();
-            }
 
             lvTracks.BeginUpdate();
             lvTracks.Invalidate(); // Refresh the ListView to update the icon
@@ -407,8 +406,7 @@ public sealed partial class ReplacementStationEditor : UserControl, IEditor
 
             ReplacedStation?.TrackedObject.Tracks.Remove(ReplacedStation.TrackedObject.Tracks.First(t => t.VanillaTrackName.Equals(track.TrackName)));
 
-            ReplacedStation?.TrackedObject.SyncStagingFolder(GlobalData.ConfigManager.CurrentConfig.StagingPath);
-            StationUpdated?.Invoke(this, EventArgs.Empty);
+            SyncAndUpdate();
         }
         catch (Exception ex)
         {
@@ -419,34 +417,43 @@ public sealed partial class ReplacementStationEditor : UserControl, IEditor
 
     private void btnRemoveAllTracks_Click(object sender, EventArgs e)
     {
-        //Confirm with dialog before removing all tracks
-        var caption = Strings.Confirm;
-        var text = Strings.ConfirmRemoveAllReplacementTracks;
+        try
+        {
+            //Confirm with dialog before removing all tracks
+            var caption = Strings.Confirm;
+            var text = Strings.ConfirmRemoveAllReplacementTracks;
 
-        if (MessageBox.Show(text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
-            return;
+            if (MessageBox.Show(text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
+                return;
 
-        lbReplacedTracks.BeginUpdate();
-        lbReplacedTracks.DataSource = null;
-        _replacedTracks.Clear();
-        _replacementTrackMap.Clear();
+            lbReplacedTracks.BeginUpdate();
+            lbReplacedTracks.DataSource = null;
+            _replacedTracks.Clear();
+            _replacementTrackMap.Clear();
 
-        //Clear all replacement tracks from the station.
-        ReplacedStation?.TrackedObject.Tracks.Clear();
+            //Clear all replacement tracks from the station.
+            ReplacedStation?.TrackedObject.Tracks.Clear();
 
-        ResetPropertiesUi();
+            ResetPropertiesUi();
 
-        lbReplacedTracks.DataSource = _replacedTracks;
-        lbReplacedTracks.DisplayMember = "ToString";
+            lbReplacedTracks.DataSource = _replacedTracks;
+            lbReplacedTracks.DisplayMember = "ToString";
 
-        lbReplacedTracks.EndUpdate();
+            if (lbReplacedTracks.Items.Count <= 0 || lbReplacedTracks.SelectedItem == null)
+                AddNoSelectionControl();
 
-        lvTracks.BeginUpdate();
-        lvTracks.Invalidate(); // Refresh the ListView to update the icon
-        lvTracks.EndUpdate();
+            lbReplacedTracks.EndUpdate();
 
-        ReplacedStation?.TrackedObject.SyncStagingFolder(GlobalData.ConfigManager.CurrentConfig.StagingPath);
-        StationUpdated?.Invoke(this, EventArgs.Empty);
+            lvTracks.BeginUpdate();
+            lvTracks.Invalidate(); // Refresh the ListView to update the icon
+            lvTracks.EndUpdate();
+
+            SyncAndUpdate();
+        } catch (Exception ex)
+        {
+            AuLogger.GetCurrentLogger<ReplacementStationEditor>("btnRemoveAllTracks_Click")
+                .Error("An error occurred while removing all replaced tracks.", ex);
+        }
     }
 
     private void lvTracks_DoubleClick(object sender, EventArgs e) => btnReplaceTrack.PerformClick();
@@ -528,6 +535,21 @@ public sealed partial class ReplacementStationEditor : UserControl, IEditor
         trackPropertiesCtl.Dock = DockStyle.Fill;
         pnlTrackProperties.Controls.Add(trackPropertiesCtl);
         return true;
+    }
+
+    private void SyncAndUpdate()
+    {
+        var config = GlobalData.ConfigManager.CurrentConfig;
+        if (config == null)
+        {
+            AuLogger.GetCurrentLogger<ReplacementStationEditor>("btnReplaceTrack_Click")
+                .Error("CurrentConfig is null. Cannot sync staging folder.");
+            StationUpdated?.Invoke(this, EventArgs.Empty);
+            return;
+        }
+
+        ReplacedStation?.TrackedObject.SyncStagingFolder(config.StagingPath);
+        StationUpdated?.Invoke(this, EventArgs.Empty);
     }
 
     #region Hover Help

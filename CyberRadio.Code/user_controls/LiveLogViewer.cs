@@ -1,9 +1,8 @@
-﻿using AetherUtils.Core.Logging;
-using RadioExt_Helper.user_controls;
+﻿using System.Text.RegularExpressions;
+using AetherUtils.Core.Logging;
 using RadioExt_Helper.utility;
-using System.Text.RegularExpressions;
 
-namespace RadioExt_Helper.custom_controls
+namespace RadioExt_Helper.user_controls
 {
     /// <summary>
     /// Provides a user control for viewing and monitoring log files in real time, displaying log entries as they are
@@ -18,8 +17,12 @@ namespace RadioExt_Helper.custom_controls
     {
         private readonly List<LogEntry> _entries = [];
         private readonly Lock _syncRoot = new();
+        private readonly SemaphoreSlim _readEntriesSemaphore = new(1, 1);
+        private readonly Lock _watcherDebounceLock = new();
 
         private FileSystemWatcher? _fileWatcher;
+        private CancellationTokenSource? _initialLoadCancellationTokenSource;
+        private System.Threading.Timer? _watcherDebounceTimer;
         private string _logLayout = "${longdate}|${level:uppercase=true}|${logger}|${message:withexception=true}";
         private string? _logFilePath;
         private int _levelTokenIndex = -1;
@@ -28,6 +31,9 @@ namespace RadioExt_Helper.custom_controls
         private string[] _layoutSeparators = [];
         private int _timestampTokenIndex = -1;
         private string[] _layoutTokens = [];
+
+        private const int InitialSystemInfoLinesToSkip = 16;
+        private const int WatcherDebounceMilliseconds = 125;
 
         /// <summary>
         /// Initializes a new instance of the LiveLogViewer class.
@@ -62,16 +68,15 @@ namespace RadioExt_Helper.custom_controls
         {
             _logFilePath = string.IsNullOrWhiteSpace(logFilePath) ? GlobalData.GetLogFilePath() : logFilePath;
             InitializeLayoutParser();
+            Stop();
 
             if (string.IsNullOrWhiteSpace(_logFilePath) || !File.Exists(_logFilePath))
             {
-                Stop();
                 return;
             }
 
-            LoadExistingEntries();
-            StartWatcher();
-            ApplyFilter();
+            _initialLoadCancellationTokenSource = new CancellationTokenSource();
+            _ = StartInitialLoadAsync(_initialLoadCancellationTokenSource.Token);
         }
 
         /// <summary>
@@ -82,6 +87,16 @@ namespace RadioExt_Helper.custom_controls
         /// has already been stopped.</remarks>
         public void Stop()
         {
+            _initialLoadCancellationTokenSource?.Cancel();
+            _initialLoadCancellationTokenSource?.Dispose();
+            _initialLoadCancellationTokenSource = null;
+
+            lock (_watcherDebounceLock)
+            {
+                _watcherDebounceTimer?.Dispose();
+                _watcherDebounceTimer = null;
+            }
+
             if (_fileWatcher == null) return;
 
             _fileWatcher.EnableRaisingEvents = false;
@@ -91,6 +106,32 @@ namespace RadioExt_Helper.custom_controls
             _fileWatcher.Renamed -= FileWatcher_Renamed;
             _fileWatcher.Dispose();
             _fileWatcher = null;
+        }
+
+        private async Task StartInitialLoadAsync(CancellationToken cancellationToken)
+        {
+            try
+            {
+                await Task.Run(() => LoadExistingEntries(cancellationToken), cancellationToken);
+            }
+            catch (OperationCanceledException)
+            {
+                return;
+            }
+            catch (Exception ex)
+            {
+                AuLogger.GetCurrentLogger<LiveLogViewer>().Error(ex, "Failed to load existing log entries");
+                return;
+            }
+
+            if (cancellationToken.IsCancellationRequested || IsDisposed) return;
+
+            this.SafeBeginInvoke(() =>
+            {
+                if (cancellationToken.IsCancellationRequested || IsDisposed) return;
+                StartWatcher();
+                ApplyFilter();
+            });
         }
 
         private void StartWatcher()
@@ -117,13 +158,14 @@ namespace RadioExt_Helper.custom_controls
             _fileWatcher.Renamed += FileWatcher_Renamed;
         }
 
-        private void LoadExistingEntries()
+        private void LoadExistingEntries(CancellationToken cancellationToken)
         {
             if (string.IsNullOrWhiteSpace(_logFilePath) || !File.Exists(_logFilePath)) return;
 
             lock (_syncRoot)
             {
                 _entries.Clear();
+                _lastReadPosition = 0;
             }
 
             using var stream = new FileStream(_logFilePath, FileMode.Open, FileAccess.Read,
@@ -131,14 +173,16 @@ namespace RadioExt_Helper.custom_controls
             using var reader = new StreamReader(stream);
 
             var i = 0;
-            while (reader.ReadLine() is { } line)
+            while (!cancellationToken.IsCancellationRequested && reader.ReadLine() is { } line)
             {
                 i++;
-                if (i < 17) //skip initial log lines that print system info
+                if (i <= InitialSystemInfoLinesToSkip) //skip initial log lines that print system info
                     continue;
 
                 TryAddEntry(line);
             }
+
+            if (cancellationToken.IsCancellationRequested) return;
 
             lock (_syncRoot)
             {
@@ -177,6 +221,33 @@ namespace RadioExt_Helper.custom_controls
             }
 
             this.SafeBeginInvoke(ApplyFilter);
+        }
+
+        private void QueueReadNewEntries()
+        {
+            lock (_watcherDebounceLock)
+            {
+                _watcherDebounceTimer ??= new System.Threading.Timer(static state =>
+                {
+                    var viewer = (LiveLogViewer)state!;
+                    _ = viewer.ReadNewEntriesSerializedAsync();
+                }, this, Timeout.Infinite, Timeout.Infinite);
+
+                _watcherDebounceTimer.Change(WatcherDebounceMilliseconds, Timeout.Infinite);
+            }
+        }
+
+        private async Task ReadNewEntriesSerializedAsync()
+        {
+            await _readEntriesSemaphore.WaitAsync();
+            try
+            {
+                ReadNewEntries();
+            }
+            finally
+            {
+                _readEntriesSemaphore.Release();
+            }
         }
 
         private void TryAddEntry(string line)
@@ -262,7 +333,7 @@ namespace RadioExt_Helper.custom_controls
         {
             _logLayout = ResolveLogLayout();
 
-            var matches = Regex.Matches(_logLayout, @"\$\{(?<name>[a-zA-Z]+)(?::[^}]*)?\}");
+            var matches = LogLayoutRegex().Matches(_logLayout);
             if (matches.Count == 0)
             {
                 _layoutTokens = [];
@@ -376,7 +447,7 @@ namespace RadioExt_Helper.custom_controls
 
         private void FileWatcher_Changed(object sender, FileSystemEventArgs e)
         {
-            ReadNewEntries();
+            QueueReadNewEntries();
         }
 
         private void FileWatcher_Created(object sender, FileSystemEventArgs e)
@@ -385,7 +456,7 @@ namespace RadioExt_Helper.custom_controls
             {
                 _lastReadPosition = 0;
             }
-            ReadNewEntries();
+            QueueReadNewEntries();
         }
 
         private void FileWatcher_Deleted(object sender, FileSystemEventArgs e)
@@ -404,7 +475,7 @@ namespace RadioExt_Helper.custom_controls
             {
                 _lastReadPosition = 0;
             }
-            ReadNewEntries();
+            QueueReadNewEntries();
         }
 
         private void txtSearch_TextChanged(object sender, EventArgs e)
@@ -449,5 +520,8 @@ namespace RadioExt_Helper.custom_controls
         }
 
         private sealed record LogEntry(DateTime? Timestamp, string Level, string Message, string Raw);
+
+        [GeneratedRegex(@"\$\{(?<name>[a-zA-Z]+)(?::[^}]*)?\}")]
+        private static partial Regex LogLayoutRegex();
     }
 }

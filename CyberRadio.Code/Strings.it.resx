@@ -1517,9 +1517,6 @@ Si prega di essere paziente. È possibile annullare in qualsiasi momento utilizz
   <data name="VanillaStationSelector_NoStationSelectedMessage" xml:space="preserve">
     <value>Seleziona prima una stazione.</value>
   </data>
-  <data name="VanillaStationSelector_NoStationSelected" xml:space="preserve">
-    <value>Nessuna stazione selezionata</value>
-  </data>
   <data name="EnabledVanillaStationsCount" xml:space="preserve">
     <value>Enabled Vanilla Stations: {0} / {1}</value>
   </data>
@@ -1793,5 +1790,11 @@ Per favore sii paziente.</value>
   </data>
   <data name="SplashScreen_DownloadingTinyMCELanguages" xml:space="preserve">
     <value>Download delle lingue TinyMCE...</value>
+  </data>
+  <data name="FatalConfigLoadError" xml:space="preserve">
+    <value>Impossibile leggere il file di configurazione.</value>
+  </data>
+  <data name="VanillaStationSelector_NoStationSelected" xml:space="preserve">
+    <value>Niente selezionato</value>
   </data>
 </root>

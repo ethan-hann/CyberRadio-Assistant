@@ -1520,9 +1520,6 @@
   <data name="VanillaStationSelector_NoStationSelectedMessage" xml:space="preserve">
     <value>请先选择一个站。</value>
   </data>
-  <data name="VanillaStationSelector_NoStationSelected" xml:space="preserve">
-    <value>没有选择站</value>
-  </data>
   <data name="EnabledVanillaStationsCount" xml:space="preserve">
     <value>启用的香草站：{0} / {1}</value>
   </data>
@@ -1793,5 +1790,11 @@
   </data>
   <data name="SplashScreen_DownloadingTinyMCELanguages" xml:space="preserve">
     <value>正在下载 TinyMCE 语言...</value>
+  </data>
+  <data name="FatalConfigLoadError" xml:space="preserve">
+    <value>无法读取配置文件。</value>
+  </data>
+  <data name="VanillaStationSelector_NoStationSelected" xml:space="preserve">
+    <value>未选择任何内容</value>
   </data>
 </root>

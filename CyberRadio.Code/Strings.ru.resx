@@ -1517,9 +1517,6 @@
   <data name="VanillaStationSelector_NoStationSelectedMessage" xml:space="preserve">
     <value>Пожалуйста, выберите станцию ​​сначала.</value>
   </data>
-  <data name="VanillaStationSelector_NoStationSelected" xml:space="preserve">
-    <value>Никакая станция не выбрана</value>
-  </data>
   <data name="EnabledVanillaStationsCount" xml:space="preserve">
     <value>Включенные ванильные станции: {0} / {1}</value>
   </data>
@@ -1780,7 +1777,7 @@ CRA перезапустится после очистки данных. Вре�
     <value>Импортированы запасные станции ({0}).</value>
   </data>
   <data name="Toast_FailedToCopyLogLine" xml:space="preserve">
-    <value>Не удалось скопировать строку журнала: {0}.</value>
+    <value>Не удалось скопировать строку журнала: {0}</value>
   </data>
   <data name="Toast_LogLineCopied" xml:space="preserve">
     <value>Строка журнала скопирована в буфер обмена.</value>
@@ -1793,5 +1790,11 @@ CRA перезапустится после очистки данных. Вре�
   </data>
   <data name="SplashScreen_DownloadingTinyMCELanguages" xml:space="preserve">
     <value>Загрузка языков TinyMCE...</value>
+  </data>
+  <data name="FatalConfigLoadError" xml:space="preserve">
+    <value>Не удалось прочитать файл конфигурации.</value>
+  </data>
+  <data name="VanillaStationSelector_NoStationSelected" xml:space="preserve">
+    <value>Ничего не выбрано</value>
   </data>
 </root>

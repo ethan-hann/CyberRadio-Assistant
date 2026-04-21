@@ -1528,7 +1528,7 @@ Please be patient. You can cancel at any time using the "Cancel Action" button. 
     <value>Please select a station first.</value>
   </data>
   <data name="VanillaStationSelector_NoStationSelected" xml:space="preserve">
-    <value>No Station Selected</value>
+    <value>Nothing Selected</value>
   </data>
   <data name="EnabledVanillaStationsCount" xml:space="preserve">
     <value>Enabled Vanilla Stations: {0} / {1}</value>
@@ -1793,5 +1793,8 @@ Please be patient.</value>
   </data>
   <data name="SplashScreen_DownloadingTinyMCELanguages" xml:space="preserve">
     <value>Downloading TinyMCE Languages...</value>
+  </data>
+  <data name="FatalConfigLoadError" xml:space="preserve">
+    <value>Failed to read config file.</value>
   </data>
 </root>
