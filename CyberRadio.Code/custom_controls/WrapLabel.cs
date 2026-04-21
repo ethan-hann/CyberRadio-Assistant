@@ -53,11 +53,7 @@ public partial class WrapLabel : Label
     protected override void OnPaint(PaintEventArgs e)
     {
         // Define the text format
-        StringFormat format = new()
-        {
-            FormatFlags = StringFormatFlags.LineLimit,
-            Trimming = StringTrimming.Word
-        };
+        StringFormat format = new() { FormatFlags = StringFormatFlags.LineLimit, Trimming = StringTrimming.Word };
 
         // Set alignment based on the InnerTextAlignment property
         format.Alignment = InnerTextAlignment switch

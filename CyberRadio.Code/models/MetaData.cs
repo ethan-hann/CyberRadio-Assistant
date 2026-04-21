@@ -190,14 +190,10 @@ public sealed class MetaData : INotifyPropertyChanged, ICloneable, IEquatable<Me
     public bool Equals(MetaData? other)
     {
         if (other == null) return false;
-        return DisplayName == other.DisplayName &&
-               Math.Abs(Fm - other.Fm) < float.Epsilon &&
-               Math.Abs(Volume - other.Volume) < float.Epsilon &&
-               Icon == other.Icon &&
-               CustomIcon.Equals(other.CustomIcon) &&
-               StreamInfo.Equals(other.StreamInfo) &&
-               SongOrder.SequenceEqual(other.SongOrder) &&
-               IsActive == other.IsActive &&
+        return DisplayName == other.DisplayName && Math.Abs(Fm - other.Fm) < float.Epsilon &&
+               Math.Abs(Volume - other.Volume) < float.Epsilon && Icon == other.Icon &&
+               CustomIcon.Equals(other.CustomIcon) && StreamInfo.Equals(other.StreamInfo) &&
+               SongOrder.SequenceEqual(other.SongOrder) && IsActive == other.IsActive &&
                CustomData.Equals(other.CustomData);
     }
 

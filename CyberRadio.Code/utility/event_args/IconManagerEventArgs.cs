@@ -19,8 +19,7 @@ namespace RadioExt_Helper.utility.event_args;
 /// <summary>
 ///     Represents the event arguments for the various events in the <see cref="IconManager" /> class.
 /// </summary>
-public class IconManagerEventArgs(string? status, int progress, bool isError, string? errorMessage = null)
-    : EventArgs
+public class IconManagerEventArgs(string? status, int progress, bool isError, string? errorMessage = null) : EventArgs
 {
     /// <summary>
     ///     The status message of the event.

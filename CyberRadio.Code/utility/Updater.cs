@@ -62,8 +62,7 @@ public static class Updater
                 if (latestVersion > currentVersion)
                 {
                     if (MessageBox.Show(Strings.UpdateAvailableNotice, Strings.UpdateAvailable, MessageBoxButtons.YesNo,
-                            MessageBoxIcon.Question) ==
-                        DialogResult.Yes)
+                            MessageBoxIcon.Question) == DialogResult.Yes)
                     {
                         VersionInfo vInfo = new(latestVersion, url);
                         new UpdateBox(vInfo).ShowDialog();

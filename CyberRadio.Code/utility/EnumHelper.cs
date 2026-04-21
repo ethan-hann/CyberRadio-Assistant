@@ -36,7 +36,6 @@ public static class EnumHelper<T> where T : Enum
     public static IEnumerable<string?> GetEnumDescriptions()
     {
         return typeof(T).GetFields(BindingFlags.Public | BindingFlags.Static)
-            .Select(f => f.GetCustomAttribute<DescriptionAttribute>()?.Description)
-            .Where(d => d != null);
+            .Select(f => f.GetCustomAttribute<DescriptionAttribute>()?.Description).Where(d => d != null);
     }
 }

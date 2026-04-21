@@ -143,8 +143,7 @@ public sealed partial class IconListBox : ListBox
                 }
 
                 // Draw the text
-                Rectangle textRect = new(e.Bounds.Left + 20, e.Bounds.Top, e.Bounds.Width - 40 - 4,
-                    e.Bounds.Height);
+                Rectangle textRect = new(e.Bounds.Left + 20, e.Bounds.Top, e.Bounds.Width - 40 - 4, e.Bounds.Height);
 
                 TextRenderer.DrawText(e.Graphics, icon.ToString(), Font, textRect, ForeColor, TextFormatFlags.Left);
             }

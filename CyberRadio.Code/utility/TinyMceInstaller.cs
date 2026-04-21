@@ -34,33 +34,20 @@ public static class TinyMceInstaller
     ///     Root folder where the TinyMCE zip will be extracted.
     ///     Example: C:\Users\you\AppData\Local\RadioExt-Helper\tinymce
     /// </summary>
-    public static string TinyMceRootFolder { get; } =
-        Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-            "RadioExt-Helper",
-            "tinymce");
+    public static string TinyMceRootFolder { get; } = Path.Combine(
+        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "RadioExt-Helper", "tinymce");
 
     /// <summary>
     ///     Full path to the TinyMCE core script that the control will look for.
     /// </summary>
     public static string TinyMceScriptPath { get; } =
-        Path.Combine(
-            TinyMceRootFolder,
-            "tinymce",
-            "js",
-            "tinymce",
-            "tinymce.min.js");
+        Path.Combine(TinyMceRootFolder, "tinymce", "js", "tinymce", "tinymce.min.js");
 
     /// <summary>
     ///     Full path to the TinyMCE languages folder.
     /// </summary>
     public static string TinyMceLangsPath { get; } =
-        Path.Combine(
-            TinyMceRootFolder,
-            "tinymce",
-            "js",
-            "tinymce",
-            "langs");
+        Path.Combine(TinyMceRootFolder, "tinymce", "js", "tinymce", "langs");
 
     /// <summary>
     ///     Returns true if TinyMCE appears to already be installed locally.
@@ -86,9 +73,7 @@ public static class TinyMceInstaller
     /// <param name="downloadUrl">Direct URL to the TinyMCE self-hosted zip file.</param>
     /// <param name="progress">Optional progress reporter for status messages.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
-    public static async Task EnsureInstalledAsync(
-        string downloadUrl,
-        IProgress<string>? progress = null,
+    public static async Task EnsureInstalledAsync(string downloadUrl, IProgress<string>? progress = null,
         CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(downloadUrl))
@@ -104,14 +89,11 @@ public static class TinyMceInstaller
 
         Directory.CreateDirectory(TinyMceRootFolder);
 
-        var tempZipPath = Path.Combine(
-            Path.GetTempPath(),
-            $"tinymce_{Guid.NewGuid():N}.zip");
+        var tempZipPath = Path.Combine(Path.GetTempPath(), $"tinymce_{Guid.NewGuid():N}.zip");
 
         try
         {
-            await DownloadZipAsync(downloadUrl, tempZipPath, progress, cancellationToken)
-                .ConfigureAwait(false);
+            await DownloadZipAsync(downloadUrl, tempZipPath, progress, cancellationToken).ConfigureAwait(false);
 
             await ExtractZipAsync(tempZipPath, TinyMceRootFolder, true, progress, cancellationToken)
                 .ConfigureAwait(false);
@@ -148,8 +130,7 @@ public static class TinyMceInstaller
     /// <returns></returns>
     /// <exception cref="ArgumentException"></exception>
     /// <exception cref="InvalidOperationException"></exception>
-    public static async Task EnsureLanguagesInstalled(string downloadUrl,
-        IProgress<string>? progress = null,
+    public static async Task EnsureLanguagesInstalled(string downloadUrl, IProgress<string>? progress = null,
         CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(downloadUrl))
@@ -162,16 +143,12 @@ public static class TinyMceInstaller
 
         progress?.Report("TinyMCE languages not found. Preparing to download...");
         Directory.CreateDirectory(TinyMceRootFolder);
-        var tempZipPath = Path.Combine(
-            Path.GetTempPath(),
-            $"tinymce_langs_{Guid.NewGuid():N}.zip");
+        var tempZipPath = Path.Combine(Path.GetTempPath(), $"tinymce_langs_{Guid.NewGuid():N}.zip");
         try
         {
-            await DownloadZipAsync(downloadUrl, tempZipPath, progress, cancellationToken)
-                .ConfigureAwait(false);
+            await DownloadZipAsync(downloadUrl, tempZipPath, progress, cancellationToken).ConfigureAwait(false);
             await ExtractZipAsync(tempZipPath, Directory.GetParent(TinyMceLangsPath).FullName, false, progress,
-                    cancellationToken)
-                .ConfigureAwait(false);
+                cancellationToken).ConfigureAwait(false);
             if (!Directory.Exists(TinyMceLangsPath) || Directory.GetFiles(TinyMceLangsPath).Length == 0)
                 throw new InvalidOperationException(
                     $"TinyMCE languages zip was extracted, but '{TinyMceLangsPath}' was not found or is empty. " +
@@ -192,49 +169,29 @@ public static class TinyMceInstaller
         }
     }
 
-    private static async Task DownloadZipAsync(
-        string downloadUrl,
-        string destinationPath,
-        IProgress<string>? progress,
+    private static async Task DownloadZipAsync(string downloadUrl, string destinationPath, IProgress<string>? progress,
         CancellationToken cancellationToken)
     {
         progress?.Report("Downloading TinyMCE package...");
 
-        using HttpClient httpClient = new()
-        {
-            Timeout = TimeSpan.FromMinutes(5)
-        };
+        using HttpClient httpClient = new() { Timeout = TimeSpan.FromMinutes(5) };
 
-        using var response = await httpClient.GetAsync(
-                downloadUrl,
-                HttpCompletionOption.ResponseHeadersRead,
-                cancellationToken)
-            .ConfigureAwait(false);
+        using var response = await httpClient
+            .GetAsync(downloadUrl, HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
 
         response.EnsureSuccessStatusCode();
 
-        await using var httpStream = await response.Content
-            .ReadAsStreamAsync(cancellationToken)
-            .ConfigureAwait(false);
+        await using var httpStream = await response.Content.ReadAsStreamAsync(cancellationToken).ConfigureAwait(false);
 
-        await using FileStream fileStream = new(
-            destinationPath,
-            FileMode.Create,
-            FileAccess.Write,
-            FileShare.None);
+        await using FileStream fileStream = new(destinationPath, FileMode.Create, FileAccess.Write, FileShare.None);
 
-        await httpStream.CopyToAsync(fileStream, cancellationToken)
-            .ConfigureAwait(false);
+        await httpStream.CopyToAsync(fileStream, cancellationToken).ConfigureAwait(false);
 
         progress?.Report("TinyMCE package downloaded.");
     }
 
-    private static Task ExtractZipAsync(
-        string zipPath,
-        string targetFolder,
-        bool replaceExisting,
-        IProgress<string>? progress,
-        CancellationToken cancellationToken)
+    private static Task ExtractZipAsync(string zipPath, string targetFolder, bool replaceExisting,
+        IProgress<string>? progress, CancellationToken cancellationToken)
     {
         progress?.Report("Extracting zip file...");
 

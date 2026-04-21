@@ -40,10 +40,7 @@ public sealed class AudioStreamChecker
     /// <param name="timeout">The timespan to wait before the request times out.</param>
     public AudioStreamChecker(TimeSpan timeout)
     {
-        _httpClient = new HttpClient
-        {
-            Timeout = timeout
-        };
+        _httpClient = new HttpClient { Timeout = timeout };
     }
 
     /// <summary>

@@ -42,10 +42,9 @@ public static class GlobalData
     /// <summary>
     ///     The version of the application.
     /// </summary>
-    public static readonly Version AppVersion =
-        Assembly.GetExecutingAssembly().GetName().Version is { } v
-            ? new Version(v.Major, v.Minor, v.Build)
-            : new Version(0, 0, 0); //This should never happen, but just in case!
+    public static readonly Version AppVersion = Assembly.GetExecutingAssembly().GetName().Version is { } v
+        ? new Version(v.Major, v.Minor, v.Build)
+        : new Version(0, 0, 0); //This should never happen, but just in case!
 
     /// <summary>
     ///     Get the resource manager for accessing string resources.
@@ -53,8 +52,7 @@ public static class GlobalData
     public static readonly ResourceManager Strings = new("RadioExt_Helper.Strings", typeof(MainForm).Assembly);
 
     private static readonly string ConfigFilePath = Path.Combine(
-        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-        "RadioExt-Helper", ConfigFileName);
+        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "RadioExt-Helper", ConfigFileName);
 
     /// <summary>
     ///     Indicates whether the global data has been initialized.
@@ -100,8 +98,8 @@ public static class GlobalData
         catch (Exception ex)
         {
             e = ex;
-            MessageBox.Show(Strings.GetString("ConfigError"), Strings.GetString("Error"),
-                MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show(Strings.GetString("ConfigError"), Strings.GetString("Error"), MessageBoxButtons.OK,
+                MessageBoxIcon.Error);
         }
 
         InitializeLogging();
@@ -129,8 +127,7 @@ public static class GlobalData
     {
         var options = ConfigManager.Get("logOptions") as LogOptions;
         return options?.LogFileDirectory ?? Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-            "RadioExt-Helper", "logs");
+            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "RadioExt-Helper", "logs");
     }
 
     /// <summary>
@@ -281,10 +278,7 @@ public static class GlobalData
         try
         {
             var iconsText = ExecutingAssembly.ReadResource("RadioExt_Helper.resources.final_ui_icon_strings.txt");
-            var distinctUiIcons = iconsText.Split('\n')
-                .Select(line => line.Trim())
-                .Distinct()
-                .ToList();
+            var distinctUiIcons = iconsText.Split('\n').Select(line => line.Trim()).Distinct().ToList();
 
             UiIcons = new BindingList<string>(distinctUiIcons);
             _uiIconsInitialized = true;

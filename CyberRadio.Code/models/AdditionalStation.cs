@@ -121,9 +121,7 @@ public sealed class AdditionalStation : IStation, INotifyPropertyChanged, IClone
     public bool Equals(AdditionalStation? other)
     {
         if (other == null) return false;
-        return MetaData.Equals(other.MetaData) &&
-               Songs.SequenceEqual(other.Songs) &&
-               Icons.SequenceEqual(other.Icons);
+        return MetaData.Equals(other.MetaData) && Songs.SequenceEqual(other.Songs) && Icons.SequenceEqual(other.Icons);
     }
 
     /// <inheritdoc />

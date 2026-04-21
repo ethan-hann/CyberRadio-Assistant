@@ -77,20 +77,13 @@ public sealed class CustomIcon : INotifyPropertyChanged, ICloneable, IEquatable<
 
     public object Clone()
     {
-        return new CustomIcon
-        {
-            InkAtlasPath = InkAtlasPath,
-            InkAtlasPart = InkAtlasPart,
-            UseCustom = UseCustom
-        };
+        return new CustomIcon { InkAtlasPath = InkAtlasPath, InkAtlasPart = InkAtlasPart, UseCustom = UseCustom };
     }
 
     public bool Equals(CustomIcon? other)
     {
         if (other == null) return false;
-        return InkAtlasPath == other.InkAtlasPath &&
-               InkAtlasPart == other.InkAtlasPart &&
-               UseCustom == other.UseCustom;
+        return InkAtlasPath == other.InkAtlasPath && InkAtlasPart == other.InkAtlasPart && UseCustom == other.UseCustom;
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;

@@ -67,7 +67,6 @@ public partial class StationManager : IDisposable
             ClearStations();
             var dirs = FileHelper.SafeEnumerateDirectories(directory);
             foreach (var d in dirs)
-            {
                 // Check if the `.vanilla` file is present in the directories
                 if (d.EndsWith("replaced-stations"))
                 {
@@ -81,12 +80,14 @@ public partial class StationManager : IDisposable
                         if (validVanillaFile)
                             ProcessVanillaDirectory(subdir, false);
                         else
-                            AuLogger.GetCurrentLogger<StationManager>().Warn($".vanilla file in directory {subdir} is not valid. Skipping vanilla station load.");
+                            AuLogger.GetCurrentLogger<StationManager>().Warn(
+                                $".vanilla file in directory {subdir} is not valid. Skipping vanilla station load.");
                     }
                 }
                 else
+                {
                     ProcessDirectory(d, d, false);
-            }
+                }
         }
         catch (Exception ex)
         {
@@ -532,8 +533,8 @@ public partial class StationManager : IDisposable
                 }
                 else
                 {
-                    AuLogger.GetCurrentLogger<StationManager>("RemoveStationIcon")
-                        .Warn("Could not delete files for the icon as they are linked to another station's icon.");
+                    AuLogger.GetCurrentLogger<StationManager>("RemoveStationIcon").Warn(
+                        "Could not delete files for the icon as they are linked to another station's icon.");
                 }
             }
 
@@ -748,7 +749,7 @@ public partial class StationManager : IDisposable
                 _replacementStations.Remove(stationId);
                 _newStations.Remove(stationId);
                 StationPaths.Remove(stationId);
-                
+
                 ReplacementStationsAsBindingList.Remove(ReplacementStationsAsBindingList.First(s => s.Id == stationId));
 
                 VanillaStationRemoved?.Invoke(this, stationId);
@@ -828,8 +829,7 @@ public partial class StationManager : IDisposable
 
                 return _stations.TryGetValue((Guid)stationId, out var pair)
                     ? pair.Value.FirstOrDefault(e =>
-                            e.Type == EditorType.IconEditor && ((IconEditor)e).Icon.Id.Equals(iconId))
-                        as IconEditor
+                        e.Type == EditorType.IconEditor && ((IconEditor)e).Icon.Id.Equals(iconId)) as IconEditor
                     : null;
             }
         }
@@ -949,8 +949,7 @@ public partial class StationManager : IDisposable
                 var stagingPath = GlobalData.ConfigManager.Get("stagingPath") as string ?? string.Empty;
                 foreach (var folder in FileHelper.SafeEnumerateDirectories(stagingPath))
                     if (IsProtectedFolder(folder))
-                        PathHelper.ClearDirectory(
-                            folder); //Don't remove protected folders; just remove their contents
+                        PathHelper.ClearDirectory(folder); //Don't remove protected folders; just remove their contents
                     else
                         Directory.Delete(folder, true);
             }
@@ -1120,8 +1119,9 @@ public partial class StationManager : IDisposable
     {
         try
         {
-            foreach (var editor in _stations.Values.SelectMany(pair => pair.Value
-                         .Where(e => e.Type == EditorType.StationEditor)).Cast<StationEditor>())
+            foreach (var editor in _stations.Values
+                         .SelectMany(pair => pair.Value.Where(e => e.Type == EditorType.StationEditor))
+                         .Cast<StationEditor>())
                 editor.GetMusicPlayer().StopStream();
         }
         catch (Exception ex)
@@ -1202,8 +1202,8 @@ public partial class StationManager : IDisposable
     {
         try
         {
-            return _replacementStations[stationId].Key.CheckPendingSaveStatus() &
-                   ReplacementStationsAsBindingList.First(s => s.Id == stationId).CheckPendingSaveStatus();
+            return _replacementStations[stationId].Key.CheckPendingSaveStatus() & ReplacementStationsAsBindingList
+                .First(s => s.Id == stationId).CheckPendingSaveStatus();
         }
         catch (Exception ex)
         {
@@ -1225,9 +1225,11 @@ public partial class StationManager : IDisposable
 
             ((StationEditor)_stations[stationId].Value.First(e => e.Type == EditorType.StationEditor))
                 .UpdateStationName(newName);
-        } catch (Exception ex)
+        }
+        catch (Exception ex)
         {
-            AuLogger.GetCurrentLogger<StationManager>("OnStationUpdated").Error(ex, "An error occurred while updating station name in UI.");
+            AuLogger.GetCurrentLogger<StationManager>("OnStationUpdated")
+                .Error(ex, "An error occurred while updating station name in UI.");
         }
     }
 
@@ -1244,9 +1246,11 @@ public partial class StationManager : IDisposable
 
             ((ReplacementStationEditor)_replacementStations[stationId].Value
                 .First(e => e.Type == EditorType.StationEditor)).UpdateStationName(newName);
-        } catch (Exception ex)
+        }
+        catch (Exception ex)
         {
-            AuLogger.GetCurrentLogger<StationManager>("OnVanillaStationUpdated").Error(ex, "An error occured while updating vanilla station name in UI.");
+            AuLogger.GetCurrentLogger<StationManager>("OnVanillaStationUpdated").Error(ex,
+                "An error occured while updating vanilla station name in UI.");
         }
     }
 
@@ -1305,8 +1309,8 @@ public partial class StationManager : IDisposable
         {
             if (existingStation.Id == stationId) continue;
 
-            if (!existingStation.TrackedObject.DisplayName.Equals(updatedName,
-                    StringComparison.OrdinalIgnoreCase)) continue;
+            if (!existingStation.TrackedObject.DisplayName.Equals(updatedName, StringComparison.OrdinalIgnoreCase))
+                continue;
 
             duplicateCount++;
             updatedName = $"{originalName} ({duplicateCount})";
@@ -1413,9 +1417,8 @@ public partial class StationManager : IDisposable
             Dictionary<Guid, bool> pendingSave = new();
             foreach (var pair in _stations)
             {
-                pendingSave[pair.Key] = pair.Value.Key.IsPendingSave
-                                        & StationsAsBindingList
-                                            .First(s => s.Id == pair.Key).IsPendingSave;
+                pendingSave[pair.Key] = pair.Value.Key.IsPendingSave &
+                                        StationsAsBindingList.First(s => s.Id == pair.Key).IsPendingSave;
                 pendingSave[pair.Key] |= IsNewStation(pair.Key);
             }
 
@@ -1439,9 +1442,8 @@ public partial class StationManager : IDisposable
             Dictionary<Guid, bool> pendingSave = new();
             foreach (var pair in _replacementStations)
             {
-                pendingSave[pair.Key] = pair.Value.Key.IsPendingSave
-                                        & ReplacementStationsAsBindingList
-                                            .First(s => s.Id == pair.Key).IsPendingSave;
+                pendingSave[pair.Key] = pair.Value.Key.IsPendingSave &
+                                        ReplacementStationsAsBindingList.First(s => s.Id == pair.Key).IsPendingSave;
                 pendingSave[pair.Key] |= IsNewStation(pair.Key);
             }
 
@@ -1566,8 +1568,7 @@ public partial class StationManager : IDisposable
     private async Task SynchronizeFilesAsync(string sourceDir, string targetDir)
     {
         var sourceFiles = FileHelper.SafeEnumerateFiles(sourceDir);
-        var targetFiles = FileHelper.SafeEnumerateFiles(targetDir)
-            .Where(f => Path.GetFileName(f) != null)
+        var targetFiles = FileHelper.SafeEnumerateFiles(targetDir).Where(f => Path.GetFileName(f) != null)
             .ToDictionary(f => Path.GetFileName(f)!, f => f);
 
         List<Task> fileTasks = new();
@@ -1679,13 +1680,7 @@ public partial class StationManager : IDisposable
     /// <returns>The <see cref="Guid" /> of the newly added station.</returns>
     private Guid AddBlankStation()
     {
-        AdditionalStation station = new()
-        {
-            MetaData =
-            {
-                DisplayName = Strings.NewStationListBoxEntry
-            }
-        };
+        AdditionalStation station = new() { MetaData = { DisplayName = Strings.NewStationListBoxEntry } };
         TrackableObject<AdditionalStation> trackedStation = new(station);
         return AddStation(trackedStation, false);
     }
@@ -1797,8 +1792,7 @@ public partial class StationManager : IDisposable
         {
             var files = FileHelper.SafeEnumerateFiles(directory, "*.*", SearchOption.AllDirectories).ToList();
             var stationData = files.Where(file => file.EndsWith("replaced.json"))
-                .Select(_replacementStationJson.LoadJson)
-                .FirstOrDefault();
+                .Select(_replacementStationJson.LoadJson).FirstOrDefault();
 
             if (stationData == null) return null;
 
@@ -1952,7 +1946,8 @@ public partial class StationManager : IDisposable
             if (optionalFmVal == null)
             {
                 var matchValue = match.Value.Trim();
-                if (float.TryParse(matchValue, NumberStyles.Float, CultureInfo.CurrentCulture, out var fmNumberParsed) ||
+                if (float.TryParse(matchValue, NumberStyles.Float, CultureInfo.CurrentCulture,
+                        out var fmNumberParsed) ||
                     float.TryParse(matchValue, NumberStyles.Float, CultureInfo.InvariantCulture, out fmNumberParsed) ||
                     float.TryParse(matchValue.Replace(',', '.'), NumberStyles.Float, CultureInfo.InvariantCulture,
                         out fmNumberParsed))

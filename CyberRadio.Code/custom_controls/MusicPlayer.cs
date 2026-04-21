@@ -138,8 +138,7 @@ public sealed partial class MusicPlayer : UserControl
         catch (Exception ex)
         {
             MessageBox.Show(this, string.Format(Strings.ErrorStreamingAudio, ex.Message), Strings.Error,
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Error);
+                MessageBoxButtons.OK, MessageBoxIcon.Error);
             AuLogger.GetCurrentLogger<MusicPlayer>("PlayStream").Error(ex, "Error streaming audio");
             btnPlayPause.ImageKey = "play";
         }
@@ -158,8 +157,7 @@ public sealed partial class MusicPlayer : UserControl
         catch (Exception ex)
         {
             MessageBox.Show(this, string.Format(Strings.ErrorStreamingAudio, ex.Message), Strings.Error,
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Error);
+                MessageBoxButtons.OK, MessageBoxIcon.Error);
             AuLogger.GetCurrentLogger<MusicPlayer>("ResumeStream").Error(ex, "Error streaming audio");
             btnPlayPause.ImageKey = "play";
         }
@@ -178,8 +176,7 @@ public sealed partial class MusicPlayer : UserControl
         catch (Exception ex)
         {
             MessageBox.Show(this, string.Format(Strings.ErrorPausingStream, ex.Message), Strings.Error,
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Error);
+                MessageBoxButtons.OK, MessageBoxIcon.Error);
             AuLogger.GetCurrentLogger<MusicPlayer>("PauseStream").Error(ex, "Error pausing stream");
             btnPlayPause.ImageKey = "pause";
         }

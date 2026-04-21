@@ -51,7 +51,8 @@ public sealed class ApplicationConfig
     ///     staging.
     /// </summary>
     [Config("autoExportToGame",
-        "Specifies whether the application should automatically export the stations to the game directory after exporting to staging.", false)]
+        "Specifies whether the application should automatically export the stations to the game directory after exporting to staging.",
+        false)]
     [Description("AutoExportOptionHelp")]
     public bool AutoExportToGame { get; set; } = false;
 
@@ -157,8 +158,9 @@ public sealed class ApplicationConfig
         AppName = "CyberRadioAssistant",
         WriteLogToConsole = false,
         NewFileEveryLaunch = true,
-        LogFileDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-            "RadioExt-Helper", "logs"),
+        LogFileDirectory =
+            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                "RadioExt-Helper", "logs"),
         LogLayout = "${longdate}|${level:uppercase=true}|${logger}|${message:withexception=true}",
         LogHeader = SystemInfo.GetLogFileHeader(),
         IncludeDateTime = true,

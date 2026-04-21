@@ -277,11 +277,8 @@ public sealed partial class StationEditor : UserControl, IEditor
     {
         try
         {
-            return dgvMetadata.Rows.Cast<DataGridViewRow>()
-                .Select((row, index) => new { Row = row, Index = index })
-                .Where(x => _customDataKeys.Contains(x.Row.Cells[0].Value?.ToString()))
-                .Select(x => x.Index)
-                .ToArray();
+            return dgvMetadata.Rows.Cast<DataGridViewRow>().Select((row, index) => new { Row = row, Index = index })
+                .Where(x => _customDataKeys.Contains(x.Row.Cells[0].Value?.ToString())).Select(x => x.Index).ToArray();
         }
         catch (Exception ex)
         {

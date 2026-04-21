@@ -133,8 +133,8 @@ public partial class UpdateBox : Form
         var canReportProgress = totalBytes != -1L;
 
         await using var contentStream = await response.Content.ReadAsStreamAsync();
-        await using FileStream fileStream =
-            new(tempFilePath, FileMode.Create, FileAccess.Write, FileShare.None, 8192, true);
+        await using FileStream fileStream = new(tempFilePath, FileMode.Create, FileAccess.Write, FileShare.None, 8192,
+            true);
 
         var totalBytesRead = 0L;
         var buffer = new byte[8192];
@@ -197,11 +197,7 @@ public partial class UpdateBox : Form
 
         if (Directory.GetParent(filePath) is not { } parent) return;
 
-        ProcessStartInfo startInfo = new("explorer.exe")
-        {
-            Arguments = parent.FullName,
-            UseShellExecute = true
-        };
+        ProcessStartInfo startInfo = new("explorer.exe") { Arguments = parent.FullName, UseShellExecute = true };
 
         Process.Start(startInfo);
     }

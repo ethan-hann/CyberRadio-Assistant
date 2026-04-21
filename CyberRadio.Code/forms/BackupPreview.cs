@@ -250,13 +250,9 @@ public sealed partial class BackupPreview : Form
         // Warn when optional song file backup is disabled.
         var shouldBackupSongs = ShouldCopySongFilesToBackup();
         if (!shouldBackupSongs)
-        {
             if (MessageBox.Show(this, Strings.CopySongFilesToBackupDisabled, Strings.Backup, MessageBoxButtons.YesNo,
                     MessageBoxIcon.Warning) == DialogResult.No)
-            {
                 return;
-            }
-        }
 
         pgProgress.Value = 0;
         pgProgress.Visible = true;
@@ -304,8 +300,8 @@ public sealed partial class BackupPreview : Form
         if (configuredValue is string stringValue && bool.TryParse(stringValue, out var parsedValue))
             return parsedValue;
 
-        AuLogger.GetCurrentLogger<BackupPreview>("ShouldCopySongFilesToBackup")
-            .Warn($"Invalid value for 'copySongFilesToBackup': {configuredValue ?? "null"}. Falling back to default: true.");
+        AuLogger.GetCurrentLogger<BackupPreview>("ShouldCopySongFilesToBackup").Warn(
+            $"Invalid value for 'copySongFilesToBackup': {configuredValue ?? "null"}. Falling back to default: true.");
         return true;
     }
 
@@ -382,9 +378,7 @@ public sealed partial class BackupPreview : Form
     {
         FolderBrowserDialog folderBrowserDialog = new()
         {
-            Description = Strings.BackupFolderDesc,
-            ShowNewFolderButton = true,
-            UseDescriptionForTitle = true
+            Description = Strings.BackupFolderDesc, ShowNewFolderButton = true, UseDescriptionForTitle = true
         };
 
         return folderBrowserDialog.ShowDialog() == DialogResult.OK ? folderBrowserDialog.SelectedPath : string.Empty;
@@ -416,9 +410,7 @@ public sealed partial class BackupPreview : Form
                     var imageKey = GetImageKey(part, isRoot, isDirectory);
                     TreeNode node = new(part)
                     {
-                        Tag = new List<FilePreview>(),
-                        ImageKey = imageKey,
-                        SelectedImageKey = imageKey
+                        Tag = new List<FilePreview>(), ImageKey = imageKey, SelectedImageKey = imageKey
                     };
 
                     currentNodeCollection.Add(node);
@@ -432,7 +424,7 @@ public sealed partial class BackupPreview : Form
                 currentNodeCollection = currentNode.Nodes;
             }
 
-            TreeNode? targetNode = currentNode?.Parent;
+            var targetNode = currentNode?.Parent;
             if (parts.Length >= 3 && parts[0].Equals("replaced-stations", StringComparison.OrdinalIgnoreCase))
             {
                 var replacedStationsNode = tvFiles.Nodes.Cast<TreeNode>()
@@ -474,12 +466,10 @@ public sealed partial class BackupPreview : Form
 
                     var size = ((ulong)preview.Size).FormatSize();
 
-                    lvFilePreviews.Items.Add(new ListViewItem(
-                        [
-                            displayFileName ?? string.Empty,
-                            size
-                        ])
-                        { Tag = preview });
+                    lvFilePreviews.Items.Add(new ListViewItem([
+                        displayFileName ?? string.Empty,
+                        size
+                    ]) { Tag = preview });
                 }
 
             lvFilePreviews.ResizeColumns();
@@ -546,10 +536,9 @@ public sealed partial class BackupPreview : Form
     private void TvFiles_AfterSelect(object sender, TreeViewEventArgs e)
     {
         var isRootNode = e.Node?.Parent == null;
-        var isReplacementStationRoot = e.Node?.Parent != null &&
-                                     e.Node.Parent.Parent == null &&
-                                     e.Node.Parent.Text.Equals("replaced-stations",
-                                         StringComparison.OrdinalIgnoreCase);
+        var isReplacementStationRoot = e.Node?.Parent != null && e.Node.Parent.Parent == null &&
+                                       e.Node.Parent.Text.Equals("replaced-stations",
+                                           StringComparison.OrdinalIgnoreCase);
 
         if (isRootNode || isReplacementStationRoot)
             PopulateListView(e.Node);

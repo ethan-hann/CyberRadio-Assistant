@@ -19,7 +19,6 @@
 using AetherUtils.Core.Extensions;
 using AetherUtils.Core.Logging;
 using RadioExt_Helper.models;
-using System;
 using Xabe.FFmpeg;
 using Xabe.FFmpeg.Downloader;
 
@@ -35,6 +34,8 @@ public sealed class AudioConverter
 {
     private static AudioConverter? _instance;
     private static readonly object Lock = new();
+
+    private int _initializeAttempts = 1;
 
     private AudioConverter()
     {
@@ -80,8 +81,6 @@ public sealed class AudioConverter
     /// </summary>
     public event EventHandler<(string file, bool success, string messageOrOutputPath)>? ConversionCompleted;
 
-    private int _initializeAttempts = 1;
-
     /// <summary>
     ///     Ensures FFmpeg binaries are downloaded & paths are set.
     /// </summary>
@@ -92,11 +91,12 @@ public sealed class AudioConverter
 
         if (_initializeAttempts > 5)
         {
-            messages.Add("Reached max number of attempts during initialize of AudioConvertor. This means FFMpeg might not have downloaded correctly.");
+            messages.Add(
+                "Reached max number of attempts during initialize of AudioConvertor. This means FFMpeg might not have downloaded correctly.");
             messages.Add("Make sure you have an internet connection and try again.");
             return messages;
         }
-        
+
         var logger = AuLogger.GetCurrentLogger<AudioConverter>("InitializeAsync");
         try
         {
@@ -133,11 +133,9 @@ public sealed class AudioConverter
         List<string> messages = new();
         try
         {
-            WorkingDirectory = Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+            WorkingDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
                 "RadioExt-Helper", "ffmpeg");
-            ConvertedDirectory = Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+            ConvertedDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
                 "RadioExt-Helper", "converted-audio");
 
             Directory.CreateDirectory(WorkingDirectory!);
@@ -186,7 +184,7 @@ public sealed class AudioConverter
     ///     anyway.
     /// </param>
     /// <returns></returns>
-        public async Task<string?> ConvertAsync(ConvertCandidate candidate, bool byPassNeedsConversionCheck,
+    public async Task<string?> ConvertAsync(ConvertCandidate candidate, bool byPassNeedsConversionCheck,
         CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(candidate);
@@ -265,8 +263,7 @@ public sealed class AudioConverter
             conversion.SetOutput(normalizedOutputPath);
             conversion.SetOverwriteOutput(true);
 
-            conversion.OnProgress += (_, prog) =>
-                ConversionProgress?.Invoke(this, (candidate.InputPath, prog.Percent));
+            conversion.OnProgress += (_, prog) => ConversionProgress?.Invoke(this, (candidate.InputPath, prog.Percent));
 
             await conversion.Start(cancellationToken).ConfigureAwait(false);
 

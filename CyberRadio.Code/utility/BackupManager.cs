@@ -35,8 +35,6 @@ public class BackupManager(CompressionLevel level)
     private const string ExternalPathsEntryName = "externalPaths.txt";
     private const string DeduplicationMapEntryName = "deduplicationMap.txt";
 
-    private readonly System.IO.Compression.CompressionLevel _zipCompressionLevel = MapZipCompressionLevel(level);
-
     /// <summary>
     ///     Dictionary containing the mapping between compression levels and their corresponding compression ratios.
     /// </summary>
@@ -54,6 +52,8 @@ public class BackupManager(CompressionLevel level)
         { CompressionLevel.Ultimate, 0.5 }
     };
 
+    private readonly System.IO.Compression.CompressionLevel _zipCompressionLevel = MapZipCompressionLevel(level);
+
     private bool _isCancelling;
 
     /// <summary>
@@ -66,12 +66,12 @@ public class BackupManager(CompressionLevel level)
         return level switch
         {
             CompressionLevel.None => System.IO.Compression.CompressionLevel.NoCompression,
-            CompressionLevel.Fastest or CompressionLevel.Fast or CompressionLevel.SuperFast =>
-                System.IO.Compression.CompressionLevel.Fastest,
-            CompressionLevel.Normal or CompressionLevel.High or CompressionLevel.Maximum =>
-                System.IO.Compression.CompressionLevel.Optimal,
-            CompressionLevel.Ultra or CompressionLevel.Extreme or CompressionLevel.Ultimate =>
-                System.IO.Compression.CompressionLevel.SmallestSize,
+            CompressionLevel.Fastest or CompressionLevel.Fast or CompressionLevel.SuperFast => System.IO.Compression
+                .CompressionLevel.Fastest,
+            CompressionLevel.Normal or CompressionLevel.High or CompressionLevel.Maximum => System.IO.Compression
+                .CompressionLevel.Optimal,
+            CompressionLevel.Ultra or CompressionLevel.Extreme or CompressionLevel.Ultimate => System.IO.Compression
+                .CompressionLevel.SmallestSize,
             _ => System.IO.Compression.CompressionLevel.Optimal
         };
     }
@@ -88,7 +88,8 @@ public class BackupManager(CompressionLevel level)
         return Convert.ToHexString(hashBytes);
     }
 
-    private static string ResolveDeduplicatedEntryPath(string entryPath, IReadOnlyDictionary<string, string> deduplicationMap)
+    private static string ResolveDeduplicatedEntryPath(string entryPath,
+        IReadOnlyDictionary<string, string> deduplicationMap)
     {
         var current = NormalizeEntryPath(entryPath);
         HashSet<string> visited = new(StringComparer.OrdinalIgnoreCase);
@@ -213,11 +214,8 @@ public class BackupManager(CompressionLevel level)
                 }
 
                 FileInfo fileInfo = new(file);
-                previews.Add(new FilePreview
-                {
-                    FileName = PathHelper.SanitizePath(previewPath),
-                    Size = fileInfo.Length
-                });
+                previews.Add(
+                    new FilePreview { FileName = PathHelper.SanitizePath(previewPath), Size = fileInfo.Length });
 
                 if (_isCancelling) return;
                 PreviewProgressChanged?.Invoke((int)((float)previews.Count / files.Length * 100));
@@ -420,11 +418,7 @@ public class BackupManager(CompressionLevel level)
                     continue;
                 }
 
-                FilePreview preview = new()
-                {
-                    FileName = entry.FullName,
-                    Size = entry.Length
-                };
+                FilePreview preview = new() { FileName = entry.FullName, Size = entry.Length };
 
                 previews.Add(preview);
                 totalSize += entry.Length;
@@ -447,11 +441,7 @@ public class BackupManager(CompressionLevel level)
                 var resolvedSource = ResolveDeduplicatedEntryPath(sourceEntry, deduplicationMap);
                 entrySizes.TryGetValue(resolvedSource, out var sourceSize);
 
-                FilePreview preview = new()
-                {
-                    FileName = deduplicatedEntry,
-                    Size = sourceSize
-                };
+                FilePreview preview = new() { FileName = deduplicatedEntry, Size = sourceSize };
 
                 previews.Add(preview);
                 totalSize += sourceSize;
@@ -649,16 +639,13 @@ public class BackupManager(CompressionLevel level)
 
     private static IEnumerable<string> GetAdditionalStationSongFiles()
     {
-        return StationManager.Instance.StationsAsList
-            .SelectMany(station => station.TrackedObject.Songs)
-            .Select(song => song.FilePath)
-            .Where(filePath => !string.IsNullOrEmpty(filePath) && File.Exists(filePath))!;
+        return StationManager.Instance.StationsAsList.SelectMany(station => station.TrackedObject.Songs)
+            .Select(song => song.FilePath).Where(filePath => !string.IsNullOrEmpty(filePath) && File.Exists(filePath))!;
     }
 
     private static IEnumerable<string> GetReplacementStationSongFiles()
     {
-        return StationManager.Instance.ReplacementStationsAsList
-            .SelectMany(station => station.TrackedObject.Tracks)
+        return StationManager.Instance.ReplacementStationsAsList.SelectMany(station => station.TrackedObject.Tracks)
             .Select(track => track.ReplacementFilePath)
             .Where(filePath => !string.IsNullOrEmpty(filePath) && File.Exists(filePath))!;
     }
@@ -674,11 +661,9 @@ public class BackupManager(CompressionLevel level)
         {
             var replacedStationsPath = Path.Combine(stagingPath, "replaced-stations");
 
-            return FileHelper.SafeEnumerateFiles(stagingPath, "*.*", SearchOption.AllDirectories)
-                .Where(file =>
-                    PathHelper.IsSubPath(replacedStationsPath, file) ||
-                    !StationManager.Instance.ValidAudioExtensions.Contains(Path.GetExtension(file)))
-                .ToArray();
+            return FileHelper.SafeEnumerateFiles(stagingPath, "*.*", SearchOption.AllDirectories).Where(file =>
+                PathHelper.IsSubPath(replacedStationsPath, file) ||
+                !StationManager.Instance.ValidAudioExtensions.Contains(Path.GetExtension(file))).ToArray();
         }
         catch (Exception ex)
         {

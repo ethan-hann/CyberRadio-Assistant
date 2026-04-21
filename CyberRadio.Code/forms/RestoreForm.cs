@@ -256,9 +256,7 @@ public partial class RestoreForm : Form
                     var imageKey = GetImageKey(part, isDirectory);
                     TreeNode node = new(part)
                     {
-                        Tag = new List<FilePreview>(),
-                        ImageKey = imageKey,
-                        SelectedImageKey = imageKey
+                        Tag = new List<FilePreview>(), ImageKey = imageKey, SelectedImageKey = imageKey
                     };
 
                     currentNodeCollection.Add(node);
@@ -272,7 +270,7 @@ public partial class RestoreForm : Form
                 currentNodeCollection = currentNode.Nodes;
             }
 
-            TreeNode? targetNode = currentNode?.Parent;
+            var targetNode = currentNode?.Parent;
             if (parts.Length >= 3 && parts[0].Equals("replaced-stations", StringComparison.OrdinalIgnoreCase))
             {
                 var replacedStationsNode = tvFiles.Nodes.Cast<TreeNode>()
@@ -315,12 +313,10 @@ public partial class RestoreForm : Form
 
                     var size = ((ulong)preview.Size).FormatSize();
 
-                    lvFilePreviews.Items.Add(new ListViewItem(
-                        [
-                            displayFileName ?? string.Empty,
-                            size
-                        ])
-                        { Tag = preview });
+                    lvFilePreviews.Items.Add(new ListViewItem([
+                        displayFileName ?? string.Empty,
+                        size
+                    ]) { Tag = preview });
                 }
 
             lvFilePreviews.ResizeColumns();
@@ -387,8 +383,7 @@ public partial class RestoreForm : Form
     private void tvFiles_AfterSelect(object sender, TreeViewEventArgs e)
     {
         var isRootNode = e.Node?.Parent == null;
-        var isReplacementStationRoot = e.Node?.Parent != null &&
-                                       e.Node.Parent.Parent == null &&
+        var isReplacementStationRoot = e.Node?.Parent != null && e.Node.Parent.Parent == null &&
                                        e.Node.Parent.Text.Equals("replaced-stations",
                                            StringComparison.OrdinalIgnoreCase);
 

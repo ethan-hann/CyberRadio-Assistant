@@ -69,10 +69,7 @@ public partial class IconLogViewerControl : UserControl, IUserControl
     {
         try
         {
-            FileInfo fileInfo = new(_logFilePath)
-            {
-                IsReadOnly = false
-            };
+            FileInfo fileInfo = new(_logFilePath) { IsReadOnly = false };
 
             //Remove the read-only flags
             File.SetAttributes(fileInfo.FullName, FileAttributes.Normal);
@@ -88,8 +85,7 @@ public partial class IconLogViewerControl : UserControl, IUserControl
                 _filteredLogLines = [];
             else
                 _filteredLogLines = logLines
-                    .Where(line => line.Contains(Identifier, StringComparison.OrdinalIgnoreCase))
-                    .ToList();
+                    .Where(line => line.Contains(Identifier, StringComparison.OrdinalIgnoreCase)).ToList();
         }
         catch (Exception ex)
         {
@@ -145,7 +141,8 @@ public partial class IconLogViewerControl : UserControl, IUserControl
         var searchQuery = txtSearch.Text.ToLower();
         foreach (DataGridViewRow row in dgvLogs.Rows)
         {
-            var isVisible = row.Cells[1]?.Value?.ToString()?.ToLower().Contains(searchQuery, StringComparison.CurrentCultureIgnoreCase);
+            var isVisible = row.Cells[1]?.Value?.ToString()?.ToLower()
+                .Contains(searchQuery, StringComparison.CurrentCultureIgnoreCase);
             row.Visible = isVisible ?? false;
         }
     }

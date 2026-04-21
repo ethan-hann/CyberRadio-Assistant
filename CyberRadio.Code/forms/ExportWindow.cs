@@ -41,18 +41,18 @@ public partial class ExportWindow : Form
     private readonly ImageList _imageList = new();
 
     private readonly Json<MetaData> _metaDataJson = new();
-    private readonly Json<List<Song>> _songListJson = new();
     private readonly Json<ReplacementStation> _replacementJson = new();
+    private readonly List<TrackableObject<ReplacementStation>> _replacementStationsToExport;
+    private readonly Json<List<Song>> _songListJson = new();
 
     private readonly List<TrackableObject<AdditionalStation>> _stationsToExport;
-    private readonly List<TrackableObject<ReplacementStation>> _replacementStationsToExport;
 
     private readonly string _statusString = Strings.ExportingStationStatus;
 
     private DirectoryCopier? _dirCopier;
-    private bool _exportToGameComplete;
-    private bool _exportNewStationsToStagingComplete;
     private bool _exportAdditionalStationsToStagingComplete;
+    private bool _exportNewStationsToStagingComplete;
+    private bool _exportToGameComplete;
     private bool _exportToStagingComplete;
     private bool _isCancelling;
 
@@ -66,10 +66,8 @@ public partial class ExportWindow : Form
 
         //Inactivate replacement stations that have no tracks
         foreach (var station in StationManager.Instance.ReplacementStationsAsBindingList)
-        {
             if (station.TrackedObject.Tracks.Count <= 0)
                 station.TrackedObject.IsActive = false;
-        }
 
         _replacementStationsToExport = StationManager.Instance.ReplacementStationsAsList;
         SetImageList();
@@ -82,26 +80,32 @@ public partial class ExportWindow : Form
     private static bool ShouldAutoExportToGame => (bool)(GlobalData.ConfigManager.Get("autoExportToGame") ?? false);
 
     /// <summary>
-    /// Occurs when the export operation to the staging area has completed.
+    ///     Occurs when the export operation to the staging area has completed.
     /// </summary>
-    /// <remarks>Subscribers can use this event to perform actions after data has been exported to staging.
-    /// The event is raised regardless of whether the export was successful or failed; check event arguments for details
-    /// if provided.</remarks>
+    /// <remarks>
+    ///     Subscribers can use this event to perform actions after data has been exported to staging.
+    ///     The event is raised regardless of whether the export was successful or failed; check event arguments for details
+    ///     if provided.
+    /// </remarks>
     public event EventHandler? OnExportToStagingComplete;
 
     /// <summary>
-    /// Occurs when the process of exporting additional stations to the staging area has completed.
+    ///     Occurs when the process of exporting additional stations to the staging area has completed.
     /// </summary>
-    /// <remarks>Subscribers can use this event to perform actions after the export operation finishes. The
-    /// event is raised regardless of whether the export succeeded or failed.</remarks>
+    /// <remarks>
+    ///     Subscribers can use this event to perform actions after the export operation finishes. The
+    ///     event is raised regardless of whether the export succeeded or failed.
+    /// </remarks>
     public event EventHandler? OnExportAdditionalStationsToStagingComplete;
 
     /// <summary>
-    /// Occurs when the export operation to the game has completed.
+    ///     Occurs when the export operation to the game has completed.
     /// </summary>
-    /// <remarks>Subscribers can use this event to perform actions after the export process finishes, such as
-    /// updating the user interface or notifying the user. The event is raised regardless of whether the export
-    /// succeeded or failed; check event arguments for details if available.</remarks>
+    /// <remarks>
+    ///     Subscribers can use this event to perform actions after the export process finishes, such as
+    ///     updating the user interface or notifying the user. The event is raised regardless of whether the export
+    ///     succeeded or failed; check event arguments for details if available.
+    /// </remarks>
     public event EventHandler? OnExportToGameComplete;
 
     /// <summary>
@@ -168,7 +172,8 @@ public partial class ExportWindow : Form
             if (e.Item == null || lvReplacedStations.SmallImageList == null ||
                 e.Item.Tag is not TrackableObject<ReplacementStation> replacedStation) return;
 
-            var image = lvReplacedStations.SmallImageList.Images[replacedStation.TrackedObject.IsActive ? "enabled" : "disabled"];
+            var image = lvReplacedStations.SmallImageList.Images[
+                replacedStation.TrackedObject.IsActive ? "enabled" : "disabled"];
             if (image == null) return;
 
             var iconX = e.Bounds.Left + (e.Bounds.Width - image.Width) / 2;
@@ -218,30 +223,30 @@ public partial class ExportWindow : Form
 
         lvStations.SuspendLayout();
         foreach (var lvItem in from station in _stationsToExport
-                               let isActive = station.TrackedObject.GetStatus()
-                               let customIconString = station.TrackedObject.CustomIcon.UseCustom
-                                   ? Strings.CustomIcon
-                                   : station.TrackedObject.MetaData.Icon
-                               let songString = station.TrackedObject.MetaData.StreamInfo.IsStream
-                                   ? Strings.IsStream
-                                   : station.TrackedObject.Songs.Count.ToString()
-                               let streamString = station.TrackedObject.MetaData.StreamInfo.IsStream
-                                   ? station.TrackedObject.MetaData.StreamInfo.StreamUrl
-                                   : Strings.UsingSongs
-                               let proposedPath = isActive
-                                   ? Path.Combine(radioExtPath, station.TrackedObject.MetaData.DisplayName)
-                                   : Strings.DisabledStation
-                               select new ListViewItem([
-                                   string.Empty, // Placeholder for the icon column
+                 let isActive = station.TrackedObject.GetStatus()
+                 let customIconString =
+                     station.TrackedObject.CustomIcon.UseCustom
+                         ? Strings.CustomIcon
+                         : station.TrackedObject.MetaData.Icon
+                 let songString =
+                     station.TrackedObject.MetaData.StreamInfo.IsStream
+                         ? Strings.IsStream
+                         : station.TrackedObject.Songs.Count.ToString()
+                 let streamString =
+                     station.TrackedObject.MetaData.StreamInfo.IsStream
+                         ? station.TrackedObject.MetaData.StreamInfo.StreamUrl
+                         : Strings.UsingSongs
+                 let proposedPath = isActive
+                     ? Path.Combine(radioExtPath, station.TrackedObject.MetaData.DisplayName)
+                     : Strings.DisabledStation
+                 select new ListViewItem([
+                     string.Empty, // Placeholder for the icon column
                      station.TrackedObject.MetaData.DisplayName,
                      customIconString ?? string.Empty,
                      songString ?? string.Empty,
                      streamString ?? string.Empty,
                      proposedPath ?? string.Empty
-                               ])
-                               {
-                                   Tag = station
-                               })
+                 ]) { Tag = station })
             lvStations.Items.Add(lvItem);
 
         lvStations.ResizeColumns();
@@ -249,20 +254,19 @@ public partial class ExportWindow : Form
 
         lvReplacedStations.SuspendLayout();
         foreach (var lvItem in from replacedStation in _replacementStationsToExport
-                               let isActive = replacedStation.TrackedObject.IsActive
-                               let replacedTracksCount = replacedStation.TrackedObject.Tracks.Count
-                               let proposedPath = isActive
-                                   ? Path.Combine(modArchivePath, $"{replacedStation.TrackedObject.VanillaStation.StationName}.archive")
-                                   : Strings.DisabledStation
-                               select new ListViewItem([
-                                   string.Empty, // Placeholder for the icon column
-                     replacedStation.TrackedObject?.VanillaStation?.StationName ?? replacedStation.TrackedObject.DisplayName,
+                 let isActive = replacedStation.TrackedObject.IsActive
+                 let replacedTracksCount = replacedStation.TrackedObject.Tracks.Count
+                 let proposedPath = isActive
+                     ? Path.Combine(modArchivePath,
+                         $"{replacedStation.TrackedObject.VanillaStation.StationName}.archive")
+                     : Strings.DisabledStation
+                 select new ListViewItem([
+                     string.Empty, // Placeholder for the icon column
+                     replacedStation.TrackedObject?.VanillaStation?.StationName ??
+                     replacedStation.TrackedObject.DisplayName,
                      replacedTracksCount.ToString(),
                      proposedPath ?? string.Empty
-                               ])
-                               {
-                                   Tag = replacedStation
-                               })
+                 ]) { Tag = replacedStation })
             lvReplacedStations.Items.Add(lvItem);
 
         lvReplacedStations.ResizeColumns();
@@ -290,7 +294,8 @@ public partial class ExportWindow : Form
     {
         if (lvReplacedStations.Items.Count > 0)
         {
-            var result = MessageBox.Show(this, Strings.ExportReplacementStationsPackWarning, Strings.Warning, MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
+            var result = MessageBox.Show(this, Strings.ExportReplacementStationsPackWarning, Strings.Warning,
+                MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
             if (result != DialogResult.OK) return;
         }
 
@@ -339,8 +344,7 @@ public partial class ExportWindow : Form
             bgWorkerExportReplacedStations.CancelAsync();
         }
 
-        if (!bgWorkerExportReplacedStationsGame.CancellationPending &&
-            bgWorkerExportReplacedStationsGame.IsBusy)
+        if (!bgWorkerExportReplacedStationsGame.CancellationPending && bgWorkerExportReplacedStationsGame.IsBusy)
         {
             _isCancelling = true;
             bgWorkerExportReplacedStationsGame.CancelAsync();
@@ -355,9 +359,7 @@ public partial class ExportWindow : Form
     {
         if (!string.IsNullOrEmpty(PathHelper.GetRadioExtPath(GameBasePath))) return true;
 
-        MessageBox.Show(Strings.NoRadioExtMsg,
-            Strings.NoModInstalled,
-            MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Strings.NoRadioExtMsg, Strings.NoModInstalled, MessageBoxButtons.OK, MessageBoxIcon.Error);
         return false;
     }
 
@@ -420,16 +422,14 @@ public partial class ExportWindow : Form
                         CopySongFiles(songDirectoryMap, newStationPath, station);
 
                         if (!CreateSongListJson(newStationPath, station))
-                            AuLogger.GetCurrentLogger<ExportWindow>("BG_ExportStaging")
-                                .Error(
-                                    "Couldn't save the songs.sgls file. This means that CRA won't know where your station's songs are located.");
+                            AuLogger.GetCurrentLogger<ExportWindow>("BG_ExportStaging").Error(
+                                "Couldn't save the songs.sgls file. This means that CRA won't know where your station's songs are located.");
                     }
                     else
                     {
                         //Remove the songs.sgls file(s) if it exists
                         var songJsons = FileHelper
-                            .SafeEnumerateFiles(newStationPath, "*.sgls", SearchOption.AllDirectories)
-                            .ToList();
+                            .SafeEnumerateFiles(newStationPath, "*.sgls", SearchOption.AllDirectories).ToList();
                         foreach (var file in songJsons.Where(File.Exists))
                             File.Delete(file);
                     }
@@ -437,16 +437,14 @@ public partial class ExportWindow : Form
                     if (station.TrackedObject.Icons.Count >= 1)
                     {
                         if (!CreateIconListJson(newStationPath, station))
-                            AuLogger.GetCurrentLogger<ExportWindow>("BG_ExportStaging")
-                                .Error(
-                                    "Couldn't save the icons.json file. This means that CRA won't know where your station's icons are located.");
+                            AuLogger.GetCurrentLogger<ExportWindow>("BG_ExportStaging").Error(
+                                "Couldn't save the icons.json file. This means that CRA won't know where your station's icons are located.");
                     }
                     else
                     {
                         //Remove the icons.icls file(s) if it exists
                         var iconJsons = FileHelper
-                            .SafeEnumerateFiles(newStationPath, "*.icls", SearchOption.AllDirectories)
-                            .ToList();
+                            .SafeEnumerateFiles(newStationPath, "*.icls", SearchOption.AllDirectories).ToList();
                         foreach (var file in iconJsons.Where(File.Exists))
                             File.Delete(file);
 
@@ -455,9 +453,8 @@ public partial class ExportWindow : Form
                     }
 
                     if (!CreateMetaDataJson(newStationPath, station))
-                        AuLogger.GetCurrentLogger<ExportWindow>("BG_ExportStaging")
-                            .Error(
-                                "Couldn't save the metadata.json file. This means that RadioExt will not work with this station!");
+                        AuLogger.GetCurrentLogger<ExportWindow>("BG_ExportStaging").Error(
+                            "Couldn't save the metadata.json file. This means that RadioExt will not work with this station!");
                 }
                 catch (Exception ex)
                 {
@@ -490,13 +487,13 @@ public partial class ExportWindow : Form
         Dictionary<string, string> songDirectoryMap = new(StringComparer.OrdinalIgnoreCase);
 
         foreach (var station in stations)
-            foreach (var song in station.TrackedObject.Songs)
-            {
-                var songDirectory = existingDirectories
-                    .FirstOrDefault(dir => song.FilePath.StartsWith(dir, StringComparison.OrdinalIgnoreCase));
+        foreach (var song in station.TrackedObject.Songs)
+        {
+            var songDirectory = existingDirectories.FirstOrDefault(dir =>
+                song.FilePath.StartsWith(dir, StringComparison.OrdinalIgnoreCase));
 
-                if (!string.IsNullOrEmpty(songDirectory)) songDirectoryMap[song.FilePath] = songDirectory;
-            }
+            if (!string.IsNullOrEmpty(songDirectory)) songDirectoryMap[song.FilePath] = songDirectory;
+        }
 
         return songDirectoryMap;
     }
@@ -564,10 +561,8 @@ public partial class ExportWindow : Form
             _stationsToExport.Select(station => station.TrackedObject.MetaData.DisplayName),
             StringComparer.OrdinalIgnoreCase);
 
-        var directoriesToDelete = existingDirectories
-            .Where(dir => !stationNames.Contains(Path.GetFileName(dir)))
-            .Where(dir => !StationManager.Instance.IsProtectedFolder(dir))
-            .ToList();
+        var directoriesToDelete = existingDirectories.Where(dir => !stationNames.Contains(Path.GetFileName(dir)))
+            .Where(dir => !StationManager.Instance.IsProtectedFolder(dir)).ToList();
 
         foreach (var directory in directoriesToDelete)
             try
@@ -584,7 +579,7 @@ public partial class ExportWindow : Form
     }
 
     /// <summary>
-    /// Removes deleted replacement station directories from the staging path.
+    ///     Removes deleted replacement station directories from the staging path.
     /// </summary>
     /// <param name="existingDirectories"></param>
     private void RemoveDeletedReplacementStations(List<string> existingDirectories)
@@ -593,10 +588,8 @@ public partial class ExportWindow : Form
             _replacementStationsToExport.Select(station => station.TrackedObject.VanillaStation.StationName),
             StringComparer.OrdinalIgnoreCase);
 
-        var directoriesToDelete = existingDirectories
-            .Where(dir => !stationNames.Contains(Path.GetFileName(dir)))
-            .Where(dir => !StationManager.Instance.IsProtectedFolder(dir))
-            .ToList();
+        var directoriesToDelete = existingDirectories.Where(dir => !stationNames.Contains(Path.GetFileName(dir)))
+            .Where(dir => !StationManager.Instance.IsProtectedFolder(dir)).ToList();
 
         foreach (var directory in directoriesToDelete)
             try
@@ -613,12 +606,17 @@ public partial class ExportWindow : Form
     }
 
     /// <summary>
-    /// Creates a directory for the specified station within the staging path and returns the full path to the created
-    /// directory.
+    ///     Creates a directory for the specified station within the staging path and returns the full path to the created
+    ///     directory.
     /// </summary>
-    /// <remarks>If the staging path is not set or is empty, no directory is created and an empty string is
-    /// returned. The directory is created using the station's display name from its metadata.</remarks>
-    /// <param name="station">A trackable object containing the station metadata used to determine the directory name. Cannot be null.</param>
+    /// <remarks>
+    ///     If the staging path is not set or is empty, no directory is created and an empty string is
+    ///     returned. The directory is created using the station's display name from its metadata.
+    /// </remarks>
+    /// <param name="station">
+    ///     A trackable object containing the station metadata used to determine the directory name. Cannot
+    ///     be null.
+    /// </param>
     /// <returns>The full path to the created station directory if the staging path is set; otherwise, an empty string.</returns>
     private static string CreateStationDirectory(TrackableObject<AdditionalStation> station)
     {
@@ -630,15 +628,19 @@ public partial class ExportWindow : Form
     }
 
     /// <summary>
-    /// Creates a replacement directory for the specified station in the staging path, if available.
+    ///     Creates a replacement directory for the specified station in the staging path, if available.
     /// </summary>
-    /// <remarks>If the staging path is not specified, the method returns an empty string. The directory is
-    /// created using the tracked object's synchronization logic.</remarks>
+    /// <remarks>
+    ///     If the staging path is not specified, the method returns an empty string. The directory is
+    ///     created using the tracked object's synchronization logic.
+    /// </remarks>
     /// <param name="station">A trackable wrapper containing the replacement station for which to create the directory.</param>
     /// <returns>The path to the created station directory if the staging path is set; otherwise, an empty string.</returns>
     private static string CreateStationDirectoryReplacement(TrackableObject<ReplacementStation> station)
     {
-        return string.IsNullOrEmpty(StagingPath) ? string.Empty : station.TrackedObject.SyncStagingFolder(StagingPath, true);
+        return string.IsNullOrEmpty(StagingPath)
+            ? string.Empty
+            : station.TrackedObject.SyncStagingFolder(StagingPath, true);
     }
 
     /// <summary>
@@ -654,7 +656,7 @@ public partial class ExportWindow : Form
     }
 
     /// <summary>
-    /// Creates a JSON metadata file for the specified replacement station.
+    ///     Creates a JSON metadata file for the specified replacement station.
     /// </summary>
     /// <param name="stationPath">The directory path where the replacement station's metadata file will be created.</param>
     /// <param name="station">A trackable object containing the replacement station data to serialize to JSON.</param>
@@ -720,7 +722,8 @@ public partial class ExportWindow : Form
         else
         {
             _exportNewStationsToStagingComplete = true;
-            _exportToStagingComplete = _exportNewStationsToStagingComplete && _exportAdditionalStationsToStagingComplete;
+            _exportToStagingComplete =
+                _exportNewStationsToStagingComplete && _exportAdditionalStationsToStagingComplete;
             pgExportProgress.Value = 0;
             OnExportToStagingComplete?.Invoke(this, EventArgs.Empty);
 
@@ -755,9 +758,8 @@ public partial class ExportWindow : Form
 
         var stagingPaths = FileHelper.SafeEnumerateDirectories(StagingPath).ToList();
 
-        var activeStationPaths = stagingPaths
-            .Where(path => activeStationNames.Any(name => path.Contains(name, StringComparison.OrdinalIgnoreCase)))
-            .ToList();
+        var activeStationPaths = stagingPaths.Where(path =>
+            activeStationNames.Any(name => path.Contains(name, StringComparison.OrdinalIgnoreCase))).ToList();
 
         CopyDirectoriesToGame(radiosPath, activeStationPaths);
         CopyIconsToGame(activeStations);
@@ -765,9 +767,8 @@ public partial class ExportWindow : Form
 
         var liveStationPaths = FileHelper.SafeEnumerateDirectories(radiosPath).ToList();
 
-        var inactiveStationPaths = liveStationPaths
-            .Where(path => !activeStationNames.Any(name => path.Contains(name, StringComparison.OrdinalIgnoreCase)))
-            .ToList();
+        var inactiveStationPaths = liveStationPaths.Where(path =>
+            !activeStationNames.Any(name => path.Contains(name, StringComparison.OrdinalIgnoreCase))).ToList();
 
         DeleteInactiveDirectories(inactiveStationPaths);
         DeleteInactiveStationIconsFromGame(inactiveStations);
@@ -815,12 +816,10 @@ public partial class ExportWindow : Form
         if (songs == null)
             return false;
 
-        var songPathsInSgls =
-            songs.Select(s => Path.Combine(targetPath, Path.GetFileName(s.FilePath))).ToList();
+        var songPathsInSgls = songs.Select(s => Path.Combine(targetPath, Path.GetFileName(s.FilePath))).ToList();
 
         // Delete songs not present in the .sgls file
-        var existingFiles = Directory.GetFiles(targetPath)
-            .Where(file => !Path.GetExtension(file).Equals(".sgls"))
+        var existingFiles = Directory.GetFiles(targetPath).Where(file => !Path.GetExtension(file).Equals(".sgls"))
             .Where(file => !Path.GetExtension(file).Equals(".icls"))
             .Where(file => !Path.GetExtension(file).Equals(".json"));
 
@@ -874,8 +873,8 @@ public partial class ExportWindow : Form
             var looseArchiveStagingPath = Path.Combine(StagingPath, "icons");
 
             if (!StationManager.Instance.IsProtectedFolder(looseArchiveStagingPath))
-                AuLogger.GetCurrentLogger<ExportWindow>("CopyIconsToGame")
-                    .Warn("The icons folder in the staging directory is not protected; it should be at this point!");
+                AuLogger.GetCurrentLogger<ExportWindow>("CopyIconsToGame").Warn(
+                    "The icons folder in the staging directory is not protected; it should be at this point!");
 
             // Ensure the game directory exists
             if (!Directory.Exists(looseArchiveGamePath))
@@ -886,17 +885,16 @@ public partial class ExportWindow : Form
             }
 
             //Get the active icon for each station based on the icons list
-            foreach (var station
-                     in activeStations.Where(station => station.TrackedObject.CustomIcon.UseCustom))
+            foreach (var station in activeStations.Where(station => station.TrackedObject.CustomIcon.UseCustom))
             {
                 DeleteAllStationIconsFromGame(station.TrackedObject.Icons);
 
                 var activeIcon = station.TrackedObject.Icons.FirstOrDefault(i => i.TrackedObject.IsActive);
                 if (activeIcon == null)
                 {
-                    AuLogger.GetCurrentLogger<ExportWindow>("CopyIconsToGame")
-                        .Warn($"Station {station.TrackedObject.MetaData.DisplayName} does not have an active icon!" +
-                              $"All previous station icons have been deleted from the game. If this is expected, no action is required. Otherwise, mark an icon as active to restore it.");
+                    AuLogger.GetCurrentLogger<ExportWindow>("CopyIconsToGame").Warn(
+                        $"Station {station.TrackedObject.MetaData.DisplayName} does not have an active icon!" +
+                        $"All previous station icons have been deleted from the game. If this is expected, no action is required. Otherwise, mark an icon as active to restore it.");
                     continue;
                 }
 
@@ -988,8 +986,8 @@ public partial class ExportWindow : Form
             var looseArchiveStagingPath = Path.Combine(StagingPath, "icons");
 
             if (!StationManager.Instance.IsProtectedFolder(looseArchiveStagingPath))
-                AuLogger.GetCurrentLogger<ExportWindow>("CopyIconsToGame")
-                    .Warn("The icons folder in the staging directory is not protected; it should be at this point!");
+                AuLogger.GetCurrentLogger<ExportWindow>("CopyIconsToGame").Warn(
+                    "The icons folder in the staging directory is not protected; it should be at this point!");
 
             //Get the active icon for each station based on the icons list
             foreach (var station in activeStations.Where(station => station.TrackedObject.CustomIcon.UseCustom))
@@ -997,9 +995,9 @@ public partial class ExportWindow : Form
                 var activeIcon = station.TrackedObject.Icons.FirstOrDefault(i => i.TrackedObject.IsActive);
                 if (activeIcon == null)
                 {
-                    AuLogger.GetCurrentLogger<ExportWindow>("DeleteInactiveIcons")
-                        .Warn($"Station {station.TrackedObject.MetaData.DisplayName} does not have an active icon!" +
-                              $"All previous station icons have been deleted from the game. If this is expected, no action is required. Otherwise, mark an icon as active to restore it.");
+                    AuLogger.GetCurrentLogger<ExportWindow>("DeleteInactiveIcons").Warn(
+                        $"Station {station.TrackedObject.MetaData.DisplayName} does not have an active icon!" +
+                        $"All previous station icons have been deleted from the game. If this is expected, no action is required. Otherwise, mark an icon as active to restore it.");
                     DeleteAllStationIconsFromGame(station.TrackedObject.Icons);
                     continue;
                 }
@@ -1021,8 +1019,8 @@ public partial class ExportWindow : Form
                     var fileHash = HashUtils.ComputeSha256Hash(expectedGamePath, true);
                     if (!HashUtils.CompareSha256Hash(fileHash, iconHash))
                     {
-                        AuLogger.GetCurrentLogger<ExportWindow>("DeleteInactiveIcons")
-                            .Warn($"Icon hash mismatch for station: {station.TrackedObject.MetaData.DisplayName}");
+                        AuLogger.GetCurrentLogger<ExportWindow>("DeleteInactiveIcons").Warn(
+                            $"Icon hash mismatch for station: {station.TrackedObject.MetaData.DisplayName}");
                         continue;
                     }
 
@@ -1152,7 +1150,8 @@ public partial class ExportWindow : Form
         try
         {
             ToggleButtons();
-            var existingDirectories = FileHelper.SafeEnumerateDirectories(Path.Combine(StagingPath, "replaced-stations")).ToList();
+            var existingDirectories =
+                FileHelper.SafeEnumerateDirectories(Path.Combine(StagingPath, "replaced-stations")).ToList();
             existingDirectories.RemoveAll(dir => StationManager.Instance.IsProtectedFolder(dir));
 
             for (var i = 0; i < _replacementStationsToExport.Count; i++)
@@ -1176,9 +1175,8 @@ public partial class ExportWindow : Form
 
                     if (!CreateReplacementStationJson(stationPath, station))
                     {
-                        AuLogger.GetCurrentLogger<ExportWindow>("BG_ExportReplacedStations")
-                            .Error(
-                                $"Failed to create replacement station JSON for station: {station.TrackedObject.DisplayName}");
+                        AuLogger.GetCurrentLogger<ExportWindow>("BG_ExportReplacedStations").Error(
+                            $"Failed to create replacement station JSON for station: {station.TrackedObject.DisplayName}");
                         bgWorkerExportReplacedStations.CancelAsync();
                     }
 
@@ -1186,40 +1184,40 @@ public partial class ExportWindow : Form
                     if (bgWorkerExportReplacedStations.CancellationPending)
                         return;
 
-                    var archive = AudioManager.Instance.GenerateAudioArchiveAsync(station.TrackedObject.VanillaStation.StationName,
-                        station.TrackedObject.Tracks).Result;
+                    var archive = AudioManager.Instance
+                        .GenerateAudioArchiveAsync(station.TrackedObject.VanillaStation.StationName,
+                            station.TrackedObject.Tracks).Result;
                     if (archive == null)
                     {
-                        AuLogger.GetCurrentLogger<ExportWindow>("BG_ExportReplacedStations")
-                            .Error($"Failed to create audio archive for replacement station: {station.TrackedObject.DisplayName}");
+                        AuLogger.GetCurrentLogger<ExportWindow>("BG_ExportReplacedStations").Error(
+                            $"Failed to create audio archive for replacement station: {station.TrackedObject.DisplayName}");
                         bgWorkerExportReplacedStations.CancelAsync();
                         return;
                     }
 
                     //Copy archive to station directory
-                    var archivePath = Path.Combine(stationPath, $"{station.TrackedObject.VanillaStation.StationName}.archive");
+                    var archivePath = Path.Combine(stationPath,
+                        $"{station.TrackedObject.VanillaStation.StationName}.archive");
                     File.Copy(archive.ArchivePath, archivePath, true);
 
-                    AuLogger.GetCurrentLogger<ExportWindow>("BG_ExportReplacedStations")
-                        .Info($"Created audio archive for replacement station: {station.TrackedObject.DisplayName}");
+                    AuLogger.GetCurrentLogger<ExportWindow>("BG_ExportReplacedStations").Info(
+                        $"Created audio archive for replacement station: {station.TrackedObject.DisplayName}");
                 }
                 catch (Exception ex)
                 {
-                    AuLogger.GetCurrentLogger<ExportWindow>("BG_ExportReplacedStations")
-                        .Error(ex,
-                            $"Failed to export replacement station: {station.TrackedObject.DisplayName}");
+                    AuLogger.GetCurrentLogger<ExportWindow>("BG_ExportReplacedStations").Error(ex,
+                        $"Failed to export replacement station: {station.TrackedObject.DisplayName}");
                 }
             }
 
             RemoveDeletedReplacementStations(existingDirectories);
-            AuLogger.GetCurrentLogger<ExportWindow>("BG_ExportReplacedStations")
-                .Info(
-                    $"Exported {_replacementStationsToExport.Count} replacement stations to staging directory: {StagingPath}");
+            AuLogger.GetCurrentLogger<ExportWindow>("BG_ExportReplacedStations").Info(
+                $"Exported {_replacementStationsToExport.Count} replacement stations to staging directory: {StagingPath}");
         }
         catch (Exception ex)
         {
-            AuLogger.GetCurrentLogger<ExportWindow>("BG_ExportReplacedStations")
-                .Error(ex, "An error occurred while exporting replacement stations to staging directory.");
+            AuLogger.GetCurrentLogger<ExportWindow>("BG_ExportReplacedStations").Error(ex,
+                "An error occurred while exporting replacement stations to staging directory.");
         }
     }
 
@@ -1232,11 +1230,14 @@ public partial class ExportWindow : Form
     private void bgWorkerExportReplacedStations_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
     {
         if (_isCancelling)
+        {
             Reset();
+        }
         else
         {
             _exportAdditionalStationsToStagingComplete = true;
-            _exportToStagingComplete = _exportNewStationsToStagingComplete && _exportAdditionalStationsToStagingComplete;
+            _exportToStagingComplete =
+                _exportNewStationsToStagingComplete && _exportAdditionalStationsToStagingComplete;
             pgExportProgress.Value = 100;
             ToggleButtons();
             UpdateStatus(Strings.ExportCompleteStatus);
@@ -1289,8 +1290,8 @@ public partial class ExportWindow : Form
                     {
                         if (!File.Exists(stagedArchivePath))
                         {
-                            AuLogger.GetCurrentLogger<ExportWindow>("BG_ExportReplacedStationsGame")
-                                .Warn($"Archive file was not found in staging for replacement station: {station.TrackedObject.DisplayName}");
+                            AuLogger.GetCurrentLogger<ExportWindow>("BG_ExportReplacedStationsGame").Warn(
+                                $"Archive file was not found in staging for replacement station: {station.TrackedObject.DisplayName}");
                             continue;
                         }
 
@@ -1307,20 +1308,19 @@ public partial class ExportWindow : Form
                 }
                 catch (Exception ex)
                 {
-                    AuLogger.GetCurrentLogger<ExportWindow>("BG_ExportReplacedStationsGame")
-                        .Error(ex,
-                            $"Failed to export replacement station archive to game: {station.TrackedObject.DisplayName}");
+                    AuLogger.GetCurrentLogger<ExportWindow>("BG_ExportReplacedStationsGame").Error(ex,
+                        $"Failed to export replacement station archive to game: {station.TrackedObject.DisplayName}");
                 }
             }
 
             var activeReplacementCount = _replacementStationsToExport.Count(s => s.TrackedObject.IsActive);
-            AuLogger.GetCurrentLogger<ExportWindow>("BG_ExportReplacedStationsGame")
-                .Info($"Exported {activeReplacementCount} replacement station archives to game directory: {gameArchivePath}");
+            AuLogger.GetCurrentLogger<ExportWindow>("BG_ExportReplacedStationsGame").Info(
+                $"Exported {activeReplacementCount} replacement station archives to game directory: {gameArchivePath}");
         }
         catch (Exception ex)
         {
-            AuLogger.GetCurrentLogger<ExportWindow>("BG_ExportReplacedStationsGame")
-                .Error(ex, "An error occurred while exporting replacement station archives to game directory.");
+            AuLogger.GetCurrentLogger<ExportWindow>("BG_ExportReplacedStationsGame").Error(ex,
+                "An error occurred while exporting replacement station archives to game directory.");
         }
     }
 
@@ -1360,10 +1360,7 @@ public partial class ExportWindow : Form
 
         var workers = new[]
         {
-            bgWorkerExport,
-            bgWorkerExportReplacedStations,
-            bgWorkerExportGame,
-            bgWorkerExportReplacedStationsGame
+            bgWorkerExport, bgWorkerExportReplacedStations, bgWorkerExportGame, bgWorkerExportReplacedStationsGame
         };
 
         var isExportInProgress = workers.Any(worker => worker.IsBusy);
@@ -1387,7 +1384,8 @@ public partial class ExportWindow : Form
             var isStagingExportBusy = bgWorkerExport.IsBusy || bgWorkerExportReplacedStations.IsBusy;
             var isGameExportBusy = bgWorkerExportGame.IsBusy || bgWorkerExportReplacedStationsGame.IsBusy;
 
-            btnExportToGame.Enabled = !isStagingExportBusy && !isGameExportBusy && _exportToStagingComplete && !_exportToGameComplete;
+            btnExportToGame.Enabled = !isStagingExportBusy && !isGameExportBusy && _exportToStagingComplete &&
+                                      !_exportToGameComplete;
             btnExportToStaging.Enabled = !isStagingExportBusy && !isGameExportBusy && !_exportToStagingComplete;
             btnCancel.Visible = isStagingExportBusy || isGameExportBusy;
         });

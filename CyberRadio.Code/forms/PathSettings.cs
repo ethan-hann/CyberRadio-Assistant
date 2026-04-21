@@ -96,18 +96,12 @@ public partial class PathSettings : Form
     /// </summary>
     private void SetLabels()
     {
-        lblGameBasePath.Text = !GameBasePath.Equals(string.Empty)
-            ? GameBasePath
-            : Strings.GameBasePathPlaceholder;
+        lblGameBasePath.Text = !GameBasePath.Equals(string.Empty) ? GameBasePath : Strings.GameBasePathPlaceholder;
 
-        lblBackupPath.Text = !StagingPath.Equals(string.Empty)
-            ? StagingPath
-            : Strings.StagingPathPlaceholder;
+        lblBackupPath.Text = !StagingPath.Equals(string.Empty) ? StagingPath : Strings.StagingPathPlaceholder;
 
         var radioPath = PathHelper.GetRadioExtPath(GameBasePath);
-        lblRadioPath.Text = radioPath.Equals(string.Empty)
-            ? Strings.RadioExtPathPlaceholder
-            : radioPath;
+        lblRadioPath.Text = radioPath.Equals(string.Empty) ? Strings.RadioExtPathPlaceholder : radioPath;
     }
 
     /// <summary>
@@ -196,8 +190,7 @@ public partial class PathSettings : Form
             if (reason == null)
             {
                 MessageBox.Show(this, string.Format(Strings.StagingPathForbidden, stagingPath), Strings.Error,
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
                 AuLogger.GetCurrentLogger<PathSettings>("ChangeStagingPath")
                     .Warn("Staging path is within a forbidden path.");
                 return;

@@ -30,18 +30,18 @@ using WIG.Lib.Models.Audio;
 namespace RadioExt_Helper.user_controls;
 
 /// <summary>
-/// Represents an editor control for modifying replacement radio stations.
+///     Represents an editor control for modifying replacement radio stations.
 /// </summary>
 public sealed partial class ReplacementStationEditor : UserControl, IEditor
 {
     private readonly ImageList _imageList = new();
 
+    private readonly NoStationSelectedCtl _noSelectionControl = new() { Dock = DockStyle.Fill };
+
     private readonly BindingList<AudioTrack> _replacedTracks = [];
 
     private readonly Dictionary<AudioTrack, ReplacedTrackPropertiesCtl?> _replacementTrackMap = [];
     private readonly ImageList _tabImages = new();
-
-    private readonly NoStationSelectedCtl _noSelectionControl = new() { Dock = DockStyle.Fill };
 
     /// <summary>
     ///     Create a new ReplacementStationEditor for the specified replacement station.
@@ -57,14 +57,6 @@ public sealed partial class ReplacementStationEditor : UserControl, IEditor
 
         ReplacedStation = station;
     }
-
-    /// <summary>
-    /// Finalizes an instance of the ReplacementStationEditor class and performs cleanup operations before the object is
-    /// reclaimed by garbage collection.
-    /// </summary>
-    /// <remarks>This destructor unsubscribes from the ContentChanged event to help prevent memory leaks. It
-    /// is called automatically by the garbage collector and should not be invoked directly.</remarks>
-    ~ReplacementStationEditor() => tinyEditor.ContentChanged -= TinyEditor_ContentChanged;
 
     /// <inheritdoc />
     public Guid Id { get; set; } = Guid.NewGuid();
@@ -119,6 +111,19 @@ public sealed partial class ReplacementStationEditor : UserControl, IEditor
     }
 
     /// <summary>
+    ///     Finalizes an instance of the ReplacementStationEditor class and performs cleanup operations before the object is
+    ///     reclaimed by garbage collection.
+    /// </summary>
+    /// <remarks>
+    ///     This destructor unsubscribes from the ContentChanged event to help prevent memory leaks. It
+    ///     is called automatically by the garbage collector and should not be invoked directly.
+    /// </remarks>
+    ~ReplacementStationEditor()
+    {
+        tinyEditor.ContentChanged -= TinyEditor_ContentChanged;
+    }
+
+    /// <summary>
     ///     Event that is raised when the station is updated.
     /// </summary>
     public event EventHandler? StationUpdated;
@@ -151,8 +156,7 @@ public sealed partial class ReplacementStationEditor : UserControl, IEditor
     {
         if (e.ColumnIndex == 0) // Assuming the icon is in the first column
         {
-            if (e.Item == null || lvTracks.SmallImageList == null ||
-                e.Item.Tag is not AudioTrack track) return;
+            if (e.Item == null || lvTracks.SmallImageList == null || e.Item.Tag is not AudioTrack track) return;
 
             var replacedTracks = lbReplacedTracks.Items.Cast<AudioTrack>().ToList();
 
@@ -222,8 +226,7 @@ public sealed partial class ReplacementStationEditor : UserControl, IEditor
 
             // A replacement station can have multiple replacement entries for the same vanilla track
             // (one per WEM ID). The editor is track-name based, so we only add one UI entry per track name.
-            var replacedTrackNames = ReplacedStation?.TrackedObject.Tracks
-                .Select(track => track.VanillaTrackName)
+            var replacedTrackNames = ReplacedStation?.TrackedObject.Tracks.Select(track => track.VanillaTrackName)
                 .Distinct(StringComparer.OrdinalIgnoreCase);
 
             if (replacedTrackNames == null)
@@ -231,8 +234,8 @@ public sealed partial class ReplacementStationEditor : UserControl, IEditor
 
             foreach (var replacedTrackName in replacedTrackNames)
             {
-                var matchingVanillaTrack = vanillaTracks
-                    .FirstOrDefault(t => t.TrackName.Equals(replacedTrackName, StringComparison.OrdinalIgnoreCase));
+                var matchingVanillaTrack = vanillaTracks.FirstOrDefault(t =>
+                    t.TrackName.Equals(replacedTrackName, StringComparison.OrdinalIgnoreCase));
                 if (matchingVanillaTrack == null)
                     continue;
 
@@ -289,12 +292,11 @@ public sealed partial class ReplacementStationEditor : UserControl, IEditor
                 durationString = durations.FirstOrDefault() ?? "Unknown";
 
             ListViewItem lvItem = new([
-                    string.Empty, // Placeholder for icon
-                    song.TrackName,
-                    song.TrackArtist,
-                    durationString
-                ])
-            { Tag = song };
+                string.Empty, // Placeholder for icon
+                song.TrackName,
+                song.TrackArtist,
+                durationString
+            ]) { Tag = song };
 
             lvTracks.Items.Add(lvItem);
         }
@@ -404,7 +406,8 @@ public sealed partial class ReplacementStationEditor : UserControl, IEditor
             if (ReplacedStation?.TrackedObject.Tracks.Count <= 0)
                 return;
 
-            ReplacedStation?.TrackedObject.Tracks.Remove(ReplacedStation.TrackedObject.Tracks.First(t => t.VanillaTrackName.Equals(track.TrackName)));
+            ReplacedStation?.TrackedObject.Tracks.Remove(
+                ReplacedStation.TrackedObject.Tracks.First(t => t.VanillaTrackName.Equals(track.TrackName)));
 
             SyncAndUpdate();
         }
@@ -449,14 +452,18 @@ public sealed partial class ReplacementStationEditor : UserControl, IEditor
             lvTracks.EndUpdate();
 
             SyncAndUpdate();
-        } catch (Exception ex)
+        }
+        catch (Exception ex)
         {
             AuLogger.GetCurrentLogger<ReplacementStationEditor>("btnRemoveAllTracks_Click")
                 .Error("An error occurred while removing all replaced tracks.", ex);
         }
     }
 
-    private void lvTracks_DoubleClick(object sender, EventArgs e) => btnReplaceTrack.PerformClick();
+    private void lvTracks_DoubleClick(object sender, EventArgs e)
+    {
+        btnReplaceTrack.PerformClick();
+    }
 
     private void ResetPropertiesUi()
     {
@@ -525,9 +532,8 @@ public sealed partial class ReplacementStationEditor : UserControl, IEditor
         ResetPropertiesUi();
 
         if (!_replacementTrackMap.TryGetValue(track, out var trackPropertiesCtl))
-            trackPropertiesCtl = _replacementTrackMap
-                .FirstOrDefault(kvp => kvp.Key.TrackName.Equals(track.TrackName, StringComparison.OrdinalIgnoreCase))
-                .Value;
+            trackPropertiesCtl = _replacementTrackMap.FirstOrDefault(kvp =>
+                kvp.Key.TrackName.Equals(track.TrackName, StringComparison.OrdinalIgnoreCase)).Value;
 
         if (trackPropertiesCtl == null)
             return false;

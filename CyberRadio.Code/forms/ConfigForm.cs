@@ -187,12 +187,7 @@ public sealed partial class ConfigForm : Form
             }
 
             // Create and add item to the ListView
-            ListViewItem item = new(keyword.Keyword)
-            {
-                Checked = keyword.IsForbidden,
-                Group = group,
-                Tag = keyword
-            };
+            ListViewItem item = new(keyword.Keyword) { Checked = keyword.IsForbidden, Group = group, Tag = keyword };
 
             lvForbiddenPaths.Items.Add(item);
         }
@@ -210,11 +205,7 @@ public sealed partial class ConfigForm : Form
             }
 
             // Create and add item to the ListView (don't add tag as it's not a config item)
-            ListViewItem item = new(keyword.Keyword)
-            {
-                Checked = keyword.IsForbidden,
-                Group = group
-            };
+            ListViewItem item = new(keyword.Keyword) { Checked = keyword.IsForbidden, Group = group };
 
             lvForbiddenPaths.Items.Add(item);
         }
@@ -245,12 +236,7 @@ public sealed partial class ConfigForm : Form
         }
 
         // Add the new keyword to the list view
-        ListViewItem item = new(e.Keyword)
-        {
-            Checked = e.IsForbidden,
-            Group = group,
-            Tag = e
-        };
+        ListViewItem item = new(e.Keyword) { Checked = e.IsForbidden, Group = group, Tag = e };
 
         lvForbiddenPaths.Items.Add(item);
 
@@ -273,9 +259,8 @@ public sealed partial class ConfigForm : Form
                 lvForbiddenPaths.Items.Remove(item);
 
         // Cleanup any empty groups
-        var groupsToRemove = lvForbiddenPaths.Groups.Cast<ListViewGroup>()
-            .Where(group => lvForbiddenPaths.Items.Cast<ListViewItem>().All(item => item.Group != group))
-            .ToList();
+        var groupsToRemove = lvForbiddenPaths.Groups.Cast<ListViewGroup>().Where(group =>
+            lvForbiddenPaths.Items.Cast<ListViewItem>().All(item => item.Group != group)).ToList();
 
         foreach (var group in groupsToRemove.Where(group =>
                      !group.Header.Equals(Strings.SystemPaths, StringComparison.CurrentCulture)))

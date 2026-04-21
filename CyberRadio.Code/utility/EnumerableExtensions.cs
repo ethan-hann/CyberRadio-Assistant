@@ -43,21 +43,26 @@ public static class EnumerableExtensions
     }
 
     /// <summary>
-    /// Converts the elements of the sequence to a single string, with each element separated by a line break.
+    ///     Converts the elements of the sequence to a single string, with each element separated by a line break.
     /// </summary>
-    /// <remarks>Each element is converted to its string representation using its ToString method. No
-    /// delimiter is added between elements other than the line break.</remarks>
+    /// <remarks>
+    ///     Each element is converted to its string representation using its ToString method. No
+    ///     delimiter is added between elements other than the line break.
+    /// </remarks>
     /// <typeparam name="T">The type of the elements in the source sequence.</typeparam>
     /// <param name="source">The sequence of elements to convert to a string. Cannot be null.</param>
-    /// <returns>A string that contains the string representation of each element in the sequence, each followed by a line break.
-    /// Returns an empty string if the sequence contains no elements.</returns>
+    /// <returns>
+    ///     A string that contains the string representation of each element in the sequence, each followed by a line break.
+    ///     Returns an empty string if the sequence contains no elements.
+    /// </returns>
     /// <exception cref="ArgumentNullException">Thrown if source is null.</exception>
     public static string ToFriendlyString<T>(this IEnumerable<T> source)
     {
         if (source == null) throw new ArgumentNullException(nameof(source));
 
         var finalString = new StringBuilder();
-        finalString = source.Aggregate(finalString, (current, item) => current.Append(item).Append(Environment.NewLine));
+        finalString =
+            source.Aggregate(finalString, (current, item) => current.Append(item).Append(Environment.NewLine));
 
         return finalString.ToString();
     }

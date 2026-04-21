@@ -62,10 +62,7 @@ public sealed partial class IconEditor : UserControl, IEditor
         _cancellationTokenSource = new CancellationTokenSource();
 
         //Set up the log viewer control
-        _iconLogViewer = new IconLogViewerControl
-        {
-            Dock = DockStyle.Fill
-        };
+        _iconLogViewer = new IconLogViewerControl { Dock = DockStyle.Fill };
 
         if (Icon.TrackedObject.CheckIconValid())
             _iconLogViewer.Identifier = Icon.TrackedObject.IsFromArchive
@@ -295,8 +292,7 @@ public sealed partial class IconEditor : UserControl, IEditor
         if (Icon.TrackedObject.CheckIconValid())
         {
             MessageBox.Show(Strings.IconEditor_IconAlreadyCreated_DragDrop,
-                Strings.IconEditor_IconAlreadyCreated_DragDrop_Caption,
-                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Strings.IconEditor_IconAlreadyCreated_DragDrop_Caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
 
             //Revert to the icon that was already created.
             picStationIcon.SetImage(Icon.TrackedObject.ImagePath ?? string.Empty);
@@ -328,8 +324,8 @@ public sealed partial class IconEditor : UserControl, IEditor
         if (_isImporting || _isExtracting) return;
 
         //Confirm with user that icon import can take a while.
-        var result = MessageBox.Show(Strings.IconEditor_ImportIcon_Confirm_Message,
-            Strings.Confirm, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+        var result = MessageBox.Show(Strings.IconEditor_ImportIcon_Confirm_Message, Strings.Confirm,
+            MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
         if (result != DialogResult.Yes) return;
 
@@ -404,8 +400,8 @@ public sealed partial class IconEditor : UserControl, IEditor
         if (_isImporting || _isExtracting) return;
 
         //Confirm with user that icon extraction can take a while.
-        var result = MessageBox.Show(Strings.IconEditor_ExtractIcon_Confirm_Message,
-            Strings.Confirm, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+        var result = MessageBox.Show(Strings.IconEditor_ExtractIcon_Confirm_Message, Strings.Confirm,
+            MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
         if (result != DialogResult.Yes) return;
 

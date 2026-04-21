@@ -37,8 +37,7 @@ namespace RadioExt_Helper.migration;
 public static class MigrationHelper
 {
     private static readonly string BaseDirectory = Path.Combine(
-        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-        "RadioExt-Helper");
+        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "RadioExt-Helper");
 
     #region Settings Migration
 
@@ -139,11 +138,13 @@ public static class MigrationHelper
 
             ApplicationConfig config = new()
             {
-                Language = xmlDoc.SelectSingleNode("//setting[@name='SelectedLanguage']/value")?.InnerText ??
-                           "English (en)",
-                GameBasePath = xmlDoc.SelectSingleNode("//setting[@name='GameBasePath']/value")?.InnerText ??
-                               string.Empty,
-                StagingPath = xmlDoc.SelectSingleNode("//setting[@name='StagingPath']/value")?.InnerText ?? string.Empty
+                Language =
+                    xmlDoc.SelectSingleNode("//setting[@name='SelectedLanguage']/value")?.InnerText ??
+                    "English (en)",
+                GameBasePath =
+                    xmlDoc.SelectSingleNode("//setting[@name='GameBasePath']/value")?.InnerText ?? string.Empty,
+                StagingPath = xmlDoc.SelectSingleNode("//setting[@name='StagingPath']/value")?.InnerText ??
+                              string.Empty
             };
 
             var windowSize = xmlDoc.SelectSingleNode("//setting[@name='WindowSize']/value")?.InnerText.Split(',');

@@ -14,34 +14,37 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+#region
+
 using System.Diagnostics;
 using AetherUtils.Core.Extensions;
-using AetherUtils.Core.Files;
 using AetherUtils.Core.Logging;
-using Org.BouncyCastle.Utilities;
-using RadioExt_Helper.forms;
 using RadioExt_Helper.models;
 using RadioExt_Helper.utility;
-using WIG.Lib.Models.Audio;
+
+#endregion
 
 namespace RadioExt_Helper.user_controls;
 
 /// <summary>
-/// A UserControl for displaying and editing properties of a replaced track associated with a replacement station.
+///     A UserControl for displaying and editing properties of a replaced track associated with a replacement station.
 /// </summary>
 public partial class ReplacedTrackPropertiesCtl : UserControl, IEditor
 {
     private readonly string _trackName;
 
     /// <summary>
-    /// Event triggered when the track's properties are changed. Event data contains the vanilla track name.
+    ///     Event triggered when the track's properties are changed. Event data contains the vanilla track name.
     /// </summary>
     public EventHandler<string>? TrackChanged;
 
     /// <summary>
-    /// Initializes a new instance of the ReplacedTrackPropertiesCtl class with the specified replacement station.
+    ///     Initializes a new instance of the ReplacedTrackPropertiesCtl class with the specified replacement station.
     /// </summary>
-    /// <param name="station">A TrackableObject containing the replacement station to associate with this control. Cannot be null.</param>
+    /// <param name="station">
+    ///     A TrackableObject containing the replacement station to associate with this control. Cannot be
+    ///     null.
+    /// </param>
     /// <param name="trackName">The name of the track this property window is editing.</param>
     public ReplacedTrackPropertiesCtl(TrackableObject<ReplacementStation> station, string trackName)
     {
@@ -81,8 +84,7 @@ public partial class ReplacedTrackPropertiesCtl : UserControl, IEditor
         openPathToReplacementFileToolStripMenuItem.Text = Strings.OpenPathToReplacementFileContextMenu;
 
         fdlgSelectFile.Title = Strings.AddReplacementTrackTitle;
-        fdlgSelectFile.Filter =
-            @"Audio Files|*.mp3;*.wav;*.ogg;*.flac;*.mp2;*.wax;*.wma;*.wem";
+        fdlgSelectFile.Filter = @"Audio Files|*.mp3;*.wav;*.ogg;*.flac;*.mp2;*.wax;*.wma;*.wem";
     }
 
     private void ReplacedTrackPropertiesCtl_Load(object sender, EventArgs e)
@@ -90,8 +92,7 @@ public partial class ReplacedTrackPropertiesCtl : UserControl, IEditor
         Translate();
 
         fdlgSelectFile.Title = Strings.AddReplacementTrackTitle;
-        fdlgSelectFile.Filter =
-            @"Audio Files|*.mp3;*.wav;*.ogg;*.flac;*.mp2;*.wax;*.wma;*.wem";
+        fdlgSelectFile.Filter = @"Audio Files|*.mp3;*.wav;*.ogg;*.flac;*.mp2;*.wax;*.wma;*.wem";
 
         PopulateListView();
     }
@@ -109,23 +110,21 @@ public partial class ReplacedTrackPropertiesCtl : UserControl, IEditor
 
         if (wemIds is null)
         {
-            AuLogger.GetCurrentLogger<ReplacedTrackPropertiesCtl>("PopulateListView")
-                .Error(
-                    $"No WEM IDs found for track '{_trackName}' in vanilla station associated with replacement station '{ReplacedStation.TrackedObject.DisplayName}'. This indicates that the Google sheet was not parsed correctly!");
+            AuLogger.GetCurrentLogger<ReplacedTrackPropertiesCtl>("PopulateListView").Error(
+                $"No WEM IDs found for track '{_trackName}' in vanilla station associated with replacement station '{ReplacedStation.TrackedObject.DisplayName}'. This indicates that the Google sheet was not parsed correctly!");
             return;
         }
 
         //Each WEM ID should be treated as its own entry in the list view and display the replaced file for the WEM ID and track combo
 
         foreach (var lvItem in from wemId in wemIds
-                               let replacedFile = ReplacedStation.TrackedObject.Tracks
-                                   .FirstOrDefault(rt => rt.VanillaTrackName.Equals(_trackName) && rt.WemId.Equals(wemId))?
-                                   .ReplacementFilePath ?? Strings.TrackNotReplacedYet
-                               select new ListViewItem([
-                                       wemId,
-                         replacedFile
-                                   ])
-                               { Tag = wemId })
+                 let replacedFile = ReplacedStation.TrackedObject.Tracks
+                     .FirstOrDefault(rt => rt.VanillaTrackName.Equals(_trackName) && rt.WemId.Equals(wemId))
+                     ?.ReplacementFilePath ?? Strings.TrackNotReplacedYet
+                 select new ListViewItem([
+                     wemId,
+                     replacedFile
+                 ]) { Tag = wemId })
             lvTracks.Items.Add(lvItem);
 
         lvTracks.ResizeColumns();
@@ -153,16 +152,12 @@ public partial class ReplacedTrackPropertiesCtl : UserControl, IEditor
 
         if (wemIds == null)
         {
-            AuLogger.GetCurrentLogger<ReplacedTrackPropertiesCtl>("btnReplaceAll_Click")
-                .Error(
-                    $"No WEM IDs found for track '{_trackName}' in vanilla station associated with replacement station '{ReplacedStation.TrackedObject.DisplayName}'. This indicates that the Google sheet was not parsed correctly!");
+            AuLogger.GetCurrentLogger<ReplacedTrackPropertiesCtl>("btnReplaceAll_Click").Error(
+                $"No WEM IDs found for track '{_trackName}' in vanilla station associated with replacement station '{ReplacedStation.TrackedObject.DisplayName}'. This indicates that the Google sheet was not parsed correctly!");
             return;
         }
 
-        foreach (var wemId in wemIds)
-        {
-            ReplacedStation.TrackedObject.ReplaceTrack(_trackName, wemId, filePath);
-        }
+        foreach (var wemId in wemIds) ReplacedStation.TrackedObject.ReplaceTrack(_trackName, wemId, filePath);
 
         PopulateListView();
         TrackChanged?.Invoke(this, _trackName);
@@ -174,9 +169,7 @@ public partial class ReplacedTrackPropertiesCtl : UserControl, IEditor
 
         if (lvTracks.SelectedItems.Count <= 0) return;
         if (lvTracks.SelectedItems[0].Tag is not string selectedWemId) return;
-        if (!ReplacedStation.TrackedObject.RemoveReplacedTrack(
-                _trackName,
-                selectedWemId)) return;
+        if (!ReplacedStation.TrackedObject.RemoveReplacedTrack(_trackName, selectedWemId)) return;
 
         PopulateListView();
         TrackChanged?.Invoke(this, _trackName);
@@ -189,22 +182,22 @@ public partial class ReplacedTrackPropertiesCtl : UserControl, IEditor
             .FirstOrDefault(t => t.TrackName.Equals(_trackName))?.WemIds;
         if (wemIds is null)
         {
-            AuLogger.GetCurrentLogger<ReplacedTrackPropertiesCtl>("btnRemoveAll_Click")
-                .Error(
-                    $"No WEM IDs found for track '{_trackName}' in vanilla station associated with replacement station '{ReplacedStation.TrackedObject.DisplayName}'. This indicates that the Google sheet was not parsed correctly!");
+            AuLogger.GetCurrentLogger<ReplacedTrackPropertiesCtl>("btnRemoveAll_Click").Error(
+                $"No WEM IDs found for track '{_trackName}' in vanilla station associated with replacement station '{ReplacedStation.TrackedObject.DisplayName}'. This indicates that the Google sheet was not parsed correctly!");
             return;
         }
 
         foreach (var wemId in wemIds)
-            ReplacedStation.TrackedObject.RemoveReplacedTrack(
-                _trackName,
-                wemId);
+            ReplacedStation.TrackedObject.RemoveReplacedTrack(_trackName, wemId);
 
         PopulateListView();
         TrackChanged?.Invoke(this, _trackName);
     }
 
-    private void lvTracks_DoubleClick(object sender, EventArgs e) => btnReplace.PerformClick();
+    private void lvTracks_DoubleClick(object sender, EventArgs e)
+    {
+        btnReplace.PerformClick();
+    }
 
     private bool TryGetTrackWemIds(out HashSet<string>? wemIds)
     {
@@ -217,9 +210,8 @@ public partial class ReplacedTrackPropertiesCtl : UserControl, IEditor
 
         if (ids is null)
         {
-            AuLogger.GetCurrentLogger<ReplacedTrackPropertiesCtl>(nameof(TryGetTrackWemIds))
-                .Error(
-                    $"No WEM IDs found for track '{_trackName}' in vanilla station associated with replacement station '{ReplacedStation.TrackedObject.DisplayName}'. This indicates that the Google sheet was not parsed correctly!");
+            AuLogger.GetCurrentLogger<ReplacedTrackPropertiesCtl>(nameof(TryGetTrackWemIds)).Error(
+                $"No WEM IDs found for track '{_trackName}' in vanilla station associated with replacement station '{ReplacedStation.TrackedObject.DisplayName}'. This indicates that the Google sheet was not parsed correctly!");
             return false;
         }
 
@@ -249,8 +241,8 @@ public partial class ReplacedTrackPropertiesCtl : UserControl, IEditor
 
         try
         {
-            var outputPath = AudioConverter.Instance.ConvertedDirectory
-                ?? Directory.GetParent(filePath)?.FullName ?? Path.GetDirectoryName(filePath);
+            var outputPath = AudioConverter.Instance.ConvertedDirectory ??
+                             Directory.GetParent(filePath)?.FullName ?? Path.GetDirectoryName(filePath);
 
             if (outputPath == null)
             {
@@ -267,8 +259,7 @@ public partial class ReplacedTrackPropertiesCtl : UserControl, IEditor
                 .Info($"Converting file '{filePath}' to WAV format for track replacement...");
 
             var convertedFilePath = Task.Run(() => AudioConverter.Instance.ConvertAsync(convertCandidate, true))
-                .GetAwaiter()
-                .GetResult();
+                .GetAwaiter().GetResult();
 
             if (convertedFilePath is null)
             {
@@ -284,7 +275,8 @@ public partial class ReplacedTrackPropertiesCtl : UserControl, IEditor
                 .Info($"Successfully converted file '{filePath}' to WAV format at '{convertedFilePath}'.");
 
             filePath = convertedFilePath;
-            ToastNotification.Show(this, string.Format(Strings.Toast_ConvertedToWav, Path.GetFileName(filePath)), ToastType.Success);
+            ToastNotification.Show(this, string.Format(Strings.Toast_ConvertedToWav, Path.GetFileName(filePath)),
+                ToastType.Success);
             return true;
         }
         catch (Exception ex)
@@ -321,24 +313,23 @@ public partial class ReplacedTrackPropertiesCtl : UserControl, IEditor
 
         if (!Directory.Exists(directory))
         {
-            ToastNotification.Show(this, string.Format(Strings.ReplacementFileDirectoryNotFound, directory), ToastType.Error);
+            ToastNotification.Show(this, string.Format(Strings.ReplacementFileDirectoryNotFound, directory),
+                ToastType.Error);
             return;
         }
 
         try
         {
-            Process.Start(new ProcessStartInfo
-            {
-                FileName = directory,
-                UseShellExecute = true,
-                Verb = "open"
-            });
-        } catch (Exception ex)
+            Process.Start(new ProcessStartInfo { FileName = directory, UseShellExecute = true, Verb = "open" });
+        }
+        catch (Exception ex)
         {
-            AuLogger.GetCurrentLogger<ReplacedTrackPropertiesCtl>(nameof(openPathToReplacementFileToolStripMenuItem_Click))
+            AuLogger
+                .GetCurrentLogger<ReplacedTrackPropertiesCtl>(nameof(openPathToReplacementFileToolStripMenuItem_Click))
                 .Error($"Error opening directory '{directory}': {ex.Message}");
-            ToastNotification.Show(this, string.Format(Strings.ErrorOpeningReplacementFileDirectory, directory), ToastType.Error);
-        } 
+            ToastNotification.Show(this, string.Format(Strings.ErrorOpeningReplacementFileDirectory, directory),
+                ToastType.Error);
+        }
     }
 
     private void lvTracks_MouseDown(object sender, MouseEventArgs e)

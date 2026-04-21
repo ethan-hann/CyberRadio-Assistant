@@ -283,8 +283,7 @@ public partial class IconManagerForm : Form
     private void RemoveIcon(TrackableObject<WolvenIcon> icon)
     {
         var firstResult = MessageBox.Show(Strings.IconManagerForm_RemoveIcon_Are_you_sure_you_want_to_delete_this_icon_,
-            Strings.IconManagerForm_RemoveIcon_Confirm_Delete,
-            MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            Strings.IconManagerForm_RemoveIcon_Confirm_Delete, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
         if (firstResult != DialogResult.Yes) return;
 
         var isLinkedToOtherStations =
@@ -394,10 +393,7 @@ public partial class IconManagerForm : Form
                 {
                     TrackableObject<WolvenIcon> icon = new(WolvenIcon.FromArchive(fdlgOpenArchive.FileName))
                     {
-                        TrackedObject =
-                        {
-                            IsFromArchive = true
-                        }
+                        TrackedObject = { IsFromArchive = true }
                     };
 
                     AddNewIcon(icon, false, true);
@@ -437,24 +433,22 @@ public partial class IconManagerForm : Form
         var existsInStaging = File.Exists(iconPath);
 
         // Check if the icon already exists in the current station
-        var currentStationHasIcon = _station.TrackedObject.Icons
-            .Any(icon => string.Equals(icon.TrackedObject.ArchivePath, iconPath, StringComparison.OrdinalIgnoreCase));
+        var currentStationHasIcon = _station.TrackedObject.Icons.Any(icon =>
+            string.Equals(icon.TrackedObject.ArchivePath, iconPath, StringComparison.OrdinalIgnoreCase));
 
         if (currentStationHasIcon)
         {
             MessageBox.Show(
                 Strings.IconManagerForm_CheckForCopy_This_icon_is_already_associated_with_the_current_station_,
-                Strings.IconManagerForm_CheckForCopy_Duplicate_Icon_Detected,
-                MessageBoxButtons.OK, MessageBoxIcon.Information);
+                Strings.IconManagerForm_CheckForCopy_Duplicate_Icon_Detected, MessageBoxButtons.OK,
+                MessageBoxIcon.Information);
             return (null, false, true); // Cancel the import since the icon is already present
         }
 
         // Check if the archive is already associated with one or more other stations
-        var existingStations = StationManager.Instance.StationsAsList
-            .Where(station => station.TrackedObject.Icons
-                .Any(icon =>
-                    string.Equals(icon.TrackedObject.ArchivePath, iconPath, StringComparison.OrdinalIgnoreCase)))
-            .ToList();
+        var existingStations = StationManager.Instance.StationsAsList.Where(station =>
+            station.TrackedObject.Icons.Any(icon =>
+                string.Equals(icon.TrackedObject.ArchivePath, iconPath, StringComparison.OrdinalIgnoreCase))).ToList();
 
         if (existsInStaging && existingStations.Count > 0 && !existingStations.Contains(_station))
         {
@@ -463,8 +457,7 @@ public partial class IconManagerForm : Form
                 existingStations.Select(station => station.TrackedObject.MetaData.DisplayName));
             var dialogResult = MessageBox.Show(
                 string.Format(Strings.IconManagerForm_CheckForCopy_, associatedStationNames),
-                Strings.IconManagerForm_CheckForCopy_Duplicate_Icon_Detected,
-                MessageBoxButtons.OKCancel,
+                Strings.IconManagerForm_CheckForCopy_Duplicate_Icon_Detected, MessageBoxButtons.OKCancel,
                 MessageBoxIcon.Question);
 
             switch (dialogResult)
@@ -472,10 +465,8 @@ public partial class IconManagerForm : Form
                 case DialogResult.OK:
                 {
                     // Create a new copy of the existing icon for the current station
-                    var existingIcon = existingStations
-                        .SelectMany(station => station.TrackedObject.Icons)
-                        .First(icon => string.Equals(icon.TrackedObject.ArchivePath, iconPath,
-                            StringComparison.OrdinalIgnoreCase));
+                    var existingIcon = existingStations.SelectMany(station => station.TrackedObject.Icons).First(icon =>
+                        string.Equals(icon.TrackedObject.ArchivePath, iconPath, StringComparison.OrdinalIgnoreCase));
 
                     // Copy the .archive and .png files and update paths
                     newIconId = StationManager.Instance.CopyStationIcon(_station.Id, existingStations.First().Id,
@@ -516,8 +507,7 @@ public partial class IconManagerForm : Form
         var firstResult = MessageBox.Show(
             Strings
                 .IconManagerForm_btnDeleteAllIcons_Click_Are_you_sure_you_want_to_remove_ALL_icons_from_this_station_,
-            Strings.IconManagerForm_RemoveIcon_Confirm_Delete,
-            MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            Strings.IconManagerForm_RemoveIcon_Confirm_Delete, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
         if (firstResult != DialogResult.Yes) return;
 
         var secondResult = MessageBox.Show(

@@ -192,8 +192,9 @@ public sealed partial class MainForm : Form
             return;
         }
 
-        var importedIconNames = string.Join(", ", stationIds.Select(stationId =>
-            StationManager.Instance.GetStation(stationId)?.Key.TrackedObject.MetaData.DisplayName));
+        var importedIconNames = string.Join(", ",
+            stationIds.Select(stationId =>
+                StationManager.Instance.GetStation(stationId)?.Key.TrackedObject.MetaData.DisplayName));
 
         ToastNotification.Show(this,
             $"{Strings.MainForm_FromZipStationsImportedTitle}: {string.Format(Strings.MainForm_FromZipImportDesc, stationIds.Count, importedIconNames)}",
@@ -219,7 +220,8 @@ public sealed partial class MainForm : Form
         var firstStationId = stationIds.First();
         lbReplacedStations.SelectedItem = StationManager.Instance.GetVanillaStation(firstStationId)?.Key;
         SelectReplacementStationEditor(firstStationId);
-        ToastNotification.Show(this, string.Format(Strings.Toast_ImportedReplacementStations, stationIds.Count), ToastType.Success);
+        ToastNotification.Show(this, string.Format(Strings.Toast_ImportedReplacementStations, stationIds.Count),
+            ToastType.Success);
         UpdateEnabledStationCount();
         HandleUserControlVisibility();
     }
@@ -585,9 +587,8 @@ public sealed partial class MainForm : Form
             if (!IconManager.Instance.IsInitialized || oodleCheck.filePath == null) return;
 
             IconManager.Instance.CopyOodleDllToWolvenKitPath(oodleCheck.filePath);
-            AuLogger.GetCurrentLogger<MainForm>("CopyOodleToIconManager")
-                .Info(
-                    $"Oodle DLL was found in game's base path and copied to WolvenKit directory: {Path.GetFileName(oodleCheck.filePath)}");
+            AuLogger.GetCurrentLogger<MainForm>("CopyOodleToIconManager").Info(
+                $"Oodle DLL was found in game's base path and copied to WolvenKit directory: {Path.GetFileName(oodleCheck.filePath)}");
         }
         else
         {
@@ -754,8 +755,8 @@ public sealed partial class MainForm : Form
         }
         catch (Exception ex)
         {
-            AuLogger.GetCurrentLogger<MainForm>("UpdateReplacementStationEditor")
-                .Error(ex, "An error occurred while updating the replacement station editor.");
+            AuLogger.GetCurrentLogger<MainForm>("UpdateReplacementStationEditor").Error(ex,
+                "An error occurred while updating the replacement station editor.");
         }
     }
 
@@ -1109,10 +1110,8 @@ public sealed partial class MainForm : Form
 
         //translate log viewer (if open)
         foreach (var form in Application.OpenForms)
-        {
             if (form is LogWindow lw)
                 lw.Translate();
-        }
 
         Focus(); // re-focus the main form
 
@@ -1527,8 +1526,8 @@ public sealed partial class MainForm : Form
         catch (Exception ex)
         {
             ToastNotification.Show(Strings.ClearTempCRADataFailed, ToastType.Error);
-            AuLogger.GetCurrentLogger<MainForm>("ClearTempDataToolStripMenuItem_Click")
-                .Error(ex, "An error occurred while starting the temporary data cleanup process.");
+            AuLogger.GetCurrentLogger<MainForm>("ClearTempDataToolStripMenuItem_Click").Error(ex,
+                "An error occurred while starting the temporary data cleanup process.");
             return;
         }
 
@@ -1539,14 +1538,12 @@ public sealed partial class MainForm : Form
     {
         var viewerFormFound = false;
         foreach (var form in Application.OpenForms)
-        {
             if (form is LogWindow lw)
             {
                 lw.Focus();
                 viewerFormFound = true;
                 break;
             }
-        }
 
         if (viewerFormFound) return;
 
@@ -1742,9 +1739,7 @@ public sealed partial class MainForm : Form
         lbStations.ClearSelected();
         ReplacementStation replacementStation = new()
         {
-            VanillaStation = e,
-            DisplayName = $"[Replaced] {e.StationName}",
-            IsActive = true
+            VanillaStation = e, DisplayName = $"[Replaced] {e.StationName}", IsActive = true
         };
 
         TrackableObject<ReplacementStation> station = new(replacementStation);

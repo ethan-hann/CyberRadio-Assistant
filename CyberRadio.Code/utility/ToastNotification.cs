@@ -17,38 +17,45 @@
 namespace RadioExt_Helper.utility;
 
 /// <summary>
-/// Enum representing the type of toast notification to display, which determines the icon and styling used in the notification.
+///     Enum representing the type of toast notification to display, which determines the icon and styling used in the
+///     notification.
 /// </summary>
 public enum ToastType
 {
     /// <summary>
-    /// Represents informational content or a message, typically used to convey non-critical details to the user.
+    ///     Represents informational content or a message, typically used to convey non-critical details to the user.
     /// </summary>
     Info,
+
     /// <summary>
-    /// Indicates that the operation completed successfully.
+    ///     Indicates that the operation completed successfully.
     /// </summary>
     Success,
+
     /// <summary>
-    /// Represents a warning message or state.
+    ///     Represents a warning message or state.
     /// </summary>
     Warning,
+
     /// <summary>
-    /// Represents an error condition or error information.
+    ///     Represents an error condition or error information.
     /// </summary>
     Error
 }
 
 /// <summary>
-/// Provides static methods for displaying balloon-style toast notifications using the Windows notification area (system
-/// tray).
+///     Provides static methods for displaying balloon-style toast notifications using the Windows notification area
+///     (system
+///     tray).
 /// </summary>
-/// <remarks>This class displays notifications as balloon tips associated with the application's NotifyIcon.
-/// Notifications support different styles (info, warning, error, success) and are styled according to the specified
-/// type. Only balloon-style notifications are used, and the notification title appears as 'RadioExt-Helper' due to
-/// system constraints. The class is thread-safe and ensures that notifications are shown on the correct UI thread. Use
-/// this class to provide user feedback or alerts in a Windows Forms application without relying on deprecated or
-/// incompatible notification APIs.</remarks>
+/// <remarks>
+///     This class displays notifications as balloon tips associated with the application's NotifyIcon.
+///     Notifications support different styles (info, warning, error, success) and are styled according to the specified
+///     type. Only balloon-style notifications are used, and the notification title appears as 'RadioExt-Helper' due to
+///     system constraints. The class is thread-safe and ensures that notifications are shown on the correct UI thread. Use
+///     this class to provide user feedback or alerts in a Windows Forms application without relying on deprecated or
+///     incompatible notification APIs.
+/// </remarks>
 public static class ToastNotification
 {
     private const int DefaultDurationMs = 3500;
@@ -60,16 +67,24 @@ public static class ToastNotification
     private static bool _initialized;
 
     /// <summary>
-    /// Displays a balloon-style toast notification with the specified message and style for a limited duration.
+    ///     Displays a balloon-style toast notification with the specified message and style for a limited duration.
     /// </summary>
-    /// <remarks>This method uses a NotifyIcon balloon tip to display the notification. The notification's
-    /// appearance reflects the specified type, and the balloon tip title will show as 'RadioExt-Helper'. If called from
-    /// a non-UI thread, the notification is marshaled to the UI thread. If the message exceeds the maximum allowed
-    /// length, it is truncated.</remarks>
-    /// <param name="owner">The parent control that owns the notification window, or null to use the default application window.</param>
+    /// <remarks>
+    ///     This method uses a NotifyIcon balloon tip to display the notification. The notification's
+    ///     appearance reflects the specified type, and the balloon tip title will show as 'RadioExt-Helper'. If called from
+    ///     a non-UI thread, the notification is marshaled to the UI thread. If the message exceeds the maximum allowed
+    ///     length, it is truncated.
+    /// </remarks>
+    /// <param name="owner">
+    ///     The parent control that owns the notification window, or null to use the default application
+    ///     window.
+    /// </param>
     /// <param name="message">The message text to display in the notification. Cannot be null, empty, or whitespace.</param>
     /// <param name="type">The style of the notification, indicating its purpose or severity. The default is ToastType.Info.</param>
-    /// <param name="durationMs">The duration, in milliseconds, for which the notification is displayed. Must be at least 1,000 milliseconds.</param>
+    /// <param name="durationMs">
+    ///     The duration, in milliseconds, for which the notification is displayed. Must be at least 1,000
+    ///     milliseconds.
+    /// </param>
     public static void Show(Control? owner, string message, ToastType type = ToastType.Info,
         int durationMs = DefaultDurationMs)
     {
@@ -99,14 +114,22 @@ public static class ToastNotification
     }
 
     /// <summary>
-    /// Displays a toast notification with the specified message and style for a given duration.
+    ///     Displays a toast notification with the specified message and style for a given duration.
     /// </summary>
-    /// <remarks>This method displays the toast notification on the application's main form. Use the 'type'
-    /// parameter to distinguish between informational, warning, error, or success notifications. The notification will
-    /// automatically disappear after the specified duration.</remarks>
+    /// <remarks>
+    ///     This method displays the toast notification on the application's main form. Use the 'type'
+    ///     parameter to distinguish between informational, warning, error, or success notifications. The notification will
+    ///     automatically disappear after the specified duration.
+    /// </remarks>
     /// <param name="message">The text to display in the toast notification. Cannot be null or empty.</param>
-    /// <param name="type">The style of the toast notification, indicating its purpose or severity. The default is ToastType.Info.</param>
-    /// <param name="durationMs">The duration, in milliseconds, for which the toast notification is displayed. The default is DefaultDurationMs.</param>
+    /// <param name="type">
+    ///     The style of the toast notification, indicating its purpose or severity. The default is
+    ///     ToastType.Info.
+    /// </param>
+    /// <param name="durationMs">
+    ///     The duration, in milliseconds, for which the toast notification is displayed. The default is
+    ///     DefaultDurationMs.
+    /// </param>
     public static void Show(string message, ToastType type = ToastType.Info, int durationMs = DefaultDurationMs)
     {
         Show(ApplicationContext.MainFormInstance, message, type, durationMs);
@@ -130,7 +153,10 @@ public static class ToastNotification
         };
     }
 
-    private static string Truncate(string text, int maxLength) => text.Length <= maxLength ? text : $"{text[..(maxLength - 3)]}...";
+    private static string Truncate(string text, int maxLength)
+    {
+        return text.Length <= maxLength ? text : $"{text[..(maxLength - 3)]}...";
+    }
 
     private static void EnsureInitialized()
     {
@@ -142,12 +168,7 @@ public static class ToastNotification
 
             var icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath) ?? SystemIcons.Application;
 
-            _notifyIcon = new NotifyIcon
-            {
-                Icon = icon,
-                Text = AppDisplayName,
-                Visible = true
-            };
+            _notifyIcon = new NotifyIcon { Icon = icon, Text = AppDisplayName, Visible = true };
 
             Application.ApplicationExit += (_, _) =>
             {

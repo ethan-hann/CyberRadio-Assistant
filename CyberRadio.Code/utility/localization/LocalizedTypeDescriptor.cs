@@ -32,8 +32,7 @@ public class LocalizedTypeDescriptor(ICustomTypeDescriptor? parent) : CustomType
     public override PropertyDescriptorCollection GetProperties()
     {
         var baseProps = base.GetProperties();
-        var props = baseProps.Cast<PropertyDescriptor>()
-            .Select(p => new LocalizedPropertyDescriptor(p))
+        var props = baseProps.Cast<PropertyDescriptor>().Select(p => new LocalizedPropertyDescriptor(p))
             .ToArray<PropertyDescriptor>();
         return new PropertyDescriptorCollection(props);
     }
@@ -42,8 +41,7 @@ public class LocalizedTypeDescriptor(ICustomTypeDescriptor? parent) : CustomType
     public override PropertyDescriptorCollection GetProperties(Attribute[]? attributes)
     {
         var baseProps = base.GetProperties(attributes);
-        var props = baseProps.Cast<PropertyDescriptor>()
-            .Select(p => new LocalizedPropertyDescriptor(p))
+        var props = baseProps.Cast<PropertyDescriptor>().Select(p => new LocalizedPropertyDescriptor(p))
             .ToArray<PropertyDescriptor>();
         return new PropertyDescriptorCollection(props);
     }

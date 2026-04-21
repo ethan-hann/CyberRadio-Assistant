@@ -35,8 +35,8 @@ public class LocalizedPropertyDescriptor(PropertyDescriptor basePropertyDescript
         get
         {
             // Get the original DescriptionAttribute
-            if (basePropertyDescriptor.Attributes[typeof(DescriptionAttribute)] is not DescriptionAttribute
-                descAttr) return basePropertyDescriptor.Description;
+            if (basePropertyDescriptor.Attributes[typeof(DescriptionAttribute)] is not DescriptionAttribute descAttr)
+                return basePropertyDescriptor.Description;
 
             // Use resource manager to translate
             var translated = Strings.ResourceManager.GetString(descAttr.Description);
@@ -49,8 +49,8 @@ public class LocalizedPropertyDescriptor(PropertyDescriptor basePropertyDescript
     {
         get
         {
-            if (basePropertyDescriptor.Attributes[typeof(DisplayNameAttribute)] is not DisplayNameAttribute
-                displayAttr) return basePropertyDescriptor.DisplayName;
+            if (basePropertyDescriptor.Attributes[typeof(DisplayNameAttribute)] is not DisplayNameAttribute displayAttr)
+                return basePropertyDescriptor.DisplayName;
 
             var localized = Strings.ResourceManager.GetString(displayAttr.DisplayName);
             return localized ?? displayAttr.DisplayName;

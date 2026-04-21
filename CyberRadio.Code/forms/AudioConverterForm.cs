@@ -46,14 +46,14 @@ public partial class AudioConverterForm : Form
     private readonly List<string> _inputFiles;
 
     /// <summary>
-    /// A hash set to track log lines and prevent duplicates.
-    /// </summary>
-    private readonly HashSet<string> _logLines = new(StringComparer.Ordinal);
-
-    /// <summary>
-    /// Gate to ensure thread-safe appending to the log.
+    ///     Gate to ensure thread-safe appending to the log.
     /// </summary>
     private readonly SemaphoreSlim _logAppendGate = new(1, 1);
+
+    /// <summary>
+    ///     A hash set to track log lines and prevent duplicates.
+    /// </summary>
+    private readonly HashSet<string> _logLines = new(StringComparer.Ordinal);
 
     /// <summary>
     ///     The radio station context for the conversion, if any.
@@ -182,8 +182,7 @@ public partial class AudioConverterForm : Form
         }
         catch (Exception ex)
         {
-            AuLogger.GetCurrentLogger<AudioConverterForm>("SetupListBox")
-                .Error(ex, "Failed to set up the ListBox.");
+            AuLogger.GetCurrentLogger<AudioConverterForm>("SetupListBox").Error(ex, "Failed to set up the ListBox.");
         }
     }
 
@@ -321,15 +320,14 @@ public partial class AudioConverterForm : Form
         //Make sure we aren't converting
         if (_isConverting)
         {
-            MessageBox.Show(Strings.ConversionOngoing, Strings.Error,
-                MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show(Strings.ConversionOngoing, Strings.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
             return;
         }
 
         // Confirm with user
         var result = MessageBox.Show(
-            string.Format(Strings.AudioConvert_ConfirmRemoveFiles, lbCandidates.CheckedItems.Count),
-            Strings.Confirm, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            string.Format(Strings.AudioConvert_ConfirmRemoveFiles, lbCandidates.CheckedItems.Count), Strings.Confirm,
+            MessageBoxButtons.YesNo, MessageBoxIcon.Question);
         if (result != DialogResult.Yes) return;
 
         var selectedItems = lbCandidates.CheckedItems.Cast<ConvertCandidate>().ToList();
@@ -365,21 +363,20 @@ public partial class AudioConverterForm : Form
 
             if (_checkedItems.Count == 0)
             {
-                MessageBox.Show(Strings.NoFilesSelected_Conversion, Strings.Error,
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(Strings.NoFilesSelected_Conversion, Strings.Error, MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
                 return;
             }
 
             if (_isConverting)
             {
-                MessageBox.Show(Strings.ConversionOngoing, Strings.Error,
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(Strings.ConversionOngoing, Strings.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
             // Confirm with user that conversion can take a while
-            var confirmResult = MessageBox.Show(Strings.AudioConvert_ConfirmStartConversion,
-                Strings.Confirm, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            var confirmResult = MessageBox.Show(Strings.AudioConvert_ConfirmStartConversion, Strings.Confirm,
+                MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (confirmResult != DialogResult.Yes) return;
 
             btnStartConversion.Enabled = false;
@@ -408,13 +405,11 @@ public partial class AudioConverterForm : Form
                         break;
 
                     if (_station != null) //Only check that files need conversion if converting for a station
-                    {
                         if (!AudioConverter.NeedsConversion(item.InputPath))
                         {
                             AddLogLine($"{item.InputPath} => {Strings.NoConversionNeeded}");
                             continue;
                         }
-                    }
 
                     RunOnUI(() => { lbCandidates.SelectedItem = item; });
 
@@ -443,8 +438,8 @@ public partial class AudioConverterForm : Form
             }
             finally
             {
-                AuLogger.GetCurrentLogger<AudioConverterForm>("btnStartConversion_Click")
-                    .Info($"Conversion process completed. Converted {_conversionCounter} of {_totalToConvert} files.");
+                AuLogger.GetCurrentLogger<AudioConverterForm>("btnStartConversion_Click").Info(
+                    $"Conversion process completed. Converted {_conversionCounter} of {_totalToConvert} files.");
 
                 RestoreUi();
                 InvokeConversionComplete();
@@ -466,8 +461,7 @@ public partial class AudioConverterForm : Form
         SetUiEnabledStates();
         btnStartConversion.Text = Strings.StartConversion;
         lblStatus.Text = Strings.Ready;
-        lblTotalConversions.Text =
-            string.Format(Strings.TotalConversionsLabel, _conversionCounter, _totalToConvert);
+        lblTotalConversions.Text = string.Format(Strings.TotalConversionsLabel, _conversionCounter, _totalToConvert);
         pgConvertCandidate.Enabled = true;
         lbCandidates.Enabled = true;
     }
@@ -478,8 +472,7 @@ public partial class AudioConverterForm : Form
     private void InvokeConversionComplete()
     {
         var convertedFiles = lbCandidates.CheckedItems.Cast<ConvertCandidate>()
-            .Select(item => item.OutputPath)
-            .ToList();
+            .Select(item => item.OutputPath).ToList();
 
         if (!_isCancelling)
             ConversionCompleted?.Invoke(this, convertedFiles);
@@ -699,8 +692,7 @@ public partial class AudioConverterForm : Form
         }
         catch (InvalidOperationException ex)
         {
-            AuLogger.GetCurrentLogger<AudioConverterForm>("RunOnUI")
-                .Warn(ex, "UI invoke failed.");
+            AuLogger.GetCurrentLogger<AudioConverterForm>("RunOnUI").Warn(ex, "UI invoke failed.");
         }
     }
 

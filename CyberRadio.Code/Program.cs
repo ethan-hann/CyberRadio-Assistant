@@ -17,7 +17,6 @@
 #region
 
 using System.Diagnostics;
-using System.Threading;
 using RadioExt_Helper.forms;
 using RadioExt_Helper.utility;
 
@@ -126,7 +125,6 @@ internal static class Program
     private static void DeleteDirectoryWithRetry(string path, int maxAttempts = 8)
     {
         for (var attempt = 1; attempt <= maxAttempts; attempt++)
-        {
             try
             {
                 if (Directory.Exists(path))
@@ -137,13 +135,11 @@ internal static class Program
             {
                 Thread.Sleep(300);
             }
-        }
     }
 
     private static void DeleteFileWithRetry(string path, int maxAttempts = 8)
     {
         for (var attempt = 1; attempt <= maxAttempts; attempt++)
-        {
             try
             {
                 if (File.Exists(path))
@@ -154,6 +150,5 @@ internal static class Program
             {
                 Thread.Sleep(300);
             }
-        }
     }
 }

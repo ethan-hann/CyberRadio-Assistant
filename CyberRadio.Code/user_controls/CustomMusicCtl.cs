@@ -31,12 +31,14 @@ using ListView = System.Windows.Forms.ListView;
 namespace RadioExt_Helper.user_controls;
 
 /// <summary>
-/// Represents a user control for managing custom music stations, allowing users to add, remove, and organize songs
-/// within a station.
+///     Represents a user control for managing custom music stations, allowing users to add, remove, and organize songs
+///     within a station.
 /// </summary>
-/// <remarks>This control provides a graphical interface for editing the contents and order of songs in a custom
-/// music station. It supports localization, drag-and-drop reordering, and integration with audio conversion workflows.
-/// The control raises events when the station is updated or when status messages should be displayed.</remarks>
+/// <remarks>
+///     This control provides a graphical interface for editing the contents and order of songs in a custom
+///     music station. It supports localization, drag-and-drop reordering, and integration with audio conversion workflows.
+///     The control raises events when the station is updated or when status messages should be displayed.
+/// </remarks>
 public sealed partial class CustomMusicCtl : UserControl, IUserControl
 {
     private readonly ImageList _songListViewImages = new();
@@ -100,24 +102,30 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
     }
 
     /// <summary>
-    /// Occurs when the station information is updated.
+    ///     Occurs when the station information is updated.
     /// </summary>
-    /// <remarks>Subscribe to this event to be notified when any changes are made to the station's data. Event
-    /// handlers receive an <see cref="EventArgs"/> instance; no additional event data is provided.</remarks>
+    /// <remarks>
+    ///     Subscribe to this event to be notified when any changes are made to the station's data. Event
+    ///     handlers receive an <see cref="EventArgs" /> instance; no additional event data is provided.
+    /// </remarks>
     public event EventHandler? StationUpdated;
 
     /// <summary>
-    /// Occurs when the status changes, providing the new status as a string.
+    ///     Occurs when the status changes, providing the new status as a string.
     /// </summary>
-    /// <remarks>Subscribers can use this event to respond to status updates. The event handler receives the
-    /// updated status as the event argument.</remarks>
+    /// <remarks>
+    ///     Subscribers can use this event to respond to status updates. The event handler receives the
+    ///     updated status as the event argument.
+    /// </remarks>
     public event EventHandler<string>? StatusChanged;
 
     /// <summary>
-    /// Occurs when the status is reset.
+    ///     Occurs when the status is reset.
     /// </summary>
-    /// <remarks>Subscribe to this event to be notified when the status is reset to its initial state. The
-    /// event handler receives standard EventArgs and does not provide additional data.</remarks>
+    /// <remarks>
+    ///     Subscribe to this event to be notified when the status is reset to its initial state. The
+    ///     event handler receives standard EventArgs and does not provide additional data.
+    /// </remarks>
     public event EventHandler? StatusReset;
 
     private void CustomMusicCtl_Load(object sender, EventArgs e)
@@ -146,8 +154,7 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
     {
         if (e.ColumnIndex == 0) // Assuming the icon is in the first column
         {
-            if (e.Item == null || lvSongs.SmallImageList == null ||
-                e.Item.Tag is not Song song) return;
+            if (e.Item == null || lvSongs.SmallImageList == null || e.Item.Tag is not Song song) return;
 
             var imageKey = FileHelper.DoesFileExist(song.FilePath, false) ? "enabled" : "disabled";
             var image = lvSongs.SmallImageList.Images[imageKey];
@@ -191,16 +198,14 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
         lvSongs.SuspendLayout();
         lvSongs.Items.Clear();
 
-        foreach (var lvItem in Station.TrackedObject.Songs
-                     .Select(song => new ListViewItem([
-                             string.Empty, // This is required for the icon to show up in the first column
-                             song.Title,
-                             song.Artist,
-                             $"{song.Duration:hh\\:mm\\:ss}",
-                             song.FileSize.FormatSize(),
-                             song.FilePath
-                         ])
-                         { Tag = song }))
+        foreach (var lvItem in Station.TrackedObject.Songs.Select(song => new ListViewItem([
+                     string.Empty, // This is required for the icon to show up in the first column
+                     song.Title,
+                     song.Artist,
+                     $"{song.Duration:hh\\:mm\\:ss}",
+                     song.FileSize.FormatSize(),
+                     song.FilePath
+                 ]) { Tag = song }))
             lvSongs.Items.Add(lvItem);
 
         lvSongs.ResizeColumns();
@@ -225,7 +230,8 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
 
             if (GlobalData.ConfigManager.GetConfig() == null)
             {
-                AuLogger.GetCurrentLogger<CustomMusicCtl>("BtnAddSongs_Click").Fatal("Configuration is null in a place it shouldn't be!");
+                AuLogger.GetCurrentLogger<CustomMusicCtl>("BtnAddSongs_Click")
+                    .Fatal("Configuration is null in a place it shouldn't be!");
                 ToastNotification.Show(this, Strings.FatalConfigLoadError, ToastType.Error);
                 return;
             }
@@ -249,7 +255,7 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
             // Add songs that don't require conversion first
             var songTasks = noConversionNeeded.Select(Song.FromFileAsync);
             var songs = await Task.WhenAll(songTasks);
-        
+
             foreach (var song in songs.Where(s => s != null && CanSongBeAdded(s)))
                 Station.TrackedObject.Songs.Add(song!);
 
@@ -271,8 +277,7 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
                 //Ask the user if they want to convert the files
                 var result = MessageBox.Show(this,
                     string.Format(pluralPrompt ? Strings.AudioConverterPrompt : Strings.AudioConverterPrompt_Single,
-                        needConversion.Count), Strings.Confirm,
-                    MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                        needConversion.Count), Strings.Confirm, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 if (result == DialogResult.Yes)
                 {
                     // Show the audio converter form
@@ -287,8 +292,7 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
         }
         catch (Exception ex)
         {
-            AuLogger.GetCurrentLogger<CustomMusicCtl>("BtnAddSongs_Click")
-                .Error(ex, "Error adding songs to station.");
+            AuLogger.GetCurrentLogger<CustomMusicCtl>("BtnAddSongs_Click").Error(ex, "Error adding songs to station.");
         }
     }
 
@@ -298,7 +302,7 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
         {
             var songTasks = e.Select(Song.FromFileAsync);
             var songs = await Task.WhenAll(songTasks);
-        
+
             foreach (var song in songs.Where(s => s != null && CanSongBeAdded(s)))
                 Station.TrackedObject.Songs.Add(song!);
 
@@ -403,8 +407,7 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
 
         // Get the list of files in the selected folder
         var filesInFolder = FileHelper.SafeEnumerateFiles(selectedFolder, "*.*", SearchOption.AllDirectories)
-            .Select(f => new FileInfo(f))
-            .ToList();
+            .Select(f => new FileInfo(f)).ToList();
 
         lvSongs.BeginUpdate();
         foreach (ListViewItem item in lvSongs.SelectedItems)
@@ -413,8 +416,9 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
 
             // Try to find a matching file in the selected folder
             var matchingFile = filesInFolder.FirstOrDefault(f =>
-                Path.GetFileName(f.FullName).Equals(Path.GetFileName(song.FilePath), StringComparison.OrdinalIgnoreCase)
-                && (ulong)f.Length == song.FileSize);
+                Path.GetFileName(f.FullName)
+                    .Equals(Path.GetFileName(song.FilePath), StringComparison.OrdinalIgnoreCase) &&
+                (ulong)f.Length == song.FileSize);
 
             // Skip to the next song if no matching file was found
             if (matchingFile == null) continue;
@@ -588,10 +592,8 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
     {
         lbSongs.BeginUpdate();
         lbSongs.Items.Clear();
-        foreach (var s in Station.TrackedObject.Songs
-                     .Where(s => !lvSongOrder.Items
-                         .Cast<ListViewItem>()
-                         .Any(item => item.Tag != null && item.Tag.Equals(s))))
+        foreach (var s in Station.TrackedObject.Songs.Where(s =>
+                     !lvSongOrder.Items.Cast<ListViewItem>().Any(item => item.Tag != null && item.Tag.Equals(s))))
             lbSongs.Items.Add(s);
         lbSongs.EndUpdate();
     }
@@ -630,8 +632,7 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
     {
         ListViewItem item = new([(lvSongOrder.Items.Count + 1).ToString(), song.Title])
         {
-            Name = song.Title,
-            Tag = song
+            Name = song.Title, Tag = song
         };
 
         lvSongOrder.Items.Add(item);
@@ -681,8 +682,7 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
         var tempSongs = lbSongs.Items.Cast<Song>().ToList();
 
         foreach (var song in Station.TrackedObject.MetaData.SongOrder
-                     .Select(item => tempSongs.Find(x => x.FilePath.EndsWith(item)))
-                     .OfType<Song>())
+                     .Select(item => tempSongs.Find(x => x.FilePath.EndsWith(item))).OfType<Song>())
             AddSongToOrderListView(song, false);
 
         UpdateListsAndViews();

@@ -75,8 +75,7 @@ public partial class VanillaStationSelector : Form
         lvTracks.Items.Clear();
         foreach (var song in station.Tracks)
         {
-            var durations = song.TrackDuration
-                .Select(d => TimeSpan.FromSeconds(d).ToString("g")).ToList();
+            var durations = song.TrackDuration.Select(d => TimeSpan.FromSeconds(d).ToString("g")).ToList();
             string durationString;
             if (durations.Count() > 1)
                 durationString = string.Join(", ", durations);
@@ -84,11 +83,10 @@ public partial class VanillaStationSelector : Form
                 durationString = durations.FirstOrDefault() ?? "Unknown";
 
             ListViewItem lvItem = new([
-                    song.TrackName,
-                    song.TrackArtist,
-                    durationString
-                ])
-                { Tag = song };
+                song.TrackName,
+                song.TrackArtist,
+                durationString
+            ]) { Tag = song };
 
             lvTracks.Items.Add(lvItem);
         }
@@ -121,8 +119,7 @@ public partial class VanillaStationSelector : Form
         else
         {
             MessageBox.Show(this, Strings.VanillaStationSelector_NoStationSelectedMessage,
-                Strings.VanillaStationSelector_NoStationSelected, MessageBoxButtons.OK,
-                MessageBoxIcon.Warning);
+                Strings.VanillaStationSelector_NoStationSelected, MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
     }
 }

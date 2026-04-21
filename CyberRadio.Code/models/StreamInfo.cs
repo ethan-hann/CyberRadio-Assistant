@@ -61,11 +61,7 @@ public sealed class StreamInfo : INotifyPropertyChanged, ICloneable, IEquatable<
 
     public object Clone()
     {
-        return new StreamInfo
-        {
-            StreamUrl = StreamUrl,
-            IsStream = IsStream
-        };
+        return new StreamInfo { StreamUrl = StreamUrl, IsStream = IsStream };
     }
 
     public bool Equals(StreamInfo? other)

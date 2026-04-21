@@ -58,8 +58,7 @@ public class DirectoryCopier(BackgroundWorker worker)
         Directory.CreateDirectory(destDir);
 
         // Copy all files using LINQ
-        var files = FileHelper.SafeEnumerateFiles(sourceDir)
-            .Select(file => new FileInfo(file));
+        var files = FileHelper.SafeEnumerateFiles(sourceDir).Select(file => new FileInfo(file));
 
         foreach (var file in files)
         {
@@ -75,8 +74,7 @@ public class DirectoryCopier(BackgroundWorker worker)
         if (!copySubDirs) return;
 
         // Copy all subdirectories recursively if specified
-        var subDirs = FileHelper.SafeEnumerateDirectories(sourceDir)
-            .Select(dir => new DirectoryInfo(dir));
+        var subDirs = FileHelper.SafeEnumerateDirectories(sourceDir).Select(dir => new DirectoryInfo(dir));
 
         foreach (var subDir in subDirs)
         {

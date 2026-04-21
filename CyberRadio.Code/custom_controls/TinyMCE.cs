@@ -1,16 +1,16 @@
 ﻿// TinyMCE.cs : RadioExt-Helper
 // Copyright (C) 2026  Ethan Hann
-//
+// 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-//
+// 
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
-//
+// 
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
@@ -39,11 +39,11 @@ public partial class TinyMce : UserControl, IUserControl
     private const string VirtualHostName = "tinymce.cra";
 
     private string _language = "en";
-    private string? _pendingHtml;
-    private WebView2? _webView;
 
     // Deduping so you don't raise ContentChanged repeatedly for identical HTML
     private string _lastRaisedHtml = string.Empty;
+    private string? _pendingHtml;
+    private WebView2? _webView;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="TinyMce" /> control.
@@ -97,16 +97,13 @@ public partial class TinyMce : UserControl, IUserControl
     public event EventHandler? EditorReady;
 
     /// <summary>
-    /// Occurs when the content changes (text OR markup/styling changes). The content is HTML.
+    ///     Occurs when the content changes (text OR markup/styling changes). The content is HTML.
     /// </summary>
     public event EventHandler<string>? ContentChanged;
 
     private void InitializeWebViewControl()
     {
-        _webView = new WebView2
-        {
-            Dock = DockStyle.Fill
-        };
+        _webView = new WebView2 { Dock = DockStyle.Fill };
         Controls.Add(_webView);
     }
 
@@ -135,8 +132,7 @@ public partial class TinyMce : UserControl, IUserControl
                     "to TinyMceRootFolder before this control is created.");
 
             var webViewDataFolder = Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-                "RadioExt-Helper",
+                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "RadioExt-Helper",
                 "webview2");
 
             Directory.CreateDirectory(webViewDataFolder);
@@ -147,9 +143,7 @@ public partial class TinyMce : UserControl, IUserControl
             var env = await CoreWebView2Environment.CreateAsync(userDataFolder: webViewDataFolder);
             await _webView.EnsureCoreWebView2Async(env);
 
-            _webView.CoreWebView2.SetVirtualHostNameToFolderMapping(
-                VirtualHostName,
-                TinyMceInstaller.TinyMceRootFolder,
+            _webView.CoreWebView2.SetVirtualHostNameToFolderMapping(VirtualHostName, TinyMceInstaller.TinyMceRootFolder,
                 CoreWebView2HostResourceAccessKind.Allow);
 
             _webView.CoreWebView2.WebMessageReceived += CoreWebView2_WebMessageReceived;
@@ -159,8 +153,7 @@ public partial class TinyMce : UserControl, IUserControl
         }
         catch (Exception ex)
         {
-            AuLogger.GetCurrentLogger<TinyMce>().Error(ex,
-                "Failed to initialize TinyMCE WebView2 control.");
+            AuLogger.GetCurrentLogger<TinyMce>().Error(ex, "Failed to initialize TinyMCE WebView2 control.");
         }
     }
 
@@ -199,7 +192,8 @@ public partial class TinyMce : UserControl, IUserControl
                 case "content-changed":
                 {
                     var html = string.Empty;
-                    if (doc.RootElement.TryGetProperty("html", out var htmlEl) && htmlEl.ValueKind == JsonValueKind.String)
+                    if (doc.RootElement.TryGetProperty("html", out var htmlEl) &&
+                        htmlEl.ValueKind == JsonValueKind.String)
                         html = htmlEl.GetString() ?? string.Empty;
 
                     // Keep internal cache in sync
@@ -240,8 +234,15 @@ public partial class TinyMce : UserControl, IUserControl
 
         if (InvokeRequired)
         {
-            try { BeginInvoke(action); }
-            catch { /* ignore during shutdown */ }
+            try
+            {
+                BeginInvoke(action);
+            }
+            catch
+            {
+                /* ignore during shutdown */
+            }
+
             return;
         }
 
@@ -446,11 +447,7 @@ public partial class TinyMce : UserControl, IUserControl
         if (_webView?.CoreWebView2 == null)
             return Task.CompletedTask;
 
-        var payload = new
-        {
-            type = "set-content",
-            html = htmlContent
-        };
+        var payload = new { type = "set-content", html = htmlContent };
 
         var json = JsonSerializer.Serialize(payload);
 
@@ -463,11 +460,7 @@ public partial class TinyMce : UserControl, IUserControl
         if (_webView?.CoreWebView2 == null)
             return Task.CompletedTask;
 
-        var payload = new
-        {
-            type = "set-language",
-            language = languageCode
-        };
+        var payload = new { type = "set-language", language = languageCode };
 
         var json = JsonSerializer.Serialize(payload);
 
@@ -505,15 +498,11 @@ public partial class TinyMce : UserControl, IUserControl
         if (!Directory.Exists(langsFolder))
             return "en";
 
-        var files = Directory
-            .GetFiles(langsFolder, "*.js")
-            .Select(Path.GetFileNameWithoutExtension)
-            .Where(f => !string.IsNullOrWhiteSpace(f))
-            .ToList();
+        var files = Directory.GetFiles(langsFolder, "*.js").Select(Path.GetFileNameWithoutExtension)
+            .Where(f => !string.IsNullOrWhiteSpace(f)).ToList();
 
         // 1) Exact two-letter match: es.js, pt.js, zh.js, etc.
-        var exact = files.FirstOrDefault(f =>
-            string.Equals(f, iso2, StringComparison.OrdinalIgnoreCase));
+        var exact = files.FirstOrDefault(f => string.Equals(f, iso2, StringComparison.OrdinalIgnoreCase));
         if (exact != null)
             return exact;
 
@@ -524,8 +513,7 @@ public partial class TinyMce : UserControl, IUserControl
             return variant;
 
         // 3) Fallback: variant with dash ("xx-YY") if any
-        variant = files.FirstOrDefault(f =>
-            f != null && f.StartsWith(iso2 + "-", StringComparison.OrdinalIgnoreCase));
+        variant = files.FirstOrDefault(f => f != null && f.StartsWith(iso2 + "-", StringComparison.OrdinalIgnoreCase));
         return variant ?? "en";
     }
 
@@ -551,8 +539,7 @@ public partial class TinyMce : UserControl, IUserControl
         if (!IsEditorReady || _webView?.CoreWebView2 == null)
             return _pendingHtml ?? string.Empty;
 
-        var resultJson = await _webView.CoreWebView2.ExecuteScriptAsync(
-            "window.__tinyHostApi.getContent();");
+        var resultJson = await _webView.CoreWebView2.ExecuteScriptAsync("window.__tinyHostApi.getContent();");
 
         string? html;
         try

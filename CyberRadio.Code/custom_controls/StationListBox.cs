@@ -307,8 +307,7 @@ public sealed partial class StationListBox : ListBox
                 }
 
                 // Determine the secondary icon (changes pending/saved)
-                var secondaryIconKey = station.IsPendingSave |
-                                       StationManager.Instance.IsNewStation(station.Id)
+                var secondaryIconKey = station.IsPendingSave | StationManager.Instance.IsNewStation(station.Id)
                     ? _editedStationIconKey
                     : _savedStationIconKey;
 
@@ -327,8 +326,7 @@ public sealed partial class StationListBox : ListBox
                     e.Bounds.Height); // Adjust width to leave space for the secondary icon
 
                 TextRenderer.DrawText(e.Graphics, station.TrackedObject.MetaData.DisplayName, GetItemFont(station),
-                    textRect,
-                    GetItemColor(station), TextFormatFlags.Left);
+                    textRect, GetItemColor(station), TextFormatFlags.Left);
             }
 
             e.DrawFocusRectangle();

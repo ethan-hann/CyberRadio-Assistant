@@ -120,11 +120,7 @@ public sealed class ReplacementStation : IStation, INotifyPropertyChanged, IClon
     /// <inheritdoc />
     public object Clone()
     {
-        return new ReplacementStation
-        {
-            Tracks = _tracks,
-            VanillaStation = _vanillaStation
-        };
+        return new ReplacementStation { Tracks = _tracks, VanillaStation = _vanillaStation };
     }
 
     /// <inheritdoc />
@@ -132,8 +128,7 @@ public sealed class ReplacementStation : IStation, INotifyPropertyChanged, IClon
     {
         if (other is null) return false;
 
-        return other.VanillaStation?.StationName == VanillaStation?.StationName &&
-               other.Tracks.SequenceEqual(Tracks);
+        return other.VanillaStation?.StationName == VanillaStation?.StationName && other.Tracks.SequenceEqual(Tracks);
     }
 
     /// <inheritdoc />
@@ -146,12 +141,16 @@ public sealed class ReplacementStation : IStation, INotifyPropertyChanged, IClon
     public StationType StationType => StationType.Replacement;
 
     /// <summary>
-    /// Replaces an existing track in the replacement station with a new track using the specified parameters.
+    ///     Replaces an existing track in the replacement station with a new track using the specified parameters.
     /// </summary>
-    /// <remarks>If the specified track does not exist in the replacement station, or if the original track
-    /// cannot be removed, the method returns false and no changes are made.</remarks>
-    /// <param name="trackName">The name of the track to be replaced. This value is compared against the vanilla track names in the station.
-    /// Cannot be null.</param>
+    /// <remarks>
+    ///     If the specified track does not exist in the replacement station, or if the original track
+    ///     cannot be removed, the method returns false and no changes are made.
+    /// </remarks>
+    /// <param name="trackName">
+    ///     The name of the track to be replaced. This value is compared against the vanilla track names in the station.
+    ///     Cannot be null.
+    /// </param>
     /// <param name="wemId">The WEM identifier to associate with the replacement track. Cannot be null.</param>
     /// <param name="replacementFile">The file path of the replacement audio file to use for the new track. Cannot be null.</param>
     /// <returns>true if the track was successfully replaced; otherwise, false.</returns>
@@ -162,9 +161,8 @@ public sealed class ReplacementStation : IStation, INotifyPropertyChanged, IClon
         var newTrack = new ReplacementTrack(trackName, wemId, replacementFile);
         if (originalTrack == null)
         {
-            AuLogger.GetCurrentLogger<ReplacementStation>("ReplaceTrack")
-                .Info(
-                    $"No replacement track found for track '{trackName}' in replacement station '{DisplayName}' for WEM ID '{wemId}'. Creating a new one...");
+            AuLogger.GetCurrentLogger<ReplacementStation>("ReplaceTrack").Info(
+                $"No replacement track found for track '{trackName}' in replacement station '{DisplayName}' for WEM ID '{wemId}'. Creating a new one...");
             Tracks.Add(newTrack);
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Tracks)));
             return Tracks.Contains(newTrack);
@@ -180,9 +178,8 @@ public sealed class ReplacementStation : IStation, INotifyPropertyChanged, IClon
         }
         else
         {
-            AuLogger.GetCurrentLogger<ReplacementStation>("ReplaceTrack")
-                .Warn(
-                    $"Failed to remove original track '{trackName}' from replacement station '{DisplayName}'.");
+            AuLogger.GetCurrentLogger<ReplacementStation>("ReplaceTrack").Warn(
+                $"Failed to remove original track '{trackName}' from replacement station '{DisplayName}'.");
             return false;
         }
 
@@ -190,11 +187,13 @@ public sealed class ReplacementStation : IStation, INotifyPropertyChanged, IClon
     }
 
     /// <summary>
-    /// Removes a replaced track from the collection that matches the specified track name and WEM ID.
+    ///     Removes a replaced track from the collection that matches the specified track name and WEM ID.
     /// </summary>
-    /// <remarks>If no replacement track matching both the specified track name and WEM ID is found, no action
-    /// is taken and the method returns false. This method does not throw an exception if the track is not
-    /// found.</remarks>
+    /// <remarks>
+    ///     If no replacement track matching both the specified track name and WEM ID is found, no action
+    ///     is taken and the method returns false. This method does not throw an exception if the track is not
+    ///     found.
+    /// </remarks>
     /// <param name="trackName">The name of the original (vanilla) track to identify the replacement to remove. Cannot be null.</param>
     /// <param name="wemId">The WEM ID associated with the replacement track to remove. Cannot be null.</param>
     /// <returns>true if a matching replacement track was found and removed; otherwise, false.</returns>
@@ -203,23 +202,23 @@ public sealed class ReplacementStation : IStation, INotifyPropertyChanged, IClon
         var trackToRemove = Tracks.FirstOrDefault(t => t.VanillaTrackName.Equals(trackName) && t.WemId.Equals(wemId));
         if (trackToRemove == null)
         {
-            AuLogger.GetCurrentLogger<ReplacementStation>("RemoveReplacedTrack")
-                .Info($"No replacement track found for track '{trackName}' in replacement station '{DisplayName}' for WEM ID '{wemId}'. Nothing to remove.");
+            AuLogger.GetCurrentLogger<ReplacementStation>("RemoveReplacedTrack").Info(
+                $"No replacement track found for track '{trackName}' in replacement station '{DisplayName}' for WEM ID '{wemId}'. Nothing to remove.");
             return false;
         }
 
-        AuLogger.GetCurrentLogger<ReplacementStation>("RemoveReplacedTrack")
-            .Info($"Removing replacement track for track '{trackName}' in replacement station '{DisplayName}' for WEM ID '{wemId}'...");
-        
+        AuLogger.GetCurrentLogger<ReplacementStation>("RemoveReplacedTrack").Info(
+            $"Removing replacement track for track '{trackName}' in replacement station '{DisplayName}' for WEM ID '{wemId}'...");
+
         var success = Tracks.Remove(trackToRemove);
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Tracks)));
 
         return success;
     }
-    
+
     /// <summary>
-    /// Ensures the files from the replacement tracks for this station are in the staging folder.
-    /// Optionally removes tracks from the staging folder that are no longer being replaced.
+    ///     Ensures the files from the replacement tracks for this station are in the staging folder.
+    ///     Optionally removes tracks from the staging folder that are no longer being replaced.
     /// </summary>
     /// <param name="stagingFolder">The path to the staging folder.</param>
     /// <param name="removeStaleFiles">True to delete stale replacement files from staging; otherwise, false.</param>

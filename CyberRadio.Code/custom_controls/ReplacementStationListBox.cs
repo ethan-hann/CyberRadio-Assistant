@@ -373,8 +373,7 @@ public sealed partial class ReplacementStationListBox : ListBox
         var textWidth = Math.Max(10, right - left);
 
         using var g = CreateGraphics();
-        var textSize = TextRenderer.MeasureText(g, text, Font,
-            new Size(textWidth, int.MaxValue),
+        var textSize = TextRenderer.MeasureText(g, text, Font, new Size(textWidth, int.MaxValue),
             TextFormatFlags.WordBreak | TextFormatFlags.NoPadding);
 
         var contentHeight = Math.Max(_imageEdge, textSize.Height);
@@ -431,11 +430,10 @@ public sealed partial class ReplacementStationListBox : ListBox
             }
 
             // Text
-            Rectangle textRect = new(e.Bounds.Left + 20, e.Bounds.Top,
-                e.Bounds.Width - 40 - 4, e.Bounds.Height);
+            Rectangle textRect = new(e.Bounds.Left + 20, e.Bounds.Top, e.Bounds.Width - 40 - 4, e.Bounds.Height);
 
-            TextRenderer.DrawText(e.Graphics, station.TrackedObject.DisplayName, GetItemFont(station),
-                textRect, GetItemColor(station), TextFormatFlags.Left);
+            TextRenderer.DrawText(e.Graphics, station.TrackedObject.DisplayName, GetItemFont(station), textRect,
+                GetItemColor(station), TextFormatFlags.Left);
         }
     }
 
@@ -457,14 +455,9 @@ public sealed partial class ReplacementStationListBox : ListBox
         // Layout
         var bounds = Rectangle.Inflate(e.Bounds, -1, -1);
 
-        Rectangle imgRect = new(
-            bounds.Left + Padding.Left,
-            bounds.Top + Padding.Top,
-            _imageEdge, _imageEdge);
+        Rectangle imgRect = new(bounds.Left + Padding.Left, bounds.Top + Padding.Top, _imageEdge, _imageEdge);
 
-        Rectangle textRect = new(
-            imgRect.Right + ImageTextGap,
-            bounds.Top + Padding.Top,
+        Rectangle textRect = new(imgRect.Right + ImageTextGap, bounds.Top + Padding.Top,
             Math.Max(10, bounds.Right - Padding.Right - (imgRect.Right + ImageTextGap)),
             Math.Max(10, bounds.Bottom - Padding.Bottom - (bounds.Top + Padding.Top)));
 
@@ -542,8 +535,7 @@ public sealed partial class ReplacementStationListBox : ListBox
             var key = ResourceKeySelector?.Invoke(item) ?? DefaultResourceKeyFromItem(item);
             var img = ResolveResourceImage(key) ??
                       // smart fallbacks
-                      ResolveResourceImage(ToUnderscoreKey(key)) ??
-                      ResolveResourceImage(key.ToLowerInvariant());
+                      ResolveResourceImage(ToUnderscoreKey(key)) ?? ResolveResourceImage(key.ToLowerInvariant());
 
             if (img == null)
             {
@@ -714,11 +706,7 @@ public sealed partial class ReplacementStationListBox : ListBox
             b = X;
         }
 
-        return Color.FromArgb(
-            255,
-            (int)((r + m) * 255),
-            (int)((g + m) * 255),
-            (int)((b + m) * 255));
+        return Color.FromArgb(255, (int)((r + m) * 255), (int)((g + m) * 255), (int)((b + m) * 255));
     }
 
     private static Image? ResolveResourceImage(string key)

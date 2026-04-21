@@ -34,10 +34,11 @@ public enum ValidAudioFiles
     [Description(".ogg")] Ogg,
     [Description(".flac")] Flac,
     [Description(".mp2")] Mp2,
-    [Browsable(false)]
-    [Description(".wax")] Wax,
+
+    [Browsable(false)] [Description(".wax")]
+    Wax,
     [Description(".wma")] Wma,
-    [Description(".wem")]
-    [Browsable(false)]
+
+    [Description(".wem")] [Browsable(false)]
     Wem
 }

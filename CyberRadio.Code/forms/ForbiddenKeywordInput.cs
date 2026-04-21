@@ -85,15 +85,15 @@ public partial class ForbiddenKeywordInput : Form
     {
         if (string.IsNullOrEmpty(txtKeyword.Text))
         {
-            MessageBox.Show(this, Strings.ForbiddenKeywordEmpty,
-                Strings.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show(this, Strings.ForbiddenKeywordEmpty, Strings.Error, MessageBoxButtons.OK,
+                MessageBoxIcon.Error);
             return;
         }
 
         if (string.IsNullOrEmpty(cmbGroups.Text))
         {
-            MessageBox.Show(this, Strings.ForbiddenKeywordNoGroup,
-                Strings.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show(this, Strings.ForbiddenKeywordNoGroup, Strings.Error, MessageBoxButtons.OK,
+                MessageBoxIcon.Error);
             return;
         }
 

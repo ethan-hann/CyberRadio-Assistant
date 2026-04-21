@@ -81,8 +81,7 @@ public static partial class PathHelper
     {
         OpenFileDialog dialog = new()
         {
-            Filter = Strings.GamePathFilter + @"|Cyberpunk2077.exe",
-            Title = Strings.OpenGameExecutable
+            Filter = Strings.GamePathFilter + @"|Cyberpunk2077.exe", Title = Strings.OpenGameExecutable
         };
 
         try
@@ -111,8 +110,7 @@ public static partial class PathHelper
         }
         catch (Exception ex)
         {
-            AuLogger.GetCurrentLogger("PathHelper.GetGamePath")
-                .Error(ex, "Error retrieving base game path.");
+            AuLogger.GetCurrentLogger("PathHelper.GetGamePath").Error(ex, "Error retrieving base game path.");
             return string.Empty;
         }
 
@@ -137,11 +135,7 @@ public static partial class PathHelper
     /// <returns>The base path of the game or <see cref="string.Empty" /> if path couldn't be determined.</returns>
     public static string GetStagingPath(bool shouldLoop)
     {
-        FolderBrowserDialog dialog = new()
-        {
-            Description = Strings.StagingPathHelp,
-            UseDescriptionForTitle = true
-        };
+        FolderBrowserDialog dialog = new() { Description = Strings.StagingPathHelp, UseDescriptionForTitle = true };
 
         try
         {
@@ -157,8 +151,7 @@ public static partial class PathHelper
         }
         catch (Exception ex)
         {
-            AuLogger.GetCurrentLogger("PathHelper.GetStagingPath")
-                .Error(ex, "Error retrieving staging path.");
+            AuLogger.GetCurrentLogger("PathHelper.GetStagingPath").Error(ex, "Error retrieving staging path.");
             return string.Empty;
         }
     }
@@ -194,7 +187,7 @@ public static partial class PathHelper
     }
 
     /// <summary>
-    /// Gets the full path to the mod archive directory for the specified game base path.
+    ///     Gets the full path to the mod archive directory for the specified game base path.
     /// </summary>
     /// <param name="gameBasePath">The root directory of the game installation. Cannot be null or empty.</param>
     /// <returns>A string containing the full path to the mod archive directory under the specified game base path.</returns>
@@ -323,8 +316,9 @@ public static partial class PathHelper
         }
     }
 
-     /// <summary>
-    ///     Sanitizes a file name by replacing invalid characters and specific characters (like apostrophes) that can cause issues.
+    /// <summary>
+    ///     Sanitizes a file name by replacing invalid characters and specific characters (like apostrophes) that can cause
+    ///     issues.
     /// </summary>
     public static string SanitizeFileName(string fileName)
     {
@@ -343,7 +337,8 @@ public static partial class PathHelper
             foreach (var ch in fileName)
             {
                 var cat = char.GetUnicodeCategory(ch);
-                if (cat is UnicodeCategory.Control or UnicodeCategory.Format or UnicodeCategory.Surrogate or UnicodeCategory.OtherNotAssigned)
+                if (cat is UnicodeCategory.Control or UnicodeCategory.Format or UnicodeCategory.Surrogate
+                    or UnicodeCategory.OtherNotAssigned)
                     continue;
 
                 buffer[length++] = ch;
@@ -444,7 +439,9 @@ public static partial class PathHelper
     public static List<ForbiddenKeyword> GetAlwaysForbiddenPaths()
     {
         return AlwaysForbiddenPaths.Select(path => new ForbiddenKeyword
-            { Group = Strings.SystemPaths, Keyword = path, IsForbidden = true }).ToList();
+        {
+            Group = Strings.SystemPaths, Keyword = path, IsForbidden = true
+        }).ToList();
     }
 
     /// <summary>
@@ -460,8 +457,7 @@ public static partial class PathHelper
         response.EnsureSuccessStatusCode();
 
         await using var contentStream = await response.Content.ReadAsStreamAsync();
-        FileStream fileStream = new(destinationFilePath, FileMode.Create, FileAccess.Write, FileShare.None, 8192,
-            true);
+        FileStream fileStream = new(destinationFilePath, FileMode.Create, FileAccess.Write, FileShare.None, 8192, true);
         await using var stream = fileStream.ConfigureAwait(false);
 
         await contentStream.CopyToAsync(fileStream);
@@ -599,10 +595,8 @@ public static partial class PathHelper
 
             var security = directoryInfo.GetAccessControl();
             var user = WindowsIdentity.GetCurrent().Name;
-            security.AddAccessRule(new FileSystemAccessRule(
-                user,
-                FileSystemRights.FullControl,
-                AccessControlType.Allow));
+            security.AddAccessRule(
+                new FileSystemAccessRule(user, FileSystemRights.FullControl, AccessControlType.Allow));
             directoryInfo.SetAccessControl(security);
         }
         catch (Exception ex)
