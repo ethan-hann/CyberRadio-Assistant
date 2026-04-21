@@ -41,6 +41,7 @@ namespace RadioExt_Helper.forms
             refreshStationsToolStripMenuItem = new ToolStripMenuItem();
             synchronizeStationsToolStripMenuItem = new ToolStripMenuItem();
             toolStripSeparator5 = new ToolStripSeparator();
+            clearAllTemporaryDataToolStripMenuItem = new ToolStripMenuItem();
             clearAllDataToolStripMenuItem = new ToolStripMenuItem();
             toolStripSeparator2 = new ToolStripSeparator();
             backupToolStripMenuItem = new ToolStripMenuItem();
@@ -108,7 +109,7 @@ namespace RadioExt_Helper.forms
             pgBackupProgress = new ToolStripProgressBar();
             lblSpring2 = new ToolStripStatusLabel();
             statusStripBackup = new StatusStrip();
-            clearAllTemporaryDataToolStripMenuItem = new ToolStripMenuItem();
+            liveLogViewerToolStripMenuItem = new ToolStripMenuItem();
             menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
@@ -193,6 +194,14 @@ namespace RadioExt_Helper.forms
             // 
             toolStripSeparator5.Name = "toolStripSeparator5";
             toolStripSeparator5.Size = new Size(263, 6);
+            // 
+            // clearAllTemporaryDataToolStripMenuItem
+            // 
+            clearAllTemporaryDataToolStripMenuItem.Image = Properties.Resources.delete;
+            clearAllTemporaryDataToolStripMenuItem.Name = "clearAllTemporaryDataToolStripMenuItem";
+            clearAllTemporaryDataToolStripMenuItem.Size = new Size(266, 22);
+            clearAllTemporaryDataToolStripMenuItem.Text = "Clear All Temporary Data!";
+            clearAllTemporaryDataToolStripMenuItem.Click += clearAllTemporaryDataToolStripMenuItem_Click;
             // 
             // clearAllDataToolStripMenuItem
             // 
@@ -320,7 +329,7 @@ namespace RadioExt_Helper.forms
             // 
             // toolsToolStripMenuItem
             // 
-            toolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { iconGeneratorToolStripMenuItem, audioConverterToolStripMenuItem });
+            toolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { iconGeneratorToolStripMenuItem, audioConverterToolStripMenuItem, liveLogViewerToolStripMenuItem });
             toolsToolStripMenuItem.Image = Properties.Resources.tools_16x16;
             toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             toolsToolStripMenuItem.Size = new Size(63, 20);
@@ -910,13 +919,14 @@ namespace RadioExt_Helper.forms
             statusStripBackup.Text = "statusStrip2";
             statusStripBackup.Visible = false;
             // 
-            // clearAllTemporaryDataToolStripMenuItem
+            // liveLogViewerToolStripMenuItem
             // 
-            clearAllTemporaryDataToolStripMenuItem.Image = Properties.Resources.delete;
-            clearAllTemporaryDataToolStripMenuItem.Name = "clearAllTemporaryDataToolStripMenuItem";
-            clearAllTemporaryDataToolStripMenuItem.Size = new Size(266, 22);
-            clearAllTemporaryDataToolStripMenuItem.Text = "Clear All Temporary Data!";
-            clearAllTemporaryDataToolStripMenuItem.Click += clearAllTemporaryDataToolStripMenuItem_Click;
+            liveLogViewerToolStripMenuItem.Image = Properties.Resources.log;
+            liveLogViewerToolStripMenuItem.Name = "liveLogViewerToolStripMenuItem";
+            liveLogViewerToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.L;
+            liveLogViewerToolStripMenuItem.Size = new Size(234, 22);
+            liveLogViewerToolStripMenuItem.Text = "Live Log Viewer";
+            liveLogViewerToolStripMenuItem.Click += liveLogViewerToolStripMenuItem_Click;
             // 
             // MainForm
             // 
@@ -1051,5 +1061,6 @@ namespace RadioExt_Helper.forms
         private SplitContainer splitContainer2;
         private ReplacementStationListBox lbReplacedStations;
         private ToolStripMenuItem clearAllTemporaryDataToolStripMenuItem;
+        private ToolStripMenuItem liveLogViewerToolStripMenuItem;
     }
 }

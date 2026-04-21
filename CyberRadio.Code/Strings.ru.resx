@@ -1749,4 +1749,49 @@ CRA перезапустится после очистки данных. Вре�
   <data name="ExportTabs_ReplacedStations" xml:space="preserve">
     <value>Заменены ванильные станции</value>
   </data>
+  <data name="LiveLog_Title" xml:space="preserve">
+    <value>Живой журнал</value>
+  </data>
+  <data name="LiveLog_SearchPrompt" xml:space="preserve">
+    <value>Поиск записей журнала...</value>
+  </data>
+  <data name="LiveLog_DGV_Timestamp" xml:space="preserve">
+    <value>Временная метка</value>
+  </data>
+  <data name="LiveLog_DGV_Level" xml:space="preserve">
+    <value>Уровень</value>
+  </data>
+  <data name="LiveLog_DGV_Message" xml:space="preserve">
+    <value>Сообщение</value>
+  </data>
+  <data name="LiveLog_CopyLine" xml:space="preserve">
+    <value>Копировать строку</value>
+  </data>
+  <data name="LiveLogViewer" xml:space="preserve">
+    <value>Просмотр журнала в реальном времени</value>
+  </data>
+  <data name="Toast_ConvertedToWav" xml:space="preserve">
+    <value>Преобразовано в WAV: {0}</value>
+  </data>
+  <data name="Notification" xml:space="preserve">
+    <value>Уведомление</value>
+  </data>
+  <data name="Toast_ImportedReplacementStations" xml:space="preserve">
+    <value>Импортированы запасные станции ({0}).</value>
+  </data>
+  <data name="Toast_FailedToCopyLogLine" xml:space="preserve">
+    <value>Не удалось скопировать строку журнала: {0}.</value>
+  </data>
+  <data name="Toast_LogLineCopied" xml:space="preserve">
+    <value>Строка журнала скопирована в буфер обмена.</value>
+  </data>
+  <data name="SplashScreen_InitializationError" xml:space="preserve">
+    <value>Не удалось инициализировать приложение. Проверьте журнал на наличие исключений.</value>
+  </data>
+  <data name="SplashScreen_DownloadingTinyMCE" xml:space="preserve">
+    <value>Загрузка TinyMCE...</value>
+  </data>
+  <data name="SplashScreen_DownloadingTinyMCELanguages" xml:space="preserve">
+    <value>Загрузка языков TinyMCE...</value>
+  </data>
 </root>

@@ -252,9 +252,21 @@ public sealed partial class ReplacementStationEditor : UserControl, IEditor
         }
         finally
         {
+            if (lbReplacedTracks.Items.Count <= 0 || lbReplacedTracks.SelectedItem == null)
+                AddNoSelectionControl();
+
             lvTracks.EndUpdate();
             lbReplacedTracks.EndUpdate();
         }
+    }
+
+    private void AddNoSelectionControl()
+    {
+        pnlTrackProperties.Controls.Clear();
+        pnlTrackProperties.Controls.Add(new NoStationSelectedCtl
+        {
+            Dock = DockStyle.Fill
+        });
     }
 
     private void PopulateListView()
@@ -381,7 +393,9 @@ public sealed partial class ReplacementStationEditor : UserControl, IEditor
             if (_replacedTracks.Count > 0)
                 SelectTrackInListBox(_replacedTracks.Last()); // Select the last track in the list after removal
             else
-                ResetPropertiesUi(); //No tracks in the listbox, remove properties UI
+            {
+                AddNoSelectionControl();
+            }
 
             lvTracks.BeginUpdate();
             lvTracks.Invalidate(); // Refresh the ListView to update the icon
@@ -461,9 +475,11 @@ public sealed partial class ReplacementStationEditor : UserControl, IEditor
 
     private void lbReplacedTracks_SelectedIndexChanged(object sender, EventArgs e)
     {
-        if (lbReplacedTracks.SelectedIndex < 0) return;
-
-        if (lbReplacedTracks.SelectedItem is not AudioTrack selectedTrack) return;
+        if (lbReplacedTracks.SelectedIndex < 0 || lbReplacedTracks.SelectedItem is not AudioTrack selectedTrack)
+        {
+            AddNoSelectionControl();
+            return;
+        }
 
         if (SwapPropertiesControl(selectedTrack)) return;
 

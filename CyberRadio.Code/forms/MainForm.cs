@@ -25,6 +25,7 @@ using AetherUtils.Core.Logging;
 using AetherUtils.Core.WinForms.Controls;
 using AetherUtils.Core.WinForms.Models;
 using RadioExt_Helper.config;
+using RadioExt_Helper.custom_controls;
 using RadioExt_Helper.models;
 using RadioExt_Helper.nexus_api;
 using RadioExt_Helper.Properties;
@@ -219,7 +220,7 @@ public sealed partial class MainForm : Form
         var firstStationId = stationIds.First();
         lbReplacedStations.SelectedItem = StationManager.Instance.GetVanillaStation(firstStationId)?.Key;
         SelectReplacementStationEditor(firstStationId);
-        ToastNotification.Show(this, $"Imported {stationIds.Count} replacement station(s).", ToastType.Success);
+        ToastNotification.Show(this, string.Format(Strings.Toast_ImportedReplacementStations, stationIds.Count), ToastType.Success);
         UpdateEnabledStationCount();
         HandleUserControlVisibility();
     }
@@ -482,6 +483,7 @@ public sealed partial class MainForm : Form
         checkForUpdatesToolStripMenuItem.Text = Strings.CheckForUpdates;
         revertChangesToolStripMenuItem.Text = Strings.RevertChanges;
         toolsToolStripMenuItem.Text = Strings.Tools;
+        liveLogViewerToolStripMenuItem.Text = Strings.LiveLogViewer;
         downloadRadioModsToolStripMenuItem.Text = Strings.DownloadRadioMods;
         apiStatusToolStripMenuItem.Text = Strings.ApiStatus;
         stationsToolStripMenuItem.Text = Strings.Stations;
@@ -1101,6 +1103,13 @@ public sealed partial class MainForm : Form
         StationManager.Instance.TranslateEditors();
         _noStationsCtrl.Translate();
 
+        //translate log viewer (if open)
+        foreach (var form in Application.OpenForms)
+        {
+            if (form is LogWindow lw)
+                lw.Translate();
+        }
+
         Focus(); // re-focus the main form
 
         languageToolStripMenuItem.HideDropDown();
@@ -1520,6 +1529,25 @@ public sealed partial class MainForm : Form
         }
 
         Environment.Exit(0);
+    }
+
+    private void liveLogViewerToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        var viewerFormFound = false;
+        foreach (var form in Application.OpenForms)
+        {
+            if (form is LogWindow lw)
+            {
+                lw.Focus();
+                viewerFormFound = true;
+                break;
+            }
+        }
+
+        if (viewerFormFound) return;
+
+        var logWindow = new LogWindow();
+        logWindow.Show();
     }
 
     private void RadioExtHelpToolStripMenuItem_Click(object sender, EventArgs e)

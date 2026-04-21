@@ -284,7 +284,7 @@ public partial class ReplacedTrackPropertiesCtl : UserControl, IEditor
                 .Info($"Successfully converted file '{filePath}' to WAV format at '{convertedFilePath}'.");
 
             filePath = convertedFilePath;
-            ToastNotification.Show(this, $"Converted to WAV: {Path.GetFileName(filePath)}", ToastType.Success);
+            ToastNotification.Show(this, string.Format(Strings.Toast_ConvertedToWav, Path.GetFileName(filePath)), ToastType.Success);
             return true;
         }
         catch (Exception ex)

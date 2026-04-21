@@ -2611,6 +2611,69 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Copy Line.
+        /// </summary>
+        internal static string LiveLog_CopyLine {
+            get {
+                return ResourceManager.GetString("LiveLog_CopyLine", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Level.
+        /// </summary>
+        internal static string LiveLog_DGV_Level {
+            get {
+                return ResourceManager.GetString("LiveLog_DGV_Level", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Message.
+        /// </summary>
+        internal static string LiveLog_DGV_Message {
+            get {
+                return ResourceManager.GetString("LiveLog_DGV_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Timestamp.
+        /// </summary>
+        internal static string LiveLog_DGV_Timestamp {
+            get {
+                return ResourceManager.GetString("LiveLog_DGV_Timestamp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search log entries....
+        /// </summary>
+        internal static string LiveLog_SearchPrompt {
+            get {
+                return ResourceManager.GetString("LiveLog_SearchPrompt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Live Log.
+        /// </summary>
+        internal static string LiveLog_Title {
+            get {
+                return ResourceManager.GetString("LiveLog_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Live Log Viewer.
+        /// </summary>
+        internal static string LiveLogViewer {
+            get {
+                return ResourceManager.GetString("LiveLogViewer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Locate All Missing Songs....
         /// </summary>
         internal static string LocateAllMissingSongs {
@@ -3162,6 +3225,15 @@ namespace RadioExt_Helper {
         internal static string Notes {
             get {
                 return ResourceManager.GetString("Notes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Notification.
+        /// </summary>
+        internal static string Notification {
+            get {
+                return ResourceManager.GetString("Notification", resourceCulture);
             }
         }
         
@@ -3988,11 +4060,38 @@ namespace RadioExt_Helper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Downloading TinyMCE....
+        /// </summary>
+        internal static string SplashScreen_DownloadingTinyMCE {
+            get {
+                return ResourceManager.GetString("SplashScreen_DownloadingTinyMCE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Downloading TinyMCE Languages....
+        /// </summary>
+        internal static string SplashScreen_DownloadingTinyMCELanguages {
+            get {
+                return ResourceManager.GetString("SplashScreen_DownloadingTinyMCELanguages", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Finalizing....
         /// </summary>
         internal static string SplashScreen_Finalizing {
             get {
                 return ResourceManager.GetString("SplashScreen_Finalizing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not initialize application. Check the log for exceptions..
+        /// </summary>
+        internal static string SplashScreen_InitializationError {
+            get {
+                return ResourceManager.GetString("SplashScreen_InitializationError", resourceCulture);
             }
         }
         
@@ -4326,6 +4425,42 @@ namespace RadioExt_Helper {
         internal static string SystemPaths {
             get {
                 return ResourceManager.GetString("SystemPaths", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Converted to WAV: {0}.
+        /// </summary>
+        internal static string Toast_ConvertedToWav {
+            get {
+                return ResourceManager.GetString("Toast_ConvertedToWav", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to copy log line: {0}.
+        /// </summary>
+        internal static string Toast_FailedToCopyLogLine {
+            get {
+                return ResourceManager.GetString("Toast_FailedToCopyLogLine", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Imported {0} replacement station(s)..
+        /// </summary>
+        internal static string Toast_ImportedReplacementStations {
+            get {
+                return ResourceManager.GetString("Toast_ImportedReplacementStations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Log line copied to clipboard..
+        /// </summary>
+        internal static string Toast_LogLineCopied {
+            get {
+                return ResourceManager.GetString("Toast_LogLineCopied", resourceCulture);
             }
         }
         

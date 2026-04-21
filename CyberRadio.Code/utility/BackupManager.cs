@@ -165,9 +165,10 @@ public class BackupManager(CompressionLevel level)
     ///     </para>
     /// </summary>
     /// <param name="stagingPath">The path to preview the backup of.</param>
+    /// <param name="shouldCopySongFiles">Indicates whether additional-station song files should be included.</param>
     /// <returns>A task representing the asynchronous operation.</returns>
     /// <exception cref="ArgumentNullException">Occurs if the <paramref name="stagingPath" /> is <c>null</c> or empty.</exception>
-    public async Task GetBackupPreviewAsync(string stagingPath)
+    public async Task GetBackupPreviewAsync(string stagingPath, bool shouldCopySongFiles = true)
     {
         if (string.IsNullOrEmpty(stagingPath))
             throw new ArgumentNullException(nameof(stagingPath));
@@ -177,10 +178,11 @@ public class BackupManager(CompressionLevel level)
         // Default to ratio of 0.75 (Normal) if compression level is not found in the dictionary
         var compressionRatio = _compressionRatios.GetValueOrDefault(BackupCompressionLevel, 0.75);
 
-        var files = FileHelper.SafeEnumerateFiles(stagingPath, "*.*", SearchOption.AllDirectories).ToArray();
+        var files = GetFilesForBackup(stagingPath, shouldCopySongFiles);
 
         List<FilePreview> previews = new();
         var totalSize = 0L;
+        Dictionary<string, string> songPathMappings = new();
 
         await Task.Run(() =>
         {
@@ -188,10 +190,32 @@ public class BackupManager(CompressionLevel level)
             {
                 if (_isCancelling) return;
 
+                string previewPath;
+                var isInsideStaging = PathHelper.IsSubPath(stagingPath, file);
+                if (isInsideStaging)
+                {
+                    previewPath = file[(stagingPath.Length + 1)..];
+                }
+                else
+                {
+                    var externalFileName = Path.GetFileName(file);
+                    var externalEntryPath = Path.Combine("external", externalFileName);
+
+                    while (songPathMappings.ContainsKey(externalEntryPath))
+                    {
+                        externalFileName =
+                            $"{Path.GetFileNameWithoutExtension(file)}-{Guid.NewGuid():N}{Path.GetExtension(file)}";
+                        externalEntryPath = Path.Combine("external", externalFileName);
+                    }
+
+                    previewPath = externalEntryPath;
+                    songPathMappings[externalEntryPath] = file;
+                }
+
                 FileInfo fileInfo = new(file);
                 previews.Add(new FilePreview
                 {
-                    FileName = file[(stagingPath.Length + 1)..],
+                    FileName = PathHelper.SanitizePath(previewPath),
                     Size = fileInfo.Length
                 });
 
@@ -243,7 +267,7 @@ public class BackupManager(CompressionLevel level)
                 if (_isCancelling) return;
 
                 Dictionary<string, string> songPathMappings = new();
-                var files = shouldCopySongFiles ? GetFilesIncludingSongs(stagingPath) : GetFilesOnly(stagingPath);
+                var files = GetFilesForBackup(stagingPath, shouldCopySongFiles);
                 var replacedStationsPath = Path.Combine(stagingPath, "replaced-stations");
 
                 using var zipArchive = ZipFile.Open(backupFileName, ZipArchiveMode.Create, Encoding.UTF8);
@@ -611,35 +635,32 @@ public class BackupManager(CompressionLevel level)
         }
     }
 
-    private string[] GetFilesIncludingSongs(string stagingPath)
+    private string[] GetFilesForBackup(string stagingPath, bool shouldCopySongFiles)
     {
         var files = GetFilesOnly(stagingPath).ToList();
 
-        StationManager.Instance.StationsAsList.ForEach(station =>
-        {
-            if (station.TrackedObject.Songs.Count > 0)
-                station.TrackedObject.Songs.ForEach(song =>
-                {
-                    if (string.IsNullOrEmpty(song.FilePath)) return;
+        if (shouldCopySongFiles)
+            files.AddRange(GetAdditionalStationSongFiles());
 
-                    if (File.Exists(song.FilePath))
-                        files.Add(song.FilePath);
-                });
-        });
-
-        StationManager.Instance.ReplacementStationsAsList.ForEach(station =>
-        {
-            if (station.TrackedObject.Tracks.Count > 0)
-                station.TrackedObject.Tracks.ForEach(track =>
-                {
-                    if (string.IsNullOrEmpty(track.ReplacementFilePath)) return;
-
-                    if (File.Exists(track.ReplacementFilePath))
-                        files.Add(track.ReplacementFilePath);
-                });
-        });
+        files.AddRange(GetReplacementStationSongFiles());
 
         return [.. files.Distinct(StringComparer.OrdinalIgnoreCase)];
+    }
+
+    private static IEnumerable<string> GetAdditionalStationSongFiles()
+    {
+        return StationManager.Instance.StationsAsList
+            .SelectMany(station => station.TrackedObject.Songs)
+            .Select(song => song.FilePath)
+            .Where(filePath => !string.IsNullOrEmpty(filePath) && File.Exists(filePath))!;
+    }
+
+    private static IEnumerable<string> GetReplacementStationSongFiles()
+    {
+        return StationManager.Instance.ReplacementStationsAsList
+            .SelectMany(station => station.TrackedObject.Tracks)
+            .Select(track => track.ReplacementFilePath)
+            .Where(filePath => !string.IsNullOrEmpty(filePath) && File.Exists(filePath))!;
     }
 
     /// <summary>

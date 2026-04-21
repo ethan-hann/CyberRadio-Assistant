@@ -1749,4 +1749,49 @@ Bitte haben Sie etwas Geduld.</value>
   <data name="ExportTabs_ReplacedStations" xml:space="preserve">
     <value>Vanilla Stations ersetzt</value>
   </data>
+  <data name="LiveLog_Title" xml:space="preserve">
+    <value>Live-Protokoll</value>
+  </data>
+  <data name="LiveLog_SearchPrompt" xml:space="preserve">
+    <value>Protokolleinträge durchsuchen...</value>
+  </data>
+  <data name="LiveLog_DGV_Timestamp" xml:space="preserve">
+    <value>Zeitstempel</value>
+  </data>
+  <data name="LiveLog_DGV_Level" xml:space="preserve">
+    <value>Ebene</value>
+  </data>
+  <data name="LiveLog_DGV_Message" xml:space="preserve">
+    <value>Nachricht</value>
+  </data>
+  <data name="LiveLog_CopyLine" xml:space="preserve">
+    <value>Zeile kopieren</value>
+  </data>
+  <data name="LiveLogViewer" xml:space="preserve">
+    <value>Live-Log-Viewer</value>
+  </data>
+  <data name="Toast_ConvertedToWav" xml:space="preserve">
+    <value>In WAV konvertiert: {0}</value>
+  </data>
+  <data name="Notification" xml:space="preserve">
+    <value>Benachrichtigung</value>
+  </data>
+  <data name="Toast_ImportedReplacementStations" xml:space="preserve">
+    <value>{0} Ersatzstation(en) importiert.</value>
+  </data>
+  <data name="Toast_FailedToCopyLogLine" xml:space="preserve">
+    <value>Protokollzeile konnte nicht kopiert werden: {0}</value>
+  </data>
+  <data name="Toast_LogLineCopied" xml:space="preserve">
+    <value>Protokollzeile in die Zwischenablage kopiert.</value>
+  </data>
+  <data name="SplashScreen_InitializationError" xml:space="preserve">
+    <value>Die Anwendung konnte nicht initialisiert werden. Überprüfen Sie das Protokoll auf Ausnahmen.</value>
+  </data>
+  <data name="SplashScreen_DownloadingTinyMCE" xml:space="preserve">
+    <value>TinyMCE wird heruntergeladen...</value>
+  </data>
+  <data name="SplashScreen_DownloadingTinyMCELanguages" xml:space="preserve">
+    <value>TinyMCE-Sprachen werden heruntergeladen...</value>
+  </data>
 </root>

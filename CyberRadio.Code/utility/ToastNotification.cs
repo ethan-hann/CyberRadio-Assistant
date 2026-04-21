@@ -123,10 +123,10 @@ public static class ToastNotification
     {
         return type switch
         {
-            ToastType.Success => "✅ Success",
-            ToastType.Warning => "⚠ Warning",
-            ToastType.Error => "❌ Error",
-            _ => "ℹ Notification"
+            ToastType.Success => $"✅ {Strings.Success}",
+            ToastType.Warning => $"⚠ {Strings.Warning}",
+            ToastType.Error => $"❌ {Strings.Error}",
+            _ => $"ℹ {Strings.Notification}"
         };
     }
 

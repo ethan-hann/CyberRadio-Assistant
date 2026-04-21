@@ -30,6 +30,13 @@ using ListView = System.Windows.Forms.ListView;
 
 namespace RadioExt_Helper.user_controls;
 
+/// <summary>
+/// Represents a user control for managing custom music stations, allowing users to add, remove, and organize songs
+/// within a station.
+/// </summary>
+/// <remarks>This control provides a graphical interface for editing the contents and order of songs in a custom
+/// music station. It supports localization, drag-and-drop reordering, and integration with audio conversion workflows.
+/// The control raises events when the station is updated or when status messages should be displayed.</remarks>
 public sealed partial class CustomMusicCtl : UserControl, IUserControl
 {
     private readonly ImageList _songListViewImages = new();
@@ -93,12 +100,24 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
     }
 
     /// <summary>
-    ///     Event that is triggered when the station is updated.
+    /// Occurs when the station information is updated.
     /// </summary>
+    /// <remarks>Subscribe to this event to be notified when any changes are made to the station's data. Event
+    /// handlers receive an <see cref="EventArgs"/> instance; no additional event data is provided.</remarks>
     public event EventHandler? StationUpdated;
 
+    /// <summary>
+    /// Occurs when the status changes, providing the new status as a string.
+    /// </summary>
+    /// <remarks>Subscribers can use this event to respond to status updates. The event handler receives the
+    /// updated status as the event argument.</remarks>
     public event EventHandler<string>? StatusChanged;
 
+    /// <summary>
+    /// Occurs when the status is reset.
+    /// </summary>
+    /// <remarks>Subscribe to this event to be notified when the status is reset to its initial state. The
+    /// event handler receives standard EventArgs and does not provide additional data.</remarks>
     public event EventHandler? StatusReset;
 
     private void CustomMusicCtl_Load(object sender, EventArgs e)
@@ -198,73 +217,95 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
         return !Station.TrackedObject.Songs.Any(s => s.Equals(song));
     }
 
-    private void BtnAddSongs_Click(object sender, EventArgs e)
+    private async void BtnAddSongs_Click(object sender, EventArgs e)
     {
-        if (fdlgOpenSongs.ShowDialog() != DialogResult.OK) return;
-
-        var config = GlobalData.ConfigManager.GetConfig();
-        if (config == null) return;
-
-        // Check if the selected files are valid audio files
-        List<string> needConversion = [];
-        List<string> noConversionNeeded = [];
-        List<string> alreadyInStation = [];
-        needConversion.AddRange(fdlgOpenSongs.FileNames.Where(AudioConverter.NeedsConversion));
-        noConversionNeeded.AddRange(fdlgOpenSongs.FileNames.Where(f => !needConversion.Contains(f)));
-
-        //Check if the proposed file is already in the station
-        alreadyInStation.AddRange(from file in needConversion
-            let proposedFile = Path.GetFileNameWithoutExtension(file)
-            where Station.TrackedObject.Songs.Any(s => s.FilePath.Contains(proposedFile))
-            select file);
-
-        // Remove files that are already in the station from needConversion
-        needConversion.RemoveAll(f => alreadyInStation.Contains(f));
-
-        // Add songs that don't require conversion first
-        foreach (var song in noConversionNeeded.Select(Song.FromFileAsync).OfType<Song>().Where(CanSongBeAdded))
-            Station.TrackedObject.Songs.Add(song);
-
-        if (needConversion.Count > 0)
+        try
         {
-            //Check if the station has been exported to staging yet. If not, we can't convert files.
-            var stagingFolder = GlobalData.ConfigManager.Get("stagingPath") as string ?? string.Empty;
-            var proposedOutputFolder = Path.Combine(stagingFolder, Station.TrackedObject.MetaData.DisplayName);
+            if (fdlgOpenSongs.ShowDialog() != DialogResult.OK) return;
 
-            if (!FileHelper.DoesFolderExist(proposedOutputFolder))
+            var config = GlobalData.ConfigManager.GetConfig();
+            if (config == null) return;
+
+            // Check if the selected files are valid audio files
+            List<string> needConversion = [];
+            List<string> noConversionNeeded = [];
+            List<string> alreadyInStation = [];
+            needConversion.AddRange(fdlgOpenSongs.FileNames.Where(AudioConverter.NeedsConversion));
+            noConversionNeeded.AddRange(fdlgOpenSongs.FileNames.Where(f => !needConversion.Contains(f)));
+
+            //Check if the proposed file is already in the station
+            alreadyInStation.AddRange(from file in needConversion
+                let proposedFile = Path.GetFileNameWithoutExtension(file)
+                where Station.TrackedObject.Songs.Any(s => s.FilePath.Contains(proposedFile))
+                select file);
+
+            // Remove files that are already in the station from needConversion
+            needConversion.RemoveAll(f => alreadyInStation.Contains(f));
+
+            // Add songs that don't require conversion first
+            var songTasks = noConversionNeeded.Select(Song.FromFileAsync);
+            var songs = await Task.WhenAll(songTasks);
+        
+            foreach (var song in songs.Where(s => s != null && CanSongBeAdded(s)))
+                Station.TrackedObject.Songs.Add(song!);
+
+            if (needConversion.Count > 0)
             {
-                MessageBox.Show(this, Strings.AudioConvert_NoStagingFolder, Strings.Error, MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-                return;
+                //Check if the station has been exported to staging yet. If not, we can't convert files.
+                var stagingFolder = GlobalData.ConfigManager.Get("stagingPath") as string ?? string.Empty;
+                var proposedOutputFolder = Path.Combine(stagingFolder, Station.TrackedObject.MetaData.DisplayName);
+
+                if (!FileHelper.DoesFolderExist(proposedOutputFolder))
+                {
+                    MessageBox.Show(this, Strings.AudioConvert_NoStagingFolder, Strings.Error, MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+                    return;
+                }
+
+                var pluralPrompt = needConversion.Count > 1;
+
+                //Ask the user if they want to convert the files
+                var result = MessageBox.Show(this,
+                    string.Format(pluralPrompt ? Strings.AudioConverterPrompt : Strings.AudioConverterPrompt_Single,
+                        needConversion.Count), Strings.Confirm,
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (result == DialogResult.Yes)
+                {
+                    // Show the audio converter form
+                    AudioConverterForm audioConverterForm = new(needConversion, Station);
+                    audioConverterForm.ConversionCompleted += AudioConverterForm_ConversionCompleted;
+                    await audioConverterForm.ShowDialogAsync(this);
+                }
             }
 
-            var pluralPrompt = needConversion.Count > 1;
-
-            //Ask the user if they want to convert the files
-            var result = MessageBox.Show(this,
-                string.Format(pluralPrompt ? Strings.AudioConverterPrompt : Strings.AudioConverterPrompt_Single,
-                    needConversion.Count), Strings.Confirm,
-                MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (result == DialogResult.Yes)
-            {
-                // Show the audio converter form
-                AudioConverterForm audioConverterForm = new(needConversion, Station);
-                audioConverterForm.ConversionCompleted += AudioConverterForm_ConversionCompleted;
-                audioConverterForm.ShowDialog(this);
-            }
+            UpdateListsAndViews();
+            StationUpdated?.Invoke(this, EventArgs.Empty);
         }
-
-        UpdateListsAndViews();
-        StationUpdated?.Invoke(this, EventArgs.Empty);
+        catch (Exception ex)
+        {
+            AuLogger.GetCurrentLogger<CustomMusicCtl>("BtnAddSongs_Click")
+                .Error(ex, "Error adding songs to station.");
+        }
     }
 
-    private void AudioConverterForm_ConversionCompleted(object? sender, List<string> e)
+    private async void AudioConverterForm_ConversionCompleted(object? sender, List<string> e)
     {
-        foreach (var song in e.Select(Song.FromFileAsync).OfType<Song>().Where(CanSongBeAdded))
-            Station.TrackedObject.Songs.Add(song);
+        try
+        {
+            var songTasks = e.Select(Song.FromFileAsync);
+            var songs = await Task.WhenAll(songTasks);
+        
+            foreach (var song in songs.Where(s => s != null && CanSongBeAdded(s)))
+                Station.TrackedObject.Songs.Add(song!);
 
-        UpdateListsAndViews();
-        StationUpdated?.Invoke(this, EventArgs.Empty);
+            UpdateListsAndViews();
+            StationUpdated?.Invoke(this, EventArgs.Empty);
+        }
+        catch (Exception ex)
+        {
+            AuLogger.GetCurrentLogger<CustomMusicCtl>("AudioConverterForm_ConversionCompleted")
+                .Error(ex, "Error processing converted audio files.");
+        }
     }
 
     private void BtnRemoveSongs_Click(object sender, EventArgs e)

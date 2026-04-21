@@ -1749,4 +1749,49 @@ S'il vous plaît soyez patient.</value>
   <data name="ExportTabs_ReplacedStations" xml:space="preserve">
     <value>Stations Vanilla remplacées</value>
   </data>
+  <data name="LiveLog_Title" xml:space="preserve">
+    <value>Journal en direct</value>
+  </data>
+  <data name="LiveLog_SearchPrompt" xml:space="preserve">
+    <value>Rechercher des entrées de journal...</value>
+  </data>
+  <data name="LiveLog_DGV_Timestamp" xml:space="preserve">
+    <value>Horodatage</value>
+  </data>
+  <data name="LiveLog_DGV_Level" xml:space="preserve">
+    <value>Niveau</value>
+  </data>
+  <data name="LiveLog_DGV_Message" xml:space="preserve">
+    <value>Message</value>
+  </data>
+  <data name="LiveLog_CopyLine" xml:space="preserve">
+    <value>Copier la ligne</value>
+  </data>
+  <data name="LiveLogViewer" xml:space="preserve">
+    <value>Visionneuse de journaux en direct</value>
+  </data>
+  <data name="Toast_ConvertedToWav" xml:space="preserve">
+    <value>Converti en WAV : {0}</value>
+  </data>
+  <data name="Notification" xml:space="preserve">
+    <value>Notification</value>
+  </data>
+  <data name="Toast_ImportedReplacementStations" xml:space="preserve">
+    <value>{0} station(s) de remplacement importée(s).</value>
+  </data>
+  <data name="Toast_FailedToCopyLogLine" xml:space="preserve">
+    <value>Échec de la copie de la ligne de journal : {0}</value>
+  </data>
+  <data name="Toast_LogLineCopied" xml:space="preserve">
+    <value>Ligne de journal copiée dans le presse-papiers.</value>
+  </data>
+  <data name="SplashScreen_InitializationError" xml:space="preserve">
+    <value>Impossible d'initialiser l'application. Vérifiez le journal pour les exceptions.</value>
+  </data>
+  <data name="SplashScreen_DownloadingTinyMCE" xml:space="preserve">
+    <value>Téléchargement de TinyMCE...</value>
+  </data>
+  <data name="SplashScreen_DownloadingTinyMCELanguages" xml:space="preserve">
+    <value>Téléchargement des langages TinyMCE...</value>
+  </data>
 </root>

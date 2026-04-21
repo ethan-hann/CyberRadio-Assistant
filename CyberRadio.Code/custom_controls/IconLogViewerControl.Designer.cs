@@ -1,6 +1,6 @@
 ﻿namespace RadioExt_Helper.custom_controls
 {
-    partial class LogViewerControl
+    partial class IconLogViewerControl
     {
         /// <summary> 
         /// Required designer variable.
@@ -133,13 +133,13 @@
             grpLogSearchHeader.TabStop = false;
             grpLogSearchHeader.Text = "Log File";
             // 
-            // LogViewerControl
+            // IconLogViewerControl
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;
             Controls.Add(grpLogSearchHeader);
-            Name = "LogViewerControl";
+            Name = "IconLogViewerControl";
             Size = new Size(938, 560);
             tableLayoutPanel1.ResumeLayout(false);
             tableLayoutPanel1.PerformLayout();

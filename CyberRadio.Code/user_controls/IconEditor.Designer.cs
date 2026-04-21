@@ -31,7 +31,7 @@ namespace RadioExt_Helper.user_controls
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(IconEditor));
-            models.ImageProperties imageProperties2 = new models.ImageProperties();
+            models.ImageProperties imageProperties1 = new models.ImageProperties();
             tableLayoutPanel3 = new TableLayoutPanel();
             tableLayoutPanel10 = new TableLayoutPanel();
             btnCopyIconPart = new Button();
@@ -616,16 +616,17 @@ namespace RadioExt_Helper.user_controls
             // 
             picStationIcon.AllowDrop = true;
             picStationIcon.Dock = DockStyle.Fill;
-            imageProperties2.Height = 0;
-            imageProperties2.ImageFormat = System.Drawing.Imaging.ImageFormat.Png;
-            imageProperties2.PixelFormat = System.Drawing.Imaging.PixelFormat.DontCare;
-            imageProperties2.Width = 0;
-            picStationIcon.ImageProperties = imageProperties2;
+            imageProperties1.Height = 0;
+            imageProperties1.ImageFormat = System.Drawing.Imaging.ImageFormat.Png;
+            imageProperties1.PixelFormat = System.Drawing.Imaging.PixelFormat.DontCare;
+            imageProperties1.Width = 0;
+            picStationIcon.ImageProperties = imageProperties1;
             picStationIcon.Location = new Point(3, 41);
             picStationIcon.Name = "picStationIcon";
             picStationIcon.Size = new Size(373, 171);
             picStationIcon.TabIndex = 7;
             picStationIcon.TabStop = false;
+            picStationIcon.DragDrop += picStationIcon_DragDrop;
             // 
             // tblWarning
             // 
