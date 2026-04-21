@@ -223,8 +223,7 @@ public sealed partial class CustomMusicCtl : UserControl, IUserControl
         {
             if (fdlgOpenSongs.ShowDialog() != DialogResult.OK) return;
 
-            var config = GlobalData.ConfigManager.GetConfig();
-            if (config == null) return;
+            if (GlobalData.ConfigManager.GetConfig() == null) return;
 
             // Check if the selected files are valid audio files
             List<string> needConversion = [];
