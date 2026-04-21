@@ -32,7 +32,7 @@ namespace RadioExt_Helper.user_controls;
 
 public sealed partial class IconEditor : UserControl, IEditor
 {
-    private readonly LogViewerControl _logViewer;
+    private readonly IconLogViewerControl _iconLogViewer;
     private readonly ImageList _tabImages;
 
     private CancellationTokenSource _cancellationTokenSource;
@@ -62,17 +62,17 @@ public sealed partial class IconEditor : UserControl, IEditor
         _cancellationTokenSource = new CancellationTokenSource();
 
         //Set up the log viewer control
-        _logViewer = new LogViewerControl
+        _iconLogViewer = new IconLogViewerControl
         {
             Dock = DockStyle.Fill
         };
 
         if (Icon.TrackedObject.CheckIconValid())
-            _logViewer.Identifier = Icon.TrackedObject.IsFromArchive
+            _iconLogViewer.Identifier = Icon.TrackedObject.IsFromArchive
                 ? Icon.TrackedObject.ArchivePath
                 : Icon.TrackedObject.AtlasName;
 
-        panelLogControl.Controls.Add(_logViewer);
+        panelLogControl.Controls.Add(_iconLogViewer);
 
         _tabImages = new ImageList();
     }
@@ -122,7 +122,7 @@ public sealed partial class IconEditor : UserControl, IEditor
 
         lblStatus.Text = Strings.Ready;
 
-        _logViewer.Translate();
+        _iconLogViewer.Translate();
     }
 
     /// <summary>
@@ -165,9 +165,9 @@ public sealed partial class IconEditor : UserControl, IEditor
         var identifier = Icon.TrackedObject.CheckIconValid()
             ? Icon.TrackedObject.IsFromArchive ? Icon.TrackedObject.ArchivePath : Icon.TrackedObject.AtlasName
             : null;
-        _logViewer.Identifier = identifier;
-        _logViewer.LoadRelevantLogEntries();
-        _logViewer.DisplayLastLines(50);
+        _iconLogViewer.Identifier = identifier;
+        _iconLogViewer.LoadRelevantLogEntries();
+        _iconLogViewer.DisplayLastLines(50);
     }
 
     private void IconEditor_Load(object sender, EventArgs e)
@@ -286,7 +286,7 @@ public sealed partial class IconEditor : UserControl, IEditor
             if (status == null) return;
 
             //Pass the status to the log viewer
-            _logViewer.AddLogEntry(DateTime.Now, status);
+            _iconLogViewer.AddLogEntry(DateTime.Now, status);
         });
     }
 
@@ -348,7 +348,7 @@ public sealed partial class IconEditor : UserControl, IEditor
             Invoke(() => pgProgress.Value = Math.Min(100, scaledValue));
         });
 
-        _logViewer.Identifier = txtAtlasName.Text;
+        _iconLogViewer.Identifier = txtAtlasName.Text;
 
         IconImportStarted?.Invoke(this, EventArgs.Empty);
         Task.Run(async () =>
@@ -425,7 +425,7 @@ public sealed partial class IconEditor : UserControl, IEditor
             Invoke(() => pgProgress.Value = Math.Min(100, scaledValue));
         });
 
-        _logViewer.Identifier = Icon.TrackedObject.ArchivePath;
+        _iconLogViewer.Identifier = Icon.TrackedObject.ArchivePath;
 
         IconExtractStarted?.Invoke(this, EventArgs.Empty);
         Task.Run(async () =>

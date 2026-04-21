@@ -272,7 +272,16 @@ public partial class RestoreForm : Form
                 currentNodeCollection = currentNode.Nodes;
             }
 
-            if (currentNode?.Parent?.Tag is List<FilePreview> previews)
+            TreeNode? targetNode = currentNode?.Parent;
+            if (parts.Length >= 3 && parts[0].Equals("replaced-stations", StringComparison.OrdinalIgnoreCase))
+            {
+                var replacedStationsNode = tvFiles.Nodes.Cast<TreeNode>()
+                    .FirstOrDefault(n => n.Text.Equals(parts[0], StringComparison.OrdinalIgnoreCase));
+                targetNode = replacedStationsNode?.Nodes.Cast<TreeNode>()
+                    .FirstOrDefault(n => n.Text.Equals(parts[1], StringComparison.OrdinalIgnoreCase));
+            }
+
+            if (targetNode?.Tag is List<FilePreview> previews)
                 previews.Add(preview);
 
             tvFiles.EndUpdate();
@@ -297,8 +306,12 @@ public partial class RestoreForm : Form
                 {
                     if (preview == null) continue;
 
-                    // Remove the root directory from the file name
-                    var displayFileName = preview.FileName?.Replace(node.Text + Path.DirectorySeparatorChar, "");
+                    var displayFileName = preview.FileName;
+                    var normalizedNodePrefix = node.FullPath.Replace('\\', '/').TrimEnd('/') + '/';
+                    var normalizedDisplayFileName = displayFileName?.Replace('\\', '/');
+                    if (!string.IsNullOrEmpty(normalizedDisplayFileName) &&
+                        normalizedDisplayFileName.StartsWith(normalizedNodePrefix, StringComparison.OrdinalIgnoreCase))
+                        displayFileName = normalizedDisplayFileName[normalizedNodePrefix.Length..];
 
                     var size = ((ulong)preview.Size).FormatSize();
 
@@ -373,7 +386,13 @@ public partial class RestoreForm : Form
     /// <param name="e"></param>
     private void tvFiles_AfterSelect(object sender, TreeViewEventArgs e)
     {
-        if (e.Node?.Parent == null)
+        var isRootNode = e.Node?.Parent == null;
+        var isReplacementStationRoot = e.Node?.Parent != null &&
+                                       e.Node.Parent.Parent == null &&
+                                       e.Node.Parent.Text.Equals("replaced-stations",
+                                           StringComparison.OrdinalIgnoreCase);
+
+        if (isRootNode || isReplacementStationRoot)
             PopulateListView(e.Node);
     }
 

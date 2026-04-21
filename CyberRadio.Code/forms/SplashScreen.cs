@@ -71,6 +71,7 @@ public partial class SplashScreen : Form
         {
             AuLogger.GetCurrentLogger<SplashScreen>()
                 .Fatal("An unhandled exception occurred during splash screen initialization.", ex);
+            ToastNotification.Show(this, Strings.SplashScreen_InitializationError, ToastType.Error);
         }
     }
 
@@ -85,7 +86,7 @@ public partial class SplashScreen : Form
         // Migrate settings (if needed)
         UpdateStatus(Strings.SplashScreen_CheckingSettings);
 
-        await Task.Delay(300);
+        await Task.Delay(150);
         var config = MigrationHelper.MigrateSettings();
         if (config != null)
         {
@@ -93,20 +94,20 @@ public partial class SplashScreen : Form
             await GlobalData.ConfigManager.SaveAsync();
 
             UpdateStatus(Strings.SplashScreen_MigratedSettings);
-            await Task.Delay(300);
+            await Task.Delay(150);
             statusMessages.Add("Settings migrated successfully.");
         }
         else
         {
             UpdateStatus(Strings.SplashScreen_MigratedSettingsNo);
-            await Task.Delay(300);
+            await Task.Delay(150);
             statusMessages.Add("Settings migration not needed.");
         }
 
         //Check staging path for forbidden paths
         bool isStagingPathValid;
         UpdateStatus(Strings.SplashScreen_CheckingStagingPath);
-        await Task.Delay(300);
+        await Task.Delay(150);
 
         var stagingPath = GlobalData.ConfigManager.Get("stagingPath") as string ?? string.Empty;
         var result = PathHelper.IsForbiddenPath(stagingPath);
@@ -140,7 +141,7 @@ public partial class SplashScreen : Form
         if (isStagingPathValid)
         {
             UpdateStatus(Strings.SplashScreen_CheckingSongs);
-            await Task.Delay(300);
+            await Task.Delay(150);
 
             var songMigrationStatus = MigrationHelper.MigrateSongs(stagingPath);
             statusMessages.AddRange(songMigrationStatus);
@@ -155,13 +156,13 @@ public partial class SplashScreen : Form
         else
         {
             UpdateStatus(Strings.SplashScreen_UpdateCheckNo);
-            await Task.Delay(300);
+            await Task.Delay(150);
         }
 
         //Setup Icon Manager
         UpdateStatus(Strings.SplashScreen_SetupIconManager);
         await IconManager.Instance.InitializeAsync();
-        await Task.Delay(200);
+        await Task.Delay(100);
         statusMessages.Add(IconManager.Instance.IsInitialized
             ? "Icon Manager initialized successfully."
             : "Icon Manager initialization failed.");
@@ -169,7 +170,7 @@ public partial class SplashScreen : Form
         //Setup Audio Converter
         UpdateStatus(Strings.SplashScreen_SetupAudioConverter);
         statusMessages.AddRange(await AudioConverter.Instance.InitializeAsync());
-        await Task.Delay(200);
+        await Task.Delay(100);
         statusMessages.Add(AudioConverter.Instance.IsInitialized
             ? "Audio Converter initialized successfully."
             : "Audio Converter initialization failed.");
@@ -177,20 +178,20 @@ public partial class SplashScreen : Form
         //Setup Audio Manager
         UpdateStatus(Strings.SplashScreen_SetupAudioManager);
         await AudioManager.Instance.InitializeAsync();
-        await Task.Delay(200);
+        await Task.Delay(100);
         statusMessages.Add(AudioManager.Instance.IsInitialized
             ? "Audio Manager initialized successfully."
             : "Audio Manager initialization failed.");
 
         //Setup TinyMCE
-        UpdateStatus("Downloading TinyMCE...");
+        UpdateStatus(Strings.SplashScreen_DownloadingTinyMCE);
         await TinyMceInstaller.EnsureInstalledAsync("https://tortal.xyz/RNlB9");
-        await Task.Delay(200);
+        await Task.Delay(100);
         statusMessages.Add(!TinyMceInstaller.IsInstalled()
             ? "Failed to install TinyMCE or already installed."
             : "TinyMCE installation successful.");
 
-        UpdateStatus("Downloading TinyMCE Languages...");
+        UpdateStatus(Strings.SplashScreen_DownloadingTinyMCELanguages);
         await TinyMceInstaller.EnsureLanguagesInstalled("https://tortal.xyz/jf9dJ");
         await Task.Delay(500);
         statusMessages.Add(!TinyMceInstaller.IsLanguagesInstalled()
@@ -210,7 +211,7 @@ public partial class SplashScreen : Form
         //}
         //------------------------------------------------------------------------------------------------------------
 
-        //Log all final paths for debugging purposes
+        //Log all final paths
         var finalStagingPath = GlobalData.ConfigManager.Get("stagingPath") as string ?? string.Empty;
         var finalGamePath = GlobalData.ConfigManager.Get("gameBasePath") as string ?? string.Empty;
         var iconManagerWorkingDirectory = IconManager.Instance.WorkingDirectory;
@@ -253,7 +254,7 @@ public partial class SplashScreen : Form
         GlobalData.ConfigManager.Set("isFirstRun", false);
         await GlobalData.ConfigManager.SaveAsync();
 
-        await Task.Delay(500);
+        await Task.Delay(100);
 
         return statusMessages;
     }

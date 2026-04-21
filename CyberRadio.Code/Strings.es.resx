@@ -1520,9 +1520,6 @@ Por favor, sea paciente. Puede cancelar en cualquier momento usando el botón "C
   <data name="VanillaStationSelector_NoStationSelectedMessage" xml:space="preserve">
     <value>Seleccione primero una estación.</value>
   </data>
-  <data name="VanillaStationSelector_NoStationSelected" xml:space="preserve">
-    <value>No hay estación seleccionada</value>
-  </data>
   <data name="EnabledVanillaStationsCount" xml:space="preserve">
     <value>Estaciones de vainilla habilitadas: {0} / {1}</value>
   </data>
@@ -1748,5 +1745,56 @@ Por favor tenga paciencia.</value>
   </data>
   <data name="ExportTabs_ReplacedStations" xml:space="preserve">
     <value>Estaciones vainilla reemplazadas</value>
+  </data>
+  <data name="LiveLog_Title" xml:space="preserve">
+    <value>Registro en vivo</value>
+  </data>
+  <data name="LiveLog_SearchPrompt" xml:space="preserve">
+    <value>Buscar entradas de registro...</value>
+  </data>
+  <data name="LiveLog_DGV_Timestamp" xml:space="preserve">
+    <value>Marca de tiempo</value>
+  </data>
+  <data name="LiveLog_DGV_Level" xml:space="preserve">
+    <value>Nivel</value>
+  </data>
+  <data name="LiveLog_DGV_Message" xml:space="preserve">
+    <value>Mensaje</value>
+  </data>
+  <data name="LiveLog_CopyLine" xml:space="preserve">
+    <value>Copiar línea</value>
+  </data>
+  <data name="LiveLogViewer" xml:space="preserve">
+    <value>Visor de registros en vivo</value>
+  </data>
+  <data name="Toast_ConvertedToWav" xml:space="preserve">
+    <value>Convertido a WAV: {0}</value>
+  </data>
+  <data name="Notification" xml:space="preserve">
+    <value>Notificación</value>
+  </data>
+  <data name="Toast_ImportedReplacementStations" xml:space="preserve">
+    <value>{0} estaciones de reemplazo importadas.</value>
+  </data>
+  <data name="Toast_FailedToCopyLogLine" xml:space="preserve">
+    <value>No se pudo copiar la línea de registro: {0}</value>
+  </data>
+  <data name="Toast_LogLineCopied" xml:space="preserve">
+    <value>Línea de registro copiada al portapapeles.</value>
+  </data>
+  <data name="SplashScreen_InitializationError" xml:space="preserve">
+    <value>No se pudo inicializar la aplicación. Consulte el registro para ver excepciones.</value>
+  </data>
+  <data name="SplashScreen_DownloadingTinyMCE" xml:space="preserve">
+    <value>Descargando TinyMCE...</value>
+  </data>
+  <data name="SplashScreen_DownloadingTinyMCELanguages" xml:space="preserve">
+    <value>Descargando Idiomas TinyMCE...</value>
+  </data>
+  <data name="FatalConfigLoadError" xml:space="preserve">
+    <value>No se pudo leer el archivo de configuración.</value>
+  </data>
+  <data name="VanillaStationSelector_NoStationSelected" xml:space="preserve">
+    <value>Nada seleccionado</value>
   </data>
 </root>

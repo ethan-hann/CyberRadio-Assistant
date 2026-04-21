@@ -35,9 +35,6 @@ public sealed partial class BackupPreview : Form
     private List<FilePreview> _previews = [];
     private long _totalSize;
 
-    //TODO: need to harden the logic for checking if song files should be included in backup
-    //we should ensure we respect the config option (except in the case of replacement stations; those audio files must be copied into the backup to ensure the station doesn't break.
-
     public BackupPreview(CompressionLevel compressionLevel)
     {
         InitializeComponent();
@@ -120,7 +117,7 @@ public sealed partial class BackupPreview : Form
                 Close();
             }
 
-            await _backupManager.GetBackupPreviewAsync(stagingPath);
+            await _backupManager.GetBackupPreviewAsync(stagingPath, ShouldCopySongFilesToBackup());
         }
         catch (Exception ex)
         {
@@ -250,8 +247,8 @@ public sealed partial class BackupPreview : Form
             return;
         }
 
-        //Warn if config has "copySongFilesToBackup" disabled since this means replacement stations will not have their song files backed up
-        var shouldBackupSongs = GlobalData.ConfigManager.Get("copySongFilesToBackup") as bool? ?? true;
+        // Warn when optional song file backup is disabled.
+        var shouldBackupSongs = ShouldCopySongFilesToBackup();
         if (!shouldBackupSongs)
         {
             if (MessageBox.Show(this, Strings.CopySongFilesToBackupDisabled, Strings.Backup, MessageBoxButtons.YesNo,
@@ -280,11 +277,7 @@ public sealed partial class BackupPreview : Form
         try
         {
             _isBackupInProgress = true;
-            var shouldBackupSongs = GlobalData.ConfigManager.Get("copySongFilesToBackup");
-            if (shouldBackupSongs is bool backupSongs)
-                await _backupManager.BackupStagingFolderAsync(stagingPath, backupPath, backupSongs);
-            else
-                await _backupManager.BackupStagingFolderAsync(stagingPath, backupPath, true);
+            await _backupManager.BackupStagingFolderAsync(stagingPath, backupPath, ShouldCopySongFilesToBackup());
         }
         catch (Exception ex)
         {
@@ -300,6 +293,20 @@ public sealed partial class BackupPreview : Form
             btnStartBackup.Enabled = true;
             this.SafeInvoke(() => lblStatus.Text = text);
         }
+    }
+
+    private static bool ShouldCopySongFilesToBackup()
+    {
+        var configuredValue = GlobalData.ConfigManager.Get("copySongFilesToBackup");
+        if (configuredValue is bool shouldCopySongFiles)
+            return shouldCopySongFiles;
+
+        if (configuredValue is string stringValue && bool.TryParse(stringValue, out var parsedValue))
+            return parsedValue;
+
+        AuLogger.GetCurrentLogger<BackupPreview>("ShouldCopySongFilesToBackup")
+            .Warn($"Invalid value for 'copySongFilesToBackup': {configuredValue ?? "null"}. Falling back to default: true.");
+        return true;
     }
 
     /// <summary>

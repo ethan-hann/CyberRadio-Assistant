@@ -219,7 +219,7 @@ public sealed partial class MainForm : Form
         var firstStationId = stationIds.First();
         lbReplacedStations.SelectedItem = StationManager.Instance.GetVanillaStation(firstStationId)?.Key;
         SelectReplacementStationEditor(firstStationId);
-        ToastNotification.Show(this, $"Imported {stationIds.Count} replacement station(s).", ToastType.Success);
+        ToastNotification.Show(this, string.Format(Strings.Toast_ImportedReplacementStations, stationIds.Count), ToastType.Success);
         UpdateEnabledStationCount();
         HandleUserControlVisibility();
     }
@@ -482,6 +482,7 @@ public sealed partial class MainForm : Form
         checkForUpdatesToolStripMenuItem.Text = Strings.CheckForUpdates;
         revertChangesToolStripMenuItem.Text = Strings.RevertChanges;
         toolsToolStripMenuItem.Text = Strings.Tools;
+        liveLogViewerToolStripMenuItem.Text = Strings.LiveLogViewer;
         downloadRadioModsToolStripMenuItem.Text = Strings.DownloadRadioMods;
         apiStatusToolStripMenuItem.Text = Strings.ApiStatus;
         stationsToolStripMenuItem.Text = Strings.Stations;
@@ -515,6 +516,9 @@ public sealed partial class MainForm : Form
         btnCollapseVanillaSection.Text = Strings.HideVanillaStations;
 
         UpdateEnabledStationCount();
+
+        _noStationSelectedCtrl.Translate();
+        _noStationsCtrl.Translate();
     }
 
     /// <summary>
@@ -557,6 +561,7 @@ public sealed partial class MainForm : Form
             }
         }
 
+        _noStationSelectedCtrl.Translate();
         _noStationSelectedCtrl.Visible = true;
     }
 
@@ -1100,6 +1105,14 @@ public sealed partial class MainForm : Form
 
         StationManager.Instance.TranslateEditors();
         _noStationsCtrl.Translate();
+        _noStationSelectedCtrl.Translate();
+
+        //translate log viewer (if open)
+        foreach (var form in Application.OpenForms)
+        {
+            if (form is LogWindow lw)
+                lw.Translate();
+        }
 
         Focus(); // re-focus the main form
 
@@ -1520,6 +1533,25 @@ public sealed partial class MainForm : Form
         }
 
         Environment.Exit(0);
+    }
+
+    private void liveLogViewerToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        var viewerFormFound = false;
+        foreach (var form in Application.OpenForms)
+        {
+            if (form is LogWindow lw)
+            {
+                lw.Focus();
+                viewerFormFound = true;
+                break;
+            }
+        }
+
+        if (viewerFormFound) return;
+
+        var logWindow = new LogWindow();
+        logWindow.Show();
     }
 
     private void RadioExtHelpToolStripMenuItem_Click(object sender, EventArgs e)

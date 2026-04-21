@@ -1520,9 +1520,6 @@
   <data name="VanillaStationSelector_NoStationSelectedMessage" xml:space="preserve">
     <value>请先选择一个站。</value>
   </data>
-  <data name="VanillaStationSelector_NoStationSelected" xml:space="preserve">
-    <value>没有选择站</value>
-  </data>
   <data name="EnabledVanillaStationsCount" xml:space="preserve">
     <value>启用的香草站：{0} / {1}</value>
   </data>
@@ -1748,5 +1745,56 @@
   </data>
   <data name="ExportTabs_ReplacedStations" xml:space="preserve">
     <value>替换原版站</value>
+  </data>
+  <data name="LiveLog_Title" xml:space="preserve">
+    <value>实时日志</value>
+  </data>
+  <data name="LiveLog_SearchPrompt" xml:space="preserve">
+    <value>搜索日志条目...</value>
+  </data>
+  <data name="LiveLog_DGV_Timestamp" xml:space="preserve">
+    <value>时间戳</value>
+  </data>
+  <data name="LiveLog_DGV_Level" xml:space="preserve">
+    <value>等级</value>
+  </data>
+  <data name="LiveLog_DGV_Message" xml:space="preserve">
+    <value>信息</value>
+  </data>
+  <data name="LiveLog_CopyLine" xml:space="preserve">
+    <value>复制行</value>
+  </data>
+  <data name="LiveLogViewer" xml:space="preserve">
+    <value>实时日志查看器</value>
+  </data>
+  <data name="Toast_ConvertedToWav" xml:space="preserve">
+    <value>转换为 WAV：{0}</value>
+  </data>
+  <data name="Notification" xml:space="preserve">
+    <value>通知</value>
+  </data>
+  <data name="Toast_ImportedReplacementStations" xml:space="preserve">
+    <value>进口了 {0} 个替换站。</value>
+  </data>
+  <data name="Toast_FailedToCopyLogLine" xml:space="preserve">
+    <value>无法复制日志行：{0}</value>
+  </data>
+  <data name="Toast_LogLineCopied" xml:space="preserve">
+    <value>日志行已复制到剪贴板。</value>
+  </data>
+  <data name="SplashScreen_InitializationError" xml:space="preserve">
+    <value>无法初始化应用程序。检查日志是否有异常。</value>
+  </data>
+  <data name="SplashScreen_DownloadingTinyMCE" xml:space="preserve">
+    <value>正在下载 TinyMCE...</value>
+  </data>
+  <data name="SplashScreen_DownloadingTinyMCELanguages" xml:space="preserve">
+    <value>正在下载 TinyMCE 语言...</value>
+  </data>
+  <data name="FatalConfigLoadError" xml:space="preserve">
+    <value>无法读取配置文件。</value>
+  </data>
+  <data name="VanillaStationSelector_NoStationSelected" xml:space="preserve">
+    <value>未选择任何内容</value>
   </data>
 </root>

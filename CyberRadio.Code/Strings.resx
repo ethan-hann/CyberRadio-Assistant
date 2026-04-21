@@ -1528,7 +1528,7 @@ Please be patient. You can cancel at any time using the "Cancel Action" button. 
     <value>Please select a station first.</value>
   </data>
   <data name="VanillaStationSelector_NoStationSelected" xml:space="preserve">
-    <value>No Station Selected</value>
+    <value>Nothing Selected</value>
   </data>
   <data name="EnabledVanillaStationsCount" xml:space="preserve">
     <value>Enabled Vanilla Stations: {0} / {1}</value>
@@ -1748,5 +1748,53 @@ Please be patient.</value>
   </data>
   <data name="ExportTabs_ReplacedStations" xml:space="preserve">
     <value>Replaced Vanilla Stations</value>
+  </data>
+  <data name="LiveLog_Title" xml:space="preserve">
+    <value>Live Log</value>
+  </data>
+  <data name="LiveLog_SearchPrompt" xml:space="preserve">
+    <value>Search log entries...</value>
+  </data>
+  <data name="LiveLog_DGV_Timestamp" xml:space="preserve">
+    <value>Timestamp</value>
+  </data>
+  <data name="LiveLog_DGV_Level" xml:space="preserve">
+    <value>Level</value>
+  </data>
+  <data name="LiveLog_DGV_Message" xml:space="preserve">
+    <value>Message</value>
+  </data>
+  <data name="LiveLog_CopyLine" xml:space="preserve">
+    <value>Copy Line</value>
+  </data>
+  <data name="LiveLogViewer" xml:space="preserve">
+    <value>Live Log Viewer</value>
+  </data>
+  <data name="Toast_ConvertedToWav" xml:space="preserve">
+    <value>Converted to WAV: {0}</value>
+  </data>
+  <data name="Notification" xml:space="preserve">
+    <value>Notification</value>
+  </data>
+  <data name="Toast_ImportedReplacementStations" xml:space="preserve">
+    <value>Imported {0} replacement station(s).</value>
+  </data>
+  <data name="Toast_FailedToCopyLogLine" xml:space="preserve">
+    <value>Failed to copy log line: {0}</value>
+  </data>
+  <data name="Toast_LogLineCopied" xml:space="preserve">
+    <value>Log line copied to clipboard.</value>
+  </data>
+  <data name="SplashScreen_InitializationError" xml:space="preserve">
+    <value>Could not initialize application. Check the log for exceptions.</value>
+  </data>
+  <data name="SplashScreen_DownloadingTinyMCE" xml:space="preserve">
+    <value>Downloading TinyMCE...</value>
+  </data>
+  <data name="SplashScreen_DownloadingTinyMCELanguages" xml:space="preserve">
+    <value>Downloading TinyMCE Languages...</value>
+  </data>
+  <data name="FatalConfigLoadError" xml:space="preserve">
+    <value>Failed to read config file.</value>
   </data>
 </root>

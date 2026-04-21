@@ -1520,9 +1520,6 @@ Por favor, seja paciente. Você pode cancelar a qualquer momento usando o botão
   <data name="VanillaStationSelector_NoStationSelectedMessage" xml:space="preserve">
     <value>Selecione uma estação primeiro.</value>
   </data>
-  <data name="VanillaStationSelector_NoStationSelected" xml:space="preserve">
-    <value>Nenhuma estação selecionada</value>
-  </data>
   <data name="EnabledVanillaStationsCount" xml:space="preserve">
     <value>Estações de baunilha ativadas: {0} / {1}</value>
   </data>
@@ -1748,5 +1745,56 @@ Por favor, seja paciente.</value>
   </data>
   <data name="ExportTabs_ReplacedStations" xml:space="preserve">
     <value>Estações de baunilha substituídas</value>
+  </data>
+  <data name="LiveLog_Title" xml:space="preserve">
+    <value>Registro ao vivo</value>
+  </data>
+  <data name="LiveLog_SearchPrompt" xml:space="preserve">
+    <value>Pesquisar entradas de registro...</value>
+  </data>
+  <data name="LiveLog_DGV_Timestamp" xml:space="preserve">
+    <value>Timestamp</value>
+  </data>
+  <data name="LiveLog_DGV_Level" xml:space="preserve">
+    <value>Nível</value>
+  </data>
+  <data name="LiveLog_DGV_Message" xml:space="preserve">
+    <value>Mensagem</value>
+  </data>
+  <data name="LiveLog_CopyLine" xml:space="preserve">
+    <value>Copiar linha</value>
+  </data>
+  <data name="LiveLogViewer" xml:space="preserve">
+    <value>Visualizador de registros ao vivo</value>
+  </data>
+  <data name="Toast_ConvertedToWav" xml:space="preserve">
+    <value>Convertido para WAV: {0}</value>
+  </data>
+  <data name="Notification" xml:space="preserve">
+    <value>Notificação</value>
+  </data>
+  <data name="Toast_ImportedReplacementStations" xml:space="preserve">
+    <value>{0} estações de substituição importadas.</value>
+  </data>
+  <data name="Toast_FailedToCopyLogLine" xml:space="preserve">
+    <value>Falha ao copiar a linha de registro: {0}</value>
+  </data>
+  <data name="Toast_LogLineCopied" xml:space="preserve">
+    <value>Linha de registro copiada para a área de transferência.</value>
+  </data>
+  <data name="SplashScreen_InitializationError" xml:space="preserve">
+    <value>Não foi possível inicializar o aplicativo. Verifique o log em busca de exceções.</value>
+  </data>
+  <data name="SplashScreen_DownloadingTinyMCE" xml:space="preserve">
+    <value>Baixando o TinyMCE...</value>
+  </data>
+  <data name="SplashScreen_DownloadingTinyMCELanguages" xml:space="preserve">
+    <value>Baixando idiomas TinyMCE...</value>
+  </data>
+  <data name="FatalConfigLoadError" xml:space="preserve">
+    <value>Falha ao ler o arquivo de configuração.</value>
+  </data>
+  <data name="VanillaStationSelector_NoStationSelected" xml:space="preserve">
+    <value>Nada selecionado</value>
   </data>
 </root>

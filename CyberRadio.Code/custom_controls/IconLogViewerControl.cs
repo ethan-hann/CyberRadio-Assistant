@@ -1,4 +1,4 @@
-﻿// LogViewerControl.cs : RadioExt-Helper
+﻿// IconLogViewerControl.cs : RadioExt-Helper
 // Copyright (C) 2026  Ethan Hann
 // 
 // This program is free software: you can redistribute it and/or modify
@@ -24,20 +24,20 @@ using RadioExt_Helper.utility;
 
 namespace RadioExt_Helper.custom_controls;
 
-public partial class LogViewerControl : UserControl, IUserControl
+public partial class IconLogViewerControl : UserControl, IUserControl
 {
     private readonly string _logFilePath = GlobalData.GetLogFilePath();
     private int _currentDisplayIndex;
 
     private List<string> _filteredLogLines;
 
-    public LogViewerControl()
+    public IconLogViewerControl()
     {
         InitializeComponent();
         _filteredLogLines = [];
     }
 
-    public LogViewerControl(string identifier)
+    public IconLogViewerControl(string identifier)
     {
         InitializeComponent();
         _filteredLogLines = [];
@@ -96,7 +96,7 @@ public partial class LogViewerControl : UserControl, IUserControl
             MessageBox.Show(
                 string.Format(Strings.LogViewerControl_LoadRelevantLogEntries_Failed_to_load_log_data___0_, ex.Message),
                 Strings.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
-            AuLogger.GetCurrentLogger<LogViewerControl>("LoadRelevantLogEntries")
+            AuLogger.GetCurrentLogger<IconLogViewerControl>("LoadRelevantLogEntries")
                 .Error(ex, "Couldn't open log file for reading.");
         }
     }
@@ -135,7 +135,7 @@ public partial class LogViewerControl : UserControl, IUserControl
             MessageBox.Show(
                 string.Format(Strings.LogViewerControl_DisplayLastLines_Failed_to_display_log_lines___0_, ex.Message),
                 Strings.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
-            AuLogger.GetCurrentLogger<LogViewerControl>("DisplayLastLines")
+            AuLogger.GetCurrentLogger<IconLogViewerControl>("DisplayLastLines")
                 .Error(ex, "Couldn't display log lines.");
         }
     }
