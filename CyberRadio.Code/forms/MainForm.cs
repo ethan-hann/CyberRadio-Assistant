@@ -1155,7 +1155,7 @@ public sealed partial class MainForm : Form
 
     private void ExportToGameToolStripMenuItem_Click(object sender, EventArgs e)
     {
-        if (lbStations.Items.Count <= 0) return;
+        if (lbStations.Items.Count <= 0 && lbReplacedStations.Items.Count <= 0) return;
 
         //Don't allow exporting if we are currently synchronizing stations.
         if (_isSyncInProgress)
